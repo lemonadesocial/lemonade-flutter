@@ -97,112 +97,121 @@ class _FarcasterChannelDetailBottomsheetState
         final targetChannel =
             result.parsedData?.FarcasterChannels?.FarcasterChannel?.firstOrNull;
         final followersCount = targetChannel?.followerCount ?? 0;
-        return Container(
-          padding: EdgeInsets.all(Spacing.smMedium),
-          color: LemonColor.atomicBlack,
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.all(Spacing.smMedium),
+              color: colorScheme.background,
+              child: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    LemonNetworkImage(
-                      width: 42.w,
-                      height: 42.w,
-                      imageUrl: widget.channel.imageUrl ?? '',
-                      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                    ),
-                    SizedBox(width: Spacing.xSmall),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.channel.name ?? '',
-                          style: Typo.extraMedium.copyWith(
-                            color: LemonColor.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          '/${widget.channel.id}',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                if (widget.channel.description?.isNotEmpty == true) ...[
-                  SizedBox(height: Spacing.xSmall),
-                  Linkify(
-                    text: widget.channel.description ?? '',
-                    linkStyle: Typo.medium.copyWith(
-                      color: LemonColor.paleViolet,
-                      decoration: TextDecoration.none,
-                    ),
-                    style: Typo.medium.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      decoration: TextDecoration.none,
-                    ),
-                    onOpen: (link) {
-                      launchUrl(Uri.parse(link.url));
-                    },
-                  ),
-                ],
-                SizedBox(height: Spacing.xSmall),
-                if (result.isLoading)
-                  Center(
-                    child: Loading.defaultLoading(context),
-                  ),
-                if (!result.isLoading) ...[
-                  if (targetChannel?.leadProfiles?.isNotEmpty == true) ...[
                     Row(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        _buildHostsAvatars(targetChannel?.leadProfiles ?? []),
-                        SizedBox(width: Spacing.xSmall),
-                        ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
-                          builder: (filter) => Assets.icons.icHostFilled.svg(
-                            colorFilter: filter,
-                            width: 15.w,
-                            height: 15.w,
-                          ),
+                        LemonNetworkImage(
+                          width: 42.w,
+                          height: 42.w,
+                          imageUrl: widget.channel.imageUrl ?? '',
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.xSmall),
                         ),
-                        SizedBox(width: Spacing.superExtraSmall),
-                        Flexible(
-                          child: _buildHostsNames(
-                            targetChannel?.leadProfiles ?? [],
-                          ),
+                        SizedBox(width: Spacing.xSmall),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              widget.channel.name ?? '',
+                              style: Typo.extraMedium.copyWith(
+                                color: LemonColor.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              '/${widget.channel.id}',
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: Spacing.xSmall),
-                  ],
-                  Row(
-                    children: [
-                      ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icProfile.svg(
-                          colorFilter: filter,
+                    if (widget.channel.description?.isNotEmpty == true) ...[
+                      SizedBox(height: Spacing.xSmall),
+                      Linkify(
+                        text: widget.channel.description ?? '',
+                        linkStyle: Typo.medium.copyWith(
+                          color: LemonColor.paleViolet,
+                          decoration: TextDecoration.none,
                         ),
-                      ),
-                      SizedBox(width: 3.w),
-                      Text(
-                        '${NumberFormat.compact().format(followersCount)} ${t.farcaster.members(n: followersCount)}',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+                        style: Typo.medium.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          decoration: TextDecoration.none,
                         ),
+                        onOpen: (link) {
+                          launchUrl(Uri.parse(link.url));
+                        },
                       ),
                     ],
-                  ),
-                ],
-              ],
+                    SizedBox(height: Spacing.xSmall),
+                    if (result.isLoading)
+                      Center(
+                        child: Loading.defaultLoading(context),
+                      ),
+                    if (!result.isLoading) ...[
+                      if (targetChannel?.leadProfiles?.isNotEmpty == true) ...[
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildHostsAvatars(
+                              targetChannel?.leadProfiles ?? [],
+                            ),
+                            SizedBox(width: Spacing.xSmall),
+                            ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (filter) =>
+                                  Assets.icons.icHostFilled.svg(
+                                colorFilter: filter,
+                                width: 15.w,
+                                height: 15.w,
+                              ),
+                            ),
+                            SizedBox(width: Spacing.superExtraSmall),
+                            Flexible(
+                              child: _buildHostsNames(
+                                targetChannel?.leadProfiles ?? [],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: Spacing.xSmall),
+                      ],
+                      Row(
+                        children: [
+                          ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (filter) => Assets.icons.icProfile.svg(
+                              colorFilter: filter,
+                            ),
+                          ),
+                          SizedBox(width: 3.w),
+                          Text(
+                            '${NumberFormat.compact().format(followersCount)} ${t.farcaster.members(n: followersCount)}',
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         );
       },
     );

@@ -13,6 +13,8 @@ enum PaymentAccountType {
   digital,
   @JsonValue('ethereum_escrow')
   ethereumEscrow,
+  @JsonValue('ethereum_relay')
+  ethereumRelay,
 }
 
 enum PaymentState {
