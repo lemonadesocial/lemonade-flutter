@@ -7,6 +7,7 @@
 
 * farcaster cast replies ([#627](https://github.com/lemonadesocial/lemonade-flutter/issues/627)) ([85b93db](https://github.com/lemonadesocial/lemonade-flutter/commit/85b93dbcb95abbe303949990e18b1cb62a482159))
 * farcaster user profile page ([#631](https://github.com/lemonadesocial/lemonade-flutter/issues/631)) ([419386b](https://github.com/lemonadesocial/lemonade-flutter/commit/419386b8bc966a590adf702085b842401613b6d7))
+* implement cast likes list ([#636](https://github.com/lemonadesocial/lemonade-flutter/issues/636)) ([8655df7](https://github.com/lemonadesocial/lemonade-flutter/commit/8655df7dff14580fa79c0a56e37c7b145a446408))
 * implement recast a cast ([#632](https://github.com/lemonadesocial/lemonade-flutter/issues/632)) ([6276ae3](https://github.com/lemonadesocial/lemonade-flutter/commit/6276ae37da37115e37fe370fed4391b7fae0e128))
 * make farcaster channel info popup start from top ([#634](https://github.com/lemonadesocial/lemonade-flutter/issues/634)) ([036d1c0](https://github.com/lemonadesocial/lemonade-flutter/commit/036d1c04f288b3ae82024c6768ecd742bdacb2f4))
 * re-make entire ticket flow ([#633](https://github.com/lemonadesocial/lemonade-flutter/issues/633)) ([4353eb8](https://github.com/lemonadesocial/lemonade-flutter/commit/4353eb87fa0ef849c04963a228a59395a8f3a7d8))

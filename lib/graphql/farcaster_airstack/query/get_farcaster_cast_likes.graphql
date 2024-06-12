@@ -1,0 +1,26 @@
+query GetFarcasterCastLikes($castHash: String, $cursor: String) {
+  FarcasterReactions(
+    input: {
+      filter: { criteria: liked, castHash: { _eq: $castHash } }
+      blockchain: ALL
+      limit: 25
+      cursor: $cursor
+    }
+  ) {
+    Reaction {
+      reactedBy {
+        profileName
+        profileDisplayName
+        profileUrl
+        profileImage
+        fid: userId
+      }
+    }
+    pageInfo {
+      hasNextPage
+      nextCursor
+      prevCursor
+      hasPrevPage
+    }
+  }
+}
