@@ -122,6 +122,7 @@ class _FarcasterCastDetailPageState extends State<FarcasterCastDetailPage> {
                         ),
                         sliver: SliverToBoxAdapter(
                           child: FarcasterCastItemWidget(
+                            onTap: () {},
                             cast: widget.cast,
                             showActions: true,
                           ),
