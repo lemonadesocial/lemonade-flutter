@@ -11,14 +11,12 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_casts.graphql.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 @RoutePage()
@@ -58,15 +56,38 @@ class _FarcasterChannelNewsfeedPageState
         ],
         titleBuilder: (context) => InkWell(
           onTap: () {
-            showCupertinoModalBottomSheet(
+            showGeneralDialog(
               context: context,
-              backgroundColor: LemonColor.atomicBlack,
-              builder: (mContext) {
+              barrierDismissible: true,
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              barrierColor: Colors.black45,
+              transitionDuration: const Duration(milliseconds: 300),
+              pageBuilder: (
+                BuildContext buildContext,
+                Animation animation,
+                Animation secondaryAnimation,
+              ) {
                 return GraphQLProvider(
                   client: airstackClient,
                   child: FarcasterChannelDetailBottomsheet(
                     channel: widget.channel,
                   ),
+                );
+              },
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return SlideTransition(
+                  position: CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOut,
+                  ).drive(
+                    Tween<Offset>(
+                      begin: const Offset(0, -1),
+                      end: Offset.zero,
+                    ),
+                  ),
+                  child: child,
                 );
               },
             );
