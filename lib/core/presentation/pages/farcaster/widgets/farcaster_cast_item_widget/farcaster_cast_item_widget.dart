@@ -87,23 +87,32 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
                     _Recast(cast: widget.cast),
                     SizedBox(height: 4.w),
                   ],
-                  Row(
-                    children: [
-                      Text(
-                        widget.cast.castedBy?.profileName ?? '',
-                        style: Typo.medium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onPrimary,
+                  InkWell(
+                    onTap: () {
+                      AutoRouter.of(context).push(
+                        FarcasterUserProfileRoute(
+                          profileName: widget.cast.castedBy?.profileName ?? '',
                         ),
-                      ),
-                      if (widget.cast.castedAtTimestamp != null)
+                      );
+                    },
+                    child: Row(
+                      children: [
                         Text(
-                          ' ${timeago.format(widget.cast.castedAtTimestamp!.toLocal())}',
+                          widget.cast.castedBy?.profileName ?? '',
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onPrimary,
                           ),
                         ),
-                    ],
+                        if (widget.cast.castedAtTimestamp != null)
+                          Text(
+                            ' ${timeago.format(widget.cast.castedAtTimestamp!.toLocal())}',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                   _CastBody(cast: widget.cast),
                   if (widget.showActions) ...[
@@ -164,19 +173,25 @@ class _CastBody extends StatelessWidget {
         ],
         if (cast.frame?.imageUrl?.isNotEmpty == true) ...[
           SizedBox(height: Spacing.xSmall),
-          LemonNetworkImage(
-            imageUrl: cast.frame?.imageUrl ?? '',
-            borderRadius: BorderRadius.circular(
-              LemonRadius.small,
+          InkWell(
+            onTap: () {},
+            child: LemonNetworkImage(
+              imageUrl: cast.frame?.imageUrl ?? '',
+              borderRadius: BorderRadius.circular(
+                LemonRadius.small,
+              ),
             ),
           ),
         ],
         if (cast.embeds?.isNotEmpty == true) ...[
           SizedBox(height: Spacing.xSmall),
-          LemonNetworkImage(
-            imageUrl: cast.embeds?.firstOrNull?.tryGet('url') ?? '',
-            borderRadius: BorderRadius.circular(
-              LemonRadius.small,
+          InkWell(
+            onTap: () {},
+            child: LemonNetworkImage(
+              imageUrl: cast.embeds?.firstOrNull?.tryGet('url') ?? '',
+              borderRadius: BorderRadius.circular(
+                LemonRadius.small,
+              ),
             ),
           ),
         ],

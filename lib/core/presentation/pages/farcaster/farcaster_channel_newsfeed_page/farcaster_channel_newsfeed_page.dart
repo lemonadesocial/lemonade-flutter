@@ -1,7 +1,7 @@
 import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
-import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_bottomsheet.dart';
+import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_popup.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -33,15 +33,29 @@ class FarcasterChannelNewsfeedPage extends StatefulWidget {
 }
 
 class _FarcasterChannelNewsfeedPageState
-    extends State<FarcasterChannelNewsfeedPage> {
+    extends State<FarcasterChannelNewsfeedPage>
+    with SingleTickerProviderStateMixin {
+  bool channelInfoVisible = false;
   final debouncer = Debouncer(milliseconds: 300);
   late ValueNotifier<GraphQLClient> airstackClient;
   final _refreshController = RefreshController();
+  late final AnimationController _animation;
 
   @override
   initState() {
     super.initState();
     airstackClient = ValueNotifier(getIt<AirstackGQL>().client);
+    _animation = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  dispose() {
+    _animation.dispose();
+    debouncer.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,41 +70,17 @@ class _FarcasterChannelNewsfeedPageState
         ],
         titleBuilder: (context) => InkWell(
           onTap: () {
-            showGeneralDialog(
-              context: context,
-              barrierDismissible: true,
-              barrierLabel:
-                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
-              barrierColor: Colors.black45,
-              transitionDuration: const Duration(milliseconds: 300),
-              pageBuilder: (
-                BuildContext buildContext,
-                Animation animation,
-                Animation secondaryAnimation,
-              ) {
-                return GraphQLProvider(
-                  client: airstackClient,
-                  child: FarcasterChannelDetailBottomsheet(
-                    channel: widget.channel,
-                  ),
-                );
-              },
-              transitionBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return SlideTransition(
-                  position: CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOut,
-                  ).drive(
-                    Tween<Offset>(
-                      begin: const Offset(0, -1),
-                      end: Offset.zero,
-                    ),
-                  ),
-                  child: child,
-                );
-              },
-            );
+            if (_animation.value == 0) {
+              _animation.forward();
+              setState(() {
+                channelInfoVisible = true;
+              });
+            } else {
+              _animation.reverse();
+              setState(() {
+                channelInfoVisible = false;
+              });
+            }
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -116,133 +106,178 @@ class _FarcasterChannelNewsfeedPageState
               SizedBox(width: Spacing.xSmall),
               ThemeSvgIcon(
                 color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icArrowUp.svg(
-                  colorFilter: filter,
-                ),
+                builder: (filter) => channelInfoVisible
+                    ? Assets.icons.icArrowDown.svg(
+                        colorFilter: filter,
+                      )
+                    : Assets.icons.icArrowUp.svg(
+                        colorFilter: filter,
+                      ),
               ),
             ],
           ),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Assets.images.bgChat.provider(),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: GraphQLProvider(
-          client: airstackClient,
-          child: Query$GetFarCasterCasts$Widget(
-            options: Options$Query$GetFarCasterCasts(
-              fetchPolicy: FetchPolicy.cacheFirst,
-              variables: Variables$Query$GetFarCasterCasts(
-                rootParentUrl: widget.channel.url,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: Assets.images.bgChat.provider(),
+                fit: BoxFit.cover,
               ),
-              onComplete: (_, __) {
-                _refreshController.refreshCompleted();
-              },
             ),
-            builder: (
-              result, {
-              refetch,
-              fetchMore,
-            }) {
-              final casts = (result.parsedData?.FarcasterCasts?.Cast ?? [])
-                  .map(
-                    (item) => AirstackFarcasterCast.fromJson(
-                      item.toJson(),
-                    ),
-                  )
-                  .toList();
-              if (result.isLoading && casts.isEmpty) {
-                return Center(
-                  child: Loading.defaultLoading(context),
-                );
-              }
-
-              return NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is ScrollEndNotification) {
-                    if (notification.metrics.pixels ==
-                        notification.metrics.maxScrollExtent) {
-                      final pageInfo =
-                          result.parsedData?.FarcasterCasts?.pageInfo;
-                      if (result.isLoading || pageInfo?.hasNextPage == false) {
-                        return true;
-                      }
-
-                      final fetchMoreOptions =
-                          FetchMoreOptions$Query$GetFarCasterCasts(
-                        variables: Variables$Query$GetFarCasterCasts(
-                          rootParentUrl: widget.channel.url,
-                          cursor: pageInfo?.nextCursor,
-                        ),
-                        updateQuery: (prevResult, nextResult) {
-                          final prevList = prevResult?['FarcasterCasts']
-                                  ?['Cast'] as List<dynamic>? ??
-                              [];
-                          final nextList = nextResult?['FarcasterCasts']
-                                  ?['Cast'] as List<dynamic>? ??
-                              [];
-                          final newList = [...prevList, ...nextList];
-                          nextResult?['FarcasterCasts']['Cast'] = newList;
-                          return nextResult;
-                        },
-                      );
-                      debouncer.run(
-                        () => fetchMore?.call(fetchMoreOptions),
-                      );
-                    }
-                  }
-                  return true;
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.xSmall,
+            child: GraphQLProvider(
+              client: airstackClient,
+              child: Query$GetFarCasterCasts$Widget(
+                options: Options$Query$GetFarCasterCasts(
+                  fetchPolicy: FetchPolicy.cacheFirst,
+                  variables: Variables$Query$GetFarCasterCasts(
+                    rootParentUrl: widget.channel.url,
                   ),
-                  child: SmartRefresher(
-                    controller: _refreshController,
-                    onRefresh: () async {
-                      refetch?.call();
-                    },
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverList.separated(
-                          itemCount: casts.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == casts.length) {
-                              if (result.parsedData?.FarcasterCasts?.pageInfo
-                                      ?.hasNextPage !=
-                                  true) {
-                                return const SizedBox.shrink();
-                              }
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: Spacing.medium,
-                                ),
-                                child: Loading.defaultLoading(context),
-                              );
-                            }
-                            return FarcasterCastItemWidget(
-                              key: ValueKey(casts[index].id),
-                              cast: casts[index],
-                              showActions: true,
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(
-                            height: 1.w,
-                            color: colorScheme.outline,
-                          ),
+                  onComplete: (_, __) {
+                    _refreshController.refreshCompleted();
+                  },
+                ),
+                builder: (
+                  result, {
+                  refetch,
+                  fetchMore,
+                }) {
+                  final casts = (result.parsedData?.FarcasterCasts?.Cast ?? [])
+                      .map(
+                        (item) => AirstackFarcasterCast.fromJson(
+                          item.toJson(),
                         ),
-                      ],
+                      )
+                      .toList();
+                  if (result.isLoading && casts.isEmpty) {
+                    return Center(
+                      child: Loading.defaultLoading(context),
+                    );
+                  }
+
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is ScrollEndNotification) {
+                        if (notification.metrics.pixels ==
+                            notification.metrics.maxScrollExtent) {
+                          final pageInfo =
+                              result.parsedData?.FarcasterCasts?.pageInfo;
+                          if (result.isLoading ||
+                              pageInfo?.hasNextPage == false) {
+                            return true;
+                          }
+
+                          final fetchMoreOptions =
+                              FetchMoreOptions$Query$GetFarCasterCasts(
+                            variables: Variables$Query$GetFarCasterCasts(
+                              rootParentUrl: widget.channel.url,
+                              cursor: pageInfo?.nextCursor,
+                            ),
+                            updateQuery: (prevResult, nextResult) {
+                              final prevList = prevResult?['FarcasterCasts']
+                                      ?['Cast'] as List<dynamic>? ??
+                                  [];
+                              final nextList = nextResult?['FarcasterCasts']
+                                      ?['Cast'] as List<dynamic>? ??
+                                  [];
+                              final newList = [...prevList, ...nextList];
+                              nextResult?['FarcasterCasts']['Cast'] = newList;
+                              return nextResult;
+                            },
+                          );
+                          debouncer.run(
+                            () => fetchMore?.call(fetchMoreOptions),
+                          );
+                        }
+                      }
+                      return true;
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.xSmall,
+                      ),
+                      child: SmartRefresher(
+                        controller: _refreshController,
+                        onRefresh: () async {
+                          refetch?.call();
+                        },
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverList.separated(
+                              itemCount: casts.length + 1,
+                              itemBuilder: (context, index) {
+                                if (index == casts.length) {
+                                  if (result.parsedData?.FarcasterCasts
+                                          ?.pageInfo?.hasNextPage !=
+                                      true) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: Spacing.medium,
+                                    ),
+                                    child: Loading.defaultLoading(context),
+                                  );
+                                }
+                                return FarcasterCastItemWidget(
+                                  key: ValueKey(casts[index].id),
+                                  cast: casts[index],
+                                  showActions: true,
+                                );
+                              },
+                              separatorBuilder: (context, index) => Divider(
+                                height: 1.w,
+                                color: colorScheme.outline,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, -1),
+                  end: Offset.zero,
+                ).animate(_animation),
+                child: GraphQLProvider(
+                  client: airstackClient,
+                  child: FarcasterChannelDetailPopup(
+                    channel: widget.channel,
+                  ),
+                ),
+              ),
+              if (channelInfoVisible)
+                Expanded(
+                  child: FadeTransition(
+                    opacity: Tween<double>(
+                      begin: 0,
+                      end: 1,
+                    ).animate(_animation),
+                    child: InkWell(
+                      onTap: () {
+                        _animation.reverse();
+                        setState(() {
+                          channelInfoVisible = false;
+                        });
+                      },
+                      child: Container(
+                        color: Colors.black54,
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
+            ],
           ),
-        ),
+        ],
       ),
     );
   }
