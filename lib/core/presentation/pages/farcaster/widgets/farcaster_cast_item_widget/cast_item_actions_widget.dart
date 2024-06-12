@@ -1,6 +1,7 @@
 import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/farcaster_repository.dart';
 import 'package:app/core/domain/farcaster/input/cast_has_reaction_input.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_likes_list/farcaster_cast_likes_list.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -18,6 +19,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CastItemActionsWidget extends StatefulWidget {
@@ -241,19 +243,35 @@ class CastItemActionsWidgetState extends State<CastItemActionsWidget> {
                   SizedBox(width: Spacing.xSmall),
                 ],
                 if (hasLikes) ...[
-                  Text(
-                    '${numberFormat.format(widget.cast.numberOfLikes)} ${t.farcaster.like(n: widget.cast.numberOfLikes ?? 0)}',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
+                  InkWell(
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        expand: true,
+                        backgroundColor: LemonColor.atomicBlack,
+                        builder: (context) => FarcasterCastLikesList(
+                          cast: widget.cast,
+                        ),
+                      );
+                    },
+                    child: Text(
+                      '${numberFormat.format(widget.cast.numberOfLikes)} ${t.farcaster.like(n: widget.cast.numberOfLikes ?? 0)}',
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
                     ),
                   ),
                   SizedBox(width: Spacing.xSmall),
                 ],
                 if (widget.cast.channel != null) ...[
-                  Text(
-                    '/${widget.cast.channel?.channelId}',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      '/${widget.cast.channel?.channelId}',
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
                     ),
                   ),
                 ],
