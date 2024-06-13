@@ -12,6 +12,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class EventOrderSlideToPay extends StatelessWidget {
   const EventOrderSlideToPay({
@@ -29,15 +30,22 @@ class EventOrderSlideToPay extends StatelessWidget {
   final String? selectedNetwork;
   final GlobalKey<SlideActionState> slideActionKey;
 
+  get _totalCryptoAmount {
+    return (pricingInfo?.cryptoTotal ?? BigInt.zero) +
+        // add fee if available for EthereumRelay
+        (pricingInfo?.paymentAccounts?.firstOrNull?.cryptoFee ?? BigInt.zero);
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final currencyInfo =
         PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
+
     final amountText = selectedNetwork?.isNotEmpty == true
         ? Web3Utils.formatCryptoCurrency(
-            pricingInfo?.cryptoTotal ?? BigInt.zero,
+            _totalCryptoAmount,
             currency: selectedCurrency,
             decimals: currencyInfo?.decimals ?? 2,
           )

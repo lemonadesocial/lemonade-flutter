@@ -74,7 +74,14 @@ class PayByCryptoButtonView extends StatefulWidget {
 class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
   final _slideToActionKey = GlobalKey<SlideActionState>();
 
-  clickInitPaymentAndSigned({
+  BigInt get _totalCryptoAmount {
+    return (widget.pricingInfo.cryptoTotal ?? BigInt.zero) +
+        // add fee if available for EthereumRelay
+        (widget.pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ??
+            BigInt.zero);
+  }
+
+  void clickInitPaymentAndSigned({
     required Event event,
     required String userWalletAddress,
   }) {
@@ -89,12 +96,13 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
               total: widget.pricingInfo.total ?? '0',
               network: widget.selectedNetwork,
               discount: widget.pricingInfo.promoCode,
+              fee: widget.pricingInfo.paymentAccounts?.first.fee,
             ),
           ),
         );
   }
 
-  clickMakeTransaction({
+  void clickMakeTransaction({
     required String userWalletAddress,
   }) {
     final currencyInfo = PaymentUtils.getCurrencyInfo(
@@ -107,9 +115,9 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
     context.read<BuyTicketsWithCryptoBloc>().add(
           BuyTicketsWithCryptoEvent.makeTransaction(
             from: userWalletAddress,
-            amount: widget.pricingInfo.cryptoTotal ?? BigInt.zero,
-            to: widget
-                    .pricingInfo.paymentAccounts?.first.accountInfo?.address ??
+            amount: _totalCryptoAmount,
+            to: widget.pricingInfo.paymentAccounts?.firstOrNull?.accountInfo
+                    ?.address ??
                 '',
             currencyInfo: currencyInfo,
           ),

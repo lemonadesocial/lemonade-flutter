@@ -67,7 +67,8 @@
         "subTotal": "Subtotal",
         "total": "Total",
         "accessCode": "Access code",
-        "promo": "Promo"
+        "promo": "Promo",
+        "fee": "Fee"
     },
     "eventPayment": {
         "payUsing": "Pay using",
