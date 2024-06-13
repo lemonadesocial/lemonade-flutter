@@ -20,6 +20,10 @@ class PaymentAccount with _$PaymentAccount {
     PaymentAccountType? type,
     PaymentProvider? provider,
     AccountInfo? accountInfo,
+    // EthereumRelay
+    String? fee,
+    BigInt? cryptoFee,
+    Relay? relay,
   }) = _PaymentAccount;
 
   factory PaymentAccount.fromDto(PaymentAccountDto dto) => PaymentAccount(
@@ -32,6 +36,9 @@ class PaymentAccount with _$PaymentAccount {
         accountInfo: dto.accountInfo != null
             ? AccountInfo.fromDto(dto.accountInfo!)
             : null,
+        fee: dto.fee,
+        cryptoFee: dto.fee != null ? BigInt.parse(dto.fee!) : null,
+        relay: dto.relay != null ? Relay.fromDto(dto.relay!) : null,
       );
 
   factory PaymentAccount.fromJson(Map<String, dynamic> json) =>
@@ -50,8 +57,9 @@ class AccountInfo with _$AccountInfo {
     // Blockchain
     String? address,
     List<String>? networks,
-    // Safe extends Blockchain
+    // Safe | EthereumRelay | EthereumEscrow
     String? network,
+    // Safe
     List<String>? owners,
     int? threshold,
     bool? pending,
@@ -61,6 +69,8 @@ class AccountInfo with _$AccountInfo {
     int? minimumDepositPercent,
     double? hostRefundPercent,
     List<RefundPolicy>? refundPolicies,
+    // Safe | EthereumRelay | EthereumEscrow
+    String? paymentSplitterContract,
   }) = _AccountInfo;
 
   factory AccountInfo.fromDto(AccountInfoDto dto) => AccountInfo(
@@ -77,8 +87,9 @@ class AccountInfo with _$AccountInfo {
         // blockchain account
         address: dto.address,
         networks: dto.networks,
-        // Safe extends Blockchain
+        // Safe | EthereumRelay | EthereumEscrow
         network: dto.network,
+        // Safe
         owners: dto.owners,
         threshold: dto.threshold,
         pending: dto.pending,
@@ -90,6 +101,8 @@ class AccountInfo with _$AccountInfo {
         refundPolicies: (dto.refundPolicies ?? [])
             .map((item) => RefundPolicy.fromDto(item))
             .toList(),
+        // EthereumRelay
+        paymentSplitterContract: dto.paymentSplitterContract,
       );
 
   factory AccountInfo.fromJson(Map<String, dynamic> json) =>
@@ -111,4 +124,19 @@ class CurrencyInfo with _$CurrencyInfo {
       );
   factory CurrencyInfo.fromJson(Map<String, dynamic> json) =>
       _$CurrencyInfoFromJson(json);
+}
+
+@freezed
+class Relay with _$Relay {
+  Relay._();
+
+  factory Relay({
+    String? paymentSplitterContract,
+  }) = _Relay;
+
+  factory Relay.fromDto(RelayDto dto) => Relay(
+        paymentSplitterContract: dto.paymentSplitterContract,
+      );
+
+  factory Relay.fromJson(Map<String, dynamic> json) => _$RelayFromJson(json);
 }
