@@ -1,4 +1,5 @@
 import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/faracaster_frame_widget/farcaster_frame_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_item_widget/cast_item_actions_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -171,16 +172,10 @@ class _CastBody extends StatelessWidget {
             },
           ),
         ],
-        if (cast.frame?.imageUrl?.isNotEmpty == true) ...[
+        if (cast.frame != null) ...[
           SizedBox(height: Spacing.xSmall),
-          InkWell(
-            onTap: () {},
-            child: LemonNetworkImage(
-              imageUrl: cast.frame?.imageUrl ?? '',
-              borderRadius: BorderRadius.circular(
-                LemonRadius.small,
-              ),
-            ),
+          FarcasterFrameWidget(
+            initialFrame: cast.frame!,
           ),
         ],
         if (cast.embeds?.isNotEmpty == true) ...[

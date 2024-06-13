@@ -24,6 +24,13 @@ query GetUserFarcasterReactions($fc_fid: Identity!, $cursor: String) {
           imageUrl
           frameUrl
           postUrl
+          buttons {
+            action
+            id
+            index
+            label
+            target
+          }
         }
         channel {
           channelId

@@ -53,10 +53,56 @@ class AirstackFrame with _$AirstackFrame {
     String? imageUrl,
     String? frameUrl,
     String? postUrl,
+    List<AirstackFrameButton>? buttons,
   }) = _AirstackFrame;
 
   factory AirstackFrame.fromJson(Map<String, dynamic> json) =>
       _$AirstackFrameFromJson(json);
+}
+
+@freezed
+class AirstackFrameButton with _$AirstackFrameButton {
+  factory AirstackFrameButton({
+    int? index,
+    AirstackFrameButtonAction? action,
+    String? target,
+    String? label,
+  }) = _AirstackFrameButton;
+
+  factory AirstackFrameButton.fromJson(Map<String, dynamic> json) =>
+      _$AirstackFrameButtonFromJson(json);
+}
+
+enum AirstackFrameButtonAction {
+  @JsonValue('post')
+  post,
+  @JsonValue('link')
+  link,
+  @JsonValue('post_redirect')
+  postRedirect,
+  @JsonValue('mint')
+  mint,
+  @JsonValue('tx')
+  tx,
+  @JsonValue('')
+  unknown;
+
+  static AirstackFrameButtonAction fromString(String value) {
+    switch (value) {
+      case 'post':
+        return AirstackFrameButtonAction.post;
+      case 'link':
+        return AirstackFrameButtonAction.link;
+      case 'post_redirect':
+        return AirstackFrameButtonAction.postRedirect;
+      case 'mint':
+        return AirstackFrameButtonAction.mint;
+      case 'tx':
+        return AirstackFrameButtonAction.tx;
+      default:
+        return AirstackFrameButtonAction.unknown;
+    }
+  }
 }
 
 @freezed
