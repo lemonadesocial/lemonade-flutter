@@ -34,5 +34,8 @@
             "replies": "Replies",
             "likes": "Likes"
         }
+    },
+    "frame": {
+        "loadFrameError": "Frame error: Unknown error commuinicating with frame server."   
     }
 }

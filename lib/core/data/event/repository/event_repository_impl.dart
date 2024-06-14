@@ -452,7 +452,7 @@ class EventRepositoryImpl implements EventRepository {
     }
 
     return Right(
-      (result.parsedData?.exportEventTickets ?? [])
+      (result.parsedData?.exportEventTickets.tickets ?? [])
           .map(
             (item) => EventTicketExport.fromJson(
               item.toJson(),
