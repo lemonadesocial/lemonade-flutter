@@ -32,8 +32,6 @@ class LoginPageState extends State<LoginPage> {
           state.maybeWhen(
             authenticated: (user) {
               AutoRouter.of(context).pop();
-              // TODO: For testing purpose
-              OnboardingUtils.startOnboarding(context, user: user);
             },
             onBoardingRequired: (user) {
               OnboardingUtils.startOnboarding(context, user: user);
