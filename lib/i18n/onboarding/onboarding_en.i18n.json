@@ -41,5 +41,9 @@
   "termConditionsBeProactive": {
     "title": "Be proactive",
     "description": "Always report bad behaviour"
-  }
+  },
+  "getSocialOnChain": "Get Social on chain",
+  "getSocialOnChainDescription": "Discover communities, friends, events and much more!",
+  "connectFarcaster": "Connect Farcaster",
+  "connectFarcasterDescription": "Discover communities, channels & more"
 }

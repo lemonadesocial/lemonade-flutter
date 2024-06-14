@@ -27,12 +27,28 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
         if (state.status == OnboardingStatus.success) {
-          context.router.push(const OnboardingAboutRoute());
+          context.router.push(const OnboardingSocialOnChainRoute());
         }
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: const LemonAppBar(),
+          appBar: LemonAppBar(
+            actions: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () => context.router
+                        .push(const OnboardingSocialOnChainRoute()),
+                    child: Text(
+                      t.onboarding.skip,
+                      style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  SizedBox(width: Spacing.smMedium),
+                ],
+              ),
+            ],
+          ),
           backgroundColor: theme.colorScheme.primary,
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),

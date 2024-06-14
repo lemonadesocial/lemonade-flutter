@@ -90,6 +90,9 @@ class AppRouter extends $AppRouter {
               page: OnboardingProfilePhotoRoute.page,
             ),
             AutoRoute(
+              page: OnboardingSocialOnChainRoute.page,
+            ),
+            AutoRoute(
               page: OnboardingAboutRoute.page,
             ),
           ],
