@@ -1,3 +1,4 @@
+import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_account_key_request.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.dart';
@@ -39,5 +40,9 @@ abstract class FarcasterRepository {
 
   Future<Either<Failure, bool>> hasReaction({
     required CastHasReactionInput input,
+  });
+
+  Future<Either<Failure, AirstackFrame>> getNextFrame({
+    required String targetUrl,
   });
 }
