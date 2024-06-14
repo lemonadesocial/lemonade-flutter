@@ -154,7 +154,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
 }
 
 class _ConnectFarcasterButton extends StatelessWidget {
-  const _ConnectFarcasterButton({super.key});
+  const _ConnectFarcasterButton();
 
   @override
   Widget build(BuildContext context) {
