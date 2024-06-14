@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -40,30 +42,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => false,
+          authenticated: (_) => true,
+        );
     return Scaffold(
       appBar: HomeAppBar(
         title: t.home.newsfeed,
         actions: [
-          InkWell(
-            onTap: () {
-              context.read<AuthBloc>().state.maybeWhen(
-                    authenticated: (session) => AutoRouter.of(context)
-                        .navigate(MyEventTicketsListRoute()),
-                    orElse: () =>
-                        AutoRouter.of(context).navigate(const LoginRoute()),
-                  );
-            },
-            child: ThemeSvgIcon(
-              builder: (filter) => Assets.icons.icTicket.svg(
-                colorFilter: filter,
+          if (!isLoggedIn) ...[
+            SizedBox(
+              width: 85.w,
+              child: LemonOutlineButton(
+                onTap: () {
+                  AutoRouter.of(context).navigate(const LoginRoute());
+                },
+                label: t.auth.signIn,
+                backgroundColor: colorScheme.secondaryContainer,
+                borderColor: colorScheme.secondaryContainer,
+                radius: BorderRadius.circular(LemonRadius.button),
               ),
             ),
-          ),
-          SizedBox(width: Spacing.medium),
-          Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
-            child: const HomeAppBarDefaultMoreActionsWidget(),
-          ),
+            SizedBox(width: Spacing.xSmall),
+          ],
+          if (isLoggedIn) ...[
+            InkWell(
+              onTap: () {
+                AutoRouter.of(context).navigate(MyEventTicketsListRoute());
+              },
+              child: ThemeSvgIcon(
+                builder: (filter) => Assets.icons.icTicket.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ),
+            SizedBox(width: Spacing.medium),
+            Padding(
+              padding: EdgeInsets.only(right: Spacing.xSmall),
+              child: const HomeAppBarDefaultMoreActionsWidget(),
+            ),
+          ],
         ],
       ),
       backgroundColor: LemonColor.black,
