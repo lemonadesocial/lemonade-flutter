@@ -1,31 +1,42 @@
-query ExportEventTickets($id: MongoID!) {
-  exportEventTickets(_id: $id) {
-    id: _id
-    active: active
-    ticketType: ticket_type
-    checkinDate: checkin_date
-    buyerId: buyer_id
-    buyerEmail: buyer_email
-    buyerName: buyer_name
-    buyerAvatar: buyer_avatar
-    buyerUsername: buyer_username
-    buyerFirstName: buyer_first_name
-    buyerLastName: buyer_last_name
-    buyerWallet: buyer_wallet
-    assigneeEmail: assignee_email
-    paymentId: payment_id
-    currency: currency
-    paymentAmount: payment_amount
-    discountAmount: discount_amount
-    discountAmount: discount_amount
-    discountCode: discount_code
-    isAssigned: is_assigned
-    isClaimed: is_claimed
-    isIssued: is_issued
-    issuedBy: issued_by
-    paymentProvider: payment_provider
-    purchaseDate: purchase_date
-    quanity: quantity
-    ticketCategory: ticket_category
+query ExportEventTickets(
+  $id: MongoID!
+  $ticketTypeIds: [MongoID!]
+  $pagination: PaginationInput
+) {
+  exportEventTickets(
+    _id: $id
+    ticketTypeIds: $ticketTypeIds
+    pagination: $pagination
+  ) {
+    count
+    tickets {
+      id: _id
+      active: active
+      ticketType: ticket_type
+      checkinDate: checkin_date
+      buyerId: buyer_id
+      buyerEmail: buyer_email
+      buyerName: buyer_name
+      buyerAvatar: buyer_avatar
+      buyerUsername: buyer_username
+      buyerFirstName: buyer_first_name
+      buyerLastName: buyer_last_name
+      buyerWallet: buyer_wallet
+      assigneeEmail: assignee_email
+      paymentId: payment_id
+      currency: currency
+      paymentAmount: payment_amount
+      discountAmount: discount_amount
+      discountAmount: discount_amount
+      discountCode: discount_code
+      isAssigned: is_assigned
+      isClaimed: is_claimed
+      isIssued: is_issued
+      issuedBy: issued_by
+      paymentProvider: payment_provider
+      purchaseDate: purchase_date
+      quanity: quantity
+      ticketCategory: ticket_category
+    }
   }
 }
