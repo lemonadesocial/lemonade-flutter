@@ -1,12 +1,11 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_bottomsheet/connect_farcaster_bottomsheet.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_button/connect_farcaster_button.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
@@ -18,12 +17,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
 
 @RoutePage()
@@ -85,7 +82,9 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                   SizedBox(height: Spacing.medium),
-                  const _ConnectFarcasterButton(),
+                  const ConnectFarcasterButton(
+                    variant: ConnectFarcasterButtonVariant.home,
+                  ),
                   SizedBox(height: Spacing.medium),
                   ConnectWalletButton(
                     builder: (onPressConnect, connectButtonState) {
@@ -130,7 +129,12 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     child: Opacity(
                       opacity: isEnabledNextButton == true ? 1 : 0.5,
                       child: LinearGradientButton(
-                        onTap: () {},
+                        onTap: () {
+                          if (isEnabledNextButton == false) {
+                            return;
+                          }
+                          context.router.push(const OnboardingAboutRoute());
+                        },
                         label: t.onboarding.next,
                         textStyle: Typo.medium.copyWith(
                           fontFamily: FontFamily.nohemiVariable,
@@ -149,62 +153,6 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ConnectFarcasterButton extends StatelessWidget {
-  const _ConnectFarcasterButton();
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
-          orElse: () => null,
-          authenticated: (user) => user,
-        );
-    final farcasterConnected =
-        loggedInUser?.farcasterUserInfo?.accountKeyRequest?.accepted == true;
-    return SettingTileWidget(
-      radius: LemonRadius.medium,
-      leadingRadius: LemonRadius.xSmall,
-      title: t.onboarding.connectFarcaster,
-      subTitle: farcasterConnected
-          ? t.common.status.connected
-          : t.onboarding.connectFarcasterDescription,
-      leading: ThemeSvgIcon(
-        color: LemonColor.lavender,
-        builder: (filter) => Assets.icons.icFarcaster.svg(
-          colorFilter: filter,
-        ),
-      ),
-      trailing: Assets.icons.icArrowBack.svg(
-        width: 18.w,
-        height: 18.w,
-      ),
-      onTap: () {
-        if (loggedInUser == null) {
-          AutoRouter.of(context).push(const LoginRoute());
-        } else {
-          if (farcasterConnected) {
-            return;
-          }
-          showCupertinoModalBottomSheet(
-            backgroundColor: LemonColor.atomicBlack,
-            context: context,
-            useRootNavigator: true,
-            builder: (mContext) => ConnectFarcasterBottomsheet(
-              onConnected: () {
-                context.read<AuthBloc>().add(const AuthEvent.refreshData());
-                Navigator.of(context, rootNavigator: true).pop();
-                SnackBarUtils.showSuccess(
-                  message: t.farcaster.farcasterConnectedSuccess,
-                );
-              },
-            ),
-          );
-        }
-      },
     );
   }
 }
