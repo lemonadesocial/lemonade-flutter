@@ -18,12 +18,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+enum ConnectFarcasterButtonVariant {
+  home,
+  drawer,
+}
+
 class ConnectFarcasterButton extends StatelessWidget {
-  const ConnectFarcasterButton({super.key});
+  final ConnectFarcasterButtonVariant variant;
+  const ConnectFarcasterButton({
+    super.key,
+    this.variant = ConnectFarcasterButtonVariant.drawer,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
@@ -56,81 +64,171 @@ class ConnectFarcasterButton extends StatelessWidget {
           );
         }
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(LemonRadius.small),
-        ),
-        padding: EdgeInsets.only(
-          top: Spacing.superExtraSmall,
-          bottom: Spacing.superExtraSmall,
-          left: Spacing.superExtraSmall,
-          right: Spacing.smMedium,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: Sizing.large,
-              height: Sizing.large,
-              decoration: BoxDecoration(
-                color: LemonColor.farcasterViolet,
-                borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-              ),
-              child: Center(
-                child: ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icFarcaster.svg(
-                    colorFilter: filter,
-                    width: Sizing.small,
-                    height: Sizing.small,
-                  ),
+      child: variant == ConnectFarcasterButtonVariant.drawer
+          ? _DrawerButton(farcasterConnected: farcasterConnected)
+          : const _HomeButton(),
+    );
+  }
+}
+
+class _DrawerButton extends StatelessWidget {
+  const _DrawerButton({
+    required this.farcasterConnected,
+  });
+
+  final bool farcasterConnected;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.circular(LemonRadius.small),
+      ),
+      padding: EdgeInsets.only(
+        top: Spacing.superExtraSmall,
+        bottom: Spacing.superExtraSmall,
+        left: Spacing.superExtraSmall,
+        right: Spacing.smMedium,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: Sizing.large,
+            height: Sizing.large,
+            decoration: BoxDecoration(
+              color: LemonColor.farcasterViolet,
+              borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+            ),
+            child: Center(
+              child: ThemeSvgIcon(
+                color: colorScheme.onPrimary,
+                builder: (filter) => Assets.icons.icFarcaster.svg(
+                  colorFilter: filter,
+                  width: Sizing.small,
+                  height: Sizing.small,
                 ),
               ),
             ),
-            SizedBox(width: Spacing.small),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    t.profile.socials.farcaster,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    t.farcaster.shareYourEvents,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: Spacing.small),
-            if (!farcasterConnected)
-              SizedBox(
-                height: 32.w,
-                child: LinearGradientButton.secondaryButton(
-                  label: StringUtils.capitalize(t.common.actions.connect),
-                  textStyle: Typo.small.copyWith(
+          ),
+          SizedBox(width: Spacing.small),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  t.profile.socials.farcaster,
+                  style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
-            if (farcasterConnected)
-              LemonOutlineButton(
-                height: 32.w,
-                label: t.common.status.connected,
-                radius: BorderRadius.circular(LemonRadius.button),
+                Text(
+                  t.farcaster.shareYourEvents,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: Spacing.small),
+          if (!farcasterConnected)
+            SizedBox(
+              height: 32.w,
+              child: LinearGradientButton.secondaryButton(
+                label: StringUtils.capitalize(t.common.actions.connect),
                 textStyle: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: colorScheme.onPrimary,
                 ),
               ),
-          ],
-        ),
+            ),
+          if (farcasterConnected)
+            LemonOutlineButton(
+              height: 32.w,
+              label: t.common.status.connected,
+              radius: BorderRadius.circular(LemonRadius.button),
+              textStyle: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeButton extends StatelessWidget {
+  const _HomeButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.onPrimary.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(LemonRadius.small),
+      ),
+      padding: EdgeInsets.all(Spacing.smMedium),
+      child: Row(
+        children: [
+          Container(
+            width: Sizing.medium,
+            height: Sizing.medium,
+            decoration: BoxDecoration(
+              color: colorScheme.onPrimary.withOpacity(0.03),
+              borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+            ),
+            child: Center(
+              child: ThemeSvgIcon(
+                color: LemonColor.farcasterViolet,
+                builder: (filter) => Assets.icons.icFarcaster.svg(
+                  colorFilter: filter,
+                  width: Sizing.small,
+                  height: Sizing.small,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.xSmall),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      t.farcaster.connectFarcaster,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icArrowRight.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3.w),
+                Text(
+                  t.farcaster.connectFarcasterHomepageDescription,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
