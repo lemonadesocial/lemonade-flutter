@@ -36,10 +36,21 @@ class _FrostedGlassDropdownController<T>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
+      decoration: ShapeDecoration(
+        color: colorScheme.secondaryContainer,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1.w,
+            color: colorScheme.outline,
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
       margin: EdgeInsets.only(top: Spacing.superExtraSmall),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LemonRadius.medium),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
           child: Container(
