@@ -36,6 +36,7 @@ class ConnectFarcasterButton extends StatelessWidget {
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
+          onBoardingRequired: (user) => user,
         );
     final farcasterConnected =
         loggedInUser?.farcasterUserInfo?.accountKeyRequest?.accepted == true;

@@ -11,6 +11,7 @@ class SettingTileWidget extends StatelessWidget {
     required this.title,
     this.leading,
     this.leadingCircle = true,
+    this.leadingRadius,
     required this.onTap,
     this.subTitle,
     this.trailing,
@@ -25,6 +26,7 @@ class SettingTileWidget extends StatelessWidget {
   final String title;
   final String? subTitle;
   final Widget? leading;
+  final double? leadingRadius;
   final bool? leadingCircle;
   final Widget? trailing;
   final VoidCallback onTap;
@@ -66,8 +68,11 @@ class SettingTileWidget extends StatelessWidget {
                               height: 42.w,
                               padding: EdgeInsets.all(Spacing.xSmall),
                               decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                                shape: BoxShape.rectangle,
                                 color: colorScheme.secondaryContainer,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(leadingRadius ?? 42.w),
+                                ),
                               ),
                               child: leading,
                             )
@@ -91,18 +96,17 @@ class SettingTileWidget extends StatelessWidget {
                               ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 3.h,
                         ),
                         subTitle == null || subTitle == ''
                             ? const SizedBox.shrink()
                             : Text(
                                 subTitle!,
                                 style: Typo.small.copyWith(
-                                  color:
-                                      colorScheme.onPrimary.withOpacity(0.36),
+                                  color: colorScheme.onSecondary,
                                   fontWeight: FontWeight.w400,
                                 ),
-                                maxLines: 1,
+                                maxLines: 2,
                               ),
                       ],
                     ),

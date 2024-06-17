@@ -10,7 +10,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -86,26 +85,32 @@ class OnboardingUsernamePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    LinearGradientButton(
-                      onTap: (bloc.state.username?.isEmpty ?? true) ||
-                              (bloc.state.usernameExisted ?? true)
-                          ? null
-                          : bloc.updateProfile,
-                      label: t.onboarding.claim,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onPrimary,
+                    SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.xSmall,
+                        ),
+                        child: LinearGradientButton(
+                          onTap: (bloc.state.username?.isEmpty ?? true) ||
+                                  (bloc.state.usernameExisted ?? true)
+                              ? null
+                              : bloc.updateProfile,
+                          label: t.onboarding.claim,
+                          textStyle: Typo.medium.copyWith(
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onPrimary,
+                          ),
+                          height: Sizing.large,
+                          radius: BorderRadius.circular(LemonRadius.large),
+                          mode: (bloc.state.username?.isEmpty ?? true) ||
+                                  (bloc.state.usernameExisted ?? true)
+                              ? GradientButtonMode.defaultMode
+                              : GradientButtonMode.lavenderMode,
+                          loadingWhen: state.status == OnboardingStatus.loading,
+                        ),
                       ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: (bloc.state.username?.isEmpty ?? true) ||
-                              (bloc.state.usernameExisted ?? true)
-                          ? GradientButtonMode.defaultMode
-                          : GradientButtonMode.lavenderMode,
-                      loadingWhen: state.status == OnboardingStatus.loading,
                     ),
-                    SizedBox(height: 24.h),
                   ],
                 ),
               ),

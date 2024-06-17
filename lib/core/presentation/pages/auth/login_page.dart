@@ -30,7 +30,7 @@ class LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeWhen(
-            authenticated: (_) {
+            authenticated: (user) {
               AutoRouter.of(context).pop();
             },
             onBoardingRequired: (user) {
