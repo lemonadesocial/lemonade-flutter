@@ -17,6 +17,7 @@
     "appBar": {
         "moreActions": {
             "myProfile": "My profile",
+            "completeProfile": "Complete profile",
             "setting": "Settings",
             "reportIssue": "Report an issue",
             "rateApp": "Rate app",

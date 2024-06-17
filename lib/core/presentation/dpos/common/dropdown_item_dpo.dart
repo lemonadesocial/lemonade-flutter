@@ -6,6 +6,7 @@ class DropdownItemDpo<T> {
   final T? value;
   final Color? customColor;
   final TextStyle? textStyle;
+  final bool? showRedDot;
 
   DropdownItemDpo({
     required this.label,
@@ -13,5 +14,6 @@ class DropdownItemDpo<T> {
     this.leadingIcon,
     this.customColor,
     this.textStyle,
+    this.showRedDot,
   });
 }

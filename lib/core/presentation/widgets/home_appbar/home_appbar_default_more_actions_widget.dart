@@ -15,6 +15,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,6 +42,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           orElse: () => false,
           authenticated: (_) => true,
         );
+    const showRedDot = true;
     return FloatingFrostedGlassDropdown(
       items: [
         DropdownItemDpo(
@@ -48,6 +50,14 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           label: t.home.appBar.moreActions.myProfile,
           leadingIcon: getThemeIcon(context, icon: Assets.icons.icProfile),
           customColor: colorScheme.onPrimary,
+        ),
+        DropdownItemDpo(
+          value: CommonMoreActions.viewSettings,
+          label: t.home.appBar.moreActions.completeProfile,
+          leadingIcon:
+              getThemeIcon(context, icon: Assets.icons.icPersonCelebrate),
+          customColor: colorScheme.onPrimary,
+          showRedDot: true,
         ),
         DropdownItemDpo(
           value: CommonMoreActions.viewSettings,
@@ -133,9 +143,32 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           return;
         }
       },
-      child: Assets.icons.icMoreVertical.svg(
-        width: Sizing.small,
-        height: Sizing.small,
+      child: Stack(
+        children: [
+          Assets.icons.icMoreVertical.svg(
+            width: Sizing.small,
+            height: Sizing.small,
+          ),
+          if (showRedDot == true) ...[
+            Positioned(
+              bottom: 0,
+              right: 3.w,
+              child: Container(
+                width: 6.w,
+                height: 6.w,
+                decoration: const ShapeDecoration(
+                  color: LemonColor.coralReef,
+                  shape: OvalBorder(
+                    side: BorderSide(
+                      width: 3,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

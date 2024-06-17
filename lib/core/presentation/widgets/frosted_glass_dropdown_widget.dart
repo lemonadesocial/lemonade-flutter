@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -92,7 +93,7 @@ class _FrostedGlassDropdownController<T>
             isSelected ? Colors.white.withOpacity(6 / 100) : Colors.transparent,
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.small,
-          vertical: Spacing.small,
+          vertical: Spacing.xSmall,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -108,6 +109,21 @@ class _FrostedGlassDropdownController<T>
                     color: item.customColor,
                   ),
             ),
+            if (item.showRedDot == true) ...[
+              Padding(
+                padding: EdgeInsets.only(left: Spacing.xSmall),
+                child: Container(
+                  width: 6.w,
+                  height: 6.w,
+                  decoration: ShapeDecoration(
+                    color: LemonColor.coralReef,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.w),
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const Spacer(),
             if (isSelected)
               ThemeSvgIcon(
