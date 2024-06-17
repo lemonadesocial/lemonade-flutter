@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.25.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.24.0...v1.25.0) (2024-06-17)
+
+
+### Features
+
+* onboarding improvement ([#642](https://github.com/lemonadesocial/lemonade-flutter/issues/642)) ([f8ea893](https://github.com/lemonadesocial/lemonade-flutter/commit/f8ea893ea230b7fb3422e90fb61ade4bbf06f3b5))
+* update unauthenticated stage for homepage ui ([#643](https://github.com/lemonadesocial/lemonade-flutter/issues/643)) ([d305353](https://github.com/lemonadesocial/lemonade-flutter/commit/d30535350d7a4ec47cee10de9a21e4889fc25d07))
+
+
+### Bug Fixes
+
+* update exportEventTickets API params ([#646](https://github.com/lemonadesocial/lemonade-flutter/issues/646)) ([55722c7](https://github.com/lemonadesocial/lemonade-flutter/commit/55722c7be23a4441c19b985521656474456420c5))
+
 ## [1.24.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.23.0...v1.24.0) (2024-06-14)
 
 
