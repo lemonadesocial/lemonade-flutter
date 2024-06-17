@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_button/connect_farcaster_button.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_channels_list/farcaster_channel_list.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -27,7 +28,7 @@ class _HomeNewsfeedListViewState extends State<HomeNewsfeedListView> {
     final bloc = context.read<NewsfeedListingBloc>();
     final refreshController = RefreshController();
 
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
           authenticated: (_) => context
@@ -39,7 +40,8 @@ class _HomeNewsfeedListViewState extends State<HomeNewsfeedListView> {
           orElse: () {},
         );
       },
-      child: BlocConsumer<NewsfeedListingBloc, NewsfeedListingState>(
+      builder: (context, authState) =>
+          BlocConsumer<NewsfeedListingBloc, NewsfeedListingState>(
         listener: (context, state) {
           if (state.scrollToTopEvent) {
             bloc.scrollController
@@ -97,6 +99,34 @@ class _HomeNewsfeedListViewState extends State<HomeNewsfeedListView> {
               slivers: [
                 const SliverToBoxAdapter(
                   child: FarcasterChannelsList(),
+                ),
+                Builder(
+                  builder: (context) {
+                    final loggedInUser =
+                        context.watch<AuthBloc>().state.maybeWhen(
+                              orElse: () => null,
+                              authenticated: (user) => user,
+                            );
+                    final isConnected = loggedInUser
+                            ?.farcasterUserInfo?.accountKeyRequest?.accepted ==
+                        true;
+                    if (isConnected) {
+                      return const SliverToBoxAdapter(
+                        child: SizedBox.shrink(),
+                      );
+                    }
+                    return SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Spacing.xSmall,
+                        horizontal: Spacing.xSmall,
+                      ),
+                      sliver: const SliverToBoxAdapter(
+                        child: ConnectFarcasterButton(
+                          variant: ConnectFarcasterButtonVariant.home,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 SliverPadding(
                   padding:
