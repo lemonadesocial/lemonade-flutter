@@ -18,6 +18,8 @@ class BuyTicketsInput with _$BuyTicketsInput {
     String? discount,
     @JsonKey(name: 'transfer_params')
     BuyTicketsTransferParamsInput? transferParams,
+    // EthereumRelay
+    String? fee,
   }) = _BuyTicketsInput;
 
   factory BuyTicketsInput.fromJson(Map<String, dynamic> json) =>

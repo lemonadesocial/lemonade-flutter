@@ -50,6 +50,16 @@ class AppConfig {
   static get lemonadeAndroidDownloadUrl =>
       'https://play.google.com/store/apps/details?id=social.lemonade.app';
 
+  // Farcaster
+  static get farcasterDefaultChannels => [
+        'lemonadedao',
+        'funitednations',
+        'vinylnation.eth',
+        'zuzalu',
+        'farcaster',
+        'ethereum',
+      ];
+
   // Wallet connect
   static get walletConnectProjectId => dotenv.env['WALLET_CONNECT_PROJECT_ID'];
 

@@ -87,7 +87,7 @@ type Query {
   getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
   getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
-  exportEventTickets(_id: MongoID!): [TicketExport!]!
+  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(
     skip: Int! = 0
@@ -2207,6 +2207,11 @@ type StripeCard {
   last4: String!
 }
 
+type ExportedTickets {
+  tickets: [TicketExport!]!
+  count: Float!
+}
+
 type TicketExport {
   """Ticket id"""
   _id: MongoID!
@@ -2236,6 +2241,12 @@ type TicketExport {
   buyer_id: MongoID
   buyer_avatar: String
   buyer_username: String
+  ticket_type_id: MongoID
+}
+
+input PaginationInput {
+  skip: Int! = 0
+  limit: Int! = 25
 }
 
 type PricingInfo {

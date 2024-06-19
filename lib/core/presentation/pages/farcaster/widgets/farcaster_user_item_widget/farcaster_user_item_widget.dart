@@ -1,4 +1,5 @@
 import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -24,6 +25,7 @@ class FarcasterUserItemWidget extends StatelessWidget {
           height: Sizing.medium,
           imageUrl: user.profileImage ?? '',
           borderRadius: BorderRadius.circular(Sizing.medium),
+          placeholder: ImagePlaceholder.avatarPlaceholder(),
         ),
         SizedBox(
           width: Spacing.xSmall,
@@ -33,7 +35,7 @@ class FarcasterUserItemWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              user.profileDisplayName ?? '',
+              user.profileDisplayName ?? 'Anonymous',
               style: Typo.medium.copyWith(
                 color: colorScheme.onPrimary,
               ),

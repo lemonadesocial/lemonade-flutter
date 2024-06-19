@@ -1,9 +1,14 @@
-query GetFarcasterUsers($queryRegex: String) {
+query GetFarcasterUsers(
+  $filter: SocialFilter!
+  $cursor: String
+  $limit: Int = 20
+) {
   Socials(
     input: {
-      filter: { profileName: { _regex: $queryRegex } }
+      filter: $filter
+      cursor: $cursor
       blockchain: ethereum
-      limit: 20
+      limit: $limit
     }
   ) {
     Social {
@@ -11,7 +16,14 @@ query GetFarcasterUsers($queryRegex: String) {
       profileDisplayName
       profileUrl
       profileImage
+      profileBio
       fid: userId
+    }
+    pageInfo {
+      hasNextPage
+      nextCursor
+      prevCursor
+      hasPrevPage
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -26,18 +27,18 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
         if (state.status == OnboardingStatus.success) {
-          context.router.push(const OnboardingAboutRoute());
+          context.router.push(const OnboardingSocialOnChainRoute());
         }
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
+          appBar: LemonAppBar(
             actions: [
               Row(
                 children: [
                   InkWell(
-                    onTap: () =>
-                        context.router.push(const OnboardingAboutRoute()),
+                    onTap: () => context.router
+                        .push(const OnboardingSocialOnChainRoute()),
                     child: Text(
                       t.onboarding.skip,
                       style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
@@ -80,22 +81,29 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                LinearGradientButton(
-                  onTap: state.profilePhoto == null ? null : bloc.uploadImage,
-                  label: t.onboarding.next,
-                  textStyle: Typo.medium.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onPrimary,
+                SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Spacing.xSmall,
+                    ),
+                    child: LinearGradientButton(
+                      onTap:
+                          state.profilePhoto == null ? null : bloc.uploadImage,
+                      label: t.onboarding.next,
+                      textStyle: Typo.medium.copyWith(
+                        fontFamily: FontFamily.nohemiVariable,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onPrimary,
+                      ),
+                      height: Sizing.large,
+                      radius: BorderRadius.circular(LemonRadius.large),
+                      mode: state.profilePhoto == null
+                          ? GradientButtonMode.defaultMode
+                          : GradientButtonMode.lavenderMode,
+                      loadingWhen: state.status == OnboardingStatus.loading,
+                    ),
                   ),
-                  height: Sizing.large,
-                  radius: BorderRadius.circular(LemonRadius.large),
-                  mode: state.profilePhoto == null
-                      ? GradientButtonMode.defaultMode
-                      : GradientButtonMode.lavenderMode,
-                  loadingWhen: state.status == OnboardingStatus.loading,
                 ),
-                SizedBox(height: 24.h),
               ],
             ),
           ),

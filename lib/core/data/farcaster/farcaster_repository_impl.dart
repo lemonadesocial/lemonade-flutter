@@ -1,5 +1,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/data/farcaster/dtos/farcaster_account_key_request_dto.dart';
+import 'package:app/core/data/farcaster/helper/parse_frame_metadata.dart';
+import 'package:app/core/domain/farcaster/entities/airstack_farcaster_cast.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_account_key_request.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/domain/farcaster/entities/farcaster_signed_key_request.dart';
@@ -160,6 +162,24 @@ class FarcasterRepositoryImpl implements FarcasterRepository {
       }
 
       return Right(response.data['data'] != null);
+    } catch (e) {
+      return Left(Failure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, AirstackFrame>> getNextFrame({
+    required String targetUrl,
+  }) async {
+    try {
+      final response = await Dio().get(
+        targetUrl,
+      );
+      if (response.statusCode != 200) {
+        return Left(Failure());
+      }
+
+      return Right(parseFarcasterFrameMetadata(response.data));
     } catch (e) {
       return Left(Failure());
     }

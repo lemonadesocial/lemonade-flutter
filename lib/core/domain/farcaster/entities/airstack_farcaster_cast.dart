@@ -14,7 +14,7 @@ class AirstackFarcasterCast with _$AirstackFarcasterCast {
     String? hash,
     AirstackFarcasterUser? castedBy,
     AirstackFrame? frame,
-    AirstackChannel? channel,
+    AirstackFarcasterChannel? channel,
     List<AirstackFarcasterCast>? quotedCast,
     String? rootParentUrl,
     String? parentHash,
@@ -53,6 +53,7 @@ class AirstackFrame with _$AirstackFrame {
     String? imageUrl,
     String? frameUrl,
     String? postUrl,
+    List<AirstackFrameButton>? buttons,
   }) = _AirstackFrame;
 
   factory AirstackFrame.fromJson(Map<String, dynamic> json) =>
@@ -60,15 +61,62 @@ class AirstackFrame with _$AirstackFrame {
 }
 
 @freezed
-class AirstackChannel with _$AirstackChannel {
-  factory AirstackChannel({
+class AirstackFrameButton with _$AirstackFrameButton {
+  factory AirstackFrameButton({
+    int? index,
+    AirstackFrameButtonAction? action,
+    String? target,
+    String? label,
+  }) = _AirstackFrameButton;
+
+  factory AirstackFrameButton.fromJson(Map<String, dynamic> json) =>
+      _$AirstackFrameButtonFromJson(json);
+}
+
+enum AirstackFrameButtonAction {
+  @JsonValue('post')
+  post,
+  @JsonValue('link')
+  link,
+  @JsonValue('post_redirect')
+  postRedirect,
+  @JsonValue('mint')
+  mint,
+  @JsonValue('tx')
+  tx,
+  @JsonValue('')
+  unknown;
+
+  static AirstackFrameButtonAction fromString(String value) {
+    switch (value) {
+      case 'post':
+        return AirstackFrameButtonAction.post;
+      case 'link':
+        return AirstackFrameButtonAction.link;
+      case 'post_redirect':
+        return AirstackFrameButtonAction.postRedirect;
+      case 'mint':
+        return AirstackFrameButtonAction.mint;
+      case 'tx':
+        return AirstackFrameButtonAction.tx;
+      default:
+        return AirstackFrameButtonAction.unknown;
+    }
+  }
+}
+
+@freezed
+class AirstackFarcasterChannel with _$AirstackFarcasterChannel {
+  factory AirstackFarcasterChannel({
     String? channelId,
     String? id,
     String? imageUrl,
     String? name,
     String? url,
+    String? description,
+    double? followerCount,
   }) = _AirstackChannel;
 
-  factory AirstackChannel.fromJson(Map<String, dynamic> json) =>
-      _$AirstackChannelFromJson(json);
+  factory AirstackFarcasterChannel.fromJson(Map<String, dynamic> json) =>
+      _$AirstackFarcasterChannelFromJson(json);
 }

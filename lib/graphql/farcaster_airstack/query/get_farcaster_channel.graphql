@@ -5,6 +5,7 @@ query GetChannel($channelId: String) {
     FarcasterChannel {
       id
       channelId
+      url,
       imageUrl
       name
       description

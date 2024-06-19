@@ -7,6 +7,10 @@ const paymentAccountInfoFragment = '''
       active
       created_at
       user
+      fee
+      relay {
+        payment_splitter_contract
+      }
       type
       title
       provider
@@ -16,6 +20,14 @@ const paymentAccountInfoFragment = '''
         currency_map
         address
         networks
+      }
+
+      ... on EthereumRelayAccount {
+        address
+        currencies
+        currency_map
+        network
+        payment_splitter_contract
       }
 
       ...on StripeAccount {

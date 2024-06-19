@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.26.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.25.0...v1.26.0) (2024-06-19)
+
+
+### Features
+
+* complete profile ([#648](https://github.com/lemonadesocial/lemonade-flutter/issues/648)) ([8c94699](https://github.com/lemonadesocial/lemonade-flutter/commit/8c94699f9264d7dfbd74097a9803db75dc5339d1))
+* discover users & channel ([#647](https://github.com/lemonadesocial/lemonade-flutter/issues/647)) ([3555bfd](https://github.com/lemonadesocial/lemonade-flutter/commit/3555bfdcac1c30df8181e189ace3408df203aae5))
+
+## [1.25.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.24.0...v1.25.0) (2024-06-17)
+
+
+### Features
+
+* onboarding improvement ([#642](https://github.com/lemonadesocial/lemonade-flutter/issues/642)) ([f8ea893](https://github.com/lemonadesocial/lemonade-flutter/commit/f8ea893ea230b7fb3422e90fb61ade4bbf06f3b5))
+* update unauthenticated stage for homepage ui ([#643](https://github.com/lemonadesocial/lemonade-flutter/issues/643)) ([d305353](https://github.com/lemonadesocial/lemonade-flutter/commit/d30535350d7a4ec47cee10de9a21e4889fc25d07))
+
+
+### Bug Fixes
+
+* update exportEventTickets API params ([#646](https://github.com/lemonadesocial/lemonade-flutter/issues/646)) ([55722c7](https://github.com/lemonadesocial/lemonade-flutter/commit/55722c7be23a4441c19b985521656474456420c5))
+
+## [1.24.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.23.0...v1.24.0) (2024-06-14)
+
+
+### Features
+
+* adapt ethereum relay payment account info ([#638](https://github.com/lemonadesocial/lemonade-flutter/issues/638)) ([4e5de84](https://github.com/lemonadesocial/lemonade-flutter/commit/4e5de84393a8754b68577b752199f1901b012bf6))
+* implement frame actions to interact with frame ([#640](https://github.com/lemonadesocial/lemonade-flutter/issues/640)) ([548ec40](https://github.com/lemonadesocial/lemonade-flutter/commit/548ec40117b5c8e26abfc32ed7ae540181cb7aa5))
+* support pagination for export event tickets ([#641](https://github.com/lemonadesocial/lemonade-flutter/issues/641)) ([4a9e7fe](https://github.com/lemonadesocial/lemonade-flutter/commit/4a9e7fe79c40cbba4d34f10ad2c5e3044af64383))
+
 ## [1.23.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.22.0...v1.23.0) (2024-06-12)
 
 

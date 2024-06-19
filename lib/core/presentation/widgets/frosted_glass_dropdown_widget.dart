@@ -36,10 +36,21 @@ class _FrostedGlassDropdownController<T>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
+      decoration: ShapeDecoration(
+        color: colorScheme.secondaryContainer,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1.w,
+            color: colorScheme.outline,
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
       margin: EdgeInsets.only(top: Spacing.superExtraSmall),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(LemonRadius.medium),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
           child: Container(
@@ -81,7 +92,7 @@ class _FrostedGlassDropdownController<T>
             isSelected ? Colors.white.withOpacity(6 / 100) : Colors.transparent,
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.small,
-          vertical: Spacing.small,
+          vertical: Spacing.xSmall,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -97,6 +108,21 @@ class _FrostedGlassDropdownController<T>
                     color: item.customColor,
                   ),
             ),
+            if (item.showRedDot == true) ...[
+              Padding(
+                padding: EdgeInsets.only(left: Spacing.xSmall),
+                child: Container(
+                  width: 6.w,
+                  height: 6.w,
+                  decoration: ShapeDecoration(
+                    color: LemonColor.coralReef,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.w),
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const Spacer(),
             if (isSelected)
               ThemeSvgIcon(

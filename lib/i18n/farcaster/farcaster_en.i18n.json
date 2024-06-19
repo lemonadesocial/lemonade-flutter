@@ -1,6 +1,7 @@
 {
     "connectFarcaster": "Connect Farcaster",
     "connectFarcasterDescription": "Press Connect & follow Warpcast instructions. This dialog will auto-close after connecting.",
+    "connectFarcasterHomepageDescription": "Discover communities and share your events!",
     "farcasterConnectedSuccess": "Farcaster successfully connected!",
     "shareOnFarcaster": "Share on Farcaster",
     "castCreatedSuccess": "Cast successfully created!",
@@ -33,6 +34,15 @@
             "casts": "Casts",
             "replies": "Replies",
             "likes": "Likes"
+        }
+    },
+    "frame": {
+        "loadFrameError": "Frame error: Unknown error commuinicating with frame server."
+    },
+    "discover": {
+        "discoverTabs": {
+            "users": "Users",
+            "channels": "Channels"
         }
     }
 }

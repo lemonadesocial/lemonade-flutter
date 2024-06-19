@@ -10,6 +10,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class EventOrderSummary extends StatelessWidget {
   const EventOrderSummary({
@@ -22,6 +23,12 @@ class EventOrderSummary extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
   final String? selectedNetwork;
   final String selectedCurrency;
+
+  BigInt get _totalCryptoAmount {
+    return (pricingInfo.cryptoTotal ?? BigInt.zero) +
+        // add fee if available for EthereumRelay
+        (pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ?? BigInt.zero);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +79,20 @@ class EventOrderSummary extends StatelessWidget {
                         ),
                   textColor: colorScheme.onPrimary.withOpacity(0.87),
                 ),
+                if (pricingInfo.paymentAccounts?.first.fee?.isNotEmpty ==
+                    true) ...[
+                  SizedBox(height: Spacing.xSmall),
+                  SummaryRow(
+                    label: t.event.eventOrder.fee,
+                    value: Web3Utils.formatCryptoCurrency(
+                      pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ??
+                          BigInt.zero,
+                      currency: selectedCurrency,
+                      decimals: currencyInfo?.decimals ?? 0,
+                    ),
+                    textColor: colorScheme.onPrimary.withOpacity(0.87),
+                  ),
+                ],
                 if (pricingInfo.discount != null &&
                     pricingInfo.promoCode?.isNotEmpty == true) ...[
                   SizedBox(height: Spacing.xSmall),
@@ -112,7 +133,7 @@ class EventOrderSummary extends StatelessWidget {
               label: t.event.eventOrder.grandTotal,
               value: isCryptoCurrency
                   ? Web3Utils.formatCryptoCurrency(
-                      pricingInfo.cryptoTotal ?? BigInt.zero,
+                      _totalCryptoAmount,
                       currency: selectedCurrency,
                       decimals: currencyInfo?.decimals ?? 0,
                     )

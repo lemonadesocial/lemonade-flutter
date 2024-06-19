@@ -23,6 +23,13 @@ query GetUserFarcasterCasts($fc_fname: Identity!, $cursor: String) {
         imageUrl
         frameUrl
         postUrl
+        buttons {
+          action
+          id
+          index
+          label
+          target
+        }
       }
       channel {
         channelId

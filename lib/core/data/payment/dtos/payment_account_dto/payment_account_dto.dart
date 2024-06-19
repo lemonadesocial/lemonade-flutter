@@ -16,6 +16,9 @@ class PaymentAccountDto with _$PaymentAccountDto {
     PaymentAccountType? type,
     PaymentProvider? provider,
     @JsonKey(name: 'account_info') AccountInfoDto? accountInfo,
+    // EthereumRelay
+    String? fee,
+    RelayDto? relay,
   }) = _PaymentAccountDto;
 
   factory PaymentAccountDto.fromJson(Map<String, dynamic> json) =>
@@ -31,8 +34,9 @@ class AccountInfoDto with _$AccountInfoDto {
     // Blockchain
     String? address,
     List<String>? networks,
-    // Safe
+    // Safe | EthereumRelay | EthereumEscrow
     String? network,
+    // Safe
     List<String>? owners,
     int? threshold,
     bool? pending,
@@ -42,6 +46,8 @@ class AccountInfoDto with _$AccountInfoDto {
     @JsonKey(name: 'minimum_deposit_percent') int? minimumDepositPercent,
     @JsonKey(name: 'host_refund_percent') double? hostRefundPercent,
     @JsonKey(name: 'refund_policies') List<RefundPolicyDto>? refundPolicies,
+    // EthereumRelay
+    @JsonKey(name: 'payment_splitter_contract') String? paymentSplitterContract,
   }) = _AccountInfoDto;
 
   factory AccountInfoDto.fromJson(Map<String, dynamic> json) =>
@@ -58,4 +64,14 @@ class CurrencyInfoDto with _$CurrencyInfoDto {
 
   factory CurrencyInfoDto.fromJson(Map<String, dynamic> json) =>
       _$CurrencyInfoDtoFromJson(json);
+}
+
+@freezed
+class RelayDto with _$RelayDto {
+  factory RelayDto({
+    @JsonKey(name: 'payment_splitter_contract') String? paymentSplitterContract,
+  }) = _RelayDto;
+
+  factory RelayDto.fromJson(Map<String, dynamic> json) =>
+      _$RelayDtoFromJson(json);
 }

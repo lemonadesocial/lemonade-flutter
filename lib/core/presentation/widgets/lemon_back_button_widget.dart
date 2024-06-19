@@ -21,7 +21,7 @@ class LemonBackButton extends StatelessWidget {
         AutoRouter.of(context).pop();
       },
       child: ThemeSvgIcon(
-        color: color ?? Theme.of(context).colorScheme.onSurface,
+        color: color ?? Theme.of(context).colorScheme.onPrimary,
         builder: (filter) => Assets.icons.icBack.svg(
           colorFilter: filter,
           fit: BoxFit.scaleDown,

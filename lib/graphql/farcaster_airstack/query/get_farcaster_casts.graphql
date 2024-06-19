@@ -23,6 +23,13 @@ query GetFarCasterCasts($rootParentUrl: String, $cursor: String) {
         imageUrl
         frameUrl
         postUrl
+        buttons {
+          action
+          id
+          index
+          label
+          target
+        }
       }
       channel {
         channelId

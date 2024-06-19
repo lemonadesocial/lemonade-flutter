@@ -82,12 +82,12 @@ class AppRouter extends $AppRouter {
             ),
             AutoRoute(
               page: OnboardingUsernameRoute.page,
-              meta: const {
-                'popBlocked': true,
-              },
             ),
             AutoRoute(
               page: OnboardingProfilePhotoRoute.page,
+            ),
+            AutoRoute(
+              page: OnboardingSocialOnChainRoute.page,
             ),
             AutoRoute(
               page: OnboardingAboutRoute.page,
@@ -517,4 +517,5 @@ final farcasterRoutes = [
   AutoRoute(page: FarcasterCastDetailRoute.page),
   AutoRoute(page: FarcasterCastDetailRoute.page),
   AutoRoute(page: FarcasterUserProfileRoute.page),
+  AutoRoute(page: FarcasterDiscoverRoute.page),
 ];

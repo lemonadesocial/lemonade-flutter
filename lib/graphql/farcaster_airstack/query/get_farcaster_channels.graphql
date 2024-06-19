@@ -1,0 +1,29 @@
+query GetFarcasterChannels(
+  $cursor: String
+  $filter: FarcasterChannelFilter!
+  $limit: Int = 20
+) {
+  FarcasterChannels(
+    input: { blockchain: ALL, cursor: $cursor, filter: $filter, limit: $limit }
+  ) {
+    FarcasterChannel {
+      id
+      channelId
+      url
+      imageUrl
+      name
+      description
+      followerCount
+      leadProfiles {
+        profileName
+        profileImage
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPrevPage
+      nextCursor
+      prevCursor
+    }
+  }
+}

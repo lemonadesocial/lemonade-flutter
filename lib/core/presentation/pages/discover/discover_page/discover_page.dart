@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_badges_near_you.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_communities.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_farcaster_channels.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_upcoming_events.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
@@ -29,7 +30,7 @@ class DiscoverPage extends StatelessWidget {
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
-          const DiscoverUpcomingEvents(),
+          const DiscoverFarcasterChannels(),
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
@@ -38,6 +39,10 @@ class DiscoverPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
           ),
           const DiscoverBadgesNearYou(),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
+          ),
+          const DiscoverUpcomingEvents(),
           SliverToBoxAdapter(
             child: SizedBox(height: 3 * BottomBar.bottomBarHeight),
           ),
