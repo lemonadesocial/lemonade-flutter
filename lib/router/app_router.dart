@@ -520,4 +520,5 @@ final farcasterRoutes = [
   AutoRoute(page: FarcasterCastDetailRoute.page),
   AutoRoute(page: FarcasterCastDetailRoute.page),
   AutoRoute(page: FarcasterUserProfileRoute.page),
+  AutoRoute(page: FarcasterDiscoverRoute.page),
 ];
