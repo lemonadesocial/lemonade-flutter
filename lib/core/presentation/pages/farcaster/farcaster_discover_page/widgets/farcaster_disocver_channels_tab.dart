@@ -4,10 +4,9 @@ import 'package:app/core/presentation/pages/farcaster/farcaster_discover_page/wi
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
-import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/gql/widgets/airstack_gql_provider_widget.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_channels.graphql.dart';
 import 'package:app/graphql/farcaster_airstack/schema.graphql.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -30,15 +29,8 @@ class FarcasterDiscoverChannelsTab extends StatefulWidget {
 
 class _FarcasterDiscoverChannelsTabState
     extends State<FarcasterDiscoverChannelsTab> {
-  late ValueNotifier<GraphQLClient> airstackClient;
   final debouncer = Debouncer(milliseconds: 300);
   final _refreshController = RefreshController();
-
-  @override
-  void initState() {
-    super.initState();
-    airstackClient = ValueNotifier(getIt<AirstackGQL>().client);
-  }
 
   @override
   void dispose() {
@@ -50,8 +42,7 @@ class _FarcasterDiscoverChannelsTabState
   @override
   Widget build(BuildContext context) {
     return Builder(
-      builder: (context) => GraphQLProvider(
-        client: airstackClient,
+      builder: (context) => AirstackGQLProviderWidget(
         child: Query$GetFarcasterChannels$Widget(
           options: Options$Query$GetFarcasterChannels(
             variables: Variables$Query$GetFarcasterChannels(
@@ -62,7 +53,7 @@ class _FarcasterDiscoverChannelsTabState
             },
           ),
           builder: (result, {refetch, fetchMore}) {
-            return _View(
+            return _ChannelsListView(
               textController: widget.textController,
               refreshController: _refreshController,
               debouncer: debouncer,
@@ -77,8 +68,8 @@ class _FarcasterDiscoverChannelsTabState
   }
 }
 
-class _View extends StatefulWidget {
-  const _View({
+class _ChannelsListView extends StatefulWidget {
+  const _ChannelsListView({
     required this.textController,
     required this.refreshController,
     required this.debouncer,
@@ -97,10 +88,10 @@ class _View extends StatefulWidget {
   )? fetchMore;
 
   @override
-  State<_View> createState() => _ViewState();
+  State<_ChannelsListView> createState() => _ChannelsListViewState();
 }
 
-class _ViewState extends State<_View> {
+class _ChannelsListViewState extends State<_ChannelsListView> {
   @override
   void initState() {
     super.initState();

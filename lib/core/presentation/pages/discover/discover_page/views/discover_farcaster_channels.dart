@@ -5,12 +5,11 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/gql/widgets/airstack_gql_provider_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_channels.graphql.dart';
 import 'package:app/graphql/farcaster_airstack/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -19,7 +18,6 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class DiscoverFarcasterChannels extends StatefulWidget {
@@ -31,14 +29,6 @@ class DiscoverFarcasterChannels extends StatefulWidget {
 }
 
 class _DiscoverFarcasterChannelsState extends State<DiscoverFarcasterChannels> {
-  late ValueNotifier<GraphQLClient> airstackClient;
-
-  @override
-  void initState() {
-    super.initState();
-    airstackClient = ValueNotifier(getIt<AirstackGQL>().client);
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -79,8 +69,7 @@ class _DiscoverFarcasterChannelsState extends State<DiscoverFarcasterChannels> {
             height: Spacing.xSmall,
           ),
         ),
-        GraphQLProvider(
-          client: airstackClient,
+        AirstackGQLProviderWidget(
           child: Query$GetFarcasterChannels$Widget(
             options: Options$Query$GetFarcasterChannels(
               variables: Variables$Query$GetFarcasterChannels(

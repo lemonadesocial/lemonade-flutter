@@ -3,10 +3,9 @@ import 'package:app/core/presentation/pages/farcaster/farcaster_discover_page/wi
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
-import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/gql/widgets/airstack_gql_provider_widget.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_users.graphql.dart';
 import 'package:app/graphql/farcaster_airstack/schema.graphql.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -27,15 +26,8 @@ class FarcasterDiscoverUsersTab extends StatefulWidget {
 }
 
 class _FarcasterDiscoverUsersTabState extends State<FarcasterDiscoverUsersTab> {
-  late ValueNotifier<GraphQLClient> airstackClient;
   final debouncer = Debouncer(milliseconds: 500);
   final _refreshController = RefreshController();
-
-  @override
-  void initState() {
-    super.initState();
-    airstackClient = ValueNotifier(getIt<AirstackGQL>().client);
-  }
 
   @override
   void dispose() {
@@ -47,8 +39,7 @@ class _FarcasterDiscoverUsersTabState extends State<FarcasterDiscoverUsersTab> {
   @override
   Widget build(BuildContext context) {
     return Builder(
-      builder: (context) => GraphQLProvider(
-        client: airstackClient,
+      builder: (context) => AirstackGQLProviderWidget(
         child: Query$GetFarcasterUsers$Widget(
           options: Options$Query$GetFarcasterUsers(
             variables: Variables$Query$GetFarcasterUsers(
@@ -59,7 +50,7 @@ class _FarcasterDiscoverUsersTabState extends State<FarcasterDiscoverUsersTab> {
             },
           ),
           builder: (result, {refetch, fetchMore}) {
-            return _View(
+            return _UsersListView(
               textController: widget.textController,
               refreshController: _refreshController,
               debouncer: debouncer,
@@ -74,8 +65,8 @@ class _FarcasterDiscoverUsersTabState extends State<FarcasterDiscoverUsersTab> {
   }
 }
 
-class _View extends StatefulWidget {
-  const _View({
+class _UsersListView extends StatefulWidget {
+  const _UsersListView({
     required this.textController,
     required this.refreshController,
     required this.debouncer,
@@ -93,10 +84,10 @@ class _View extends StatefulWidget {
       fetchMore;
 
   @override
-  State<_View> createState() => _ViewState();
+  State<_UsersListView> createState() => _UsersListViewState();
 }
 
-class _ViewState extends State<_View> {
+class _UsersListViewState extends State<_UsersListView> {
   @override
   void initState() {
     super.initState();
