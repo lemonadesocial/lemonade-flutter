@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/enums/common_more_actions_enum.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/widgets/complete_profile_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/report_issue_bottom_sheet/report_issue_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -38,10 +41,15 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
     final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => false,
           authenticated: (_) => true,
         );
+    final walletState = context.watch<WalletBloc>().state;
     const showRedDot = true;
     return FloatingFrostedGlassDropdown(
       items: [
@@ -52,12 +60,15 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           customColor: colorScheme.onPrimary,
         ),
         DropdownItemDpo(
-          value: CommonMoreActions.viewSettings,
+          value: CommonMoreActions.completeProfile,
           label: t.home.appBar.moreActions.completeProfile,
           leadingIcon:
               getThemeIcon(context, icon: Assets.icons.icPersonCelebrate),
           customColor: colorScheme.onPrimary,
-          showRedDot: true,
+          showRedDot: OnboardingUtils.showRedDotCompleteProfile(
+            user: loggedInUser,
+            walletState: walletState,
+          ),
         ),
         DropdownItemDpo(
           value: CommonMoreActions.viewSettings,
@@ -117,6 +128,17 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
 
         if (!isLoggedIn) {
           AutoRouter.of(context).push(const LoginRoute());
+          return;
+        }
+
+        if (item?.value == CommonMoreActions.completeProfile) {
+          showCupertinoModalBottomSheet(
+            context: context,
+            useRootNavigator: true,
+            backgroundColor: LemonColor.atomicBlack,
+            barrierColor: LemonColor.black87,
+            builder: (mContext) => const CompleteProfileBottomSheet(),
+          );
           return;
         }
 
