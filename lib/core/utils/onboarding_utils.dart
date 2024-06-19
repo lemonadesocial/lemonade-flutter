@@ -1,3 +1,4 @@
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
@@ -28,5 +29,23 @@ class OnboardingUtils {
         ],
       ),
     );
+  }
+
+  static showRedDotCompleteProfile({
+    required User? user,
+    required WalletState walletState,
+  }) {
+    final filledUsername = (user?.username ?? '').isNotEmpty;
+    final filledAvatar = (user?.imageAvatar ?? '').isNotEmpty;
+    final connectedFarcaster =
+        user?.farcasterUserInfo?.accountKeyRequest?.accepted == true;
+    final connectedWallet = walletState.activeSession != null;
+    if (filledUsername &&
+        filledAvatar &&
+        connectedWallet &&
+        connectedFarcaster) {
+      return false;
+    }
+    return true;
   }
 }

@@ -50,5 +50,17 @@
         "instagram": "Instagram",
         "twitter": "Twitter",
         "farcaster": "Farcaster"
+    },
+    "completeProfile": {
+        "label": "Complete profile",
+        "description": "Let’s help you #makelemonade",
+        "pickUsername": "Pick your username",
+        "pickUsernameDesc": "Help others’ find you! ",
+        "pickYourProfilePhoto": "Pick your profile Photo",
+        "pickYourProfilePhotoDesc": "Share off your profile with a photo or NFT",
+        "connectYourWallet": "Connect your wallet",
+        "connectYourWalletDesc": "Where you receive crypto payments",
+        "connectFarcaster": "Connect Farcaster",
+        "connectFarcasterDesc": "Showcase Farcaster timeline & create casts"
     }
 }

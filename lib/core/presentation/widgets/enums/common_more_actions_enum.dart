@@ -3,6 +3,7 @@ enum CommonMoreActions {
   shareProfile,
   viewProfile,
   viewSettings,
+  completeProfile,
   rateApp,
   reportUser,
   reportEvent,

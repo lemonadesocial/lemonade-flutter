@@ -82,9 +82,6 @@ class AppRouter extends $AppRouter {
             ),
             AutoRoute(
               page: OnboardingUsernameRoute.page,
-              meta: const {
-                'popBlocked': true,
-              },
             ),
             AutoRoute(
               page: OnboardingProfilePhotoRoute.page,
