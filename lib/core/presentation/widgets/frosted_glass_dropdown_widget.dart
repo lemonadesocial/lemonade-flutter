@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
