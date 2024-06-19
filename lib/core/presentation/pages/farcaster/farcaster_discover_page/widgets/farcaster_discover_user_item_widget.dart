@@ -7,9 +7,9 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class FarcasterUserItemWidget extends StatelessWidget {
+class FarcasterDiscoverUserItemWidget extends StatelessWidget {
   final AirstackFarcasterUser user;
-  const FarcasterUserItemWidget({
+  const FarcasterDiscoverUserItemWidget({
     super.key,
     required this.user,
   });
@@ -19,6 +19,7 @@ class FarcasterUserItemWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         LemonNetworkImage(
           width: Sizing.medium,
@@ -30,24 +31,35 @@ class FarcasterUserItemWidget extends StatelessWidget {
         SizedBox(
           width: Spacing.xSmall,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              user.profileDisplayName ?? 'Anonymous',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                user.profileDisplayName ?? 'Anonymous',
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
               ),
-            ),
-            SizedBox(height: 2.w),
-            Text(
-              '@${user.profileName}',
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
+              SizedBox(height: 2.w),
+              Text(
+                '@${user.profileName}',
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
               ),
-            ),
-          ],
+              if (user.profileBio?.isNotEmpty == true) ...[
+                SizedBox(height: Spacing.xSmall),
+                Text(
+                  user.profileBio!,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ],
     );

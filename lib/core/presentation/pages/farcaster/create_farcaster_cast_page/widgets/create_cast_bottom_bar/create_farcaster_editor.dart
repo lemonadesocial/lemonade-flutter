@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_users.graphql.dart';
+import 'package:app/graphql/farcaster_airstack/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -126,7 +127,11 @@ class CreateFarcasterEditorState extends State<CreateFarcasterEditor> {
           getIt<FarcasterRepository>()
               .getUsers(
             input: Variables$Query$GetFarcasterUsers(
-              queryRegex: '^$value',
+              filter: Input$SocialFilter(
+                profileName: Input$Regex_String_Comparator_Exp(
+                  $_regex: '^$value',
+                ),
+              ),
             ),
           )
               .then((result) {

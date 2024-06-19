@@ -14,7 +14,7 @@ class AirstackFarcasterCast with _$AirstackFarcasterCast {
     String? hash,
     AirstackFarcasterUser? castedBy,
     AirstackFrame? frame,
-    AirstackChannel? channel,
+    AirstackFarcasterChannel? channel,
     List<AirstackFarcasterCast>? quotedCast,
     String? rootParentUrl,
     String? parentHash,
@@ -106,15 +106,17 @@ enum AirstackFrameButtonAction {
 }
 
 @freezed
-class AirstackChannel with _$AirstackChannel {
-  factory AirstackChannel({
+class AirstackFarcasterChannel with _$AirstackFarcasterChannel {
+  factory AirstackFarcasterChannel({
     String? channelId,
     String? id,
     String? imageUrl,
     String? name,
     String? url,
+    String? description,
+    double? followerCount,
   }) = _AirstackChannel;
 
-  factory AirstackChannel.fromJson(Map<String, dynamic> json) =>
-      _$AirstackChannelFromJson(json);
+  factory AirstackFarcasterChannel.fromJson(Map<String, dynamic> json) =>
+      _$AirstackFarcasterChannelFromJson(json);
 }

@@ -1,11 +1,15 @@
-query GetChannel($channelId: String) {
+query GetFarcasterChannels(
+  $cursor: String
+  $filter: FarcasterChannelFilter
+  $limit: Int = 20
+) {
   FarcasterChannels(
-    input: { blockchain: ALL, filter: { channelId: { _eq: $channelId } } }
+    input: { blockchain: ALL, cursor: $cursor, filter: $filter, limit: $limit }
   ) {
     FarcasterChannel {
       id
       channelId
-      url,
+      url
       imageUrl
       name
       description
@@ -16,8 +20,10 @@ query GetChannel($channelId: String) {
       }
     }
     pageInfo {
-      nextCursor
       hasNextPage
+      hasPrevPage
+      nextCursor
+      prevCursor
     }
   }
 }

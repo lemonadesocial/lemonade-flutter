@@ -37,6 +37,12 @@
         }
     },
     "frame": {
-        "loadFrameError": "Frame error: Unknown error commuinicating with frame server."   
+        "loadFrameError": "Frame error: Unknown error commuinicating with frame server."
+    },
+    "discover": {
+        "discoverTabs": {
+            "users": "Users",
+            "channels": "Channels"
+        }
     }
 }
