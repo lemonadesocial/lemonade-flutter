@@ -1,6 +1,6 @@
 query GetFarcasterChannels(
   $cursor: String
-  $filter: FarcasterChannelFilter
+  $filter: FarcasterChannelFilter!
   $limit: Int = 20
 ) {
   FarcasterChannels(
