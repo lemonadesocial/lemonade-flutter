@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.26.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.25.0...v1.26.0) (2024-06-19)
+
+
+### Features
+
+* complete profile ([#648](https://github.com/lemonadesocial/lemonade-flutter/issues/648)) ([8c94699](https://github.com/lemonadesocial/lemonade-flutter/commit/8c94699f9264d7dfbd74097a9803db75dc5339d1))
+* discover users & channel ([#647](https://github.com/lemonadesocial/lemonade-flutter/issues/647)) ([3555bfd](https://github.com/lemonadesocial/lemonade-flutter/commit/3555bfdcac1c30df8181e189ace3408df203aae5))
+
 ## [1.25.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.24.0...v1.25.0) (2024-06-17)
 
 
