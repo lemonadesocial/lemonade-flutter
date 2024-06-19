@@ -61,7 +61,7 @@ class CompleteProfileBottomSheet extends StatelessWidget {
         LinearProgressIndicator(
           value: getPercentage(user: loggedInUser, walletState: walletState),
           color: LemonColor.paleViolet,
-          minHeight: 3,
+          minHeight: 3.w,
           borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         ),
         SafeArea(
