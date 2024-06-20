@@ -16,10 +16,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HorizontalCollaboratorLikesList extends StatelessWidget {
   final List<UserDiscoverySwipe> pendingSwipes;
   final Function()? refetch;
+  final bool headerVisible;
+
   const HorizontalCollaboratorLikesList({
     super.key,
     required this.pendingSwipes,
     this.refetch,
+    this.headerVisible = true,
   });
 
   @override
@@ -28,36 +31,37 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
-        InkWell(
-          onTap: () =>
-              AutoRouter.of(context).push(const CollaboratorLikesRoute()),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-            child: Row(
-              children: [
-                Text(
-                  t.collaborator.likes,
-                  style: Typo.mediumPlus.copyWith(
+        if (headerVisible)
+          InkWell(
+            onTap: () =>
+                AutoRouter.of(context).push(const CollaboratorLikesRoute()),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              child: Row(
+                children: [
+                  Text(
+                    t.collaborator.likes,
+                    style: Typo.mediumPlus.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                  SizedBox(
+                    width: Spacing.extraSmall,
+                  ),
+                  CollaboratorCounter(
+                    count: pendingSwipes.length,
+                  ),
+                  const Spacer(),
+                  ThemeSvgIcon(
                     color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icArrowRight.svg(
+                      colorFilter: filter,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                CollaboratorCounter(
-                  count: pendingSwipes.length,
-                ),
-                const Spacer(),
-                ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icArrowRight.svg(
-                    colorFilter: filter,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
         SizedBox(height: Spacing.xSmall),
         SizedBox(
           height: 87.w,
@@ -124,7 +128,7 @@ class _PersonItem extends StatelessWidget {
                   width: 60.w,
                   height: 60.w,
                   borderRadius: BorderRadius.circular(60.w),
-                  placeholder: ImagePlaceholder.defaultPlaceholder(),
+                  placeholder: ImagePlaceholder.avatarPlaceholder(),
                 ),
               ),
               if (swipe.message?.isNotEmpty == true)

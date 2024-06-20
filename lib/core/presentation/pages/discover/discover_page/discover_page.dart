@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_badges_near_you.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_collaborators.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_communities.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_farcaster_channels.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_upcoming_events.dart';
@@ -23,6 +24,7 @@ class DiscoverPage extends StatelessWidget {
       appBar: HomeAppBar(title: t.discover.discover),
       body: CustomScrollView(
         slivers: [
+          const DiscoverCollaborators(),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
             sliver: const DiscoverCards(),

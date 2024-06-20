@@ -16,6 +16,10 @@
         "music": {
             "title": "Vinyls",
             "subTitle": "Music that you truly own"
+        },
+        "channels": {
+            "title": "Channels",
+            "subTitle": ""
         }
     },
     "hotBadgesNearYou": "Hot badges near you",

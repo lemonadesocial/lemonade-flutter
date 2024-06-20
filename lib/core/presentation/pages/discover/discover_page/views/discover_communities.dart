@@ -1,11 +1,14 @@
 import 'package:app/core/application/community/community_bloc.dart';
 import 'package:app/core/domain/community/community_repository.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/widgets/community_spotlight_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/discover/community_spotlight_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -26,16 +29,28 @@ class DiscoverCommunities extends StatelessWidget {
       children: [
         SliverPadding(
           padding: EdgeInsets.symmetric(
-            vertical: Spacing.xSmall,
             horizontal: Spacing.xSmall,
           ),
           sliver: SliverToBoxAdapter(
-            child: Text(
-              t.discover.communities,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  t.discover.communities,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(width: Spacing.extraSmall),
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
+                    colorFilter: filter,
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -75,7 +90,7 @@ class _DiscoverCommunitiesList extends StatelessWidget {
                   )
                 : SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 150.h,
+                      height: 138.w,
                       child: ListView.separated(
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -98,7 +113,9 @@ class _DiscoverCommunitiesList extends StatelessWidget {
                     ),
                   );
           default:
-            return Center(child: Text(t.common.somethingWrong));
+            return Center(
+              child: Text(t.common.somethingWrong),
+            );
         }
       },
     );
