@@ -1,5 +1,5 @@
 import 'package:app/core/domain/community/community_user/community_user.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/device_utils.dart';
 import 'package:app/theme/spacing.dart';
@@ -22,12 +22,14 @@ class CommunitySpotlightItem extends StatelessWidget {
       width: isIpad ? 144.w : 96.w,
       child: Column(
         children: [
-          LemonCircleAvatar(
-            size: 90.w,
-            url: AvatarUtils.getProfileAvatar(
+          LemonNetworkImage(
+            width: 96.w,
+            height: 96.w,
+            imageUrl: AvatarUtils.getProfileAvatar(
               userAvatar: user.imageAvatar,
               userId: user.id,
             ),
+            borderRadius: BorderRadius.circular(LemonRadius.small),
           ),
           Padding(
             padding: EdgeInsets.only(top: Spacing.xSmall),
@@ -36,18 +38,22 @@ class CommunitySpotlightItem extends StatelessWidget {
               children: [
                 Text(
                   user.displayName ?? user.userName ?? '',
-                  style: Typo.medium.copyWith(
+                  style: Typo.small.copyWith(
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onPrimary,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 2.w),
                 Text(
-                  user.userName ?? '',
-                  style: Typo.small.copyWith(
+                  user.userName?.isNotEmpty == true ? "@${user.userName}" : '',
+                  style: Typo.xSmall.copyWith(
                     fontWeight: FontWeight.w400,
                     color: colorScheme.onSecondary,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

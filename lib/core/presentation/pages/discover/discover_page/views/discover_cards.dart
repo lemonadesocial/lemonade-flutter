@@ -1,6 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/widgets/discover/discover_card.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/widgets/discover_card.dart';
 import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -79,14 +79,19 @@ class _DiscoverCardsState extends State<DiscoverCards> {
         );
     final isLoggedIn = user != null;
     return SliverGrid.count(
-      crossAxisCount: 3,
+      crossAxisCount: 2,
       crossAxisSpacing: 9.w,
-      childAspectRatio: (DeviceUtils.isIpad() ? 2 : 0.9),
+      mainAxisSpacing: 9.w,
+      childAspectRatio: (DeviceUtils.isIpad() ? 2 : 3),
       children: [
         DiscoverCard(
+          direction: DiscoverCardDirection.horizontal,
           title: t.discover.cardSections.events.title,
           subTitle: t.discover.cardSections.events.subTitle,
-          icon: Assets.icons.icDiscoverEvents.svg(),
+          icon: Assets.icons.icDiscoverEvents.svg(
+            width: 21.w,
+            height: 21.w,
+          ),
           colors: DiscoverCardGradient.events.colors,
           onTap: () {
             onAuthenticatedTap(
@@ -98,9 +103,13 @@ class _DiscoverCardsState extends State<DiscoverCards> {
           },
         ),
         DiscoverCard(
+          direction: DiscoverCardDirection.horizontal,
           title: t.discover.cardSections.collaborators.title,
           subTitle: t.discover.cardSections.collaborators.subTitle,
-          icon: Assets.icons.icDiscoverPeople.svg(),
+          icon: Assets.icons.icDiscoverPeople.svg(
+            width: 21.w,
+            height: 21.w,
+          ),
           colors: DiscoverCardGradient.collaborators.colors,
           onTap: () {
             onAuthenticatedTap(
@@ -118,9 +127,31 @@ class _DiscoverCardsState extends State<DiscoverCards> {
           },
         ),
         DiscoverCard(
+          direction: DiscoverCardDirection.horizontal,
+          title: t.discover.cardSections.channels.title,
+          subTitle: '',
+          icon: Assets.icons.icChatFilledGradient.svg(
+            width: 21.w,
+            height: 21.w,
+          ),
+          colors: DiscoverCardGradient.channels.colors,
+          onTap: () {
+            onAuthenticatedTap(
+              isLoggedIn: isLoggedIn,
+              tapFunc: () {
+                router.push(const FarcasterDiscoverRoute());
+              },
+            );
+          },
+        ),
+        DiscoverCard(
+          direction: DiscoverCardDirection.horizontal,
           title: t.discover.cardSections.badges.title,
           subTitle: t.discover.cardSections.badges.subTitle,
-          icon: Assets.icons.icDiscoverBadges.svg(),
+          icon: Assets.icons.icDiscoverBadges.svg(
+            width: 21.w,
+            height: 21.w,
+          ),
           colors: DiscoverCardGradient.badges.colors,
           onTap: () {
             onAuthenticatedTap(

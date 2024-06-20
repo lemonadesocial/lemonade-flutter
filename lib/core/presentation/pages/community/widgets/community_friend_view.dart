@@ -1,7 +1,7 @@
 import 'package:app/core/application/community/community_bloc.dart';
 import 'package:app/core/presentation/pages/community/widgets/community_user_tile.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/widgets/discover_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/discover/discover_card.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
