@@ -51,7 +51,7 @@ class DiscoverCollaborators extends StatelessWidget {
           );
         }
         return SliverPadding(
-          padding: EdgeInsets.only(bottom: Spacing.large),
+          padding: EdgeInsets.only(bottom: 2 * Spacing.xSmall),
           sliver: SliverToBoxAdapter(
             child: HorizontalCollaboratorLikesList(
               headerVisible: false,
