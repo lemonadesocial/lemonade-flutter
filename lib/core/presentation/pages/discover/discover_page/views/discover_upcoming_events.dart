@@ -30,7 +30,6 @@ class DiscoverUpcomingEvents extends StatelessWidget {
       children: [
         SliverPadding(
           padding: EdgeInsets.symmetric(
-            vertical: Spacing.xSmall,
             horizontal: Spacing.xSmall,
           ),
           sliver: SliverToBoxAdapter(
@@ -41,6 +40,11 @@ class DiscoverUpcomingEvents extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.xSmall,
           ),
         ),
         BlocProvider(

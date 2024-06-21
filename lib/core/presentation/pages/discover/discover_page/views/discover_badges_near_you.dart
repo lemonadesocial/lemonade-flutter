@@ -60,7 +60,6 @@ class _DiscoverBadgesNearYouView extends StatelessWidget {
       children: [
         SliverPadding(
           padding: EdgeInsets.symmetric(
-            vertical: Spacing.xSmall,
             horizontal: Spacing.xSmall,
           ),
           sliver: SliverToBoxAdapter(
