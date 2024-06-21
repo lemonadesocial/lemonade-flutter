@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.26.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.25.0...v1.26.0) (2024-06-21)
+
+
+### Features
+
+* complete profile ([#648](https://github.com/lemonadesocial/lemonade-flutter/issues/648)) ([8c94699](https://github.com/lemonadesocial/lemonade-flutter/commit/8c94699f9264d7dfbd74097a9803db75dc5339d1))
+* discover page polishment ([#650](https://github.com/lemonadesocial/lemonade-flutter/issues/650)) ([befb8e7](https://github.com/lemonadesocial/lemonade-flutter/commit/befb8e7abb3eaa0d31596ff5333d4911581b1aea))
+* discover users & channel ([#647](https://github.com/lemonadesocial/lemonade-flutter/issues/647)) ([3555bfd](https://github.com/lemonadesocial/lemonade-flutter/commit/3555bfdcac1c30df8181e189ace3408df203aae5))
+* enhance complete profile to connect wallet and farcaster ([#651](https://github.com/lemonadesocial/lemonade-flutter/issues/651)) ([9842fb6](https://github.com/lemonadesocial/lemonade-flutter/commit/9842fb6a4ec66cb2ae77f2c9a5d454a7676fad74))
+
+
+### Bug Fixes
+
+* hide discover communities section in discover page ([#652](https://github.com/lemonadesocial/lemonade-flutter/issues/652)) ([91b234c](https://github.com/lemonadesocial/lemonade-flutter/commit/91b234c58c83c30c3c93db31d368e497c332a093))
+
 ## [1.25.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.24.0...v1.25.0) (2024-06-17)
 
 
