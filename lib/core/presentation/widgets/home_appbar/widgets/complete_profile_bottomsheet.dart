@@ -1,12 +1,17 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_bottomsheet/connect_farcaster_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -16,6 +21,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
 
 class CompleteProfileBottomSheet extends StatelessWidget {
   const CompleteProfileBottomSheet({
@@ -127,29 +134,38 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                   iconColor: Colors.white,
                   checked: (loggedInUser?.imageAvatar ?? '').isNotEmpty,
                   onTap: () => AutoRouter.of(context).push(
-                    const OnboardingSocialOnChainRoute(),
+                    const OnboardingProfilePhotoRoute(),
                   ),
                 ),
                 SizedBox(
                   height: Spacing.smMedium,
                 ),
-                _RowItem(
-                  title: t.profile.completeProfile.connectYourWallet,
-                  subtitle: t.profile.completeProfile.connectYourWalletDesc,
-                  icon: ThemeSvgIcon(
-                    color: LemonColor.topaz,
-                    builder: (filter) => Assets.icons.icWallet.svg(
-                      colorFilter: filter,
-                      width: Sizing.mSmall,
-                      height: Sizing.mSmall,
-                    ),
-                  ),
-                  backgroundColor: LemonColor.topaz.withOpacity(0.18),
-                  iconColor: Colors.white,
-                  checked: walletState.activeSession != null,
-                  onTap: () {
-                    AutoRouter.of(context).push(
-                      const OnboardingSocialOnChainRoute(),
+                BlocBuilder<WalletBloc, WalletState>(
+                  builder: (context, walletState) {
+                    final connectButtonState = walletState.state;
+                    final isConnecting =
+                        connectButtonState == ConnectButtonState.connecting;
+                    final isConnected = walletState.activeSession != null;
+                    return _RowItem(
+                      title: t.profile.completeProfile.connectYourWallet,
+                      subtitle: t.profile.completeProfile.connectYourWalletDesc,
+                      icon: ThemeSvgIcon(
+                        color: LemonColor.topaz,
+                        builder: (filter) => Assets.icons.icWallet.svg(
+                          colorFilter: filter,
+                          width: Sizing.mSmall,
+                          height: Sizing.mSmall,
+                        ),
+                      ),
+                      backgroundColor: LemonColor.topaz.withOpacity(0.18),
+                      iconColor: Colors.white,
+                      checked: isConnected,
+                      onTap: () {
+                        final w3mService =
+                            getIt<WalletConnectService>().w3mService;
+                        w3mService.openModal(context);
+                      },
+                      loading: isConnecting,
                     );
                   },
                 ),
@@ -171,8 +187,24 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                   iconColor: Colors.white,
                   checked: farcasterConnected,
                   onTap: () {
-                    AutoRouter.of(context).push(
-                      const OnboardingSocialOnChainRoute(),
+                    if (farcasterConnected) {
+                      return;
+                    }
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      useRootNavigator: true,
+                      backgroundColor: LemonColor.atomicBlack,
+                      barrierColor: LemonColor.black87,
+                      builder: (mContext) => ConnectFarcasterBottomsheet(
+                        onConnected: () {
+                          context
+                              .read<AuthBloc>()
+                              .add(const AuthEvent.refreshData());
+                          SnackBarUtils.showSuccess(
+                            message: t.farcaster.farcasterConnectedSuccess,
+                          );
+                        },
+                      ),
                     );
                   },
                 ),
@@ -193,6 +225,7 @@ class _RowItem extends StatelessWidget {
   final Color iconColor;
   final bool? checked;
   final Function()? onTap;
+  final bool? loading;
 
   const _RowItem({
     required this.title,
@@ -202,6 +235,7 @@ class _RowItem extends StatelessWidget {
     required this.iconColor,
     required this.onTap,
     this.checked,
+    this.loading,
   });
 
   @override
@@ -271,23 +305,25 @@ class _RowItem extends StatelessWidget {
               ),
             ),
             SizedBox(width: Spacing.xSmall),
-            checked == true
-                ? ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icDone.svg(
-                      colorFilter: filter,
-                      width: Sizing.xSmall,
-                      height: Sizing.xSmall,
-                    ),
-                  )
-                : ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icArrowRight.svg(
-                      colorFilter: filter,
-                      width: Sizing.xSmall,
-                      height: Sizing.xSmall,
-                    ),
-                  ),
+            loading == true
+                ? Loading.defaultLoading(context)
+                : checked == true
+                    ? ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icDone.svg(
+                          colorFilter: filter,
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                        ),
+                      )
+                    : ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icArrowRight.svg(
+                          colorFilter: filter,
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                        ),
+                      ),
           ],
         ),
       ),
