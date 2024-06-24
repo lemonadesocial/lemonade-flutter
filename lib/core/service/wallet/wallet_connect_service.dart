@@ -112,16 +112,11 @@ class WalletConnectService {
     _app!.onSessionUpdate.unsubscribeAll();
   }
 
-  Future<SessionData?> getActiveSession() async {
+  Future<W3MSession?> getActiveSession() async {
     if (!initialized) {
       await init();
     }
-    var activeSessions =
-        _app?.getActiveSessions().entries.map((entry) => entry.value).toList();
-
-    if (activeSessions?.isEmpty == true) return null;
-
-    return activeSessions?.first;
+    return _w3mService.session;
   }
 
   Future<String?> personalSign({
@@ -129,10 +124,10 @@ class WalletConnectService {
     required String wallet,
     String? chainId,
   }) async {
-    await _w3mService.launchConnectedWallet();
+    _w3mService.launchConnectedWallet();
 
-    final data = await _app!.request(
-      topic: w3mService.session?.topic ?? '',
+    final data = await _w3mService.request(
+      topic: _w3mService.session?.topic ?? '',
       chainId: chainId ?? _currentWalletChainId ?? ETHEREUM.chainId,
       request: SessionRequestParams(
         method: 'personal_sign',
@@ -148,10 +143,9 @@ class WalletConnectService {
     required String chainId,
     required EthereumTransaction transaction,
   }) async {
-    await _w3mService.launchConnectedWallet();
-
-    final transactionId = await _app!.request(
-      topic: w3mService.session?.topic ?? '',
+    _w3mService.launchConnectedWallet();
+    final transactionId = await _w3mService.request(
+      topic: _w3mService.session?.topic ?? '',
       chainId: chainId,
       request: SessionRequestParams(
         method: 'eth_sendTransaction',

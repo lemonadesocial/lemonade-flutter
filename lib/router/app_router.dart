@@ -54,10 +54,6 @@ class AppRouter extends $AppRouter {
           page: MyProfileRoute.page,
         ),
         AutoRoute(
-          path: '/wallet',
-          page: WalletRoute.page,
-        ),
-        AutoRoute(
           path: '/profile/:id',
           page: ProfileRoute.page,
         ),

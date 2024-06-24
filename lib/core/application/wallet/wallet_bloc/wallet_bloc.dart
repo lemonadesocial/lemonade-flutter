@@ -3,6 +3,7 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:web3modal_flutter/services/w3m_service/i_w3m_service.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 part 'wallet_bloc.freezed.dart';
@@ -55,7 +56,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       );
     }
     // Case 0: init error
-    if (w3mService.initError != null) {
+    if (w3mService.status == W3MServiceStatus.error) {
       return emit(
         state.copyWith(
           activeSession: w3mService.session,
@@ -115,7 +116,7 @@ class WalletEvent with _$WalletEvent {
 @freezed
 class WalletState with _$WalletState {
   const factory WalletState({
-    SessionData? activeSession,
+    W3MSession? activeSession,
     required ConnectButtonState state,
   }) = _WalletState;
 }

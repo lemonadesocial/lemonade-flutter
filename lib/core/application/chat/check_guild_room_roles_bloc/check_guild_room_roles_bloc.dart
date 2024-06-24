@@ -5,6 +5,7 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 part 'check_guild_room_roles_bloc.freezed.dart';
 
@@ -24,7 +25,7 @@ class CheckGuildRoomRolesBloc
     Emitter emit,
   ) async {
     final userWalletAddress =
-        getIt<WalletConnectService>().w3mService.address ?? '';
+        getIt<WalletConnectService>().w3mService.session?.address ?? '';
     emit(CheckGuildRoomRolesState.loading());
     final guild = await _getGuildDetail();
     List<GuildRolePermission> guildRolePermissions = [];

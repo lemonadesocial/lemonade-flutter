@@ -11,12 +11,12 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class WalletConnectActiveSessionWidget extends StatelessWidget {
   final String? title;
-  final SessionData? activeSession;
+  final W3MSession? activeSession;
   final Function()? onPressDisconnect;
 
   const WalletConnectActiveSessionWidget({
@@ -31,7 +31,7 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final w3mService = getIt<WalletConnectService>().w3mService;
     String displayAddress =
-        Web3Utils.formatIdentifier(w3mService.address ?? '');
+        Web3Utils.formatIdentifier(w3mService.session?.address ?? '');
     final fallbackIcon = ThemeSvgIcon(
       color: colorScheme.onSurfaceVariant,
       builder: (colorFilter) => Assets.icons.icWalletFilled.svg(
@@ -59,10 +59,9 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
               ),
               child: Center(
                 child: CachedNetworkImage(
-                  imageUrl: explorerService.instance?.getWalletImageUrl(
-                        w3mService.selectedWallet?.listing.imageId ?? '',
-                      ) ??
-                      '',
+                  imageUrl: explorerService.instance.getWalletImageUrl(
+                    w3mService.selectedWallet?.listing.imageId ?? '',
+                  ),
                   placeholder: (_, __) => fallbackIcon,
                   errorWidget: (_, __, ___) => fallbackIcon,
                 ),

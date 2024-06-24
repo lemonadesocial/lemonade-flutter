@@ -18,7 +18,6 @@ import 'package:convert/convert.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
-import 'package:web3dart/web3dart.dart';
 import 'package:app/core/service/wallet/rpc_error_handler_extension.dart';
 
 part 'buy_tickets_with_crypto_bloc.freezed.dart';
