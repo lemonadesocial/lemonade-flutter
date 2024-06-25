@@ -25,6 +25,7 @@ class UpdatePaymentTransferParams with _$UpdatePaymentTransferParams {
     // for stripe
     @JsonKey(name: 'payment_method') String? paymentMethod,
     String? network,
+    String? from,
   }) = _UpdatePaymentTransferParams;
 
   factory UpdatePaymentTransferParams.fromJson(Map<String, dynamic> json) =>

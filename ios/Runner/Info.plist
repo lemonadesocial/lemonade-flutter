@@ -52,6 +52,7 @@
 		<string>trust</string>
 		<string>safe</string>
 		<string>rainbow</string>
+		<string>cbwallet</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

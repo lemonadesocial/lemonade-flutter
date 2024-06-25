@@ -12,6 +12,7 @@
     <package android:name="com.wallet.crypto.trustapp"/>
     <package android:name="io.gnosis.safe"/>
     <package android:name="me.rainbow"/>
+    <package android:name="org.toshi"/>
     <!-- Add other wallet schemes names here -->
   </queries>
   <application

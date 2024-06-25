@@ -99,8 +99,8 @@ dependencies:
   rxdart: ^0.27.7
 
   # wallet
-  walletconnect_flutter_v2: ^2.1.11
-  web3dart: ^2.6.1
+  web3modal_flutter: 3.2.2
+  web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
   bip32: ^2.0.0
@@ -129,13 +129,13 @@ dependencies:
   share_plus: ^7.0.2
   shake: ^2.2.0
   flutter_native_splash: ^2.3.2
-  package_info_plus: ^4.1.0
+  package_info_plus: 7.0.0
   flutter_vibrate: ^1.3.0
   connectivity_plus: any
   restart_app: ^1.2.1
   formz: ^0.6.1
   flutter_app_badger: ^1.5.0
-  uuid: ^3.0.7
+  uuid: 4.3.3
   flutter_google_places_hoc081098: 2.0.0-beta.1
   google_maps_webservice:
     git:
@@ -145,8 +145,6 @@ dependencies:
   currency_text_input_formatter: ^2.1.10
   mobile_scanner: 3.5.5
   modal_bottom_sheet: ^3.0.0-pre
-  web3modal_flutter: 
-    path: ./packages/web3modal_flutter
   dynamic_color: ^1.7.0
   calendar_date_picker2: ^0.5.5
   wheel_picker: ^0.0.4
@@ -170,7 +168,8 @@ dependency_overrides:
     git:
       url: https://github.com/sieuhuflit/fcm_shared_isolate.git
       ref: main
-
+  package_info_plus: 7.0.0
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -22,6 +22,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
 class PayByCryptoButton extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
@@ -170,7 +171,7 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
             }
 
             final w3mService = getIt<WalletConnectService>().w3mService;
-            final userWalletAddress = w3mService.address ?? '';
+            final userWalletAddress = w3mService.session?.address ?? '';
 
             return BlocBuilder<BuyTicketsWithCryptoBloc,
                 BuyTicketsWithCryptoState>(

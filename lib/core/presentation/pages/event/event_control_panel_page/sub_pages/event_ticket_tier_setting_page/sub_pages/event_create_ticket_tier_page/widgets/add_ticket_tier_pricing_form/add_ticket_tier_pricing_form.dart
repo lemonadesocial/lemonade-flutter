@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
 enum TicketPricingMethod {
   fiat,
@@ -279,17 +279,7 @@ class _AddTicketTierPricingFormViewState
                                   final selectedChain =
                                       modifyTicketPriceState.network;
                                   final userWalletAddress =
-                                      NamespaceUtils.getAccount(
-                                    walletState
-                                            .activeSession
-                                            ?.namespaces
-                                            .entries
-                                            .first
-                                            .value
-                                            .accounts
-                                            .first ??
-                                        '',
-                                  );
+                                      walletState.activeSession?.address ?? '';
                                   if (!isValid || isConnectingPaymentAccount) {
                                     return;
                                   }

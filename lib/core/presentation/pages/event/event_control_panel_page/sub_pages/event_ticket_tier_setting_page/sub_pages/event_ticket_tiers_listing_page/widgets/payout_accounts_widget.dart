@@ -89,12 +89,12 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
           },
         ),
         SizedBox(height: Spacing.xSmall),
-        FutureBuilder<SessionData?>(
+        FutureBuilder<W3MSession?>(
           future: getIt<WalletConnectService>().getActiveSession(),
           builder: (context, walletConnectSnapshot) {
             final activeSession = walletConnectSnapshot.data;
             final userWalletAddress =
-                getIt<WalletConnectService>().w3mService.address ?? '';
+                getIt<WalletConnectService>().w3mService.session?.address ?? '';
             return PayoutAccountItem(
               title: t.event.ticketTierSetting.crypto,
               subTitle: activeSession != null
