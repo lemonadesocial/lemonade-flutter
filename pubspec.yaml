@@ -99,7 +99,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # wallet
-  walletconnect_flutter_v2: 2.2.3
+  web3modal_flutter: 3.2.2
   web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
@@ -145,7 +145,6 @@ dependencies:
   currency_text_input_formatter: ^2.1.10
   mobile_scanner: 3.5.5
   modal_bottom_sheet: ^3.0.0-pre
-  web3modal_flutter: 3.2.2
   dynamic_color: ^1.7.0
   calendar_date_picker2: ^0.5.5
   wheel_picker: ^0.0.4
