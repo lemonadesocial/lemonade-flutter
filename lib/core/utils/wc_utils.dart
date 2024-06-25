@@ -1,5 +1,5 @@
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class WCUtils {
   static List<String> getSessionsAccounts(Map<String, Namespace> namespaces) {

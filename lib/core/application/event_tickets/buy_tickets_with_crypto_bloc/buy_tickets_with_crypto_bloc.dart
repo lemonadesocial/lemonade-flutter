@@ -17,7 +17,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 import 'package:app/core/service/wallet/rpc_error_handler_extension.dart';
 
 part 'buy_tickets_with_crypto_bloc.freezed.dart';
@@ -273,6 +273,7 @@ class BuyTicketsWithCryptoBloc
           signature: _signature,
           txHash: _txHash,
           network: selectedNetwork!,
+          from: walletConnectService.w3mService.session?.address ?? '',
         ),
       ),
     );
