@@ -1,6 +1,7 @@
 import 'package:app/core/service/web3/erc20.dart';
 import 'package:app/core/service/web3/escrow/contracts/lemonade_escrow_factory_v1_contract_abi.dart';
 import 'package:app/core/service/web3/escrow/contracts/lemonade_escrow_v1_contract_abi.dart';
+import 'package:app/core/service/web3/escrow/contracts/lemonade_relay_payment_contract_abi.dart';
 import 'package:web3dart/web3dart.dart';
 
 class Web3ContractService {
@@ -21,6 +22,13 @@ class Web3ContractService {
   static DeployedContract getEscrowContract(String contractAddress) {
     return DeployedContract(
       ContractAbi.fromJson(lemonadeEscrowV1ContractAbi, ''),
+      EthereumAddress.fromHex(contractAddress),
+    );
+  }
+
+  static DeployedContract getRelayPaymentContract(String contractAddress) {
+    return DeployedContract(
+      ContractAbi.fromJson(lemonadeRelayPaymentContractAbi, ''),
       EthereumAddress.fromHex(contractAddress),
     );
   }

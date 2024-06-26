@@ -431,6 +431,9 @@ type Event {
   currency: String
   cover: String
   cta_button_text: String
+
+  """Show secondary CTA button text"""
+  cta_secondary_visible: Boolean
   description: String
   events: [MongoID!]
   frequent_questions: [FrequentQuestion!]
@@ -1256,6 +1259,7 @@ enum EmailTemplateType {
   join_request_declined
   join_requested
   post_rsvp
+  ticket_issued
   ticket_received
   ticket_cancelled
   ticket_type_whitelisted
@@ -1465,7 +1469,8 @@ type GetEventInvitedStatisticsResponse {
 type Guest {
   invited_by: MongoID!
   invited_by_expanded: User
-  joined: Boolean!
+  joined: Boolean
+  declined: Boolean
 
   """Exists only if joined from email"""
   user: MongoID
@@ -2482,6 +2487,7 @@ type Mutation {
   cancelEvent(_id: MongoID!): Event!
   acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
   inviteEvent(input: InviteEventInput!): Event!
+  responseInvitation(input: ResponseInvitationInput!): Boolean!
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
@@ -2730,6 +2736,9 @@ input EventInput {
   currency: String
   cover: String
   cta_button_text: String
+
+  """Show secondary CTA button text"""
+  cta_secondary_visible: Boolean
   description: String
   events: [MongoID!]
   frequent_questions: [FrequentQuestionInput!]
@@ -2891,6 +2900,15 @@ input InviteEventInput {
   users: [MongoID!]
   phones: [String!]
   emails: [String!]
+}
+
+input ResponseInvitationInput {
+  _id: MongoID!
+  action: InvitationState!
+}
+
+enum InvitationState {
+  DECLINED
 }
 
 input CreateEventQuestionsInput {

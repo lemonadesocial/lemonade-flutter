@@ -18,6 +18,7 @@ class Chain with _$Chain {
     ERC20Token? nativeToken,
     double? blockTime,
     double? safeConfirmations,
+    String? relayPaymentContract,
   }) = _Chain;
 
   factory Chain.fromDto(ChainDto dto) {
@@ -38,6 +39,7 @@ class Chain with _$Chain {
       nativeToken: nativeToken,
       blockTime: dto.blockTime,
       safeConfirmations: dto.safeConfirmations,
+      relayPaymentContract: dto.relayPaymentContract,
     );
   }
 }

@@ -17,6 +17,7 @@ final getChainsListQuery = gql('''
         decimals
         contract
       }
+      relay_payment_contract
     }
   }
 ''');
