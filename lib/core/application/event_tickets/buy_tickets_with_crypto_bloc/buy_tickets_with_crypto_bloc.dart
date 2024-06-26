@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
@@ -182,30 +183,64 @@ class BuyTicketsWithCryptoBloc
         );
       }
       late EthereumTransaction ethereumTxn;
-      // is erc20 token
-      if (contractAddress != zeroAddress) {
-        final contract = Web3ContractService.getERC20Contract(contractAddress);
+
+      if (_currentPayment?.accountExpanded?.type ==
+          PaymentAccountType.ethereumRelay) {
+        final relayContract = Web3ContractService.getRelayPaymentContract(
+          chain?.relayPaymentContract ?? '',
+        );
+        // token address (can be native token or ERC20 token)
+        final currencyAddress = _currentPayment?.accountExpanded?.accountInfo
+                ?.currencyMap?[event.currency]?.contracts?[selectedNetwork] ??
+            '';
         final contractCallTxn = Transaction.callContract(
-          contract: contract,
-          function: contract.function('transfer'),
+          contract: relayContract,
+          function: relayContract.function('pay'),
           parameters: [
-            EthereumAddress.fromHex(event.to),
+            EthereumAddress.fromHex(
+              _currentPayment
+                      ?.accountExpanded?.accountInfo?.paymentSplitterContract ??
+                  '',
+            ),
+            event.eventId,
+            _currentPayment?.id ?? '',
+            EthereumAddress.fromHex(currencyAddress),
             event.amount,
           ],
         );
         ethereumTxn = EthereumTransaction(
           from: event.from,
-          to: contractAddress,
-          value: '0x0',
+          to: chain?.relayPaymentContract ?? '',
+          value: event.amount.toRadixString(16),
           data: hex.encode(List<int>.from(contractCallTxn.data!)),
         );
       } else {
-        // is native token
-        ethereumTxn = EthereumTransaction(
-          from: event.from,
-          to: event.to,
-          value: event.amount.toRadixString(16),
-        );
+        // is erc20 token
+        if (contractAddress != zeroAddress) {
+          final contract =
+              Web3ContractService.getERC20Contract(contractAddress);
+          final contractCallTxn = Transaction.callContract(
+            contract: contract,
+            function: contract.function('transfer'),
+            parameters: [
+              EthereumAddress.fromHex(event.to),
+              event.amount,
+            ],
+          );
+          ethereumTxn = EthereumTransaction(
+            from: event.from,
+            to: contractAddress,
+            value: '0x0',
+            data: hex.encode(List<int>.from(contractCallTxn.data!)),
+          );
+        } else {
+          // is native token
+          ethereumTxn = EthereumTransaction(
+            from: event.from,
+            to: event.to,
+            value: event.amount.toRadixString(16),
+          );
+        }
       }
 
       _txHash = await walletConnectService
@@ -328,6 +363,8 @@ class BuyTicketsWithCryptoEvent with _$BuyTicketsWithCryptoEvent {
     required BigInt amount,
     required String to,
     required CurrencyInfo currencyInfo,
+    required String eventId,
+    required String currency,
   }) = _MakeTransaction;
   factory BuyTicketsWithCryptoEvent.selectNetwork({
     required String network,

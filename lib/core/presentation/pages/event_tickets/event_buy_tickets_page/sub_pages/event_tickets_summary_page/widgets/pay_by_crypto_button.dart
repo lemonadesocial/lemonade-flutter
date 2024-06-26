@@ -104,6 +104,7 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
   }
 
   void clickMakeTransaction({
+    required Event event,
     required String userWalletAddress,
   }) {
     final currencyInfo = PaymentUtils.getCurrencyInfo(
@@ -121,6 +122,8 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                     ?.address ??
                 '',
             currencyInfo: currencyInfo,
+            currency: widget.selectedCurrency,
+            eventId: event.id ?? '',
           ),
         );
   }
@@ -199,6 +202,7 @@ class _PayByCryptoButtonViewState extends State<PayByCryptoButtonView> {
                 if (state is BuyTicketsWithCryptoStateSigned) {
                   buttonTitle = buttonTitle = t.event.eventCryptoPayment.pay;
                   onPress = () => clickMakeTransaction(
+                        event: event,
                         userWalletAddress: userWalletAddress,
                       );
                 }

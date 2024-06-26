@@ -80,11 +80,19 @@ const paymentAccountFragment = '''
       provider
       account_info {
         ...on EthereumAccount {
-        currencies
-        currency_map
-        address
-        networks
-      }
+          currencies
+          currency_map
+          address
+          networks
+        }
+
+      ... on EthereumRelayAccount {
+          address
+          currencies
+          currency_map
+          network
+          payment_splitter_contract
+        }
 
       ...on StripeAccount {
         currencies
@@ -120,7 +128,7 @@ const paymentAccountFragment = '''
           percent
           timestamp
         }
-      }
+      } 
     }
   }
 ''';
