@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/utils/dialog_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -81,22 +81,20 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
             if (kDebugMode) {
               print("leave");
             }
-            final confirmed = await showOkCancelAlertDialog(
-              useRootNavigator: false,
-              context: context,
-              title: t.common.areYouSure,
-              okLabel: t.common.actions.ok,
-              cancelLabel: t.common.actions.cancel,
+
+            DialogUtils.showConfirmDialog(
+              context,
+              message: t.common.areYouSure,
+              onConfirm: () async {
+                final success = await showFutureLoadingDialog(
+                  context: context,
+                  future: () => widget.room.leave(),
+                );
+                if (success.error == null) {
+                  AutoRouter.of(context).navigateNamed('/chat');
+                }
+              },
             );
-            if (confirmed == OkCancelResult.ok) {
-              final success = await showFutureLoadingDialog(
-                context: context,
-                future: () => widget.room.leave(),
-              );
-              if (success.error == null) {
-                AutoRouter.of(context).navigateNamed('/chat');
-              }
-            }
             break;
           default:
             break;

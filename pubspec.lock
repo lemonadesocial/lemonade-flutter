@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.7"
-  adaptive_dialog:
-    dependency: "direct main"
-    description:
-      name: adaptive_dialog
-      sha256: "910debe8766eff4b378ed5164bb470debb87c53a3bdf6adee03c79f64fbf7348"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.10.1"
   adaptive_number:
     dependency: transitive
     description:
@@ -49,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.2"
-  animations:
-    dependency: transitive
-    description:
-      name: animations
-      sha256: d3d6dcfb218225bbe68e87ccf6378bbb2e32a94900722c5f81611dad089911cb
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.11"
   ansicolor:
     dependency: transitive
     description:
@@ -81,14 +65,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
-  appkit_ui_element_colors:
-    dependency: transitive
-    description:
-      name: appkit_ui_element_colors
-      sha256: c3e50f900aae314d339de489535736238627071457c4a4a2dbbb1545b4f04f22
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   archive:
     dependency: transitive
     description:
@@ -1454,14 +1430,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  gradient_borders:
-    dependency: transitive
-    description:
-      name: gradient_borders
-      sha256: "69eeaff519d145a4c6c213ada1abae386bcc8981a4970d923e478ce7ba19e309"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   graphql:
     dependency: transitive
     description:
@@ -1670,14 +1638,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  intersperse:
-    dependency: transitive
-    description:
-      name: intersperse
-      sha256: "2f8a905c96f6cbba978644a3d5b31b8d86ddc44917662df7d27a61f3df66a576"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   intl:
     dependency: "direct main"
     description:
@@ -1830,22 +1790,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.0"
-  macos_ui:
-    dependency: transitive
-    description:
-      name: macos_ui
-      sha256: d351f0bada7e5b0cee8cf394299878a6c04e5cfcd784fa1d40e44299501124d8
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
-  macos_window_utils:
-    dependency: transitive
-    description:
-      name: macos_window_utils
-      sha256: b3dfd47bbc605f0e315af684b50370a8f84932267aaa542098063fa384d593bd
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   markdown:
     dependency: transitive
     description:
