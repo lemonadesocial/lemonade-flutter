@@ -46,7 +46,7 @@ class DialogUtils {
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: LemonColor.atomicBlack,
+          backgroundColor: LemonColor.chineseBlack,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
@@ -54,13 +54,13 @@ class DialogUtils {
             padding: EdgeInsets.all(Spacing.medium),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   message,
                   style: Typo.mediumPlus.copyWith(
                     color: colorScheme.onPrimary,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Spacing.small),
                 Row(
