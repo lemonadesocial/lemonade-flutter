@@ -140,8 +140,8 @@ class EventTicketUtils {
     required String currency,
   }) {
     return paymentAccounts.firstWhereOrNull((payAcc) {
-      return payAcc.type == PaymentAccountType.ethereum &&
-          (payAcc.accountInfo?.networks?.contains(network) ?? false) &&
+      return payAcc.type == PaymentAccountType.ethereumRelay &&
+          (payAcc.accountInfo?.network == network) &&
           (payAcc.accountInfo?.currencies?.contains(currency) ?? false);
     });
   }

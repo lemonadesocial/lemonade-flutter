@@ -6,6 +6,7 @@ import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_pay
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
+import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -105,22 +106,30 @@ class ConnectPaymentAccountBloc
     return result.getOrElse(() => Event());
   }
 
+  // Only support creating Ethereum Relay payment account
   Future<PaymentAccount?> _createEthereumPaymentAccount({
-    Chain? selectedChain,
-    String? userWalletAddress,
+    required Chain selectedChain,
+    required String userWalletAddress,
   }) async {
+    final paymentSplitterContractRes = await LemonadeRelayUtils.register(
+      chain: selectedChain,
+      payeeAddress: userWalletAddress,
+    );
+    if (paymentSplitterContractRes.isLeft()) {
+      return null;
+    }
+    final paymentSplitterContract =
+        paymentSplitterContractRes.getOrElse(() => "");
     final result = await _paymentRepository.createPaymentAccount(
       input: CreatePaymentAccountInput(
-        type: PaymentAccountType.ethereum,
+        type: PaymentAccountType.ethereumRelay,
         accountInfo: AccountInfoInput(
-          currencies: selectedChain?.tokens
-                  ?.map((item) => item.symbol ?? '')
-                  .toList() ??
-              [],
-          ethereumPaymentAccountNetworks: [
-            selectedChain?.chainId ?? '',
-          ],
           address: userWalletAddress,
+          currencies:
+              selectedChain.tokens?.map((item) => item.symbol ?? '').toList() ??
+                  [],
+          network: selectedChain.chainId,
+          paymentSplitterContract: paymentSplitterContract,
         ),
       ),
     );

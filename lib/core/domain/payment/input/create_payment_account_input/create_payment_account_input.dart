@@ -32,6 +32,8 @@ class AccountInfoInput with _$AccountInfoInput {
     String? network,
     List<String>? owners,
     int? threshold,
+    // Ethereum Relay
+    @JsonKey(name: 'payment_splitter_contract') String? paymentSplitterContract,
   }) = _AccountInfoInput;
 
   factory AccountInfoInput.fromJson(Map<String, dynamic> json) =>
