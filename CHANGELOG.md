@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.27.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.26.0...v1.27.0) (2024-07-02)
+
+
+### Features
+
+* coinbase wallet integration ([#654](https://github.com/lemonadesocial/lemonade-flutter/issues/654)) ([73444bc](https://github.com/lemonadesocial/lemonade-flutter/commit/73444bc9c845758b086a526d03907ec498b7c8a7))
+* enhance confirm dialog ([#659](https://github.com/lemonadesocial/lemonade-flutter/issues/659)) ([1aff0d7](https://github.com/lemonadesocial/lemonade-flutter/commit/1aff0d76f53b96dbdcacaa5e12887c0634c9e8f5))
+* handle relay payment ([#657](https://github.com/lemonadesocial/lemonade-flutter/issues/657)) ([830c262](https://github.com/lemonadesocial/lemonade-flutter/commit/830c2622a61bbeb3a33a90916f98b08d61261b71))
+* implement creating relay payment account for host ([#663](https://github.com/lemonadesocial/lemonade-flutter/issues/663)) ([c09c728](https://github.com/lemonadesocial/lemonade-flutter/commit/c09c7289d52ae229f64cacd370c3a8267320b460))
+* increase minSdk to 23 for android ([#656](https://github.com/lemonadesocial/lemonade-flutter/issues/656)) ([f73eae0](https://github.com/lemonadesocial/lemonade-flutter/commit/f73eae057255f61c929eccda19a03ba7563116bd))
+* pop close after update personal or social success ([#660](https://github.com/lemonadesocial/lemonade-flutter/issues/660)) ([f8f0bd1](https://github.com/lemonadesocial/lemonade-flutter/commit/f8f0bd18bd223318c4270d7d09b415cadca8d544))
+
+
+### Bug Fixes
+
+* fix web3modal not show coinbase option ([#662](https://github.com/lemonadesocial/lemonade-flutter/issues/662)) ([aee619a](https://github.com/lemonadesocial/lemonade-flutter/commit/aee619a4f3e3d5bffba1ac2516395d51aa7b8cc1))
+* moving application form structure ([#661](https://github.com/lemonadesocial/lemonade-flutter/issues/661)) ([80be720](https://github.com/lemonadesocial/lemonade-flutter/commit/80be720b372395ba81d3666e014cb64be8387cc2))
+* update button styling in leave chat pop up ([#658](https://github.com/lemonadesocial/lemonade-flutter/issues/658)) ([9243c16](https://github.com/lemonadesocial/lemonade-flutter/commit/9243c16146ab2750221edddb5aa2e26b951b50c9))
+
 ## [1.26.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.25.0...v1.26.0) (2024-06-21)
 
 
