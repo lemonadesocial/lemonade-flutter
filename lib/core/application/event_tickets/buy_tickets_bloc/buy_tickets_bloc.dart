@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
@@ -147,6 +148,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
         id: event.payment.id ?? '',
         transferParams: UpdatePaymentTransferParams(
           paymentMethod: event.paymentMethod,
+          returnUrl: '${AppConfig.appScheme}://payment',
         ),
       ),
     );
