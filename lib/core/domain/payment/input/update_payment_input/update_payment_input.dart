@@ -22,10 +22,11 @@ class UpdatePaymentTransferParams with _$UpdatePaymentTransferParams {
   factory UpdatePaymentTransferParams({
     @JsonKey(name: 'tx_hash') String? txHash,
     @JsonKey(name: 'signature') String? signature,
-    // for stripe
-    @JsonKey(name: 'payment_method') String? paymentMethod,
     String? network,
     String? from,
+    // for stripe
+    @JsonKey(name: 'payment_method') String? paymentMethod,
+    @JsonKey(name: 'return_url') String? returnUrl,
   }) = _UpdatePaymentTransferParams;
 
   factory UpdatePaymentTransferParams.fromJson(Map<String, dynamic> json) =>
