@@ -65,7 +65,7 @@ class WaitForPaymentNotificationHandler {
     });
   }
 
-  startWithCrypto(
+  void startWithCrypto(
     BuildContext context, {
     required String chainId,
     required String txHash,

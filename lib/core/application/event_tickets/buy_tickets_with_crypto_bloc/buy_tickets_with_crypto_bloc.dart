@@ -20,7 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 import 'package:app/core/service/wallet/rpc_error_handler_extension.dart';
-
 part 'buy_tickets_with_crypto_bloc.freezed.dart';
 
 const maxUpdatePaymentAttempt = 5;
@@ -36,6 +35,7 @@ class BuyTicketsWithCryptoBloc
   Payment? _currentPayment;
   String? _signature;
   String? _txHash;
+  String? _erc20approveTxHash;
   int _updatePaymentAttemptCount = 0;
   final walletConnectService = getIt<WalletConnectService>();
 
@@ -124,7 +124,17 @@ class BuyTicketsWithCryptoBloc
 
       _signature = signature;
 
-      if (_signature != null) {
+      if (_signature != null && _signature!.startsWith("0x")) {
+        await paymentRepository.updatePayment(
+          input: UpdatePaymentInput(
+            id: _currentPayment?.id ?? '',
+            transferParams: UpdatePaymentTransferParams(
+              signature: _signature,
+              network: selectedNetwork!,
+              from: walletConnectService.w3mService.session?.address ?? '',
+            ),
+          ),
+        );
         emit(
           BuyTicketsWithCryptoState.signed(
             data: state.data.copyWith(
@@ -193,6 +203,58 @@ class BuyTicketsWithCryptoBloc
         final currencyAddress = _currentPayment?.accountExpanded?.accountInfo
                 ?.currencyMap?[event.currency]?.contracts?[selectedNetwork] ??
             '';
+        // if currency is not native token
+        // need to approve first
+        if (currencyAddress != zeroAddress && _erc20approveTxHash == null) {
+          final erc20Contract = Web3ContractService.getERC20Contract(
+            currencyAddress,
+          );
+          final approveContractCall = Transaction.callContract(
+            contract: erc20Contract,
+            function: erc20Contract.function('approve'),
+            parameters: [
+              EthereumAddress.fromHex(
+                chain?.relayPaymentContract ?? '',
+              ),
+              event.amount,
+            ],
+          );
+          final ethereumTxn = EthereumTransaction(
+            from: event.from,
+            to: currencyAddress,
+            value: BigInt.zero.toRadixString(16),
+            data: hex.encode(List<int>.from(approveContractCall.data!)),
+          );
+          final txHash = await walletConnectService.requestTransaction(
+            chainId: chain?.fullChainId ?? '',
+            transaction: ethereumTxn,
+          );
+          if (txHash.isEmpty || !txHash.startsWith("0x")) {
+            return emit(
+              BuyTicketsWithCryptoState.failure(
+                data: state.data,
+                failureReason: WalletConnectFailure(),
+              ),
+            );
+          }
+          _erc20approveTxHash = txHash;
+          final receipt = await Web3Utils.waitForReceipt(
+            rpcUrl: chain?.rpcUrl ?? '',
+            txHash: _erc20approveTxHash!,
+            maxAttempt: 5,
+            deplayDuration: const Duration(seconds: 5),
+          );
+          if (receipt?.status != true) {
+            _erc20approveTxHash = null;
+            return emit(
+              BuyTicketsWithCryptoState.failure(
+                data: state.data,
+                failureReason: WalletConnectFailure(),
+              ),
+            );
+          }
+        }
+
         final contractCallTxn = Transaction.callContract(
           contract: relayContract,
           function: relayContract.function('pay'),
@@ -211,7 +273,8 @@ class BuyTicketsWithCryptoBloc
         ethereumTxn = EthereumTransaction(
           from: event.from,
           to: chain?.relayPaymentContract ?? '',
-          value: event.amount.toRadixString(16),
+          value: (currencyAddress == zeroAddress ? event.amount : BigInt.zero)
+              .toRadixString(16),
           data: hex.encode(List<int>.from(contractCallTxn.data!)),
         );
       } else {
@@ -230,7 +293,7 @@ class BuyTicketsWithCryptoBloc
           ethereumTxn = EthereumTransaction(
             from: event.from,
             to: contractAddress,
-            value: '0x0',
+            value: BigInt.zero.toRadixString(16),
             data: hex.encode(List<int>.from(contractCallTxn.data!)),
           );
         } else {
@@ -254,7 +317,7 @@ class BuyTicketsWithCryptoBloc
             ),
           );
 
-      if (_txHash != null) {
+      if (_txHash != null && _txHash!.startsWith('0x')) {
         add(BuyTicketsWithCryptoEvent.processUpdatePayment());
       } else {
         emit(
