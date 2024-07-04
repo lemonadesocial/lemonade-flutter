@@ -3,6 +3,7 @@ import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/farcaster_cast_item_widget/farcaster_cast_item_widget.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/farcaster_channel_detail_popup.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -154,6 +155,12 @@ class _FarcasterChannelNewsfeedPageState
                   if (result.isLoading && casts.isEmpty) {
                     return Center(
                       child: Loading.defaultLoading(context),
+                    );
+                  }
+
+                  if (casts.isEmpty || result.hasException) {
+                    return const Center(
+                      child: EmptyList(),
                     );
                   }
 
