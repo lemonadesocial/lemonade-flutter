@@ -15,7 +15,7 @@ class AirstackFarcasterCast with _$AirstackFarcasterCast {
     AirstackFarcasterUser? castedBy,
     AirstackFrame? frame,
     AirstackFarcasterChannel? channel,
-    List<AirstackFarcasterCast>? quotedCast,
+    List<AirstackFarcasterCast?>? quotedCast,
     String? rootParentUrl,
     String? parentHash,
     String? parentFid,
