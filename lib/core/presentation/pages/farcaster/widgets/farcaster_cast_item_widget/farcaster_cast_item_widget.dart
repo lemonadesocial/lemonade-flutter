@@ -84,7 +84,10 @@ class _FarcasterCastItemWidgetState extends State<FarcasterCastItemWidget>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (widget.cast.quotedCast?.whereType<AirstackFarcasterCast>().isNotEmpty == true) ...[
+                  if (widget.cast.quotedCast
+                          ?.whereType<AirstackFarcasterCast>()
+                          .isNotEmpty ==
+                      true) ...[
                     _Recast(cast: widget.cast),
                     SizedBox(height: 4.w),
                   ],
