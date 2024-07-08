@@ -1,4 +1,6 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
+import 'package:app/core/presentation/pages/quest/quest_listing_page/quest_listing_page.dart';
+import 'package:app/core/presentation/pages/quest/quest_listing_page/views/quest_listing_page_view.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
@@ -9,6 +11,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -67,6 +70,19 @@ class _HomePageState extends State<HomePage> {
             SizedBox(width: Spacing.xSmall),
           ],
           if (isLoggedIn) ...[
+            InkWell(
+              onTap: () {
+                AutoRouter.of(context).navigate(const QuestListingRoute());
+              },
+              child: ThemeSvgIcon(
+                builder: (filter) => Assets.icons.icTargetLine.svg(
+                  colorFilter: filter,
+                  width: Sizing.small,
+                  height: Sizing.small,
+                ),
+              ),
+            ),
+            SizedBox(width: Spacing.medium),
             InkWell(
               onTap: () {
                 AutoRouter.of(context).navigate(MyEventTicketsListRoute());
