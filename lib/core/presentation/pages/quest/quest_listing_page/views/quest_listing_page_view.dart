@@ -7,7 +7,6 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:matrix/matrix.dart';
 
 enum QuestListingTabs {
   profile(tabIndex: 0),

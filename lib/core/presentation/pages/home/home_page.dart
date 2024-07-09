@@ -1,6 +1,4 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
-import 'package:app/core/presentation/pages/quest/quest_listing_page/quest_listing_page.dart';
-import 'package:app/core/presentation/pages/quest/quest_listing_page/views/quest_listing_page_view.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
