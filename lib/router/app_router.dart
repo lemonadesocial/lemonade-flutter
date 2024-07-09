@@ -184,6 +184,9 @@ final eventDetailRoutes = AutoRoute(
       page: ScanQRCheckinRewardsRoute.page,
     ),
     AutoRoute(
+      page: ClaimSplitRelayPaymentRoute.page,
+    ),
+    AutoRoute(
       path: 'claimRewards/:user_id',
       page: ClaimRewardsRoute.page,
     ),

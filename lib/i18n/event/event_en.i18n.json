@@ -609,5 +609,15 @@
         "cancelled": "Cancelled",
         "cancelledSuccessfully": "Your event “$event_name” has been successfully cancelled"
     },
-    "cancelTicket": "Cancel ticket"
+    "cancelTicket": "Cancel ticket",
+    "relayPayment": {
+        "claimSplit": {
+            "saleSplit": "Sales split",
+            "claimSplitTitle": "Claim Sales Split",
+            "claimSplitDescription": "You have a sales split from crypto ticket sales. Pay gas fees and claim your share!",
+            "claimSplitSuccess": "Successfully claimed",
+            "claimSplitFailed": "Fail to claim",
+            "pendingClaims": "Pending claims"
+        }
+    }
 }

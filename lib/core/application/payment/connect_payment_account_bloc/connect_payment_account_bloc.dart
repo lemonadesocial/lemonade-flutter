@@ -2,7 +2,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
-import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
@@ -33,7 +32,6 @@ class ConnectPaymentAccountBloc
   ) async {
     emit(ConnectPaymentAccountState.checkingPaymentAccount());
     final connectedPaymentAccounts = _getConnectedPaymentAccounts();
-    final userPaymentAccounts = await _getUserPaymentAccounts();
     final selectedCurrency = blocEvent.currency;
     final selectedChain = blocEvent.selectedChain;
     final userWalletAddress = blocEvent.userWalletAddress;
@@ -51,7 +49,7 @@ class ConnectPaymentAccountBloc
     // if not connected,
     // check if user already created with desired payment account
     final createdPaymentAccount = _getCreatedPaymentAccount(
-      userPaymentAccounts: userPaymentAccounts,
+      connectedPaymentAccounts: connectedPaymentAccounts,
       currency: selectedCurrency,
       selectedChain: selectedChain,
     );
@@ -174,32 +172,23 @@ class ConnectPaymentAccountBloc
   }
 
   PaymentAccount? _getCreatedPaymentAccount({
-    required List<PaymentAccount> userPaymentAccounts,
+    required List<PaymentAccount> connectedPaymentAccounts,
     required String currency,
     Chain? selectedChain,
   }) {
     PaymentAccount? createdPaymentAccount;
     if (selectedChain != null) {
+      // Each event will have its own relay payment account for each network
       createdPaymentAccount = EventTicketUtils.findEthereumPaymentAccount(
-        userPaymentAccounts,
+        connectedPaymentAccounts,
         network: selectedChain.chainId ?? '',
         currency: currency,
       );
     } else {
       createdPaymentAccount =
-          EventTicketUtils.findStripePaymentAccount(userPaymentAccounts);
+          EventTicketUtils.findStripePaymentAccount(connectedPaymentAccounts);
     }
     return createdPaymentAccount;
-  }
-
-  Future<List<PaymentAccount>> _getUserPaymentAccounts() async {
-    final result = await _paymentRepository.getPaymentAccounts(
-      input: GetPaymentAccountsInput(),
-    );
-    if (result.isLeft()) {
-      return [];
-    }
-    return result.getOrElse(() => []);
   }
 
   List<PaymentAccount> _getConnectedPaymentAccounts() {

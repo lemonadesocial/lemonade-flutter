@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -13,6 +14,7 @@ import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -68,6 +70,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
+    final relayPaymentSupported = event.paymentAccountsExpanded?.any(
+          (element) => element.type == PaymentAccountType.ethereumRelay,
+        ) ??
+        false;
     return FutureBuilder<Either<Failure, List<EventTicket>>>(
       future: getIt<EventTicketRepository>().getTickets(
         input: GetTicketsInput(
@@ -363,10 +369,72 @@ class HostEventBasicInfoCard extends StatelessWidget {
             SizedBox(
               height: Spacing.extraSmall,
             ),
+            if (relayPaymentSupported) ...[
+              _ClaimRelayPaymentButton(event: event),
+              SizedBox(
+                height: Spacing.extraSmall,
+              ),
+            ],
             _ViewGuestsButton(event: event),
           ],
         );
       },
+    );
+  }
+}
+
+class _ClaimRelayPaymentButton extends StatelessWidget {
+  final Event event;
+  const _ClaimRelayPaymentButton({
+    required this.event,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          ClaimSplitRelayPaymentRoute(
+            event: event,
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.smMedium),
+        decoration: BoxDecoration(
+          color: colorScheme.onPrimary.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+        ),
+        child: Row(
+          children: [
+            ThemeSvgIcon(
+              color: LemonColor.malachiteGreen,
+              builder: (filter) => Assets.icons.icCashVariant.svg(
+                width: 18.w,
+                height: 18.w,
+                colorFilter: filter,
+              ),
+            ),
+            SizedBox(width: Spacing.extraSmall),
+            Text(
+              t.event.relayPayment.claimSplit.saleSplit,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+            const Spacer(),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icArrowRight.svg(
+                width: 18.w,
+                height: 18.w,
+                colorFilter: filter,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -394,7 +462,9 @@ class _ViewGuestsButton extends StatelessWidget {
         );
       },
       child: Container(
-        height: 54.w,
+        padding: EdgeInsets.all(
+          Spacing.smMedium,
+        ),
         decoration: BoxDecoration(
           color: colorScheme.onPrimary.withOpacity(0.06),
           borderRadius: BorderRadius.only(
@@ -404,69 +474,42 @@ class _ViewGuestsButton extends StatelessWidget {
             topRight: Radius.circular(LemonRadius.extraSmall),
           ),
         ),
-        child: Stack(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.smMedium,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Center(
-                              child: event.approvalRequired == true
-                                  ? Assets.icons.icError.svg(
-                                      width: 20.w,
-                                      height: 20.w,
-                                    )
-                                  : Assets.icons.icGuestsGradient.svg(
-                                      width: 20.w,
-                                      height: 20.w,
-                                    ),
-                            ),
-                            SizedBox(width: Spacing.small),
-                            Text(
-                              event.approvalRequired == true
-                                  ? t.event.eventApproval.pendingRequests(
-                                      count: event.pendingRequestCount
-                                              ?.toString() ??
-                                          0,
-                                      n: event.pendingRequestCount ?? 0,
-                                    )
-                                  : t.event.eventApproval.guests,
-                              style: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Stack(
-                  children: [
-                    SizedBox(
-                      width: Sizing.xLarge,
-                      child: Center(
-                        child: Assets.icons.icArrowBack.svg(
-                          width: 25.w,
-                          height: 25.w,
-                        ),
-                      ),
+            Center(
+              child: event.approvalRequired == true
+                  ? Assets.icons.icError.svg(
+                      width: 18.w,
+                      height: 18.w,
+                    )
+                  : Assets.icons.icGuestsGradient.svg(
+                      width: 18.w,
+                      height: 18.w,
                     ),
-                  ],
-                ),
-              ],
+            ),
+            SizedBox(width: Spacing.extraSmall),
+            Text(
+              event.approvalRequired == true
+                  ? t.event.eventApproval.pendingRequests(
+                      count: event.pendingRequestCount?.toString() ?? 0,
+                      n: event.pendingRequestCount ?? 0,
+                    )
+                  : t.event.eventApproval.guests,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+            const Spacer(),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icArrowRight.svg(
+                width: 18.w,
+                height: 18.w,
+                colorFilter: filter,
+              ),
             ),
           ],
         ),

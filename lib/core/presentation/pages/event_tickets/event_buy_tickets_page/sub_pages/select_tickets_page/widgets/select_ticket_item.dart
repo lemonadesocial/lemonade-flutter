@@ -21,6 +21,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class SelectTicketItem extends StatelessWidget {
   const SelectTicketItem({
@@ -304,94 +305,106 @@ class _PriceItem extends StatelessWidget {
 
     return ChainQuery(
       chainId: price.network ?? '',
-      builder: (chain, {required isLoading}) => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Flexible(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (isCryptoCurrency && price.network?.isNotEmpty == true) ...[
-                  Container(
-                    decoration: ShapeDecoration(
-                      color: LemonColor.chineseBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          Sizing.medium,
-                        ),
-                      ),
-                    ),
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(Sizing.xSmall),
-                        child: CachedNetworkImage(
-                          imageUrl: chain?.logoUrl ?? '',
-                          placeholder: (_, __) => const SizedBox.shrink(),
-                          errorWidget: (_, __, ___) => const SizedBox.shrink(),
-                          width: Sizing.xSmall,
-                          height: Sizing.xSmall,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: Spacing.xSmall),
-                ],
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        isCryptoCurrency
-                            ? Web3Utils.formatCryptoCurrency(
-                                price.cryptoCost ?? BigInt.zero,
-                                currency: currency,
-                                decimals: decimals,
-                              )
-                            : NumberUtils.formatCurrency(
-                                amount: price.fiatCost ?? 0,
-                                currency: currency,
-                              ),
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.87),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      if (isCryptoCurrency &&
-                          price.network?.isNotEmpty == true) ...[
-                        SizedBox(height: 2.w),
-                        Text(
-                          chain?.name ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+      builder: (
+        chain, {
+        required isLoading,
+      }) {
+        final targetToken = isCryptoCurrency
+            ? chain?.tokens?.firstWhereOrNull(
+                (token) => token.symbol == currency,
+              )
+            : null;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isCryptoCurrency &&
+                      price.network?.isNotEmpty == true) ...[
+                    Container(
+                      decoration: ShapeDecoration(
+                        color: LemonColor.chineseBlack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            Sizing.medium,
                           ),
                         ),
+                      ),
+                      width: Sizing.medium,
+                      height: Sizing.medium,
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(Sizing.xSmall),
+                          child: CachedNetworkImage(
+                            imageUrl: targetToken?.logoUrl ?? '',
+                            placeholder: (_, __) => const SizedBox.shrink(),
+                            errorWidget: (_, __, ___) =>
+                                const SizedBox.shrink(),
+                            width: Sizing.xSmall,
+                            height: Sizing.xSmall,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: Spacing.xSmall),
+                  ],
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          isCryptoCurrency
+                              ? Web3Utils.formatCryptoCurrency(
+                                  price.cryptoCost ?? BigInt.zero,
+                                  currency: currency,
+                                  decimals: decimals,
+                                )
+                              : NumberUtils.formatCurrency(
+                                  amount: price.fiatCost ?? 0,
+                                  currency: currency,
+                                ),
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary.withOpacity(0.87),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (isCryptoCurrency &&
+                            price.network?.isNotEmpty == true) ...[
+                          SizedBox(height: 2.w),
+                          Text(
+                            chain?.name ?? '',
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          TicketCounter(
-            count: count,
-            onDecrease: onDecrease,
-            onIncrease: onIncrease,
-            disabled: disabled,
-            onPressDisabled: () {
-              SnackBarUtils.showError(
-                title: t.common.error.label,
-                message: t.event.eventBuyTickets.multipleTicketsError,
-              );
-            },
-          ),
-        ],
-      ),
+            SizedBox(width: Spacing.xSmall),
+            TicketCounter(
+              count: count,
+              onDecrease: onDecrease,
+              onIncrease: onIncrease,
+              disabled: disabled,
+              onPressDisabled: () {
+                SnackBarUtils.showError(
+                  title: t.common.error.label,
+                  message: t.event.eventBuyTickets.multipleTicketsError,
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -7,6 +7,8 @@ part 'chain.freezed.dart';
 
 @freezed
 class Chain with _$Chain {
+  Chain._();
+
   factory Chain({
     bool? active,
     String? chainId,
@@ -20,6 +22,9 @@ class Chain with _$Chain {
     double? safeConfirmations,
     String? relayPaymentContract,
   }) = _Chain;
+
+  int get completedBlockTime =>
+      (blockTime?.toInt() ?? 1) * (safeConfirmations?.toInt() ?? 1);
 
   factory Chain.fromDto(ChainDto dto) {
     final tokens = List.from(dto.tokens ?? [])
@@ -54,6 +59,7 @@ class ERC20Token with _$ERC20Token {
     String? symbol,
     double? decimals,
     String? contract,
+    String? logoUrl,
   }) = _ERC20Token;
 
   factory ERC20Token.fromDto(ERC20TokenDto dto) => ERC20Token(
@@ -62,5 +68,6 @@ class ERC20Token with _$ERC20Token {
         symbol: dto.symbol,
         decimals: dto.decimals,
         contract: dto.contract,
+        logoUrl: dto.logoUrl,
       );
 }

@@ -29,6 +29,7 @@ class ERC20TokenDto with _$ERC20TokenDto {
     String? symbol,
     double? decimals,
     String? contract,
+    @JsonKey(name: 'logo_url') String? logoUrl,
   }) = _ERC20TokenDto;
 
   factory ERC20TokenDto.fromJson(Map<String, dynamic> json) =>

@@ -238,6 +238,9 @@ class BuyTicketsWithCryptoBloc
             );
           }
           _erc20approveTxHash = txHash;
+          await Future.delayed(
+            Duration(seconds: chain?.completedBlockTime ?? 1),
+          );
           final receipt = await Web3Utils.waitForReceipt(
             rpcUrl: chain?.rpcUrl ?? '',
             txHash: _erc20approveTxHash!,
