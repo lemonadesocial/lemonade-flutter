@@ -173,7 +173,6 @@ class ConnectPaymentAccountBloc
 
   PaymentAccount? _getCreatedPaymentAccount({
     required List<PaymentAccount> connectedPaymentAccounts,
-    // required List<PaymentAccount> userPaymentAccounts,
     required String currency,
     Chain? selectedChain,
   }) {

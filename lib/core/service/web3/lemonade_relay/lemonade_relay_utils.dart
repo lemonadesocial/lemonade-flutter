@@ -75,6 +75,9 @@ class LemonadeRelayUtils {
       function: contract.function('allPayees'),
       params: [],
     );
+    if (data.isEmpty || data[0].isEmpty) {
+      throw Exception('No payee found');
+    }
     final payees = data[0];
     // currently only get first payee because we only support 1 payee (event's host)
     return payees[0][0] as EthereumAddress;
