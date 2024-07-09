@@ -65,7 +65,8 @@
         "join": "Join",
         "shareUser": "Share user",
         "reportUser": "Report user",
-        "editMyProfile": "Edit my profile"
+        "editMyProfile": "Edit my profile",
+        "claim": "Claim"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
