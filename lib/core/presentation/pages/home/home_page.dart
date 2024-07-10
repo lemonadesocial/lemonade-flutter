@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
           if (isLoggedIn) ...[
             InkWell(
               onTap: () {
-                AutoRouter.of(context).navigate(const QuestListingRoute());
+                AutoRouter.of(context).navigate(const QuestRoute());
               },
               child: ThemeSvgIcon(
                 builder: (filter) => Assets.icons.icTargetLine.svg(

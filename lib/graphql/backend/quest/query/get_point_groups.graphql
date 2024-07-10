@@ -1,0 +1,7 @@
+# import '../fragment/point_group_fragment.graphql'
+
+query GetPointGroups {
+    getPointGroups {
+        ...PointGroup
+    }
+}

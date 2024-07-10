@@ -113,7 +113,7 @@ class AppRouter extends $AppRouter {
         vaultRoutes,
         collaboratorRoutes,
         ...farcasterRoutes,
-        ...questRoutes,
+        questRoutes,
       ];
 }
 
@@ -517,6 +517,13 @@ final farcasterRoutes = [
   AutoRoute(page: FarcasterDiscoverRoute.page),
 ];
 
-final questRoutes = [
-  AutoRoute(page: QuestListingRoute.page),
-];
+final questRoutes = AutoRoute(
+  path: '/quest',
+  page: QuestRoute.page,
+  children: [
+    AutoRoute(
+      initial: true,
+      page: QuestListingRoute.page,
+    ),
+  ],
+);

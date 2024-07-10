@@ -1,0 +1,5 @@
+fragment Group on Group {
+  id: _id
+  title
+  position
+}

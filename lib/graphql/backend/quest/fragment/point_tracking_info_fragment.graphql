@@ -1,0 +1,6 @@
+fragment PointTrackingInfo on PointTrackingInfo {
+  id: _id
+  config
+  points
+  createdAt: created_at
+}

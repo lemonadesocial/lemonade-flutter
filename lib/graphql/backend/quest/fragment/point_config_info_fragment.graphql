@@ -1,0 +1,14 @@
+# import 'point_tracking_info_fragment.graphql'
+
+fragment PointConfigInfo on PointConfigInfo {
+  id: _id
+  type
+  title
+  points
+  firstTimeOnly: first_time_only
+  firstLevelGroup: first_level_group
+  secondLevelGroup: second_level_group
+  trackings {
+    ...PointTrackingInfo
+  }
+}
