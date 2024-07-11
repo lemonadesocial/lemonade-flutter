@@ -1,10 +1,13 @@
 import 'package:app/core/application/quest/get_point_groups_bloc/get_point_groups_bloc.dart';
+import 'package:app/core/domain/quest/entities/group.dart';
 import 'package:app/core/presentation/pages/quest/widgets/quest_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -42,7 +45,7 @@ class _QuestListingPageState extends State<QuestListingPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    // _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -55,72 +58,121 @@ class _QuestListingPageState extends State<QuestListingPage>
       ),
       backgroundColor: colorScheme.primary,
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
-                builder: (context, state) {
-              final pointGroups = state.pointGroups;
-              List<String?> pointGroupsTitle = pointGroups
-                  .map((item) => item.firstLevelGroup?.title)
-                  .toList();
-              List<Tab> tabs = pointGroupsTitle.map((tabName) {
-                return Tab(text: StringUtils.capitalize(tabName));
-              }).toList();
+        child: BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
+          builder: (context, state) {
+            final pointGroups = state.pointGroups;
+            List<String?> pointGroupsTitle =
+                pointGroups.map((item) => item.firstLevelGroup?.title).toList();
+            List<Tab> tabs = pointGroupsTitle.map((tabName) {
+              return Tab(text: StringUtils.capitalize(tabName));
+            }).toList();
 
-              return TabBar(
-                onTap: (index) {
-                  setState(() {
-                    selectedTabIndex = index;
-                  });
-                },
-                controller: _tabController,
-                labelStyle: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w500,
-                ),
-                unselectedLabelStyle: Typo.medium.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w500,
-                ),
-                indicatorColor: LemonColor.paleViolet,
-                tabs: tabs,
-              );
-            }),
-            SizedBox(height: Spacing.extraSmall),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
+            return DefaultTabController(
+              length: tabs.length,
+              initialIndex: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: Spacing.xSmall,
-                      horizontal: Spacing.xSmall,
+                  TabBar(
+                    onTap: (index) {
+                      setState(() {
+                        selectedTabIndex = index;
+                      });
+                    },
+                    labelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w500,
                     ),
-                    child: CustomScrollView(
-                      slivers: [
-                        _GuestListSection(
-                          rooms: const [{}, {}, {}, {}, {}, {}],
-                          itemBuilder: () => QuestItemWidget(
-                            title: '1 point',
-                            subTitle: 'Verify email',
-                            onTap: () {},
-                            repeatable: true,
-                          ),
-                          emptyText: t.chat.emptyChannels,
-                        ),
-                      ],
+                    unselectedLabelStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    indicatorColor: LemonColor.paleViolet,
+                    tabs: tabs,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: pointGroups.map((pointGroups) {
+                        final secondaryLevelGroups =
+                            pointGroups.secondLevelGroups;
+                        return Column(
+                          children: [
+                            _SecondaryLevelGroup(
+                              secondaryLevelGroups: secondaryLevelGroups,
+                              selected: false,
+                            ),
+                            Expanded(
+                              child: CustomScrollView(
+                                slivers: [
+                                  _GuestListSection(
+                                    rooms: const [{}, {}, {}, {}, {}, {}],
+                                    itemBuilder: () => QuestItemWidget(
+                                      title: '1 point',
+                                      subTitle: 'Verify email',
+                                      onTap: () {},
+                                      repeatable: true,
+                                    ),
+                                    emptyText: t.chat.emptyChannels,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
                   ),
-                  const CustomScrollView(
-                    slivers: [],
-                  ),
-                  const CustomScrollView(slivers: []),
-                  const CustomScrollView(slivers: []),
                 ],
               ),
-            ),
-          ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _SecondaryLevelGroup extends StatelessWidget {
+  const _SecondaryLevelGroup({
+    required this.secondaryLevelGroups,
+    required this.selected,
+  });
+
+  final List<Group>? secondaryLevelGroups;
+  final bool? selected;
+
+  @override
+  Widget build(BuildContext context) {
+    if (secondaryLevelGroups != null) {
+      if (secondaryLevelGroups!.isEmpty) {
+        return const SizedBox.shrink();
+      }
+    }
+    return Padding(
+      padding: EdgeInsets.only(
+        top: Spacing.medium,
+        left: Spacing.small,
+        right: Spacing.small,
+      ),
+      child: SizedBox(
+        height: Sizing.medium,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          separatorBuilder: (context, index) =>
+              SizedBox(width: Spacing.extraSmall),
+          itemCount: secondaryLevelGroups?.length ?? 0,
+          itemBuilder: (context, index) {
+            final type = secondaryLevelGroups?[index];
+            return LemonOutlineButton(
+              onTap: () {},
+              backgroundColor: selected == true
+                  ? LemonColor.chineseBlack
+                  : LemonColor.atomicBlack,
+              borderColor: selected == true ? LemonColor.chineseBlack : null,
+              label: StringUtils.capitalize(type?.title),
+              radius: BorderRadius.circular(LemonRadius.button),
+            );
+          },
         ),
       ),
     );
@@ -145,10 +197,17 @@ class _GuestListSection extends StatelessWidget {
         child: EmptyList(emptyText: emptyText),
       );
     }
-    return SliverList.separated(
-      itemCount: 6,
-      itemBuilder: (context, index) => itemBuilder(),
-      separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        top: Spacing.medium,
+        left: Spacing.small,
+        right: Spacing.small,
+      ),
+      sliver: SliverList.separated(
+        itemCount: 6,
+        itemBuilder: (context, index) => itemBuilder(),
+        separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
+      ),
     );
   }
 }
