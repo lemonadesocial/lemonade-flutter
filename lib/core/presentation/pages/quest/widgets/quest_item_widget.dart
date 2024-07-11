@@ -13,12 +13,14 @@ class QuestItemWidget extends StatelessWidget {
     required this.subTitle,
     required this.onTap,
     this.repeatable,
+    this.trackingCount,
   });
 
   final String title;
   final String subTitle;
   final VoidCallback onTap;
   final bool? repeatable;
+  final int? trackingCount;
 
   @override
   Widget build(BuildContext context) {
@@ -95,22 +97,25 @@ class QuestItemWidget extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              t.quest.completeCount(count: 15),
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(width: Spacing.superExtraSmall),
-                            Assets.icons.icDoneAllRounded.svg(
-                              width: 18.w,
-                              height: 18.w,
-                            ),
-                          ],
-                        ),
+                        (trackingCount ?? 0) > 0
+                            ? Row(
+                                children: [
+                                  Text(
+                                    t.quest.completeCount(
+                                        count: trackingCount ?? ''),
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: Spacing.superExtraSmall),
+                                  Assets.icons.icDoneAllRounded.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                   )

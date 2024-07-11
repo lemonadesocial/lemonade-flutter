@@ -6,5 +6,8 @@ import 'package:dartz/dartz.dart';
 abstract class QuestRepository {
   Future<Either<Failure, List<PointGroup>>> getPointGroups();
 
-  Future<Either<Failure, List<PointConfigInfo>>> getMyPoints();
+  Future<Either<Failure, List<PointConfigInfo>>> getMyPoints({
+    required String? firstLevelGroup,
+    required String? secondLevelGroup,
+  });
 }

@@ -36,9 +36,16 @@ class QuestRepositoryImpl implements QuestRepository {
   }
 
   @override
-  Future<Either<Failure, List<PointConfigInfo>>> getMyPoints() async {
+  Future<Either<Failure, List<PointConfigInfo>>> getMyPoints({
+    required String? firstLevelGroup,
+    required String? secondLevelGroup,
+  }) async {
     final result = await _client.query$GetMyPoints(
       Options$Query$GetMyPoints(
+        variables: Variables$Query$GetMyPoints(
+          firstLevelGroup: firstLevelGroup,
+          secondLevelGroup: secondLevelGroup,
+        ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
@@ -49,7 +56,7 @@ class QuestRepositoryImpl implements QuestRepository {
       List.from(
         result.parsedData!.getMyPoints
             .map(
-              (item) => PointGroup.fromJson(item.toJson()),
+              (item) => PointConfigInfo.fromJson(item.toJson()),
             )
             .toList(),
       ),
