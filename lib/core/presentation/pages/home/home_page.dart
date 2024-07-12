@@ -19,7 +19,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -97,7 +96,8 @@ class _HomePageState extends State<HomePage> {
                           color: colorScheme.secondaryContainer,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
-                                LemonRadius.extraSmall / 2),
+                              LemonRadius.extraSmall / 2,
+                            ),
                           ),
                         ),
                         child: Row(

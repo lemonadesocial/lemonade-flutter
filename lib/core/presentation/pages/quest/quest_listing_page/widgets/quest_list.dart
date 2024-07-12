@@ -74,7 +74,7 @@ class QuestList extends StatelessWidget {
                       pointConfigInfo.firstTimeOnly == false;
                   final trackingCount = pointConfigInfo.trackings?.length;
                   return QuestItemWidget(
-                    title: t.quest.pointCount(count: points),
+                    title: t.quest.pointsCount(n: points, count: points),
                     subTitle: pointConfigInfo.title ?? '',
                     onTap: () {},
                     repeatable: repeatable,

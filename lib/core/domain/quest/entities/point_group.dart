@@ -10,6 +10,9 @@ class PointGroup with _$PointGroup {
   const factory PointGroup({
     Group? firstLevelGroup,
     List<Group>? secondLevelGroups,
+    int? points,
+    int? count,
+    int? completed,
   }) = _PointGroup;
 
   factory PointGroup.fromJson(Map<String, dynamic> json) =>

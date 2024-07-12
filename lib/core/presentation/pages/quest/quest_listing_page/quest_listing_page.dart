@@ -1,5 +1,6 @@
 import 'package:app/core/application/quest/get_point_groups_bloc/get_point_groups_bloc.dart';
 import 'package:app/core/domain/quest/entities/group.dart';
+import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_completed_card.dart';
 import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -58,6 +59,7 @@ class _QuestListingPageState extends State<QuestListingPage>
         child: BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
           builder: (context, state) {
             final pointGroups = state.pointGroups;
+            final selectedFirstLevelGroup = state.selectedFirstLevelGroup;
             final selectedSecondaryLevelGroup = state.selectedSecondLevelGroup;
             List<String?> pointGroupsTitle =
                 pointGroups.map((item) => item.firstLevelGroup?.title).toList();
@@ -90,11 +92,24 @@ class _QuestListingPageState extends State<QuestListingPage>
                   ),
                   Expanded(
                     child: TabBarView(
-                      children: pointGroups.map((pointGroups) {
+                      children: pointGroups.map((pointGroup) {
                         final secondaryLevelGroups =
-                            pointGroups.secondLevelGroups;
+                            pointGroup.secondLevelGroups;
                         return Column(
                           children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: Spacing.xSmall,
+                                left: Spacing.xSmall,
+                                right: Spacing.xSmall,
+                              ),
+                              child: QuestCompletedCard(
+                                completedCount: pointGroup.completed ?? 0,
+                                pointsCount: pointGroup.points ?? 0,
+                                typeTitle:
+                                    pointGroup.firstLevelGroup?.title ?? '',
+                              ),
+                            ),
                             _SecondaryLevelGroup(
                               secondaryLevelGroups: secondaryLevelGroups,
                               selectedSecondaryLevelGroup:

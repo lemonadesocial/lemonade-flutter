@@ -1,7 +1,7 @@
 # import '../fragment/point_group_fragment.graphql'
 
-query GetPointGroups {
-    getPointGroups {
+query GetPointGroups($withCount: Boolean) {
+    getPointGroups(with_count: $withCount) {
         ...PointGroup
     }
 }

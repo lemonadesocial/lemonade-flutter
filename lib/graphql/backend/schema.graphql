@@ -69,7 +69,7 @@ type Query {
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
   getOffers(type: OfferType!): [Offer!]!
-  getPointGroups: [PointGroup!]!
+  getPointGroups(with_count: Boolean): [PointGroup!]!
   getMyPoints(first_level_group: MongoID, second_level_group: MongoID): [PointConfigInfo!]!
   getRooms(input: GetRoomsInput!): [Room!]!
   getRoom(_id: MongoID!): Room
@@ -2012,11 +2012,16 @@ enum OfferType {
 type PointGroup {
   first_level_group: Group
   second_level_groups: [Group]!
+  points: Float
+  count: Float
+  completed: Float
 }
 
 type Group {
   _id: MongoID!
   title: String!
+  sub_title_1: String
+  sub_title_2: String
   position: Float!
 }
 

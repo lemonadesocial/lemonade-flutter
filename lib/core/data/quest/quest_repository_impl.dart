@@ -18,6 +18,7 @@ class QuestRepositoryImpl implements QuestRepository {
   Future<Either<Failure, List<PointGroup>>> getPointGroups() async {
     final result = await _client.query$GetPointGroups(
       Options$Query$GetPointGroups(
+        variables: Variables$Query$GetPointGroups(withCount: true),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
     );

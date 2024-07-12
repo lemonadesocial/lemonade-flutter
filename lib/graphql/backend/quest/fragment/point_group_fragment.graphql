@@ -7,4 +7,7 @@ fragment PointGroup on PointGroup {
   secondLevelGroups: second_level_groups {
     ...Group
   }
+  points
+  count
+  completed
 }
