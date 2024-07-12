@@ -83,7 +83,7 @@ class LemonadeRelayUtils {
     return payees[0][0] as EthereumAddress;
   }
 
-  static Future<Either<Failure, bool>> claimSplit({
+  static Future<Either<Failure, String>> claimSplit({
     required String paymentSplitterContractAddress,
     required String connectedWalletAddress,
     required Chain chain,
@@ -125,7 +125,7 @@ class LemonadeRelayUtils {
         transaction: ethereumTx,
       );
       if (!txHash.startsWith('0x')) {
-        return Left(Failure());
+        return Left(Failure(message: txHash));
       }
       await Future.delayed(
         Duration(seconds: chain.completedBlockTime),
@@ -136,7 +136,7 @@ class LemonadeRelayUtils {
         deplayDuration: const Duration(seconds: 3),
       );
       if (receipt?.status == true) {
-        return const Right(true);
+        return Right(txHash);
       }
       return Left(Failure());
     } catch (e) {
