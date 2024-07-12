@@ -14,9 +14,13 @@ class GetPointGroupsBloc
           GetPointGroupsState(
             fetching: true,
             pointGroups: [],
+            selectedFirstLevelGroup: null,
+            selectedSecondLevelGroup: null,
           ),
         ) {
     on<_GetPointGroupsEventFetch>(_onFetch);
+    on<_GetPointGroupsEventSelectFirstLevelGroup>(_onSelectFirstLevelGroup);
+    on<_GetPointGroupsEventSelectSecondLevelGroup>(_onSelectSecondLevelGroup);
   }
 
   void _onFetch(_GetPointGroupsEventFetch event, Emitter emit) async {
@@ -32,11 +36,42 @@ class GetPointGroupsBloc
       );
     });
   }
+
+  void _onSelectFirstLevelGroup(
+      _GetPointGroupsEventSelectFirstLevelGroup event, Emitter emit) async {
+    emit(state.copyWith(selectedFirstLevelGroup: event.firstLevelGroup));
+  }
+
+  void _onSelectSecondLevelGroup(
+      _GetPointGroupsEventSelectSecondLevelGroup event, Emitter emit) async {
+    // Uncheck when tap again
+    if (event.secondLevelGroup == state.selectedSecondLevelGroup) {
+      emit(
+        state.copyWith(
+          selectedSecondLevelGroup: null,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          selectedSecondLevelGroup: event.secondLevelGroup,
+        ),
+      );
+    }
+  }
 }
 
 @freezed
 class GetPointGroupsEvent with _$GetPointGroupsEvent {
   factory GetPointGroupsEvent.fetch() = _GetPointGroupsEventFetch;
+
+  factory GetPointGroupsEvent.selectFirstLevelGroup({
+    required String? firstLevelGroup,
+  }) = _GetPointGroupsEventSelectFirstLevelGroup;
+
+  factory GetPointGroupsEvent.selectSecondLevelGroup({
+    required String? secondLevelGroup,
+  }) = _GetPointGroupsEventSelectSecondLevelGroup;
 }
 
 @freezed
@@ -44,5 +79,7 @@ class GetPointGroupsState with _$GetPointGroupsState {
   factory GetPointGroupsState({
     required bool fetching,
     required List<PointGroup> pointGroups,
+    required String? selectedFirstLevelGroup,
+    required String? selectedSecondLevelGroup,
   }) = _GetPointGroupsState;
 }
