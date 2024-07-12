@@ -102,7 +102,8 @@ class QuestItemWidget extends StatelessWidget {
                                 children: [
                                   Text(
                                     t.quest.completeCount(
-                                        count: trackingCount ?? ''),
+                                      count: trackingCount ?? '',
+                                    ),
                                     style: Typo.small.copyWith(
                                       color: colorScheme.onSecondary,
                                       fontWeight: FontWeight.w400,

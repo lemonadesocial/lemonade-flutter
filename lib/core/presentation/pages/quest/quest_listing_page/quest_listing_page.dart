@@ -59,7 +59,6 @@ class _QuestListingPageState extends State<QuestListingPage>
         child: BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
           builder: (context, state) {
             final pointGroups = state.pointGroups;
-            final selectedFirstLevelGroup = state.selectedFirstLevelGroup;
             final selectedSecondaryLevelGroup = state.selectedSecondLevelGroup;
             List<String?> pointGroupsTitle =
                 pointGroups.map((item) => item.firstLevelGroup?.title).toList();

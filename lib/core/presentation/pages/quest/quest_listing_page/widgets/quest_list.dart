@@ -20,7 +20,9 @@ class QuestList extends StatelessWidget {
     required String? secondLevelGroup,
   }) async {
     return getIt<QuestRepository>().getMyPoints(
-        firstLevelGroup: firstLevelGroup, secondLevelGroup: secondLevelGroup);
+      firstLevelGroup: firstLevelGroup,
+      secondLevelGroup: secondLevelGroup,
+    );
   }
 
   @override

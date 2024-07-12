@@ -38,12 +38,16 @@ class GetPointGroupsBloc
   }
 
   void _onSelectFirstLevelGroup(
-      _GetPointGroupsEventSelectFirstLevelGroup event, Emitter emit) async {
+    _GetPointGroupsEventSelectFirstLevelGroup event,
+    Emitter emit,
+  ) async {
     emit(state.copyWith(selectedFirstLevelGroup: event.firstLevelGroup));
   }
 
   void _onSelectSecondLevelGroup(
-      _GetPointGroupsEventSelectSecondLevelGroup event, Emitter emit) async {
+    _GetPointGroupsEventSelectSecondLevelGroup event,
+    Emitter emit,
+  ) async {
     // Uncheck when tap again
     if (event.secondLevelGroup == state.selectedSecondLevelGroup) {
       emit(

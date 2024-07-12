@@ -89,36 +89,40 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Positioned(
-                      bottom: 0.w,
-                      right: 0.w,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 2.w, vertical: 1.w),
-                        decoration: ShapeDecoration(
-                          color: colorScheme.secondaryContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              LemonRadius.extraSmall / 2,
-                            ),
+                    bottom: 0.w,
+                    right: 0.w,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 2.w,
+                        vertical: 1.w,
+                      ),
+                      decoration: ShapeDecoration(
+                        color: colorScheme.secondaryContainer,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            LemonRadius.extraSmall / 2,
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              (questPoints ?? 0).toString(),
-                              textAlign: TextAlign.center,
-                              style: Typo.xSmall.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w900,
-                                  height: 0,
-                                  fontFamily: FontFamily.spaceGrotesk),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            (questPoints ?? 0).toString(),
+                            textAlign: TextAlign.center,
+                            style: Typo.xSmall.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w900,
+                              height: 0,
+                              fontFamily: FontFamily.spaceGrotesk,
                             ),
-                          ],
-                        ),
-                      )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class QuestCompletedCard extends StatelessWidget {
-  const QuestCompletedCard(
-      {super.key,
-      required this.completedCount,
-      required this.pointsCount,
-      required this.typeTitle});
+  const QuestCompletedCard({
+    super.key,
+    required this.completedCount,
+    required this.pointsCount,
+    required this.typeTitle,
+  });
   final int completedCount;
   final int pointsCount;
   final String? typeTitle;
@@ -65,7 +66,9 @@ class QuestCompletedCard extends StatelessWidget {
               children: [
                 Text(
                   t.quest.questsTypeCompleted(
-                      count: completedCount, type: typeTitle ?? ''),
+                    count: completedCount,
+                    type: typeTitle ?? '',
+                  ),
                   // '12 Events Quests completed',
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,

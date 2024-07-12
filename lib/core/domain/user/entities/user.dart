@@ -113,103 +113,104 @@ class User with _$User {
 
   factory User.fromDto(UserDto dto) {
     return User(
-        userId: dto.id ?? '',
-        createdAt: dto.createdAt,
-        displayName: dto.displayName,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        imageAvatar: dto.imageAvatar,
-        newPhotosExpanded: (dto.newPhotosExpanded ?? [])
-            .where((item) => item != null)
-            .map(
-              (item) => DbFile.fromDto(item!),
-            )
-            .toList(),
-        dateOfBirth: dto.dateOfBirth,
-        phoneVerified: dto.phoneVerified,
-        googleUserInfo: dto.googleUserInfo != null
-            ? GoogleUserInfo.fromDto(dto.googleUserInfo!)
-            : null,
-        discordUserInfo: dto.discordUserInfo != null
-            ? DiscordUserInfo.fromDto(dto.discordUserInfo!)
-            : null,
-        shopifyUserInfo: dto.shopifyUserInfo != null
-            ? ShopifyUserInfo.fromDto(dto.shopifyUserInfo!)
-            : null,
-        twitchUserInfo: dto.twitchUserInfo != null
-            ? TwitchUserInfo.fromDto(dto.twitchUserInfo!)
-            : null,
-        zoomUserInfo: dto.zoomUserInfo != null
-            ? ZoomUserInfo.fromDto(dto.zoomUserInfo!)
-            : null,
-        name: dto.name,
-        username: dto.username,
-        phone: dto.phone,
-        email: dto.email,
-        pronoun: dto.pronoun,
-        description: dto.description,
-        active: dto.active,
-        cover: dto.cover,
-        type: dto.type,
-        industry: dto.industry,
-        addresses: dto.addresses?.map(Address.fromDto).toList(),
-        hosted: dto.hosted,
-        attended: dto.attended,
-        friends: dto.friends,
-        following: dto.following,
-        followers: dto.followers,
-        currency: dto.currency,
-        jobTitle: dto.jobTitle,
-        tagline: dto.tagline,
-        handleTwitter: dto.handleTwitter,
-        handleInstagram: dto.handleInstagram,
-        handleFacebook: dto.handleFacebook,
-        handleLinkedin: dto.handleLinkedin,
-        handleGithub: dto.handleGithub,
-        handleMirror: dto.handleMirror,
-        handleFarcaster: dto.handleFarcaster,
-        handleLens: dto.handleLens,
-        calendlyUrl: dto.calendlyUrl,
-        wallets: dto.wallets,
-        walletCustodial: dto.walletCustodial,
-        newGender: dto.newGender,
-        companyName: dto.companyName,
-        educationTitle: dto.educationTitle,
-        ethnicity: dto.ethnicity,
-        notificationFilterList:
-            dto.notificationFilter.map((e) => e.type).toList(),
-        blockedList: dto.blockedExpanded.map((e) => User.fromDto(e)).toList(),
-        termsAcceptedAdult: dto.termsAcceptedAdult,
-        termsAcceptedConditions: dto.termsAcceptedConditions,
-        matrixLocalpart: dto.matrixLocalpart,
-        serviceOffers: dto.serviceOffers,
-        expertise: dto.expertise,
-        eventsExpanded: List.from(dto.eventsExpanded ?? [])
-            .map(
-              (item) => Event.fromDto(item),
-            )
-            .toList(),
-        expertiseExpanded: List.from(dto.expertiseExpanded ?? [])
-            .map(
-              (item) => UserExpertise.fromDto(item),
-            )
-            .toList(),
-        serviceOffersExpanded: List.from(dto.serviceOffersExpanded ?? [])
-            .map(
-              (item) => UserServiceOffer.fromDto(item),
-            )
-            .toList(),
-        icebreakers: List.from(dto.icebreakers ?? [])
-            .map(
-              (item) => UserIcebreaker.fromDto(item),
-            )
-            .toList(),
-        farcasterUserInfo: dto.farcasterUserInfo != null
-            ? UserFarcasterInfo.fromDto(dto.farcasterUserInfo!)
-            : null,
-        age: dto.age,
-        locationLine: dto.locationLine,
-        questPoints: dto.questPoints);
+      userId: dto.id ?? '',
+      createdAt: dto.createdAt,
+      displayName: dto.displayName,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      imageAvatar: dto.imageAvatar,
+      newPhotosExpanded: (dto.newPhotosExpanded ?? [])
+          .where((item) => item != null)
+          .map(
+            (item) => DbFile.fromDto(item!),
+          )
+          .toList(),
+      dateOfBirth: dto.dateOfBirth,
+      phoneVerified: dto.phoneVerified,
+      googleUserInfo: dto.googleUserInfo != null
+          ? GoogleUserInfo.fromDto(dto.googleUserInfo!)
+          : null,
+      discordUserInfo: dto.discordUserInfo != null
+          ? DiscordUserInfo.fromDto(dto.discordUserInfo!)
+          : null,
+      shopifyUserInfo: dto.shopifyUserInfo != null
+          ? ShopifyUserInfo.fromDto(dto.shopifyUserInfo!)
+          : null,
+      twitchUserInfo: dto.twitchUserInfo != null
+          ? TwitchUserInfo.fromDto(dto.twitchUserInfo!)
+          : null,
+      zoomUserInfo: dto.zoomUserInfo != null
+          ? ZoomUserInfo.fromDto(dto.zoomUserInfo!)
+          : null,
+      name: dto.name,
+      username: dto.username,
+      phone: dto.phone,
+      email: dto.email,
+      pronoun: dto.pronoun,
+      description: dto.description,
+      active: dto.active,
+      cover: dto.cover,
+      type: dto.type,
+      industry: dto.industry,
+      addresses: dto.addresses?.map(Address.fromDto).toList(),
+      hosted: dto.hosted,
+      attended: dto.attended,
+      friends: dto.friends,
+      following: dto.following,
+      followers: dto.followers,
+      currency: dto.currency,
+      jobTitle: dto.jobTitle,
+      tagline: dto.tagline,
+      handleTwitter: dto.handleTwitter,
+      handleInstagram: dto.handleInstagram,
+      handleFacebook: dto.handleFacebook,
+      handleLinkedin: dto.handleLinkedin,
+      handleGithub: dto.handleGithub,
+      handleMirror: dto.handleMirror,
+      handleFarcaster: dto.handleFarcaster,
+      handleLens: dto.handleLens,
+      calendlyUrl: dto.calendlyUrl,
+      wallets: dto.wallets,
+      walletCustodial: dto.walletCustodial,
+      newGender: dto.newGender,
+      companyName: dto.companyName,
+      educationTitle: dto.educationTitle,
+      ethnicity: dto.ethnicity,
+      notificationFilterList:
+          dto.notificationFilter.map((e) => e.type).toList(),
+      blockedList: dto.blockedExpanded.map((e) => User.fromDto(e)).toList(),
+      termsAcceptedAdult: dto.termsAcceptedAdult,
+      termsAcceptedConditions: dto.termsAcceptedConditions,
+      matrixLocalpart: dto.matrixLocalpart,
+      serviceOffers: dto.serviceOffers,
+      expertise: dto.expertise,
+      eventsExpanded: List.from(dto.eventsExpanded ?? [])
+          .map(
+            (item) => Event.fromDto(item),
+          )
+          .toList(),
+      expertiseExpanded: List.from(dto.expertiseExpanded ?? [])
+          .map(
+            (item) => UserExpertise.fromDto(item),
+          )
+          .toList(),
+      serviceOffersExpanded: List.from(dto.serviceOffersExpanded ?? [])
+          .map(
+            (item) => UserServiceOffer.fromDto(item),
+          )
+          .toList(),
+      icebreakers: List.from(dto.icebreakers ?? [])
+          .map(
+            (item) => UserIcebreaker.fromDto(item),
+          )
+          .toList(),
+      farcasterUserInfo: dto.farcasterUserInfo != null
+          ? UserFarcasterInfo.fromDto(dto.farcasterUserInfo!)
+          : null,
+      age: dto.age,
+      locationLine: dto.locationLine,
+      questPoints: dto.questPoints,
+    );
   }
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
