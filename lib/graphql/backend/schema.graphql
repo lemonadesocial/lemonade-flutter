@@ -69,6 +69,8 @@ type Query {
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
   getOffers(type: OfferType!): [Offer!]!
+  getPointGroups(with_count: Boolean): [PointGroup!]!
+  getMyPoints(first_level_group: MongoID, second_level_group: MongoID): [PointConfigInfo!]!
   getRooms(input: GetRoomsInput!): [Room!]!
   getRoom(_id: MongoID!): Room
   getRoomCredentials(input: GetRoomCredentialsInput!): RoomCredentials!
@@ -95,6 +97,7 @@ type Query {
     _id: [MongoID!]
     event: MongoID
     user: MongoID
+    payment: MongoID
 
     """Get tickets of the specified ticket types"""
     ticket_types: [MongoID!]
@@ -223,6 +226,7 @@ type User {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   farcaster_fid: Float
+  quest_points: Float
   icebreakers: [UserIcebreaker!]
   service_offers_expanded: [UserServiceOffer]
   expertise_expanded: [UserExpertise]
@@ -1412,6 +1416,7 @@ type UserWithEmail {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   farcaster_fid: Float
+  quest_points: Float
   icebreakers: [UserIcebreaker!]
   service_offers_expanded: [UserServiceOffer]
   expertise_expanded: [UserExpertise]
@@ -2002,6 +2007,65 @@ type Offer {
 enum OfferType {
   HOME
   POAP
+}
+
+type PointGroup {
+  first_level_group: Group
+  second_level_groups: [Group]!
+  points: Float
+  count: Float
+  completed: Float
+}
+
+type Group {
+  _id: MongoID!
+  title: String!
+  sub_title_1: String
+  sub_title_2: String
+  position: Float!
+}
+
+type PointConfigInfo {
+  _id: MongoID!
+  type: PointType!
+  title: String
+  points: Float!
+  first_time_only: Boolean
+  first_level_group: MongoID
+  second_level_group: MongoID
+  trackings: [PointTrackingInfo!]!
+}
+
+enum PointType {
+  verify_email
+  config_username
+  config_display_name
+  config_profile_photo
+  config_bio
+  connect_wallet
+  connect_farcaster
+  connect_stripe
+  connect_eventbrite
+  signup_on_mobile_app
+  create_post
+  per_post_has_more_than_n_likes
+  per_published_event
+  every_nth_rsvp
+  event_attestation
+  update_event_attestation
+  per_guest_checkin
+  per_paid_ticket_tier_created
+  per_ticket_sold
+  per_event_rsvp
+  per_event_checkin
+  invitee_rsvp_event
+}
+
+type PointTrackingInfo {
+  _id: MongoID!
+  config: MongoID!
+  points: Float!
+  created_at: DateTimeISO!
 }
 
 input GetRoomsInput {

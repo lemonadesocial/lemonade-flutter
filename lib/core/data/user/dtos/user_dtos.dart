@@ -91,6 +91,7 @@ class UserDto with _$UserDto {
     UserFarcasterInfoDto? farcasterUserInfo,
     double? age,
     @JsonKey(name: 'location_line') String? locationLine,
+    @JsonKey(name: 'quest_points') int? questPoints,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

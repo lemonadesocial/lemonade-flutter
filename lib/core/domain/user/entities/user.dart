@@ -108,6 +108,7 @@ class User with _$User {
     UserFarcasterInfo? farcasterUserInfo,
     String? locationLine,
     double? age,
+    int? questPoints,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -208,6 +209,7 @@ class User with _$User {
           : null,
       age: dto.age,
       locationLine: dto.locationLine,
+      questPoints: dto.questPoints,
     );
   }
 

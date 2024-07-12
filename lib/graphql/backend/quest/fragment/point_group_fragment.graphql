@@ -1,0 +1,13 @@
+# import 'group_fragment.graphql'
+
+fragment PointGroup on PointGroup {
+  firstLevelGroup: first_level_group {
+    ...Group
+  }
+  secondLevelGroups: second_level_groups {
+    ...Group
+  }
+  points
+  count
+  completed
+}

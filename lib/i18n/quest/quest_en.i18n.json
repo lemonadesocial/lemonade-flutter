@@ -1,0 +1,20 @@
+{
+    "quests": "Quests",
+    "questsTabs": {
+        "profile": "Profile",
+        "post": "Post",
+        "events": "Events",
+        "citizenship": "Citizenship"
+    },
+    "questsTypeCompleted": "$count $type Quests completed",
+    "pointsCount(ordinal)": {
+        "one": "$count point",
+        "other": "$count points"
+    },
+    "pointsEarned(ordinal)": {
+        "one": "$count point earned",
+        "other": "$count points earned"
+    },
+    "repeatable": "Repeatable",
+    "completeCount": "$count complete"
+}

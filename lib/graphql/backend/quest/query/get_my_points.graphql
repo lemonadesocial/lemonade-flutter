@@ -1,0 +1,7 @@
+# import '../fragment/point_config_info_fragment.graphql'
+
+query GetMyPoints($firstLevelGroup: MongoID, $secondLevelGroup: MongoID) {
+  getMyPoints(first_level_group: $firstLevelGroup, second_level_group: $secondLevelGroup) {
+    ...PointConfigInfo
+  }
+}

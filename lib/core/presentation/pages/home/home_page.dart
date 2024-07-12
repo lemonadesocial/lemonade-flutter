@@ -1,4 +1,5 @@
 import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
+import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
@@ -67,6 +68,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(width: Spacing.xSmall),
           ],
           if (isLoggedIn) ...[
+            const QuestPointsWidget(),
+            SizedBox(width: Spacing.medium),
             InkWell(
               onTap: () {
                 AutoRouter.of(context).navigate(MyEventTicketsListRoute());
