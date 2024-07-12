@@ -11,6 +11,7 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -116,10 +117,18 @@ class _ClaimPaymentByNetworkGroupState
     ))
         .fold((l) => [] as List<BigInt>, (r) => r);
 
-    final payments = tokens.asMap().entries.map((entry) {
-      final index = entry.key;
-      return ClaimbleRelayPayment(amount: amounts[index], token: entry.value);
-    }).toList();
+    final payments = tokens
+        .asMap()
+        .entries
+        .map((entry) {
+          final index = entry.key;
+          return ClaimbleRelayPayment(
+            amount: amounts[index],
+            token: entry.value,
+          );
+        })
+        .where((element) => element.amount != BigInt.zero)
+        .toList();
     return payments;
   }
 
@@ -131,8 +140,9 @@ class _ClaimPaymentByNetworkGroupState
       future: getClaimablePayments(),
       builder: (context, snapshot) {
         final claimablePayments = snapshot.data ?? [];
-        final isAllClaimed =
-            claimablePayments.every((element) => element.amount == BigInt.zero);
+        final isClaimable = claimablePayments.isNotEmpty;
+        final shouldDisplayBody = claimablePayments.isNotEmpty ||
+            (snapshot.connectionState == ConnectionState.waiting);
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -144,6 +154,12 @@ class _ClaimPaymentByNetworkGroupState
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(LemonRadius.medium),
                   topRight: Radius.circular(LemonRadius.medium),
+                  bottomLeft: shouldDisplayBody
+                      ? Radius.zero
+                      : Radius.circular(LemonRadius.medium),
+                  bottomRight: shouldDisplayBody
+                      ? Radius.zero
+                      : Radius.circular(LemonRadius.medium),
                 ),
               ),
               child: Row(
@@ -175,7 +191,7 @@ class _ClaimPaymentByNetworkGroupState
                           color: colorScheme.onPrimary,
                         ),
                       ),
-                      if (!isAllClaimed)
+                      if (isClaimable)
                         Text(
                           t.event.relayPayment.claimSplit.pendingClaims,
                           style: Typo.small.copyWith(
@@ -185,7 +201,27 @@ class _ClaimPaymentByNetworkGroupState
                     ],
                   ),
                   const Spacer(),
-                  if (!isAllClaimed)
+                  if (claimablePayments.isEmpty &&
+                      snapshot.connectionState != ConnectionState.waiting)
+                    InkWell(
+                      onTap: () {
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: Sizing.medium,
+                        height: Sizing.medium,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: colorScheme.outline,
+                          ),
+                        ),
+                        child: Center(
+                          child: Assets.icons.icReload.svg(),
+                        ),
+                      ),
+                    ),
+                  if (isClaimable)
                     SizedBox(
                       height: Sizing.medium,
                       child: LinearGradientButton.primaryButton(
@@ -204,30 +240,33 @@ class _ClaimPaymentByNetworkGroupState
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(Spacing.small),
-              decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(LemonRadius.medium),
-                  bottomRight: Radius.circular(LemonRadius.medium),
+            if (isClaimable ||
+                (snapshot.connectionState == ConnectionState.waiting))
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(Spacing.small),
+                decoration: BoxDecoration(
+                  color: LemonColor.chineseBlack,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(LemonRadius.medium),
+                    bottomRight: Radius.circular(LemonRadius.medium),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (snapshot.connectionState == ConnectionState.waiting &&
+                        claimablePayments.isEmpty)
+                      Loading.defaultLoading(context),
+                    for (final item in claimablePayments.asMap().entries)
+                      _ClaimableItem(
+                        isLast: item.key == claimablePayments.length - 1,
+                        claimableRelayPayment: item.value,
+                      ),
+                  ],
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (snapshot.connectionState == ConnectionState.waiting &&
-                      claimablePayments.isEmpty)
-                    Loading.defaultLoading(context),
-                  for (final item in claimablePayments.asMap().entries)
-                    _ClaimableItem(
-                      isLast: item.key == claimablePayments.length - 1,
-                      claimableRelayPayment: item.value,
-                    ),
-                ],
-              ),
-            ),
           ],
         );
       },
