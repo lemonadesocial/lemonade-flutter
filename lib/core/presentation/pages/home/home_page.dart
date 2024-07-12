@@ -11,6 +11,7 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -48,6 +50,11 @@ class _HomePageState extends State<HomePage> {
           orElse: () => false,
           authenticated: (_) => true,
         );
+    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
+    final questPoints = loggedInUser?.questPoints;
     return Scaffold(
       appBar: HomeAppBar(
         title: t.home.newsfeed,
@@ -72,12 +79,45 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 AutoRouter.of(context).navigate(const QuestRoute());
               },
-              child: ThemeSvgIcon(
-                builder: (filter) => Assets.icons.icTargetLine.svg(
-                  colorFilter: filter,
-                  width: Sizing.small,
-                  height: Sizing.small,
-                ),
+              child: Stack(
+                children: [
+                  ThemeSvgIcon(
+                    builder: (filter) => Assets.icons.icTargetLine.svg(
+                      colorFilter: filter,
+                      width: Sizing.small,
+                      height: Sizing.small,
+                    ),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0.w,
+                      child: Container(
+                        padding: EdgeInsets.all(2.w),
+                        decoration: ShapeDecoration(
+                          color: colorScheme.secondaryContainer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                LemonRadius.extraSmall / 2),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              (questPoints ?? 0).toString(),
+                              textAlign: TextAlign.center,
+                              style: Typo.xSmall.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontWeight: FontWeight.w900,
+                                height: 0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
               ),
             ),
             SizedBox(width: Spacing.medium),
