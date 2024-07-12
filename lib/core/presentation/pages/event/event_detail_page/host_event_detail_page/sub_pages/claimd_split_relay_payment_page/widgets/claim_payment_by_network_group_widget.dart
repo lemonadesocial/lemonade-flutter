@@ -1,3 +1,4 @@
+import 'package:app/core/application/payment/claim_relay_payment_bloc/claim_relay_payment_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
@@ -9,7 +10,6 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -20,6 +20,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
@@ -62,39 +63,23 @@ class _ClaimPaymentByNetworkGroupState
   }
 
   Future<void> claimSplit(List<ClaimbleRelayPayment> claimablePayments) async {
-    setState(() {
-      isClaiming = true;
-    });
     final tokens = claimablePayments
         .where((item) => item.amount != BigInt.zero)
         .map(
           (e) => e.token,
         )
         .toList();
-    final result = await LemonadeRelayUtils.claimSplit(
-      paymentSplitterContractAddress:
-          targetPaymentAccount?.accountInfo?.paymentSplitterContract ?? '',
-      connectedWalletAddress:
-          getIt<WalletConnectService>().w3mService.session?.address ?? '',
-      chain: widget.chain,
-      tokens: tokens,
-    );
-    result.fold(
-      (failure) {
-        SnackBarUtils.showError(
-          message: failure.message ??
-              t.event.relayPayment.claimSplit.claimSplitFailed,
+    context.read<ClaimRelayPaymentBloc>().add(
+          ClaimRelayPaymentEvent.claim(
+            chain: widget.chain,
+            tokens: tokens,
+            paymentSplitterContractAddress:
+                targetPaymentAccount?.accountInfo?.paymentSplitterContract ??
+                    '',
+            connectedWalletAddress:
+                getIt<WalletConnectService>().w3mService.session?.address ?? '',
+          ),
         );
-      },
-      (r) => SnackBarUtils.showSuccess(
-        message: t.event.relayPayment.claimSplit.claimSplitSuccess,
-      ),
-    );
-    if (mounted) {
-      setState(() {
-        isClaiming = false;
-      });
-    }
   }
 
   Future<List<ClaimbleRelayPayment>> getClaimablePayments() async {
@@ -136,140 +121,150 @@ class _ClaimPaymentByNetworkGroupState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return FutureBuilder(
-      future: getClaimablePayments(),
-      builder: (context, snapshot) {
-        final claimablePayments = snapshot.data ?? [];
-        final isClaimable = claimablePayments.isNotEmpty;
-        final shouldDisplayBody = claimablePayments.isNotEmpty ||
-            (snapshot.connectionState == ConnectionState.waiting);
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.all(Spacing.small),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: LemonColor.atomicBlack,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(LemonRadius.medium),
-                  topRight: Radius.circular(LemonRadius.medium),
-                  bottomLeft: shouldDisplayBody
-                      ? Radius.zero
-                      : Radius.circular(LemonRadius.medium),
-                  bottomRight: shouldDisplayBody
-                      ? Radius.zero
-                      : Radius.circular(LemonRadius.medium),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    decoration: ShapeDecoration(
-                      color: LemonColor.chineseBlack,
-                      shape: const CircleBorder(),
-                    ),
-                    child: Center(
-                      child: LemonNetworkImage(
-                        imageUrl: widget.chain.logoUrl ?? '',
-                        width: Sizing.mSmall,
-                        height: Sizing.mSmall,
-                        borderRadius: BorderRadius.circular(Sizing.medium),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: Spacing.xSmall),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        widget.chain.name ?? '',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                        ),
-                      ),
-                      if (isClaimable)
-                        Text(
-                          t.event.relayPayment.claimSplit.pendingClaims,
-                          style: Typo.small.copyWith(
-                            color: LemonColor.malachiteGreen,
-                          ),
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  if (claimablePayments.isEmpty &&
-                      snapshot.connectionState != ConnectionState.waiting)
-                    InkWell(
-                      onTap: () {
-                        setState(() {});
-                      },
-                      child: Container(
-                        width: Sizing.medium,
-                        height: Sizing.medium,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.outline,
-                          ),
-                        ),
-                        child: Center(
-                          child: Assets.icons.icReload.svg(),
-                        ),
-                      ),
-                    ),
-                  if (isClaimable)
-                    SizedBox(
-                      height: Sizing.medium,
-                      child: LinearGradientButton.primaryButton(
-                        loadingWhen: isClaiming,
-                        label: t.common.actions.claim,
-                        onTap: () {
-                          if (isClaiming) return;
-                          claimSplit(claimablePayments);
-                        },
-                        textStyle: Typo.small.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            if (isClaimable ||
-                (snapshot.connectionState == ConnectionState.waiting))
+    return BlocListener<ClaimRelayPaymentBloc, ClaimRelayPaymentState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () => null,
+          success: (txHash, chain) {
+            setState(() {});
+          },
+        );
+      },
+      child: FutureBuilder(
+        future: getClaimablePayments(),
+        builder: (context, snapshot) {
+          final claimablePayments = snapshot.data ?? [];
+          final isClaimable = claimablePayments.isNotEmpty;
+          final shouldDisplayBody = claimablePayments.isNotEmpty ||
+              (snapshot.connectionState == ConnectionState.waiting);
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Container(
-                width: double.infinity,
                 padding: EdgeInsets.all(Spacing.small),
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: LemonColor.chineseBlack,
+                  color: LemonColor.atomicBlack,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(LemonRadius.medium),
-                    bottomRight: Radius.circular(LemonRadius.medium),
+                    topLeft: Radius.circular(LemonRadius.medium),
+                    topRight: Radius.circular(LemonRadius.medium),
+                    bottomLeft: shouldDisplayBody
+                        ? Radius.zero
+                        : Radius.circular(LemonRadius.medium),
+                    bottomRight: shouldDisplayBody
+                        ? Radius.zero
+                        : Radius.circular(LemonRadius.medium),
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                child: Row(
                   children: [
-                    if (snapshot.connectionState == ConnectionState.waiting &&
-                        claimablePayments.isEmpty)
-                      Loading.defaultLoading(context),
-                    for (final item in claimablePayments.asMap().entries)
-                      _ClaimableItem(
-                        isLast: item.key == claimablePayments.length - 1,
-                        claimableRelayPayment: item.value,
+                    Container(
+                      width: Sizing.medium,
+                      height: Sizing.medium,
+                      decoration: ShapeDecoration(
+                        color: LemonColor.chineseBlack,
+                        shape: const CircleBorder(),
+                      ),
+                      child: Center(
+                        child: LemonNetworkImage(
+                          imageUrl: widget.chain.logoUrl ?? '',
+                          width: Sizing.mSmall,
+                          height: Sizing.mSmall,
+                          borderRadius: BorderRadius.circular(Sizing.medium),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: Spacing.xSmall),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          widget.chain.name ?? '',
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                        if (isClaimable)
+                          Text(
+                            t.event.relayPayment.claimSplit.pendingClaims,
+                            style: Typo.small.copyWith(
+                              color: LemonColor.malachiteGreen,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const Spacer(),
+                    if (claimablePayments.isEmpty &&
+                        snapshot.connectionState != ConnectionState.waiting)
+                      InkWell(
+                        onTap: () {
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: Sizing.medium,
+                          height: Sizing.medium,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: colorScheme.outline,
+                            ),
+                          ),
+                          child: Center(
+                            child: Assets.icons.icReload.svg(),
+                          ),
+                        ),
+                      ),
+                    if (isClaimable)
+                      SizedBox(
+                        height: Sizing.medium,
+                        child: LinearGradientButton.primaryButton(
+                          loadingWhen: isClaiming,
+                          label: t.common.actions.claim,
+                          onTap: () {
+                            if (isClaiming) return;
+                            claimSplit(claimablePayments);
+                          },
+                          textStyle: Typo.small.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                   ],
                 ),
               ),
-          ],
-        );
-      },
+              if (isClaimable ||
+                  (snapshot.connectionState == ConnectionState.waiting))
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(Spacing.small),
+                  decoration: BoxDecoration(
+                    color: LemonColor.chineseBlack,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(LemonRadius.medium),
+                      bottomRight: Radius.circular(LemonRadius.medium),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (snapshot.connectionState == ConnectionState.waiting &&
+                          claimablePayments.isEmpty)
+                        Loading.defaultLoading(context),
+                      for (final item in claimablePayments.asMap().entries)
+                        _ClaimableItem(
+                          isLast: item.key == claimablePayments.length - 1,
+                          claimableRelayPayment: item.value,
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

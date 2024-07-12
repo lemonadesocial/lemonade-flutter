@@ -30,8 +30,8 @@ class CircularLoadingState extends State<CircularLoading>
 
   @override
   void dispose() {
-    super.dispose();
     _animationContrl.dispose();
+    super.dispose();
   }
 
   @override
