@@ -58,6 +58,7 @@ class _QuestListingPageState extends State<QuestListingPage>
         child: BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
           builder: (context, state) {
             final pointGroups = state.pointGroups;
+            final selectedSecondaryLevelGroup = state.selectedSecondLevelGroup;
             List<String?> pointGroupsTitle =
                 pointGroups.map((item) => item.firstLevelGroup?.title).toList();
             List<Tab> tabs = pointGroupsTitle.map((tabName) {
@@ -96,7 +97,16 @@ class _QuestListingPageState extends State<QuestListingPage>
                           children: [
                             _SecondaryLevelGroup(
                               secondaryLevelGroups: secondaryLevelGroups,
-                              selected: false,
+                              selectedSecondaryLevelGroup:
+                                  selectedSecondaryLevelGroup,
+                              onTap: (secondaryLevelGroupId) {
+                                context.read<GetPointGroupsBloc>().add(
+                                      GetPointGroupsEvent
+                                          .selectSecondLevelGroup(
+                                        secondLevelGroup: secondaryLevelGroupId,
+                                      ),
+                                    );
+                              },
                             ),
                             SizedBox(
                               height: Spacing.medium,
@@ -124,14 +134,17 @@ class _QuestListingPageState extends State<QuestListingPage>
 class _SecondaryLevelGroup extends StatelessWidget {
   const _SecondaryLevelGroup({
     required this.secondaryLevelGroups,
-    required this.selected,
+    required this.onTap,
+    required this.selectedSecondaryLevelGroup,
   });
 
   final List<Group>? secondaryLevelGroups;
-  final bool? selected;
+  final Function(String? secondaryLevelGroupId)? onTap;
+  final String? selectedSecondaryLevelGroup;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     if (secondaryLevelGroups != null) {
       if (secondaryLevelGroups!.isEmpty) {
         return const SizedBox.shrink();
@@ -151,14 +164,21 @@ class _SecondaryLevelGroup extends StatelessWidget {
               SizedBox(width: Spacing.extraSmall),
           itemCount: secondaryLevelGroups?.length ?? 0,
           itemBuilder: (context, index) {
-            final type = secondaryLevelGroups?[index];
+            final secondaryLevelGroup = secondaryLevelGroups?[index];
+            final secondaryLevelGroupId = secondaryLevelGroup?.id ?? '';
+            final selected =
+                secondaryLevelGroupId == selectedSecondaryLevelGroup;
             return LemonOutlineButton(
-              onTap: () {},
-              backgroundColor: selected == true
-                  ? LemonColor.chineseBlack
-                  : LemonColor.atomicBlack,
-              borderColor: selected == true ? LemonColor.chineseBlack : null,
-              label: StringUtils.capitalize(type?.title),
+              onTap: () {
+                if (onTap != null) {
+                  onTap!.call(secondaryLevelGroupId);
+                }
+              },
+              backgroundColor:
+                  selected == true ? colorScheme.outline : Colors.transparent,
+              borderColor:
+                  selected == true ? Colors.transparent : colorScheme.outline,
+              label: StringUtils.capitalize(secondaryLevelGroup?.title),
               radius: BorderRadius.circular(LemonRadius.button),
             );
           },
