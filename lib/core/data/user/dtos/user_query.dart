@@ -183,6 +183,7 @@ const privateFragment = '''
     music
     tag_timeline
     notification_filters
+    quest_points
   }
 ''';
 

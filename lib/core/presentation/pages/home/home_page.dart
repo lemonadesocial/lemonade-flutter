@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -88,10 +89,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Positioned(
-                      bottom: 0,
+                      bottom: 0.w,
                       right: 0.w,
                       child: Container(
-                        padding: EdgeInsets.all(2.w),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.w),
                         decoration: ShapeDecoration(
                           color: colorScheme.secondaryContainer,
                           shape: RoundedRectangleBorder(
@@ -109,10 +111,10 @@ class _HomePageState extends State<HomePage> {
                               (questPoints ?? 0).toString(),
                               textAlign: TextAlign.center,
                               style: Typo.xSmall.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w900,
-                                height: 0,
-                              ),
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w900,
+                                  height: 0,
+                                  fontFamily: FontFamily.spaceGrotesk),
                             ),
                           ],
                         ),
