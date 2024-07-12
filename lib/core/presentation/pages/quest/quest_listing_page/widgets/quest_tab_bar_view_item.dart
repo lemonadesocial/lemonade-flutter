@@ -11,10 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuestTabBarViewItem extends StatelessWidget {
-  const QuestTabBarViewItem(
-      {super.key,
-      required this.pointGroup,
-      required this.secondaryLevelGroups});
+  const QuestTabBarViewItem({
+    super.key,
+    required this.pointGroup,
+    required this.secondaryLevelGroups,
+  });
 
   final PointGroup pointGroup;
   final List<QuestGroup>? secondaryLevelGroups;
@@ -76,43 +77,46 @@ class _SecondaryLevelGroup extends StatelessWidget {
       }
     }
     return BlocBuilder<GetPointGroupsBloc, GetPointGroupsState>(
-        builder: (context, state) {
-      final selectedSecondaryLevelGroup = state.selectedSecondLevelGroup;
-      return Padding(
-        padding: EdgeInsets.only(
-          top: Spacing.small,
-          left: Spacing.small,
-          right: Spacing.small,
-        ),
-        child: SizedBox(
-          height: Sizing.medium,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) =>
-                SizedBox(width: Spacing.extraSmall),
-            itemCount: secondaryLevelGroups?.length ?? 0,
-            itemBuilder: (context, index) {
-              final secondaryLevelGroup = secondaryLevelGroups?[index];
-              final secondaryLevelGroupId = secondaryLevelGroup?.id ?? '';
-              final selected =
-                  secondaryLevelGroupId == selectedSecondaryLevelGroup;
-              return LemonOutlineButton(
-                onTap: () {
-                  if (onTap != null) {
-                    onTap!.call(secondaryLevelGroupId);
-                  }
-                },
-                backgroundColor:
-                    selected == true ? colorScheme.outline : Colors.transparent,
-                borderColor:
-                    selected == true ? Colors.transparent : colorScheme.outline,
-                label: StringUtils.capitalize(secondaryLevelGroup?.title),
-                radius: BorderRadius.circular(LemonRadius.button),
-              );
-            },
+      builder: (context, state) {
+        final selectedSecondaryLevelGroup = state.selectedSecondLevelGroup;
+        return Padding(
+          padding: EdgeInsets.only(
+            top: Spacing.small,
+            left: Spacing.small,
+            right: Spacing.small,
           ),
-        ),
-      );
-    });
+          child: SizedBox(
+            height: Sizing.medium,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) =>
+                  SizedBox(width: Spacing.extraSmall),
+              itemCount: secondaryLevelGroups?.length ?? 0,
+              itemBuilder: (context, index) {
+                final secondaryLevelGroup = secondaryLevelGroups?[index];
+                final secondaryLevelGroupId = secondaryLevelGroup?.id ?? '';
+                final selected =
+                    secondaryLevelGroupId == selectedSecondaryLevelGroup;
+                return LemonOutlineButton(
+                  onTap: () {
+                    if (onTap != null) {
+                      onTap!.call(secondaryLevelGroupId);
+                    }
+                  },
+                  backgroundColor: selected == true
+                      ? colorScheme.outline
+                      : Colors.transparent,
+                  borderColor: selected == true
+                      ? Colors.transparent
+                      : colorScheme.outline,
+                  label: StringUtils.capitalize(secondaryLevelGroup?.title),
+                  radius: BorderRadius.circular(LemonRadius.button),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -97,8 +97,9 @@ class _QuestListingPageState extends State<QuestListingPage>
                         final secondaryLevelGroups =
                             pointGroup.secondLevelGroups;
                         return QuestTabBarViewItem(
-                            pointGroup: pointGroup,
-                            secondaryLevelGroups: secondaryLevelGroups);
+                          pointGroup: pointGroup,
+                          secondaryLevelGroups: secondaryLevelGroups,
+                        );
                       }).toList(),
                     ),
                   ),
