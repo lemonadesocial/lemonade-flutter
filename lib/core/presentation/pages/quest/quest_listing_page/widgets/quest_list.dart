@@ -2,7 +2,7 @@ import 'package:app/core/application/quest/get_point_groups_bloc/get_point_group
 import 'package:app/core/domain/quest/entities/point_config_info.dart';
 import 'package:app/core/domain/quest/quest_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/presentation/pages/quest/widgets/quest_item_widget.dart';
+import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
