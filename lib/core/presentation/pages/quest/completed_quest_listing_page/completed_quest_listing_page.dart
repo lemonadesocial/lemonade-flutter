@@ -54,6 +54,11 @@ class CompletedQuestsListingPage extends StatelessWidget {
               pointGroups.map((item) => item.firstLevelGroup).toList();
           final selectedFirstLevelGroup = state.selectedFirstLevelGroup;
           final selectedSecondaryGroup = state.selectedSecondLevelGroup;
+          final selectedPointGroup = state.pointGroups.firstWhere(
+            (pointGroup) =>
+                pointGroup.firstLevelGroup?.id == selectedFirstLevelGroup,
+          );
+          final totalQuestsCount = selectedPointGroup.count ?? 0;
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -82,7 +87,7 @@ class CompletedQuestsListingPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Completed',
+                        t.quest.completed,
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
                           fontFamily: FontFamily.nohemiVariable,
@@ -90,7 +95,10 @@ class CompletedQuestsListingPage extends StatelessWidget {
                       ),
                       SizedBox(height: Spacing.superExtraSmall),
                       Text(
-                        '31 total quests',
+                        t.quest.totalQuestsCount(
+                          n: totalQuestsCount,
+                          count: totalQuestsCount,
+                        ),
                         style: Typo.mediumPlus.copyWith(
                           color: colorScheme.onSecondary,
                         ),
@@ -164,14 +172,14 @@ class CompletedQuestsListingPage extends StatelessWidget {
                     );
                   }
                   List<PointConfigInfo> pointConfigInfos = snapshot.data ?? [];
-                  final completedQuests = pointConfigInfos
+                  final trackings = pointConfigInfos
                       .expand(
                         (point) => (point.trackings ?? []).map((tracking) {
                           return tracking;
                         }),
                       )
                       .toList();
-                  if (pointConfigInfos.isEmpty) {
+                  if (trackings.isEmpty) {
                     return const SliverToBoxAdapter(
                       child: EmptyList(),
                     );
@@ -179,11 +187,11 @@ class CompletedQuestsListingPage extends StatelessWidget {
                   return SliverPadding(
                     padding: EdgeInsets.all(Spacing.xSmall),
                     sliver: SliverList.separated(
-                      itemCount: completedQuests.length,
+                      itemCount: trackings.length,
                       separatorBuilder: (context, index) =>
                           SizedBox(height: Spacing.xSmall),
                       itemBuilder: (context, index) {
-                        final pointTrackingInfo = completedQuests[index];
+                        final pointTrackingInfo = trackings[index];
                         final pointConfigInfo = pointConfigInfos.firstWhere(
                             (item) => item.id == pointTrackingInfo.config);
                         return CompletedQuestItem(
