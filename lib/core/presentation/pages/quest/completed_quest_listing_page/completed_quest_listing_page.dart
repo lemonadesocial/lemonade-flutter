@@ -68,7 +68,9 @@ class CompletedQuestsListingPage extends StatelessWidget {
                     LemonOutlineButton(
                       backgroundColor: LemonColor.chineseBlack,
                       label: t.quest.pointsCount(
-                          n: questPoints ?? 0, count: questPoints ?? 0),
+                        n: questPoints ?? 0,
+                        count: questPoints ?? 0,
+                      ),
                       textStyle: Typo.small.copyWith(
                         color: colorScheme.onPrimary,
                       ),
@@ -193,7 +195,8 @@ class CompletedQuestsListingPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final pointTrackingInfo = trackings[index];
                         final pointConfigInfo = pointConfigInfos.firstWhere(
-                            (item) => item.id == pointTrackingInfo.config);
+                          (item) => item.id == pointTrackingInfo.config,
+                        );
                         return CompletedQuestItem(
                           title: pointConfigInfo.title,
                           pointTrackingInfo: pointTrackingInfo,
