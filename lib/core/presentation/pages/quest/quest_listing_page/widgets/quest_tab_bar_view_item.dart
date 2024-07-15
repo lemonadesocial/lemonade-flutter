@@ -5,8 +5,10 @@ import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/que
 import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_list.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,6 +36,10 @@ class QuestTabBarViewItem extends StatelessWidget {
             completedCount: pointGroup.completed ?? 0,
             pointsCount: pointGroup.points ?? 0,
             typeTitle: pointGroup.firstLevelGroup?.title ?? '',
+            onTap: () {
+              AutoRouter.of(context)
+                  .navigate(const CompletedQuestsListingRoute());
+            },
           ),
         ),
         _SecondaryLevelGroup(
@@ -103,6 +109,9 @@ class _SecondaryLevelGroup extends StatelessWidget {
                       onTap!.call(secondaryLevelGroupId);
                     }
                   },
+                  textColor: selected == true
+                      ? colorScheme.onPrimary
+                      : colorScheme.onSecondary,
                   backgroundColor: selected == true
                       ? colorScheme.outline
                       : Colors.transparent,

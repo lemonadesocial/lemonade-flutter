@@ -13,88 +13,96 @@ class QuestCompletedCard extends StatelessWidget {
     required this.completedCount,
     required this.pointsCount,
     required this.typeTitle,
+    required this.onTap,
   });
   final int completedCount;
   final int pointsCount;
   final String? typeTitle;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1.w,
-            color: colorScheme.outline,
+    return InkWell(
+      onTap: () {
+        if (onTap != null) {
+          onTap!.call();
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: 1.w,
+              color: colorScheme.outline,
+            ),
+            borderRadius: BorderRadius.circular(15),
           ),
-          borderRadius: BorderRadius.circular(15),
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              color: LemonColor.white09,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(LemonRadius.normal),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: Sizing.medium,
+              height: Sizing.medium,
+              clipBehavior: Clip.antiAlias,
+              decoration: ShapeDecoration(
+                color: LemonColor.white09,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LemonRadius.normal),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Assets.icons.icDoneAllRoundedGreen.svg(),
+                ],
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Assets.icons.icDoneAllRoundedGreen.svg(),
-              ],
-            ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.quest.questsTypeCompleted(
-                    count: completedCount,
-                    type: typeTitle ?? '',
-                  ),
-                  // '12 Events Quests completed',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    height: 0,
-                  ),
-                ),
-                SizedBox(height: 2.w),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    t.quest.pointsEarned(n: pointsCount, count: pointsCount),
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+            SizedBox(width: Spacing.xSmall),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.quest.questsTypeCompleted(
+                      count: completedCount,
+                      type: typeTitle ?? '',
+                    ),
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
                       height: 0,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 2.w),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      t.quest.pointsEarned(n: pointsCount, count: pointsCount),
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                        height: 0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          Assets.icons.icArrowBack.svg(
-            width: 18.w,
-            height: 18.w,
-          ),
-        ],
+            SizedBox(width: Spacing.xSmall),
+            Assets.icons.icArrowBack.svg(
+              width: 18.w,
+              height: 18.w,
+            ),
+          ],
+        ),
       ),
     );
   }

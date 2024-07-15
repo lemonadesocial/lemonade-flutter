@@ -31,9 +31,19 @@ class GetPointGroupsBloc
         state.copyWith(fetching: false),
       );
     }, (pointGroups) {
-      emit(
-        state.copyWith(fetching: false, pointGroups: pointGroups),
-      );
+      if (pointGroups.isNotEmpty && state.selectedFirstLevelGroup == null) {
+        emit(
+          state.copyWith(
+            fetching: false,
+            pointGroups: pointGroups,
+            selectedFirstLevelGroup: pointGroups.first.firstLevelGroup?.id,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(fetching: false, pointGroups: pointGroups),
+        );
+      }
     });
   }
 
@@ -41,7 +51,12 @@ class GetPointGroupsBloc
     _GetPointGroupsEventSelectFirstLevelGroup event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(selectedFirstLevelGroup: event.firstLevelGroup));
+    emit(
+      state.copyWith(
+        selectedFirstLevelGroup: event.firstLevelGroup,
+        selectedSecondLevelGroup: null,
+      ),
+    );
   }
 
   void _onSelectSecondLevelGroup(
