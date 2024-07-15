@@ -528,5 +528,8 @@ final questRoutes = AutoRoute(
       initial: true,
       page: QuestListingRoute.page,
     ),
+    AutoRoute(
+      page: CompletedQuestsListingRoute.page,
+    ),
   ],
 );

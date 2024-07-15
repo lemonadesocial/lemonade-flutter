@@ -10,19 +10,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum QuestListingTabs {
-  profile(tabIndex: 0),
-  post(tabIndex: 1),
-  event(tabIndex: 2),
-  citizenship(tabIndex: 3);
-
-  const QuestListingTabs({
-    required this.tabIndex,
-  });
-
-  final int tabIndex;
-}
-
 @RoutePage()
 class QuestListingPage extends StatefulWidget {
   const QuestListingPage({
@@ -35,8 +22,6 @@ class QuestListingPage extends StatefulWidget {
 
 class _QuestListingPageState extends State<QuestListingPage>
     with SingleTickerProviderStateMixin {
-  late int selectedTabIndex = QuestListingTabs.profile.index;
-
   @override
   void initState() {
     super.initState();
@@ -76,9 +61,12 @@ class _QuestListingPageState extends State<QuestListingPage>
                 children: [
                   TabBar(
                     onTap: (index) {
-                      setState(() {
-                        selectedTabIndex = index;
-                      });
+                      context.read<GetPointGroupsBloc>().add(
+                            GetPointGroupsEvent.selectFirstLevelGroup(
+                              firstLevelGroup:
+                                  pointGroups[index].firstLevelGroup?.id,
+                            ),
+                          );
                     },
                     labelStyle: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,

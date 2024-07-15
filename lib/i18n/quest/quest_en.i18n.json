@@ -16,5 +16,11 @@
         "other": "$count points earned"
     },
     "repeatable": "Repeatable",
-    "completeCount": "$count complete"
+    "completeCount": "$count complete",
+    "points": "points",
+    "complted": "Completed",
+    "totalQuestsCount(ordinal)": {
+        "one": "$count total quest",
+        "other": "$count total quests"
+    }
 }
