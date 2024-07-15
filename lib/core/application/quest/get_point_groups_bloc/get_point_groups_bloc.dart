@@ -51,7 +51,12 @@ class GetPointGroupsBloc
     _GetPointGroupsEventSelectFirstLevelGroup event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(selectedFirstLevelGroup: event.firstLevelGroup));
+    emit(
+      state.copyWith(
+        selectedFirstLevelGroup: event.firstLevelGroup,
+        selectedSecondLevelGroup: null,
+      ),
+    );
   }
 
   void _onSelectSecondLevelGroup(
