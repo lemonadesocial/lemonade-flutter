@@ -60,7 +60,7 @@ class QuestItemWidget extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            height: 3.h,
+                            height: 3.w,
                           ),
                           subTitle == ''
                               ? const SizedBox.shrink()
@@ -106,26 +106,25 @@ class QuestItemWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          (trackingCount ?? 0) > 0
-                              ? Row(
-                                  children: [
-                                    Text(
-                                      t.quest.completeCount(
-                                        count: trackingCount ?? '',
-                                      ),
-                                      style: Typo.small.copyWith(
-                                        color: colorScheme.onSecondary,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    SizedBox(width: Spacing.superExtraSmall),
-                                    Assets.icons.icDoneAllRounded.svg(
-                                      width: 18.w,
-                                      height: 18.w,
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
+                          if ((trackingCount ?? 0) > 0)
+                            Row(
+                              children: [
+                                Text(
+                                  t.quest.completeCount(
+                                    count: trackingCount ?? '',
+                                  ),
+                                  style: Typo.small.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                SizedBox(width: Spacing.superExtraSmall),
+                                Assets.icons.icDoneAllRounded.svg(
+                                  width: 18.w,
+                                  height: 18.w,
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     )

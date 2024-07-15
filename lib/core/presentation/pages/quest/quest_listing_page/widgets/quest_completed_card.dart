@@ -77,7 +77,6 @@ class QuestCompletedCard extends StatelessWidget {
                       count: completedCount,
                       type: typeTitle ?? '',
                     ),
-                    // '12 Events Quests completed',
                     style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
                       height: 0,

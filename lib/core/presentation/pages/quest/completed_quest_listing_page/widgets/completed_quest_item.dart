@@ -5,6 +5,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class CompletedQuestItem extends StatelessWidget {
   const CompletedQuestItem({
@@ -19,6 +20,9 @@ class CompletedQuestItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    String formattedDateTime = DateFormat('d MMM, HH:mm').format(
+      pointTrackingInfo.createdAt?.toLocal() ?? DateTime.now().toLocal(),
+    );
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
@@ -38,7 +42,7 @@ class CompletedQuestItem extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                "17 Dec, 12:32",
+                formattedDateTime,
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
