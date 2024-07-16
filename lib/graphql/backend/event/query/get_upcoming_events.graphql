@@ -1,0 +1,30 @@
+query GetUpcomingEvents($id: MongoID!, $limit: Int = 100, $skip: Int = 0) {
+  getUpcomingEvents(user: $id, limit: $limit, skip: $skip) {
+    _id
+    title
+    slug
+    host
+    host_expanded {
+      _id
+      name
+      new_photos_expanded {
+        _id
+        key
+        bucket
+      }
+    }
+    new_new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+    start
+    end
+    address {
+      street_1
+      city
+      title
+      region
+    }
+  }
+}
