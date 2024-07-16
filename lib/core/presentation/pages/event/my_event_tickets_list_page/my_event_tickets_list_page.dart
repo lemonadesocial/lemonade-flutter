@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/past_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/upcoming_events_listing_bloc.dart';
+import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -133,8 +134,8 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
               }) {
                 final eventsList = (result.parsedData?.getUpcomingEvents ?? [])
                     .map(
-                      (item) => Event.fromJson(
-                        item.toJson(),
+                      (item) => Event.fromDto(
+                        EventDto.fromJson(item.toJson()),
                       ),
                     )
                     .toList();
@@ -194,8 +195,8 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
               }) {
                 final eventsList = (result.parsedData?.getPastEvents ?? [])
                     .map(
-                      (item) => Event.fromJson(
-                        item.toJson(),
+                      (item) => Event.fromDto(
+                        EventDto.fromJson(item.toJson()),
                       ),
                     )
                     .toList();

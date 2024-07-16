@@ -48,7 +48,7 @@ class EventReservationsListView extends StatelessWidget {
         child: ListView.separated(
           itemBuilder: (context, index) {
             if (index == eventsList.length) {
-              return hasNextPage && eventsList.length > 20
+              return hasNextPage && eventsList.length >= 20
                   ? Padding(
                       padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                       child: Loading.defaultLoading(context),
