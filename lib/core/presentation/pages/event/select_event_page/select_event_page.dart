@@ -106,7 +106,6 @@ class _SelectEventPageState extends State<SelectEventPage>
                       height: Sizing.medium,
                       child: TextField(
                         controller: _textController,
-                        onChanged: (v) {},
                         cursorColor: colorScheme.onSecondary,
                         decoration: InputDecoration(
                           fillColor: LemonColor.chineseBlack,
