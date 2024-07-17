@@ -1,3 +1,4 @@
+import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/application/quest/get_point_groups_bloc/get_point_groups_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,18 @@ class QuestPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetPointGroupsBloc()
-        ..add(
-          GetPointGroupsEvent.fetch(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => EditProfileBloc(),
         ),
+        BlocProvider(
+          create: (context) => GetPointGroupsBloc()
+            ..add(
+              GetPointGroupsEvent.fetch(),
+            ),
+        ),
+      ],
       child: this,
     );
   }
