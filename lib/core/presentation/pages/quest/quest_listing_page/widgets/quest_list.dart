@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/quest/get_point_groups_bloc/get_point_groups_bloc.dart';
 import 'package:app/core/domain/quest/entities/point_config_info.dart';
 import 'package:app/core/domain/quest/quest_repository.dart';
@@ -5,9 +6,12 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,7 +85,9 @@ class QuestList extends StatelessWidget {
                   return QuestItemWidget(
                     title: t.quest.pointsCount(n: points, count: points),
                     subTitle: pointConfigInfo.title ?? '',
-                    onTap: () {},
+                    onTap: () {
+                      onTapQuestItem(context, pointConfigInfo);
+                    },
                     repeatable: repeatable,
                     trackingCount: trackingCount,
                     disabled: disabled,
@@ -95,5 +101,38 @@ class QuestList extends StatelessWidget {
         );
       },
     );
+  }
+
+  void onTapQuestItem(
+    BuildContext context,
+    PointConfigInfo pointConfigInfo,
+  ) async {
+    final type = pointConfigInfo.type;
+    switch (type) {
+      /**
+       * PROFILE TYPE
+       */
+      case Enum$PointType.config_username:
+        final userName = await context.router.push(
+          OnboardingWrapperRoute(
+            onboardingFlow: false,
+            children: [OnboardingUsernameRoute(onboardingFlow: false)],
+          ),
+        ) as String?;
+        if (userName != null) {
+          context.read<AuthBloc>().add(
+                const AuthEvent.refreshData(),
+              );
+        }
+        break;
+      case Enum$PointType.config_display_name ||
+            Enum$PointType.config_profile_photo ||
+            Enum$PointType.config_bio:
+        AutoRouter.of(context).navigate(const EditProfileRoute());
+      case Enum$PointType.create_post ||
+            Enum$PointType.per_post_has_more_than_n_likes:
+        AutoRouter.of(context).navigate(const CreatePostRoute());
+      default:
+    }
   }
 }
