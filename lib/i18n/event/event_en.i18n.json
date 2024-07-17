@@ -27,6 +27,7 @@
     "eventStarted": "Event started",
     "eventEnded": "Event ended",
     "myEvents": "My events",
+    "selectEvents": "Select events",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
