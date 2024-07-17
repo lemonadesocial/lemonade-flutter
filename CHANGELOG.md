@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.28.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.27.0...v1.28.0) (2024-07-16)
+
+
+### Features
+
+* get quest listing & filter quest data ([#670](https://github.com/lemonadesocial/lemonade-flutter/issues/670)) ([bd5f4a4](https://github.com/lemonadesocial/lemonade-flutter/commit/bd5f4a46c13c848605e1d3a3d793ac41710c7700))
+* implement claim relay payment split ([#668](https://github.com/lemonadesocial/lemonade-flutter/issues/668)) ([5bf96e3](https://github.com/lemonadesocial/lemonade-flutter/commit/5bf96e368d87c13ce0cb45ae2bc8825ab1eb3573))
+* quest completed list ([#674](https://github.com/lemonadesocial/lemonade-flutter/issues/674)) ([67adcc4](https://github.com/lemonadesocial/lemonade-flutter/commit/67adcc4256ec6f9a15e6b31bf8be8553f7a811f2))
+
+
+### Bug Fixes
+
+* add empty state for nework group in claim split pages ([#672](https://github.com/lemonadesocial/lemonade-flutter/issues/672)) ([ed46e67](https://github.com/lemonadesocial/lemonade-flutter/commit/ed46e673ba68cb20f030dbb10f540616252a39ae))
+* add waiting page/success page when claim split ([#673](https://github.com/lemonadesocial/lemonade-flutter/issues/673)) ([717c030](https://github.com/lemonadesocial/lemonade-flutter/commit/717c030d71b761cc2b81cd543be47713e2fef260))
+* fix wrong mapping data for event tickets list ([#676](https://github.com/lemonadesocial/lemonade-flutter/issues/676)) ([2d6caa2](https://github.com/lemonadesocial/lemonade-flutter/commit/2d6caa247963ef8946bb540fe8196628fbf210dd))
+* pagination for for tickets list page (event reservation) ([#675](https://github.com/lemonadesocial/lemonade-flutter/issues/675)) ([e09394d](https://github.com/lemonadesocial/lemonade-flutter/commit/e09394d204dd0c37b2169eed5a9c3b1c1ee749b6))
+* update event mutation when create relay account ([#671](https://github.com/lemonadesocial/lemonade-flutter/issues/671)) ([81a2d14](https://github.com/lemonadesocial/lemonade-flutter/commit/81a2d1416815241bac37c659d7a7198b7c5e89fe))
+
 ## [1.27.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.26.0...v1.27.0) (2024-07-04)
 
 
