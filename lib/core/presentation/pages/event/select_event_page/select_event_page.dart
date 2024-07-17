@@ -38,7 +38,7 @@ class _SelectEventPageState extends State<SelectEventPage>
   final Debouncer _debouncer = Debouncer(milliseconds: 300);
   bool attendingEventsHasNextPage = true;
   bool hostingEventsHasNextPage = true;
-  bool searchedEventListVisible = false;
+  bool searchedResultVisible = false;
 
   @override
   void initState() {
@@ -55,12 +55,12 @@ class _SelectEventPageState extends State<SelectEventPage>
     _textController.addListener(() {
       if (_textController.text.isEmpty) {
         setState(() {
-          searchedEventListVisible = false;
+          searchedResultVisible = false;
         });
       } else {
-        if (searchedEventListVisible) return;
+        if (searchedResultVisible) return;
         setState(() {
-          searchedEventListVisible = true;
+          searchedResultVisible = true;
         });
       }
     });
@@ -294,7 +294,7 @@ class _SelectEventPageState extends State<SelectEventPage>
                       ),
                     ],
                   ),
-                  if (searchedEventListVisible)
+                  if (searchedResultVisible)
                     _SearchedEventList(
                       textController: _textController,
                       onTap: widget.onEventSelected,
