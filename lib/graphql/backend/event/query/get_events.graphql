@@ -1,0 +1,27 @@
+# import '../fragment/event_fragment.graphql'
+
+query GetEvents(
+  $highlight: Boolean
+  $search: String
+  $accepted: MongoID
+  $limit: Int
+  $skip: Int
+) {
+  events: getEvents(
+    highlight: $highlight
+    search: $search
+    accepted: $accepted
+    limit: $limit
+    skip: $skip
+  ) {
+    ...EventFields
+    event_ticket_types {
+      _id
+      prices {
+        currency
+        network
+        cost
+      }
+    }
+  }
+}

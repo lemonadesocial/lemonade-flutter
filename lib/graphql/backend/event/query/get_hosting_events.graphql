@@ -1,0 +1,20 @@
+# import '../fragment/event_fragment.graphql'
+
+query GetHostingEvents(
+  $user: MongoID!
+  $state: FilterEventInput
+  $limit: Int = 100
+  $skip: Int = 0
+) {
+  events: getHostingEvents(user: $user, state: $state, limit: $limit, skip: $skip) {
+    ...EventFields
+    event_ticket_types {
+      _id
+      prices {
+        currency
+        network
+        cost
+      }
+    }
+  }
+}
