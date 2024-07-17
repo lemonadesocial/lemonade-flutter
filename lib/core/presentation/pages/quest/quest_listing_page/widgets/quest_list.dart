@@ -104,7 +104,9 @@ class QuestList extends StatelessWidget {
   }
 
   void onTapQuestItem(
-      BuildContext context, PointConfigInfo pointConfigInfo) async {
+    BuildContext context,
+    PointConfigInfo pointConfigInfo,
+  ) async {
     final type = pointConfigInfo.type;
     switch (type) {
       /**
