@@ -1,7 +1,7 @@
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
+import 'package:app/core/utils/share_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:intl/intl.dart';
-import 'package:share_plus/share_plus.dart';
 
 class GuestEventDetailDashboard extends StatelessWidget {
   const GuestEventDetailDashboard({
@@ -104,9 +103,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
               .svg(width: Sizing.small, height: Sizing.small),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            Share.share(
-              '${AppConfig.webUrl}/event/${event.id}',
-            );
+            ShareUtils.shareEvent(event);
           },
         ),
       ],

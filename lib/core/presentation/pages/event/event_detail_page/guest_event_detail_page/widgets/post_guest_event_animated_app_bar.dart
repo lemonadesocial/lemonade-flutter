@@ -1,5 +1,4 @@
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/report/input/report_input.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
@@ -10,6 +9,7 @@ import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/share_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:share_plus/share_plus.dart';
 
 enum _EventAction {
   share,
@@ -41,9 +40,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
   });
 
   void _share() {
-    Share.share(
-      '${AppConfig.webUrl}/event/${event.id}',
-    );
+    ShareUtils.shareEvent(event);
   }
 
   void _edit(BuildContext context) {
