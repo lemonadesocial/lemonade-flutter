@@ -26,6 +26,9 @@ class QuestPointsWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () {
+        context.read<AuthBloc>().add(
+              const AuthEvent.refreshData(),
+            );
         AutoRouter.of(context).navigate(const QuestRoute());
       },
       child: Stack(
