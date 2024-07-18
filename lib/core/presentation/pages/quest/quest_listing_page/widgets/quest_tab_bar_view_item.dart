@@ -26,22 +26,23 @@ class QuestTabBarViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-            top: Spacing.xSmall,
-            left: Spacing.xSmall,
-            right: Spacing.xSmall,
+        if ((pointGroup.points ?? 0) > 0)
+          Padding(
+            padding: EdgeInsets.only(
+              top: Spacing.xSmall,
+              left: Spacing.xSmall,
+              right: Spacing.xSmall,
+            ),
+            child: QuestCompletedCard(
+              completedCount: pointGroup.completed ?? 0,
+              pointsCount: pointGroup.points ?? 0,
+              typeTitle: pointGroup.firstLevelGroup?.title ?? '',
+              onTap: () {
+                AutoRouter.of(context)
+                    .navigate(const CompletedQuestsListingRoute());
+              },
+            ),
           ),
-          child: QuestCompletedCard(
-            completedCount: pointGroup.completed ?? 0,
-            pointsCount: pointGroup.points ?? 0,
-            typeTitle: pointGroup.firstLevelGroup?.title ?? '',
-            onTap: () {
-              AutoRouter.of(context)
-                  .navigate(const CompletedQuestsListingRoute());
-            },
-          ),
-        ),
         _SecondaryLevelGroup(
           secondaryLevelGroups: secondaryLevelGroups,
           onTap: (secondaryLevelGroupId) {
