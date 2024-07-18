@@ -26,7 +26,6 @@ class LemonDrawerProfileInfo extends StatelessWidget {
           authenticated: (authSession) => authSession,
           orElse: () => null,
         );
-
     final questPoints = authSession?.questPoints;
     final colorScheme = Theme.of(context).colorScheme;
     return Column(

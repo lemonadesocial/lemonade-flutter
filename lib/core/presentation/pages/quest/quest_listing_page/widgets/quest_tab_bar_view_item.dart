@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/quest/get_point_groups_bloc/get_point_groups_bloc.dart';
 import 'package:app/core/domain/quest/entities/point_group.dart';
 import 'package:app/core/domain/quest/entities/quest_group.dart';

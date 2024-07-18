@@ -71,6 +71,9 @@ class _Leading extends StatelessWidget {
             AutoRouter.of(context).push(const LoginRoute());
           },
           authenticated: (_) {
+            context.read<AuthBloc>().add(
+                  const AuthEvent.refreshData(),
+                );
             DrawerUtils.openDrawer(context);
           },
         );

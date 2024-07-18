@@ -4,13 +4,16 @@ import 'package:app/core/domain/quest/entities/point_config_info.dart';
 import 'package:app/core/domain/quest/quest_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event/select_event_page/select_event_page.dart';
+import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_bottomsheet/connect_farcaster_bottomsheet.dart';
 import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
@@ -167,7 +170,39 @@ class QuestList extends StatelessWidget {
           },
         );
         break;
+      /**
+       * Account Type
+       */
+      case Enum$PointType.connect_farcaster:
+        final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
+              orElse: () => null,
+              authenticated: (user) => user,
+              onBoardingRequired: (user) => user,
+            );
+        final farcasterConnected =
+            loggedInUser?.farcasterUserInfo?.accountKeyRequest?.accepted ==
+                true;
+        if (farcasterConnected) {
+          return;
+        }
+        showCupertinoModalBottomSheet(
+          backgroundColor: LemonColor.atomicBlack,
+          context: context,
+          useRootNavigator: true,
+          builder: (mContext) => ConnectFarcasterBottomsheet(
+            onConnected: () {
+              context.read<AuthBloc>().add(const AuthEvent.refreshData());
+              Navigator.of(context, rootNavigator: true).pop();
+              SnackBarUtils.showSuccess(
+                message: t.farcaster.farcasterConnectedSuccess,
+              );
+            },
+          ),
+        );
+        break;
       default:
+        SnackBarUtils.showComingSoon();
+        break;
     }
   }
 }
