@@ -3,6 +3,7 @@ import 'package:app/core/application/quest/get_point_groups_bloc/get_point_group
 import 'package:app/core/domain/quest/entities/point_config_info.dart';
 import 'package:app/core/domain/quest/quest_repository.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/pages/event/select_event_page/select_event_page.dart';
 import 'package:app/core/presentation/pages/quest/quest_listing_page/widgets/quest_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -15,6 +16,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class QuestList extends StatelessWidget {
   const QuestList({super.key});
@@ -129,9 +131,42 @@ class QuestList extends StatelessWidget {
             Enum$PointType.config_profile_photo ||
             Enum$PointType.config_bio:
         AutoRouter.of(context).navigate(const EditProfileRoute());
+        break;
       case Enum$PointType.create_post ||
             Enum$PointType.per_post_has_more_than_n_likes:
         AutoRouter.of(context).navigate(const CreatePostRoute());
+        break;
+      // EVENT TYPE
+      // This is passive type, so we don't need to do anything
+      case Enum$PointType.every_nth_rsvp:
+        break;
+      case Enum$PointType.per_published_event:
+        AutoRouter.of(context).push(const CreateEventRoute());
+        break;
+      case Enum$PointType.per_event_rsvp:
+      case Enum$PointType.invitee_rsvp_event:
+        AutoRouter.of(context).push(EventsListingRoute());
+        break;
+      case Enum$PointType.event_attestation:
+      case Enum$PointType.update_event_attestation:
+      case Enum$PointType.per_paid_ticket_tier_created:
+      case Enum$PointType.per_event_checkin:
+      case Enum$PointType.per_guest_checkin:
+      case Enum$PointType.per_ticket_sold:
+        showCupertinoModalBottomSheet(
+          context: context,
+          expand: true,
+          useRootNavigator: true,
+          builder: (context) {
+            return SelectEventPage(
+              onEventSelected: (event) {
+                AutoRouter.of(context)
+                    .push(EventDetailRoute(eventId: event.id ?? ''));
+              },
+            );
+          },
+        );
+        break;
       default:
     }
   }
