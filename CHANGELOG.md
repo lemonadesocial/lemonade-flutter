@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.29.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.28.0...v1.29.0) (2024-07-18)
+
+
+### Features
+
+* account quest navigation ([#682](https://github.com/lemonadesocial/lemonade-flutter/issues/682)) ([09cd6a1](https://github.com/lemonadesocial/lemonade-flutter/commit/09cd6a1a636263da105f55236e680f08cb085ef0))
+* enhance share event link ([#681](https://github.com/lemonadesocial/lemonade-flutter/issues/681)) ([b4a68ac](https://github.com/lemonadesocial/lemonade-flutter/commit/b4a68aca502bbb64e219b7a307dc67a82fd8e534))
+* handle navigate profile quest ([#679](https://github.com/lemonadesocial/lemonade-flutter/issues/679)) ([d0c5b62](https://github.com/lemonadesocial/lemonade-flutter/commit/d0c5b624aaf8787bdf273ba45b2ebc1dd35848e5))
+* implement select event page ([#677](https://github.com/lemonadesocial/lemonade-flutter/issues/677)) ([913e195](https://github.com/lemonadesocial/lemonade-flutter/commit/913e195bba0cb2842a914c94fe08be2f5a8ec25f))
+* quest event type navigation handling ([#680](https://github.com/lemonadesocial/lemonade-flutter/issues/680)) ([36d224d](https://github.com/lemonadesocial/lemonade-flutter/commit/36d224d02683bbd734ab25b2f352454743e07871))
+
 ## [1.28.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.27.0...v1.28.0) (2024-07-16)
 
 
