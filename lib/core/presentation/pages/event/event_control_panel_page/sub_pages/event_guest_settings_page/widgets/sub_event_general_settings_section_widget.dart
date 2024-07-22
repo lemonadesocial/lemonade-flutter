@@ -1,3 +1,6 @@
+import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/sub_pages/sub_event_detail_settings_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -6,16 +9,23 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class SubEventSettings extends StatelessWidget {
+class SubEventGeneralSettingsSectionWidget extends StatelessWidget {
   final bool subEventEnabled;
+  final SubEventSettings? subEventSettings;
   final Function(bool value) onSubEventEnabledChanged;
-  const SubEventSettings({
+  final Function(SubEventSettings? subEventSettings)? onSubEventSettingsChanged;
+
+  const SubEventGeneralSettingsSectionWidget({
     super.key,
     required this.subEventEnabled,
+    this.subEventSettings,
     required this.onSubEventEnabledChanged,
+    required this.onSubEventSettingsChanged,
   });
 
   @override
@@ -78,7 +88,23 @@ class SubEventSettings extends StatelessWidget {
               colorFilter: filter,
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            showCupertinoModalBottomSheet(
+              context: context,
+              expand: true,
+              builder: (context) {
+                return BlocBuilder<EventGuestSettingsBloc,
+                    EventGuestSettingState>(
+                  builder: (context, state) {
+                    return SubEventDetailSettingsPage(
+                      subEventSettings: state.subEventSettings,
+                      onSubEventSettingsChanged: onSubEventSettingsChanged,
+                    );
+                  },
+                );
+              },
+            );
+          },
         ),
       ],
     );

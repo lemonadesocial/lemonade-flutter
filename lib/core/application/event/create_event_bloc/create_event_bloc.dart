@@ -1,5 +1,6 @@
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -122,6 +123,12 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         published: false,
         subevent_parent: parentEventId,
         subevent_enabled: event.subEventEnabled,
+        subevent_settings: Input$SubeventSettingsInput(
+          ticket_required_for_creation:
+              event.subEventSettings?.ticketRequiredForCreation,
+          ticket_required_for_purchase:
+              event.subEventSettings?.ticketRequiredForPurchase,
+        ),
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
@@ -162,6 +169,7 @@ class CreateEventEvent with _$CreateEventEvent {
     String? guestLimit,
     String? guestLimitPer,
     bool? subEventEnabled,
+    SubEventSettings? subEventSettings,
   }) = FormSubmitted;
 }
 

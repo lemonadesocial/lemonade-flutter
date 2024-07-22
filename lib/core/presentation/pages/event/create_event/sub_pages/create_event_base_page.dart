@@ -208,6 +208,8 @@ class CreateEventBasePage extends StatelessWidget {
                           eventGuestSettingsState.approvalRequired,
                       private: eventGuestSettingsState.private,
                       subEventEnabled: eventGuestSettingsState.subEventEnabled,
+                      subEventSettings:
+                          eventGuestSettingsState.subEventSettings,
                     ),
                   );
             },

@@ -636,7 +636,12 @@
     "subEventSettings": {
         "allowSubEvent": "Allow sub-events",
         "allowSubEventDescription": "Guests can create events inside your event",
-        "subEventSettings": "Sub-event settings"
+        "subEventSettings": "Sub-event settings",
+        "requireTicketToCreate": "Require ticket to create",
+        "requireTicketToCreateDescription": "Guests must hold parent event ticket to create",
+        "requireTicketToAttend": "Require ticket to attend",
+        "requireTicketToAttendDescription": "Guests must hold parent event ticket to attend",
+        "viewSubEvents": "View sub-events"
     },
     "sideEvent": {
         "createSideEvent": "Create side event",

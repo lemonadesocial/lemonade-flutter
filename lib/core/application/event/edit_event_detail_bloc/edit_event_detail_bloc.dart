@@ -1,5 +1,6 @@
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -72,6 +73,12 @@ class EditEventDetailBloc
         speaker_users: event.speakerUsers ?? [],
         timezone: event.timezone,
         subevent_enabled: event.subEventEnabled,
+        subevent_settings: Input$SubeventSettingsInput(
+          ticket_required_for_creation:
+              event.subEventSettings?.ticketRequiredForCreation,
+          ticket_required_for_purchase:
+              event.subEventSettings?.ticketRequiredForPurchase,
+        ),
       ),
       id: event.eventId,
     );
@@ -107,6 +114,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     bool? approvalRequired,
     String? timezone,
     bool? subEventEnabled,
+    SubEventSettings? subEventSettings,
   }) = EditEventDetailEventUpdateEvent;
 }
 
