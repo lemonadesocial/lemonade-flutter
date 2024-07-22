@@ -212,8 +212,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                         (widget.event != null &&
                                 widget.event?.subeventParent == null) ||
                             // This is for create case where event is root event
-                            guestSettingsState.parentEventId?.isEmpty ==
-                                true) ...[
+                            (guestSettingsState.parentEventId == null ||
+                                guestSettingsState.parentEventId?.isEmpty ==
+                                    true)) ...[
                       SubEventGeneralSettingsSectionWidget(
                         subEventEnabled: guestSettingsState.subEventEnabled,
                         subEventSettings: guestSettingsState.subEventSettings,
