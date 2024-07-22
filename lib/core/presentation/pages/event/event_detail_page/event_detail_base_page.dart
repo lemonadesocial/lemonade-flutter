@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
@@ -33,7 +34,19 @@ class _EventDetailBasePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
+    return BlocConsumer<GetEventDetailBloc, GetEventDetailState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () => null,
+          fetched: (event) {
+            context.read<EditEventDetailBloc>().add(
+                  EditEventDetailEvent.updateParentEvent(
+                    parentEventId: event.subeventParent ?? '',
+                  ),
+                );
+          },
+        );
+      },
       builder: (context, state) => state.when(
         failure: () => Scaffold(
           backgroundColor: colorScheme.primary,

@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event_frequent_question.dart';
 import 'package:app/core/domain/event/entities/event_session.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -68,6 +69,12 @@ class Event with _$Event {
     bool? published,
     List<EventFrequentQuestion>? frequentQuestions,
     String? timezone,
+    // Sub-event related
+    bool? subeventEnabled,
+    String? subeventParent,
+    Event? subeventParentExpanded,
+    SubEventSettings? subeventSettings,
+    List<String>? inheritedCohosts,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -154,6 +161,16 @@ class Event with _$Event {
           .map((item) => EventFrequentQuestion.fromDto(item))
           .toList(),
       timezone: dto.timezone,
+      // Sub-event related
+      subeventEnabled: dto.subeventEnabled,
+      subeventParent: dto.subeventParent,
+      subeventParentExpanded: dto.subeventParentExpanded != null
+          ? Event.fromDto(dto.subeventParentExpanded!)
+          : null,
+      subeventSettings: dto.subeventSettings != null
+          ? SubEventSettings.fromDto(dto.subeventSettings!)
+          : null,
+      inheritedCohosts: dto.inheritedCohosts,
     );
   }
 

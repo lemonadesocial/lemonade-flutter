@@ -12,7 +12,14 @@ import 'package:timezone/timezone.dart';
 part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
-  CreateEventBloc() : super(const CreateEventState()) {
+  final String? parentEventId;
+  CreateEventBloc({
+    this.parentEventId,
+  }) : super(
+          CreateEventState(
+            parentEventId: parentEventId,
+          ),
+        ) {
     on<EventTitleChanged>(_onTitleChanged);
     on<EventDescriptionChanged>(_onDescriptionChanged);
     on<VirtualChanged>(_onVirtualChanged);
@@ -83,7 +90,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      var input = Input$EventInput(
+      Input$EventInput input = Input$EventInput(
         title: title.value,
         description: description.value,
         private: event.private,
@@ -113,6 +120,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
               )
             : null,
         published: false,
+        subevent_parent: parentEventId,
+        subevent_enabled: event.subEventEnabled,
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
@@ -152,6 +161,7 @@ class CreateEventEvent with _$CreateEventEvent {
     Address? address,
     String? guestLimit,
     String? guestLimitPer,
+    bool? subEventEnabled,
   }) = FormSubmitted;
 }
 
@@ -164,5 +174,7 @@ class CreateEventState with _$CreateEventState {
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     String? eventId,
+    // Subevent related
+    String? parentEventId,
   }) = _CreateEventState;
 }

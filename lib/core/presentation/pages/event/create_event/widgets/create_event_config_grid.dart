@@ -71,6 +71,7 @@ class CreateEventConfigGrid extends StatelessWidget {
       enableDrag: false,
       barrierColor: LemonColor.black50,
       bounce: true,
+      expand: true,
       backgroundColor: LemonColor.atomicBlack,
       context: context,
       builder: (newContext) {

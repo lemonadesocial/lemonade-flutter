@@ -33,7 +33,7 @@ class CreateEventBasePage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BlocListener<CreateEventBloc, CreateEventState>(
+    return BlocConsumer<CreateEventBloc, CreateEventState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
           SnackBarUtils.showSuccess(
@@ -51,114 +51,112 @@ class CreateEventBasePage extends StatelessWidget {
               );
         }
       },
-      child: GestureDetector(
+      builder: (context, state) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
-            title: t.event.eventCreation.createEvent,
+            title: state.parentEventId != null
+                ? t.event.eventCreation.createSubEvent
+                : t.event.eventCreation.createEvent,
           ),
           body: SafeArea(
-            child: BlocBuilder<CreateEventBloc, CreateEventState>(
-              builder: (context, state) {
-                return Stack(
-                  children: [
-                    CustomScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: LemonTextField(
-                              hintText: t.event.eventCreation.titleHint,
-                              initialText: state.title.value,
-                              onChange: (value) => context
-                                  .read<CreateEventBloc>()
-                                  .add(EventTitleChanged(title: value)),
-                              errorText: state.title.displayError?.getMessage(
-                                t.event.eventCreation.title,
-                              ),
-                            ),
+            child: Stack(
+              children: [
+                CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: LemonTextField(
+                          hintText: t.event.eventCreation.titleHint,
+                          initialText: state.title.value,
+                          onChange: (value) => context
+                              .read<CreateEventBloc>()
+                              .add(EventTitleChanged(title: value)),
+                          errorText: state.title.displayError?.getMessage(
+                            t.event.eventCreation.title,
                           ),
                         ),
-                        SliverPadding(
-                          padding: EdgeInsets.only(top: Spacing.xSmall),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: SettingTileWidget(
-                              title: t.event.eventCreation.description,
-                              subTitle: StringUtils.stripHtmlTags(
-                                context
-                                    .read<CreateEventBloc>()
-                                    .state
-                                    .description
-                                    .value,
-                              ),
-                              leading: Assets.icons.icDescription.svg(),
-                              leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
-                              ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                              radius: LemonRadius.small,
-                              onTap: () {
-                                AutoRouter.of(context).navigate(
-                                  EventDescriptionFieldRoute(
-                                    description: state.description.value,
-                                    onDescriptionChanged: (value) {
-                                      context.read<CreateEventBloc>().add(
-                                            EventDescriptionChanged(
-                                              description: value,
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                );
-                              },
-                              isError: state.description.displayError != null,
-                            ),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.only(top: 30.h),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: const SliverToBoxAdapter(
-                            child: EventDateTimeSettingSection(),
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.only(top: 30.h),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                          ),
-                          sliver: const CreateEventConfigGrid(),
-                        ),
-                      ],
+                      ),
                     ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 15,
-                      child: _buildSubmitButton(context),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: Spacing.xSmall),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: SettingTileWidget(
+                          title: t.event.eventCreation.description,
+                          subTitle: StringUtils.stripHtmlTags(
+                            context
+                                .read<CreateEventBloc>()
+                                .state
+                                .description
+                                .value,
+                          ),
+                          leading: Assets.icons.icDescription.svg(),
+                          leadingCircle: false,
+                          trailing: Assets.icons.icArrowBack.svg(
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                          titleStyle: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          radius: LemonRadius.small,
+                          onTap: () {
+                            AutoRouter.of(context).navigate(
+                              EventDescriptionFieldRoute(
+                                description: state.description.value,
+                                onDescriptionChanged: (value) {
+                                  context.read<CreateEventBloc>().add(
+                                        EventDescriptionChanged(
+                                          description: value,
+                                        ),
+                                      );
+                                },
+                              ),
+                            );
+                          },
+                          isError: state.description.displayError != null,
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 30.h),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: const SliverToBoxAdapter(
+                        child: EventDateTimeSettingSection(),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 30.h),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: const CreateEventConfigGrid(),
                     ),
                   ],
-                );
-              },
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 15,
+                  child: _buildSubmitButton(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -209,6 +207,7 @@ class CreateEventBasePage extends StatelessWidget {
                       approvalRequired:
                           eventGuestSettingsState.approvalRequired,
                       private: eventGuestSettingsState.private,
+                      subEventEnabled: eventGuestSettingsState.subEventEnabled,
                     ),
                   );
             },

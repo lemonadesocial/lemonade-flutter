@@ -10,11 +10,28 @@ part 'edit_event_detail_bloc.freezed.dart';
 
 class EditEventDetailBloc
     extends Bloc<EditEventDetailEvent, EditEventDetailState> {
-  EditEventDetailBloc() : super(EditEventDetailState()) {
+  final String? parentEventId;
+  EditEventDetailBloc({
+    this.parentEventId,
+  }) : super(
+          EditEventDetailState(
+            parentEventId: parentEventId,
+          ),
+        ) {
     on<EditEventDetailEventUpdateEvent>(_onUpdate);
+    on<EditEventDetailEventUpdateParentEvent>(_onUpdateParentEventId);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
+
+  void _onUpdateParentEventId(
+    EditEventDetailEventUpdateParentEvent event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(parentEventId: event.parentEventId),
+    );
+  }
 
   Future<void> _onUpdate(
     EditEventDetailEventUpdateEvent event,
@@ -54,6 +71,7 @@ class EditEventDetailBloc
             : null,
         speaker_users: event.speakerUsers ?? [],
         timezone: event.timezone,
+        subevent_enabled: event.subEventEnabled,
       ),
       id: event.eventId,
     );
@@ -72,6 +90,10 @@ class EditEventDetailBloc
 
 @freezed
 class EditEventDetailEvent with _$EditEventDetailEvent {
+  const factory EditEventDetailEvent.updateParentEvent({
+    String? parentEventId,
+  }) = EditEventDetailEventUpdateParentEvent;
+
   const factory EditEventDetailEvent.update({
     required String eventId,
     bool? virtual,
@@ -84,6 +106,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     List<String>? speakerUsers,
     bool? approvalRequired,
     String? timezone,
+    bool? subEventEnabled,
   }) = EditEventDetailEventUpdateEvent;
 }
 
@@ -93,6 +116,7 @@ class EditEventDetailState with _$EditEventDetailState {
     @Default(EditEventDetailBlocStatus.initial)
     EditEventDetailBlocStatus status,
     Event? event,
+    String? parentEventId,
   }) = _EditEventDetailState;
 
   factory EditEventDetailState.initial() => EditEventDetailState();

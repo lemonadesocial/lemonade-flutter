@@ -11,23 +11,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
-  const CreateEventPage({super.key});
+  final String? parentEventId;
+  const CreateEventPage({
+    super.key,
+    this.parentEventId,
+  });
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CreateEventBloc(),
+          create: (context) => CreateEventBloc(
+            parentEventId: parentEventId,
+          ),
         ),
         BlocProvider(
-          create: (context) => EventGuestSettingsBloc(),
+          create: (context) => EventGuestSettingsBloc(
+            parentEventId: parentEventId,
+          ),
         ),
         BlocProvider(
-          create: (context) => EditEventDetailBloc(),
-        ),
-        BlocProvider(
-          create: (context) => EventGuestSettingsBloc(),
+          create: (context) => EditEventDetailBloc(
+            parentEventId: parentEventId,
+          ),
         ),
         BlocProvider(
           create: (context) => EventDateTimeSettingsBloc()

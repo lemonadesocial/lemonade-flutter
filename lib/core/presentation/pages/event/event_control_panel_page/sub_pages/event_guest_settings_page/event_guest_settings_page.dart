@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/sub_event_general_settings_section.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -53,6 +54,11 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       final eventApprovalRequired = widget.event?.approvalRequired ?? true;
       context.read<EventGuestSettingsBloc>().add(
             RequireApprovalChanged(approvalRequired: eventApprovalRequired),
+          );
+      context.read<EventGuestSettingsBloc>().add(
+            SubEventEnabledChanged(
+              subEventEnabled: widget.event?.subeventEnabled ?? false,
+            ),
           );
     } else {
       final eventGuestSettingBloc =
@@ -194,6 +200,27 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     SizedBox(
                       height: Spacing.medium,
                     ),
+                    // Root event wont have parent event
+                    if (
+                        // This is for edit case where event is root event
+                        (widget.event != null &&
+                                widget.event?.subeventParent == null) ||
+                            // This is for create case where event is root event
+                            state.parentEventId?.isEmpty == true) ...[
+                      SubEventSettings(
+                        subEventEnabled: state.subEventEnabled,
+                        onSubEventEnabledChanged: (enabled) {
+                          context.read<EventGuestSettingsBloc>().add(
+                                SubEventEnabledChanged(
+                                  subEventEnabled: enabled,
+                                ),
+                              );
+                        },
+                      ),
+                      SizedBox(
+                        height: Spacing.medium,
+                      ),
+                    ],
                     SettingTileWidget(
                       title: t.event.deleteEvent,
                       onTap: () {
@@ -267,6 +294,10 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                             .read<EventGuestSettingsBloc>()
                                             .state
                                             .approvalRequired,
+                                        subEventEnabled: context
+                                            .read<EventGuestSettingsBloc>()
+                                            .state
+                                            .subEventEnabled,
                                       ),
                                     );
                               },

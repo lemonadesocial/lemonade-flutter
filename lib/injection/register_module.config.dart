@@ -128,7 +128,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i23.EventDateTimeSettingsBloc>(
         () => _i23.EventDateTimeSettingsBloc());
     gh.lazySingleton<_i24.EventGuestSettingsBloc>(
-        () => _i24.EventGuestSettingsBloc());
+        () => _i24.EventGuestSettingsBloc(parentEventId: gh<String>()));
     gh.lazySingleton<_i25.EventLocationSettingBloc>(
         () => _i25.EventLocationSettingBloc());
     gh.lazySingleton<_i26.EventPaymentRepository>(

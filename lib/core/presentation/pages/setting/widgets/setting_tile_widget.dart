@@ -19,6 +19,7 @@ class SettingTileWidget extends StatelessWidget {
     this.titleStyle,
     this.color,
     this.radius,
+    this.borderRadius,
     this.isError,
     this.titleColor,
   });
@@ -34,6 +35,7 @@ class SettingTileWidget extends StatelessWidget {
   final TextStyle? titleStyle;
   final Color? color;
   final double? radius;
+  final BorderRadius? borderRadius;
   final bool? isError;
   final Color? titleColor;
 
@@ -46,7 +48,8 @@ class SettingTileWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: color ?? LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(radius ?? LemonRadius.small),
+          borderRadius: borderRadius ??
+              BorderRadius.circular(radius ?? LemonRadius.small),
           border: isError == true
               ? Border.all(
                   color: LemonColor.errorRedBg,

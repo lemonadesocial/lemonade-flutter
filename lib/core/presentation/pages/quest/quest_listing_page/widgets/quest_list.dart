@@ -141,7 +141,7 @@ class QuestList extends StatelessWidget {
       case Enum$PointType.every_nth_rsvp:
         break;
       case Enum$PointType.per_published_event:
-        AutoRouter.of(context).push(const CreateEventRoute());
+        AutoRouter.of(context).push(CreateEventRoute());
         break;
       case Enum$PointType.per_event_rsvp:
       case Enum$PointType.invitee_rsvp_event:
