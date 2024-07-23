@@ -216,6 +216,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                 guestSettingsState.parentEventId?.isEmpty ==
                                     true)) ...[
                       SubEventGeneralSettingsSectionWidget(
+                        event: widget.event,
                         subEventEnabled: guestSettingsState.subEventEnabled,
                         subEventSettings: guestSettingsState.subEventSettings,
                         onSubEventEnabledChanged: (enabled) {

@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/sub_pages/sub_event_detail_settings_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SubEventGeneralSettingsSectionWidget extends StatelessWidget {
+  final Event? event;
   final bool subEventEnabled;
   final SubEventSettings? subEventSettings;
   final Function(bool value) onSubEventEnabledChanged;
@@ -22,6 +24,7 @@ class SubEventGeneralSettingsSectionWidget extends StatelessWidget {
 
   const SubEventGeneralSettingsSectionWidget({
     super.key,
+    this.event,
     required this.subEventEnabled,
     this.subEventSettings,
     required this.onSubEventEnabledChanged,
@@ -97,6 +100,7 @@ class SubEventGeneralSettingsSectionWidget extends StatelessWidget {
                     EventGuestSettingState>(
                   builder: (context, state) {
                     return SubEventDetailSettingsPage(
+                      event: event,
                       subEventSettings: state.subEventSettings,
                       onSubEventSettingsChanged: onSubEventSettingsChanged,
                     );
