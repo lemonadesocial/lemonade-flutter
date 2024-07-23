@@ -8,7 +8,6 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -91,9 +90,6 @@ class SubEventDetailSettingsPage extends StatelessWidget {
                   title: t.event.subEventSettings.requireTicketToAttend,
                   subTitle:
                       t.event.subEventSettings.requireTicketToAttendDescription,
-                  titleStyle: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(LemonRadius.medium),
                     bottomRight: Radius.circular(LemonRadius.medium),
