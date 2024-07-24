@@ -27,6 +27,7 @@ enum EventConfigurationType {
   promotions,
   applicationForm,
   photos,
+  team,
 }
 
 class EventConfiguration {
@@ -126,6 +127,15 @@ class EventConfiguration {
             : t.common.actions.add,
         icon: Icon(
           Icons.speaker,
+          color: colorScheme.onSecondary,
+          size: 18.w,
+        ),
+      ),
+      EventConfiguration(
+        type: EventConfigurationType.team,
+        title: t.event.configuration.team,
+        icon: Icon(
+          Icons.manage_accounts,
           color: colorScheme.onSecondary,
           size: 18.w,
         ),
