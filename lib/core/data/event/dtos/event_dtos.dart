@@ -7,6 +7,7 @@ import 'package:app/core/data/event/dtos/event_session/event_session_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
+import 'package:app/core/data/event/dtos/sub_event_settings_dto/sub_event_settings_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -76,6 +77,12 @@ class EventDto with _$EventDto {
     List<EventFrequentQuestionDto>? frequentQuestions,
     String? timezone,
     @JsonKey(name: 'tickets') List<EventTicketDto>? tickets,
+    // Sub-event related
+    @JsonKey(name: 'subevent_enabled') bool? subeventEnabled,
+    @JsonKey(name: 'subevent_parent') String? subeventParent,
+    @JsonKey(name: 'subevent_parent_expanded') EventDto? subeventParentExpanded,
+    @JsonKey(name: 'subevent_settings') SubEventSettingsDto? subeventSettings,
+    @JsonKey(name: 'inherited_cohosts') List<String>? inheritedCohosts,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

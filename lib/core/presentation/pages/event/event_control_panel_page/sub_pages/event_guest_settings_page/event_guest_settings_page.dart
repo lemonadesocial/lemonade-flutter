@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/sub_event_general_settings_section_widget.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -54,6 +55,16 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       context.read<EventGuestSettingsBloc>().add(
             RequireApprovalChanged(approvalRequired: eventApprovalRequired),
           );
+      context.read<EventGuestSettingsBloc>().add(
+            SubEventEnabledChanged(
+              subEventEnabled: widget.event?.subeventEnabled ?? false,
+            ),
+          );
+      context.read<EventGuestSettingsBloc>().add(
+            SubEventSettingsChanged(
+              subEventSettings: widget.event?.subeventSettings,
+            ),
+          );
     } else {
       final eventGuestSettingBloc =
           context.read<EventGuestSettingsBloc>().state;
@@ -90,7 +101,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
 
   Widget _buildContent(ColorScheme colorScheme) {
     return BlocBuilder<EventGuestSettingsBloc, EventGuestSettingState>(
-      builder: (context, state) {
+      builder: (context, guestSettingsState) {
         return Stack(
           children: [
             SingleChildScrollView(
@@ -101,14 +112,14 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                 ),
                 child: Column(
                   children: [
-                    _buildSegmentedButton(colorScheme, state),
+                    _buildSegmentedButton(colorScheme, guestSettingsState),
                     SizedBox(
                       height: Spacing.medium,
                     ),
                     _buildSettingTile(
                       title: t.event.guestSettings.autoApprove,
                       subTitle: t.event.guestSettings.autoApproveDescription,
-                      value: !state.approvalRequired,
+                      value: !guestSettingsState.approvalRequired,
                       onChanged: (value) {
                         Vibrate.feedback(FeedbackType.light);
                         context.read<EventGuestSettingsBloc>().add(
@@ -124,9 +135,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                         title: t.event.guestSettings.guestUnlockLimit,
                         subTitle:
                             t.event.guestSettings.guestUnlockLimitDescription,
-                        value: state.guestLimitPer == null,
+                        value: guestSettingsState.guestLimitPer == null,
                         onChanged: (value) =>
-                            _onGuestLimitPerToggle(value, state),
+                            _onGuestLimitPerToggle(value, guestSettingsState),
                         trailing: SizedBox(
                           width: 60.w,
                           child: LemonTextField(
@@ -138,7 +149,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                 .add(
                                   GuestLimitPerChanged(guestLimitPer: value),
                                 ),
-                            readOnly: state.guestLimitPer == null,
+                            readOnly: guestSettingsState.guestLimitPer == null,
                           ),
                         ),
                       ),
@@ -149,9 +160,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     _buildContainer(
                       _buildSettingTile(
                         title: t.event.guestSettings.noUnlockLimit,
-                        value: state.guestLimitPer == null,
+                        value: guestSettingsState.guestLimitPer == null,
                         onChanged: (value) =>
-                            _onNoGuestLimitPerToggle(value, state),
+                            _onNoGuestLimitPerToggle(value, guestSettingsState),
                         subTitle: '',
                       ),
                     ),
@@ -163,8 +174,9 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                         title: t.event.guestSettings.totalGuestLimit,
                         subTitle:
                             t.event.guestSettings.totalGuestLimitDescription,
-                        value: state.guestLimit == null,
-                        onChanged: (value) => _onGuestLimitToggle(value, state),
+                        value: guestSettingsState.guestLimit == null,
+                        onChanged: (value) =>
+                            _onGuestLimitToggle(value, guestSettingsState),
                         trailing: SizedBox(
                           width: 60.w,
                           child: LemonTextField(
@@ -174,7 +186,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                             onChange: (value) => context
                                 .read<EventGuestSettingsBloc>()
                                 .add(GuestLimitChanged(guestLimit: (value))),
-                            readOnly: state.guestLimit == null,
+                            readOnly: guestSettingsState.guestLimit == null,
                           ),
                         ),
                       ),
@@ -185,15 +197,47 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                     _buildContainer(
                       _buildSettingTile(
                         title: t.event.guestSettings.noGuestLimit,
-                        value: state.guestLimit == null,
+                        value: guestSettingsState.guestLimit == null,
                         onChanged: (value) =>
-                            _onNoGuestLimitToggle(value, state),
+                            _onNoGuestLimitToggle(value, guestSettingsState),
                         subTitle: '',
                       ),
                     ),
                     SizedBox(
                       height: Spacing.medium,
                     ),
+                    // Root event wont have parent event
+                    if (
+                        // This is for edit case where event is root event
+                        (widget.event != null &&
+                                widget.event?.subeventParent == null) ||
+                            // This is for create case where event is root event
+                            (guestSettingsState.parentEventId == null ||
+                                guestSettingsState.parentEventId?.isEmpty ==
+                                    true)) ...[
+                      SubEventGeneralSettingsSectionWidget(
+                        event: widget.event,
+                        subEventEnabled: guestSettingsState.subEventEnabled,
+                        subEventSettings: guestSettingsState.subEventSettings,
+                        onSubEventEnabledChanged: (enabled) {
+                          context.read<EventGuestSettingsBloc>().add(
+                                SubEventEnabledChanged(
+                                  subEventEnabled: enabled,
+                                ),
+                              );
+                        },
+                        onSubEventSettingsChanged: (subEventSettings) {
+                          context.read<EventGuestSettingsBloc>().add(
+                                SubEventSettingsChanged(
+                                  subEventSettings: subEventSettings,
+                                ),
+                              );
+                        },
+                      ),
+                      SizedBox(
+                        height: Spacing.medium,
+                      ),
+                    ],
                     SettingTileWidget(
                       title: t.event.deleteEvent,
                       onTap: () {
@@ -251,22 +295,17 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                 context.read<EditEventDetailBloc>().add(
                                       EditEventDetailEvent.update(
                                         eventId: widget.event?.id ?? '',
-                                        guestLimit: context
-                                            .read<EventGuestSettingsBloc>()
-                                            .state
-                                            .guestLimit,
-                                        guestLimitPer: context
-                                            .read<EventGuestSettingsBloc>()
-                                            .state
-                                            .guestLimitPer,
-                                        private: context
-                                            .read<EventGuestSettingsBloc>()
-                                            .state
-                                            .private,
-                                        approvalRequired: context
-                                            .read<EventGuestSettingsBloc>()
-                                            .state
-                                            .approvalRequired,
+                                        guestLimit:
+                                            guestSettingsState.guestLimit,
+                                        guestLimitPer:
+                                            guestSettingsState.guestLimitPer,
+                                        private: guestSettingsState.private,
+                                        approvalRequired:
+                                            guestSettingsState.approvalRequired,
+                                        subEventEnabled:
+                                            guestSettingsState.subEventEnabled,
+                                        subEventSettings:
+                                            guestSettingsState.subEventSettings,
                                       ),
                                     );
                               },

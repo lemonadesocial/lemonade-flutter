@@ -1,147 +1,159 @@
 # import '../../payment/fragment/payment_fragment.graphql'
 
 fragment EventHostExpandedFragment on User {
+  _id
+  name
+  display_name
+  username
+  new_photos_expanded(limit: 1) {
     _id
-    name
-    display_name
-    username
-    new_photos_expanded(limit: 1) {
-        _id
-        key
-        bucket
-    }
-    job_title
-    __typename
+    key
+    bucket
+  }
+  job_title
+  __typename
 }
 
 fragment EventPeopleFragment on Event {
-    cohosts
-    speaker_users
-    accepted
-    invited
-    pending
+  cohosts
+  speaker_users
+  accepted
+  invited
+  pending
 }
 
 fragment EventMatrixFragment on Event {
-    matrix_event_room_id
+  matrix_event_room_id
 }
 
 fragment EventOfferFragment on Event {
-    offers {
-        _id
-        auto
-        broadcast_rooms
-        position
-        provider
-        provider_id
-        provider_network 
-    }
+  offers {
+    _id
+    auto
+    broadcast_rooms
+    position
+    provider
+    provider_id
+    provider_network
+  }
 }
 
 fragment EventTicketTypesFragment on Event {
-    event_ticket_types {
-      _id
-      active
-      event
-      title
-      prices {
-        cost
-        currency
-        network
-        default
-      }
-      ticket_limit
-      ticket_count
+  event_ticket_types {
+    _id
+    active
+    event
+    title
+    prices {
+      cost
+      currency
+      network
       default
-      address_required
-      description
-      description_line
-      external_ids
-      offers {
-        _id
-        provider
-        provider_network
-        provider_id
-        position
-        auto
-        broadcast_rooms
-      }
-      photos
-      photos_expanded(limit: 1) {
-        _id
-        url
-        key 
-        bucket
-      }
     }
+    ticket_limit
+    ticket_count
+    default
+    address_required
+    description
+    description_line
+    external_ids
+    offers {
+      _id
+      provider
+      provider_network
+      provider_id
+      position
+      auto
+      broadcast_rooms
+    }
+    photos
+    photos_expanded(limit: 1) {
+      _id
+      url
+      key
+      bucket
+    }
+  }
 }
 
 fragment EventPaymentAccountFragment on Event {
-    payment_accounts_new,
-    payment_accounts_expanded {
-        ...PaymentAccountFragment
-    }
+  payment_accounts_new
+  payment_accounts_expanded {
+    ...PaymentAccountFragment
+  }
 }
 
-
 fragment EventFields on Event {
+  _id
+  title
+  slug
+  host
+  approval_required
+  host_expanded {
+    ...EventHostExpandedFragment
+  }
+  cohosts_expanded(limit: 25) {
+    ...EventHostExpandedFragment
+  }
+  new_new_photos_expanded(limit: 25) {
+    key
+    bucket
+  }
+  ...EventPeopleFragment
+  ...EventMatrixFragment
+  start
+  end
+  cost
+  currency
+  description
+  broadcasts {
+    provider_id
+  }
+  address {
     _id
+    street_1
+    city
     title
-    slug
-    host
-    approval_required
-    host_expanded {
-        ...EventHostExpandedFragment
-    }
-    cohosts_expanded(limit: 25) {
-        ...EventHostExpandedFragment
-    }
-    new_new_photos_expanded(limit: 25) {
-        key
-        bucket
-    }
-    ...EventPeopleFragment
-    ...EventMatrixFragment
-    start
-    end
-    cost
-    currency
-    description
-    broadcasts {
-        provider_id
-    }
-    address {
-        _id
-        street_1
-        city
-        title
-        region
-    }
-    latitude
-    longitude
-    guest_limit
-    guest_limit_per
-    virtual
-    private
-    invited_count
-    checkin_count
-    attending_count
-    pending_request_count
-    guest_directory_enabled
+    region
+  }
+  latitude
+  longitude
+  guest_limit
+  guest_limit_per
+  virtual
+  private
+  invited_count
+  checkin_count
+  attending_count
+  pending_request_count
+  guest_directory_enabled
 }
 
 fragment EventCohostRequestFragment on EventCohostRequest {
+  _id
+  event
+  state
+  to_expanded {
     _id
-    event
-    state
-    to_expanded {
-        _id
-        name
-        username
-        new_photos_expanded(limit: 1) {
-            _id
-            key
-            bucket
-        }
+    name
+    username
+    new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
     }
+  }
+}
+
+fragment EventSubEventFragment on Event {
+  subevent_enabled
+  subevent_parent
+  subevent_parent_expanded {
+    _id
+  }
+  subevent_settings {
+    ticket_required_for_creation
+    ticket_required_for_purchase
+  }
+  inherited_cohosts
 }

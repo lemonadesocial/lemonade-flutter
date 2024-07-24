@@ -1,5 +1,6 @@
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -12,7 +13,14 @@ import 'package:timezone/timezone.dart';
 part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
-  CreateEventBloc() : super(const CreateEventState()) {
+  final String? parentEventId;
+  CreateEventBloc({
+    this.parentEventId,
+  }) : super(
+          CreateEventState(
+            parentEventId: parentEventId,
+          ),
+        ) {
     on<EventTitleChanged>(_onTitleChanged);
     on<EventDescriptionChanged>(_onDescriptionChanged);
     on<VirtualChanged>(_onVirtualChanged);
@@ -83,7 +91,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      var input = Input$EventInput(
+      Input$EventInput input = Input$EventInput(
         title: title.value,
         description: description.value,
         private: event.private,
@@ -113,6 +121,14 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
               )
             : null,
         published: false,
+        subevent_parent: parentEventId,
+        subevent_enabled: event.subEventEnabled,
+        subevent_settings: Input$SubeventSettingsInput(
+          ticket_required_for_creation:
+              event.subEventSettings?.ticketRequiredForCreation,
+          ticket_required_for_purchase:
+              event.subEventSettings?.ticketRequiredForPurchase,
+        ),
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
@@ -152,6 +168,8 @@ class CreateEventEvent with _$CreateEventEvent {
     Address? address,
     String? guestLimit,
     String? guestLimitPer,
+    bool? subEventEnabled,
+    SubEventSettings? subEventSettings,
   }) = FormSubmitted;
 }
 
@@ -164,5 +182,7 @@ class CreateEventState with _$CreateEventState {
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     String? eventId,
+    // Subevent related
+    String? parentEventId,
   }) = _CreateEventState;
 }

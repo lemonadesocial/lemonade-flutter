@@ -39,7 +39,7 @@ class AIChatCommandView extends StatelessWidget {
         label: t.home.event,
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const CreateEventRoute());
+          AutoRouter.of(context).navigate(CreateEventRoute());
         },
       ),
       // TODO: Temporary comment for AppStore/PlayStore review

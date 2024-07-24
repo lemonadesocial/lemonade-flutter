@@ -6,5 +6,6 @@ mutation UpdateEvent($input: EventInput!, $id: MongoID!) {
     ...EventOfferFragment
     ...EventPaymentAccountFragment
     ...EventTicketTypesFragment
+    ...EventSubEventFragment
   }
 }

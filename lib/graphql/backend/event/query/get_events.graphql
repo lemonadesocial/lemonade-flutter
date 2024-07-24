@@ -6,6 +6,8 @@ query GetEvents(
   $accepted: MongoID
   $limit: Int
   $skip: Int
+  $tags: [String!]
+  $subevent_parent: MongoID
 ) {
   events: getEvents(
     highlight: $highlight
@@ -13,6 +15,8 @@ query GetEvents(
     accepted: $accepted
     limit: $limit
     skip: $skip
+    tags: $tags
+    subevent_parent: $subevent_parent
   ) {
     ...EventFields
     event_ticket_types {
