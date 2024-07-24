@@ -2,10 +2,10 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_checkin_guests_action.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_basic_info_card.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_create_sub_side_event_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/cast_on_farcaster_button/cast_on_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -126,7 +126,7 @@ class HostEventDetailView extends StatelessWidget {
                             horizontal: Spacing.smMedium,
                           ),
                           sliver: SliverToBoxAdapter(
-                            child: HostEventCreateSubSideEventButton(
+                            child: CreateSubSideEventButton(
                               event: event,
                             ),
                           ),
