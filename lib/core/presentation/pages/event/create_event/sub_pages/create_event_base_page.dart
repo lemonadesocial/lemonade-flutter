@@ -5,6 +5,7 @@ import 'package:app/core/application/event/event_location_setting_bloc/event_loc
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -137,6 +138,24 @@ class CreateEventBasePage extends StatelessWidget {
                       ),
                       sliver: const SliverToBoxAdapter(
                         child: EventDateTimeSettingSection(),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 30.h),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: SelectEventTagsDropdown(
+                          onChange: (tags) {
+                            context.read<CreateEventBloc>().add(
+                                  CreateEventEvent.tagsChanged(tags: tags),
+                                );
+                          },
+                          initialSelectedTags: const [],
+                        ),
                       ),
                     ),
                     SliverPadding(
