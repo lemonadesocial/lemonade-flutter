@@ -29,6 +29,9 @@ class EventCollaborationsGridConfig extends StatelessWidget {
       case EventConfigurationType.speakers:
         AutoRouter.of(context).navigate(const EventSpeakersRoute());
         break;
+      case EventConfigurationType.team:
+        AutoRouter.of(context).navigate(const EventTeamMembersSettingRoute());
+        break;
       default:
         SnackBarUtils.showComingSoon();
     }

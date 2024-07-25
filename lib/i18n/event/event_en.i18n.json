@@ -209,7 +209,8 @@
         "program": "Program",
         "faq": "FAQ",
         "info": "Info",
-        "guests": "Guests"
+        "guests": "Guests",
+        "team": "Team"
     },
     "rewards": "Rewards",
     "addPoap": "Add POAP",
@@ -649,5 +650,15 @@
     },
     "eventTags": {
         "addTags": "Add tags"
+    },
+    "teamMembers": {
+        "title": "Team Members",
+        "searchMembers": "Search members",
+        "addTeamMember": "Add team member",
+        "addTeamMemberDescription": "Manage your team members and define the access control",
+        "chooseRole": "Choose role",
+        "visibleOnEvent": "Visible on event",
+        "accessControl": "Access control",
+        "eventRoles": "Event Roles"
     }
 }

@@ -288,6 +288,9 @@ final eventDetailRoutes = AutoRoute(
         AutoRoute(
           page: EventPhotosSettingRoute.page,
         ),
+        AutoRoute(
+          page: EventTeamMembersSettingRoute.page,
+        ),
       ],
     ),
     AutoRoute(
