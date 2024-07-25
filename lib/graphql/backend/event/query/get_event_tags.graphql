@@ -1,0 +1,3 @@
+query GetEventTags($all: Boolean) {
+  getEventTags(all: $all)
+}

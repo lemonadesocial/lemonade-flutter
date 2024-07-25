@@ -203,6 +203,7 @@ const eventFragment = '''
       cost
     }
   }
+  tags
   ...eventPeopleFragment
   ...eventMatrixFragment
 }
@@ -267,6 +268,21 @@ const eventTicketsFragment = '''
   }
 ''';
 
+const eventSubEventFragment = '''
+  fragment eventSubEventFragment on Event {
+    subevent_enabled
+    subevent_parent
+    subevent_parent_expanded {
+      _id  
+    }
+    subevent_settings {
+      ticket_required_for_creation
+      ticket_required_for_purchase
+    }
+    inherited_cohosts
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $eventFragment
   $eventOfferFragment
@@ -277,6 +293,7 @@ final getEventDetailQuery = gql('''
   $eventPaymentTicketsDiscountFragment
   $eventFrequentQuestionsFragment
   $eventTicketsFragment
+  $eventSubEventFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -289,6 +306,7 @@ final getEventDetailQuery = gql('''
       ...eventPaymentTicketsDiscountFragment
       ...eventFrequentQuestionsFragment
       ...eventTicketsFragment
+      ...eventSubEventFragment
     }
   }
 ''');

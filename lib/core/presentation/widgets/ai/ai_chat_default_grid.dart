@@ -95,7 +95,7 @@ class AIChatDefaultGrid extends StatelessWidget {
       case AIMetadataAction.createPost:
         AutoRouter.of(context).navigate(const CreatePostRoute());
       case AIMetadataAction.createEvent:
-        AutoRouter.of(context).navigate(const CreateEventRoute());
+        AutoRouter.of(context).navigate(CreateEventRoute());
       default:
         break;
     }

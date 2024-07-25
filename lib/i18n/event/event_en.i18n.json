@@ -135,6 +135,7 @@
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
     "eventCreation": {
         "createEvent": "Create event",
+        "createSubEvent": "Create sub-event",
         "title": "Title",
         "titleAndDescription": "Title & Description",
         "titleHint": "Enter title",
@@ -627,6 +628,29 @@
             "claimSplitSuccessDescription": "Congratulations! You have successfully claimed your sales split"
         }
     },
+    "subEvent": {
+        "subEvent": "Sub-event",
+        "subEvents": "Sub-events",
+        "createSubEvent": "Create sub-event",
+        "createSubEventDescription": "Host mini events within the main event"
+    },
+    "subEventSettings": {
+        "allowSubEvent": "Allow sub-events",
+        "allowSubEventDescription": "Guests can create events inside your event",
+        "subEventSettings": "Sub-event settings",
+        "requireTicketToCreate": "Require ticket to create",
+        "requireTicketToCreateDescription": "Guests must hold parent event ticket to create",
+        "requireTicketToAttend": "Require ticket to attend",
+        "requireTicketToAttendDescription": "Guests must hold parent event ticket to attend",
+        "viewSubEvents": "View sub-events"
+    },
+    "sideEvent": {
+        "createSideEvent": "Create side event",
+        "createSideEventDescription": "Host independent events within the main event"
+    },
+    "eventTags": {
+        "addTags": "Add tags"
+    },
     "teamMembers": {
         "title": "Team Members",
         "searchMembers": "Search members",
@@ -636,5 +660,5 @@
         "visibleOnEvent": "Visible on event",
         "accessControl": "Access control",
         "eventRoles": "Event Roles"
-    }
+    },
 }

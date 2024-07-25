@@ -1,5 +1,6 @@
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -10,11 +11,28 @@ part 'edit_event_detail_bloc.freezed.dart';
 
 class EditEventDetailBloc
     extends Bloc<EditEventDetailEvent, EditEventDetailState> {
-  EditEventDetailBloc() : super(EditEventDetailState()) {
+  final String? parentEventId;
+  EditEventDetailBloc({
+    this.parentEventId,
+  }) : super(
+          EditEventDetailState(
+            parentEventId: parentEventId,
+          ),
+        ) {
     on<EditEventDetailEventUpdateEvent>(_onUpdate);
+    on<EditEventDetailEventUpdateParentEvent>(_onUpdateParentEventId);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
+
+  void _onUpdateParentEventId(
+    EditEventDetailEventUpdateParentEvent event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(parentEventId: event.parentEventId),
+    );
+  }
 
   Future<void> _onUpdate(
     EditEventDetailEventUpdateEvent event,
@@ -54,6 +72,13 @@ class EditEventDetailBloc
             : null,
         speaker_users: event.speakerUsers ?? [],
         timezone: event.timezone,
+        subevent_enabled: event.subEventEnabled,
+        subevent_settings: Input$SubeventSettingsInput(
+          ticket_required_for_creation:
+              event.subEventSettings?.ticketRequiredForCreation,
+          ticket_required_for_purchase:
+              event.subEventSettings?.ticketRequiredForPurchase,
+        ),
       ),
       id: event.eventId,
     );
@@ -72,6 +97,10 @@ class EditEventDetailBloc
 
 @freezed
 class EditEventDetailEvent with _$EditEventDetailEvent {
+  const factory EditEventDetailEvent.updateParentEvent({
+    String? parentEventId,
+  }) = EditEventDetailEventUpdateParentEvent;
+
   const factory EditEventDetailEvent.update({
     required String eventId,
     bool? virtual,
@@ -84,6 +113,8 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     List<String>? speakerUsers,
     bool? approvalRequired,
     String? timezone,
+    bool? subEventEnabled,
+    SubEventSettings? subEventSettings,
   }) = EditEventDetailEventUpdateEvent;
 }
 
@@ -93,6 +124,7 @@ class EditEventDetailState with _$EditEventDetailState {
     @Default(EditEventDetailBlocStatus.initial)
     EditEventDetailBlocStatus status,
     Event? event,
+    String? parentEventId,
   }) = _EditEventDetailState;
 
   factory EditEventDetailState.initial() => EditEventDetailState();

@@ -149,7 +149,7 @@ class AIChatCard extends StatelessWidget {
           AutoRouter.of(context).navigate(const CreatePostRoute());
         } else if (targetObject.action == AIMetadataAction.createEvent) {
           Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const CreateEventRoute());
+          AutoRouter.of(context).navigate(CreateEventRoute());
         }
       },
     );

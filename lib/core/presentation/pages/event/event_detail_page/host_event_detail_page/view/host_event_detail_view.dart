@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/cast_on_farcaster_button/cast_on_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -119,6 +120,21 @@ class HostEventDetailView extends StatelessWidget {
                       SliverPadding(
                         padding: EdgeInsets.only(top: Spacing.xLarge),
                       ),
+                      if (event.subeventEnabled == true) ...[
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: CreateSubSideEventButton(
+                              event: event,
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.xLarge),
+                        ),
+                      ],
                       SliverPadding(
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),

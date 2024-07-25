@@ -40,7 +40,9 @@ class EventControlPanelPage extends StatelessWidget
           create: (context) => EventLocationSettingBloc(),
         ),
         BlocProvider(
-          create: (context) => EventGuestSettingsBloc(),
+          create: (context) => EventGuestSettingsBloc(
+            parentEventId: event?.subeventParent,
+          ),
         ),
         BlocProvider(
           create: (context) => GetUsersBloc(),

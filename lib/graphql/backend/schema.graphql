@@ -37,15 +37,16 @@ type Query {
   getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getEventPendingInvites: GetEventPendingInvitesResponse!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
-  getMyEvents(state: GetEventsState, skip: Int! = 0, limit: Int! = 25): [Event!]!
+  getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
   getEvent(_id: MongoID!): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean): [Event!]!
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
   getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
   getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
+  getEventTags(all: Boolean): [String!]!
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
@@ -89,6 +90,7 @@ type Query {
   getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
   getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
+  tgGetMyDialogs: ScrapDialogResult!
   exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(
@@ -225,6 +227,7 @@ type User {
   twitter_user_info: JSON
   twitter2_user_info: JSON
   zoom_user_info: JSON
+  telegram_user_info: JSON
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -508,8 +511,13 @@ type Event {
   invited_count: Float
   inviter_user_map: JSON
   matrix_event_room_id: String
+  inherited_cohosts: [MongoID!]
+  subevent_enabled: Boolean
+  subevent_settings: SubeventSettings
+  subevent_parent: MongoID
   url: String
   url_go: String
+  telegram_groups: [TelegramDialog!]
   broadcasts: [Broadcast!]
   event_ticket_types: [EventTicketType!]
   pending_request_count: Float
@@ -517,6 +525,7 @@ type Event {
   has_terms_accepted: Boolean
   data: JSON
   host_expanded: User
+  subevent_parent_expanded: Event
   cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   invited_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   pending_expanded(skip: Int! = 0, limit: Int! = 25): [User]
@@ -620,6 +629,17 @@ type Video {
   provider_id: String!
   title: String
   thumbnail: String
+}
+
+type SubeventSettings {
+  ticket_required_for_creation: Boolean
+  ticket_required_for_purchase: Boolean
+}
+
+type TelegramDialog {
+  id: Float
+  photo: MongoID
+  title: String
 }
 
 type Broadcast {
@@ -1415,6 +1435,7 @@ type UserWithEmail {
   twitter_user_info: JSON
   twitter2_user_info: JSON
   zoom_user_info: JSON
+  telegram_user_info: JSON
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -2276,6 +2297,50 @@ type StripeCard {
   last4: String!
 }
 
+type ScrapDialogResult {
+  user: TgUser
+  dialogs: [TgDialog!]
+}
+
+type TgUser {
+  self: Boolean
+  contact: Boolean
+  mutualContact: Boolean
+  deleted: Boolean
+  bot: Boolean
+  botChatHistory: Boolean
+  botNochats: Boolean
+  verified: Boolean
+  restricted: Boolean
+  min: Boolean
+  botInlineGeo: Boolean
+  support: Boolean
+  scam: Boolean
+  applyMinPhoto: Boolean
+  fake: Boolean
+  botAttachMenu: Boolean
+  premium: Boolean
+  attachMenuEnabled: Boolean
+  botCanEdit: Boolean
+  closeFriend: Boolean
+  storiesHidden: Boolean
+  storiesUnavailable: Boolean
+  contactRequirePremium: Boolean
+  botBusiness: Boolean
+  firstName: String
+  lastName: String
+  username: String
+  phone: String
+  botInlinePlaceholder: String
+  langCode: String
+}
+
+type TgDialog {
+  id: Float
+  title: String
+  photo: MongoID
+}
+
 type ExportedTickets {
   tickets: [TicketExport!]!
   count: Float!
@@ -2635,6 +2700,8 @@ type Mutation {
   deleteStore(_id: MongoID!): Boolean!
   createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
+  tgSendCode(input: PermissionInput!): String!
+  tgVerify(input: VerifyCodeInput!): Boolean!
   cancelTickets(input: CancelTicketsInput!): Boolean!
   assignTickets(input: AssignTicketsInput!): Boolean!
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
@@ -2851,6 +2918,10 @@ input EventInput {
   welcome_video: VideoInput
   zones_menu_text: String
   guest_directory_enabled: Boolean
+  subevent_enabled: Boolean
+  subevent_settings: SubeventSettingsInput
+  subevent_parent: MongoID
+  telegram_groups: [TelegramDialogInput!]
 }
 
 input ApplicationProfileFieldInput {
@@ -2952,6 +3023,17 @@ input VideoInput {
   provider_id: String!
   title: String
   thumbnail: String
+}
+
+input SubeventSettingsInput {
+  ticket_required_for_creation: Boolean
+  ticket_required_for_purchase: Boolean
+}
+
+input TelegramDialogInput {
+  id: Float
+  photo: MongoID
+  title: String
 }
 
 input AcceptEventTermsInput {
@@ -3503,6 +3585,16 @@ input SalesTaxInput {
   ratio_map: JSON
   countries: [String!]
   regions: [String!]
+}
+
+input PermissionInput {
+  phone_number: String!
+}
+
+input VerifyCodeInput {
+  phone_number: String!
+  phone_code_hash: String!
+  phone_code: String!
 }
 
 input CancelTicketsInput {
