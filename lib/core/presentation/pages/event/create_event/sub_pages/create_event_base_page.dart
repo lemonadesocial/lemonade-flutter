@@ -65,7 +65,6 @@ class CreateEventBasePage extends StatelessWidget {
             child: Stack(
               children: [
                 CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
                   slivers: [
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
@@ -172,7 +171,7 @@ class CreateEventBasePage extends StatelessWidget {
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 15,
+                  bottom: 0,
                   child: _buildSubmitButton(context),
                 ),
               ],
@@ -185,54 +184,58 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.smMedium,
-            vertical: Spacing.xSmall,
-          ),
-          child: LinearGradientButton(
-            label: t.event.eventCreation.createEvent,
-            height: 48.h,
-            radius: BorderRadius.circular(24),
-            textStyle: Typo.medium.copyWith(),
-            mode: GradientButtonMode.lavenderMode,
-            onTap: () {
-              Vibrate.feedback(FeedbackType.light);
-              final eventGuestSettingsState =
-                  context.read<EventGuestSettingsBloc>().state;
-              final start =
-                  context.read<EventDateTimeSettingsBloc>().state.start.value ??
-                      EventDateTimeConstants.defaultStartDateTime;
-              final end =
-                  context.read<EventDateTimeSettingsBloc>().state.end.value ??
-                      EventDateTimeConstants.defaultEndDateTime;
-              final selectedAddress = context
-                  .read<EventLocationSettingBloc>()
-                  .state
-                  .selectedAddress;
-              final timezone =
-                  context.read<EventDateTimeSettingsBloc>().state.timezone ??
-                      '';
-              context.read<CreateEventBloc>().add(
-                    FormSubmitted(
-                      start: start,
-                      end: end,
-                      timezone: timezone,
-                      address: selectedAddress,
-                      guestLimit: eventGuestSettingsState.guestLimit,
-                      guestLimitPer: eventGuestSettingsState.guestLimitPer,
-                      approvalRequired:
-                          eventGuestSettingsState.approvalRequired,
-                      private: eventGuestSettingsState.private,
-                      subEventEnabled: eventGuestSettingsState.subEventEnabled,
-                      subEventSettings:
-                          eventGuestSettingsState.subEventSettings,
-                    ),
-                  );
-            },
-            loadingWhen: state.status.isInProgress,
+        return Container(
+          color: colorScheme.background,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.smMedium,
+              vertical: Spacing.xSmall,
+            ),
+            child: LinearGradientButton.primaryButton(
+              label: t.event.eventCreation.createEvent,
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                final eventGuestSettingsState =
+                    context.read<EventGuestSettingsBloc>().state;
+                final start = context
+                        .read<EventDateTimeSettingsBloc>()
+                        .state
+                        .start
+                        .value ??
+                    EventDateTimeConstants.defaultStartDateTime;
+                final end =
+                    context.read<EventDateTimeSettingsBloc>().state.end.value ??
+                        EventDateTimeConstants.defaultEndDateTime;
+                final selectedAddress = context
+                    .read<EventLocationSettingBloc>()
+                    .state
+                    .selectedAddress;
+                final timezone =
+                    context.read<EventDateTimeSettingsBloc>().state.timezone ??
+                        '';
+                context.read<CreateEventBloc>().add(
+                      FormSubmitted(
+                        start: start,
+                        end: end,
+                        timezone: timezone,
+                        address: selectedAddress,
+                        guestLimit: eventGuestSettingsState.guestLimit,
+                        guestLimitPer: eventGuestSettingsState.guestLimitPer,
+                        approvalRequired:
+                            eventGuestSettingsState.approvalRequired,
+                        private: eventGuestSettingsState.private,
+                        subEventEnabled:
+                            eventGuestSettingsState.subEventEnabled,
+                        subEventSettings:
+                            eventGuestSettingsState.subEventSettings,
+                      ),
+                    );
+              },
+              loadingWhen: state.status.isInProgress,
+            ),
           ),
         );
       },
