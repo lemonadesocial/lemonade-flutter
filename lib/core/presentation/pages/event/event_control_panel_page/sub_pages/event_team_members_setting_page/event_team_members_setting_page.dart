@@ -1,9 +1,12 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_item_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_search_bar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -51,6 +54,20 @@ class _EventTeamMembersSettingPageViewState
       appBar: LemonAppBar(
         backgroundColor: colorScheme.background,
         title: t.event.teamMembers.title,
+        actions: [
+          InkWell(
+            onTap: () {},
+            child: ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icInfo.svg(
+                colorFilter: filter,
+                width: Sizing.medium / 2,
+                height: Sizing.medium / 2,
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
+        ],
       ),
       backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
@@ -58,8 +75,8 @@ class _EventTeamMembersSettingPageViewState
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall,
+            padding: EdgeInsets.only(
+              left: Spacing.xSmall,
             ),
             child: EventTeamMembersSearchBar(
               textController: _textController,
@@ -71,6 +88,7 @@ class _EventTeamMembersSettingPageViewState
           Padding(
             padding: EdgeInsets.only(
               left: Spacing.small,
+              bottom: Spacing.xSmall,
             ),
             child: SizedBox(
               height: Sizing.medium,
@@ -99,7 +117,39 @@ class _EventTeamMembersSettingPageViewState
               ),
             ),
           ),
+          const Expanded(
+            child: CustomScrollView(
+              slivers: [_EventTeamMembersList()],
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _EventTeamMembersList extends StatelessWidget {
+  const _EventTeamMembersList();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        left: Spacing.small,
+        right: Spacing.small,
+        bottom: Spacing.xLarge,
+      ),
+      sliver: SliverList.separated(
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return EventTeamMemberItemWidget(
+            title: 'Justin Saris',
+            subTitle: '@jessie.bessie',
+            onTap: () {},
+          );
+        },
+        separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
       ),
     );
   }
