@@ -64,6 +64,9 @@ class EventTeamMembersSearchBar extends StatelessWidget {
           width: Spacing.xSmall,
         ),
         const _AddTeamMemberButton(),
+        SizedBox(
+          width: Spacing.xSmall,
+        ),
       ],
     );
   }

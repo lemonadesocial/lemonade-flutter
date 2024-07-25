@@ -633,6 +633,8 @@
         "addTeamMember": "Add team member",
         "addTeamMemberDescription": "Manage your team members and define the access control",
         "chooseRole": "Choose role",
-        "visibleOnEvent": "Visible on event"
+        "visibleOnEvent": "Visible on event",
+        "accessControl": "Access control",
+        "eventRoles": "Event Roles"
     }
 }
