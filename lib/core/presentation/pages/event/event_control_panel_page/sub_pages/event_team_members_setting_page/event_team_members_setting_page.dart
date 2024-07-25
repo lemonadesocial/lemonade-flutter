@@ -123,6 +123,7 @@ class _EventTeamMembersSettingPageViewState
                   borderColor: selected == true
                       ? Colors.transparent
                       : colorScheme.outline,
+                  // TODO: Will integrate with backend data soon
                   label: StringUtils.capitalize("Co-host"),
                   radius: BorderRadius.circular(LemonRadius.button),
                 );
@@ -157,6 +158,7 @@ class _EventTeamMembersList extends StatelessWidget {
       sliver: SliverList.separated(
         itemCount: 8,
         itemBuilder: (context, index) {
+          // TODO: Will integrate with backend data soon
           return EventTeamMemberItemWidget(
             title: 'Justin Saris',
             subTitle: '@jessie.bessie',
