@@ -25,6 +25,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<EventDescriptionChanged>(_onDescriptionChanged);
     on<VirtualChanged>(_onVirtualChanged);
     on<FormSubmitted>(_onFormSubmitted);
+    on<TagsChanged>(_onTagsChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -66,6 +67,17 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     emit(
       state.copyWith(
         virtual: event.virtual,
+      ),
+    );
+  }
+
+  Future<void> _onTagsChanged(
+    TagsChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        tags: event.tags,
       ),
     );
   }
@@ -129,6 +141,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           ticket_required_for_purchase:
               event.subEventSettings?.ticketRequiredForPurchase,
         ),
+        tags: state.tags,
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
@@ -159,6 +172,9 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.virtualChanged({required bool virtual}) =
       VirtualChanged;
 
+  const factory CreateEventEvent.tagsChanged({required List<String> tags}) =
+      TagsChanged;
+
   const factory CreateEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
@@ -181,6 +197,7 @@ class CreateEventState with _$CreateEventState {
     @Default(true) bool virtual,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default([]) List<String> tags,
     String? eventId,
     // Subevent related
     String? parentEventId,

@@ -646,5 +646,8 @@
     "sideEvent": {
         "createSideEvent": "Create side event",
         "createSideEventDescription": "Host independent events within the main event"
+    },
+    "eventTags": {
+        "addTags": "Add tags"
     }
 }

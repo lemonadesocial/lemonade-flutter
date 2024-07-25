@@ -203,6 +203,7 @@ const eventFragment = '''
       cost
     }
   }
+  tags
   ...eventPeopleFragment
   ...eventMatrixFragment
 }

@@ -75,6 +75,7 @@ class Event with _$Event {
     Event? subeventParentExpanded,
     SubEventSettings? subeventSettings,
     List<String>? inheritedCohosts,
+    List<String>? tags,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -171,6 +172,7 @@ class Event with _$Event {
           ? SubEventSettings.fromDto(dto.subeventSettings!)
           : null,
       inheritedCohosts: dto.inheritedCohosts,
+      tags: dto.tags,
     );
   }
 
