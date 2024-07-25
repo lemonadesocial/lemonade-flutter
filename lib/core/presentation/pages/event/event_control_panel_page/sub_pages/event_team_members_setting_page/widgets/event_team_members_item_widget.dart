@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -79,12 +78,14 @@ class EventTeamMemberItemWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
-                _RoleName(roleName: 'Creator'),
+                // TODO: Integrate with real data soon
+                const _RoleName(roleName: 'Creator'),
                 SizedBox(width: Spacing.xSmall),
                 Assets.icons.icMoreHoriz.svg(
-                    width: Sizing.xSmall,
-                    height: Sizing.xSmall,
-                    color: colorScheme.onSecondary),
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  color: colorScheme.onSecondary,
+                ),
               ],
             ),
           ),
@@ -96,7 +97,6 @@ class EventTeamMemberItemWidget extends StatelessWidget {
 
 class _RoleName extends StatelessWidget {
   const _RoleName({
-    super.key,
     required this.roleName,
   });
 
@@ -122,7 +122,7 @@ class _RoleName extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Creator',
+            roleName,
             style: Typo.small.copyWith(
               height: 0,
               color: colorScheme.onPrimary,

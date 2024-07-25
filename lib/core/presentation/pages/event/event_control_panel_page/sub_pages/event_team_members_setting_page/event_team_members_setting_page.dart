@@ -148,7 +148,6 @@ class _EventTeamMembersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     return SliverPadding(
       padding: EdgeInsets.only(
         left: Spacing.small,

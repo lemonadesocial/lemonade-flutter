@@ -44,7 +44,7 @@ class EventRoleAccessControlBottomSheetState
               backgroundColor: LemonColor.atomicBlack,
             ),
             const _RoleTags(),
-            const _AccessControlList()
+            const _AccessControlList(),
           ],
         ),
       ),
@@ -57,7 +57,6 @@ class _RoleTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.only(
@@ -96,7 +95,7 @@ class _RoleTags extends StatelessWidget {
 }
 
 class _AccessControlList extends StatelessWidget {
-  const _AccessControlList({super.key});
+  const _AccessControlList();
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +182,7 @@ class _AccessControlItem extends StatelessWidget {
               color: colorScheme.onPrimary,
               height: 0,
             ),
-          )
+          ),
         ],
       ),
     );
