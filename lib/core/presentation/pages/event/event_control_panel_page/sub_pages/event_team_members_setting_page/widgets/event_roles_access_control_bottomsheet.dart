@@ -77,13 +77,11 @@ class _RoleTags extends StatelessWidget {
             final selected = index == 0;
             return LemonOutlineButton(
               onTap: () {},
-              textColor: selected == true
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSecondary,
+              textColor:
+                  selected ? colorScheme.onPrimary : colorScheme.onSecondary,
               backgroundColor:
-                  selected == true ? colorScheme.outline : Colors.transparent,
-              borderColor:
-                  selected == true ? Colors.transparent : colorScheme.outline,
+                  selected ? colorScheme.outline : Colors.transparent,
+              borderColor: selected ? Colors.transparent : colorScheme.outline,
               label: StringUtils.capitalize("Co-host"),
               radius: BorderRadius.circular(LemonRadius.button),
             );

@@ -156,13 +156,17 @@ class _EventTeamMembersList extends StatelessWidget {
         bottom: Spacing.xLarge,
       ),
       sliver: SliverList.separated(
-        itemCount: 8,
+        itemCount: 10,
         itemBuilder: (context, index) {
           // TODO: Will integrate with backend data soon
+          final isFirst = index == 0;
+          final isLast = index == 9;
           return EventTeamMemberItemWidget(
             title: 'Justin Saris',
             subTitle: '@jessie.bessie',
             onTap: () {},
+            isFirst: isFirst,
+            isLast: isLast,
           );
         },
         separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),

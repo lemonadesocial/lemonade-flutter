@@ -14,11 +14,15 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.onTap,
+    this.isFirst = false,
+    this.isLast = false,
   });
 
   final String title;
   final String subTitle;
   final VoidCallback onTap;
+  final bool? isFirst;
+  final bool? isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,20 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.medium),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          topRight: Radius.circular(
+            isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          bottomLeft: Radius.circular(
+            isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+          bottomRight: Radius.circular(
+            isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
+          ),
+        ),
       ),
       clipBehavior: Clip.hardEdge,
       child: Column(
@@ -113,7 +130,7 @@ class _RoleName extends StatelessWidget {
       decoration: ShapeDecoration(
         color: LemonColor.white06,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+          borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
       ),
       child: Row(
