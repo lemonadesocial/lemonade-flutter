@@ -113,7 +113,7 @@ class _RoleName extends StatelessWidget {
       decoration: ShapeDecoration(
         color: LemonColor.white06,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(LemonRadius.normal),
+          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         ),
       ),
       child: Row(
