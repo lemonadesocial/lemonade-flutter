@@ -46,11 +46,6 @@ class EventTeamMembersFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
-          orElse: () => null,
-          fetched: (event) => event,
-        );
-
     return Scaffold(
       appBar: const LemonAppBar(),
       resizeToAvoidBottomInset: false,
@@ -97,126 +92,23 @@ class EventTeamMembersFormPage extends StatelessWidget {
                     child: SizedBox(height: Spacing.large),
                   ),
                   SliverToBoxAdapter(
-                      child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Column(
-                            children: [_CircleNumber(label: '1')],
-                          ),
-                          SizedBox(
-                            width: Spacing.small,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                t.event.teamMembers.chooseRole,
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
-                                  height: 0,
-                                ),
-                              ),
-                              SizedBox(
-                                height: Spacing.xSmall,
-                              ),
-                              // const ChooseRoleDropdown(ticketTypes: []),
-                              Container(
-                                width: 300,
-                                height: 60,
-                                padding: const EdgeInsets.all(18),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 1,
-                                      color: Colors.white
-                                          .withOpacity(0.09000000357627869),
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ThemeSvgIcon(
-                                      color: colorScheme.onPrimary,
-                                      builder: (colorFilter) =>
-                                          Assets.icons.icEyeOutline.svg(
-                                        colorFilter: colorFilter,
-                                        width: 18.w,
-                                        height: 18.w,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Container(
-                                        height: 18,
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Visible on event',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontFamily: 'Switzer Variable',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: Spacing.xSmall),
-                                    FlutterSwitch(
-                                      inactiveColor: colorScheme.outline,
-                                      inactiveToggleColor:
-                                          colorScheme.onSurfaceVariant,
-                                      activeColor: LemonColor.switchActive,
-                                      activeToggleColor: colorScheme.onPrimary,
-                                      height: 24.h,
-                                      width: 42.w,
-                                      value: true,
-                                      padding: 3.w,
-                                      onToggle: (value) {},
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30.w,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Column(
-                            children: [_CircleNumber(label: '2')],
-                          ),
-                          SizedBox(
-                            width: Spacing.small,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Column(
+                              children: [_CircleNumber(label: '1')],
+                            ),
+                            SizedBox(
+                              width: Spacing.small,
+                            ),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  t.event.teamMembers.selectTeamMembers,
+                                  t.event.teamMembers.chooseRole,
                                   style: Typo.medium.copyWith(
                                     color: colorScheme.onSecondary,
                                     height: 0,
@@ -225,21 +117,128 @@ class EventTeamMembersFormPage extends StatelessWidget {
                                 SizedBox(
                                   height: Spacing.xSmall,
                                 ),
-                                LemonTextField(
-                                  borderColor: LemonColor.white09,
-                                  hintText: t.event.teamMembers
-                                      .searchProfileOrEnterEmail,
-                                  contentPadding:
-                                      EdgeInsets.all(Spacing.smMedium),
-                                  onChange: (value) {},
+                                // const ChooseRoleDropdown(ticketTypes: []),
+                                Container(
+                                  width: 300,
+                                  height: 60,
+                                  padding: const EdgeInsets.all(18),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1,
+                                        color: Colors.white
+                                            .withOpacity(0.09000000357627869),
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ThemeSvgIcon(
+                                        color: colorScheme.onPrimary,
+                                        builder: (colorFilter) =>
+                                            Assets.icons.icEyeOutline.svg(
+                                          colorFilter: colorFilter,
+                                          width: 18.w,
+                                          height: 18.w,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      const Expanded(
+                                        child: SizedBox(
+                                          height: 18,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Visible on event',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily:
+                                                      'Switzer Variable',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: Spacing.xSmall),
+                                      FlutterSwitch(
+                                        inactiveColor: colorScheme.outline,
+                                        inactiveToggleColor:
+                                            colorScheme.onSurfaceVariant,
+                                        activeColor: LemonColor.switchActive,
+                                        activeToggleColor:
+                                            colorScheme.onPrimary,
+                                        height: 24.h,
+                                        width: 42.w,
+                                        value: true,
+                                        padding: 3.w,
+                                        onToggle: (value) {},
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30.w,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Column(
+                              children: [_CircleNumber(label: '2')],
+                            ),
+                            SizedBox(
+                              width: Spacing.small,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    t.event.teamMembers.selectTeamMembers,
+                                    style: Typo.medium.copyWith(
+                                      color: colorScheme.onSecondary,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: Spacing.xSmall,
+                                  ),
+                                  LemonTextField(
+                                    borderColor: LemonColor.white09,
+                                    hintText: t.event.teamMembers
+                                        .searchProfileOrEnterEmail,
+                                    contentPadding:
+                                        EdgeInsets.all(Spacing.smMedium),
+                                    onChange: (value) {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -303,7 +302,7 @@ class _CircleNumber extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            label ?? '',
+            label,
             textAlign: TextAlign.center,
             style: Typo.small.copyWith(
               color: colorScheme.onSecondary,

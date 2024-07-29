@@ -81,7 +81,6 @@ class _TicketTierItem extends StatelessWidget {
   final Widget? trailing;
   final EventTicketType? ticketType;
   const _TicketTierItem({
-    super.key,
     this.trailing,
     this.ticketType,
   });
