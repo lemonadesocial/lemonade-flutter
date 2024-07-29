@@ -659,6 +659,8 @@
         "chooseRole": "Choose role",
         "visibleOnEvent": "Visible on event",
         "accessControl": "Access control",
-        "eventRoles": "Event Roles"
+        "eventRoles": "Event Roles",
+        "selectTeamMembers": "Select team members",
+        "searchProfileOrEnterEmail": "Search profile or enter email"
     }
 }
