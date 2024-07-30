@@ -158,11 +158,6 @@ class MyEventTicketPageView extends StatelessWidget {
                           ),
                           SizedBox(height: Spacing.medium),
                           const AddTicketToCalendarButton(),
-                          if (Platform.isIOS) ...[
-                            SizedBox(height: Spacing.xSmall),
-                            const AddTicketToAppleWalletButton(),
-                          ],
-                          SizedBox(height: Spacing.medium),
                           BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                             builder: (context, myTicketsState) {
                               final myTicket = myTicketsState.maybeWhen(
@@ -176,9 +171,20 @@ class MyEventTicketPageView extends StatelessWidget {
                                   ),
                                 ),
                               );
-                              return MyTicketCard(
-                                event: eventDetail,
-                                myTicket: myTicket,
+                              return Column(
+                                children: [
+                                  if (Platform.isIOS) ...[
+                                    SizedBox(height: Spacing.xSmall),
+                                    AddTicketToAppleWalletButton(
+                                      ticket: myTicket,
+                                    ),
+                                  ],
+                                  SizedBox(height: Spacing.medium),
+                                  MyTicketCard(
+                                    event: eventDetail,
+                                    myTicket: myTicket,
+                                  ),
+                                ],
                               );
                             },
                           ),
