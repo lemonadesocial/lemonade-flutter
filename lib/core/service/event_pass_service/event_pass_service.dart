@@ -1,47 +1,37 @@
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:app/core/failure.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_wallet_card/core/passkit.dart';
 import 'package:http/http.dart';
-import 'package:matrix/matrix.dart' as matrix;
+import 'package:flutter_wallet_card/flutter_wallet_card.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EventPassService {
-  final String ticketId;
   final Client _client = Client();
-  EventPassService({
-    required this.ticketId,
-  });
+  EventPassService();
 
-  Future<Either<Failure, List<dynamic>>> apple() async {
+  Future<void> generateApplePassKit({required String ticketId}) async {
+    final appOauth = AppOauth();
+    final token = await appOauth.getTokenForGql();
+
     try {
-      final appOauth = AppOauth();
-      final token = await appOauth.getTokenForGql();
-      print(token);
-      final result = await _client.get(
-        Uri.parse(
-          "https://backend.staging.lemonade.social/event/pass/google/$ticketId",
-        ),
+      final response = await _client.get(
+        Uri.parse("${AppConfig.rootBackendUrl}/event/pass/apple/$ticketId"),
         headers: {"Authorization": 'Bearer $token'},
       );
-      print(
-          "https://backend.staging.lemonade.social/event/pass/google/$ticketId");
-      print(result.statusCode);
-      print(result.body.toString());
-      if (result.statusCode == 200) {
-        Map<String, dynamic> json = jsonDecode(result.body);
-        print("??????");
-        print(json);
-        if (json.tryGet('data') != null) {
-          print("???json.tryGet('data') as List<dynamic>");
-          print(json.tryGet('data') as List<dynamic>);
-          return Right(json.tryGet('data') as List<dynamic>);
-        }
-        Left(Failure(message: result.body));
-      }
-      return Left(Failure(message: result.body));
+      // Collect bytes data & write data to 1 single apple pass
+      final bytes = response.bodyBytes;
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/apple_pass.pass';
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+      final passkit = await Passkit().saveFromPath(id: 'apple', file: file);
+      await FlutterWalletCard.addPasskit(passkit);
+      await file.delete();
     } catch (e) {
-      return Left(Failure());
+      debugPrint('Error generating Apple PassKit: $e');
     }
   }
 }

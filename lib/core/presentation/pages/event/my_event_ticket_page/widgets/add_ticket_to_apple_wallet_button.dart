@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/service/event_pass_service/event_pass_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -18,7 +19,14 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        EventPassService(ticketId: ticket?.id ?? '').apple();
+        showFutureLoadingDialog(
+          context: context,
+          future: () async {
+            await EventPassService().generateApplePassKit(
+              ticketId: ticket?.id ?? '',
+            );
+          },
+        );
       },
       child: Container(
         height: 54.w,
