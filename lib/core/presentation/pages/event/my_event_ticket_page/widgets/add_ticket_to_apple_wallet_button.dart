@@ -1,4 +1,5 @@
-import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/service/event_pass_service/event_pass_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -7,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddTicketToAppleWalletButton extends StatelessWidget {
-  const AddTicketToAppleWalletButton({super.key});
+  const AddTicketToAppleWalletButton({super.key, required this.ticket});
+  final EventTicket? ticket;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        SnackBarUtils.showComingSoon();
+        EventPassService(ticketId: ticket?.id ?? '').apple();
       },
       child: Container(
         height: 54.w,
