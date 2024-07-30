@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wallet_card/core/passkit.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_wallet_card/flutter_wallet_card.dart';
 import 'package:path_provider/path_provider.dart';
 
 class EventPassService {
-  final Client _client = Client();
+  final _appOauth = getIt<AppOauth>();
+  final http.Client _client = http.Client();
   EventPassService();
 
   Future<void> generateApplePassKit({required String ticketId}) async {
-    final appOauth = AppOauth();
-    final token = await appOauth.getTokenForGql();
-
+    final token = await _appOauth.getTokenForGql();
     try {
       final response = await _client.get(
         Uri.parse("${AppConfig.rootBackendUrl}/event/pass/apple/$ticketId"),
