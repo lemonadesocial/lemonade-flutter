@@ -176,7 +176,8 @@ class MyEventTicketPageView extends StatelessWidget {
                                   if (Platform.isIOS) ...[
                                     SizedBox(height: Spacing.xSmall),
                                     AddTicketToAppleWalletButton(
-                                        ticket: myTicket)
+                                      ticket: myTicket,
+                                    ),
                                   ],
                                   SizedBox(height: Spacing.medium),
                                   MyTicketCard(
