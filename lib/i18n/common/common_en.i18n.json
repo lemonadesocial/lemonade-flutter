@@ -126,6 +126,7 @@
     "addTo": "Add to",
     "calendar": "calendar",
     "appleWallet": "Apple Wallet",
+    "googleWallet": "Google Wallet",
     "report": {
         "reportPost": "Report post",
         "reportEvent": "Report event",
