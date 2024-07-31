@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/add_ticket_to_apple_wallet_button.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/add_ticket_to_calendar_button.dart';
+import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/add_ticket_to_google_wallet_button.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/my_ticket_card.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_actions.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -176,6 +177,12 @@ class MyEventTicketPageView extends StatelessWidget {
                                   if (Platform.isIOS) ...[
                                     SizedBox(height: Spacing.xSmall),
                                     AddTicketToAppleWalletButton(
+                                      ticket: myTicket,
+                                    ),
+                                  ],
+                                  if (Platform.isAndroid) ...[
+                                    SizedBox(height: Spacing.xSmall),
+                                    AddTicketToGoogleWalletButton(
                                       ticket: myTicket,
                                     ),
                                   ],
