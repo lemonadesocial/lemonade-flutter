@@ -28,6 +28,7 @@
     "eventEnded": "Event ended",
     "myEvents": "My events",
     "selectEvents": "Select events",
+    "hostedBy": "Hosted by",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -632,7 +633,8 @@
         "subEvent": "Sub-event",
         "subEvents": "Sub-events",
         "createSubEvent": "Create sub-event",
-        "createSubEventDescription": "Host mini events within the main event"
+        "createSubEventDescription": "Host mini events within the main event",
+        "sessions": "Sessions"
     },
     "subEventSettings": {
         "allowSubEvent": "Allow sub-events",
