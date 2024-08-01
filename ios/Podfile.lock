@@ -146,6 +146,9 @@ PODS:
     - Flutter
   - flutter_vibrate (0.0.1):
     - Flutter
+  - flutter_wallet_card (1.0.0):
+    - Flutter
+    - OpenSSL-Universal
   - flutter_web_auth_2 (1.1.1):
     - Flutter
   - geolocator_apple (1.2.0):
@@ -354,6 +357,7 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
+  - flutter_wallet_card (from `.symlinks/plugins/flutter_wallet_card/ios`)
   - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
@@ -460,6 +464,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_timezone/ios"
   flutter_vibrate:
     :path: ".symlinks/plugins/flutter_vibrate/ios"
+  flutter_wallet_card:
+    :path: ".symlinks/plugins/flutter_wallet_card/ios"
   flutter_web_auth_2:
     :path: ".symlinks/plugins/flutter_web_auth_2/ios"
   geolocator_apple:
@@ -530,6 +536,7 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
+  flutter_wallet_card: a90c0ceec680b87c0c6bb04a1f6d429e171929e7
   flutter_web_auth_2: a1bc00762c408a8f80b72a538cd7ff5b601c3e71
   geolocator_apple: 9157311f654584b9bb72686c55fc02a97b73f461
   GoogleAppMeasurement: 722db6550d1e6d552b08398b69a975ac61039338

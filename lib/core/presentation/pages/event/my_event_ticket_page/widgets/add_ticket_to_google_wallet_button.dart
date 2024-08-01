@@ -8,8 +8,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AddTicketToAppleWalletButton extends StatelessWidget {
-  const AddTicketToAppleWalletButton({super.key, required this.ticket});
+class AddTicketToGoogleWalletButton extends StatelessWidget {
+  const AddTicketToGoogleWalletButton({super.key, required this.ticket});
   final EventTicket? ticket;
 
   @override
@@ -22,7 +22,7 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
         showFutureLoadingDialog(
           context: context,
           future: () async {
-            await EventPassService().generateApplePassKit(
+            await EventPassService().generateGooglePassKit(
               ticketId: ticket?.id ?? '',
             );
           },
@@ -55,7 +55,7 @@ class AddTicketToAppleWalletButton extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  t.common.appleWallet,
+                  t.common.googleWallet,
                   style: Typo.small.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w700,
