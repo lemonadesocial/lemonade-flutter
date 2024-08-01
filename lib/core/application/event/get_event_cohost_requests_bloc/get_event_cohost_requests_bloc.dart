@@ -1,29 +1,34 @@
-import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'get_event_cohost_requests_bloc.freezed.dart';
 
-class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
-  GetEventRolesBloc() : super(const GetEventRolesStateLoading()) {
-    on<GetEventRolesEventFetch>(_onFetch);
+class GetEventCohostRequestsBloc
+    extends Bloc<GetEventCohostRequestsEvent, GetEventCohostRequestsState> {
+  GetEventCohostRequestsBloc()
+      : super(const GetEventCohostRequestsStateLoading()) {
+    on<GetEventCohostRequestsEventFetch>(_onFetch);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
 
   Future<void> _onFetch(
-    GetEventRolesEventFetch event,
+    GetEventCohostRequestsEventFetch event,
     Emitter emit,
   ) async {
-    emit(const GetEventRolesState.loading());
-    final result = await eventRepository.getEventRoles();
+    emit(const GetEventCohostRequestsState.loading());
+    final result = await eventRepository.getEventCohostRequest(
+      input: Input$GetEventCohostRequestsInput(event: event.eventId),
+    );
     result.fold(
-      (failure) => emit(const GetEventRolesState.failure()),
-      (eventRoles) => emit(
-        GetEventRolesState.fetched(
-          eventRoles: eventRoles,
+      (failure) => emit(const GetEventCohostRequestsState.failure()),
+      (eventCohostRequests) => emit(
+        GetEventCohostRequestsState.fetched(
+          eventCohostRequests: eventCohostRequests,
         ),
       ),
     );
@@ -31,15 +36,19 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
 }
 
 @freezed
-class GetEventRolesEvent with _$GetEventRolesEvent {
-  const factory GetEventRolesEvent.fetch() = GetEventRolesEventFetch;
+class GetEventCohostRequestsEvent with _$GetEventCohostRequestsEvent {
+  const factory GetEventCohostRequestsEvent.fetch({
+    required String eventId,
+  }) = GetEventCohostRequestsEventFetch;
 }
 
 @freezed
-class GetEventRolesState with _$GetEventRolesState {
-  const factory GetEventRolesState.fetched({
-    required List<EventRole> eventRoles,
-  }) = GetEventRolesStateFetched;
-  const factory GetEventRolesState.loading() = GetEventRolesStateLoading;
-  const factory GetEventRolesState.failure() = GetEventRolesStateFailure;
+class GetEventCohostRequestsState with _$GetEventCohostRequestsState {
+  const factory GetEventCohostRequestsState.fetched({
+    required List<EventCohostRequest> eventCohostRequests,
+  }) = GetEventCohostRequestsStateFetched;
+  const factory GetEventCohostRequestsState.loading() =
+      GetEventCohostRequestsStateLoading;
+  const factory GetEventCohostRequestsState.failure() =
+      GetEventCohostRequestsStateFailure;
 }
