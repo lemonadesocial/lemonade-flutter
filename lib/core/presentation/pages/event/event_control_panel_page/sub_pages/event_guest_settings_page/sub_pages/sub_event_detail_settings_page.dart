@@ -1,17 +1,17 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/sub_event_settings.dart';
-import 'package:app/core/presentation/pages/event/sub_events_listing_page/sub_events_listing_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SubEventDetailSettingsPage extends StatelessWidget {
   final Event? event;
@@ -137,15 +137,10 @@ class SubEventDetailSettingsPage extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(LemonRadius.medium),
                     onTap: () {
-                      showCupertinoModalBottomSheet(
-                        context: context,
-                        expand: true,
-                        builder: ((context) {
-                          return SubEventsListingPage(
-                            parentEventId: event?.id ?? '',
-                            backgroundColor: LemonColor.atomicBlack,
-                          );
-                        }),
+                      AutoRouter.of(context).push(
+                        SubEventsListingV2Route(
+                          parentEventId: event?.id ?? '',
+                        ),
                       );
                     },
                   ),

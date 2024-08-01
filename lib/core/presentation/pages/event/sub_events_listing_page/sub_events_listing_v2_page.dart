@@ -190,7 +190,7 @@ class _SubEventsListingV2PageViewState
                 ),
               ),
               AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 200),
                 opacity: _calendarVisible ? 1 : 0,
                 child: AnimatedContainer(
                   margin: EdgeInsets.symmetric(
@@ -206,7 +206,7 @@ class _SubEventsListingV2PageViewState
                       width: 1.w,
                     ),
                   ),
-                  duration: const Duration(milliseconds: 100),
+                  duration: const Duration(milliseconds: 200),
                   height: _calendarVisible ? 300 : 0,
                   child: CalendarDatePicker2(
                     config: CalendarDatePicker2Config(
@@ -240,9 +240,6 @@ class _SubEventsListingV2PageViewState
                                 .eventsGroupByDate[date.withoutTime]
                                 ?.isNotEmpty ??
                             false;
-                        if (!_calendarVisible) {
-                          return null;
-                        }
                         return SubEventCalendarDayCellWidget(
                           date: date,
                           selected: selected,

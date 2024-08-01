@@ -29,23 +29,25 @@ class SubEventCalendarDayCellWidget extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              date.day.toString(),
-              style: textStyle,
-            ),
-            SizedBox(
-              height: 4.w,
-            ),
-            hasEvent
-                ? Icon(Icons.circle, size: 3.w, color: LemonColor.paleViolet)
-                : SizedBox(
-                    height: 3.w,
-                  ),
-          ],
+        child: FittedBox(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                date.day.toString(),
+                style: textStyle,
+              ),
+              SizedBox(
+                height: 4.w,
+              ),
+              hasEvent
+                  ? Icon(Icons.circle, size: 3.w, color: LemonColor.paleViolet)
+                  : SizedBox(
+                      height: 3.w,
+                    ),
+            ],
+          ),
         ),
       ),
     );
