@@ -7,6 +7,7 @@ import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -42,6 +43,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_roles.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -585,6 +587,23 @@ class EventRepositoryImpl implements EventRepository {
           result.parsedData!.cancelEvent.toJson(),
         ),
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<EventRole>>> getEventRoles() async {
+    final result = await client.query$GetEventRoles(
+      Options$Query$GetEventRoles(
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      (result.parsedData?.getRoles ?? [])
+          .map((item) => EventRole.fromJson(item.toJson()))
+          .toList(),
     );
   }
 }

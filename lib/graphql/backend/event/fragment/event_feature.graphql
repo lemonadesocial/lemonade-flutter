@@ -1,0 +1,6 @@
+fragment EventFeature on Feature {
+  id: _id
+  code
+  name
+  featureEnable: feature_enable
+}

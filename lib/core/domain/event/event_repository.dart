@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -127,4 +128,6 @@ abstract class EventRepository {
   Future<Either<Failure, Event>> cancelEvent({
     required String eventId,
   });
+
+  Future<Either<Failure, List<EventRole>>> getEventRoles();
 }
