@@ -7,13 +7,13 @@ class SubEventCalendarDayCellWidget extends StatelessWidget {
   final TextStyle? textStyle;
   final BoxDecoration? decoration;
   final bool selected;
-  final bool hasEvent;
+  final int eventCount;
 
   const SubEventCalendarDayCellWidget({
     super.key,
     required this.date,
     required this.selected,
-    required this.hasEvent,
+    required this.eventCount,
     this.decoration,
     this.textStyle,
   });
@@ -21,6 +21,7 @@ class SubEventCalendarDayCellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final count = eventCount > 3 ? 3 : eventCount;
     return Container(
       decoration: decoration?.copyWith(
         border: Border.all(
@@ -41,10 +42,20 @@ class SubEventCalendarDayCellWidget extends StatelessWidget {
               SizedBox(
                 height: 4.w,
               ),
-              hasEvent
-                  ? Icon(Icons.circle, size: 3.w, color: LemonColor.paleViolet)
+              count > 0
+                  ? Row(
+                      children: List.filled(count, "")
+                          .map(
+                            (_) => Icon(
+                              Icons.circle,
+                              size: 4.w,
+                              color: LemonColor.paleViolet,
+                            ),
+                          )
+                          .toList(),
+                    )
                   : SizedBox(
-                      height: 3.w,
+                      height: 4.w,
                     ),
             ],
           ),

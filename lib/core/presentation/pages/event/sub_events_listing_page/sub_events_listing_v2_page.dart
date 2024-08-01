@@ -236,14 +236,13 @@ class _SubEventsListingV2PageViewState
                         textStyle,
                       }) {
                         final selected = isSelected ?? false;
-                        final hasEvent = state
-                                .eventsGroupByDate[date.withoutTime]
-                                ?.isNotEmpty ??
-                            false;
+                        final eventCount =
+                            state.eventsGroupByDate[date.withoutTime]?.length ??
+                                0;
                         return SubEventCalendarDayCellWidget(
                           date: date,
                           selected: selected,
-                          hasEvent: hasEvent,
+                          eventCount: eventCount,
                           textStyle: textStyle,
                           decoration: decoration,
                         );

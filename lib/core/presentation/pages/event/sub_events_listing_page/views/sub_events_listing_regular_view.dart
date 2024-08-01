@@ -129,7 +129,9 @@ class _EventItem extends StatelessWidget {
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
                   _Tile(
-                    icon: Assets.icons.icCalendar.svg(
+                    icon: Icon(
+                      Icons.today_outlined,
+                      size: 15.w,
                       color: colorScheme.onSecondary,
                     ),
                     title: DateFormatUtils.fullDateWithTime(

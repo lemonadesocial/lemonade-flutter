@@ -65,7 +65,7 @@ class _SubEventsListingHourlyViewState
                 eventArranger: const SideEventArranger(
                   includeEdges: true,
                 ),
-                startHour: 5,
+                startHour: 0,
                 endHour: 24,
                 hourIndicatorSettings: HourIndicatorSettings(
                   height: 1.w,
