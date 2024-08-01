@@ -1,10 +1,12 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/string_utils.dart';
-import 'package:app/i18n/i18n.g.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,35 +36,9 @@ class _SubEventsListingHourlyViewState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Expanded(
       child: Column(
         children: [
-          if (widget.isCalendarShowing) SizedBox(height: Spacing.xSmall),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall,
-            ),
-            child: Row(
-              children: [
-                Text(
-                  DateFormatUtils.custom(
-                    widget.selectedDate ?? DateTime.now(),
-                    pattern: "dd, EEEE",
-                  ),
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Spacer(),
-                if (DateUtils.isSameDay(widget.selectedDate, DateTime.now()))
-                  Text(
-                    StringUtils.capitalize(t.common.today),
-                  ),
-              ],
-            ),
-          ),
           SizedBox(height: Spacing.xSmall),
           Expanded(
             child: NotificationListener<ScrollNotification>(
@@ -88,13 +64,9 @@ class _SubEventsListingHourlyViewState
                 heightPerMinute: 1, // height occupied by 1 minute time span.
                 eventArranger: const SideEventArranger(
                   includeEdges: true,
-                ), // To define how simultaneous events will be arranged.
-                // onEventTap: (events, date) => print(events),
-                // onEventDoubleTap: (events, date) => print(events),
-                // onEventLongTap: (events, date) => print(events),
-                // onDateLongPress: (date) => print(date),
-                startHour: 5, // To set the first hour displayed (ex: 05:00)
-                endHour: 24, // To set the end hour displayed
+                ),
+                startHour: 5,
+                endHour: 24,
                 hourIndicatorSettings: HourIndicatorSettings(
                   height: 1.w,
                   color: colorScheme.outline,
@@ -104,13 +76,6 @@ class _SubEventsListingHourlyViewState
                 onPageChange: (date, page) {
                   widget.onDateChanged?.call(date);
                 },
-                fullDayEventBuilder: (events, date) {
-                  return SizedBox(
-                    child: Column(
-                      children: events.map((e) => Text(e.title)).toList(),
-                    ),
-                  );
-                },
                 pageViewPhysics: widget.isCalendarShowing
                     ? const NeverScrollableScrollPhysics()
                     : const AlwaysScrollableScrollPhysics(),
@@ -118,6 +83,28 @@ class _SubEventsListingHourlyViewState
                     (date, events, boundary, startDuration, endDuration) {
                   if (events.isNotEmpty) {
                     return _EventItem(eventJson: events.first.event!);
+                  }
+                  return const SizedBox.shrink();
+                },
+                fullDayEventBuilder: (calendarEvents, date) {
+                  final filteredCalendarEvents =
+                      calendarEvents; // = calendarEvents.unique((item) => item.title);
+                  if (filteredCalendarEvents.isNotEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.xSmall,
+                      ),
+                      child: Column(
+                        children: filteredCalendarEvents.map((e) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: Spacing.superExtraSmall,
+                            ),
+                            child: _EventItem(eventJson: e.event!),
+                          );
+                        }).toList(),
+                      ),
+                    );
                   }
                   return const SizedBox.shrink();
                 },
@@ -140,37 +127,80 @@ class _EventItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final event = Event.fromJson(eventJson as Map<String, dynamic>);
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2.w),
-      padding: EdgeInsets.all(Spacing.xSmall),
-      decoration: BoxDecoration(
-        color: LemonColor.chineseBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-        border: Border.all(
-          color: LemonColor.paleViolet,
-          width: 1.w,
+    final isPast = event.end?.isBefore(DateTime.now()) ?? false;
+    final isFullDayEvent =
+        (event.end?.difference(event.start!).inDays ?? 0) >= 1;
+    const fulldayEventTimeFormatPattern = "MMM d • hh:mm a";
+
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          EventDetailRoute(eventId: event.id ?? ''),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 2.w),
+        padding: EdgeInsets.all(Spacing.xSmall),
+        decoration: BoxDecoration(
+          color: isPast ? LemonColor.chineseBlack : LemonColor.paleViolet12,
+          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+          border: Border.all(
+            color: LemonColor.paleViolet,
+            width: 1.w,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            event.title ?? '',
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 3.w,
+          children: [
+            Text(
+              event.title ?? '',
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          SizedBox(
-            height: Spacing.superExtraSmall,
-          ),
-          Text(
-            '${DateFormatUtils.custom(event.start ?? DateTime.now(), pattern: 'MMM d • hh:mm a')} ${DateFormatUtils.timeOnly(event.end ?? DateTime.now())}',
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
+            Row(
+              children: [
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icHostOutline.svg(
+                    colorFilter: filter,
+                    width: 12.w,
+                    height: 12.w,
+                  ),
+                ),
+                SizedBox(width: 3.w),
+                Flexible(
+                  child: Text(
+                    event.hostExpanded?.name ?? '',
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            if (isFullDayEvent)
+              Text(
+                '${DateFormatUtils.custom(
+                  event.start ?? DateTime.now(),
+                  pattern: fulldayEventTimeFormatPattern,
+                )} - ${DateFormatUtils.custom(
+                  event.end ?? DateTime.now(),
+                  pattern: fulldayEventTimeFormatPattern,
+                )}',
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

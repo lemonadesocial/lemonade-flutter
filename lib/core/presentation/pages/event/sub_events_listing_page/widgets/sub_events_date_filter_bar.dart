@@ -47,7 +47,9 @@ class SubEventsDateFilterBar extends StatelessWidget {
                 children: [
                   SizedBox(
                     child: Center(
-                      child: Assets.icons.icCalendar.svg(
+                      child: Icon(
+                        Icons.today_outlined,
+                        size: 18.w,
                         color: colorScheme.onSecondary,
                       ),
                     ),

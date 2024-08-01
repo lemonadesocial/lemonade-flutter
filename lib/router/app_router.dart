@@ -366,6 +366,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: CreateFarcasterCastRoute.page,
     ),
+    AutoRoute(
+      page: SubEventsListingV2Route.page,
+    ),
   ],
 );
 

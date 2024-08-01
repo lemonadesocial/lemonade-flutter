@@ -634,7 +634,10 @@
         "subEvents": "Sub-events",
         "createSubEvent": "Create sub-event",
         "createSubEventDescription": "Host mini events within the main event",
-        "sessions": "Sessions"
+        "sessions": "Sessions",
+        "sessionsEmptyTitle": "No sessions yet",
+        "sessionEmptyDescription": "Sessions added to this event will appear\nhere. Let’s create a session now!",
+        "createSession": "Create session"
     },
     "subEventSettings": {
         "allowSubEvent": "Allow sub-events",

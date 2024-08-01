@@ -8,6 +8,9 @@ query GetEvents(
   $skip: Int
   $tags: [String!]
   $subevent_parent: MongoID
+  $startFrom: DateTimeISO
+  $startTo: DateTimeISO
+  $unpublished: Boolean
 ) {
   events: getEvents(
     highlight: $highlight
@@ -17,6 +20,9 @@ query GetEvents(
     skip: $skip
     tags: $tags
     subevent_parent: $subevent_parent
+    start_from: $startFrom
+    start_to: $startTo
+    unpublished: $unpublished
   ) {
     ...EventFields
     event_ticket_types {
