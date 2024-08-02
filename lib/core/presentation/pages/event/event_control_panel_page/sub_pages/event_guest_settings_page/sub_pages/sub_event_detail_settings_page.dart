@@ -138,7 +138,7 @@ class SubEventDetailSettingsPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(LemonRadius.medium),
                     onTap: () {
                       AutoRouter.of(context).push(
-                        SubEventsListingV2Route(
+                        SubEventsListingRoute(
                           parentEventId: event?.id ?? '',
                         ),
                       );

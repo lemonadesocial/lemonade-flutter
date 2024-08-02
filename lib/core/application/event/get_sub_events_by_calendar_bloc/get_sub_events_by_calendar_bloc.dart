@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:collection/collection.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'get_sub_events_by_calendar_bloc.freezed.dart';
 
@@ -27,7 +29,16 @@ class GetSubEventsByCalendarBloc
             isLoading: false,
           ),
         ) {
-    on<_GetSubEventsByCalendarEventOnDateChanged>(_onDateChanged);
+    on<_GetSubEventsByCalendarEventOnDateChanged>(
+      _onDateChanged,
+      transformer: (events, mapper) => events
+          .debounceTime(
+            const Duration(
+              milliseconds: 200,
+            ),
+          )
+          .switchMap(mapper),
+    );
     on<_GetSubEventsByCalendarEventOnFetch>(_onFetch);
   }
 
@@ -56,10 +67,12 @@ class GetSubEventsByCalendarBloc
     );
     final result = await _client.query$GetEvents(
       Options$Query$GetEvents(
+        fetchPolicy: FetchPolicy.networkOnly,
         variables: Variables$Query$GetEvents(
           limit: 100,
           subevent_parent: parentEventId,
-          unpublished: true,
+          // TODO: to be confirmed with PO
+          // unpublished: true,
           startFrom:
               DateTime(state.selectedDate.year, state.selectedDate.month, 1)
                   .toUtc(),

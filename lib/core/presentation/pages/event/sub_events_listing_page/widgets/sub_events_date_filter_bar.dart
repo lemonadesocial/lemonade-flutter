@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/event/sub_events_listing_page/sub_events_listing_v2_page.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/sub_events_listing_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';

@@ -77,6 +77,24 @@ class EventDetailNavigationBarHelper {
           AutoRouter.of(context).navigate(const GuestEventRewardUsesRoute());
         },
       ),
+      if (event.subeventParent == null && event.subeventEnabled == true)
+        FeatureItem(
+          label: t.event.subEvent.subEvents,
+          iconData: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icSessions.svg(
+              colorFilter: filter,
+              width: iconSize,
+              height: iconSize,
+            ),
+          ),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).navigate(
+              SubEventsListingRoute(parentEventId: event.id ?? ''),
+            );
+          },
+        ),
       FeatureItem(
         label: t.event.configuration.lounge,
         iconData: ThemeSvgIcon(
@@ -183,6 +201,24 @@ class EventDetailNavigationBarHelper {
           );
         },
       ),
+      if (event.subeventParent == null && event.subeventEnabled == true)
+        FeatureItem(
+          label: t.event.subEvent.subEvents,
+          iconData: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icSessions.svg(
+              colorFilter: filter,
+              width: iconSize,
+              height: iconSize,
+            ),
+          ),
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).navigate(
+              SubEventsListingRoute(parentEventId: event.id ?? ''),
+            );
+          },
+        ),
       FeatureItem(
         label: t.event.configuration.lounge,
         iconData: ThemeSvgIcon(
