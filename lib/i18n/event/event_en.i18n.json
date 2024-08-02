@@ -28,6 +28,7 @@
     "eventEnded": "Event ended",
     "myEvents": "My events",
     "selectEvents": "Select events",
+    "hostedBy": "Hosted by",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -135,7 +136,6 @@
     "paymentNotSupported": "Paid tickets are not supported yet. Please kindly use our website",
     "eventCreation": {
         "createEvent": "Create event",
-        "createSubEvent": "Create sub-event",
         "title": "Title",
         "titleAndDescription": "Title & Description",
         "titleHint": "Enter title",
@@ -629,20 +629,24 @@
         }
     },
     "subEvent": {
-        "subEvent": "Sub-event",
-        "subEvents": "Sub-events",
-        "createSubEvent": "Create sub-event",
-        "createSubEventDescription": "Host mini events within the main event"
+        "subEvent": "Session",
+        "subEvents": "Sessions",
+        "createSubEvent": "Create session",
+        "createSubEventDescription": "Host mini session within the main event",
+        "sessions": "Sessions",
+        "sessionsEmptyTitle": "No sessions yet",
+        "sessionEmptyDescription": "Sessions added to this event will appear\nhere. Let’s create a session now!",
+        "createSession": "Create session"
     },
     "subEventSettings": {
-        "allowSubEvent": "Allow sub-events",
-        "allowSubEventDescription": "Guests can create events inside your event",
-        "subEventSettings": "Sub-event settings",
+        "allowSubEvent": "Allow sessions",
+        "allowSubEventDescription": "Guests can create sessions inside your event",
+        "subEventSettings": "Session settings",
         "requireTicketToCreate": "Require ticket to create",
         "requireTicketToCreateDescription": "Guests must hold parent event ticket to create",
         "requireTicketToAttend": "Require ticket to attend",
         "requireTicketToAttendDescription": "Guests must hold parent event ticket to attend",
-        "viewSubEvents": "View sub-events"
+        "viewSubEvents": "View sessions"
     },
     "sideEvent": {
         "createSideEvent": "Create side event",

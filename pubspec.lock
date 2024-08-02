@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: appcheck
-      sha256: "2682c9c270c28d83f8d87d68bb607a83882778b14c6a8da19df423be1b386520"
+      sha256: "0fcbe15b6bba67027c6f94bd177b9b319e019b51e0b49e9cd80486448c4a1909"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.5.2"
   appflowy_editor:
     dependency: "direct main"
     description:
@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.5"
+  calendar_view:
+    dependency: "direct main"
+    description:
+      name: calendar_view
+      sha256: "0268c53439f6348f11a35e8a87493843473ab7c28190fe9f38c9ee05a9621564"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   canonical_json:
     dependency: transitive
     description:
@@ -341,10 +349,10 @@ packages:
     dependency: transitive
     description:
       name: coinbase_wallet_sdk
-      sha256: "0e8d78359a2d8e6e7c57274342bb9d8b7257d4b42961a09399acc50d254aeae8"
+      sha256: "4a309b22d1d8647ab4381ac075921dba211ac642f58b2ca06c0c1fb8f58973da"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.9"
   collection:
     dependency: transitive
     description:
@@ -2928,10 +2936,10 @@ packages:
     dependency: transitive
     description:
       name: walletconnect_flutter_v2
-      sha256: cc6fa6a537910a66258ee64bb510edbfc0dee01485ea1138651431087c94671b
+      sha256: "4a77de8d33f5d1f6b6ae07d4d2f7bf591ddb6c4cd671bf7493100798d92fa4d3"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.0"
   watcher:
     dependency: transitive
     description:
@@ -2960,10 +2968,10 @@ packages:
     dependency: "direct main"
     description:
       name: web3modal_flutter
-      sha256: ddfb21de4ee450ad3b269008f695884ab1b2da6810c855b71aeee5d55363f7cd
+      sha256: "4d24d458ebbf19ef49ac2b094882e8e6327d3c667cb48b168769277fc3d4f20e"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.2"
+    version: "3.3.0"
   web_socket_channel:
     dependency: transitive
     description:

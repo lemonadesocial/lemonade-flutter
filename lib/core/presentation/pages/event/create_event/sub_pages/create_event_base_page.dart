@@ -58,7 +58,7 @@ class CreateEventBasePage extends StatelessWidget {
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
             title: state.parentEventId != null
-                ? t.event.eventCreation.createSubEvent
+                ? t.event.subEvent.createSubEvent
                 : t.event.eventCreation.createEvent,
           ),
           body: SafeArea(
@@ -195,7 +195,9 @@ class CreateEventBasePage extends StatelessWidget {
               vertical: Spacing.xSmall,
             ),
             child: LinearGradientButton.primaryButton(
-              label: t.event.eventCreation.createEvent,
+              label: state.parentEventId != null
+                  ? t.event.subEvent.createSubEvent
+                  : t.event.eventCreation.createEvent,
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
                 final eventGuestSettingsState =
