@@ -6,8 +6,11 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class EventListUserRole extends StatelessWidget {
-  const EventListUserRole(
-      {super.key, required this.eventId, required this.selectedFilterRole});
+  const EventListUserRole({
+    super.key,
+    required this.eventId,
+    required this.selectedFilterRole,
+  });
   final String eventId;
   final EventRole? selectedFilterRole;
 
