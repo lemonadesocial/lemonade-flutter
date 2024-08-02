@@ -1,3 +1,5 @@
+# import '../../schema.graphql';
+
 fragment EventFeature on Feature {
   id: _id
   code

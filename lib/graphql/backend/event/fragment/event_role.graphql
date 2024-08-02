@@ -1,7 +1,8 @@
+# import '../../schema.graphql';
 # import './event_feature.graphql'
 
 fragment EventRole on Role {
-  _id
+  id: _id
   code
   name
   featuresExpanded: features_expanded {
