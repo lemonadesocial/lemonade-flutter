@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -52,28 +53,29 @@ class EventRoleAccessControlBottomSheetState
             ),
             BlocBuilder<GetEventRolesBloc, GetEventRolesState>(
               builder: (context, state) {
-                return state.maybeWhen(
-                  loading: () => Center(child: Loading.defaultLoading(context)),
-                  orElse: () => const SizedBox.shrink(),
-                  fetched: (eventRoles) {
-                    final eventRole = eventRoles[selectedIndex];
-                    return Column(
-                      children: [
-                        _RoleTags(
-                          eventRoles: eventRoles,
-                          selectedIndex: selectedIndex,
-                          onTap: (newSelectedIndex) {
-                            setState(() {
-                              selectedIndex = newSelectedIndex;
-                            });
-                          },
-                        ),
-                        _AccessControlList(
-                          eventRole: eventRole,
-                        ),
-                      ],
-                    );
-                  },
+                if (state.fetching == true) {
+                  return Center(child: Loading.defaultLoading(context));
+                }
+                if (state.eventRoles.isEmpty) {
+                  return const EmptyList();
+                }
+                final eventRoles = state.eventRoles;
+                final eventRole = eventRoles[selectedIndex];
+                return Column(
+                  children: [
+                    _RoleTags(
+                      eventRoles: eventRoles,
+                      selectedIndex: selectedIndex,
+                      onTap: (newSelectedIndex) {
+                        setState(() {
+                          selectedIndex = newSelectedIndex;
+                        });
+                      },
+                    ),
+                    _AccessControlList(
+                      eventRole: eventRole,
+                    ),
+                  ],
                 );
               },
             ),

@@ -1,0 +1,16 @@
+# import '../../schema.graphql';
+# import './event_feature.graphql'
+
+fragment EventUserRole on EventUserRole {
+  user {
+    id: _id
+    name
+    email
+    imageAvatar: image_avatar
+  }
+  roles {
+   id: _id
+    code
+    name 
+  }
+}

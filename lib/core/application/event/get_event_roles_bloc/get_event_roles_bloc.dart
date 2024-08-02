@@ -7,39 +7,58 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'get_event_roles_bloc.freezed.dart';
 
 class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
-  GetEventRolesBloc() : super(const GetEventRolesStateLoading()) {
-    on<GetEventRolesEventFetch>(_onFetch);
+  final _eventRepository = getIt<EventRepository>();
+  GetEventRolesBloc()
+      : super(
+          GetEventRolesState(
+            fetching: true,
+            eventRoles: [],
+            selectedFilterRole: null,
+          ),
+        ) {
+    on<_GetEventRolesEventFetch>(_onFetch);
+    on<_GetEventRolesEventSelectFilterRole>(_onselectFilterRole);
   }
 
-  final EventRepository eventRepository = getIt<EventRepository>();
+  void _onFetch(_GetEventRolesEventFetch event, Emitter emit) async {
+    emit(state.copyWith(fetching: true));
+    final result = await _eventRepository.getEventRoles();
+    result.fold((failure) => emit(state.copyWith(fetching: false)),
+        (eventRoles) {
+      emit(
+        state.copyWith(
+          fetching: false,
+          eventRoles: eventRoles,
+          selectedFilterRole: eventRoles.first,
+        ),
+      );
+    });
+  }
 
-  Future<void> _onFetch(
-    GetEventRolesEventFetch event,
+  void _onselectFilterRole(
+    _GetEventRolesEventSelectFilterRole event,
     Emitter emit,
   ) async {
-    emit(const GetEventRolesState.loading());
-    final result = await eventRepository.getEventRoles();
-    result.fold(
-      (failure) => emit(const GetEventRolesState.failure()),
-      (eventRoles) => emit(
-        GetEventRolesState.fetched(
-          eventRoles: eventRoles,
-        ),
-      ),
+    emit(
+      state.copyWith(selectedFilterRole: event.eventRole),
     );
   }
 }
 
 @freezed
 class GetEventRolesEvent with _$GetEventRolesEvent {
-  const factory GetEventRolesEvent.fetch() = GetEventRolesEventFetch;
+  factory GetEventRolesEvent.fetch() = _GetEventRolesEventFetch;
+
+  factory GetEventRolesEvent.selectFilterRole({
+    required EventRole? eventRole,
+  }) = _GetEventRolesEventSelectFilterRole;
 }
 
 @freezed
 class GetEventRolesState with _$GetEventRolesState {
-  const factory GetEventRolesState.fetched({
+  factory GetEventRolesState({
+    required bool fetching,
     required List<EventRole> eventRoles,
-  }) = GetEventRolesStateFetched;
-  const factory GetEventRolesState.loading() = GetEventRolesStateLoading;
-  const factory GetEventRolesState.failure() = GetEventRolesStateFailure;
+    required EventRole? selectedFilterRole,
+  }) = _GetEventRolesState;
 }

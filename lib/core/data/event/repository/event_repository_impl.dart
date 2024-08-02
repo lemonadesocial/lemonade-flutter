@@ -592,7 +592,11 @@ class EventRepositoryImpl implements EventRepository {
 
   @override
   Future<Either<Failure, List<EventRole>>> getEventRoles() async {
-    final result = await client.query$GetEventRoles();
+    final result = await client.query$GetEventRoles(
+      Options$Query$GetEventRoles(
+        fetchPolicy: FetchPolicy.noCache,
+      ),
+    );
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }

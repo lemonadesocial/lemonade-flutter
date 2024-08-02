@@ -1,11 +1,13 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_roles_access_control_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_item_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_search_bar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -106,38 +108,48 @@ class _EventTeamMembersListingPageViewState
             height: Sizing.medium,
             child: BlocBuilder<GetEventRolesBloc, GetEventRolesState>(
               builder: (context, state) {
-                return state.maybeWhen(
-                  loading: () => Center(child: Loading.defaultLoading(context)),
-                  fetched: (eventRoles) {
-                    return ListView.separated(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.small,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: Spacing.extraSmall),
-                      itemCount: eventRoles.length,
-                      itemBuilder: (context, index) {
-                        final item = eventRoles[index];
-                        final selected = index == 0;
-                        return LemonOutlineButton(
-                          onTap: () {},
-                          textColor: selected == true
-                              ? colorScheme.onPrimary
-                              : colorScheme.onSecondary,
-                          backgroundColor: selected == true
-                              ? colorScheme.outline
-                              : Colors.transparent,
-                          borderColor: selected == true
-                              ? Colors.transparent
-                              : colorScheme.outline,
-                          label: StringUtils.capitalize(item.name ?? ''),
-                          radius: BorderRadius.circular(LemonRadius.button),
-                        );
+                if (state.fetching == true) {
+                  return Center(child: Loading.defaultLoading(context));
+                }
+                if (state.eventRoles.isEmpty) {
+                  return const EmptyList();
+                }
+                final eventRoles = state.eventRoles;
+                return ListView.separated(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.small,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) =>
+                      SizedBox(width: Spacing.extraSmall),
+                  itemCount: eventRoles.length,
+                  itemBuilder: (context, index) {
+                    print("???");
+                    print(state.selectedFilterRole);
+                    final item = eventRoles[index];
+                    final selected = state.selectedFilterRole?.id == item.id;
+                    return LemonOutlineButton(
+                      onTap: () {
+                        print("TAP");
+                        context.read<GetEventRolesBloc>().add(
+                              GetEventRolesEvent.selectFilterRole(
+                                eventRole: item,
+                              ),
+                            );
                       },
+                      textColor: selected == true
+                          ? colorScheme.onPrimary
+                          : colorScheme.onSecondary,
+                      backgroundColor: selected == true
+                          ? colorScheme.outline
+                          : Colors.transparent,
+                      borderColor: selected == true
+                          ? Colors.transparent
+                          : colorScheme.outline,
+                      label: StringUtils.capitalize(item.name ?? ''),
+                      radius: BorderRadius.circular(LemonRadius.button),
                     );
                   },
-                  orElse: () => const SizedBox.shrink(),
                 );
               },
             ),
@@ -170,7 +182,6 @@ class _EventTeamMembersList extends StatelessWidget {
       sliver: SliverList.separated(
         itemCount: 10,
         itemBuilder: (context, index) {
-          // TODO: Will integrate with backend data soon
           final isFirst = index == 0;
           final isLast = index == 9;
           return EventTeamMemberItemWidget(

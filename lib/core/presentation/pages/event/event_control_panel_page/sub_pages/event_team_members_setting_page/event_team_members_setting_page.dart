@@ -12,7 +12,7 @@ class EventTeamMembersSettingPage extends StatelessWidget
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          GetEventRolesBloc()..add(const GetEventRolesEvent.fetch()),
+          GetEventRolesBloc()..add(GetEventRolesEvent.fetch()),
       child: this,
     );
   }
