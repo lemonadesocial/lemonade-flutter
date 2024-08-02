@@ -15,6 +15,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
@@ -44,6 +45,7 @@ import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_roles.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_list_user_role.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -603,6 +605,33 @@ class EventRepositoryImpl implements EventRepository {
     return Right(
       (result.parsedData?.getRoles ?? [])
           .map((item) => EventRole.fromJson(item.toJson()))
+          .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<EventUserRole>>> getListUserRole({
+    required String eventId,
+    String? roleId,
+    String? searchCriteria,
+  }) async {
+    final result = await client.query$GetListUserRole(
+      Options$Query$GetListUserRole(
+        variables: Variables$Query$GetListUserRole(
+          input: Input$EventRoleFilter(
+            event_id: eventId,
+            role_id: roleId != null ? [roleId] : [],
+            search_criteria: "",
+          ),
+        ),
+      ),
+    );
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(
+      (result.parsedData?.getListUserRole ?? [])
+          .map((item) => EventUserRole.fromJson(item.toJson()))
           .toList(),
     );
   }

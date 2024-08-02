@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -130,4 +131,10 @@ abstract class EventRepository {
   });
 
   Future<Either<Failure, List<EventRole>>> getEventRoles();
+
+  Future<Either<Failure, List<EventUserRole>>> getListUserRole({
+    required String eventId,
+    String? roleId,
+    String? searchCriteria,
+  });
 }

@@ -11,8 +11,7 @@ class EventTeamMembersSettingPage extends StatelessWidget
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          GetEventRolesBloc()..add(GetEventRolesEvent.fetch()),
+      create: (context) => GetEventRolesBloc()..add(GetEventRolesEvent.fetch()),
       child: this,
     );
   }

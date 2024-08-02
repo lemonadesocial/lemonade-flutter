@@ -1,9 +1,8 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_listing_page/widgets/event_list_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_roles_access_control_bottomsheet.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_item_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_search_bar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -90,32 +89,33 @@ class _EventTeamMembersListingPageViewState
       ),
       backgroundColor: colorScheme.background,
       resizeToAvoidBottomInset: true,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left: Spacing.xSmall,
-            ),
-            child: EventTeamMembersSearchBar(
-              textController: _textController,
-            ),
-          ),
-          SizedBox(
-            height: Spacing.xSmall,
-          ),
-          SizedBox(
-            height: Sizing.medium,
-            child: BlocBuilder<GetEventRolesBloc, GetEventRolesState>(
-              builder: (context, state) {
-                if (state.fetching == true) {
-                  return Center(child: Loading.defaultLoading(context));
-                }
-                if (state.eventRoles.isEmpty) {
-                  return const EmptyList();
-                }
-                final eventRoles = state.eventRoles;
-                return ListView.separated(
+      body: BlocBuilder<GetEventRolesBloc, GetEventRolesState>(
+        builder: (context, state) {
+          if (state.fetching == true) {
+            return Center(child: Loading.defaultLoading(context));
+          }
+          if (state.eventRoles.isEmpty) {
+            return const EmptyList();
+          }
+          final eventRoles = state.eventRoles;
+          final selectedFilterRole = state.selectedFilterRole;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: Spacing.xSmall,
+                ),
+                child: EventTeamMembersSearchBar(
+                  textController: _textController,
+                ),
+              ),
+              SizedBox(
+                height: Spacing.xSmall,
+              ),
+              SizedBox(
+                height: Sizing.medium,
+                child: ListView.separated(
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.small,
                   ),
@@ -124,13 +124,10 @@ class _EventTeamMembersListingPageViewState
                       SizedBox(width: Spacing.extraSmall),
                   itemCount: eventRoles.length,
                   itemBuilder: (context, index) {
-                    print("???");
-                    print(state.selectedFilterRole);
                     final item = eventRoles[index];
                     final selected = state.selectedFilterRole?.id == item.id;
                     return LemonOutlineButton(
                       onTap: () {
-                        print("TAP");
                         context.read<GetEventRolesBloc>().add(
                               GetEventRolesEvent.selectFilterRole(
                                 eventRole: item,
@@ -150,49 +147,24 @@ class _EventTeamMembersListingPageViewState
                       radius: BorderRadius.circular(LemonRadius.button),
                     );
                   },
-                );
-              },
-            ),
-          ),
-          SizedBox(
-            height: Spacing.xSmall,
-          ),
-          const Expanded(
-            child: CustomScrollView(
-              slivers: [_EventTeamMembersList()],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EventTeamMembersList extends StatelessWidget {
-  const _EventTeamMembersList();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsets.only(
-        left: Spacing.small,
-        right: Spacing.small,
-        bottom: Spacing.xLarge,
-      ),
-      sliver: SliverList.separated(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          final isFirst = index == 0;
-          final isLast = index == 9;
-          return EventTeamMemberItemWidget(
-            title: 'Justin Saris',
-            subTitle: '@jessie.bessie',
-            onTap: () {},
-            isFirst: isFirst,
-            isLast: isLast,
+                ),
+              ),
+              SizedBox(
+                height: Spacing.xSmall,
+              ),
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    EventListUserRole(
+                      eventId: widget.event?.id ?? '',
+                      selectedFilterRole: selectedFilterRole,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
-        separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
       ),
     );
   }
