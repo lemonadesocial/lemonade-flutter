@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: appcheck
-      sha256: "2682c9c270c28d83f8d87d68bb607a83882778b14c6a8da19df423be1b386520"
+      sha256: "0fcbe15b6bba67027c6f94bd177b9b319e019b51e0b49e9cd80486448c4a1909"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.5.2"
   appflowy_editor:
     dependency: "direct main"
     description:
@@ -2968,10 +2968,10 @@ packages:
     dependency: "direct main"
     description:
       name: web3modal_flutter
-      sha256: ec804266724e77f11f2a9cdaf7c5c27e5c8c63fa8d28cd26a936b48e3b2216f1
+      sha256: "4d24d458ebbf19ef49ac2b094882e8e6327d3c667cb48b168769277fc3d4f20e"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0-beta06"
+    version: "3.3.0"
   web_socket_channel:
     dependency: transitive
     description:

@@ -99,7 +99,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # wallet
-  web3modal_flutter: 3.2.2
+  web3modal_flutter: ^3.3.0
   web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
