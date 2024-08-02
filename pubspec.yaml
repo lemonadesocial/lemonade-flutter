@@ -83,6 +83,7 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.1
   animated_text_kit: ^4.2.2
   flutter_styled_toast: ^2.2.1
+  calendar_view: ^1.2.0
 
   # Webview
   flutter_inappwebview: ^5.8.0

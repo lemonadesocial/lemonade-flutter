@@ -11,6 +11,7 @@ fragment EventHostExpandedFragment on User {
     bucket
   }
   job_title
+  image_avatar
   __typename
 }
 
