@@ -29,6 +29,8 @@
     "myEvents": "My events",
     "selectEvents": "Select events",
     "hostedBy": "Hosted by",
+    "tagsType": "type",
+    "hosts": "hosts",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",

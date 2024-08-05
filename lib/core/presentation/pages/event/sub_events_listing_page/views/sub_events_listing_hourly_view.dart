@@ -1,4 +1,6 @@
+import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -9,6 +11,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:calendar_view/calendar_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubEventsListingHourlyView extends StatefulWidget {
@@ -132,76 +135,89 @@ class _EventItem extends StatelessWidget {
         (event.end?.difference(event.start!).inDays ?? 0) >= 1;
     const fulldayEventTimeFormatPattern = "MMM d • hh:mm a";
 
-    return InkWell(
-      onTap: () {
-        AutoRouter.of(context).push(
-          EventDetailRoute(eventId: event.id ?? ''),
+    return BlocBuilder<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
+      builder: (context, state) {
+        final visible = getSubEventByFilter(
+          event,
+          selectedHosts: state.selectedHosts,
+          selectedTags: state.selectedTags,
         );
-      },
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(horizontal: 2.w),
-        padding: EdgeInsets.all(Spacing.xSmall),
-        decoration: BoxDecoration(
-          color: isPast ? LemonColor.chineseBlack : LemonColor.paleViolet12,
-          borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-          border: Border.all(
-            color: LemonColor.paleViolet,
-            width: 1.w,
-          ),
-        ),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 3.w,
-          children: [
-            Text(
-              event.title ?? '',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
+        if (!visible) {
+          return const SizedBox.shrink();
+        }
+
+        return InkWell(
+          onTap: () {
+            AutoRouter.of(context).push(
+              EventDetailRoute(eventId: event.id ?? ''),
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: 2.w),
+            padding: EdgeInsets.all(Spacing.xSmall),
+            decoration: BoxDecoration(
+              color: isPast ? LemonColor.chineseBlack : LemonColor.paleViolet12,
+              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+              border: Border.all(
+                color: LemonColor.paleViolet,
+                width: 1.w,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
-            Row(
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 3.w,
               children: [
-                ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icHostOutline.svg(
-                    colorFilter: filter,
-                    width: 12.w,
-                    height: 12.w,
+                Text(
+                  event.title ?? '',
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(width: 3.w),
-                Flexible(
-                  child: Text(
-                    event.hostExpanded?.name ?? '',
+                Row(
+                  children: [
+                    ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icHostOutline.svg(
+                        colorFilter: filter,
+                        width: 12.w,
+                        height: 12.w,
+                      ),
+                    ),
+                    SizedBox(width: 3.w),
+                    Flexible(
+                      child: Text(
+                        event.hostExpanded?.name ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                if (isFullDayEvent)
+                  Text(
+                    '${DateFormatUtils.custom(
+                      event.start ?? DateTime.now(),
+                      pattern: fulldayEventTimeFormatPattern,
+                    )} - ${DateFormatUtils.custom(
+                      event.end ?? DateTime.now(),
+                      pattern: fulldayEventTimeFormatPattern,
+                    )}',
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
               ],
             ),
-            if (isFullDayEvent)
-              Text(
-                '${DateFormatUtils.custom(
-                  event.start ?? DateTime.now(),
-                  pattern: fulldayEventTimeFormatPattern,
-                )} - ${DateFormatUtils.custom(
-                  event.end ?? DateTime.now(),
-                  pattern: fulldayEventTimeFormatPattern,
-                )}',
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
