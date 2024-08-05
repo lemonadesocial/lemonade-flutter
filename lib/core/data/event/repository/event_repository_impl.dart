@@ -630,9 +630,13 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(
-      (result.parsedData?.getListUserRole ?? [])
-          .map((item) => EventUserRole.fromJson(item.toJson()))
-          .toList(),
+      List.from(
+        result.parsedData!.getListUserRole
+            .map(
+              (item) => EventUserRole.fromJson(item.toJson()),
+            )
+            .toList(),
+      ),
     );
   }
 }

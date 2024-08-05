@@ -139,7 +139,7 @@ type Query {
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getListUserRole(input: EventRoleFilter!): [EventUserRole!]!
-  getUserRole(input: EventRoleInput!): EventRole!
+  getUserRole(input: UserRoleInput!): [EventUserRole!]!
   getRoles: [Role!]!
   getEventSessionReservations(
     input: GetEventSessionReservationsInput
@@ -245,10 +245,19 @@ type Query {
     address: AddressInput!
   ): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
-  getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
-  tgGetMyChannels: ScrapChannelResult!
+  getStripeCards(
+    skip: Int! = 0
+    limit: Int! = 25
+    payment_account: MongoID
+  ): [StripeCard!]!
+  tgGetMyChannels(input: ScanChannelsInput!): ScanChannelsResult!
   joinChannel(event_ids: MongoID!): Boolean!
-  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
+  exportEventTickets(
+    _id: MongoID!
+    ticket_type_ids: [MongoID!]
+    search_text: String
+    pagination: PaginationInput
+  ): ExportedTickets!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(
     skip: Int! = 0
@@ -840,6 +849,7 @@ type TelegramChannel {
   title: String
   username: String
   inviteLink: String
+  joined: [MongoID!]
 }
 
 type Broadcast {
@@ -1767,35 +1777,58 @@ input GetEventRewardUsesInput {
 
 type EventUserRole {
   user: User
-  roles: [Role!]!
+  roles: [EventRoleInformation!]!
   event: Event
   created_at: DateTimeISO
   granted_by: User
 }
 
+type EventRoleInformation {
+  role: Role
+  visible: Boolean
+}
+
 type Role {
   _id: MongoID!
-  code: String!
-  features: [FeatureBase!]
+  code: RoleCode!
+  features: [MongoID!]
   updated_by: MongoID
   name: String!
   features_expanded: [Feature!]
 }
 
-type FeatureBase {
-  _id: MongoID!
-  code: String!
-  endpoints: [String!]
-  updated_by: MongoID
+enum RoleCode {
+  Host
+  Cohost
+  Manager
+  Sales
+  Marketing
+  DataAnalyst
+  Promoter
 }
 
 type Feature {
   _id: MongoID!
-  code: String!
+  code: FeatureCode!
   endpoints: [String!]
   updated_by: MongoID
   name: String!
   feature_enable: Boolean
+}
+
+enum FeatureCode {
+  DataDashboardInsights
+  DataDashboardRewards
+  DataDashboardRevenue
+  CSVExportGuestList
+  GuestListDashboard
+  EventSettings
+  TicketingSettings
+  EmailManager
+  PromotionCodes
+  POAPdata
+  CheckIn
+  EAS
 }
 
 input EventRoleFilter {
@@ -1804,24 +1837,9 @@ input EventRoleFilter {
   role_id: [MongoID!]
 }
 
-type EventRole {
-  event: MongoID!
-  roles: [MongoID!]!
-  user: MongoID
-  email: MongoID
-  created_at: DateTimeISO!
-  granted_by: MongoID
-}
-
-input EventRoleInput {
-  user: UserFilter!
+input UserRoleInput {
+  user_id: MongoID!
   event_id: MongoID!
-  role_ids: [MongoID!]
-}
-
-input UserFilter {
-  user_id: MongoID
-  email: String
 }
 
 type EventSessionReservation {
@@ -2570,7 +2588,9 @@ type StripeCard {
   last4: String!
 }
 
-type ScrapChannelResult {
+type ScanChannelsResult {
+  offset_date: Float!
+  offset_id: Float!
   user: TgUser
   channels: [TelegramChannel!]
 }
@@ -2595,6 +2615,11 @@ type TgUser {
   username: String
   phone: String
   langCode: String
+}
+
+input ScanChannelsInput {
+  offset_date: Float!
+  offset_id: Float!
 }
 
 type ExportedTickets {
@@ -3079,7 +3104,7 @@ type Mutation {
     payment_method: String!
   ): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
-  tgSendCode(input: PermissionInput!): String!
+  tgSendCode(input: SendCodeInput!): String!
   tgVerify(input: VerifyCodeInput!): Boolean!
   tgUnlinkAccount: Boolean!
   cancelTickets(input: CancelTicketsInput!): Boolean!
@@ -3430,6 +3455,7 @@ input TelegramChannelInput {
   title: String
   username: String
   inviteLink: String
+  joined: [MongoID!]
 }
 
 input AcceptEventTermsInput {
@@ -3465,6 +3491,22 @@ input UpdateEventRewardUseInput {
   reward_number: Float!
   user: MongoID!
   active: Boolean!
+}
+
+input EventRoleInput {
+  users: [UserFilter!]!
+  event_id: MongoID!
+  roles: [RoleInput!]
+}
+
+input UserFilter {
+  user_id: MongoID
+  email: String
+}
+
+input RoleInput {
+  visible: Boolean!
+  role_id: MongoID!
 }
 
 input FeatureInput {
@@ -3995,7 +4037,7 @@ input SalesTaxInput {
   regions: [String!]
 }
 
-input PermissionInput {
+input SendCodeInput {
   phone_number: String!
 }
 
@@ -4003,6 +4045,7 @@ input VerifyCodeInput {
   phone_number: String!
   phone_code_hash: String!
   phone_code: String!
+  password_2fa: String
 }
 
 input CancelTicketsInput {

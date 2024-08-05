@@ -1,17 +1,7 @@
-# import '../fragment/event_role.graphql'
+# import '../fragment/event_user_role.graphql'
 
 query GetListUserRole($input: EventRoleFilter!) {
   getListUserRole(input: $input) {
-    user {
-      _id
-      name
-      email
-      image_avatar
-    }
-    roles {
-      _id
-      code
-      name
-    }
+    ...EventUserRole
   }
 }

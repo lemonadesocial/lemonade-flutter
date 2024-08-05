@@ -1,6 +1,8 @@
 import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_item_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +22,17 @@ class EventListUserRole extends StatelessWidget {
       future: getIt<EventRepository>()
           .getListUserRole(eventId: eventId, roleId: selectedFilterRole?.id),
       builder: (context, snapshot) {
-        final listUserRole =
-            snapshot.data?.fold((l) => null, (listUserRole) => listUserRole);
+        if (snapshot.connectionState == ConnectionState.none) {
+          return Center(
+            child: Loading.defaultLoading(context),
+          );
+        }
+        final listUserRole = snapshot.data?.fold((l) => null, (item) => item);
+        if (listUserRole != null && listUserRole.isEmpty) {
+          return const SliverToBoxAdapter(
+            child: EmptyList(),
+          );
+        }
         return SliverPadding(
           padding: EdgeInsets.only(
             left: Spacing.small,

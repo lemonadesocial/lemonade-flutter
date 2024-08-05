@@ -1,5 +1,5 @@
-# import '../../schema.graphql';
 # import './event_feature.graphql'
+# import './event_role_information.graphql'
 
 fragment EventUserRole on EventUserRole {
   user {
@@ -9,8 +9,6 @@ fragment EventUserRole on EventUserRole {
     imageAvatar: image_avatar
   }
   roles {
-   id: _id
-    code
-    name 
+    ...EventRoleInformation
   }
 }
