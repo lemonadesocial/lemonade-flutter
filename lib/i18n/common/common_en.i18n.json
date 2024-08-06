@@ -146,7 +146,7 @@
         "disconnected": "No internet connection"
     },
     "shorebird_update_title": "Update Required",
-    "shorebird_update_description" :"To ensure the best experience and maintain security, a mandatory app update is now required please click \"Update Now\" to proceed.",
+    "shorebird_update_description": "To ensure the best experience and maintain security, a mandatory app update is now required please click \"Update Now\" to proceed.",
     "update_now": "Update Now",
     "restart": "Restart",
     "pleaseTryAgain": "There's something wrong, please try again",
@@ -195,5 +195,14 @@
         "notConnected": "Not connected",
         "connected": "Connected"
     },
-    "more": "$count more"
+    "more": "$count more",
+    "filters": "Filters",
+    "filterSelected(ordinal)": {
+        "one": "$n filter selected",
+        "other": "$n filters selected"
+    },
+    "result(ordinal)": {
+        "one": "$n result",
+        "other": "$n results"
+    }
 }

@@ -25,3 +25,23 @@ List<CalendarEventData> getCalendarEvents(List<Event> events) {
     );
   }).toList();
 }
+
+bool getSubEventByFilter(
+  Event event, {
+  required List<String> selectedHosts,
+  required List<String> selectedTags,
+}) {
+  final eventHostId = event.host;
+  final hostIncluded =
+      selectedHosts.isEmpty ? true : selectedHosts.contains(eventHostId);
+  final tagIncluded = selectedTags.isEmpty
+      ? true
+      : (event.tags ?? [])
+          .toSet()
+          .intersection(selectedTags.toSet())
+          .isNotEmpty;
+  if (tagIncluded && hostIncluded) {
+    return true;
+  }
+  return false;
+}

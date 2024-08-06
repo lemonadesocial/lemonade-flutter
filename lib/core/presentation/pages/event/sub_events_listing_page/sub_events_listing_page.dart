@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_filter_bottomsheet_view/sub_events_filter_bottomsheet_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_hourly_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_regular_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_event_calendar_day_cell_widget.dart';
@@ -61,7 +62,8 @@ class SubEventsListingPageView extends StatefulWidget {
       _SubEventsListingPageViewState();
 }
 
-class _SubEventsListingPageViewState extends State<SubEventsListingPageView> {
+class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
+    with TickerProviderStateMixin {
   final calendarViewEventCtrl = calendar_view.EventController();
   GlobalKey<calendar_view.DayViewState> hourlyViewState = GlobalKey();
   bool _calendarVisible = false;
@@ -70,16 +72,6 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView> {
   final Debouncer _debouncer = Debouncer(milliseconds: 200);
   SubEventViewMode _viewMode = SubEventViewMode.calendar;
   Map<String, bool> addedCalendarEventsMap = {};
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   List<Event> _getEventsByDate(
     Map<DateTime, List<Event>> eventsGroupByDate,
@@ -123,198 +115,243 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      appBar: LemonAppBar(
-        title: t.event.subEvent.sessions,
-        actions: [
-          InkWell(
-            onTap: () {
-              AutoRouter.of(context).push(
-                CreateEventRoute(
-                  parentEventId: widget.parentEventId,
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall,
-              ),
-              child: Icon(
-                Icons.add,
-                color: colorScheme.onPrimary,
-              ),
-            ),
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: _calendarVisible ? 0 : 0.16.sh,
           ),
-        ],
-      ),
-      body:
-          BlocConsumer<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
-        listenWhen: (previous, current) =>
-            previous.events.length != current.events.length,
-        listener: (context, state) {
-          var newCalendarEvents = getCalendarEvents(
-            state.events,
-          );
-          var filteredCalendarEvents = newCalendarEvents
-              .where((element) => addedCalendarEventsMap[element.title] == null)
-              .toList();
-
-          calendarViewEventCtrl.addAll(
-            filteredCalendarEvents,
-          );
-
-          for (var item in newCalendarEvents) {
-            if (addedCalendarEventsMap[item.title] == null) {
-              addedCalendarEventsMap[item.title] = true;
-            }
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Spacing.xSmall,
-                  vertical: Spacing.small,
-                ),
-                child: SubEventsDateFilterBar(
-                  selectedDate: state.selectedDate,
-                  viewMode: _viewMode,
-                  onToggle: _toggle,
-                  onViewModeChange: (mode) {
-                    setState(() {
-                      _viewMode = mode;
-                    });
+          child: Scaffold(
+            appBar: LemonAppBar(
+              title: t.event.subEvent.sessions,
+              actions: [
+                InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).push(
+                      CreateEventRoute(
+                        parentEventId: widget.parentEventId,
+                      ),
+                    );
                   },
-                ),
-              ),
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: _calendarVisible ? 1 : 0,
-                child: AnimatedContainer(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: Spacing.xSmall,
-                  ),
-                  padding: EdgeInsets.only(
-                    top: Spacing.xSmall,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(LemonRadius.medium),
-                    border: Border.all(
-                      color: colorScheme.outline,
-                      width: 1.w,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.xSmall,
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      color: colorScheme.onPrimary,
                     ),
                   ),
-                  duration: const Duration(milliseconds: 200),
-                  height: _calendarVisible ? 300 : 0,
-                  child: CalendarDatePicker2(
-                    config: CalendarDatePicker2Config(
-                      controlsHeight: 0,
-                      nextMonthIcon: const SizedBox.shrink(),
-                      lastMonthIcon: const SizedBox.shrink(),
-                      calendarType: CalendarDatePicker2Type.single,
-                      selectedDayTextStyle: Typo.small.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
-                      selectedDayHighlightColor: LemonColor.chineseBlack,
-                      customModePickerIcon: const SizedBox(),
-                      todayTextStyle: Typo.small.copyWith(
-                        color: LemonColor.paleViolet,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      dayTextStyle:
-                          Typo.small.copyWith(color: colorScheme.onPrimary),
-                      dayBorderRadius:
-                          BorderRadius.circular(LemonRadius.extraSmall),
-                      dayBuilder: ({
-                        required date,
-                        decoration,
-                        isDisabled,
-                        isSelected,
-                        isToday,
-                        textStyle,
-                      }) {
-                        final selected = isSelected ?? false;
-                        final eventCount =
-                            state.eventsGroupByDate[date.withoutTime]?.length ??
-                                0;
-                        return SubEventCalendarDayCellWidget(
-                          date: date,
-                          selected: selected,
-                          eventCount: eventCount,
-                          textStyle: textStyle,
-                          decoration: decoration,
-                        );
-                      },
-                    ),
-                    value: [state.selectedDate],
-                    onDisplayedMonthChanged: (date) {
-                      _onCalendarChanged(date);
-                    },
-                    onValueChanged: (dates) {
-                      if (dates.isNotEmpty) {
-                        _onCalendarChanged(dates[0]!);
-                      }
-                    },
-                  ),
                 ),
-              ),
-              if (_calendarVisible) SizedBox(height: Spacing.xSmall),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Spacing.xSmall,
-                ),
-                child: Row(
+              ],
+            ),
+            body: BlocConsumer<GetSubEventsByCalendarBloc,
+                GetSubEventsByCalendarState>(
+              listenWhen: (previous, current) =>
+                  previous.events.length != current.events.length,
+              listener: (context, state) {
+                var newCalendarEvents = getCalendarEvents(
+                  state.events,
+                );
+                var filteredCalendarEvents = newCalendarEvents
+                    .where(
+                      (element) =>
+                          addedCalendarEventsMap[element.title] == null,
+                    )
+                    .toList();
+
+                calendarViewEventCtrl.addAll(
+                  filteredCalendarEvents,
+                );
+
+                for (var item in newCalendarEvents) {
+                  if (addedCalendarEventsMap[item.title] == null) {
+                    addedCalendarEventsMap[item.title] = true;
+                  }
+                }
+              },
+              builder: (context, state) {
+                return Column(
                   children: [
-                    Text(
-                      '${StringUtils.ordinal(state.selectedDate.day)}, ${DateFormatUtils.custom(
-                        state.selectedDate,
-                        pattern: "EEEE",
-                      )}',
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.xSmall,
+                        vertical: Spacing.small,
+                      ),
+                      child: SubEventsDateFilterBar(
+                        selectedDate: state.selectedDate,
+                        viewMode: _viewMode,
+                        onToggle: _toggle,
+                        onViewModeChange: (mode) {
+                          setState(() {
+                            _viewMode = mode;
+                          });
+                        },
                       ),
                     ),
-                    const Spacer(),
-                    if (DateUtils.isSameDay(state.selectedDate, DateTime.now()))
-                      Text(
-                        StringUtils.capitalize(t.common.today),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: _calendarVisible ? 1 : 0,
+                      child: AnimatedContainer(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: Spacing.xSmall,
+                        ),
+                        padding: EdgeInsets.only(
+                          top: Spacing.xSmall,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.medium),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 1.w,
+                          ),
+                        ),
+                        duration: const Duration(milliseconds: 200),
+                        height: _calendarVisible ? 300 : 0,
+                        child: CalendarDatePicker2(
+                          config: CalendarDatePicker2Config(
+                            controlsHeight: 0,
+                            nextMonthIcon: const SizedBox.shrink(),
+                            lastMonthIcon: const SizedBox.shrink(),
+                            calendarType: CalendarDatePicker2Type.single,
+                            selectedDayTextStyle: Typo.small.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                            selectedDayHighlightColor: LemonColor.chineseBlack,
+                            customModePickerIcon: const SizedBox(),
+                            todayTextStyle: Typo.small.copyWith(
+                              color: LemonColor.paleViolet,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            dayTextStyle: Typo.small
+                                .copyWith(color: colorScheme.onPrimary),
+                            dayBorderRadius:
+                                BorderRadius.circular(LemonRadius.extraSmall),
+                            dayBuilder: ({
+                              required date,
+                              decoration,
+                              isDisabled,
+                              isSelected,
+                              isToday,
+                              textStyle,
+                            }) {
+                              final selected = isSelected ?? false;
+                              final eventCount = state
+                                      .eventsGroupByDate[date.withoutTime]
+                                      ?.length ??
+                                  0;
+                              return SubEventCalendarDayCellWidget(
+                                date: date,
+                                selected: selected,
+                                eventCount: eventCount,
+                                textStyle: textStyle,
+                                decoration: decoration,
+                              );
+                            },
+                          ),
+                          value: [state.selectedDate],
+                          onDisplayedMonthChanged: (date) {
+                            _onCalendarChanged(date);
+                          },
+                          onValueChanged: (dates) {
+                            if (dates.isNotEmpty) {
+                              _onCalendarChanged(dates[0]!);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    if (_calendarVisible) SizedBox(height: Spacing.xSmall),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.xSmall,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            '${StringUtils.ordinal(state.selectedDate.day)}, ${DateFormatUtils.custom(
+                              state.selectedDate,
+                              pattern: "EEEE",
+                            )}',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const Spacer(),
+                          if (DateUtils.isSameDay(
+                            state.selectedDate,
+                            DateTime.now(),
+                          ))
+                            Text(
+                              StringUtils.capitalize(t.common.today),
+                            ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xSmall),
+                    if (_viewMode == SubEventViewMode.listing)
+                      SubEventsListingRegularView(
+                        isCalendarShowing: _calendarVisible,
+                        onScroll: _onScroll,
+                        events: _getEventsByDate(
+                          state.eventsGroupByDate,
+                          state.selectedDate,
+                        )
+                            .where(
+                              (event) => getSubEventByFilter(
+                                event,
+                                selectedHosts: state.selectedHosts,
+                                selectedTags: state.selectedTags,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    if (_viewMode == SubEventViewMode.calendar)
+                      calendar_view.CalendarControllerProvider(
+                        controller: calendarViewEventCtrl,
+                        child: SubEventsListingHourlyView(
+                          state: hourlyViewState,
+                          selectedDate: state.selectedDate,
+                          isCalendarShowing: _calendarVisible,
+                          onDateChanged: (date) {
+                            context.read<GetSubEventsByCalendarBloc>().add(
+                                  GetSubEventsByCalendarEvent.dateChanged(
+                                    selectedDate: date,
+                                  ),
+                                );
+                          },
+                          onScroll: _onScroll,
+                        ),
                       ),
                   ],
-                ),
-              ),
-              SizedBox(height: Spacing.xSmall),
-              if (_viewMode == SubEventViewMode.listing)
-                SubEventsListingRegularView(
-                  isCalendarShowing: _calendarVisible,
-                  onScroll: _onScroll,
-                  events: _getEventsByDate(
-                    state.eventsGroupByDate,
-                    state.selectedDate,
+                );
+              },
+            ),
+          ),
+        ),
+        BlocBuilder<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
+          builder: (context, state) => state.events.isEmpty
+              ? const SizedBox.shrink()
+              : TweenAnimationBuilder(
+                  tween: Tween<double>(begin: 200, end: 0),
+                  duration: const Duration(milliseconds: 500),
+                  builder: (context, value, child) => Transform.translate(
+                    offset: Offset(
+                      0,
+                      value,
+                    ),
+                    child: child,
+                  ),
+                  child: SubEventsFilterBottomSheetView(
+                    events: state.events,
+                    selectedHostIds: state.selectedHosts,
+                    selectedTags: state.selectedTags,
                   ),
                 ),
-              if (_viewMode == SubEventViewMode.calendar)
-                calendar_view.CalendarControllerProvider(
-                  controller: calendarViewEventCtrl,
-                  child: SubEventsListingHourlyView(
-                    state: hourlyViewState,
-                    selectedDate: state.selectedDate,
-                    isCalendarShowing: _calendarVisible,
-                    onDateChanged: (date) {
-                      context.read<GetSubEventsByCalendarBloc>().add(
-                            GetSubEventsByCalendarEvent.dateChanged(
-                              selectedDate: date,
-                            ),
-                          );
-                    },
-                    onScroll: _onScroll,
-                  ),
-                ),
-            ],
-          );
-        },
-      ),
+        ),
+      ],
     );
   }
 }
