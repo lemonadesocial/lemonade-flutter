@@ -1784,8 +1784,9 @@ type EventUserRole {
 }
 
 type EventRoleInformation {
-  role: Role
+  role: MongoID!
   visible: Boolean
+  role_expanded: Role!
 }
 
 type Role {
@@ -1834,7 +1835,7 @@ enum FeatureCode {
 input EventRoleFilter {
   search_criteria: String
   event_id: MongoID!
-  role_id: [MongoID!]
+  role_ids: [MongoID!]
 }
 
 input UserRoleInput {

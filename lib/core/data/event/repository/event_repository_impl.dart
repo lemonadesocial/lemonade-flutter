@@ -620,7 +620,8 @@ class EventRepositoryImpl implements EventRepository {
         variables: Variables$Query$GetListUserRole(
           input: Input$EventRoleFilter(
             event_id: eventId,
-            role_id: roleId != null ? [roleId] : [],
+            role_ids: null,
+            // role_ids: roleId != null ? [roleId] : [],
             search_criteria: "",
           ),
         ),

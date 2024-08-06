@@ -8,7 +8,7 @@ part 'event_role_information.freezed.dart';
 class EventRoleInformation with _$EventRoleInformation {
   @JsonSerializable(explicitToJson: true)
   const factory EventRoleInformation({
-    EventRole? role,
+    EventRole? roleExpanded,
     bool? visible,
   }) = _EventRoleInformation;
 
