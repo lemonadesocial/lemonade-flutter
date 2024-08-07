@@ -103,17 +103,14 @@ class _QuestListingPageState extends State<QuestListingPage>
                           .animateTo(indexOfTab, duration: Duration.zero);
                     }
                   },
-                  child: Expanded(
-                    child: TabBarView(
-                      children: pointGroups.map((pointGroup) {
-                        final secondaryLevelGroups =
-                            pointGroup.secondLevelGroups;
-                        return QuestTabBarViewItem(
-                          pointGroup: pointGroup,
-                          secondaryLevelGroups: secondaryLevelGroups,
-                        );
-                      }).toList(),
-                    ),
+                  child: TabBarView(
+                    children: pointGroups.map((pointGroup) {
+                      final secondaryLevelGroups = pointGroup.secondLevelGroups;
+                      return QuestTabBarViewItem(
+                        pointGroup: pointGroup,
+                        secondaryLevelGroups: secondaryLevelGroups,
+                      );
+                    }).toList(),
                   ),
                 ),
               ),

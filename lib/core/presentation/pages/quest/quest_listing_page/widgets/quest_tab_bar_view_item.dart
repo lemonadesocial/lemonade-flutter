@@ -24,51 +24,45 @@ class QuestTabBarViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: [
-              if ((pointGroup.points ?? 0) > 0)
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    top: Spacing.xSmall,
-                    left: Spacing.xSmall,
-                    right: Spacing.xSmall,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: QuestCompletedCard(
-                      completedCount: pointGroup.completed ?? 0,
-                      pointsCount: pointGroup.points ?? 0,
-                      typeTitle: pointGroup.firstLevelGroup?.title ?? '',
-                      onTap: () {
-                        AutoRouter.of(context)
-                            .navigate(const CompletedQuestsListingRoute());
-                      },
+    return CustomScrollView(
+      slivers: [
+        if ((pointGroup.points ?? 0) > 0)
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: Spacing.xSmall,
+              left: Spacing.xSmall,
+              right: Spacing.xSmall,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: QuestCompletedCard(
+                completedCount: pointGroup.completed ?? 0,
+                pointsCount: pointGroup.points ?? 0,
+                typeTitle: pointGroup.firstLevelGroup?.title ?? '',
+                onTap: () {
+                  AutoRouter.of(context)
+                      .navigate(const CompletedQuestsListingRoute());
+                },
+              ),
+            ),
+          ),
+        SliverToBoxAdapter(
+          child: _SecondaryLevelGroup(
+            secondaryLevelGroups: secondaryLevelGroups,
+            onTap: (secondaryLevelGroupId) {
+              context.read<GetPointGroupsBloc>().add(
+                    GetPointGroupsEvent.selectSecondLevelGroup(
+                      secondLevelGroup: secondaryLevelGroupId,
                     ),
-                  ),
-                ),
-              SliverToBoxAdapter(
-                child: _SecondaryLevelGroup(
-                  secondaryLevelGroups: secondaryLevelGroups,
-                  onTap: (secondaryLevelGroupId) {
-                    context.read<GetPointGroupsBloc>().add(
-                          GetPointGroupsEvent.selectSecondLevelGroup(
-                            secondLevelGroup: secondaryLevelGroupId,
-                          ),
-                        );
-                  },
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: Spacing.medium,
-                ),
-              ),
-              const QuestList(),
-            ],
+                  );
+            },
           ),
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.medium,
+          ),
+        ),
+        const QuestList(),
       ],
     );
   }
