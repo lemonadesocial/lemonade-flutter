@@ -667,5 +667,10 @@
         "visibleOnEvent": "Visible on event",
         "accessControl": "Access control",
         "eventRoles": "Event Roles"
+    },
+    "virtualLinkSetting": {
+        "addVirtualLink": "Add virtual link",
+        "addVirtualLinkDescription": "Please enter the virtual event link for your guests to join",
+        "enterLink": "Enter link"
     }
 }
