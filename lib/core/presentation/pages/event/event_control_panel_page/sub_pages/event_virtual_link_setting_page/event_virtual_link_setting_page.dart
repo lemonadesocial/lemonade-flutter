@@ -34,10 +34,11 @@ class _EventVirtualLinkSettingPageState
   @override
   void initState() {
     super.initState();
-    editingController.addListener(_onChange);
     if (widget.defaultUrl != null) {
       editingController.text = widget.defaultUrl ?? "";
     }
+    isEmpty = editingController.text.isEmpty;
+    editingController.addListener(_onChange);
   }
 
   @override
