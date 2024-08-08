@@ -1,10 +1,11 @@
-import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
-import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/choose_role_dropdown.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/event_search_members_input.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/event_team_member_item.dart';
+import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/widgets/create_cast_bottom_bar/create_farcaster_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -17,16 +18,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
-class EventTeamMembersFormPage extends StatefulWidget {
-  const EventTeamMembersFormPage({super.key});
-
-  @override
-  State<EventTeamMembersFormPage> createState() =>
-      _EventTeamMembersFormPageState();
-}
-
-class _EventTeamMembersFormPageState extends State<EventTeamMembersFormPage> {
+class EventTeamMembersFormPage extends StatelessWidget {
   final _scrollController = ScrollController();
+
+  EventTeamMembersFormPage({super.key});
+
+  scrollToEnd() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      curve: Curves.easeIn,
+    );
+  }
+
+  void scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      curve: Curves.easeIn,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,13 +159,15 @@ class _EventTeamMembersFormPageState extends State<EventTeamMembersFormPage> {
                               SizedBox(
                                 height: Spacing.xSmall,
                               ),
-                              LemonTextField(
-                                borderColor: LemonColor.white09,
-                                hintText: t.event.teamMembers
-                                    .searchProfileOrEnterEmail,
-                                contentPadding:
-                                    EdgeInsets.all(Spacing.smMedium),
-                                onChange: (value) {},
+                              Focus(
+                                onFocusChange: (isFocused) {
+                                  if (isFocused) {
+                                    scrollToEnd();
+                                  } else {
+                                    scrollToTop();
+                                  }
+                                },
+                                child: EventSearchMembersInput(),
                               ),
                             ],
                           ),
@@ -158,31 +175,39 @@ class _EventTeamMembersFormPageState extends State<EventTeamMembersFormPage> {
                       ],
                     ),
                   ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 350.w),
+                  ),
                 ],
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.background,
-                  border: Border(
-                    top: BorderSide(
-                      color: colorScheme.outline,
+              child: BlocBuilder<EventTeamMembersFormBloc,
+                  EventTeamMembersFormBlocState>(
+                builder: (context, state) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: colorScheme.background,
+                      border: Border(
+                        top: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: SafeArea(
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: LinearGradientButton.primaryButton(
-                      onTap: () {},
-                      label: t.common.actions.sendInvite,
-                      textColor: colorScheme.onPrimary,
+                    padding: EdgeInsets.all(Spacing.smMedium),
+                    child: SafeArea(
+                      child: Opacity(
+                        opacity: state.isValid == true ? 1 : 0.5,
+                        child: LinearGradientButton.primaryButton(
+                          onTap: () {},
+                          label: t.common.actions.sendInvite,
+                          textColor: colorScheme.onPrimary,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],

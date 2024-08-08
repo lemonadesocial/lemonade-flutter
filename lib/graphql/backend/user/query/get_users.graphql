@@ -1,14 +1,15 @@
 query GetUsers($skip: Int! = 0, $limit: Int! = 25, $search: String!) {
-    getUsers(skip: $skip, limit: $limit, search: $search) {
-        _id
-        description
-        image_avatar
-        name
-        new_photos
-        new_photos_expanded(limit: 1) {
-            key
-            bucket
-        }
-        username
+  getUsers(skip: $skip, limit: $limit, search: $search) {
+    _id
+    description
+    image_avatar
+    name
+    new_photos
+    new_photos_expanded(limit: 1) {
+      key
+      bucket
     }
+    username
+    email
+  }
 }

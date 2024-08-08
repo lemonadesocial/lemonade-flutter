@@ -1,6 +1,5 @@
 import 'package:app/core/domain/event/entities/event_role.dart';
-import 'package:app/core/utils/email_validator.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,16 +10,19 @@ class EventTeamMembersFormBloc
   EventTeamMembersFormBloc()
       : super(
           EventTeamMembersFormBlocState(
-            teamMembers: [],
+            users: [],
             isValid: false,
           ),
         ) {
     on<EventTeamMembersFormBlocEventSelectRole>(onSelectRole);
-    on<EventTeamMembersFormBlocEventAddNewTeamMember>(
-      onAddNewTeamMember,
+    on<EventTeamMembersFormBlocEventAddNewUser>(
+      onAddNewUser,
     );
-    on<EventTeamMembersFormBlocEventRemoveTeamMember>(
-      onRemoveTeamMember,
+    on<EventTeamMembersFormBlocEventAddNewEmail>(
+      onAddNewEmail,
+    );
+    on<EventTeamMembersFormBlocEventRemoveUser>(
+      onRemoveUser,
     );
   }
 
@@ -36,47 +38,51 @@ class EventTeamMembersFormBloc
     );
   }
 
-  void onAddNewTeamMember(
-    EventTeamMembersFormBlocEventAddNewTeamMember event,
+  void onAddNewUser(
+    EventTeamMembersFormBlocEventAddNewUser event,
     Emitter emit,
   ) {
-    List<Input$TicketAssignment> newAssignments = [
-      ...state.teamMembers,
-      Input$TicketAssignment(email: "", count: 1),
-    ];
+    List<dynamic> newUsers = [...state.users, event.user];
 
     emit(
       _validate(
-        state.copyWith(teamMembers: newAssignments),
+        state.copyWith(users: newUsers),
       ),
     );
   }
 
-  void onRemoveTeamMember(
-    EventTeamMembersFormBlocEventRemoveTeamMember event,
+  void onAddNewEmail(
+    EventTeamMembersFormBlocEventAddNewEmail event,
     Emitter emit,
   ) {
-    List<Input$TicketAssignment> newAssignments = [...state.teamMembers];
-    newAssignments.removeAt(event.index);
+    List<dynamic> newUsers = [...state.users, event.email];
 
     emit(
       _validate(
-        state.copyWith(teamMembers: newAssignments),
+        state.copyWith(users: newUsers),
+      ),
+    );
+  }
+
+  void onRemoveUser(
+    EventTeamMembersFormBlocEventRemoveUser event,
+    Emitter emit,
+  ) {
+    List<dynamic> newUsers = [...state.users];
+    newUsers.removeAt(event.index);
+
+    emit(
+      _validate(
+        state.copyWith(users: newUsers),
       ),
     );
   }
 
   EventTeamMembersFormBlocState _validate(EventTeamMembersFormBlocState state) {
-    final hasTicketTypeSelected = state.selectedRole != null;
-    final allAssignmentsValid = state.teamMembers
-        .map(
-          (assignment) =>
-              EmailValidator.validate(assignment.email) && assignment.count > 0,
-        )
-        .every((element) => element == true);
-
+    final hasSelectedRole = state.selectedRole != null;
+    final isNotEmpty = state.users.isNotEmpty;
     return state.copyWith(
-      isValid: hasTicketTypeSelected && allAssignmentsValid,
+      isValid: hasSelectedRole && isNotEmpty,
     );
   }
 }
@@ -86,18 +92,22 @@ class EventTeamMembersFormBlocEvent with _$EventTeamMembersFormBlocEvent {
   factory EventTeamMembersFormBlocEvent.selectRole({
     EventRole? role,
   }) = EventTeamMembersFormBlocEventSelectRole;
-  factory EventTeamMembersFormBlocEvent.addNewTeamMember() =
-      EventTeamMembersFormBlocEventAddNewTeamMember;
-  factory EventTeamMembersFormBlocEvent.removeTeamMember({
+  factory EventTeamMembersFormBlocEvent.addNewUser({
+    required User user,
+  }) = EventTeamMembersFormBlocEventAddNewUser;
+  factory EventTeamMembersFormBlocEvent.addNewEmail({
+    required String email,
+  }) = EventTeamMembersFormBlocEventAddNewEmail;
+  factory EventTeamMembersFormBlocEvent.removeUser({
     required int index,
-  }) = EventTeamMembersFormBlocEventRemoveTeamMember;
+  }) = EventTeamMembersFormBlocEventRemoveUser;
 }
 
 @freezed
 class EventTeamMembersFormBlocState with _$EventTeamMembersFormBlocState {
   factory EventTeamMembersFormBlocState({
     EventRole? selectedRole,
-    required List<Input$TicketAssignment> teamMembers,
+    required List<dynamic> users,
     required bool isValid,
   }) = _EventTeamMembersFormBlocState;
 }

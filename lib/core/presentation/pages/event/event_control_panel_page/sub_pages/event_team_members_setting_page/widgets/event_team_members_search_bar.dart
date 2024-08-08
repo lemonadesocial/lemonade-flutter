@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/create_farcaster_cast_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -92,7 +93,7 @@ class _AddTeamMemberButton extends StatelessWidget {
                 role: eventRoles.first,
               ),
             );
-        AutoRouter.of(context).navigate(const EventTeamMembersFormRoute());
+        AutoRouter.of(context).navigate(EventTeamMembersFormRoute());
       },
       child: Container(
         width: Sizing.medium,
