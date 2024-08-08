@@ -1,3 +1,4 @@
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_feature.g.dart';
@@ -8,7 +9,7 @@ class EventFeature with _$EventFeature {
   @JsonSerializable(explicitToJson: true)
   const factory EventFeature({
     String? id,
-    String? code,
+    Enum$FeatureCode? code,
     String? name,
     bool? featureEnable,
   }) = _EventFeature;

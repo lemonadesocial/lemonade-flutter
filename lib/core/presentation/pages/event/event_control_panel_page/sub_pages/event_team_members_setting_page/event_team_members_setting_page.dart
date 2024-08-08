@@ -1,5 +1,4 @@
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
-import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +16,6 @@ class EventTeamMembersSettingPage extends StatelessWidget
         BlocProvider(
           create: (context) =>
               GetEventRolesBloc()..add(GetEventRolesEvent.fetch()),
-        ),
-        BlocProvider(
-          create: (context) => EventTeamMembersFormBloc(),
         ),
         BlocProvider(
           create: (context) => GetUsersBloc(),

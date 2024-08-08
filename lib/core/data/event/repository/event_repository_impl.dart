@@ -6,8 +6,10 @@ import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
+import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/domain/event/entities/event_role_information.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -20,8 +22,11 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/event/mutation/delete_user_role.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/add_user_role.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/decide_user_join_request.graphql.dart';
@@ -617,12 +622,10 @@ class EventRepositoryImpl implements EventRepository {
   }) async {
     final result = await client.query$GetListUserRole(
       Options$Query$GetListUserRole(
+        fetchPolicy: FetchPolicy.noCache,
         variables: Variables$Query$GetListUserRole(
           input: Input$EventRoleFilter(
             event_id: eventId,
-            role_ids: null,
-            // role_ids: roleId != null ? [roleId] : [],
-            search_criteria: "",
           ),
         ),
       ),
@@ -634,10 +637,63 @@ class EventRepositoryImpl implements EventRepository {
       List.from(
         result.parsedData!.getListUserRole
             .map(
-              (item) => EventUserRole.fromJson(item.toJson()),
+              (item) => EventUserRole(
+                roles: item.roles
+                    .map((e) => EventRoleInformation.fromJson(e.toJson()))
+                    .toList(),
+                user: User.fromDto(
+                  UserDto.fromJson(
+                    item.user!.toJson(),
+                  ),
+                ),
+              ),
             )
             .toList(),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> addUserRole({
+    required String eventId,
+    required List<Input$RoleInput> roles,
+    required List<Input$UserFilter> users,
+  }) async {
+    final result = await client.mutate$AddUserRole(
+      Options$Mutation$AddUserRole(
+        variables: Variables$Mutation$AddUserRole(
+          input: Input$EventRoleInput(
+            users: users,
+            roles: roles,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.addUserRole);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteUserRole({
+    required String eventId,
+    required List<Input$UserFilter> users,
+  }) async {
+    final result = await client.mutate$DeleteUserRole(
+      Options$Mutation$DeleteUserRole(
+        variables: Variables$Mutation$DeleteUserRole(
+          input: Input$EventRoleInput(
+            users: users,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.deleteUserRole);
   }
 }

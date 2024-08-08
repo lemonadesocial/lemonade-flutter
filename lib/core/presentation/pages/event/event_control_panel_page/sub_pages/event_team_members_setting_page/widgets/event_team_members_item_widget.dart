@@ -14,12 +14,14 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.onTap,
+    required this.roleName,
     this.isFirst = false,
     this.isLast = false,
   });
 
   final String title;
   final String subTitle;
+  final String roleName;
   final VoidCallback onTap;
   final bool? isFirst;
   final bool? isLast;
@@ -95,8 +97,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
-                // TODO: Integrate with real data soon
-                const _RoleName(roleName: 'Creator'),
+                _RoleName(roleName: roleName),
                 SizedBox(width: Spacing.xSmall),
                 Assets.icons.icMoreHoriz.svg(
                   width: Sizing.xSmall,

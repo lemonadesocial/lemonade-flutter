@@ -1,11 +1,15 @@
+import 'dart:ffi';
+
 import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
+import 'package:app/core/domain/event/entities/event_role.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/choose_role_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/event_search_members_input.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/event_team_member_item.dart';
-import 'package:app/core/presentation/pages/farcaster/create_farcaster_cast_page/widgets/create_cast_bottom_bar/create_farcaster_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -19,9 +23,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class EventTeamMembersFormPage extends StatelessWidget {
-  final _scrollController = ScrollController();
+  final EventUserRole? initialEventUserRole;
+  final Function()? refetch;
 
-  EventTeamMembersFormPage({super.key});
+  const EventTeamMembersFormPage({
+    super.key,
+    this.initialEventUserRole,
+    this.refetch,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<EventRole> eventRoles =
+        context.read<GetEventRolesBloc>().state.eventRoles;
+    return BlocProvider(
+      create: (context) => EventTeamMembersFormBloc(
+        initialEventUserRole: initialEventUserRole,
+      )..add(
+          EventTeamMembersFormBlocEvent.selectRole(
+            role: eventRoles.first,
+          ),
+        ),
+      child: EventTeamMembersFormView(refetch: refetch),
+    );
+  }
+}
+
+class EventTeamMembersFormView extends StatelessWidget {
+  final _scrollController = ScrollController();
+  final Function()? refetch;
+
+  EventTeamMembersFormView({super.key, this.refetch});
 
   scrollToEnd() {
     _scrollController.animateTo(
@@ -47,170 +79,195 @@ class EventTeamMembersFormPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    String eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
+              fetched: (event) => event.id,
+              orElse: () => "",
+            ) ??
+        "";
     return Scaffold(
       appBar: const LemonAppBar(),
       resizeToAvoidBottomInset: false,
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
+      body:
+          BlocListener<EventTeamMembersFormBloc, EventTeamMembersFormBlocState>(
+        listener: (context, state) {
+          if (state.status == EventTeamMembersFormStatus.success) {
+            if (refetch != null) refetch?.call();
+            SnackBarUtils.showSuccess(
+              message: t.event.teamMembers.addTeamMemberSuccessfully,
+            );
+            AutoRouter.of(context).pop();
+          }
         },
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                left: Spacing.smMedium,
-                right: Spacing.smMedium,
-                top: Spacing.xSmall,
-              ),
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.event.teamMembers.addTeamMember,
-                          style: Typo.extraLarge.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w800,
-                            fontFamily: FontFamily.nohemiVariable,
-                            height: 0,
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: Spacing.smMedium,
+                  right: Spacing.smMedium,
+                  top: Spacing.xSmall,
+                ),
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            t.event.teamMembers.addTeamMember,
+                            style: Typo.extraLarge.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: FontFamily.nohemiVariable,
+                              height: 0,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: Spacing.superExtraSmall),
-                        Text(
-                          t.event.teamMembers.addTeamMemberDescription,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
+                          SizedBox(height: Spacing.superExtraSmall),
+                          Text(
+                            t.event.teamMembers.addTeamMemberDescription,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: Spacing.large),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const _CircleNumber(label: '1'),
-                        SizedBox(
-                          width: Spacing.small,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                t.event.teamMembers.chooseRole,
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
-                                  height: 0,
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.large),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _CircleNumber(label: '1'),
+                          SizedBox(
+                            width: Spacing.small,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.event.teamMembers.chooseRole,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    height: 0,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: Spacing.xSmall,
-                              ),
-                              BlocBuilder<GetEventRolesBloc,
-                                  GetEventRolesState>(
-                                builder: (context, state) {
-                                  return ChooseRoleDropdown(
-                                    eventRoles: state.eventRoles,
+                                SizedBox(
+                                  height: Spacing.xSmall,
+                                ),
+                                BlocBuilder<GetEventRolesBloc,
+                                    GetEventRolesState>(
+                                  builder: (context, state) {
+                                    return ChooseRoleDropdown(
+                                      eventRoles: state.eventRoles,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 30.w,
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _CircleNumber(label: '2'),
+                          SizedBox(
+                            width: Spacing.small,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.event.teamMembers.selectTeamMembers,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    height: 0,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: Spacing.xSmall,
+                                ),
+                                Focus(
+                                  onFocusChange: (isFocused) {
+                                    if (isFocused) {
+                                      scrollToEnd();
+                                    } else {
+                                      scrollToTop();
+                                    }
+                                  },
+                                  child: EventSearchMembersInput(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: 350.w),
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BlocBuilder<EventTeamMembersFormBloc,
+                    EventTeamMembersFormBlocState>(
+                  builder: (context, state) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: colorScheme.background,
+                        border: Border(
+                          top: BorderSide(
+                            color: colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(Spacing.smMedium),
+                      child: SafeArea(
+                        child: Opacity(
+                          opacity: state.isValid == true ? 1 : 0.5,
+                          child: LinearGradientButton.primaryButton(
+                            loadingWhen: state.status ==
+                                EventTeamMembersFormStatus.loading,
+                            onTap: () {
+                              context.read<EventTeamMembersFormBloc>().add(
+                                    EventTeamMembersFormBlocEvent.submitForm(
+                                      eventId: eventId,
+                                    ),
                                   );
-                                },
-                              ),
-                            ],
+                            },
+                            label: t.common.actions.sendInvite,
+                            textColor: colorScheme.onPrimary,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 30.w,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const _CircleNumber(label: '2'),
-                        SizedBox(
-                          width: Spacing.small,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                t.event.teamMembers.selectTeamMembers,
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
-                                  height: 0,
-                                ),
-                              ),
-                              SizedBox(
-                                height: Spacing.xSmall,
-                              ),
-                              Focus(
-                                onFocusChange: (isFocused) {
-                                  if (isFocused) {
-                                    scrollToEnd();
-                                  } else {
-                                    scrollToTop();
-                                  }
-                                },
-                                child: EventSearchMembersInput(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 350.w),
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: BlocBuilder<EventTeamMembersFormBloc,
-                  EventTeamMembersFormBlocState>(
-                builder: (context, state) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: colorScheme.background,
-                      border: Border(
-                        top: BorderSide(
-                          color: colorScheme.outline,
-                        ),
                       ),
-                    ),
-                    padding: EdgeInsets.all(Spacing.smMedium),
-                    child: SafeArea(
-                      child: Opacity(
-                        opacity: state.isValid == true ? 1 : 0.5,
-                        child: LinearGradientButton.primaryButton(
-                          onTap: () {},
-                          label: t.common.actions.sendInvite,
-                          textColor: colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

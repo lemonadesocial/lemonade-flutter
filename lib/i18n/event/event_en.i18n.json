@@ -665,6 +665,8 @@
         "accessControl": "Access control",
         "eventRoles": "Event Roles",
         "selectTeamMembers": "Select team members",
-        "searchProfileOrEnterEmail": "Search profile or enter email"
+        "searchProfileOrEnterEmail": "Search profile or enter email",
+        "addTeamMemberSuccessfully": "Add team member successfully",
+        "deletTeamMemberSuccessfully": "Delete team member successfully"
     }
 }
