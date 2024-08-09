@@ -1,7 +1,7 @@
 name: app
 description: Lemonade Social App
 publish_to: "none"
-version: 1.29.0
+version: 1.30.0
 
 environment:
   flutter: "3.19.6"
@@ -255,6 +255,12 @@ flutter:
           weight: 500
         - asset: assets/fonts/Orbitron-Regular.ttf
           weight: 400
+    - family: SpaceMono
+      fonts:
+        - asset: assets/fonts/SpaceMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SpaceMono-Bold.ttf
+          weight: 600
 
 sentry:
   upload_debug_symbols: true
