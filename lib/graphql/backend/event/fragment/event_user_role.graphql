@@ -3,12 +3,14 @@
 
 fragment EventUserRole on EventUserRole {
   user {
-    id: _id
+    _id
     name
-    email
-    imageAvatar: image_avatar
+    username
+    new_photos
+    image_avatar
   }
   roles {
     ...EventRoleInformation
   }
+  email
 }

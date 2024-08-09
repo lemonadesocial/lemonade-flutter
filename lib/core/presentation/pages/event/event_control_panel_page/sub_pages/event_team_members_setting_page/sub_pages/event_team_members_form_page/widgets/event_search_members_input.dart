@@ -30,6 +30,12 @@ class EventSearchMembersInputState extends State<EventSearchMembersInput> {
   String? _searchValue;
 
   void onConfirmInviteViaEmail() {
+    if (StringUtils.isValidEmail(_controller.text) == false) {
+      setState(() {
+        _showRecommendationBox = false;
+      });
+      return;
+    }
     context.read<EventTeamMembersFormBloc>().add(
           EventTeamMembersFormBlocEventAddNewEmail(email: _controller.text),
         );

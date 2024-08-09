@@ -17,6 +17,8 @@ class EventTeamMembersFormBloc
           EventTeamMembersFormBlocState.initial(),
         ) {
     on<EventTeamMembersFormBlocEventSelectRole>(onSelectRole);
+    on<EventTeamMembersFormBlocEventChangeVisibleOnEvent>(
+        onChangeVisibleOnEvent);
     on<EventTeamMembersFormBlocEventAddNewUser>(
       onAddNewUser,
     );
@@ -43,8 +45,22 @@ class EventTeamMembersFormBloc
     EventTeamMembersFormBlocEventSelectRole event,
     Emitter emit,
   ) {
+    final isCohost = event.role?.code == Enum$RoleCode.Cohost;
     final newState = state.copyWith(
       selectedRole: event.role,
+      visibleOnEvent: isCohost == true ? true : false,
+    );
+    emit(
+      _validate(newState),
+    );
+  }
+
+  void onChangeVisibleOnEvent(
+    EventTeamMembersFormBlocEventChangeVisibleOnEvent event,
+    Emitter emit,
+  ) {
+    final newState = state.copyWith(
+      visibleOnEvent: event.visibleOnEvent,
     );
     emit(
       _validate(newState),
@@ -107,7 +123,10 @@ class EventTeamMembersFormBloc
     final result = await getIt<EventRepository>().addUserRole(
       eventId: event.eventId,
       roles: [
-        Input$RoleInput(visible: false, role_id: state.selectedRole?.id ?? ''),
+        Input$RoleInput(
+          visible: state.visibleOnEvent ?? false,
+          role_id: state.selectedRole?.id ?? '',
+        ),
       ],
       users: usersInput,
     );
@@ -157,6 +176,9 @@ class EventTeamMembersFormBlocEvent with _$EventTeamMembersFormBlocEvent {
   factory EventTeamMembersFormBlocEvent.selectRole({
     EventRole? role,
   }) = EventTeamMembersFormBlocEventSelectRole;
+  factory EventTeamMembersFormBlocEvent.changeVisibleOnEvent({
+    bool? visibleOnEvent,
+  }) = EventTeamMembersFormBlocEventChangeVisibleOnEvent;
   factory EventTeamMembersFormBlocEvent.addNewUser({
     required User user,
   }) = EventTeamMembersFormBlocEventAddNewUser;
@@ -181,6 +203,7 @@ class EventTeamMembersFormBlocState with _$EventTeamMembersFormBlocState {
     @Default(EventTeamMembersFormStatus.initial)
     EventTeamMembersFormStatus status,
     EventRole? selectedRole,
+    bool? visibleOnEvent,
     required List<dynamic> users,
     required bool isValid,
   }) = _EventTeamMembersFormBlocState;
@@ -190,6 +213,7 @@ class EventTeamMembersFormBlocState with _$EventTeamMembersFormBlocState {
         status: EventTeamMembersFormStatus.initial,
         users: [],
         selectedRole: null,
+        visibleOnEvent: true,
         isValid: false,
       );
 }

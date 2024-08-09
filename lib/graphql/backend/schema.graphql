@@ -1496,6 +1496,7 @@ type EmailTracking {
 }
 
 enum EmailTemplateType {
+  role_grant
   invitation
   join_request_approved
   join_request_declined
@@ -1777,6 +1778,7 @@ input GetEventRewardUsesInput {
 
 type EventUserRole {
   user: User
+  email: String
   roles: [EventRoleInformation!]!
   event: Event
   created_at: DateTimeISO

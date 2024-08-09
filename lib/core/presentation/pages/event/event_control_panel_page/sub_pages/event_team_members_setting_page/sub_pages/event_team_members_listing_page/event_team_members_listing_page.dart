@@ -187,14 +187,18 @@ class _EventTeamMembersListingPageViewState
                       .map(
                         (item) => EventUserRole(
                           roles: item.roles
-                              .map((e) =>
-                                  EventRoleInformation.fromJson(e.toJson()))
+                              .map(
+                                (e) =>
+                                    EventRoleInformation.fromJson(e.toJson()),
+                              )
                               .toList(),
-                          user: User.fromDto(
-                            UserDto.fromJson(
-                              item.user!.toJson(),
-                            ),
-                          ),
+                          user: item.user != null
+                              ? User.fromDto(
+                                  UserDto.fromJson(
+                                    item.user!.toJson(),
+                                  ),
+                                )
+                              : null,
                         ),
                       )
                       .toList();

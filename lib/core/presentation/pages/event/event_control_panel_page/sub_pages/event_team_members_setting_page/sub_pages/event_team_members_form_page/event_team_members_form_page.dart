@@ -7,6 +7,7 @@ import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/choose_role_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/event_search_members_input.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_form_page/widgets/visible_on_event_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -34,18 +35,6 @@ class EventTeamMembersFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // List<EventRole> eventRoles =
-    //     context.read<GetEventRolesBloc>().state.eventRoles;
-    // return BlocProvider(
-    //   create: (context) => EventTeamMembersFormBloc(
-    //     initialEventUserRole: initialEventUserRole,
-    //   )..add(
-    //       EventTeamMembersFormBlocEvent.selectRole(
-    //         role: eventRoles.first,
-    //       ),
-    //     ),
-    //   child: EventTeamMembersFormView(refetch: refetch),
-    // );
     return EventTeamMembersFormView(refetch: refetch);
   }
 }
@@ -176,6 +165,10 @@ class EventTeamMembersFormView extends StatelessWidget {
                                     );
                                   },
                                 ),
+                                SizedBox(
+                                  height: Spacing.xSmall,
+                                ),
+                                const VisibleOnEventCard(),
                               ],
                             ),
                           ),
@@ -219,7 +212,7 @@ class EventTeamMembersFormView extends StatelessWidget {
                                       scrollToTop();
                                     }
                                   },
-                                  child: EventSearchMembersInput(),
+                                  child: const EventSearchMembersInput(),
                                 ),
                               ],
                             ),

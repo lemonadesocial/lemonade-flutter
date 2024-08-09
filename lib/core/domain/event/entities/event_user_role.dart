@@ -11,6 +11,7 @@ class EventUserRole with _$EventUserRole {
   const factory EventUserRole({
     User? user,
     List<EventRoleInformation>? roles,
+    String? email,
   }) = _EventUserRole;
 
   factory EventUserRole.fromJson(Map<String, dynamic> json) =>
