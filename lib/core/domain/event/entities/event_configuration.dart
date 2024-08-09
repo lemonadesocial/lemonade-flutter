@@ -87,6 +87,16 @@ class EventConfiguration {
           color: LemonColor.white54,
         ),
       ),
+      EventConfiguration(
+        type: EventConfigurationType.applicationForm,
+        title: t.event.configuration.applicationForm,
+        description: '',
+        icon: Icon(
+          Icons.format_list_bulleted_sharp,
+          size: 18,
+          color: LemonColor.white54,
+        ),
+      ),
     ];
     return eventConfigs;
   }

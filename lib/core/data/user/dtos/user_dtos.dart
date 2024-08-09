@@ -16,7 +16,6 @@ class UserDto with _$UserDto {
   const factory UserDto({
     @JsonKey(name: '_id') String? id,
     @JsonKey(name: 'created_at', includeIfNull: false) DateTime? createdAt,
-    @JsonKey(name: 'user_name', includeIfNull: false) String? userName,
     @JsonKey(name: 'display_name', includeIfNull: false) String? displayName,
     @JsonKey(name: 'first_name', includeIfNull: false) String? firstName,
     @JsonKey(name: 'last_name', includeIfNull: false) String? lastName,

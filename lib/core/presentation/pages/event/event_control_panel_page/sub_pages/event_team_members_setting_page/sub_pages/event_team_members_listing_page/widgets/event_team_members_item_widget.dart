@@ -1,10 +1,12 @@
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,15 +16,19 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     required this.title,
     required this.subTitle,
     required this.onTap,
+    required this.roleName,
     this.isFirst = false,
     this.isLast = false,
+    this.user,
   });
 
   final String title;
   final String subTitle;
+  final String roleName;
   final VoidCallback onTap;
   final bool? isFirst;
   final bool? isLast;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +58,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
             padding: EdgeInsets.all(Spacing.small),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(Sizing.medium),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    imageUrl: '',
-                    placeholder: (_, __) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                    errorWidget: (_, __, ___) =>
-                        ImagePlaceholder.defaultPlaceholder(),
-                  ),
-                ),
+                _Avatar(user: user),
                 SizedBox(
                   width: Spacing.xSmall,
                 ),
@@ -95,8 +89,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
-                // TODO: Integrate with real data soon
-                const _RoleName(roleName: 'Creator'),
+                _RoleName(roleName: roleName),
                 SizedBox(width: Spacing.xSmall),
                 Assets.icons.icMoreHoriz.svg(
                   width: Sizing.xSmall,
@@ -147,6 +140,48 @@ class _RoleName extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  const _Avatar({
+    required this.user,
+  });
+
+  final User? user;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    if (user == null) {
+      return Container(
+        width: Sizing.medium,
+        height: Sizing.medium,
+        margin: EdgeInsets.only(
+          right: Spacing.xSmall,
+        ),
+        decoration: ShapeDecoration(
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LemonRadius.small * 2),
+          ),
+        ),
+        child: Center(
+          child: ThemeSvgIcon(
+            color: colorScheme.onPrimary,
+            builder: (filter) => Assets.icons.icEmailAt.svg(
+              width: Sizing.xSmall,
+              height: Sizing.xSmall,
+              colorFilter: filter,
+            ),
+          ),
+        ),
+      );
+    }
+    return LemonCircleAvatar(
+      size: Sizing.medium,
+      url: AvatarUtils.getAvatarUrl(user: user),
     );
   }
 }

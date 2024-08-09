@@ -1,0 +1,3 @@
+mutation AddUserRole($input: EventRoleInput!) {
+  addUserRole(input: $input)
+}

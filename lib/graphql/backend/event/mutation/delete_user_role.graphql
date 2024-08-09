@@ -1,0 +1,3 @@
+mutation DeleteUserRole($input: EventRoleInput!) {
+  deleteUserRole(input: $input)
+}

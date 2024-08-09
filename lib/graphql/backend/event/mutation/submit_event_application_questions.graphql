@@ -1,3 +1,8 @@
 mutation SubmitEventApplicationQuestions($event: MongoID!, $questions: [QuestionInput!]!) {
-  submitEventApplicationQuestions(event: $event, questions: $questions)
+  submitEventApplicationQuestions(event: $event, questions: $questions) {
+    id: _id
+    question
+    required
+    position
+  }
 }

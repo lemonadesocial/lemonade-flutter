@@ -9,6 +9,7 @@ import 'package:app/core/presentation/pages/event/create_event/widgets/event_con
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -130,17 +131,29 @@ class CreateEventConfigGrid extends StatelessWidget {
                   builder: (context, state) {
                     return EventConfigCard(
                       title: eventConfig.title,
-                      description: eventConfig.description,
+                      description: event?.virtualUrl ?? eventConfig.description,
                       icon: eventConfig.icon,
                       selected: eventConfig.selected,
                       onTap: () {
                         Vibrate.feedback(FeedbackType.light);
-                        context.read<EditEventDetailBloc>().add(
-                              EditEventDetailEvent.update(
-                                eventId: event?.id ?? '',
-                                virtual: !(event?.virtual ?? false),
-                              ),
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          builder: (mContext) {
+                            return EventVirtualLinkSettingPage(
+                              defaultUrl: event?.virtualUrl,
+                              onConfirm: (virtualUrl) {
+                                context.read<EditEventDetailBloc>().add(
+                                      EditEventDetailEvent.update(
+                                        eventId: event?.id ?? '',
+                                        virtual: virtualUrl.isNotEmpty,
+                                        virtualUrl: virtualUrl,
+                                      ),
+                                    );
+                              },
                             );
+                          },
+                        );
                       },
                       loading:
                           state.status == EditEventDetailBlocStatus.loading,
@@ -242,13 +255,26 @@ class CreateEventConfigGrid extends StatelessWidget {
                 builder: (context, state) {
                   return EventConfigCard(
                     title: eventConfig.title,
-                    description: eventConfig.description,
+                    description: state.virtualUrl ?? '',
                     icon: eventConfig.icon,
                     onTap: () {
                       Vibrate.feedback(FeedbackType.light);
-                      context.read<CreateEventBloc>().add(
-                            VirtualChanged(virtual: !state.virtual),
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        builder: (mContext) {
+                          return EventVirtualLinkSettingPage(
+                            defaultUrl: state.virtualUrl,
+                            onConfirm: (virtualUrl) {
+                              context.read<CreateEventBloc>().add(
+                                    CreateEventEvent.virtualLinkChanged(
+                                      virtualUrl: virtualUrl,
+                                    ),
+                                  );
+                            },
                           );
+                        },
+                      );
                     },
                     selected: state.virtual,
                   );

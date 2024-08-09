@@ -1,0 +1,8 @@
+# import './event_role.graphql'
+
+fragment EventRoleInformation on EventRoleInformation {
+  visible
+  roleExpanded: role_expanded {
+    ...EventRole
+  }
+}

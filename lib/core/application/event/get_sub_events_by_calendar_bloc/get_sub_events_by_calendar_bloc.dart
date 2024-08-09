@@ -24,8 +24,10 @@ class GetSubEventsByCalendarBloc
   }) : super(
           GetSubEventsByCalendarState(
             selectedDate: DateTime.now().toLocal().withoutTime,
-            eventsGroupByDate: <DateTime, List<Event>>{},
             events: [],
+            eventsGroupByDate: <DateTime, List<Event>>{},
+            selectedHosts: [],
+            selectedTags: [],
             isLoading: false,
           ),
         ) {
@@ -40,6 +42,7 @@ class GetSubEventsByCalendarBloc
           .switchMap(mapper),
     );
     on<_GetSubEventsByCalendarEventOnFetch>(_onFetch);
+    on<_GetSubEventsByCalendarEventOnFilterUpdate>(_onFilterUpdate);
   }
 
   void _onDateChanged(
@@ -54,6 +57,18 @@ class GetSubEventsByCalendarBloc
     }
     emit(state.copyWith(selectedDate: selectedDate));
     add(GetSubEventsByCalendarEvent.fetch());
+  }
+
+  void _onFilterUpdate(
+    _GetSubEventsByCalendarEventOnFilterUpdate event,
+    Emitter emit,
+  ) {
+    emit(
+      state.copyWith(
+        selectedHosts: event.selectedHosts ?? state.selectedHosts,
+        selectedTags: event.selectedTags ?? state.selectedTags,
+      ),
+    );
   }
 
   Future<void> _onFetch(
@@ -136,14 +151,20 @@ class GetSubEventsByCalendarEvent with _$GetSubEventsByCalendarEvent {
   }) = _GetSubEventsByCalendarEventOnDateChanged;
   factory GetSubEventsByCalendarEvent.fetch() =
       _GetSubEventsByCalendarEventOnFetch;
+  factory GetSubEventsByCalendarEvent.updateFilter({
+    List<String>? selectedTags,
+    List<String>? selectedHosts,
+  }) = _GetSubEventsByCalendarEventOnFilterUpdate;
 }
 
 @freezed
 class GetSubEventsByCalendarState with _$GetSubEventsByCalendarState {
   factory GetSubEventsByCalendarState({
     required DateTime selectedDate,
-    required Map<DateTime, List<Event>> eventsGroupByDate,
     required List<Event> events,
+    required Map<DateTime, List<Event>> eventsGroupByDate,
+    required List<String> selectedHosts,
+    required List<String> selectedTags,
     required bool isLoading,
     Failure? failure,
   }) = _GetSubEventsByCalendarState;
