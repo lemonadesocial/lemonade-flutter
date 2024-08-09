@@ -23,7 +23,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         ) {
     on<EventTitleChanged>(_onTitleChanged);
     on<EventDescriptionChanged>(_onDescriptionChanged);
-    on<VirtualChanged>(_onVirtualChanged);
+    on<VirtualLinkChanged>(_onVirtualLinkChanged);
     on<FormSubmitted>(_onFormSubmitted);
     on<TagsChanged>(_onTagsChanged);
   }
@@ -60,13 +60,14 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
-  Future<void> _onVirtualChanged(
-    VirtualChanged event,
+  Future<void> _onVirtualLinkChanged(
+    VirtualLinkChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     emit(
       state.copyWith(
-        virtual: event.virtual,
+        virtualUrl: event.virtualUrl,
+        virtual: event.virtualUrl?.isNotEmpty == true,
       ),
     );
   }
@@ -118,6 +119,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
           event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
         ),
         virtual: state.virtual,
+        virtual_url: state.virtualUrl,
         address: event.address != null
             ? Input$AddressInput(
                 title: event.address!.title,
@@ -169,8 +171,8 @@ class CreateEventEvent with _$CreateEventEvent {
     required String description,
   }) = EventDescriptionChanged;
 
-  const factory CreateEventEvent.virtualChanged({required bool virtual}) =
-      VirtualChanged;
+  const factory CreateEventEvent.virtualLinkChanged({String? virtualUrl}) =
+      VirtualLinkChanged;
 
   const factory CreateEventEvent.tagsChanged({required List<String> tags}) =
       TagsChanged;
@@ -194,7 +196,8 @@ class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
     @Default(StringFormz.pure()) StringFormz description,
-    @Default(true) bool virtual,
+    @Default(false) bool virtual,
+    String? virtualUrl,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default([]) List<String> tags,

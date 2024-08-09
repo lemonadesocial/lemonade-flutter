@@ -55,6 +55,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'guest_limit') double? guestLimit,
     @JsonKey(name: 'guest_limit_per') double? guestLimitPer,
     bool? virtual,
+    @JsonKey(name: 'virtual_url') String? virtualUrl,
     bool? private,
     List<RewardDto>? rewards,
     @JsonKey(name: 'approval_required') bool? approvalRequired,
