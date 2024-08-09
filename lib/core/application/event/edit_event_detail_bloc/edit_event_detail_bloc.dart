@@ -42,6 +42,7 @@ class EditEventDetailBloc
     final result = await eventRepository.updateEvent(
       input: Input$EventInput(
         virtual: event.virtual,
+        virtual_url: event.virtualUrl,
         start: event.start != null
             ? DateTime.parse(event.start!.toUtc().toIso8601String())
             : null,
@@ -104,6 +105,7 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
   const factory EditEventDetailEvent.update({
     required String eventId,
     bool? virtual,
+    String? virtualUrl,
     DateTime? start,
     DateTime? end,
     Address? address,

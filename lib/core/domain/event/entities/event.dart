@@ -53,6 +53,7 @@ class Event with _$Event {
     double? guestLimit,
     double? guestLimitPer,
     bool? virtual,
+    String? virtualUrl,
     bool? private,
     List<Reward>? rewards,
     bool? approvalRequired,
@@ -132,6 +133,7 @@ class Event with _$Event {
       guestLimit: dto.guestLimit,
       guestLimitPer: dto.guestLimitPer,
       virtual: dto.virtual,
+      virtualUrl: dto.virtualUrl,
       private: dto.private,
       rewards: List.from(dto.rewards ?? [])
           .map((item) => Reward.fromDto(item))

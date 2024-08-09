@@ -29,6 +29,8 @@
     "myEvents": "My events",
     "selectEvents": "Select events",
     "hostedBy": "Hosted by",
+    "tagsType": "type",
+    "hosts": "hosts",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -210,7 +212,8 @@
         "faq": "FAQ",
         "info": "Info",
         "guests": "Guests",
-        "team": "Team"
+        "team": "Team",
+        "applicationForm": "Application form"
     },
     "rewards": "Rewards",
     "addPoap": "Add POAP",
@@ -672,5 +675,10 @@
         "tryEnteringEmail": "Try entering an email or search for someone else",
         "inviteViaEmail": "Invite via email",
         "invitedViaEmail": "Invited via email"
+    },
+    "virtualLinkSetting": {
+        "addVirtualLink": "Add virtual link",
+        "addVirtualLinkDescription": "Please enter the virtual event link for your guests to join",
+        "enterLink": "Enter link"
     }
 }

@@ -178,6 +178,7 @@ const eventFragment = '''
   guest_limit
   guest_limit_per
   virtual
+  virtual_url
   private
   invited_count
   checkin_count
