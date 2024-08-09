@@ -11,13 +11,14 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
   GetEventRolesBloc()
       : super(
           GetEventRolesState(
-            fetching: true,
-            eventRoles: [],
-            selectedFilterRole: null,
-          ),
+              fetching: true,
+              eventRoles: [],
+              selectedFilterRole: null,
+              searchCriteria: ""),
         ) {
     on<_GetEventRolesEventFetch>(_onFetch);
     on<_GetEventRolesEventSelectFilterRole>(_onselectFilterRole);
+    on<_GetEventRolesEventChangeSearchCriteria>(_onChangeSearchCriteria);
   }
 
   void _onFetch(_GetEventRolesEventFetch event, Emitter emit) async {
@@ -43,6 +44,15 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
       state.copyWith(selectedFilterRole: event.eventRole),
     );
   }
+
+  void _onChangeSearchCriteria(
+    _GetEventRolesEventChangeSearchCriteria event,
+    Emitter emit,
+  ) async {
+    emit(
+      state.copyWith(searchCriteria: event.searchCriteria),
+    );
+  }
 }
 
 @freezed
@@ -52,6 +62,10 @@ class GetEventRolesEvent with _$GetEventRolesEvent {
   factory GetEventRolesEvent.selectFilterRole({
     required EventRole? eventRole,
   }) = _GetEventRolesEventSelectFilterRole;
+
+  factory GetEventRolesEvent.changeSearchCriteria({
+    required String? searchCriteria,
+  }) = _GetEventRolesEventChangeSearchCriteria;
 }
 
 @freezed
@@ -60,5 +74,6 @@ class GetEventRolesState with _$GetEventRolesState {
     required bool fetching,
     required List<EventRole> eventRoles,
     required EventRole? selectedFilterRole,
+    required String? searchCriteria,
   }) = _GetEventRolesState;
 }

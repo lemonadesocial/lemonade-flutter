@@ -1,3 +1,6 @@
+import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
+import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
+import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -9,6 +12,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventTeamMembersSearchBar extends StatelessWidget {
@@ -37,7 +41,13 @@ class EventTeamMembersSearchBar extends StatelessWidget {
             height: 42.w,
             child: TextField(
               controller: textController,
-              onChanged: (v) {},
+              onChanged: (value) {
+                context.read<GetEventRolesBloc>().add(
+                      GetEventRolesEvent.changeSearchCriteria(
+                        searchCriteria: value,
+                      ),
+                    );
+              },
               cursorColor: colorScheme.onSecondary,
               decoration: InputDecoration(
                 fillColor: LemonColor.atomicBlack,
@@ -87,6 +97,13 @@ class _AddTeamMemberButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        List<EventRole> eventRoles =
+            context.read<GetEventRolesBloc>().state.eventRoles;
+        context.read<EventTeamMembersFormBloc>().add(
+              EventTeamMembersFormBlocEvent.selectRole(
+                role: eventRoles.first,
+              ),
+            );
         AutoRouter.of(context)
             .navigate(EventTeamMembersFormRoute(refetch: refetch));
       },

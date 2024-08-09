@@ -667,6 +667,9 @@
         "selectTeamMembers": "Select team members",
         "searchProfileOrEnterEmail": "Search profile or enter email",
         "addTeamMemberSuccessfully": "Add team member successfully",
-        "deletTeamMemberSuccessfully": "Delete team member successfully"
+        "deleteTeamMemberSuccessfully": "Delete team member successfully",
+        "noSuggestionsFound": "No suggestions found",
+        "tryEnteringEmail": "Try entering an email or search for someone else",
+        "inviteViaEmail": "Invite via email"
     }
 }

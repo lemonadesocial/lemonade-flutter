@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
@@ -106,99 +107,113 @@ class _EventTeamMembersListingPageViewState
           }
           final eventRoles = state.eventRoles;
           final selectedFilterRole = state.selectedFilterRole;
-          return Query$GetListUserRole$Widget(
-            options: Options$Query$GetListUserRole(
-              variables: Variables$Query$GetListUserRole(
-                input: Input$EventRoleFilter(
-                  event_id: widget.event?.id ?? '',
+          final searchCriteria = state.searchCriteria;
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  left: Spacing.xSmall,
+                ),
+                child: EventTeamMembersSearchBar(
+                  textController: _textController,
+                  refetch: () => null,
                 ),
               ),
-              fetchPolicy: FetchPolicy.networkOnly,
-            ),
-            builder: (result, {refetch, fetchMore}) {
-              if (result.isLoading == true) {
-                return Center(child: Loading.defaultLoading(context));
-              }
-              if ((result.parsedData?.getListUserRole ?? []).isEmpty) {
-                return const EmptyList();
-              }
-              final eventUserRoles = result.parsedData!.getListUserRole
-                  .map(
-                    (item) => EventUserRole(
-                      roles: item.roles
-                          .map((e) => EventRoleInformation.fromJson(e.toJson()))
-                          .toList(),
-                      user: User.fromDto(
-                        UserDto.fromJson(
-                          item.user!.toJson(),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList();
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: Spacing.xSmall,
-                    ),
-                    child: EventTeamMembersSearchBar(
-                      textController: _textController,
-                      refetch: refetch,
-                    ),
+              SizedBox(
+                height: Spacing.xSmall,
+              ),
+              SizedBox(
+                height: Sizing.medium,
+                child: ListView.separated(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.small,
                   ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  SizedBox(
-                    height: Sizing.medium,
-                    child: ListView.separated(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.small,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: Spacing.extraSmall),
-                      itemCount: eventRoles.length,
-                      itemBuilder: (context, index) {
-                        final item = eventRoles[index];
-                        final selected =
-                            state.selectedFilterRole?.id == item.id;
-                        return LemonOutlineButton(
-                          onTap: () {
-                            context.read<GetEventRolesBloc>().add(
-                                  GetEventRolesEvent.selectFilterRole(
-                                    eventRole: item,
-                                  ),
-                                );
-                          },
-                          textColor: selected == true
-                              ? colorScheme.onPrimary
-                              : colorScheme.onSecondary,
-                          backgroundColor: selected == true
-                              ? colorScheme.outline
-                              : Colors.transparent,
-                          borderColor: selected == true
-                              ? Colors.transparent
-                              : colorScheme.outline,
-                          label: StringUtils.capitalize(item.name ?? ''),
-                          radius: BorderRadius.circular(LemonRadius.button),
-                        );
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) =>
+                      SizedBox(width: Spacing.extraSmall),
+                  itemCount: eventRoles.length,
+                  itemBuilder: (context, index) {
+                    final item = eventRoles[index];
+                    final selected = state.selectedFilterRole?.id == item.id;
+                    return LemonOutlineButton(
+                      onTap: () {
+                        context.read<GetEventRolesBloc>().add(
+                              GetEventRolesEvent.selectFilterRole(
+                                eventRole: item,
+                              ),
+                            );
                       },
+                      textColor: selected == true
+                          ? colorScheme.onPrimary
+                          : colorScheme.onSecondary,
+                      backgroundColor: selected == true
+                          ? colorScheme.outline
+                          : Colors.transparent,
+                      borderColor: selected == true
+                          ? Colors.transparent
+                          : colorScheme.outline,
+                      label: StringUtils.capitalize(item.name ?? ''),
+                      radius: BorderRadius.circular(LemonRadius.button),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: Spacing.xSmall,
+              ),
+              Query$GetListUserRole$Widget(
+                options: Options$Query$GetListUserRole(
+                  variables: Variables$Query$GetListUserRole(
+                    input: Input$EventRoleFilter(
+                      event_id: widget.event?.id ?? '',
+                      role_ids: selectedFilterRole != null
+                          ? [selectedFilterRole.id ?? '']
+                          : null,
+                      search_criteria: searchCriteria,
                     ),
                   ),
-                  SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                  EventListUserRole(
-                    eventId: widget.event?.id ?? '',
-                    selectedFilterRole: selectedFilterRole,
-                    eventUserRoles: eventUserRoles,
-                  ),
-                ],
-              );
-            },
+                  fetchPolicy: FetchPolicy.networkOnly,
+                ),
+                builder: (result, {refetch, fetchMore}) {
+                  if (result.isLoading == true) {
+                    return Center(child: Loading.defaultLoading(context));
+                  }
+                  if ((result.parsedData?.getListUserRole ?? []).isEmpty) {
+                    return const EmptyList();
+                  }
+                  final eventUserRoles = result.parsedData!.getListUserRole
+                      .map(
+                        (item) => EventUserRole(
+                          roles: item.roles
+                              .map((e) =>
+                                  EventRoleInformation.fromJson(e.toJson()))
+                              .toList(),
+                          user: User.fromDto(
+                            UserDto.fromJson(
+                              item.user!.toJson(),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList();
+                  return BlocListener<EventTeamMembersFormBloc,
+                      EventTeamMembersFormBlocState>(
+                    listener: (context, state) {
+                      if (state.status == EventTeamMembersFormStatus.success) {
+                        if (refetch != null) refetch.call();
+                      }
+                    },
+                    child: EventListUserRole(
+                      eventId: widget.event?.id ?? '',
+                      selectedFilterRole: selectedFilterRole,
+                      eventUserRoles: eventUserRoles,
+                    ),
+                  );
+                },
+              ),
+            ],
           );
         },
       ),

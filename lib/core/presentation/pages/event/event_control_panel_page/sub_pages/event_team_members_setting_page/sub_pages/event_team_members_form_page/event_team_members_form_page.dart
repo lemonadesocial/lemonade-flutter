@@ -34,18 +34,19 @@ class EventTeamMembersFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<EventRole> eventRoles =
-        context.read<GetEventRolesBloc>().state.eventRoles;
-    return BlocProvider(
-      create: (context) => EventTeamMembersFormBloc(
-        initialEventUserRole: initialEventUserRole,
-      )..add(
-          EventTeamMembersFormBlocEvent.selectRole(
-            role: eventRoles.first,
-          ),
-        ),
-      child: EventTeamMembersFormView(refetch: refetch),
-    );
+    // List<EventRole> eventRoles =
+    //     context.read<GetEventRolesBloc>().state.eventRoles;
+    // return BlocProvider(
+    //   create: (context) => EventTeamMembersFormBloc(
+    //     initialEventUserRole: initialEventUserRole,
+    //   )..add(
+    //       EventTeamMembersFormBlocEvent.selectRole(
+    //         role: eventRoles.first,
+    //       ),
+    //     ),
+    //   child: EventTeamMembersFormView(refetch: refetch),
+    // );
+    return EventTeamMembersFormView(refetch: refetch);
   }
 }
 
@@ -91,10 +92,13 @@ class EventTeamMembersFormView extends StatelessWidget {
           BlocListener<EventTeamMembersFormBloc, EventTeamMembersFormBlocState>(
         listener: (context, state) {
           if (state.status == EventTeamMembersFormStatus.success) {
-            if (refetch != null) refetch?.call();
+            context
+                .read<EventTeamMembersFormBloc>()
+                .add(EventTeamMembersFormBlocEvent.reset());
             SnackBarUtils.showSuccess(
               message: t.event.teamMembers.addTeamMemberSuccessfully,
             );
+            if (refetch != null) refetch?.call();
             AutoRouter.of(context).pop();
           }
         },

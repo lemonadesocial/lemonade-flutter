@@ -29,6 +29,9 @@ class EventTeamMembersFormBloc
     on<EventTeamMembersFormBlocEventSubmitForm>(
       onSubmitForm,
     );
+    on<EventTeamMembersFormBlocEventReset>(
+      onReset,
+    );
     on<EventTeamMembersFormBlocEventPopulateInitialUserRole>(
         onPopulateUserRole);
     if (initialEventUserRole != null) {
@@ -124,12 +127,20 @@ class EventTeamMembersFormBloc
     emit(
       _validate(
         EventTeamMembersFormBlocState(
+          status: EventTeamMembersFormStatus.initial,
           users: [],
           selectedRole: null,
           isValid: false,
         ),
       ),
     );
+  }
+
+  void onReset(
+    EventTeamMembersFormBlocEventReset event,
+    Emitter emit,
+  ) {
+    emit(EventTeamMembersFormBlocState.initial());
   }
 
   EventTeamMembersFormBlocState _validate(EventTeamMembersFormBlocState state) {
@@ -160,6 +171,8 @@ class EventTeamMembersFormBlocEvent with _$EventTeamMembersFormBlocEvent {
   }) = EventTeamMembersFormBlocEventSubmitForm;
   factory EventTeamMembersFormBlocEvent.populateInitialUserRole() =
       EventTeamMembersFormBlocEventPopulateInitialUserRole;
+  factory EventTeamMembersFormBlocEvent.reset() =
+      EventTeamMembersFormBlocEventReset;
 }
 
 @freezed
@@ -176,6 +189,7 @@ class EventTeamMembersFormBlocState with _$EventTeamMembersFormBlocState {
       EventTeamMembersFormBlocState(
         status: EventTeamMembersFormStatus.initial,
         users: [],
+        selectedRole: null,
         isValid: false,
       );
 }
