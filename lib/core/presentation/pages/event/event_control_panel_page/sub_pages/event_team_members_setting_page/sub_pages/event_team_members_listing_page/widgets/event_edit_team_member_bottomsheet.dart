@@ -217,7 +217,7 @@ class EventEditTeamMemberBottomSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

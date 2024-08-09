@@ -28,74 +28,77 @@ class VisibleOnEventCard extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<EventTeamMembersFormBloc, EventTeamMembersFormBlocState>(
-        builder: (context, state) {
-      final isCohostSelected = state.selectedRole?.code == Enum$RoleCode.Cohost;
-      if (isCohostSelected == false) {
-        return const SizedBox();
-      }
-      return Container(
-        padding: EdgeInsets.all(Spacing.smMedium),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1.w,
-              color:
-                  showBorder == true ? LemonColor.white09 : Colors.transparent,
+      builder: (context, state) {
+        final isCohostSelected =
+            state.selectedRole?.code == Enum$RoleCode.Cohost;
+        if (isCohostSelected == false) {
+          return const SizedBox();
+        }
+        return Container(
+          padding: EdgeInsets.all(Spacing.smMedium),
+          clipBehavior: Clip.antiAlias,
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.w,
+                color: showBorder == true
+                    ? LemonColor.white09
+                    : Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(LemonRadius.small),
             ),
-            borderRadius: BorderRadius.circular(LemonRadius.small),
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: Sizing.medium / 2,
-              height: Sizing.medium / 2,
-              clipBehavior: Clip.antiAlias,
-              decoration: const BoxDecoration(),
-              child: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
-                builder: (filter) => Assets.icons.icEyeOutline.svg(
-                  colorFilter: filter,
-                  width: Sizing.medium / 2,
-                  height: Sizing.medium / 2,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: Sizing.medium / 2,
+                height: Sizing.medium / 2,
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(),
+                child: ThemeSvgIcon(
+                  color: colorScheme.onPrimary,
+                  builder: (filter) => Assets.icons.icEyeOutline.svg(
+                    colorFilter: filter,
+                    width: Sizing.medium / 2,
+                    height: Sizing.medium / 2,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: Spacing.xSmall),
-            Expanded(
-              child: SizedBox(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      t.event.teamMembers.visibleOnEvent,
-                      style: Typo.medium
-                          .copyWith(height: 0, color: colorScheme.onPrimary),
-                    ),
-                  ],
+              SizedBox(width: Spacing.xSmall),
+              Expanded(
+                child: SizedBox(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        t.event.teamMembers.visibleOnEvent,
+                        style: Typo.medium
+                            .copyWith(height: 0, color: colorScheme.onPrimary),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: Spacing.xSmall),
-            FlutterSwitch(
-              inactiveColor: colorScheme.outline,
-              inactiveToggleColor: colorScheme.onSurfaceVariant,
-              activeColor: LemonColor.switchActive,
-              activeToggleColor: colorScheme.onPrimary,
-              height: 24.h,
-              width: 42.w,
-              value: enabledSwitch,
-              onToggle: (value) => onToggleSwitch(value),
-            ),
-          ],
-        ),
-      );
-    });
+              SizedBox(width: Spacing.xSmall),
+              FlutterSwitch(
+                inactiveColor: colorScheme.outline,
+                inactiveToggleColor: colorScheme.onSurfaceVariant,
+                activeColor: LemonColor.switchActive,
+                activeToggleColor: colorScheme.onPrimary,
+                height: 24.h,
+                width: 42.w,
+                value: enabledSwitch,
+                onToggle: (value) => onToggleSwitch(value),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
