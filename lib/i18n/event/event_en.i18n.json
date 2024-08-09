@@ -674,7 +674,8 @@
         "noSuggestionsFound": "No suggestions found",
         "tryEnteringEmail": "Try entering an email or search for someone else",
         "inviteViaEmail": "Invite via email",
-        "invitedViaEmail": "Invited via email"
+        "invitedViaEmail": "Invited via email",
+        "editMember": "Edit Member"
     },
     "virtualLinkSetting": {
         "addVirtualLink": "Add virtual link",

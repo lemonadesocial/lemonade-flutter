@@ -1,9 +1,13 @@
 import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_listing_page/widgets/event_edit_team_member_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_listing_page/widgets/event_team_members_item_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class EventListUserRole extends StatelessWidget {
   const EventListUserRole({
@@ -42,7 +46,17 @@ class EventListUserRole extends StatelessWidget {
               subTitle: isInvitedViaEmail
                   ? t.event.teamMembers.invitedViaEmail
                   : username,
-              onTap: () {},
+              onTap: () {
+                showCupertinoModalBottomSheet(
+                  context: context,
+                  backgroundColor: LemonColor.atomicBlack,
+                  topRadius: Radius.circular(30.r),
+                  barrierColor: Colors.black.withOpacity(0.8),
+                  builder: (mContext) {
+                    return EventEditTeamMemberBottomSheet();
+                  },
+                );
+              },
               isFirst: isFirst,
               isLast: isLast,
               roleName: roleName,

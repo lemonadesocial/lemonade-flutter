@@ -13,9 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 class VisibleOnEventCard extends StatelessWidget {
-  const VisibleOnEventCard({
-    super.key,
-  });
+  const VisibleOnEventCard({super.key, this.showBorder = true});
+  final bool? showBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,9 @@ class VisibleOnEventCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 1.w,
-                color: LemonColor.white09,
+                color: showBorder == true
+                    ? LemonColor.white09
+                    : Colors.transparent,
               ),
               borderRadius: BorderRadius.circular(LemonRadius.small),
             ),
@@ -48,13 +49,13 @@ class VisibleOnEventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 18,
-                height: 18,
+                width: Sizing.medium / 2,
+                height: Sizing.medium / 2,
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(),
                 child: ThemeSvgIcon(
                   color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icChecked.svg(
+                  builder: (filter) => Assets.icons.icEyeOutline.svg(
                     colorFilter: filter,
                     width: Sizing.medium / 2,
                     height: Sizing.medium / 2,
@@ -64,7 +65,6 @@ class VisibleOnEventCard extends StatelessWidget {
               SizedBox(width: Spacing.xSmall),
               Expanded(
                 child: SizedBox(
-                  height: 18,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
