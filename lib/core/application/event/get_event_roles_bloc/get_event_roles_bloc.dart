@@ -11,10 +11,11 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
   GetEventRolesBloc()
       : super(
           GetEventRolesState(
-              fetching: true,
-              eventRoles: [],
-              selectedFilterRole: null,
-              searchCriteria: ""),
+            fetching: true,
+            eventRoles: [],
+            selectedFilterRole: null,
+            searchCriteria: "",
+          ),
         ) {
     on<_GetEventRolesEventFetch>(_onFetch);
     on<_GetEventRolesEventSelectFilterRole>(_onselectFilterRole);

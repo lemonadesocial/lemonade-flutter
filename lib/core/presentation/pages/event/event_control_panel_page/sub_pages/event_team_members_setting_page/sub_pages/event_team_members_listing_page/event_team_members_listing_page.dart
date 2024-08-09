@@ -199,6 +199,7 @@ class _EventTeamMembersListingPageViewState
                                   ),
                                 )
                               : null,
+                          email: item.email,
                         ),
                       )
                       .toList();

@@ -18,7 +18,8 @@ class EventTeamMembersFormBloc
         ) {
     on<EventTeamMembersFormBlocEventSelectRole>(onSelectRole);
     on<EventTeamMembersFormBlocEventChangeVisibleOnEvent>(
-        onChangeVisibleOnEvent);
+      onChangeVisibleOnEvent,
+    );
     on<EventTeamMembersFormBlocEventAddNewUser>(
       onAddNewUser,
     );
@@ -35,7 +36,8 @@ class EventTeamMembersFormBloc
       onReset,
     );
     on<EventTeamMembersFormBlocEventPopulateInitialUserRole>(
-        onPopulateUserRole);
+      onPopulateUserRole,
+    );
     if (initialEventUserRole != null) {
       add(EventTeamMembersFormBlocEvent.populateInitialUserRole());
     }

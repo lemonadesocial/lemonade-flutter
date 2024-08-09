@@ -1,5 +1,6 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -57,10 +58,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
             padding: EdgeInsets.all(Spacing.small),
             child: Row(
               children: [
-                LemonCircleAvatar(
-                  size: Sizing.medium,
-                  url: AvatarUtils.getAvatarUrl(user: user),
-                ),
+                _Avatar(user: user),
                 SizedBox(
                   width: Spacing.xSmall,
                 ),
@@ -142,6 +140,48 @@ class _RoleName extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _Avatar extends StatelessWidget {
+  const _Avatar({
+    required this.user,
+  });
+
+  final User? user;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    if (user == null) {
+      return Container(
+        width: Sizing.medium,
+        height: Sizing.medium,
+        margin: EdgeInsets.only(
+          right: Spacing.xSmall,
+        ),
+        decoration: ShapeDecoration(
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(LemonRadius.small * 2),
+          ),
+        ),
+        child: Center(
+          child: ThemeSvgIcon(
+            color: colorScheme.onPrimary,
+            builder: (filter) => Assets.icons.icEmailAt.svg(
+              width: Sizing.xSmall,
+              height: Sizing.xSmall,
+              colorFilter: filter,
+            ),
+          ),
+        ),
+      );
+    }
+    return LemonCircleAvatar(
+      size: Sizing.medium,
+      url: AvatarUtils.getAvatarUrl(user: user),
     );
   }
 }
