@@ -12,9 +12,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChooseRoleDropdown extends StatelessWidget {
   final List<EventRole> eventRoles;
+  final Function(String? value)? onChanged;
   const ChooseRoleDropdown({
     super.key,
     required this.eventRoles,
+    required this.onChanged,
   });
 
   @override
@@ -26,12 +28,9 @@ class ChooseRoleDropdown extends StatelessWidget {
           child: DropdownButton2(
             value: state.selectedRole?.id,
             onChanged: (value) {
-              context.read<EventTeamMembersFormBloc>().add(
-                    EventTeamMembersFormBlocEvent.selectRole(
-                      role: eventRoles
-                          .firstWhere((element) => element.id == value),
-                    ),
-                  );
+              if (onChanged != null) {
+                onChanged?.call(value);
+              }
             },
             customButton: Container(
               padding: EdgeInsets.all(Spacing.smMedium),

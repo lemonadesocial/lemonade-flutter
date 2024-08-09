@@ -214,6 +214,7 @@ class _EventTeamMembersListingPageViewState
                       eventId: widget.event?.id ?? '',
                       selectedFilterRole: selectedFilterRole,
                       eventUserRoles: eventUserRoles,
+                      refetch: refetch,
                     ),
                   );
                 },

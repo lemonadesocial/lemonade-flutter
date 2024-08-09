@@ -26,6 +26,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/event/mutation/delete_user_role.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_user_role.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/add_user_role.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
@@ -674,6 +675,29 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!.addUserRole);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserRole({
+    required String eventId,
+    required List<Input$RoleInput> roles,
+    required List<Input$UserFilter> users,
+  }) async {
+    final result = await client.mutate$UpdateUserRole(
+      Options$Mutation$UpdateUserRole(
+        variables: Variables$Mutation$UpdateUserRole(
+          input: Input$EventRoleInput(
+            users: users,
+            roles: roles,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.updateUserRole);
   }
 
   @override
