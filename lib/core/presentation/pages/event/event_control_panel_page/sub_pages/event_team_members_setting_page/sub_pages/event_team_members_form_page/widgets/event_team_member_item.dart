@@ -6,6 +6,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,14 +16,14 @@ class EventTeamMemberItem extends StatelessWidget {
     required this.userItem,
     required this.onRemove,
   });
-  final dynamic userItem;
   final Function()? onRemove;
+  final Either<User, String> userItem;
 
   String getLabelDisplay() {
-    if (userItem is User) {
-      return userItem.name;
-    }
-    return userItem;
+    return userItem.fold(
+      (user) => user.name ?? '',
+      (email) => email,
+    );
   }
 
   @override
@@ -44,7 +45,9 @@ class EventTeamMemberItem extends StatelessWidget {
           userItem is User
               ? LemonCircleAvatar(
                   size: Sizing.medium / 2,
-                  url: AvatarUtils.getAvatarUrl(user: userItem),
+                  url: AvatarUtils.getAvatarUrl(
+                    user: userItem.fold((user) => user, (r) => null),
+                  ),
                 )
               : Center(
                   child: ThemeSvgIcon(

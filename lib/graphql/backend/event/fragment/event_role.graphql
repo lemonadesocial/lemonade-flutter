@@ -2,10 +2,10 @@
 # import './event_feature.graphql'
 
 fragment EventRole on Role {
-  id: _id
+  _id
   code
   name
-  featuresExpanded: features_expanded {
+  features_expanded {
     ...EventFeature
   }
 }

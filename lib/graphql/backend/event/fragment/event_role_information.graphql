@@ -2,7 +2,7 @@
 
 fragment EventRoleInformation on EventRoleInformation {
   visible
-  roleExpanded: role_expanded {
+  role_expanded {
     ...EventRole
   }
 }

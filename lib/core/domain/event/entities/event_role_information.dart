@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_role_information_dto/event_role_information_dto.dart';
 import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,6 +12,11 @@ class EventRoleInformation with _$EventRoleInformation {
     EventRole? roleExpanded,
     bool? visible,
   }) = _EventRoleInformation;
+
+  factory EventRoleInformation.fromDto(EventRoleInformationDto dto) =>
+      EventRoleInformation(
+        visible: dto.visible,
+      );
 
   factory EventRoleInformation.fromJson(Map<String, dynamic> json) =>
       _$EventRoleInformationFromJson(json);

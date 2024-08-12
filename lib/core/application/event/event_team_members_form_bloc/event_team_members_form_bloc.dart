@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -50,7 +51,7 @@ class EventTeamMembersFormBloc
     final isCohost = event.role?.code == Enum$RoleCode.Cohost;
     final newState = state.copyWith(
       selectedRole: event.role,
-      visibleOnEvent: isCohost == true ? true : false,
+      visibleOnEvent: isCohost,
     );
     emit(
       _validate(newState),
@@ -73,8 +74,10 @@ class EventTeamMembersFormBloc
     EventTeamMembersFormBlocEventAddNewUser event,
     Emitter emit,
   ) {
-    List<dynamic> newUsers = [...state.users, event.user];
-
+    List<Either<User, String>> newUsers = [
+      ...state.users,
+      Left(event.user),
+    ];
     emit(
       _validate(
         state.copyWith(users: newUsers),
@@ -86,8 +89,10 @@ class EventTeamMembersFormBloc
     EventTeamMembersFormBlocEventAddNewEmail event,
     Emitter emit,
   ) {
-    List<dynamic> newUsers = [...state.users, event.email];
-
+    List<Either<User, String>> newUsers = [
+      ...state.users,
+      Right(event.email),
+    ];
     emit(
       _validate(
         state.copyWith(users: newUsers),
@@ -99,9 +104,8 @@ class EventTeamMembersFormBloc
     EventTeamMembersFormBlocEventRemoveUser event,
     Emitter emit,
   ) {
-    List<dynamic> newUsers = [...state.users];
+    List<Either<User, String>> newUsers = [...state.users];
     newUsers.removeAt(event.index);
-
     emit(
       _validate(
         state.copyWith(users: newUsers),
@@ -114,14 +118,12 @@ class EventTeamMembersFormBloc
     Emitter emit,
   ) async {
     emit(state.copyWith(status: EventTeamMembersFormStatus.loading));
-    final List<Input$UserFilter> usersInput = state.users
-        .map(
-          (item) => Input$UserFilter(
-            email: item is String ? item : null,
-            user_id: item is User ? item.userId : null,
-          ),
-        )
-        .toList();
+    final List<Input$UserFilter> usersInput = state.users.map((item) {
+      return item.fold(
+        (user) => Input$UserFilter(user_id: user.userId),
+        (email) => Input$UserFilter(email: email),
+      );
+    }).toList();
     final result = await getIt<EventRepository>().addUserRole(
       eventId: event.eventId,
       roles: [
@@ -206,7 +208,7 @@ class EventTeamMembersFormBlocState with _$EventTeamMembersFormBlocState {
     EventTeamMembersFormStatus status,
     EventRole? selectedRole,
     bool? visibleOnEvent,
-    required List<dynamic> users,
+    required List<Either<User, String>> users,
     required bool isValid,
   }) = _EventTeamMembersFormBlocState;
 

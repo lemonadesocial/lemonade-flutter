@@ -2,8 +2,10 @@ import 'package:app/core/data/event/dtos/event_application_answer_dto/event_appl
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
+import 'package:app/core/data/event/dtos/event_role_dto/event_role_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
+import 'package:app/core/data/event/dtos/event_user_role_dto/event_user_role_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
@@ -609,13 +611,17 @@ class EventRepositoryImpl implements EventRepository {
     }
     return Right(
       (result.parsedData?.getRoles ?? [])
-          .map((item) => EventRole.fromJson(item.toJson()))
+          .map(
+            (item) => EventRole.fromDto(
+              EventRoleDto.fromJson(item.toJson()),
+            ),
+          )
           .toList(),
     );
   }
 
   @override
-  Future<Either<Failure, List<EventUserRole>>> getListUserRole({
+  Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
     required String eventId,
     String? roleId,
     String? searchCriteria,
@@ -630,26 +636,17 @@ class EventRepositoryImpl implements EventRepository {
         ),
       ),
     );
-    if (result.hasException) {
+    if (result.hasException || result.parsedData == null) {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(
-      List.from(
-        result.parsedData!.getListUserRole
-            .map(
-              (item) => EventUserRole(
-                roles: item.roles
-                    .map((e) => EventRoleInformation.fromJson(e.toJson()))
-                    .toList(),
-                user: User.fromDto(
-                  UserDto.fromJson(
-                    item.user!.toJson(),
-                  ),
-                ),
-              ),
-            )
-            .toList(),
-      ),
+      (result.parsedData?.getListUserRole ?? [])
+          .map(
+            (item) => EventUserRole.fromDto(
+              EventUserRoleDto.fromJson(item.toJson()),
+            ),
+          )
+          .toList(),
     );
   }
 

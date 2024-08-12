@@ -48,8 +48,8 @@ class VisibleOnEventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 18,
-                height: 18,
+                width: Sizing.medium / 2,
+                height: Sizing.medium / 2,
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(),
                 child: ThemeSvgIcon(
@@ -64,7 +64,7 @@ class VisibleOnEventCard extends StatelessWidget {
               SizedBox(width: Spacing.xSmall),
               Expanded(
                 child: SizedBox(
-                  height: 18,
+                  height: Sizing.medium / 2,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -85,7 +85,7 @@ class VisibleOnEventCard extends StatelessWidget {
                 inactiveToggleColor: colorScheme.onSurfaceVariant,
                 activeColor: LemonColor.switchActive,
                 activeToggleColor: colorScheme.onPrimary,
-                height: 24.h,
+                height: Sizing.small,
                 width: 42.w,
                 value: visibleOnEvent ?? false,
                 onToggle: (value) {

@@ -18,7 +18,7 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
           ),
         ) {
     on<_GetEventRolesEventFetch>(_onFetch);
-    on<_GetEventRolesEventSelectFilterRole>(_onselectFilterRole);
+    on<_GetEventRolesEventSelectFilterRole>(_onSelectFilterRole);
     on<_GetEventRolesEventChangeSearchCriteria>(_onChangeSearchCriteria);
   }
 
@@ -37,7 +37,7 @@ class GetEventRolesBloc extends Bloc<GetEventRolesEvent, GetEventRolesState> {
     });
   }
 
-  void _onselectFilterRole(
+  void _onSelectFilterRole(
     _GetEventRolesEventSelectFilterRole event,
     Emitter emit,
   ) async {

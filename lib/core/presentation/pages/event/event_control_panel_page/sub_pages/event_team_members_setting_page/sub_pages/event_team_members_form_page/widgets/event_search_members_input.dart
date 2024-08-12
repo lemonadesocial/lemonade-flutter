@@ -84,7 +84,7 @@ class EventSearchMembersInputState extends State<EventSearchMembersInput> {
         SizedBox(
           height: Spacing.xSmall,
         ),
-        if (_showRecommendationBox == true)
+        if (_showRecommendationBox)
           BlocBuilder<GetUsersBloc, GetUsersState>(
             builder: (context, state) {
               final isInviteViaEmail = StringUtils.isValidEmail(_searchValue);
@@ -141,7 +141,7 @@ class EventSearchMembersInputState extends State<EventSearchMembersInput> {
               );
             },
           ),
-        if (_showRecommendationBox == false)
+        if (!_showRecommendationBox)
           BlocBuilder<EventTeamMembersFormBloc, EventTeamMembersFormBlocState>(
             builder: (context, state) {
               return ListView.separated(
@@ -193,7 +193,7 @@ class _CustomUserItem extends StatelessWidget {
             size: Sizing.medium,
             url: AvatarUtils.getAvatarUrl(user: user),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: Spacing.xSmall),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

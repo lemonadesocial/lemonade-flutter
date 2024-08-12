@@ -9,6 +9,7 @@ import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:collection/collection.dart';
 
 class ChooseRoleDropdown extends StatelessWidget {
   final List<EventRole> eventRoles;
@@ -29,7 +30,7 @@ class ChooseRoleDropdown extends StatelessWidget {
               context.read<EventTeamMembersFormBloc>().add(
                     EventTeamMembersFormBlocEvent.selectRole(
                       role: eventRoles
-                          .firstWhere((element) => element.id == value),
+                          .firstWhereOrNull((element) => element.id == value),
                     ),
                   );
             },

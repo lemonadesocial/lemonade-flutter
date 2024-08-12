@@ -132,7 +132,7 @@ abstract class EventRepository {
 
   Future<Either<Failure, List<EventRole>>> getEventRoles();
 
-  Future<Either<Failure, List<EventUserRole>>> getListUserRole({
+  Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
     required String eventId,
     String? roleId,
     String? searchCriteria,
