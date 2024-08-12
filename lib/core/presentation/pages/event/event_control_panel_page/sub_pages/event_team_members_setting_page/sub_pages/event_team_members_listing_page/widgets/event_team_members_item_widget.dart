@@ -15,7 +15,6 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
-    required this.onTap,
     required this.roleName,
     this.isFirst = false,
     this.isLast = false,
@@ -25,7 +24,6 @@ class EventTeamMemberItemWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final String roleName;
-  final VoidCallback onTap;
   final bool? isFirst;
   final bool? isLast;
   final User? user;

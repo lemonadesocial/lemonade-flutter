@@ -42,7 +42,6 @@ class EventListUserRole extends StatelessWidget {
               subTitle: isInvitedViaEmail
                   ? t.event.teamMembers.invitedViaEmail
                   : username,
-              onTap: () {},
               isFirst: isFirst,
               isLast: isLast,
               roleName: roleName,
