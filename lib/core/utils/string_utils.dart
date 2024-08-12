@@ -76,4 +76,14 @@ class StringUtils {
     final result = markdown.replaceAll(regex, '');
     return result;
   }
+
+  static bool isValidEmail(String? email) {
+    if (email == null || email.isEmpty) return false;
+    final RegExp emailRegex = RegExp(
+      r'^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{1,}$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return emailRegex.hasMatch(email);
+  }
 }

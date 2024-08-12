@@ -30,6 +30,9 @@ class LemonTextField extends StatelessWidget {
     this.filled,
     this.fillColor,
     this.radius = 12.0,
+    this.onFieldSubmitted,
+    this.enableSuggestions,
+    this.autocorrect,
   });
 
   final ValueChanged<String>? onChange;
@@ -55,6 +58,9 @@ class LemonTextField extends StatelessWidget {
   final bool? filled;
   final Color? fillColor;
   final double radius;
+  final Function(String newValue)? onFieldSubmitted;
+  final bool? enableSuggestions;
+  final bool? autocorrect;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +109,7 @@ class LemonTextField extends StatelessWidget {
         ],
         TextFormField(
           onTap: onTap,
+          onFieldSubmitted: onFieldSubmitted,
           controller: controller,
           autofocus: autofocus,
           onChanged: onChange,
@@ -131,6 +138,8 @@ class LemonTextField extends StatelessWidget {
           ),
           inputFormatters: inputFormatters,
           readOnly: readOnly ?? false,
+          enableSuggestions: enableSuggestions ?? false,
+          autocorrect: autocorrect ?? false,
         ),
         if (statusWidget != null) ...[
           SizedBox(height: Spacing.xSmall),

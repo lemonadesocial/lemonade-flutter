@@ -290,6 +290,15 @@ final eventDetailRoutes = AutoRoute(
         ),
         AutoRoute(
           page: EventTeamMembersSettingRoute.page,
+          children: [
+            AutoRoute(
+              initial: true,
+              page: EventTeamMembersListingRoute.page,
+            ),
+            AutoRoute(
+              page: EventTeamMembersFormRoute.page,
+            ),
+          ],
         ),
       ],
     ),

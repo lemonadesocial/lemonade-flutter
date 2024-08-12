@@ -23,8 +23,11 @@ class GetUsersBloc extends Bloc<GetUsersEvent, GetUsersState> {
 
   void _onFetch(GetUsersEventFetch event, Emitter emit) async {
     emit(GetUsersState.loading());
-    final result =
-        await _userRepository.getUsers(skip: 0, limit: 5, search: event.search);
+    final result = await _userRepository.getUsers(
+      skip: 0,
+      limit: event.limit ?? 5,
+      search: event.search,
+    );
     result.fold(
       (failure) => emit(GetUsersState.failure()),
       (users) => emit(

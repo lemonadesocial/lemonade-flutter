@@ -1,0 +1,8 @@
+# import '../../schema.graphql';
+
+fragment EventFeature on Feature {
+  _id
+  code
+  name
+  feature_enable
+}
