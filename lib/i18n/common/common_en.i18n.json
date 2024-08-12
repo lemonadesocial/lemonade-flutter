@@ -69,7 +69,9 @@
         "claim": "Claim",
         "sendInvite": "Send Invite",
         "go": "go",
-        "patse": "Paste"
+        "patse": "Paste",
+        "viewTicket": "View ticket",
+        "viewEvent": "View event"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

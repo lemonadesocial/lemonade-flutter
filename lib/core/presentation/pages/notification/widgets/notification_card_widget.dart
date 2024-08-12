@@ -1,18 +1,18 @@
 import 'package:app/core/application/notification/delete_notifications_bloc/delete_notifications_bloc.dart';
-import 'package:app/core/data/notification/notification_constants.dart';
 import 'package:app/core/domain/notification/input/delete_notifications_input.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/default_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_invited_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_join_request_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_ticket_assigned_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_update_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/friend_request_notification_item.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/payment_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_slidable_widget.dart';
-import 'package:app/core/utils/image_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:flutter/material.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/theme/typo.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 
 class NotificationCard extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -66,7 +66,6 @@ class NotificationCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return NotificationSlidable(
       id: notification.id ?? '',
       onRemove: () {
@@ -99,69 +98,50 @@ class NotificationCardView extends StatelessWidget {
       },
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(Spacing.small),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: colorScheme.outline)),
-          ),
-          child: Row(
-            children: [
-              _buildAvatar(),
-              Expanded(child: _buildMessage(colorScheme)),
-            ],
-          ),
+        child: Builder(
+          builder: (context) {
+            if ([
+              Enum$NotificationType.event_request_created.name,
+              Enum$NotificationType.event_request_approved.name,
+              Enum$NotificationType.event_request_declined.name,
+            ].contains(notification.type)) {
+              return EventJoinRequestNotificationItem(
+                notification: notification,
+              );
+            }
+
+            if (notification.type ==
+                Enum$NotificationType.ticket_assigned.name) {
+              return EventTicketAssignedNotificationItem(
+                notification: notification,
+              );
+            }
+
+            if (notification.type == Enum$NotificationType.event_invite.name) {
+              return EventInvitedNotificationItem(notification: notification);
+            }
+
+            if (notification.type == Enum$NotificationType.event_update.name) {
+              return EventUpdateNotificationItem(notification: notification);
+            }
+
+            if ([
+              Enum$NotificationType.payment_succeeded.name,
+              Enum$NotificationType.payment_failed.name,
+              Enum$NotificationType.payment_refunded.name,
+            ].contains(notification.type)) {
+              return PaymentNotificationItem(notification: notification);
+            }
+
+            if (notification.type ==
+                Enum$NotificationType.user_friendship_request.name) {
+              return FriendRequestNotificationItem(notification: notification);
+            }
+
+            return DefaultNotificationItem(notification: notification);
+          },
         ),
       ),
-    );
-  }
-
-  Widget _buildAvatar() {
-    if (notification.type == NotificationType.eventCohostRequest ||
-        notification.type == NotificationType.userFriendshipRequest ||
-        notification.type == NotificationType.eventAnnounce) {
-      return Container(
-        padding: EdgeInsets.only(right: Spacing.small),
-        child: LemonCircleAvatar(
-          url: ImageUtils.generateUrl(
-            file: notification.fromExpanded?.newPhotosExpanded?.firstOrNull,
-            imageConfig: ImageConfig.profile,
-          ),
-          size: 42,
-        ),
-      );
-    }
-    if (notification.type == NotificationType.userDiscoveryMatch) {
-      return Container(
-        padding: EdgeInsets.only(right: Spacing.small),
-        child: ThemeSvgIcon(
-          color: const Color(0xFFC69DF7),
-          builder: (filter) => Assets.icons.icMatches
-              .svg(colorFilter: filter, width: 42, height: 42),
-        ),
-      );
-    }
-    return Container();
-  }
-
-  Widget _buildMessage(ColorScheme colorScheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          notification.message ?? '',
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          timeago.format(notification.createdAt!, locale: 'en_short'),
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
     );
   }
 }

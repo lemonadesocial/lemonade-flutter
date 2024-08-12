@@ -1,0 +1,7 @@
+# import '../fragment/notification_fragment.graphql'
+
+query GetNotifications($skip: Int!, $limit: Int!, $type: NotificationTypeFilterInput) {
+  getNotifications(skip: $skip, limit: $limit, type: $type) {
+    ...Notification
+  }
+}
