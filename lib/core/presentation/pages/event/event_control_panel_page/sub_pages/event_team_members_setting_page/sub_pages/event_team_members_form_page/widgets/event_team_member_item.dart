@@ -29,6 +29,7 @@ class EventTeamMemberItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final user = userItem.fold((user) => user, (r) => null);
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: ShapeDecoration(
@@ -42,11 +43,11 @@ class EventTeamMemberItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          userItem is User
+          user is User
               ? LemonCircleAvatar(
                   size: Sizing.medium / 2,
                   url: AvatarUtils.getAvatarUrl(
-                    user: userItem.fold((user) => user, (r) => null),
+                    user: user,
                   ),
                 )
               : Center(

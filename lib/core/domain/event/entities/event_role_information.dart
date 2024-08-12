@@ -15,6 +15,9 @@ class EventRoleInformation with _$EventRoleInformation {
 
   factory EventRoleInformation.fromDto(EventRoleInformationDto dto) =>
       EventRoleInformation(
+        roleExpanded: dto.roleExpanded != null
+            ? EventRole.fromDto(dto.roleExpanded!)
+            : null,
         visible: dto.visible,
       );
 
