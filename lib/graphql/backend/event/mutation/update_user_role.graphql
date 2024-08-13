@@ -1,0 +1,3 @@
+mutation UpdateUserRole($input: EventRoleInput!) {
+  updateUserRole(input: $input)
+}

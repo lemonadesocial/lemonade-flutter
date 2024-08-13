@@ -144,6 +144,12 @@ abstract class EventRepository {
     required List<Input$UserFilter> users,
   });
 
+  Future<Either<Failure, bool>> updateUserRole({
+    required String eventId,
+    required List<Input$RoleInput> roles,
+    required List<Input$UserFilter> users,
+  });
+
   Future<Either<Failure, bool>> deleteUserRole({
     required String eventId,
     required List<Input$UserFilter> users,
