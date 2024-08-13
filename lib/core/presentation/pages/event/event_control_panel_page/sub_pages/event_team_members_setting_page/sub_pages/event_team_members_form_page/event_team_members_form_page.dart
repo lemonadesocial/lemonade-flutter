@@ -249,7 +249,7 @@ class EventTeamMembersFormView extends StatelessWidget {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: SizedBox(height: 350.w),
+                      child: SizedBox(height: 500.w),
                     ),
                   ],
                 ),

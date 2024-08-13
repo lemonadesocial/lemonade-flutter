@@ -1,11 +1,9 @@
 import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
-import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_role_information.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
-import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/data/event/dtos/event_user_role_dto/event_user_role_dto.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_listing_page/widgets/event_list_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_roles_access_control_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_search_bar.dart';
@@ -180,26 +178,14 @@ class _EventTeamMembersListingPageViewState
                   if (result.isLoading == true) {
                     return Center(child: Loading.defaultLoading(context));
                   }
-                  if ((result.parsedData?.getListUserRole ?? []).isEmpty) {
+                  if (result.parsedData == null ||
+                      (result.parsedData?.getListUserRole ?? []).isEmpty) {
                     return const EmptyList();
                   }
                   final eventUserRoles = result.parsedData!.getListUserRole
                       .map(
-                        (item) => EventUserRole(
-                          roles: item.roles
-                              .map(
-                                (e) =>
-                                    EventRoleInformation.fromJson(e.toJson()),
-                              )
-                              .toList(),
-                          user: item.user != null
-                              ? User.fromDto(
-                                  UserDto.fromJson(
-                                    item.user!.toJson(),
-                                  ),
-                                )
-                              : null,
-                          email: item.email,
+                        (item) => EventUserRole.fromDto(
+                          EventUserRoleDto.fromJson(item.toJson()),
                         ),
                       )
                       .toList();

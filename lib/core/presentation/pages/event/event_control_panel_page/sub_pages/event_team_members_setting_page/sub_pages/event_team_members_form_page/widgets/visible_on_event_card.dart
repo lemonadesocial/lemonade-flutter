@@ -70,6 +70,7 @@ class VisibleOnEventCard extends StatelessWidget {
               SizedBox(width: Spacing.xSmall),
               Expanded(
                 child: SizedBox(
+                  height: Sizing.medium / 2,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
