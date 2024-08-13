@@ -6,6 +6,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,17 +15,24 @@ class SubEventsDateFilterBar extends StatelessWidget {
   final DateTime selectedDate;
   final Function()? onToggle;
   final Function(SubEventViewMode viewMode)? onViewModeChange;
+  final Function(DateTime date)? onDateChanged;
+
   const SubEventsDateFilterBar({
     super.key,
     required this.selectedDate,
     required this.viewMode,
     this.onToggle,
     this.onViewModeChange,
+    this.onDateChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isToday = DateUtils.isSameDay(
+      selectedDate,
+      DateTime.now(),
+    );
     return Row(
       children: [
         Expanded(
@@ -45,12 +53,19 @@ class SubEventsDateFilterBar extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    child: Center(
-                      child: Icon(
-                        Icons.today_outlined,
-                        size: 18.w,
-                        color: colorScheme.onSecondary,
+                  InkWell(
+                    onTap: () {
+                      onDateChanged?.call(DateTime.now().withoutTime);
+                    },
+                    child: SizedBox(
+                      child: Center(
+                        child: Icon(
+                          Icons.today_outlined,
+                          size: 18.w,
+                          color: isToday
+                              ? colorScheme.onSecondary
+                              : colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ),

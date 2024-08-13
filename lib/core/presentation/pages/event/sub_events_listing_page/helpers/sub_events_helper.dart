@@ -5,7 +5,11 @@ List<CalendarEventData> getCalendarEvents(List<Event> events) {
   return events.map((event) {
     DateTime eventStartTime = event.start!.toLocal();
     DateTime eventEndTime = event.end!.toLocal();
-    bool isFullDayEvent = eventEndTime.difference(eventStartTime).inDays >= 1;
+
+    bool isFullDayEvent = eventEndTime.year >= eventStartTime.year &&
+        eventEndTime.month >= eventStartTime.month &&
+        eventEndTime.day > eventStartTime.day;
+
     if (eventStartTime.hour == eventEndTime.hour &&
         eventStartTime.minute == eventEndTime.minute) {
       eventEndTime = eventEndTime.add(const Duration(hours: 1, minutes: 30));
