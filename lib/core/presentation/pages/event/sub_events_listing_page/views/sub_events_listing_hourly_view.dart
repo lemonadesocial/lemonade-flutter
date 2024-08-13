@@ -131,8 +131,9 @@ class _EventItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final event = Event.fromJson(eventJson as Map<String, dynamic>);
     final isPast = event.end?.isBefore(DateTime.now()) ?? false;
-    final isFullDayEvent =
-        (event.end?.difference(event.start!).inDays ?? 0) >= 1;
+    bool isFullDayEvent = (event.end?.year ?? 0) >= (event.start?.year ?? 0) &&
+        (event.end?.month ?? 0) >= (event.start?.month ?? 0) &&
+        (event.end?.day ?? 0) > (event.start?.day ?? 0);
     const fulldayEventTimeFormatPattern = "MMM d • hh:mm a";
 
     return BlocBuilder<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
