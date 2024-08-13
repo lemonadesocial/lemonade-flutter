@@ -139,7 +139,7 @@ type Query {
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getListUserRole(input: EventRoleFilter!): [EventUserRole!]!
-  getUserRole(input: UserRoleInput!): [EventUserRole!]!
+  getUserRole(input: UserRoleInput!): EventUserRole!
   getRoles: [Role!]!
   getEventSessionReservations(
     input: GetEventSessionReservationsInput
@@ -2938,9 +2938,6 @@ type Mutation {
   addUserRole(input: EventRoleInput!): Boolean!
   updateUserRole(input: EventRoleInput!): Boolean!
   deleteUserRole(input: EventRoleInput!): Boolean!
-  addFeatureEndpoints(input: FeatureInput!): Boolean!
-  addRoleFeatures(input: RoleFeatureInput!): Boolean!
-  resetFeatureEndpoints(input: FeatureInput!): Boolean!
   acceptEvent(_id: MongoID!): EventRsvp!
   declineEvent(_id: MongoID!): EventRsvp!
   checkinUser(event: MongoID!, user: MongoID!): EventRsvp!
@@ -3510,16 +3507,6 @@ input UserFilter {
 input RoleInput {
   visible: Boolean!
   role_id: MongoID!
-}
-
-input FeatureInput {
-  feature_id: MongoID
-  endpoints: [String!]!
-}
-
-input RoleFeatureInput {
-  role_id: MongoID
-  feature_ids: [MongoID!]!
 }
 
 type EventRsvp {

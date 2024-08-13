@@ -5,4 +5,5 @@ fragment EventFeature on Feature {
   code
   name
   feature_enable
+  endpoints
 }
