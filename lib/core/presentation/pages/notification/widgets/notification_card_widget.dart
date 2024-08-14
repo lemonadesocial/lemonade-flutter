@@ -135,7 +135,16 @@ class NotificationCardView extends StatelessWidget {
 
             if (notification.type ==
                 Enum$NotificationType.user_friendship_request.name) {
-              return FriendRequestNotificationItem(notification: notification);
+              return FriendRequestNotificationItem(
+                notification: notification,
+                onRemove: () {
+                  onRemove?.call(
+                    index,
+                    notification,
+                    false,
+                  );
+                },
+              );
             }
 
             return DefaultNotificationItem(notification: notification);

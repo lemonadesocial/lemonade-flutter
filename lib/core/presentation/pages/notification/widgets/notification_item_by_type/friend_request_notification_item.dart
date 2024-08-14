@@ -1,10 +1,14 @@
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/notification_item_base.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_thumbnail.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/user/query/create_user_friendship.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -16,9 +20,12 @@ import 'package:app/core/domain/notification/entities/notification.dart'
 
 class FriendRequestNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
+  final Function()? onRemove;
+
   const FriendRequestNotificationItem({
     super.key,
     required this.notification,
+    this.onRemove,
   });
 
   @override
@@ -54,9 +61,21 @@ class FriendRequestNotificationItem extends StatelessWidget {
         height: Sizing.medium,
         child: LinearGradientButton.primaryButton(
           onTap: () async {
-            AutoRouter.of(context).push(
-              EventDetailRoute(eventId: notification.refEvent ?? ''),
+            final response = await showFutureLoadingDialog(
+              context: context,
+              future: () async {
+                return await getIt<AppGQL>().client.mutate$createUserFriendship(
+                      Options$Mutation$createUserFriendship(
+                        variables: Variables$Mutation$createUserFriendship(
+                          user: notification.from ?? '',
+                        ),
+                      ),
+                    );
+              },
             );
+            if (response.result?.parsedData?.friendship != null) {
+              onRemove?.call();
+            }
           },
           textStyle: Typo.small.copyWith(
             color: colorScheme.onPrimary,
@@ -78,14 +97,16 @@ class FriendRequestNotificationItem extends StatelessWidget {
             ),
             SizedBox(height: Spacing.superExtraSmall),
           ],
-          Text(
-            notification.fromExpanded?.description ??
-                notification.fromExpanded?.jobTitle ??
-                '',
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+          if (notification.fromExpanded?.description?.isNotEmpty == true ||
+              notification.fromExpanded?.jobTitle?.isNotEmpty == true)
+            Text(
+              notification.fromExpanded?.description ??
+                  notification.fromExpanded?.jobTitle ??
+                  '',
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+              ),
             ),
-          ),
         ],
       ),
     );
