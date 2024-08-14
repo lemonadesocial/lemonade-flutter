@@ -1,9 +1,9 @@
 import 'package:app/core/domain/event/entities/event_user_role.dart';
-import 'package:app/core/service/feature_manager/feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event_feature_visibility_strategy.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 
-class EventRoleBasedFeatureVisibilityStrategy
-    implements FeatureVisibilityStrategy {
+class EventRoleBasedEventFeatureVisibilityStrategy
+    implements EventFeatureVisibilityStrategy {
   static const Map<Enum$FeatureCode, List<Enum$RoleCode>> _featureRoleMappings =
       {
     Enum$FeatureCode.DataDashboardInsights: [

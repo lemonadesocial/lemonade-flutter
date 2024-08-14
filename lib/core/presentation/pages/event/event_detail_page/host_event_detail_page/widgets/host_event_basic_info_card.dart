@@ -80,7 +80,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
         ) ??
         false;
     final featureManager =
-        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
+        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
     final canShowGuestList =
         featureManager.canShowGuestList(eventUserRole: eventUserRole);
     final canShowEventSettings =

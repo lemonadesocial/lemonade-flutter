@@ -168,7 +168,7 @@ class EventDetailNavigationBarHelper {
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
     final featureManager =
-        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
+        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
     final canShowCheckIn =
         featureManager.canShowCheckin(eventUserRole: eventUserRole);
     final canShowGuestList =

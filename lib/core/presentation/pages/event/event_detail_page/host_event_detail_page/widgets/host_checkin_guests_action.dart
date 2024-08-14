@@ -29,7 +29,7 @@ class HostCheckinGuestsAction extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final featureManager =
-        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
+        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
     final canShowCheckIn =
         featureManager.canShowGuestList(eventUserRole: eventUserRole);
     if (!canShowCheckIn) return const SizedBox();

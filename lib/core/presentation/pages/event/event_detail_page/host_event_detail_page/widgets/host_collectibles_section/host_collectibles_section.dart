@@ -32,7 +32,7 @@ class HostCollectiblesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final featureManager =
-        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
+        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
     final canShowPoap =
         featureManager.canShowPoap(eventUserRole: eventUserRole);
     if (!canShowPoap) {

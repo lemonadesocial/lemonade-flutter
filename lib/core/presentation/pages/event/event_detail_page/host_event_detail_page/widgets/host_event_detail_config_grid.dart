@@ -38,7 +38,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
     final eventInvitedCount = eventDetail.invitedCount ?? 0;
     final eventTicketTypesCount = eventDetail.eventTicketTypes?.length ?? 0;
     final featureManager =
-        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
+        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
     final canShowDashboard =
         featureManager.canShowDashboard(eventUserRole: eventUserRole);
     final canShowEventSettings =
