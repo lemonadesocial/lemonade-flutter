@@ -10,7 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:app/core/application/auth/auth_bloc.dart' as _i9;
 import 'package:app/core/application/chat/new_chat_bloc/new_chat_bloc.dart'
-    as _i39;
+    as _i41;
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart'
     as _i23;
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart'
@@ -38,19 +38,19 @@ import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart
     as _i33;
 import 'package:app/core/data/farcaster/farcaster_repository_impl.dart' as _i35;
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart'
-    as _i43;
-import 'package:app/core/data/payment/payment_repository_impl.dart' as _i46;
-import 'package:app/core/data/poap/poap_repository_impl.dart' as _i48;
-import 'package:app/core/data/post/newsfeed_repository_impl.dart' as _i41;
-import 'package:app/core/data/post/post_repository_impl.dart' as _i50;
-import 'package:app/core/data/quest/quest_repository_impl.dart' as _i52;
+    as _i45;
+import 'package:app/core/data/payment/payment_repository_impl.dart' as _i48;
+import 'package:app/core/data/poap/poap_repository_impl.dart' as _i50;
+import 'package:app/core/data/post/newsfeed_repository_impl.dart' as _i43;
+import 'package:app/core/data/post/post_repository_impl.dart' as _i52;
+import 'package:app/core/data/quest/quest_repository_impl.dart' as _i54;
 import 'package:app/core/data/report/repository/report_repository_impl.dart'
-    as _i54;
-import 'package:app/core/data/token/token_repository_impl.dart' as _i58;
-import 'package:app/core/data/user/user_repository_impl.dart' as _i60;
-import 'package:app/core/data/vault/vault_repository_impl.dart' as _i62;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i65;
-import 'package:app/core/data/web3/web3_repository_impl.dart' as _i67;
+    as _i56;
+import 'package:app/core/data/token/token_repository_impl.dart' as _i60;
+import 'package:app/core/data/user/user_repository_impl.dart' as _i62;
+import 'package:app/core/data/vault/vault_repository_impl.dart' as _i64;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i67;
+import 'package:app/core/data/web3/web3_repository_impl.dart' as _i69;
 import 'package:app/core/domain/ai/ai_repository.dart' as _i4;
 import 'package:app/core/domain/applicant/applicant_repository.dart' as _i7;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i10;
@@ -69,30 +69,33 @@ import 'package:app/core/domain/event/repository/event_reward_repository.dart'
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart'
     as _i32;
 import 'package:app/core/domain/farcaster/farcaster_repository.dart' as _i34;
-import 'package:app/core/domain/newsfeed/newsfeed_repository.dart' as _i40;
+import 'package:app/core/domain/newsfeed/newsfeed_repository.dart' as _i42;
 import 'package:app/core/domain/notification/notification_repository.dart'
-    as _i42;
-import 'package:app/core/domain/payment/payment_repository.dart' as _i45;
-import 'package:app/core/domain/poap/poap_repository.dart' as _i47;
-import 'package:app/core/domain/post/post_repository.dart' as _i49;
-import 'package:app/core/domain/quest/quest_repository.dart' as _i51;
-import 'package:app/core/domain/report/report_repository.dart' as _i53;
-import 'package:app/core/domain/token/token_repository.dart' as _i57;
-import 'package:app/core/domain/user/user_repository.dart' as _i59;
-import 'package:app/core/domain/vault/vault_repository.dart' as _i61;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i64;
-import 'package:app/core/domain/web3/web3_repository.dart' as _i66;
+    as _i44;
+import 'package:app/core/domain/payment/payment_repository.dart' as _i47;
+import 'package:app/core/domain/poap/poap_repository.dart' as _i49;
+import 'package:app/core/domain/post/post_repository.dart' as _i51;
+import 'package:app/core/domain/quest/quest_repository.dart' as _i53;
+import 'package:app/core/domain/report/report_repository.dart' as _i55;
+import 'package:app/core/domain/token/token_repository.dart' as _i59;
+import 'package:app/core/domain/user/user_repository.dart' as _i61;
+import 'package:app/core/domain/vault/vault_repository.dart' as _i63;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i66;
+import 'package:app/core/domain/web3/web3_repository.dart' as _i68;
 import 'package:app/core/oauth/oauth.dart' as _i6;
 import 'package:app/core/service/badge/badge_service.dart' as _i12;
-import 'package:app/core/service/firebase/firebase_service.dart' as _i36;
-import 'package:app/core/service/matrix/matrix_service.dart' as _i38;
-import 'package:app/core/service/shake/shake_service.dart' as _i55;
-import 'package:app/core/service/shorebird_codepush_service.dart' as _i56;
+import 'package:app/core/service/feature_manager/feature_manager.dart' as _i36;
+import 'package:app/core/service/feature_manager/feature_visibility_strategy.dart'
+    as _i37;
+import 'package:app/core/service/firebase/firebase_service.dart' as _i38;
+import 'package:app/core/service/matrix/matrix_service.dart' as _i40;
+import 'package:app/core/service/shake/shake_service.dart' as _i57;
+import 'package:app/core/service/shorebird_codepush_service.dart' as _i58;
 import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
-    as _i44;
-import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i63;
+    as _i46;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i65;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
-import 'package:app/core/utils/location_utils.dart' as _i37;
+import 'package:app/core/utils/location_utils.dart' as _i39;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
@@ -140,33 +143,35 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i33.EventTicketRepositoryImpl());
     gh.lazySingleton<_i34.FarcasterRepository>(
         () => _i35.FarcasterRepositoryImpl());
-    gh.lazySingleton<_i36.FirebaseService>(() => _i36.FirebaseService());
-    gh.lazySingleton<_i37.LocationUtils>(() => _i37.LocationUtils());
-    gh.lazySingleton<_i38.MatrixService>(() => _i38.MatrixService());
+    gh.lazySingleton<_i36.FeatureManager>(
+        () => _i36.FeatureManager(gh<_i37.FeatureVisibilityStrategy>()));
+    gh.lazySingleton<_i38.FirebaseService>(() => _i38.FirebaseService());
+    gh.lazySingleton<_i39.LocationUtils>(() => _i39.LocationUtils());
+    gh.lazySingleton<_i40.MatrixService>(() => _i40.MatrixService());
     gh.lazySingleton<_i3.MetaverseGQL>(() => _i3.MetaverseGQL());
-    gh.lazySingleton<_i39.NewChatBloc>(() => _i39.NewChatBloc());
-    gh.lazySingleton<_i40.NewsfeedRepository>(
-        () => _i41.NewsfeedRepositoryImpl());
-    gh.lazySingleton<_i42.NotificationRepository>(
-        () => _i43.NotificationRepositoryImpl());
-    gh.lazySingleton<_i44.OwnerKeysDatabase>(() => _i44.OwnerKeysDatabase());
-    gh.lazySingleton<_i45.PaymentRepository>(
-        () => _i46.PaymentRepositoryImpl());
-    gh.lazySingleton<_i47.PoapRepository>(() => _i48.PoapRepositoryImpl());
-    gh.lazySingleton<_i49.PostRepository>(() => _i50.PostRepositoryImpl());
-    gh.lazySingleton<_i51.QuestRepository>(() => _i52.QuestRepositoryImpl());
-    gh.lazySingleton<_i53.ReportRepository>(() => _i54.ReportRepositoryImpl());
-    gh.lazySingleton<_i55.ShakeService>(() => _i55.ShakeService());
-    gh.lazySingleton<_i56.ShorebirdCodePushService>(
-        () => _i56.ShorebirdCodePushService());
-    gh.lazySingleton<_i57.TokenRepository>(() => _i58.TokenRepositoryImpl());
-    gh.lazySingleton<_i59.UserRepository>(() => _i60.UserRepositoryImpl());
-    gh.lazySingleton<_i61.VaultRepository>(() => _i62.VaultRepositoryImpl());
-    gh.lazySingleton<_i63.WalletConnectService>(
-        () => _i63.WalletConnectService());
+    gh.lazySingleton<_i41.NewChatBloc>(() => _i41.NewChatBloc());
+    gh.lazySingleton<_i42.NewsfeedRepository>(
+        () => _i43.NewsfeedRepositoryImpl());
+    gh.lazySingleton<_i44.NotificationRepository>(
+        () => _i45.NotificationRepositoryImpl());
+    gh.lazySingleton<_i46.OwnerKeysDatabase>(() => _i46.OwnerKeysDatabase());
+    gh.lazySingleton<_i47.PaymentRepository>(
+        () => _i48.PaymentRepositoryImpl());
+    gh.lazySingleton<_i49.PoapRepository>(() => _i50.PoapRepositoryImpl());
+    gh.lazySingleton<_i51.PostRepository>(() => _i52.PostRepositoryImpl());
+    gh.lazySingleton<_i53.QuestRepository>(() => _i54.QuestRepositoryImpl());
+    gh.lazySingleton<_i55.ReportRepository>(() => _i56.ReportRepositoryImpl());
+    gh.lazySingleton<_i57.ShakeService>(() => _i57.ShakeService());
+    gh.lazySingleton<_i58.ShorebirdCodePushService>(
+        () => _i58.ShorebirdCodePushService());
+    gh.lazySingleton<_i59.TokenRepository>(() => _i60.TokenRepositoryImpl());
+    gh.lazySingleton<_i61.UserRepository>(() => _i62.UserRepositoryImpl());
+    gh.lazySingleton<_i63.VaultRepository>(() => _i64.VaultRepositoryImpl());
+    gh.lazySingleton<_i65.WalletConnectService>(
+        () => _i65.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i64.WalletRepository>(() => _i65.WalletRepositoryImpl());
-    gh.lazySingleton<_i66.Web3Repository>(() => _i67.Web3RepositoryIml());
+    gh.lazySingleton<_i66.WalletRepository>(() => _i67.WalletRepositoryImpl());
+    gh.lazySingleton<_i68.Web3Repository>(() => _i69.Web3RepositoryIml());
     return this;
   }
 }

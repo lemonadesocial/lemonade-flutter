@@ -7,13 +7,13 @@ class FeatureManager {
 
   FeatureManager(this.strategy);
 
-  bool shouldShowFeature({
+  bool canShowFeature({
     required EventUserRole? eventUserRole,
-    required Enum$FeatureCode featureCode,
+    required List<Enum$FeatureCode> featureCodes,
   }) {
-    return strategy.shouldShowFeature(
+    return strategy.canShowFeature(
       eventUserRole: eventUserRole,
-      featureCode: featureCode,
+      featureCodes: featureCodes,
     );
   }
 }

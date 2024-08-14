@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
@@ -73,7 +74,12 @@ class _EventDetailBasePageView extends StatelessWidget {
               EventUtils.isAttending(event: event, userId: userId);
           final isOwnEvent =
               EventUtils.isOwnEvent(event: event, userId: userId);
-          if (isOwnEvent || isCohost) {
+          final eventUserRole =
+              context.watch<GetEventUserRoleBloc>().state.maybeWhen(
+                    fetched: (eventUserRole) => eventUserRole,
+                    orElse: () => null,
+                  );
+          if (isOwnEvent || isCohost || eventUserRole != null) {
             return const HostEventDetailView();
           }
           return isAttending
