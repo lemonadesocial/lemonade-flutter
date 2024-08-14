@@ -1,9 +1,11 @@
 import 'package:app/core/domain/event/entities/event_user_role.dart';
-import 'package:app/core/service/feature_manager/event_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/feature_visibility_strategy.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 
 class FeatureManager {
-  final EventFeatureVisibilityStrategy strategy;
+  // Allows for different visibility strategies
+  // making it easy to extend or replace the logic in the future.
+  final FeatureVisibilityStrategy strategy;
 
   FeatureManager(this.strategy);
 
@@ -17,6 +19,7 @@ class FeatureManager {
     );
   }
 
+  // Core method to check feature visibility using the provided strategy.
   bool canShowDashboard({
     required EventUserRole? eventUserRole,
   }) {
