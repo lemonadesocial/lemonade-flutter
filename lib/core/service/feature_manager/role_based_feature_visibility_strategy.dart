@@ -80,15 +80,14 @@ class RoleBasedFeatureVisibilityStrategy implements FeatureVisibilityStrategy {
     EventUserRole? eventUserRole,
     List<Enum$FeatureCode>? featureCodes,
   }) {
-    if (eventUserRole == null) return false;
-    if (featureCodes == null) return false;
+    if (eventUserRole == null) return true;
 
     final roles = eventUserRole.roles ?? [];
     if (roles.isEmpty) return false;
 
     // Precompute allowed roles for each feature code to reduce repetitive lookups
     final featureRoleMappings = {
-      for (var featureCode in featureCodes)
+      for (var featureCode in featureCodes!)
         featureCode: _featureRoleMappings[featureCode] ?? [],
     };
 
@@ -98,7 +97,6 @@ class RoleBasedFeatureVisibilityStrategy implements FeatureVisibilityStrategy {
 
       for (var featureCode in featureCodes) {
         final allowedRoles = featureRoleMappings[featureCode]!;
-
         if (!allowedRoles.contains(roleCode)) continue;
 
         final featureEnabled = featuresExpanded.any(

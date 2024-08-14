@@ -30,6 +30,10 @@ class HostEventDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final eventUserRole = context.watch<GetEventUserRoleBloc>().state.maybeWhen(
+          fetched: (eventUserRole) => eventUserRole,
+          orElse: () => null,
+        );
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
@@ -82,7 +86,10 @@ class HostEventDetailView extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: SliverToBoxAdapter(
-                          child: HostEventBasicInfoCard(event: event),
+                          child: HostEventBasicInfoCard(
+                            event: event,
+                            eventUserRole: eventUserRole,
+                          ),
                         ),
                       ),
                       SliverPadding(
@@ -93,6 +100,7 @@ class HostEventDetailView extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: HostEventDetailConfigGrid(
                           event: event,
+                          eventUserRole: eventUserRole,
                         ),
                       ),
                       SliverPadding(

@@ -16,4 +16,71 @@ class FeatureManager {
       featureCodes: featureCodes,
     );
   }
+
+  bool canShowDashboard({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [
+        Enum$FeatureCode.DataDashboardInsights,
+        Enum$FeatureCode.DataDashboardRewards,
+        Enum$FeatureCode.DataDashboardRevenue,
+      ],
+    );
+  }
+
+  bool canShowGuestList({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.GuestListDashboard],
+    );
+  }
+
+  bool canShowEventSettings({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.EventSettings],
+    );
+  }
+
+  bool canShowTicketSettings({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.TicketingSettings],
+    );
+  }
+
+  bool canShowPromotion({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.PromotionCodes],
+    );
+  }
+
+  bool canShowPoap({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.POAPdata],
+    );
+  }
+
+  bool canShowCheckin({
+    required EventUserRole? eventUserRole,
+  }) {
+    return strategy.canShowFeature(
+      eventUserRole: eventUserRole,
+      featureCodes: [Enum$FeatureCode.CheckIn],
+    );
+  }
 }

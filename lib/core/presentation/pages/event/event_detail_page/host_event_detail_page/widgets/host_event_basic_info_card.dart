@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
@@ -7,10 +8,13 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/feature_manager/feature_manager.dart';
+import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -31,9 +35,11 @@ class HostEventBasicInfoCard extends StatelessWidget {
   const HostEventBasicInfoCard({
     super.key,
     required this.event,
+    required this.eventUserRole,
   });
 
   final Event event;
+  final EventUserRole? eventUserRole;
 
   String? get durationText {
     final now = DateTime.now();
@@ -74,6 +80,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
           (element) => element.type == PaymentAccountType.ethereumRelay,
         ) ??
         false;
+    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final canShowGuestList =
+        featureManager.canShowGuestList(eventUserRole: eventUserRole);
+
     return FutureBuilder<Either<Failure, List<EventTicket>>>(
       future: getIt<EventTicketRepository>().getTickets(
         input: GetTicketsInput(
@@ -227,155 +237,157 @@ class HostEventBasicInfoCard extends StatelessWidget {
             SizedBox(
               height: Spacing.extraSmall,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.checkins,
-                      ),
-                    ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
+            if (canShowGuestList)
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => AutoRouter.of(context).push(
+                        EventApprovalSettingRoute(
+                          initialTab: EventGuestsTabs.checkins,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.checkInCount?.toString() ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
+                      child: Container(
+                        height: 73.w,
+                        decoration: BoxDecoration(
+                          color: colorScheme.onPrimary.withOpacity(0.06),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(LemonRadius.extraSmall),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: Spacing.smMedium),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                event.checkInCount?.toString() ?? '',
+                                style: Typo.mediumPlus.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.checkedIn.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                t.event.checkedIn.capitalize(),
+                                style: Typo.small
+                                    .copyWith(color: colorScheme.onSecondary),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.reservations,
-                      ),
-                    ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
+                  SizedBox(
+                    width: Spacing.extraSmall,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => AutoRouter.of(context).push(
+                        EventApprovalSettingRoute(
+                          initialTab: EventGuestsTabs.reservations,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.attendingCount?.toString() ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
+                      child: Container(
+                        height: 73.w,
+                        decoration: BoxDecoration(
+                          color: colorScheme.onPrimary.withOpacity(0.06),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(LemonRadius.extraSmall),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: Spacing.smMedium),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                event.attendingCount?.toString() ?? '',
+                                style: Typo.mediumPlus.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.attending.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                t.event.attending.capitalize(),
+                                style: Typo.small
+                                    .copyWith(color: colorScheme.onSecondary),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: Spacing.extraSmall,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.invited,
-                      ),
-                    ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
+                  SizedBox(
+                    width: Spacing.extraSmall,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => AutoRouter.of(context).push(
+                        EventApprovalSettingRoute(
+                          initialTab: EventGuestsTabs.invited,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.invitedCount?.toString() ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
+                      child: Container(
+                        height: 73.w,
+                        decoration: BoxDecoration(
+                          color: colorScheme.onPrimary.withOpacity(0.06),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(LemonRadius.extraSmall),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: Spacing.smMedium),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                event.invitedCount?.toString() ?? '',
+                                style: Typo.mediumPlus.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.invited.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                t.event.invited.capitalize(),
+                                style: Typo.small
+                                    .copyWith(color: colorScheme.onSecondary),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Spacing.extraSmall,
-            ),
+                ],
+              ),
+            if (canShowGuestList)
+              SizedBox(
+                height: Spacing.extraSmall,
+              ),
             if (relayPaymentSupported) ...[
               _ClaimRelayPaymentButton(event: event),
               SizedBox(
                 height: Spacing.extraSmall,
               ),
             ],
-            _ViewGuestsButton(event: event),
+            if (canShowGuestList) _ViewGuestsButton(event: event),
           ],
         );
       },

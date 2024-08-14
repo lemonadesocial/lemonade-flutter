@@ -4,6 +4,6 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 abstract class FeatureVisibilityStrategy {
   bool canShowFeature({
     EventUserRole? eventUserRole,
-    List<Enum$FeatureCode> featureCodes,
+    List<Enum$FeatureCode>? featureCodes,
   });
 }
