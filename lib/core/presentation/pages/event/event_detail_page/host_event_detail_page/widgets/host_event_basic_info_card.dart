@@ -9,12 +9,11 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -80,7 +79,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
           (element) => element.type == PaymentAccountType.ethereumRelay,
         ) ??
         false;
-    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final featureManager =
+        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
     final canShowGuestList =
         featureManager.canShowGuestList(eventUserRole: eventUserRole);
     final canShowEventSettings =
@@ -195,7 +195,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (canShowEventSettings) const _EditEventButton()
+                      if (canShowEventSettings) const _EditEventButton(),
                     ],
                   ),
                 ],

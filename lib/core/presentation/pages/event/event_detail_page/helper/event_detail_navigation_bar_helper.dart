@@ -3,7 +3,7 @@ import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -167,7 +167,8 @@ class EventDetailNavigationBarHelper {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
-    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final featureManager =
+        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
     final canShowCheckIn =
         featureManager.canShowCheckin(eventUserRole: eventUserRole);
     final canShowGuestList =

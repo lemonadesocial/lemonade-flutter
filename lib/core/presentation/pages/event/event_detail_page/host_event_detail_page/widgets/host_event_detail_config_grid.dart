@@ -6,7 +6,7 @@ import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -37,7 +37,8 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         );
     final eventInvitedCount = eventDetail.invitedCount ?? 0;
     final eventTicketTypesCount = eventDetail.eventTicketTypes?.length ?? 0;
-    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final featureManager =
+        FeatureManager(EventRoleBasedFeatureVisibilityStrategy());
     final canShowDashboard =
         featureManager.canShowDashboard(eventUserRole: eventUserRole);
     final canShowEventSettings =
