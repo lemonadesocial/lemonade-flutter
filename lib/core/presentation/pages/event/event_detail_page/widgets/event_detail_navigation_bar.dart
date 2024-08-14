@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/helper/event_detail_navigation_bar_helper.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
 import 'package:app/core/utils/animation_utils.dart';
@@ -16,7 +17,12 @@ final List<double> _snapSizes = [.16, .5];
 
 class EventDetailNavigationBar extends StatefulWidget {
   final Event event;
-  const EventDetailNavigationBar({super.key, required this.event});
+  final EventUserRole? eventUserRole;
+  const EventDetailNavigationBar({
+    super.key,
+    required this.event,
+    this.eventUserRole,
+  });
 
   @override
   State<EventDetailNavigationBar> createState() =>
@@ -115,8 +121,12 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
                         animation: animation,
                         builder: (context, child) => SliverVisibility(
                           visible: _visibleWhenExpanded,
-                          replacementSliver: _buildHorizontalList(),
-                          sliver: _buildGridList(),
+                          replacementSliver: _buildHorizontalList(
+                            eventUserRole: widget.eventUserRole,
+                          ),
+                          sliver: _buildGridList(
+                            eventUserRole: widget.eventUserRole,
+                          ),
                         ),
                       ),
                     ],
@@ -130,22 +140,29 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     );
   }
 
-  SliverToBoxAdapter _buildHorizontalList() {
+  SliverToBoxAdapter _buildHorizontalList({
+    required EventUserRole? eventUserRole,
+  }) {
     late List features = [];
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
           authenticated: (session) => session.userId,
         );
-    final isCohost = EventUtils.isCohost(event: widget.event, userId: userId);
+    final isCohost = EventUtils.isCohost(
+      event: widget.event,
+      userId: userId,
+      eventUserRole: eventUserRole,
+    );
     final isAttending =
         EventUtils.isAttending(event: widget.event, userId: userId);
     final isOwnEvent =
         EventUtils.isOwnEvent(event: widget.event, userId: userId);
-    if (isOwnEvent || isCohost) {
+    if (isOwnEvent || isCohost || eventUserRole != null) {
       features = EventDetailNavigationBarHelper.getEventFeaturesForHost(
         context: context,
         event: widget.event,
         isSmallIcon: true,
+        eventUserRole: eventUserRole,
       );
     } else if (isAttending) {
       features = EventDetailNavigationBarHelper.getEventFeaturesForGuest(
@@ -179,23 +196,29 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     );
   }
 
-  SliverPadding _buildGridList() {
+  SliverPadding _buildGridList({
+    required EventUserRole? eventUserRole,
+  }) {
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
           authenticated: (session) => session.userId,
         );
     List features = [];
-    final isCohost = EventUtils.isCohost(event: widget.event, userId: userId);
+    final isCohost = EventUtils.isCohost(
+      event: widget.event,
+      userId: userId,
+      eventUserRole: eventUserRole,
+    );
     final isAttending =
         EventUtils.isAttending(event: widget.event, userId: userId);
     final isOwnEvent =
         EventUtils.isOwnEvent(event: widget.event, userId: userId);
-
-    if (isOwnEvent || isCohost) {
+    if (isOwnEvent || isCohost || eventUserRole != null) {
       features = EventDetailNavigationBarHelper.getEventFeaturesForHost(
         context: context,
         event: widget.event,
         isSmallIcon: false,
+        eventUserRole: eventUserRole,
       );
     } else if (isAttending) {
       features = EventDetailNavigationBarHelper.getEventFeaturesForGuest(

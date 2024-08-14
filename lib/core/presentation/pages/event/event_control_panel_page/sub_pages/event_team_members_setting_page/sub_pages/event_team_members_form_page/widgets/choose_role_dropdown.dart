@@ -96,7 +96,7 @@ class _EventRoleItem extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Text(
-            eventRole?.name ?? '',
+            eventRole?.title ?? '',
             style: Typo.mediumPlus.copyWith(
               color: colorScheme.onPrimary,
             ),

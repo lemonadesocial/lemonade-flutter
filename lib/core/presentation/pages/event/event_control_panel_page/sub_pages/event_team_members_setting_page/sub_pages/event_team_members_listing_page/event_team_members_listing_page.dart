@@ -152,7 +152,7 @@ class _EventTeamMembersListingPageViewState
                       borderColor: selected == true
                           ? Colors.transparent
                           : colorScheme.outline,
-                      label: StringUtils.capitalize(item.name ?? ''),
+                      label: StringUtils.capitalize(item.title ?? ''),
                       radius: BorderRadius.circular(LemonRadius.button),
                     );
                   },

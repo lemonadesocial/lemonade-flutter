@@ -115,6 +115,7 @@ class HostEventDetailView extends StatelessWidget {
                             children: [
                               HostCheckinGuestsAction(
                                 event: event,
+                                eventUserRole: eventUserRole,
                               ),
                               SizedBox(
                                 height: Spacing.extraSmall,
@@ -148,7 +149,10 @@ class HostEventDetailView extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                         sliver: SliverToBoxAdapter(
-                          child: HostCollectiblesSection(event: event),
+                          child: HostCollectiblesSection(
+                            event: event,
+                            eventUserRole: eventUserRole,
+                          ),
                         ),
                       ),
                       SliverPadding(
@@ -176,6 +180,7 @@ class HostEventDetailView extends StatelessWidget {
                   ),
                   EventDetailNavigationBar(
                     event: event,
+                    eventUserRole: eventUserRole,
                   ),
                 ],
               ),

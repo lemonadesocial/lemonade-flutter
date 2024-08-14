@@ -1,5 +1,8 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/feature_manager/feature_manager.dart';
+import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -15,13 +18,20 @@ class HostCheckinGuestsAction extends StatelessWidget {
   const HostCheckinGuestsAction({
     super.key,
     required this.event,
+    required this.eventUserRole,
   });
 
   final Event event;
+  final EventUserRole? eventUserRole;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final canShowCheckIn =
+        featureManager.canShowGuestList(eventUserRole: eventUserRole);
+    if (!canShowCheckIn) return const SizedBox();
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);

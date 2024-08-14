@@ -83,6 +83,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
     final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
     final canShowGuestList =
         featureManager.canShowGuestList(eventUserRole: eventUserRole);
+    final canShowEventSettings =
+        featureManager.canShowEventSettings(eventUserRole: eventUserRole);
 
     return FutureBuilder<Either<Failure, List<EventTicket>>>(
       future: getIt<EventTicketRepository>().getTickets(
@@ -193,42 +195,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: Spacing.smMedium,
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.onPrimary.withOpacity(0.06),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(9.r)),
-                              ),
-                              width: Sizing.medium,
-                              height: Sizing.medium,
-                              child: InkWell(
-                                onTap: () {
-                                  Vibrate.feedback(FeedbackType.light);
-                                  AutoRouter.of(context)
-                                      .navigate(const EventControlPanelRoute());
-                                },
-                                child: Center(
-                                  child: ThemeSvgIcon(
-                                    color: colorScheme.onSecondary,
-                                    builder: (filter) =>
-                                        Assets.icons.icEdit.svg(
-                                      colorFilter: filter,
-                                      width: 15.w,
-                                      height: 15.w,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      if (canShowEventSettings) const _EditEventButton()
                     ],
                   ),
                 ],
@@ -526,6 +493,48 @@ class _ViewGuestsButton extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _EditEventButton extends StatelessWidget {
+  const _EditEventButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Stack(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            right: Spacing.smMedium,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: colorScheme.onPrimary.withOpacity(0.06),
+              borderRadius: BorderRadius.all(Radius.circular(9.r)),
+            ),
+            width: Sizing.medium,
+            height: Sizing.medium,
+            child: InkWell(
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                AutoRouter.of(context).navigate(const EventControlPanelRoute());
+              },
+              child: Center(
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icEdit.svg(
+                    colorFilter: filter,
+                    width: 15.w,
+                    height: 15.w,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

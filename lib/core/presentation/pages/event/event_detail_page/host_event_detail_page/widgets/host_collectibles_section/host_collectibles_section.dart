@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/token/input/get_tokens_input.dart';
 import 'package:app/core/domain/token/token_repository.dart';
@@ -7,6 +8,8 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/widgets/empty_collectible_card_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/feature_manager/feature_manager.dart';
+import 'package:app/core/service/feature_manager/role_based_feature_visibility_strategy.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
@@ -16,9 +19,11 @@ class HostCollectiblesSection extends StatelessWidget {
   const HostCollectiblesSection({
     super.key,
     required this.event,
+    required this.eventUserRole,
   });
 
   final Event event;
+  final EventUserRole? eventUserRole;
 
   List<EventOffer> get eventPoapOffers => (event.offers ?? [])
       .where((offer) => offer.provider == OfferProvider.poap)
@@ -26,6 +31,12 @@ class HostCollectiblesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final featureManager = FeatureManager(RoleBasedFeatureVisibilityStrategy());
+    final canShowPoap =
+        featureManager.canShowPoap(eventUserRole: eventUserRole);
+    if (!canShowPoap) {
+      return const SizedBox();
+    }
     if (eventPoapOffers.isEmpty) {
       return const EmptyCollectibleCardWidget();
     }

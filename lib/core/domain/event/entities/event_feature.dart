@@ -11,7 +11,7 @@ class EventFeature with _$EventFeature {
   const factory EventFeature({
     String? id,
     Enum$FeatureCode? code,
-    String? name,
+    String? title,
     bool? featureEnable,
     List<String>? endpoints,
   }) = _EventFeature;
@@ -19,7 +19,7 @@ class EventFeature with _$EventFeature {
   factory EventFeature.fromDto(EventFeatureDto dto) => EventFeature(
         id: dto.id,
         code: dto.code,
-        name: dto.name,
+        title: dto.title,
         featureEnable: dto.featureEnable,
       );
 

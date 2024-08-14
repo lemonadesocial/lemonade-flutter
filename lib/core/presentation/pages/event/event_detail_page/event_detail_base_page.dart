@@ -69,16 +69,20 @@ class _EventDetailBasePageView extends StatelessWidget {
                 orElse: () => '',
                 authenticated: (session) => session.userId,
               );
-          final isCohost = EventUtils.isCohost(event: event, userId: userId);
-          final isAttending =
-              EventUtils.isAttending(event: event, userId: userId);
-          final isOwnEvent =
-              EventUtils.isOwnEvent(event: event, userId: userId);
           final eventUserRole =
               context.watch<GetEventUserRoleBloc>().state.maybeWhen(
                     fetched: (eventUserRole) => eventUserRole,
                     orElse: () => null,
                   );
+          final isCohost = EventUtils.isCohost(
+            event: event,
+            userId: userId,
+            eventUserRole: eventUserRole,
+          );
+          final isAttending =
+              EventUtils.isAttending(event: event, userId: userId);
+          final isOwnEvent =
+              EventUtils.isOwnEvent(event: event, userId: userId);
           if (isOwnEvent || isCohost || eventUserRole != null) {
             return const HostEventDetailView();
           }

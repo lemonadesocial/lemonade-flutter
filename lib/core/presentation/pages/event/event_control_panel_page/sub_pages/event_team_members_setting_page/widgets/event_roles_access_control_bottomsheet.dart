@@ -127,7 +127,7 @@ class _RoleTags extends StatelessWidget {
               backgroundColor:
                   selected ? colorScheme.outline : Colors.transparent,
               borderColor: selected ? Colors.transparent : colorScheme.outline,
-              label: StringUtils.capitalize(item.name),
+              label: StringUtils.capitalize(item.title),
               radius: BorderRadius.circular(LemonRadius.button),
             );
           },
@@ -226,7 +226,7 @@ class _AccessControlItem extends StatelessWidget {
             width: Spacing.xSmall,
           ),
           Text(
-            eventFeature?.name ?? '',
+            eventFeature?.title ?? '',
             style: Typo.small.copyWith(
               color: colorScheme.onPrimary,
               height: 0,

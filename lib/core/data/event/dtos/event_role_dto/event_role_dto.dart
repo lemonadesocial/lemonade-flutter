@@ -10,7 +10,7 @@ class EventRoleDto with _$EventRoleDto {
   factory EventRoleDto({
     @JsonKey(name: '_id') String? id,
     Enum$RoleCode? code,
-    String? name,
+    String? title,
     @JsonKey(name: 'features_expanded') List<EventFeatureDto>? featuresExpanded,
   }) = _EventRoleDto;
 
