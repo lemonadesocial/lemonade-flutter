@@ -2,8 +2,9 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/event_role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -28,10 +29,12 @@ class HostCheckinGuestsAction extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final featureManager =
-        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
-    final canShowCheckIn =
-        featureManager.canShowGuestList(eventUserRole: eventUserRole);
+    final canShowCheckIn = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [Enum$FeatureCode.CheckIn],
+      ),
+    ).canShowFeature;
     if (!canShowCheckIn) return const SizedBox();
     return InkWell(
       onTap: () {

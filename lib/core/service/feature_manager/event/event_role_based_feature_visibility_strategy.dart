@@ -4,6 +4,14 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 
 class EventRoleBasedEventFeatureVisibilityStrategy
     implements FeatureVisibilityStrategy {
+  final EventUserRole? eventUserRole;
+  final List<Enum$FeatureCode>? featureCodes;
+
+  EventRoleBasedEventFeatureVisibilityStrategy({
+    required this.eventUserRole,
+    required this.featureCodes,
+  });
+
   static const Map<Enum$FeatureCode, List<Enum$RoleCode>> _featureRoleMappings =
       {
     Enum$FeatureCode.DataDashboardInsights: [
@@ -77,14 +85,12 @@ class EventRoleBasedEventFeatureVisibilityStrategy
     ],
   };
   @override
-  bool canShowFeature({
-    EventUserRole? eventUserRole,
-    List<Enum$FeatureCode>? featureCodes,
-  }) {
+  bool get canShowFeature {
     if (eventUserRole == null) return true;
 
-    final roles = eventUserRole.roles ?? [];
+    final roles = eventUserRole?.roles ?? [];
     if (roles.isEmpty) return false;
+    if ((featureCodes ?? []).isEmpty) return false;
 
     // Precompute allowed roles for each feature code to reduce repetitive lookups
     final featureRoleMappings = {
@@ -96,7 +102,7 @@ class EventRoleBasedEventFeatureVisibilityStrategy
       final roleCode = role.roleExpanded?.code;
       final featuresExpanded = role.roleExpanded?.featuresExpanded ?? [];
 
-      for (var featureCode in featureCodes) {
+      for (var featureCode in featureCodes!) {
         final allowedRoles = featureRoleMappings[featureCode]!;
         if (!allowedRoles.contains(roleCode)) continue;
 

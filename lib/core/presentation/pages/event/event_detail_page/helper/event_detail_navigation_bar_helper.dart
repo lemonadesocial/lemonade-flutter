@@ -3,8 +3,9 @@ import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/event_role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -167,16 +168,40 @@ class EventDetailNavigationBarHelper {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
-    final featureManager =
-        FeatureManager(EventRoleBasedEventFeatureVisibilityStrategy());
-    final canShowCheckIn =
-        featureManager.canShowCheckin(eventUserRole: eventUserRole);
-    final canShowGuestList =
-        featureManager.canShowGuestList(eventUserRole: eventUserRole);
-    final canShowEventSettings =
-        featureManager.canShowEventSettings(eventUserRole: eventUserRole);
-    final canShowDashboard =
-        featureManager.canShowDashboard(eventUserRole: eventUserRole);
+    final canShowCheckIn = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [
+          Enum$FeatureCode.CheckIn,
+        ],
+      ),
+    ).canShowFeature;
+    final canShowGuestList = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [
+          Enum$FeatureCode.GuestListDashboard,
+        ],
+      ),
+    ).canShowFeature;
+    final canShowEventSettings = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [
+          Enum$FeatureCode.EventSettings,
+        ],
+      ),
+    ).canShowFeature;
+    final canShowDashboard = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [
+          Enum$FeatureCode.DataDashboardInsights,
+          Enum$FeatureCode.DataDashboardRevenue,
+          Enum$FeatureCode.DataDashboardRewards,
+        ],
+      ),
+    ).canShowFeature;
     final List<FeatureItem> features = [
       if (canShowCheckIn)
         FeatureItem(
