@@ -18,6 +18,7 @@ fragment Notification on Notification {
       key
       bucket
     }
+    image_avatar
   }
   is_seen
   ref_event

@@ -1,5 +1,4 @@
 import 'package:app/core/application/notification/delete_notifications_bloc/delete_notifications_bloc.dart';
-import 'package:app/core/domain/notification/input/delete_notifications_input.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/default_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_invited_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_join_request_notification_item.dart';
@@ -69,13 +68,6 @@ class NotificationCardView extends StatelessWidget {
     return NotificationSlidable(
       id: notification.id ?? '',
       onRemove: () {
-        context.read<DeleteNotificationsBloc>().add(
-              DeleteNotificationsEvent.delete(
-                input: DeleteNotificationsInput(
-                  ids: [notification.id ?? ''],
-                ),
-              ),
-            );
         onRemove?.call(
           index,
           notification,
@@ -83,13 +75,6 @@ class NotificationCardView extends StatelessWidget {
         );
       },
       onDismissed: () {
-        context.read<DeleteNotificationsBloc>().add(
-              DeleteNotificationsEvent.delete(
-                input: DeleteNotificationsInput(
-                  ids: [notification.id ?? ''],
-                ),
-              ),
-            );
         onRemove?.call(
           index,
           notification,
@@ -107,6 +92,13 @@ class NotificationCardView extends StatelessWidget {
             ].contains(notification.type)) {
               return EventJoinRequestNotificationItem(
                 notification: notification,
+                onRemove: () {
+                  onRemove?.call(
+                    index,
+                    notification,
+                    false,
+                  );
+                },
               );
             }
 

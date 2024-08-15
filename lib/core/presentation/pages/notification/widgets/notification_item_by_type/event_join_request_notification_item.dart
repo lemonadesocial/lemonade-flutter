@@ -1,10 +1,14 @@
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/notification_item_base.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_thumbnail.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/mutation/decide_user_join_request.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -13,17 +17,50 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
+import 'package:matrix/matrix.dart';
 
 class EventJoinRequestNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
+  final Function()? onRemove;
   const EventJoinRequestNotificationItem({
     super.key,
     required this.notification,
+    this.onRemove,
   });
+
+  Future<void> _decideJoinRequest(
+    BuildContext context, {
+    required String eventId,
+    required String joinRequestId,
+    required Enum$EventJoinRequestState decision,
+  }) async {
+    final response = await showFutureLoadingDialog(
+      context: context,
+      future: () {
+        return getIt<AppGQL>().client.mutate$DecideUserJoinRequests(
+              Options$Mutation$DecideUserJoinRequests(
+                variables: Variables$Mutation$DecideUserJoinRequests(
+                  input: Input$DecideUserJoinRequestsInput(
+                    decision: decision,
+                    event: eventId,
+                    requests: [joinRequestId],
+                  ),
+                ),
+              ),
+            );
+      },
+    );
+    if (response.result?.parsedData?.decideUserJoinRequests == true) {
+      onRemove?.call();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final joinRequestId =
+        notification.data?.tryGet('event_join_request_id') as String? ?? '';
+    final eventId = notification.refEvent ?? '';
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
@@ -34,13 +71,18 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
           height: Sizing.small,
         ),
       ),
-      avatar: notification.refUserExpanded != null
+      avatar: notification.fromExpanded != null ||
+              notification.refUserExpanded != null
           ? NotificationThumbnail(
-              imageUrl: notification.refUserExpanded?.imageAvatar ?? '',
+              imageUrl: notification.fromExpanded?.imageAvatar ??
+                  notification.refUserExpanded?.imageAvatar ??
+                  '',
               onTap: () {
                 AutoRouter.of(context).push(
                   ProfileRoute(
-                    userId: notification.refUserExpanded?.userId ?? '',
+                    userId: notification.fromExpanded?.userId ??
+                        notification.refUserExpanded?.userId ??
+                        '',
                   ),
                 );
               },
@@ -68,23 +110,29 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
               ? Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (colorFilter) => _Icon(
-                        onTap: () {
-                          // TODO: view application
-                        },
-                        icon: Assets.icons.icApplication.svg(
-                          colorFilter: colorFilter,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: Spacing.extraSmall),
+                    // TODO: temporary hide view application
+                    // ThemeSvgIcon(
+                    //   color: colorScheme.onSecondary,
+                    //   builder: (colorFilter) => _Icon(
+                    //     onTap: () {
+                    //       // TODO: view application
+                    //     },
+                    //     icon: Assets.icons.icApplication.svg(
+                    //       colorFilter: colorFilter,
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(width: Spacing.extraSmall),
                     ThemeSvgIcon(
                       color: LemonColor.coralReef,
                       builder: (colorFilter) => _Icon(
                         onTap: () {
-                          //TODO: decline join request
+                          _decideJoinRequest(
+                            context,
+                            eventId: eventId,
+                            joinRequestId: joinRequestId,
+                            decision: Enum$EventJoinRequestState.declined,
+                          );
                         },
                         icon: Assets.icons.icClose.svg(
                           colorFilter: colorFilter,
@@ -96,7 +144,12 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
                       color: LemonColor.paleViolet,
                       builder: (colorFilter) => _Icon(
                         onTap: () {
-                          //TODO: Accept join request
+                          _decideJoinRequest(
+                            context,
+                            eventId: eventId,
+                            joinRequestId: joinRequestId,
+                            decision: Enum$EventJoinRequestState.approved,
+                          );
                         },
                         icon: Assets.icons.icDone.svg(
                           colorFilter: colorFilter,
