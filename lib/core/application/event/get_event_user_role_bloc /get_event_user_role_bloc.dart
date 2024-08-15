@@ -24,7 +24,11 @@ class GetEventUserRoleBloc
       userId: event.userId,
     );
     result.fold(
-      (failure) => emit(const GetEventUserRoleState.failure()),
+      (failure) => emit(
+        const GetEventUserRoleState.fetched(
+          eventUserRole: null,
+        ),
+      ),
       (eventUserRole) => emit(
         GetEventUserRoleState.fetched(
           eventUserRole: eventUserRole,
@@ -45,8 +49,7 @@ class GetEventUserRoleEvent with _$GetEventUserRoleEvent {
 @freezed
 class GetEventUserRoleState with _$GetEventUserRoleState {
   const factory GetEventUserRoleState.fetched({
-    required EventUserRole eventUserRole,
+    required EventUserRole? eventUserRole,
   }) = GetEventUserRoleStateFetched;
   const factory GetEventUserRoleState.loading() = GetEventUserRoleStateLoading;
-  const factory GetEventUserRoleState.failure() = GetEventUserRoleStateFailure;
 }

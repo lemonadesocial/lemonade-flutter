@@ -7,6 +7,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
+import 'package:app/core/utils/event_user_role_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -48,14 +49,16 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ],
       ),
     ).canShowFeature;
+
     final canShowEventSettings = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.EventSettings,
-        ],
-      ),
-    ).canShowFeature;
+          EventRoleBasedEventFeatureVisibilityStrategy(
+            eventUserRole: eventUserRole,
+            featureCodes: [
+              Enum$FeatureCode.EventSettings,
+            ],
+          ),
+        ).canShowFeature ||
+        EventUserRoleUtils.hasSalesRole(eventUserRole: eventUserRole);
     final List<EventConfigGridViewModel?> listData = [
       if (canShowEventSettings)
         EventConfigGridViewModel(
@@ -138,23 +141,22 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           );
         },
       ),
-      if (canShowEventSettings)
-        EventConfigGridViewModel(
-          title: t.event.configuration.tickets,
-          subTitle:
-              '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
-          icon: ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icTicketGradient.svg(
-              width: 24.w,
-              height: 24.w,
-            ),
+      EventConfigGridViewModel(
+        title: t.event.configuration.tickets,
+        subTitle:
+            '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
+        icon: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icTicketGradient.svg(
+            width: 24.w,
+            height: 24.w,
           ),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context)
-                .navigate(const EventIssueTicketsSettingRoute());
-          },
         ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context)
+              .navigate(const EventIssueTicketsSettingRoute());
+        },
+      ),
     ];
     final eventCohostRequests =
         context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(

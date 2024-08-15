@@ -69,38 +69,42 @@ class _EventDetailBasePageView extends StatelessWidget {
                 orElse: () => '',
                 authenticated: (session) => session.userId,
               );
-          final eventUserRole =
-              context.watch<GetEventUserRoleBloc>().state.maybeWhen(
-                    fetched: (eventUserRole) => eventUserRole,
-                    orElse: () => null,
+          return BlocBuilder<GetEventUserRoleBloc, GetEventUserRoleState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                fetched: (eventUserRole) {
+                  final isCohost = EventUtils.isCohost(
+                    event: event,
+                    userId: userId,
+                    eventUserRole: eventUserRole,
                   );
-          final isCohost = EventUtils.isCohost(
-            event: event,
-            userId: userId,
-            eventUserRole: eventUserRole,
+                  final isAttending =
+                      EventUtils.isAttending(event: event, userId: userId);
+                  final isOwnEvent =
+                      EventUtils.isOwnEvent(event: event, userId: userId);
+                  if (isOwnEvent || isCohost || eventUserRole != null) {
+                    return const HostEventDetailView();
+                  }
+                  return isAttending
+                      ? BlocProvider(
+                          create: (context) => GetMyTicketsBloc(
+                            input: GetTicketsInput(
+                              event: event.id,
+                              user: userId,
+                              skip: 0,
+                              limit: 100,
+                            ),
+                          )..add(
+                              GetMyTicketsEvent.fetch(),
+                            ),
+                          child: const PostGuestEventDetailView(),
+                        )
+                      : const PreGuestEventDetailView();
+                },
+                orElse: () => Center(child: Loading.defaultLoading(context)),
+              );
+            },
           );
-          final isAttending =
-              EventUtils.isAttending(event: event, userId: userId);
-          final isOwnEvent =
-              EventUtils.isOwnEvent(event: event, userId: userId);
-          if (isOwnEvent || isCohost || eventUserRole != null) {
-            return const HostEventDetailView();
-          }
-          return isAttending
-              ? BlocProvider(
-                  create: (context) => GetMyTicketsBloc(
-                    input: GetTicketsInput(
-                      event: event.id,
-                      user: userId,
-                      skip: 0,
-                      limit: 100,
-                    ),
-                  )..add(
-                      GetMyTicketsEvent.fetch(),
-                    ),
-                  child: const PostGuestEventDetailView(),
-                )
-              : const PreGuestEventDetailView();
         },
       ),
     );
