@@ -44,7 +44,7 @@ class EventListUserRole extends StatelessWidget {
             final username = item?.user?.username ?? '';
             final isFirst = index == 0;
             final isLast = index == ((eventUserRoles ?? []).length - 1);
-            final roleName = item?.roles?.first.roleExpanded?.name ?? '';
+            final roleName = item?.roles?.first.roleExpanded?.title ?? '';
             return EventTeamMemberItemWidget(
               title: isInvitedViaEmail ? email : name,
               subTitle: isInvitedViaEmail

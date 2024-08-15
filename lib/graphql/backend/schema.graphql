@@ -139,7 +139,7 @@ type Query {
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getListUserRole(input: EventRoleFilter!): [EventUserRole!]!
-  getUserRole(input: UserRoleInput!): [EventUserRole!]!
+  getUserRole(input: UserRoleInput!): EventUserRole!
   getRoles: [Role!]!
   getEventSessionReservations(
     input: GetEventSessionReservationsInput
@@ -204,6 +204,16 @@ type Query {
     _id: [MongoID!]
     active: Boolean
   ): [Site!]!
+  listSpaceMembers(
+    space: MongoID!
+    role: SpaceRole
+    state: SpaceMembershipState
+    visible: Boolean
+  ): [SpaceMember!]!
+  listSpaceRoleFeatures(
+    space: MongoID!
+    role: SpaceRole!
+  ): ListSpaceRoleFeaturesResponse!
   getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
   getStoreCategory(_id: MongoID!): StoreCategory
   getStoreCategories(
@@ -1794,9 +1804,9 @@ type EventRoleInformation {
 type Role {
   _id: MongoID!
   code: RoleCode!
+  title: String!
   features: [MongoID!]
   updated_by: MongoID
-  name: String!
   features_expanded: [Feature!]
 }
 
@@ -1813,10 +1823,10 @@ enum RoleCode {
 type Feature {
   _id: MongoID!
   code: FeatureCode!
-  endpoints: [String!]
+  title: String!
   updated_by: MongoID
-  name: String!
   feature_enable: Boolean
+  endpoints: [String!]
 }
 
 enum FeatureCode {
@@ -1832,6 +1842,9 @@ enum FeatureCode {
   POAPdata
   CheckIn
   EAS
+  Space
+  SpaceMembership
+  CollectibleData
 }
 
 input EventRoleFilter {
@@ -2534,6 +2547,40 @@ type SitePassport {
   crowdfundAddress: JSON
 }
 
+type SpaceMember {
+  _id: MongoID!
+  user: MongoID!
+  role: SpaceRole!
+  state: SpaceMembershipState!
+  visible: Boolean
+  user_expanded: User
+}
+
+enum SpaceRole {
+  member
+  moderator
+  admin
+  creator
+}
+
+enum SpaceMembershipState {
+  requested
+  rejected
+  joined
+}
+
+type ListSpaceRoleFeaturesResponse {
+  features: [FeatureBase!]!
+  codes: [FeatureCode!]!
+}
+
+type FeatureBase {
+  _id: MongoID!
+  code: FeatureCode!
+  title: String!
+  updated_by: MongoID
+}
+
 type StoreBucketItem {
   _id: MongoID!
   active: Boolean!
@@ -2938,9 +2985,6 @@ type Mutation {
   addUserRole(input: EventRoleInput!): Boolean!
   updateUserRole(input: EventRoleInput!): Boolean!
   deleteUserRole(input: EventRoleInput!): Boolean!
-  addFeatureEndpoints(input: FeatureInput!): Boolean!
-  addRoleFeatures(input: RoleFeatureInput!): Boolean!
-  resetFeatureEndpoints(input: FeatureInput!): Boolean!
   acceptEvent(_id: MongoID!): EventRsvp!
   declineEvent(_id: MongoID!): EventRsvp!
   checkinUser(event: MongoID!, user: MongoID!): EventRsvp!
@@ -3043,6 +3087,22 @@ type Mutation {
   createSite(input: CreateSiteInput!): Site!
   updateSite(input: UpdateSiteInput!, _id: MongoID!): Site
   deleteSite(_id: MongoID!): Boolean!
+  addSpaceMembers(input: AddSpaceMemberInput!): [SpaceMember!]!
+  deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
+  updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
+  requestSpaceMembership(space: MongoID!): SpaceMember!
+  decideSpaceMembership(
+    decision: Boolean!
+    user: MongoID!
+    space: MongoID!
+  ): SpaceMember
+  createSpace(input: SpaceInput!): Space!
+  updateSpace(input: SpaceInput!, _id: MongoID!): Space
+  pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
+  unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
+  followSpace(space: MongoID!): Boolean!
+  unfollowSpace(space: MongoID!): Boolean!
+  updateSpaceRoleFeatures(input: UpdateSpaceRoleFeaturesInput!): Boolean!
   createStoreBucketItem(input: StoreBucketItemInput!): StoreBucketItem!
   updateStoreBucketItem(
     input: UpdateStoreBucketItemInput!
@@ -3343,6 +3403,7 @@ input EventInput {
   subevent_settings: SubeventSettingsInput
   subevent_parent: MongoID
   telegram_channels: [TelegramChannelInput!]
+  space: MongoID
 }
 
 input ApplicationProfileFieldInput {
@@ -3510,16 +3571,6 @@ input UserFilter {
 input RoleInput {
   visible: Boolean!
   role_id: MongoID!
-}
-
-input FeatureInput {
-  feature_id: MongoID
-  endpoints: [String!]!
-}
-
-input RoleFeatureInput {
-  role_id: MongoID
-  feature_ids: [MongoID!]!
 }
 
 type EventRsvp {
@@ -3909,6 +3960,70 @@ input UpdateSiteInput {
   text: JSON
   visibility: JSON
   active: Boolean
+}
+
+input AddSpaceMemberInput {
+  space: MongoID!
+  role: SpaceRole!
+  visible: Boolean
+  users: [MongoID!]!
+}
+
+input DeleteSpaceMemberInput {
+  space: MongoID!
+  users: [MongoID!]!
+}
+
+input UpdateSpaceMemberInput {
+  _id: MongoID
+  role: SpaceRole
+  visible: Boolean
+}
+
+type Space {
+  _id: MongoID!
+  title: String!
+  description: String
+  creator: MongoID!
+
+  """
+  Private space requires moderation for membership
+  """
+  private: Boolean
+  followers: [MongoID!]
+  daos: SpaceDao
+  handle_twitter: String
+  handle_instagram: String
+  events: [MongoID!]
+
+  """
+  Events that are being listed on space home page
+  """
+  listed_events: [MongoID!]
+}
+
+type SpaceDao {
+  network: String!
+  address: String!
+  name: String!
+}
+
+input SpaceInput {
+  title: String!
+  description: String
+
+  """
+  Private space requires moderation for membership
+  """
+  private: Boolean
+  handle_twitter: String
+  handle_instagram: String
+}
+
+input UpdateSpaceRoleFeaturesInput {
+  space: MongoID!
+  role: String!
+  codes: [FeatureCode!]!
 }
 
 input StoreBucketItemInput {

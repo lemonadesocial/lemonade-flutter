@@ -51,6 +51,7 @@ import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.d
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_roles.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_list_user_role.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_user_role.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -645,6 +646,35 @@ class EventRepositoryImpl implements EventRepository {
             ),
           )
           .toList(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, EventUserRole>> getEventUserRole({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result = await client.query$GetUserRole(
+      Options$Query$GetUserRole(
+        fetchPolicy: FetchPolicy.noCache,
+        variables: Variables$Query$GetUserRole(
+          input: Input$UserRoleInput(
+            user_id: userId,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      EventUserRole.fromDto(
+        EventUserRoleDto.fromJson(
+          result.parsedData!.getUserRole.toJson(),
+        ),
+      ),
     );
   }
 
