@@ -12,7 +12,11 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event/user_role_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -85,42 +89,67 @@ class _EventDetailBasePageView extends StatelessWidget {
                   final isOwnEvent =
                       EventUtils.isOwnEvent(event: event, userId: userId);
                   if (isOwnEvent || isCohost || eventUserRole != null) {
-                    return const HostEventDetailView();
+                    final canUseEventCohosts = FeatureManager(
+                      UserRoleFeatureVisibilityStrategy(
+                        eventUserRole: eventUserRole,
+                        roleCodes: [
+                          Enum$RoleCode.Host,
+                          Enum$RoleCode.Cohost,
+                        ],
+                      ),
+                    ).canShowFeature;
+
+                    final canUseCheckIn = FeatureManager(
+                      EventRoleBasedEventFeatureVisibilityStrategy(
+                        eventUserRole: eventUserRole,
+                        featureCodes: [Enum$FeatureCode.CheckIn],
+                      ),
+                    ).canShowFeature;
+
+                    final providers = <BlocProvider>[
+                      if (canUseEventCohosts)
+                        BlocProvider(
+                          create: (context) => GetEventCohostRequestsBloc()
+                            ..add(
+                              GetEventCohostRequestsEvent.fetch(
+                                eventId: event.id ?? '',
+                              ),
+                            ),
+                        ),
+                      if (canUseCheckIn)
+                        BlocProvider(
+                          create: (context) => GetEventCheckinsBloc()
+                            ..add(
+                              GetEventCheckinsEvent.fetch(
+                                eventId: event.id ?? '',
+                              ),
+                            ),
+                        ),
+                    ];
+
+                    return providers.isEmpty
+                        ? const HostEventDetailView()
+                        : MultiBlocProvider(
+                            providers: providers,
+                            child: const HostEventDetailView(),
+                          );
                   }
                   if (!isAttending) return const PreGuestEventDetailView();
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => GetMyTicketsBloc(
-                          input: GetTicketsInput(
-                            event: event.id,
-                            user: userId,
-                            skip: 0,
-                            limit: 100,
-                          ),
-                        )..add(
-                            GetMyTicketsEvent.fetch(),
-                          ),
-                      ),
-                      BlocProvider(
-                        create: (context) => GetEventCohostRequestsBloc()
-                          ..add(
-                            GetEventCohostRequestsEvent.fetch(
-                              eventId: event.id ?? '',
+                  return isAttending
+                      ? BlocProvider(
+                          create: (context) => GetMyTicketsBloc(
+                            input: GetTicketsInput(
+                              event: event.id,
+                              user: userId,
+                              skip: 0,
+                              limit: 100,
                             ),
-                          ),
-                      ),
-                      BlocProvider(
-                        create: (context) => GetEventCheckinsBloc()
-                          ..add(
-                            GetEventCheckinsEvent.fetch(
-                              eventId: event.id ?? '',
+                          )..add(
+                              GetMyTicketsEvent.fetch(),
                             ),
-                          ),
-                      ),
-                    ],
-                    child: const PostGuestEventDetailView(),
-                  );
+                          child: const PostGuestEventDetailView(),
+                        )
+                      : const PreGuestEventDetailView();
                 },
                 orElse: () => Center(child: Loading.defaultLoading(context)),
               );

@@ -33,23 +33,7 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => GetEventCohostRequestsBloc()
-            ..add(
-              GetEventCohostRequestsEvent.fetch(
-                eventId: eventId,
-              ),
-            ),
-        ),
-        BlocProvider(
           create: (context) => EditEventDetailBloc(),
-        ),
-        BlocProvider(
-          create: (context) => GetEventCheckinsBloc()
-            ..add(
-              GetEventCheckinsEvent.fetch(
-                eventId: eventId,
-              ),
-            ),
         ),
         BlocProvider(
           create: (context) => UpdateEventCheckinBloc(),

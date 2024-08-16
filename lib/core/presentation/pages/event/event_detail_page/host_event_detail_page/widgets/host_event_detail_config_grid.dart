@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/view_model/event_config_grid_view_model.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/feature_manager/event/user_role_feature_visibility_strategy.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -157,15 +158,6 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         },
       ),
     ];
-    final eventCohostRequests =
-        context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
-              orElse: () => [],
-              fetched: (eventCohostRequests) => eventCohostRequests,
-            );
-    final eventCheckins = context.watch<GetEventCheckinsBloc>().state.maybeWhen(
-          orElse: () => [],
-          fetched: (eventCheckins) => eventCheckins,
-        );
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: listData.length,
@@ -176,6 +168,18 @@ class HostEventDetailConfigGrid extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           if (listData[index]?.title == t.event.configuration.checkIn) {
+            final canUseCheckIn = FeatureManager(
+              EventRoleBasedEventFeatureVisibilityStrategy(
+                eventUserRole: eventUserRole,
+                featureCodes: [Enum$FeatureCode.CheckIn],
+              ),
+            ).canShowFeature;
+            final eventCheckins = canUseCheckIn
+                ? context.watch<GetEventCheckinsBloc>().state.maybeWhen(
+                      orElse: () => [],
+                      fetched: (eventCheckins) => eventCheckins,
+                    )
+                : [];
             return GridItemWidget(
               item: EventConfigGridViewModel(
                 title: listData[index]!.title,
@@ -189,6 +193,21 @@ class HostEventDetailConfigGrid extends StatelessWidget {
             );
           }
           if (listData[index]?.title == t.event.configuration.coHosts) {
+            final canUseEventCohosts = FeatureManager(
+              UserRoleFeatureVisibilityStrategy(
+                eventUserRole: eventUserRole,
+                roleCodes: [
+                  Enum$RoleCode.Host,
+                  Enum$RoleCode.Cohost,
+                ],
+              ),
+            ).canShowFeature;
+            final eventCohostRequests = canUseEventCohosts
+                ? context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
+                      orElse: () => [],
+                      fetched: (eventCohostRequests) => eventCohostRequests,
+                    )
+                : [];
             return GridItemWidget(
               item: EventConfigGridViewModel(
                 title: listData[index]!.title,
