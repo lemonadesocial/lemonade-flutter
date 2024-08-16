@@ -1,5 +1,4 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
-import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
@@ -12,7 +11,6 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/utils/event_user_role_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -43,9 +41,14 @@ class EventControlPanelBasePage extends StatelessWidget {
         ],
       ),
     ).canShowFeature;
-    final hasPromotionCodesFeature = EventUserRoleUtils.hasPromotionCodeFeature(
-      eventUserRole: eventUserRole,
-    );
+    final canShowPromotionCodes = FeatureManager(
+      EventRoleBasedEventFeatureVisibilityStrategy(
+        eventUserRole: eventUserRole,
+        featureCodes: [
+          Enum$FeatureCode.PromotionCodes,
+        ],
+      ),
+    ).canShowFeature;
     return Scaffold(
       backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
@@ -65,11 +68,11 @@ class EventControlPanelBasePage extends StatelessWidget {
             return BlocListener<EditEventDetailBloc, EditEventDetailState>(
               listener: (context, state) {
                 if (state.status == EditEventDetailBlocStatus.success) {
-                  context.read<GetEventCohostRequestsBloc>().add(
-                        GetEventCohostRequestsEvent.fetch(
-                          eventId: event.id ?? '',
-                        ),
-                      );
+                  // context.read<GetEventCohostRequestsBloc>().add(
+                  //       GetEventCohostRequestsEvent.fetch(
+                  //         eventId: event.id ?? '',
+                  //       ),
+                  //     );
                   context.read<GetEventDetailBloc>().add(
                         GetEventDetailEvent.fetch(
                           eventId: state.event?.id ?? '',
@@ -149,7 +152,7 @@ class EventControlPanelBasePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (canShowEventSettings || hasPromotionCodesFeature)
+                    if (canShowEventSettings || canShowPromotionCodes)
                       SliverPadding(
                         padding: EdgeInsets.symmetric(
                           horizontal: Spacing.smMedium,

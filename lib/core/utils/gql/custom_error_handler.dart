@@ -78,11 +78,6 @@ class CustomErrorHandler {
     final errors = response.errors;
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
-    // Don't need to capture any forbidden error
-    if (errorCode == GraphQLErrorCodeStrings.FORBIDDEN) {
-      return;
-    }
-
     if (kDebugMode) {
       print('--- handleGraphQLError request: ${request.toString()}');
       print('--- handleGraphQLError response : ${response.toString()}');

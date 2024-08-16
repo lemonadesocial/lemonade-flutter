@@ -84,34 +84,30 @@ class EventRoleBasedEventFeatureVisibilityStrategy
       Enum$RoleCode.Host,
     ],
   };
+
   @override
   bool get canShowFeature {
-    if (eventUserRole == null) return true;
+    if (eventUserRole == null ||
+        featureCodes == null ||
+        featureCodes!.isEmpty) {
+      return false;
+    }
 
-    final roles = eventUserRole?.roles ?? [];
-    if (roles.isEmpty) return false;
-    if ((featureCodes ?? []).isEmpty) return false;
-
-    // Precompute allowed roles for each feature code to reduce repetitive lookups
-    final featureRoleMappings = {
-      for (var featureCode in featureCodes!)
-        featureCode: _featureRoleMappings[featureCode] ?? [],
-    };
-
-    for (var role in roles) {
+    for (final role in (eventUserRole!.roles ?? [])) {
       final roleCode = role.roleExpanded?.code;
       final featuresExpanded = role.roleExpanded?.featuresExpanded ?? [];
 
-      for (var featureCode in featureCodes!) {
-        final allowedRoles = featureRoleMappings[featureCode]!;
-        if (!allowedRoles.contains(roleCode)) continue;
-
-        final featureEnabled = featuresExpanded.any(
-          (feature) =>
-              feature?.code == featureCode && (feature?.featureEnable ?? false),
-        );
-
-        if (featureEnabled) return true;
+      for (final featureCode in featureCodes!) {
+        final allowedRoles = _featureRoleMappings[featureCode] ?? [];
+        if (allowedRoles.contains(roleCode)) {
+          final featureEnabled = featuresExpanded.any(
+            (feature) =>
+                feature?.code == featureCode && feature?.featureEnable == true,
+          );
+          if (featureEnabled) {
+            return true;
+          }
+        }
       }
     }
 

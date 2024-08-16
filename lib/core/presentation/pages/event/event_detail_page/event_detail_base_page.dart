@@ -1,5 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
@@ -70,8 +72,8 @@ class _EventDetailBasePageView extends StatelessWidget {
                 authenticated: (session) => session.userId,
               );
           return BlocBuilder<GetEventUserRoleBloc, GetEventUserRoleState>(
-            builder: (context, state) {
-              return state.maybeWhen(
+            builder: (context, eventUserRoleState) {
+              return eventUserRoleState.maybeWhen(
                 fetched: (eventUserRole) {
                   final isCohost = EventUtils.isCohost(
                     event: event,
@@ -85,21 +87,40 @@ class _EventDetailBasePageView extends StatelessWidget {
                   if (isOwnEvent || isCohost || eventUserRole != null) {
                     return const HostEventDetailView();
                   }
-                  return isAttending
-                      ? BlocProvider(
-                          create: (context) => GetMyTicketsBloc(
-                            input: GetTicketsInput(
-                              event: event.id,
-                              user: userId,
-                              skip: 0,
-                              limit: 100,
+                  if (!isAttending) return const PreGuestEventDetailView();
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => GetMyTicketsBloc(
+                          input: GetTicketsInput(
+                            event: event.id,
+                            user: userId,
+                            skip: 0,
+                            limit: 100,
+                          ),
+                        )..add(
+                            GetMyTicketsEvent.fetch(),
+                          ),
+                      ),
+                      BlocProvider(
+                        create: (context) => GetEventCohostRequestsBloc()
+                          ..add(
+                            GetEventCohostRequestsEvent.fetch(
+                              eventId: event.id ?? '',
                             ),
-                          )..add(
-                              GetMyTicketsEvent.fetch(),
+                          ),
+                      ),
+                      BlocProvider(
+                        create: (context) => GetEventCheckinsBloc()
+                          ..add(
+                            GetEventCheckinsEvent.fetch(
+                              eventId: event.id ?? '',
                             ),
-                          child: const PostGuestEventDetailView(),
-                        )
-                      : const PreGuestEventDetailView();
+                          ),
+                      ),
+                    ],
+                    child: const PostGuestEventDetailView(),
+                  );
                 },
                 orElse: () => Center(child: Loading.defaultLoading(context)),
               );
