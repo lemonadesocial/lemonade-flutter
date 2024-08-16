@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
+import 'package:app/core/service/feature_manager/event/user_role_feature_visibility_strategy.dart';
 import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -68,11 +70,22 @@ class EventControlPanelBasePage extends StatelessWidget {
             return BlocListener<EditEventDetailBloc, EditEventDetailState>(
               listener: (context, state) {
                 if (state.status == EditEventDetailBlocStatus.success) {
-                  // context.read<GetEventCohostRequestsBloc>().add(
-                  //       GetEventCohostRequestsEvent.fetch(
-                  //         eventId: event.id ?? '',
-                  //       ),
-                  //     );
+                  final canUseEventCohosts = FeatureManager(
+                    UserRoleFeatureVisibilityStrategy(
+                      eventUserRole: eventUserRole,
+                      roleCodes: [
+                        Enum$RoleCode.Host,
+                        Enum$RoleCode.Cohost,
+                      ],
+                    ),
+                  ).canShowFeature;
+                  if (canUseEventCohosts) {
+                    context.read<GetEventCohostRequestsBloc>().add(
+                          GetEventCohostRequestsEvent.fetch(
+                            eventId: event.id ?? '',
+                          ),
+                        );
+                  }
                   context.read<GetEventDetailBloc>().add(
                         GetEventDetailEvent.fetch(
                           eventId: state.event?.id ?? '',
