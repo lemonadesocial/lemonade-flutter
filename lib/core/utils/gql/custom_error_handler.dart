@@ -18,6 +18,7 @@ class GraphQLErrorCodeStrings {
   static const String BAD_REQUEST = "BAD_REQUEST";
   static const String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
   static const String UNKNOWN_ERROR = "UNKNOWN_ERROR";
+  static const String FORBIDDEN = "FORBIDDEN";
 }
 
 class CustomErrorHandler {
@@ -51,7 +52,8 @@ class CustomErrorHandler {
     LinkException exception,
   ) {
     if (kDebugMode) {
-      print('handleGraphQhandleExceptionErrorError : ${exception.toString()}');
+      print('--- handleExceptionError request: ${request.toString()}');
+      print('--- handleExceptionError exception : ${exception.toString()}');
     }
     // If server exception problem
     if (exception is ServerException) {
@@ -76,6 +78,11 @@ class CustomErrorHandler {
     final errors = response.errors;
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
+    if (kDebugMode) {
+      print('--- handleGraphQLError request: ${request.toString()}');
+      print('--- handleGraphQLError response : ${response.toString()}');
+    }
+
     showSnackbarError(errorCode, errorMessage);
     CrashAnalyticsManager().crashAnalyticsService?.captureError(
           errors,

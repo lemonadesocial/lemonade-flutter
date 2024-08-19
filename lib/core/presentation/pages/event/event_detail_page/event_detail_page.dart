@@ -1,7 +1,5 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_buy_tickets_prerequisite_check_bloc/event_buy_tickets_prerequisite_check_bloc.dart';
-import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
-import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
@@ -33,23 +31,7 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
             ),
         ),
         BlocProvider(
-          create: (context) => GetEventCohostRequestsBloc()
-            ..add(
-              GetEventCohostRequestsEvent.fetch(
-                eventId: eventId,
-              ),
-            ),
-        ),
-        BlocProvider(
           create: (context) => EditEventDetailBloc(),
-        ),
-        BlocProvider(
-          create: (context) => GetEventCheckinsBloc()
-            ..add(
-              GetEventCheckinsEvent.fetch(
-                eventId: eventId,
-              ),
-            ),
         ),
         BlocProvider(
           create: (context) => UpdateEventCheckinBloc(),
