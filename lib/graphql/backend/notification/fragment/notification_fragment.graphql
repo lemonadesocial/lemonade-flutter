@@ -40,6 +40,10 @@ fragment Notification on Notification {
         key
       }
     }
+    application_profile_fields {
+      field
+      required
+    }
   }
   ref_room
   ref_store_order
