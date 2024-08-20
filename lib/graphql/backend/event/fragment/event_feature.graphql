@@ -3,6 +3,7 @@
 fragment EventFeature on Feature {
   _id
   code
-  name
+  title
   feature_enable
+  endpoints
 }

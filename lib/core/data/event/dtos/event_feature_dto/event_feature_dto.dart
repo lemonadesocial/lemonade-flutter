@@ -9,7 +9,7 @@ class EventFeatureDto with _$EventFeatureDto {
   factory EventFeatureDto({
     @JsonKey(name: '_id', includeIfNull: false) String? id,
     Enum$FeatureCode? code,
-    String? name,
+    String? title,
     List<String>? endpoints,
     @JsonKey(name: 'feature_enable', includeIfNull: false) bool? featureEnable,
   }) = _EventFeatureDto;

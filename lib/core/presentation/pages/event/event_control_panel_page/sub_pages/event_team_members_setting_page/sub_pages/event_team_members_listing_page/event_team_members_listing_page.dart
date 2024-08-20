@@ -1,9 +1,9 @@
 import 'package:app/core/application/event/event_team_members_form_bloc/event_team_members_form_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_roles_bloc/get_event_roles_bloc.dart';
-import 'package:app/core/data/event/dtos/event_user_role_dto/event_user_role_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_user_role.dart';
+import 'package:app/core/data/event/dtos/event_user_role_dto/event_user_role_dto.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/sub_pages/event_team_members_listing_page/widgets/event_list_user_role.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_roles_access_control_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_team_members_setting_page/widgets/event_team_members_search_bar.dart';
@@ -152,7 +152,7 @@ class _EventTeamMembersListingPageViewState
                       borderColor: selected == true
                           ? Colors.transparent
                           : colorScheme.outline,
-                      label: StringUtils.capitalize(item.name ?? ''),
+                      label: StringUtils.capitalize(item.title ?? ''),
                       radius: BorderRadius.circular(LemonRadius.button),
                     );
                   },
@@ -200,6 +200,7 @@ class _EventTeamMembersListingPageViewState
                       eventId: widget.event?.id ?? '',
                       selectedFilterRole: selectedFilterRole,
                       eventUserRoles: eventUserRoles,
+                      refetch: refetch,
                     ),
                   );
                 },

@@ -187,6 +187,9 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
                             _viewMode = mode;
                           });
                         },
+                        onDateChanged: (date) {
+                          _onCalendarChanged(date);
+                        },
                       ),
                     ),
                     AnimatedOpacity(

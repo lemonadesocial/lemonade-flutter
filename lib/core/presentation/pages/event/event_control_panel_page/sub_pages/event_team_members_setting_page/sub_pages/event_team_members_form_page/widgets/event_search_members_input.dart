@@ -120,6 +120,7 @@ class EventSearchMembersInputState extends State<EventSearchMembersInput> {
                         for (var item in users)
                           InkWell(
                             onTap: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
                               setState(() {
                                 _showRecommendationBox = false;
                               });

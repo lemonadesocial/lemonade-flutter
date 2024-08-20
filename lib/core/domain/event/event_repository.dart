@@ -138,7 +138,18 @@ abstract class EventRepository {
     String? searchCriteria,
   });
 
+  Future<Either<Failure, EventUserRole>> getEventUserRole({
+    required String eventId,
+    required String userId,
+  });
+
   Future<Either<Failure, bool>> addUserRole({
+    required String eventId,
+    required List<Input$RoleInput> roles,
+    required List<Input$UserFilter> users,
+  });
+
+  Future<Either<Failure, bool>> updateUserRole({
     required String eventId,
     required List<Input$RoleInput> roles,
     required List<Input$UserFilter> users,

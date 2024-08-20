@@ -15,6 +15,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
+    required this.onTap,
     required this.roleName,
     this.isFirst = false,
     this.isLast = false,
@@ -24,6 +25,7 @@ class EventTeamMemberItemWidget extends StatelessWidget {
   final String title;
   final String subTitle;
   final String roleName;
+  final Function()? onTap;
   final bool? isFirst;
   final bool? isLast;
   final User? user;
@@ -31,73 +33,80 @@ class EventTeamMemberItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
-          ),
-          topRight: Radius.circular(
-            isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
-          ),
-          bottomLeft: Radius.circular(
-            isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
-          ),
-          bottomRight: Radius.circular(
-            isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
-          ),
-        ),
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(Spacing.small),
-            child: Row(
-              children: [
-                _Avatar(user: user),
-                SizedBox(
-                  width: Spacing.xSmall,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 3.w,
-                      ),
-                      subTitle == ''
-                          ? const SizedBox.shrink()
-                          : Text(
-                              subTitle,
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-                _RoleName(roleName: roleName),
-                SizedBox(width: Spacing.xSmall),
-                Assets.icons.icMoreHoriz.svg(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                  color: colorScheme.onSecondary,
-                ),
-              ],
+    return InkWell(
+      onTap: () {
+        if (onTap != null) {
+          onTap!.call();
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: LemonColor.atomicBlack,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(
+              isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
+            ),
+            topRight: Radius.circular(
+              isFirst == true ? LemonRadius.medium : LemonRadius.extraSmall,
+            ),
+            bottomLeft: Radius.circular(
+              isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
+            ),
+            bottomRight: Radius.circular(
+              isLast == true ? LemonRadius.medium : LemonRadius.extraSmall,
             ),
           ),
-        ],
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(Spacing.small),
+              child: Row(
+                children: [
+                  _Avatar(user: user),
+                  SizedBox(
+                    width: Spacing.xSmall,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 3.w,
+                        ),
+                        subTitle == ''
+                            ? const SizedBox.shrink()
+                            : Text(
+                                subTitle,
+                                style: Typo.small.copyWith(
+                                  color: colorScheme.onSecondary,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: Spacing.xSmall),
+                  _RoleName(roleName: roleName),
+                  SizedBox(width: Spacing.xSmall),
+                  Assets.icons.icMoreHoriz.svg(
+                    width: Sizing.xSmall,
+                    height: Sizing.xSmall,
+                    color: colorScheme.onSecondary,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

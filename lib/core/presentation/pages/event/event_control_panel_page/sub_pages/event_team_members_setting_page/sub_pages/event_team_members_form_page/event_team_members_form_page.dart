@@ -159,13 +159,44 @@ class EventTeamMembersFormView extends StatelessWidget {
                                   builder: (context, state) {
                                     return ChooseRoleDropdown(
                                       eventRoles: state.eventRoles,
+                                      onChanged: (value) {
+                                        context
+                                            .read<EventTeamMembersFormBloc>()
+                                            .add(
+                                              EventTeamMembersFormBlocEvent
+                                                  .selectRole(
+                                                role:
+                                                    state.eventRoles.firstWhere(
+                                                  (element) =>
+                                                      element.id == value,
+                                                ),
+                                              ),
+                                            );
+                                      },
                                     );
                                   },
                                 ),
                                 SizedBox(
                                   height: Spacing.xSmall,
                                 ),
-                                const VisibleOnEventCard(),
+                                BlocBuilder<EventTeamMembersFormBloc,
+                                    EventTeamMembersFormBlocState>(
+                                  builder: (context, state) {
+                                    return VisibleOnEventCard(
+                                      enabledSwitch:
+                                          state.visibleOnEvent ?? false,
+                                      onToggleSwitch: (bool? value) {
+                                        context
+                                            .read<EventTeamMembersFormBloc>()
+                                            .add(
+                                              EventTeamMembersFormBlocEventChangeVisibleOnEvent(
+                                                visibleOnEvent: value,
+                                              ),
+                                            );
+                                      },
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -218,7 +249,7 @@ class EventTeamMembersFormView extends StatelessWidget {
                       ),
                     ),
                     SliverToBoxAdapter(
-                      child: SizedBox(height: 350.w),
+                      child: SizedBox(height: 500.w),
                     ),
                   ],
                 ),

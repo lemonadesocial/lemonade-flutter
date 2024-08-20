@@ -12,7 +12,7 @@ class EventRole with _$EventRole {
   const factory EventRole({
     String? id,
     Enum$RoleCode? code,
-    String? name,
+    String? title,
     List<EventFeature?>? featuresExpanded,
   }) = _EventRole;
 
@@ -20,7 +20,7 @@ class EventRole with _$EventRole {
     return EventRole(
       id: dto.id,
       code: dto.code,
-      name: dto.name,
+      title: dto.title,
       featuresExpanded: dto.featuresExpanded != null
           ? List.from(dto.featuresExpanded ?? [])
               .map((item) => EventFeature.fromDto(item))

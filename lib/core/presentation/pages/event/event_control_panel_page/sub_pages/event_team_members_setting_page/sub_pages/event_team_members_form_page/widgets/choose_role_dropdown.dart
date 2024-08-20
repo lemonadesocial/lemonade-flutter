@@ -9,13 +9,14 @@ import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:collection/collection.dart';
 
 class ChooseRoleDropdown extends StatelessWidget {
   final List<EventRole> eventRoles;
+  final Function(String? value)? onChanged;
   const ChooseRoleDropdown({
     super.key,
     required this.eventRoles,
+    required this.onChanged,
   });
 
   @override
@@ -27,12 +28,9 @@ class ChooseRoleDropdown extends StatelessWidget {
           child: DropdownButton2(
             value: state.selectedRole?.id,
             onChanged: (value) {
-              context.read<EventTeamMembersFormBloc>().add(
-                    EventTeamMembersFormBlocEvent.selectRole(
-                      role: eventRoles
-                          .firstWhereOrNull((element) => element.id == value),
-                    ),
-                  );
+              if (onChanged != null) {
+                onChanged?.call(value);
+              }
             },
             customButton: Container(
               padding: EdgeInsets.all(Spacing.smMedium),
@@ -98,7 +96,7 @@ class _EventRoleItem extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Text(
-            eventRole?.name ?? '',
+            eventRole?.title ?? '',
             style: Typo.mediumPlus.copyWith(
               color: colorScheme.onPrimary,
             ),

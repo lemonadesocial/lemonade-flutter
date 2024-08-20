@@ -4,7 +4,7 @@
 fragment EventRole on Role {
   _id
   code
-  name
+  title
   features_expanded {
     ...EventFeature
   }

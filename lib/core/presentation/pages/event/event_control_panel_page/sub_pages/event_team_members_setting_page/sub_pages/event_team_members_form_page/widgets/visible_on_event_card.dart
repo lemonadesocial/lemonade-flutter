@@ -15,7 +15,13 @@ import 'package:flutter_switch/flutter_switch.dart';
 class VisibleOnEventCard extends StatelessWidget {
   const VisibleOnEventCard({
     super.key,
+    this.showBorder = true,
+    required this.onToggleSwitch,
+    required this.enabledSwitch,
   });
+  final bool? showBorder;
+  final bool enabledSwitch;
+  final Function(bool? value) onToggleSwitch;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +29,8 @@ class VisibleOnEventCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<EventTeamMembersFormBloc, EventTeamMembersFormBlocState>(
       builder: (context, state) {
-        final visibleOnEvent = state.visibleOnEvent;
         final isCohostSelected =
             state.selectedRole?.code == Enum$RoleCode.Cohost;
-        // Not show this one if not select co-host
         if (isCohostSelected == false) {
           return const SizedBox();
         }
@@ -37,7 +41,9 @@ class VisibleOnEventCard extends StatelessWidget {
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 1.w,
-                color: LemonColor.white09,
+                color: showBorder == true
+                    ? LemonColor.white09
+                    : Colors.transparent,
               ),
               borderRadius: BorderRadius.circular(LemonRadius.small),
             ),
@@ -54,7 +60,7 @@ class VisibleOnEventCard extends StatelessWidget {
                 decoration: const BoxDecoration(),
                 child: ThemeSvgIcon(
                   color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icChecked.svg(
+                  builder: (filter) => Assets.icons.icEyeOutline.svg(
                     colorFilter: filter,
                     width: Sizing.medium / 2,
                     height: Sizing.medium / 2,
@@ -85,16 +91,10 @@ class VisibleOnEventCard extends StatelessWidget {
                 inactiveToggleColor: colorScheme.onSurfaceVariant,
                 activeColor: LemonColor.switchActive,
                 activeToggleColor: colorScheme.onPrimary,
-                height: Sizing.small,
+                height: 24.h,
                 width: 42.w,
-                value: visibleOnEvent ?? false,
-                onToggle: (value) {
-                  context.read<EventTeamMembersFormBloc>().add(
-                        EventTeamMembersFormBlocEventChangeVisibleOnEvent(
-                          visibleOnEvent: value,
-                        ),
-                      );
-                },
+                value: enabledSwitch,
+                onToggle: (value) => onToggleSwitch(value),
               ),
             ],
           ),

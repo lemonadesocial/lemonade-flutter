@@ -41,6 +41,7 @@ import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dar
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
+import 'package:app/graphql/backend/event/mutation/update_user_role.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -50,6 +51,7 @@ import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.d
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_roles.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_list_user_role.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_user_role.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -648,6 +650,35 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
+  Future<Either<Failure, EventUserRole>> getEventUserRole({
+    required String eventId,
+    required String userId,
+  }) async {
+    final result = await client.query$GetUserRole(
+      Options$Query$GetUserRole(
+        fetchPolicy: FetchPolicy.noCache,
+        variables: Variables$Query$GetUserRole(
+          input: Input$UserRoleInput(
+            user_id: userId,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      EventUserRole.fromDto(
+        EventUserRoleDto.fromJson(
+          result.parsedData!.getUserRole.toJson(),
+        ),
+      ),
+    );
+  }
+
+  @override
   Future<Either<Failure, bool>> addUserRole({
     required String eventId,
     required List<Input$RoleInput> roles,
@@ -668,6 +699,29 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(result.parsedData!.addUserRole);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateUserRole({
+    required String eventId,
+    required List<Input$RoleInput> roles,
+    required List<Input$UserFilter> users,
+  }) async {
+    final result = await client.mutate$UpdateUserRole(
+      Options$Mutation$UpdateUserRole(
+        variables: Variables$Mutation$UpdateUserRole(
+          input: Input$EventRoleInput(
+            users: users,
+            roles: roles,
+            event_id: eventId,
+          ),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+    return Right(result.parsedData!.updateUserRole);
   }
 
   @override
