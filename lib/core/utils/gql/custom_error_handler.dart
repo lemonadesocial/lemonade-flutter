@@ -82,20 +82,19 @@ class CustomErrorHandler {
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
 
-    // TODO: temp solution to prevent show error to user when logged out
-    // the root cause is some query widget auto trigger api called after logout
-    final unauthenticatedCall =
-        (errorCode == GraphQLErrorCodeStrings.UNAUTHENTICATED &&
-            getIt<AppOauth>().tokenState != OAuthTokenState.valid);
-    if (!unauthenticatedCall) {
-      showSnackbarError(errorCode, errorMessage);
-    }
     if (kDebugMode) {
       print('--- handleGraphQLError request: ${request.toString()}');
       print('--- handleGraphQLError response : ${response.toString()}');
     }
+    // TODO: temp solution to prevent show 401 error to user when logged out
+    // the root cause is query widget still called when loggedout
+    final unauthenticatedErrorAfterLogout =
+        errorCode == GraphQLErrorCodeStrings.UNAUTHENTICATED &&
+            getIt<AppOauth>().tokenState != OAuthTokenState.valid;
 
-    showSnackbarError(errorCode, errorMessage);
+    if (!unauthenticatedErrorAfterLogout) {
+      showSnackbarError(errorCode, errorMessage);
+    }
     CrashAnalyticsManager().crashAnalyticsService?.captureError(
           errors,
           StackTrace.fromString(request.toString()),
