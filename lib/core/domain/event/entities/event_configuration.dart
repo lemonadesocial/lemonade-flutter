@@ -2,12 +2,9 @@ import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_ev
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
-import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
