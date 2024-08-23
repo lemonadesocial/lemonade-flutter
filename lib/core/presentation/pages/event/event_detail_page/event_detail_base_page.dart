@@ -1,9 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
-import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
-import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
@@ -12,11 +9,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
-import 'package:app/core/service/feature_manager/event/user_role_feature_visibility_strategy.dart';
-import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/utils/event_utils.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -75,86 +68,51 @@ class _EventDetailBasePageView extends StatelessWidget {
                 orElse: () => '',
                 authenticated: (session) => session.userId,
               );
-          return BlocBuilder<GetEventUserRoleBloc, GetEventUserRoleState>(
-            builder: (context, eventUserRoleState) {
-              return eventUserRoleState.maybeWhen(
-                fetched: (eventUserRole) {
-                  final isCohost = EventUtils.isCohost(
-                    event: event,
-                    userId: userId,
-                    eventUserRole: eventUserRole,
-                  );
-                  final isAttending =
-                      EventUtils.isAttending(event: event, userId: userId);
-                  final isOwnEvent =
-                      EventUtils.isOwnEvent(event: event, userId: userId);
-                  if (isOwnEvent || isCohost || eventUserRole != null) {
-                    final canUseEventCohosts = FeatureManager(
-                      UserRoleFeatureVisibilityStrategy(
-                        eventUserRole: eventUserRole,
-                        roleCodes: [
-                          Enum$RoleCode.Host,
-                          Enum$RoleCode.Cohost,
-                        ],
-                      ),
-                    ).canShowFeature;
 
-                    final canUseCheckIn = FeatureManager(
-                      EventRoleBasedEventFeatureVisibilityStrategy(
-                        eventUserRole: eventUserRole,
-                        featureCodes: [Enum$FeatureCode.CheckIn],
-                      ),
-                    ).canShowFeature;
-
-                    final providers = <BlocProvider>[
-                      if (canUseEventCohosts)
-                        BlocProvider(
-                          create: (context) => GetEventCohostRequestsBloc()
-                            ..add(
-                              GetEventCohostRequestsEvent.fetch(
-                                eventId: event.id ?? '',
-                              ),
-                            ),
-                        ),
-                      if (canUseCheckIn)
-                        BlocProvider(
-                          create: (context) => GetEventCheckinsBloc()
-                            ..add(
-                              GetEventCheckinsEvent.fetch(
-                                eventId: event.id ?? '',
-                              ),
-                            ),
-                        ),
-                    ];
-
-                    return providers.isEmpty
-                        ? const HostEventDetailView()
-                        : MultiBlocProvider(
-                            providers: providers,
-                            child: const HostEventDetailView(),
-                          );
-                  }
-                  if (!isAttending) return const PreGuestEventDetailView();
-                  return isAttending
-                      ? BlocProvider(
-                          create: (context) => GetMyTicketsBloc(
-                            input: GetTicketsInput(
-                              event: event.id,
-                              user: userId,
-                              skip: 0,
-                              limit: 100,
-                            ),
-                          )..add(
-                              GetMyTicketsEvent.fetch(),
-                            ),
-                          child: const PostGuestEventDetailView(),
-                        )
-                      : const PreGuestEventDetailView();
-                },
-                orElse: () => Center(child: Loading.defaultLoading(context)),
-              );
-            },
+          final isCohost = EventUtils.isCohost(
+            event: event,
+            userId: userId,
           );
+          final isAttending =
+              EventUtils.isAttending(event: event, userId: userId);
+          final isOwnEvent =
+              EventUtils.isOwnEvent(event: event, userId: userId);
+          if (isOwnEvent || isCohost) {
+            // final canUseEventCohosts = FeatureManager(
+            //   UserRoleFeatureVisibilityStrategy(
+            //     eventUserRole: eventUserRole,
+            //     roleCodes: [
+            //       Enum$RoleCode.Host,
+            //       Enum$RoleCode.Cohost,
+            //     ],
+            //   ),
+            // ).canShowFeature;
+
+            // final canUseCheckIn = FeatureManager(
+            //   EventRoleBasedEventFeatureVisibilityStrategy(
+            //     eventUserRole: eventUserRole,
+            //     featureCodes: [Enum$FeatureCode.CheckIn],
+            //   ),
+            // ).canShowFeature;
+
+            return const HostEventDetailView();
+          }
+          if (!isAttending) return const PreGuestEventDetailView();
+          return isAttending
+              ? BlocProvider(
+                  create: (context) => GetMyTicketsBloc(
+                    input: GetTicketsInput(
+                      event: event.id,
+                      user: userId,
+                      skip: 0,
+                      limit: 100,
+                    ),
+                  )..add(
+                      GetMyTicketsEvent.fetch(),
+                    ),
+                  child: const PostGuestEventDetailView(),
+                )
+              : const PreGuestEventDetailView();
         },
       ),
     );

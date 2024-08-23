@@ -1,16 +1,16 @@
-# import './event_feature.graphql'
-# import './event_role_information.graphql'
+# # import './event_feature.graphql'
+# # import './event_role_information.graphql'
 
-fragment EventUserRole on EventUserRole {
-  user {
-    _id
-    name
-    username
-    new_photos
-    image_avatar
-  }
-  roles {
-    ...EventRoleInformation
-  }
-  email
-}
+# fragment EventUserRole on EventUserRole {
+#   user {
+#     _id
+#     name
+#     username
+#     new_photos
+#     image_avatar
+#   }
+#   roles {
+#     ...EventRoleInformation
+#   }
+#   email
+# }
