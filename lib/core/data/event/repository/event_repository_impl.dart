@@ -2,14 +2,11 @@ import 'package:app/core/data/event/dtos/event_application_answer_dto/event_appl
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
-import 'package:app/core/data/event/dtos/event_role_dto/event_role_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
-import 'package:app/core/data/event/dtos/event_user_role_dto/event_user_role_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -17,15 +14,12 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
-import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/graphql/backend/event/mutation/delete_user_role.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/add_user_role.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_story.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/decide_user_join_request.graphql.dart';
@@ -41,7 +35,6 @@ import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dar
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/update_user_role.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -49,9 +42,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
-import 'package:app/graphql/backend/event/query/get_event_roles.graphql.dart';
-import 'package:app/graphql/backend/event/query/get_list_user_role.graphql.dart';
-import 'package:app/graphql/backend/event/query/get_user_role.graphql.dart';
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -598,150 +588,150 @@ class EventRepositoryImpl implements EventRepository {
     );
   }
 
-  @override
-  Future<Either<Failure, List<EventRole>>> getEventRoles() async {
-    final result = await client.query$GetEventRoles(
-      Options$Query$GetEventRoles(
-        fetchPolicy: FetchPolicy.noCache,
-      ),
-    );
-    if (result.hasException) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(
-      (result.parsedData?.getRoles ?? [])
-          .map(
-            (item) => EventRole.fromDto(
-              EventRoleDto.fromJson(item.toJson()),
-            ),
-          )
-          .toList(),
-    );
-  }
+  // @override
+  // Future<Either<Failure, List<EventRole>>> getEventRoles() async {
+  //   final result = await client.query$GetEventRoles(
+  //     Options$Query$GetEventRoles(
+  //       fetchPolicy: FetchPolicy.noCache,
+  //     ),
+  //   );
+  //   if (result.hasException) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
+  //   return Right(
+  //     (result.parsedData?.getRoles ?? [])
+  //         .map(
+  //           (item) => EventRole.fromDto(
+  //             EventRoleDto.fromJson(item.toJson()),
+  //           ),
+  //         )
+  //         .toList(),
+  //   );
+  // }
 
-  @override
-  Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
-    required String eventId,
-    String? roleId,
-    String? searchCriteria,
-  }) async {
-    final result = await client.query$GetListUserRole(
-      Options$Query$GetListUserRole(
-        fetchPolicy: FetchPolicy.noCache,
-        variables: Variables$Query$GetListUserRole(
-          input: Input$EventRoleFilter(
-            event_id: eventId,
-          ),
-        ),
-      ),
-    );
-    if (result.hasException || result.parsedData == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(
-      (result.parsedData?.getListUserRole ?? [])
-          .map(
-            (item) => EventUserRole.fromDto(
-              EventUserRoleDto.fromJson(item.toJson()),
-            ),
-          )
-          .toList(),
-    );
-  }
+  // @override
+  // Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
+  //   required String eventId,
+  //   String? roleId,
+  //   String? searchCriteria,
+  // }) async {
+  //   final result = await client.query$GetListUserRole(
+  //     Options$Query$GetListUserRole(
+  //       fetchPolicy: FetchPolicy.noCache,
+  //       variables: Variables$Query$GetListUserRole(
+  //         input: Input$EventRoleFilter(
+  //           event_id: eventId,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   if (result.hasException || result.parsedData == null) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
+  //   return Right(
+  //     (result.parsedData?.getListUserRole ?? [])
+  //         .map(
+  //           (item) => EventUserRole.fromDto(
+  //             EventUserRoleDto.fromJson(item.toJson()),
+  //           ),
+  //         )
+  //         .toList(),
+  //   );
+  // }
 
-  @override
-  Future<Either<Failure, EventUserRole>> getEventUserRole({
-    required String eventId,
-    required String userId,
-  }) async {
-    final result = await client.query$GetUserRole(
-      Options$Query$GetUserRole(
-        fetchPolicy: FetchPolicy.noCache,
-        variables: Variables$Query$GetUserRole(
-          input: Input$UserRoleInput(
-            user_id: userId,
-            event_id: eventId,
-          ),
-        ),
-      ),
-    );
-    if (result.hasException || result.parsedData == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
+  // @override
+  // Future<Either<Failure, EventUserRole>> getEventUserRole({
+  //   required String eventId,
+  //   required String userId,
+  // }) async {
+  //   final result = await client.query$GetUserRole(
+  //     Options$Query$GetUserRole(
+  //       fetchPolicy: FetchPolicy.noCache,
+  //       variables: Variables$Query$GetUserRole(
+  //         input: Input$UserRoleInput(
+  //           user_id: userId,
+  //           event_id: eventId,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   if (result.hasException || result.parsedData == null) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
 
-    return Right(
-      EventUserRole.fromDto(
-        EventUserRoleDto.fromJson(
-          result.parsedData!.getUserRole.toJson(),
-        ),
-      ),
-    );
-  }
+  //   return Right(
+  //     EventUserRole.fromDto(
+  //       EventUserRoleDto.fromJson(
+  //         result.parsedData!.getUserRole.toJson(),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  @override
-  Future<Either<Failure, bool>> addUserRole({
-    required String eventId,
-    required List<Input$RoleInput> roles,
-    required List<Input$UserFilter> users,
-  }) async {
-    final result = await client.mutate$AddUserRole(
-      Options$Mutation$AddUserRole(
-        variables: Variables$Mutation$AddUserRole(
-          input: Input$EventRoleInput(
-            users: users,
-            roles: roles,
-            event_id: eventId,
-          ),
-        ),
-      ),
-    );
-    if (result.hasException || result.parsedData == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(result.parsedData!.addUserRole);
-  }
+  // @override
+  // Future<Either<Failure, bool>> addUserRole({
+  //   required String eventId,
+  //   required List<Input$RoleInput> roles,
+  //   required List<Input$UserFilter> users,
+  // }) async {
+  //   final result = await client.mutate$AddUserRole(
+  //     Options$Mutation$AddUserRole(
+  //       variables: Variables$Mutation$AddUserRole(
+  //         input: Input$EventRoleInput(
+  //           users: users,
+  //           roles: roles,
+  //           event_id: eventId,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   if (result.hasException || result.parsedData == null) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
+  //   return Right(result.parsedData!.addUserRole);
+  // }
 
-  @override
-  Future<Either<Failure, bool>> updateUserRole({
-    required String eventId,
-    required List<Input$RoleInput> roles,
-    required List<Input$UserFilter> users,
-  }) async {
-    final result = await client.mutate$UpdateUserRole(
-      Options$Mutation$UpdateUserRole(
-        variables: Variables$Mutation$UpdateUserRole(
-          input: Input$EventRoleInput(
-            users: users,
-            roles: roles,
-            event_id: eventId,
-          ),
-        ),
-      ),
-    );
-    if (result.hasException || result.parsedData == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(result.parsedData!.updateUserRole);
-  }
+  // @override
+  // Future<Either<Failure, bool>> updateUserRole({
+  //   required String eventId,
+  //   required List<Input$RoleInput> roles,
+  //   required List<Input$UserFilter> users,
+  // }) async {
+  //   final result = await client.mutate$UpdateUserRole(
+  //     Options$Mutation$UpdateUserRole(
+  //       variables: Variables$Mutation$UpdateUserRole(
+  //         input: Input$EventRoleInput(
+  //           users: users,
+  //           roles: roles,
+  //           event_id: eventId,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   if (result.hasException || result.parsedData == null) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
+  //   return Right(result.parsedData!.updateUserRole);
+  // }
 
-  @override
-  Future<Either<Failure, bool>> deleteUserRole({
-    required String eventId,
-    required List<Input$UserFilter> users,
-  }) async {
-    final result = await client.mutate$DeleteUserRole(
-      Options$Mutation$DeleteUserRole(
-        variables: Variables$Mutation$DeleteUserRole(
-          input: Input$EventRoleInput(
-            users: users,
-            event_id: eventId,
-          ),
-        ),
-      ),
-    );
-    if (result.hasException || result.parsedData == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(result.parsedData!.deleteUserRole);
-  }
+  // @override
+  // Future<Either<Failure, bool>> deleteUserRole({
+  //   required String eventId,
+  //   required List<Input$UserFilter> users,
+  // }) async {
+  //   final result = await client.mutate$DeleteUserRole(
+  //     Options$Mutation$DeleteUserRole(
+  //       variables: Variables$Mutation$DeleteUserRole(
+  //         input: Input$EventRoleInput(
+  //           users: users,
+  //           event_id: eventId,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   if (result.hasException || result.parsedData == null) {
+  //     return Left(Failure.withGqlException(result.exception));
+  //   }
+  //   return Right(result.parsedData!.deleteUserRole);
+  // }
 }

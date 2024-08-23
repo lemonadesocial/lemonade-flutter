@@ -1,9 +1,9 @@
-# import '../../schema.graphql';
+# # import '../../schema.graphql';
 
-fragment EventFeature on Feature {
-  _id
-  code
-  title
-  feature_enable
-  endpoints
-}
+# fragment EventFeature on Feature {
+#   _id
+#   code
+#   title
+#   feature_enable
+#   endpoints
+# }

@@ -1,8 +1,8 @@
-# import './event_role.graphql'
+# # import './event_role.graphql'
 
-fragment EventRoleInformation on EventRoleInformation {
-  visible
-  role_expanded {
-    ...EventRole
-  }
-}
+# fragment EventRoleInformation on EventRoleInformation {
+#   visible
+#   role_expanded {
+#     ...EventRole
+#   }
+# }

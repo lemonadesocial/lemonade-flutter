@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_role.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -7,7 +6,6 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
-import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -130,33 +128,33 @@ abstract class EventRepository {
     required String eventId,
   });
 
-  Future<Either<Failure, List<EventRole>>> getEventRoles();
+  // Future<Either<Failure, List<EventRole>>> getEventRoles();
 
-  Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
-    required String eventId,
-    String? roleId,
-    String? searchCriteria,
-  });
+  // Future<Either<Failure, List<EventUserRole>>> getListUserRoles({
+  //   required String eventId,
+  //   String? roleId,
+  //   String? searchCriteria,
+  // });
 
-  Future<Either<Failure, EventUserRole>> getEventUserRole({
-    required String eventId,
-    required String userId,
-  });
+  // Future<Either<Failure, EventUserRole>> getEventUserRole({
+  //   required String eventId,
+  //   required String userId,
+  // });
 
-  Future<Either<Failure, bool>> addUserRole({
-    required String eventId,
-    required List<Input$RoleInput> roles,
-    required List<Input$UserFilter> users,
-  });
+  // Future<Either<Failure, bool>> addUserRole({
+  //   required String eventId,
+  //   required List<Input$RoleInput> roles,
+  //   required List<Input$UserFilter> users,
+  // });
 
-  Future<Either<Failure, bool>> updateUserRole({
-    required String eventId,
-    required List<Input$RoleInput> roles,
-    required List<Input$UserFilter> users,
-  });
+  // Future<Either<Failure, bool>> updateUserRole({
+  //   required String eventId,
+  //   required List<Input$RoleInput> roles,
+  //   required List<Input$UserFilter> users,
+  // });
 
-  Future<Either<Failure, bool>> deleteUserRole({
-    required String eventId,
-    required List<Input$UserFilter> users,
-  });
+  // Future<Either<Failure, bool>> deleteUserRole({
+  //   required String eventId,
+  //   required List<Input$UserFilter> users,
+  // });
 }

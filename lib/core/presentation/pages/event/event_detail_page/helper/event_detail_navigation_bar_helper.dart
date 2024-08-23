@@ -1,11 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/feature_manager/feature_manager.dart';
-import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -163,68 +159,68 @@ class EventDetailNavigationBarHelper {
     required BuildContext context,
     required Event event,
     bool? isSmallIcon = true,
-    required EventUserRole? eventUserRole,
+    // required EventUserRole? eventUserRole,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
-    final canShowCheckIn = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.CheckIn,
-        ],
-      ),
-    ).canShowFeature;
-    final canShowGuestList = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.GuestListDashboard,
-        ],
-      ),
-    ).canShowFeature;
-    final canShowEventSettings = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.EventSettings,
-        ],
-      ),
-    ).canShowFeature;
-    final canShowDashboard = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.DataDashboardInsights,
-          Enum$FeatureCode.DataDashboardRevenue,
-          Enum$FeatureCode.DataDashboardRewards,
-        ],
-      ),
-    ).canShowFeature;
+    // final canShowCheckIn = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.CheckIn,
+    //     ],
+    //   ),
+    // ).canShowFeature;
+    // final canShowGuestList = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.GuestListDashboard,
+    //     ],
+    //   ),
+    // ).canShowFeature;
+    // final canShowEventSettings = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.EventSettings,
+    //     ],
+    //   ),
+    // ).canShowFeature;
+    // final canShowDashboard = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.DataDashboardInsights,
+    //       Enum$FeatureCode.DataDashboardRevenue,
+    //       Enum$FeatureCode.DataDashboardRewards,
+    //     ],
+    //   ),
+    // ).canShowFeature;
     final List<FeatureItem> features = [
-      if (canShowCheckIn)
-        FeatureItem(
-          label: t.event.configuration.checkIn,
-          iconData: ThemeSvgIcon(
-            color: LemonColor.paleViolet,
-            builder: (filter) => Assets.icons.icCheckin.svg(
-              colorFilter: filter,
-              width: iconSize,
-              height: iconSize,
-            ),
+      // if (canShowCheckIn)
+      FeatureItem(
+        label: t.event.configuration.checkIn,
+        iconData: ThemeSvgIcon(
+          color: LemonColor.paleViolet,
+          builder: (filter) => Assets.icons.icCheckin.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
           ),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).navigate(
-              ScanQRCheckinRewardsRoute(
-                event: event,
-              ),
-            );
-          },
-          backgroundColor: LemonColor.paleViolet18,
-          textColor: colorScheme.onPrimary,
         ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).navigate(
+            ScanQRCheckinRewardsRoute(
+              event: event,
+            ),
+          );
+        },
+        backgroundColor: LemonColor.paleViolet18,
+        textColor: colorScheme.onPrimary,
+      ),
       FeatureItem(
         label: t.event.configuration.rewards,
         iconData: ThemeSvgIcon(
@@ -273,23 +269,22 @@ class EventDetailNavigationBarHelper {
           AutoRouter.of(context).navigate(const GuestEventStoriesRoute());
         },
       ),
-      if (canShowGuestList)
-        FeatureItem(
-          label: t.event.configuration.guests,
-          iconData: ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icGuests.svg(
-              colorFilter: filter,
-              width: iconSize,
-              height: iconSize,
-            ),
+      FeatureItem(
+        label: t.event.configuration.guests,
+        iconData: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icGuests.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
           ),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).push(
-              EventApprovalSettingRoute(),
-            );
-          },
         ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).push(
+            EventApprovalSettingRoute(),
+          );
+        },
+      ),
       if (shouldShowProgram)
         FeatureItem(
           label: t.event.configuration.program,
@@ -335,43 +330,43 @@ class EventDetailNavigationBarHelper {
       //     SnackBarUtils.showComingSoon();
       //   },
       // ),
-      if (canShowEventSettings)
-        FeatureItem(
-          label: t.event.configuration.controlPanel,
-          iconData: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icSettings.svg(
-              colorFilter: filter,
-              width: iconSize,
-              height: iconSize,
-            ),
+      // if (canShowEventSettings)
+      FeatureItem(
+        label: t.event.configuration.controlPanel,
+        iconData: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
+          builder: (filter) => Assets.icons.icSettings.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
           ),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).push(
-              const EventControlPanelRoute(),
-            );
-          },
         ),
-      if (canShowDashboard)
-        FeatureItem(
-          label: t.event.configuration.dashboard,
-          iconData: ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icDashboard.svg(
-              colorFilter: filter,
-              width: iconSize,
-              height: iconSize,
-            ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).push(
+            const EventControlPanelRoute(),
+          );
+        },
+      ),
+      // if (canShowDashboard)
+      FeatureItem(
+        label: t.event.configuration.dashboard,
+        iconData: ThemeSvgIcon(
+          builder: (filter) => Assets.icons.icDashboard.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
           ),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).push(
-              EventDashboardRoute(
-                eventId: event.id ?? '',
-              ),
-            );
-          },
         ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).push(
+            EventDashboardRoute(
+              eventId: event.id ?? '',
+            ),
+          );
+        },
+      ),
     ];
     return features;
   }
