@@ -1,11 +1,13 @@
 import 'dart:ui';
-
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/device_utils.dart';
-import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,14 @@ class GuestEventDetailAppBar extends StatefulWidget {
 class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
   bool _isSliverAppBarCollapsed = false;
 
+  DbFile? get cover {
+    if (widget.event.newNewPhotosExpanded == null ||
+        widget.event.newNewPhotosExpanded!.isEmpty) {
+      return null;
+    }
+    return widget.event.newNewPhotosExpanded!.first;
+  }
+
   @override
   initState() {
     super.initState();
@@ -43,6 +53,18 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (cover == null) {
+      return SliverToBoxAdapter(
+        child: LemonAppBar(
+          title: '',
+          actions: [
+            GuestEventMoreActions(event: widget.event, isAppBarCollapsed: true),
+            SizedBox(width: Spacing.xSmall),
+          ],
+        ),
+      );
+    }
+
     final isIpad = DeviceUtils.isIpad();
     return SliverAppBar(
       pinned: true,
@@ -65,24 +87,19 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1,
         collapseMode: CollapseMode.pin,
-        background: _EventDetailCover(event: widget.event),
+        background: _EventDetailCover(
+          event: widget.event,
+        ),
       ),
     );
   }
 }
 
 class _EventDetailCover extends StatelessWidget {
-  const _EventDetailCover({required this.event});
-
   final Event event;
-
-  DbFile? get cover {
-    if (event.newNewPhotosExpanded == null ||
-        event.newNewPhotosExpanded!.isEmpty) {
-      return null;
-    }
-    return event.newNewPhotosExpanded!.first;
-  }
+  const _EventDetailCover({
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +113,7 @@ class _EventDetailCover extends StatelessWidget {
               fit: BoxFit.cover,
               placeholder: (_, __) => ImagePlaceholder.eventCard(),
               errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-              imageUrl: ImageUtils.generateUrl(
-                file: cover,
-                imageConfig: ImageConfig.eventPoster,
-              ),
+              imageUrl: EventUtils.getEventThumbnailUrl(event: event),
             ),
           ),
         ],

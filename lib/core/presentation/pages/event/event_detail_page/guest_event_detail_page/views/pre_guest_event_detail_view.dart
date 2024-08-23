@@ -46,7 +46,6 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           authenticated: (session) => session.userId,
           orElse: () => '',
         );
-
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
@@ -58,6 +57,7 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           ),
           loading: () => Loading.defaultLoading(context),
           fetched: (event) {
+            final coverPhoto = EventUtils.getEventThumbnailUrl(event: event);
             final isOwnEvent =
                 EventUtils.isOwnEvent(event: event, userId: userId);
             final widgets = [
@@ -94,9 +94,10 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                         scrollController: _scrollController,
                         event: event,
                       ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.large),
-                      ),
+                      if (coverPhoto.isNotEmpty)
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.large),
+                        ),
                       SliverList.separated(
                         itemCount: widgets.length,
                         itemBuilder: (context, index) {
@@ -111,10 +112,11 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                       ),
                     ],
                   ),
-                  _FloatingButtonsBar(
-                    scrollController: _scrollController,
-                    event: event,
-                  ),
+                  if (coverPhoto.isNotEmpty)
+                    _FloatingButtonsBar(
+                      scrollController: _scrollController,
+                      event: event,
+                    ),
                   if (!isOwnEvent)
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -147,7 +149,6 @@ class _FloatingButtonsBar extends StatefulWidget {
 
 class _FloatingButtonsBarState extends State<_FloatingButtonsBar> {
   bool _isSliverAppBarCollapsed = false;
-
   @override
   initState() {
     super.initState();
