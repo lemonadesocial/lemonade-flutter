@@ -1,14 +1,10 @@
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/feature_manager/event/event_role_based_feature_visibility_strategy.dart';
-import 'package:app/core/service/feature_manager/feature_manager.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:flutter/material.dart';
@@ -145,15 +141,15 @@ class EventConfiguration {
           size: 18.w,
         ),
       ),
-      EventConfiguration(
-        type: EventConfigurationType.team,
-        title: t.event.configuration.team,
-        icon: Icon(
-          Icons.manage_accounts,
-          color: colorScheme.onSecondary,
-          size: 18.w,
-        ),
-      ),
+      // EventConfiguration(
+      //   type: EventConfigurationType.team,
+      //   title: t.event.configuration.team,
+      //   icon: Icon(
+      //     Icons.manage_accounts,
+      //     color: colorScheme.onSecondary,
+      //     size: 18.w,
+      //   ),
+      // ),
     ];
     return eventConfigs;
   }
@@ -201,72 +197,71 @@ class EventConfiguration {
   static List<EventConfiguration> ticketsEventConfiguations(
     BuildContext context,
     Event? event,
-    EventUserRole? eventUserRole,
   ) {
     final eventTicketTypesCount = event?.eventTicketTypes?.length ?? 0;
     final eventRewardsCount = event?.rewards?.length ?? 0;
     final eventPromotionsCount = event?.paymentTicketDiscounts?.length ?? 0;
     final colorScheme = Theme.of(context).colorScheme;
-    final canShowEventSettings = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.EventSettings,
-        ],
-      ),
-    ).canShowFeature;
-    final canShowPromotionCodes = FeatureManager(
-      EventRoleBasedEventFeatureVisibilityStrategy(
-        eventUserRole: eventUserRole,
-        featureCodes: [
-          Enum$FeatureCode.PromotionCodes,
-        ],
-      ),
-    ).canShowFeature;
+    // final canShowEventSettings = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.EventSettings,
+    //     ],
+    //   ),
+    // ).canShowFeature;
+    // final canShowPromotionCodes = FeatureManager(
+    //   EventRoleBasedEventFeatureVisibilityStrategy(
+    //     eventUserRole: eventUserRole,
+    //     featureCodes: [
+    //       Enum$FeatureCode.PromotionCodes,
+    //     ],
+    //   ),
+    // ).canShowFeature;
     final List<EventConfiguration> eventConfigs = [
-      if (canShowEventSettings)
-        EventConfiguration(
-          type: EventConfigurationType.ticketTiers,
-          title: t.event.ticketTier,
-          description:
-              '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
-          icon: Center(
-            child: Assets.icons.icTicket.svg(
-              width: 18.w,
-              height: 18.w,
-              color: colorScheme.onSecondary,
-            ),
+      // if (canShowEventSettings)
+      EventConfiguration(
+        type: EventConfigurationType.ticketTiers,
+        title: t.event.ticketTier,
+        description:
+            '$eventTicketTypesCount ${t.event.ticketTypesCount(n: eventTicketTypesCount)}',
+        icon: Center(
+          child: Assets.icons.icTicket.svg(
+            width: 18.w,
+            height: 18.w,
+            color: colorScheme.onSecondary,
           ),
         ),
-      if (canShowEventSettings)
-        EventConfiguration(
-          type: EventConfigurationType.rewards,
-          title: t.event.configuration.rewards,
-          description:
-              '$eventRewardsCount ${t.event.rewardsCount(n: eventRewardsCount)}',
-          icon: Center(
-            child: Icon(
-              Icons.star_border_outlined,
-              color: colorScheme.onSecondary,
-              size: 18.w,
-            ),
+      ),
+      // if (canShowEventSettings)
+      EventConfiguration(
+        type: EventConfigurationType.rewards,
+        title: t.event.configuration.rewards,
+        description:
+            '$eventRewardsCount ${t.event.rewardsCount(n: eventRewardsCount)}',
+        icon: Center(
+          child: Icon(
+            Icons.star_border_outlined,
+            color: colorScheme.onSecondary,
+            size: 18.w,
           ),
         ),
-      if (canShowPromotionCodes)
-        EventConfiguration(
-          type: EventConfigurationType.promotions,
-          title: t.event.configuration.promitions,
-          description: eventPromotionsCount > 0
-              ? t.event.eventPromotions.promotions(n: eventPromotionsCount)
-              : t.common.actions.add,
-          icon: Center(
-            child: Icon(
-              Icons.discount_outlined,
-              color: colorScheme.onSecondary,
-              size: 18.w,
-            ),
+      ),
+      // if (canShowPromotionCodes)
+      EventConfiguration(
+        type: EventConfigurationType.promotions,
+        title: t.event.configuration.promitions,
+        description: eventPromotionsCount > 0
+            ? t.event.eventPromotions.promotions(n: eventPromotionsCount)
+            : t.common.actions.add,
+        icon: Center(
+          child: Icon(
+            Icons.discount_outlined,
+            color: colorScheme.onSecondary,
+            size: 18.w,
           ),
         ),
+      ),
     ];
     return eventConfigs;
   }

@@ -1,8 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_user_role.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -24,17 +22,17 @@ class EventUtils {
   static bool isCohost({
     required Event event,
     required String userId,
-    EventUserRole? eventUserRole,
+    // EventUserRole? eventUserRole,
   }) {
     if (event.id == null) return false;
-    if (eventUserRole != null) {
-      final cohostRole = eventUserRole.roles?.where(
-        (element) => element.roleExpanded?.code == Enum$RoleCode.Cohost,
-      );
-      if (cohostRole?.isNotEmpty == true) {
-        return true;
-      }
-    }
+    // if (eventUserRole != null) {
+    //   final cohostRole = eventUserRole.roles?.where(
+    //     (element) => element.roleExpanded?.code == Enum$RoleCode.Cohost,
+    //   );
+    //   if (cohostRole?.isNotEmpty == true) {
+    //     return true;
+    //   }
+    // }
     return event.cohosts?.contains(userId) ?? false;
   }
 

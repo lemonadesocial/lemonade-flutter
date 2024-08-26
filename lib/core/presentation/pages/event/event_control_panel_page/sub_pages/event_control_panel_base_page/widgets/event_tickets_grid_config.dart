@@ -1,6 +1,5 @@
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/application/event/get_event_user_role_bloc%20/get_event_user_role_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_configuration.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
@@ -47,14 +46,14 @@ class EventTicketsGridConfig extends StatelessWidget {
           orElse: () => Event(),
           fetched: (eventDetail) => eventDetail,
         );
-    final eventUserRole = context.watch<GetEventUserRoleBloc>().state.maybeWhen(
-          orElse: () => null,
-          fetched: (eventUserRole) => eventUserRole,
-        );
+    // final eventUserRole = context.watch<GetEventUserRoleBloc>().state.maybeWhen(
+    //       orElse: () => null,
+    //       fetched: (eventUserRole) => eventUserRole,
+    //     );
     final eventConfigs = EventConfiguration.ticketsEventConfiguations(
       context,
       eventDetail,
-      eventUserRole,
+      // eventUserRole,
     );
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

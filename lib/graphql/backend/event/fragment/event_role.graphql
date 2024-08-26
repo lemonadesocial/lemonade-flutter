@@ -1,11 +1,12 @@
-# import '../../schema.graphql';
-# import './event_feature.graphql'
+# # import '../../schema.graphql';
+# # import './event_feature.graphql'
 
-fragment EventRole on Role {
-  _id
-  code
-  title
-  features_expanded {
-    ...EventFeature
-  }
-}
+# fragment EventRole on Role {
+#   _id
+#   code
+#   title
+#   features_expanded {
+#     ...EventFeature
+#   }
+# }
+# # 

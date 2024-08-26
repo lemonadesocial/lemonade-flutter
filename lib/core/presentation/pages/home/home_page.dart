@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dar
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -48,11 +49,19 @@ class _HomePageState extends State<HomePage> {
           orElse: () => false,
           authenticated: (_) => true,
         );
+    final isProcessingLogin = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => false,
+          processing: () => true,
+        );
     return Scaffold(
       appBar: HomeAppBar(
         title: t.home.newsfeed,
         actions: [
-          if (!isLoggedIn) ...[
+          if (isProcessingLogin) ...[
+            Loading.defaultLoading(context),
+            SizedBox(width: Spacing.xSmall),
+          ],
+          if (!isLoggedIn && !isProcessingLogin) ...[
             SizedBox(
               width: 85.w,
               child: LemonOutlineButton(

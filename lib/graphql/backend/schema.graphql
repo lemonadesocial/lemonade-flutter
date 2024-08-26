@@ -50,11 +50,12 @@ type Query {
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
-  getListUserRole(input: EventRoleFilter!): [EventUserRole!]!
-  getUserRole(input: UserRoleInput!): EventUserRole!
-  getRoles: [Role!]!
-  getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
-  getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
+  getEventSessionReservations(
+    input: GetEventSessionReservationsInput
+  ): [EventSessionReservation!]!
+  getEventSessionReservationSummary(
+    input: GetEventSessionReservationSummaryInput!
+  ): [EventSessionReservationSummary!]!
   getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
@@ -1301,7 +1302,6 @@ type EmailTracking {
 }
 
 enum EmailTemplateType {
-  role_grant
   invitation
   join_request_approved
   join_request_declined
@@ -1577,78 +1577,6 @@ input GetEventRewardUsesInput {
   user: MongoID!
 }
 
-type EventUserRole {
-  user: User
-  email: String
-  roles: [EventRoleInformation!]!
-  event: Event
-  created_at: DateTimeISO
-  granted_by: User
-}
-
-type EventRoleInformation {
-  role: MongoID!
-  visible: Boolean
-  role_expanded: Role!
-}
-
-type Role {
-  _id: MongoID!
-  code: RoleCode!
-  title: String!
-  features: [MongoID!]
-  updated_by: MongoID
-  features_expanded: [Feature!]
-}
-
-enum RoleCode {
-  Host
-  Cohost
-  Manager
-  Sales
-  Marketing
-  DataAnalyst
-  Promoter
-}
-
-type Feature {
-  _id: MongoID!
-  code: FeatureCode!
-  title: String!
-  updated_by: MongoID
-  feature_enable: Boolean
-  endpoints: [String!]
-}
-
-enum FeatureCode {
-  DataDashboardInsights
-  DataDashboardRewards
-  DataDashboardRevenue
-  CSVExportGuestList
-  GuestListDashboard
-  EventSettings
-  TicketingSettings
-  EmailManager
-  PromotionCodes
-  POAPdata
-  CheckIn
-  EAS
-  Space
-  SpaceMembership
-  CollectibleData
-}
-
-input EventRoleFilter {
-  search_criteria: String
-  event_id: MongoID!
-  role_ids: [MongoID!]
-}
-
-input UserRoleInput {
-  user_id: MongoID!
-  event_id: MongoID!
-}
-
 type EventSessionReservation {
   user: MongoID!
   event: MongoID!
@@ -1709,6 +1637,7 @@ type TicketDiscount {
 }
 
 input GetEventTicketTypesInput {
+  email: String
   event: MongoID!
   discount: String
 }
@@ -1779,7 +1708,8 @@ type NewPayment {
   fee: String
   currency: String!
   state: NewPaymentState!
-  user: MongoID!
+  user: MongoID
+  buyer_info: BuyerInfo
   account: MongoID!
   ref_data: JSON
   billing_info: BillingInfo
@@ -1796,6 +1726,11 @@ enum NewPaymentState {
   initialized
   failed
   succeeded
+}
+
+type BuyerInfo {
+  email: String!
+  name: String
 }
 
 type BillingInfo {
@@ -1895,33 +1830,39 @@ type Notification {
 }
 
 enum NotificationType {
-  admin_payment_verification
-  chat_message
   event_announce
+  event_invite
   event_approve
-  event_attestation_sync_completed
+  event_cohost_request
+  event_cohost_request_announce
   event_broadcast_created
   event_broadcast_deactivated
   event_broadcast_deleted
+  event_broadcast_started
+  user_discovery_match
+  user_friendship_request
+  user_friendship_request_accept
+  user_contact_signup
+  event_request_created
+  event_invite_attending
+  event_declined
+  event_cancellation
+  admin_payment_verification
+  chat_message
   event_broadcast_ended
   event_broadcast_rescheduled
-  event_broadcast_started
-  event_cancellation
   event_chat_announce
-  event_cohost_request
-  event_cohost_request_announce
   event_donation
-  event_invite
+  event_attestation_sync_completed
   event_invite_verify_accept_request
   event_invite_verify_request
   event_request_approved
-  event_request_created
   event_request_declined
-  event_role_grant
-  event_role_update
   event_unlock_verify_accept_request
   event_unlock_verify_request
   event_update
+  ticket_assigned
+  ticket_cancelled
   payment_authorized
   payment_failed
   payment_refunded
@@ -1933,7 +1874,6 @@ enum NotificationType {
   place_reservation_request_accept
   place_reservation_request_decline
   reservation_accept
-  reservation_decline
   room_invite
   room_started
   safe_vault_init_failed
@@ -1947,12 +1887,6 @@ enum NotificationType {
   store_order_in_transit
   store_order_pending
   store_order_preparing
-  ticket_assigned
-  ticket_cancelled
-  user_contact_signup
-  user_discovery_match
-  user_friendship_request
-  user_friendship_request_accept
 }
 
 type StoreOrder {
@@ -2361,15 +2295,27 @@ enum SpaceMembershipState {
 }
 
 type ListSpaceRoleFeaturesResponse {
-  features: [FeatureBase!]!
+  features: [Feature!]!
   codes: [FeatureCode!]!
 }
 
-type FeatureBase {
-  _id: MongoID!
+type Feature {
   code: FeatureCode!
   title: String!
-  updated_by: MongoID
+}
+
+enum FeatureCode {
+  DataDashboard
+  CSVGuestList
+  GuestListDashboard
+  EventSettings
+  TicketingSettings
+  EmailManager
+  PromotionCodes
+  CollectibleData
+  Checkin
+  Space
+  SpaceMembership
 }
 
 type StoreBucketItem {
@@ -2537,11 +2483,17 @@ type RelayPaymentInfo {
 }
 
 input CalculateTicketsPricingInput {
+  buyer_info: BuyerInfoInput
   currency: String!
   network: String
   event: MongoID!
   items: [PurchasableItem!]!
   discount: String
+}
+
+input BuyerInfoInput {
+  email: String!
+  name: String
 }
 
 input PurchasableItem {
@@ -2743,11 +2695,8 @@ type Mutation {
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
   updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
-  addUserRole(input: EventRoleInput!): Boolean!
-  updateUserRole(input: EventRoleInput!): Boolean!
-  deleteUserRole(input: EventRoleInput!): Boolean!
-  acceptEvent(_id: MongoID!): EventRsvp!
-  declineEvent(_id: MongoID!): EventRsvp!
+  acceptEvent(email: String, _id: MongoID!): EventRsvp!
+  declineEvent(message: String, _id: MongoID!): EventRsvp!
   checkinUser(event: MongoID!, user: MongoID!): EventRsvp!
   createEventSessionReservation(input: EventSessionReservationInput!): Boolean!
   deleteEventSessionReservation(input: EventSessionReservationInput!): Boolean!
@@ -3218,22 +3167,6 @@ input UpdateEventRewardUseInput {
   active: Boolean!
 }
 
-input EventRoleInput {
-  users: [UserFilter!]!
-  event_id: MongoID!
-  roles: [RoleInput!]
-}
-
-input UserFilter {
-  user_id: MongoID
-  email: String
-}
-
-input RoleInput {
-  visible: Boolean!
-  role_id: MongoID!
-}
-
 type EventRsvp {
   state: EventRsvpState!
   messages: EventRsvpMessages
@@ -3424,6 +3357,7 @@ input UpdateNewPaymentAccountInput {
 input UpdatePaymentInput {
   _id: MongoID!
   transfer_params: JSON
+  payment_secret: String
 }
 
 input PostInput {
@@ -3846,6 +3780,7 @@ type RedeemTicketsResponse {
 }
 
 input RedeemTicketsInput {
+  buyer_info: BuyerInfoInput
   event: MongoID!
   items: [RedeemItem!]!
 }
@@ -3865,6 +3800,7 @@ type BuyTicketsResponse {
 }
 
 input BuyTicketsInput {
+  buyer_info: BuyerInfoInput
   currency: String!
   network: String
   event: MongoID!

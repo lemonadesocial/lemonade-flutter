@@ -1,9 +1,9 @@
-# import '../fragment/event_role_information.graphql'
+# # import '../fragment/event_role_information.graphql'
 
-query GetUserRole($input: UserRoleInput!) {
-  getUserRole(input: $input) {
-    roles {
-      ...EventRoleInformation
-    }
-  }
-}
+# query GetUserRole($input: UserRoleInput!) {
+#   getUserRole(input: $input) {
+#     roles {
+#       ...EventRoleInformation
+#     }
+#   }
+# }
