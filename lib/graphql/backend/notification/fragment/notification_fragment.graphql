@@ -1,0 +1,58 @@
+# import '../../schema.graphql'
+
+fragment Notification on Notification {
+  _id
+  title
+  message
+  type
+  created_at
+  from
+  from_expanded {
+    _id
+    name
+    username
+    description
+    job_title
+    new_photos_expanded(limit: 1) {
+      _id
+      key
+      bucket
+    }
+    image_avatar
+  }
+  is_seen
+  ref_event
+  ref_event_expanded {
+    accepted
+    _id
+    title
+    new_new_photos_expanded(limit: 1) {
+      _id
+      bucket
+      key
+    }
+    host
+    host_expanded {
+      _id
+      new_photos_expanded {
+        _id
+        bucket
+        key
+      }
+    }
+    application_profile_fields {
+      field
+      required
+    }
+  }
+  ref_room
+  ref_store_order
+  ref_user
+  ref_user_expanded {
+    _id
+    display_name
+    image_avatar
+    username
+  }
+  data
+}
