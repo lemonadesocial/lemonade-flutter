@@ -6,6 +6,7 @@
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.VIBRATE" />
   <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" tools:node="remove" />
   <queries>
     <package android:name="metamask" />
     <package android:name="io.metamask"/>
