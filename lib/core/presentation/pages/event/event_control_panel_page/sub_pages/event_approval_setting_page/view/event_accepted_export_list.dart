@@ -141,6 +141,7 @@ class _EventAcceptedExportListState extends State<EventAcceptedExportList> {
                     return EventAcceptedExportItem(
                       event: widget.event,
                       eventAccepted: eventAccepted,
+                      refetch: () => refetch?.call(),
                       onTapCancelTicket: (ticketId) async {
                         await showFutureLoadingDialog(
                           context: context,
