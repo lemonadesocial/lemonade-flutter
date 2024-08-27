@@ -234,6 +234,7 @@
         "creditDebit": "Credit/Debit",
         "erc20": "ERC20",
         "connectAccount": "Connect account",
+        "connected": "Connected",
         "selectAccount": "Select account",
         "crypto": "Crypto",
         "newTicket": "New ticket",

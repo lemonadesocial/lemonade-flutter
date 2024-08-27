@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
@@ -16,10 +17,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 @RoutePage()
 class EventTicketTiersListingPage extends StatelessWidget {
-  const EventTicketTiersListingPage({super.key});
+  final RefreshController _refreshCtrl = RefreshController();
+  EventTicketTiersListingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,51 +72,61 @@ class EventTicketTiersListingPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   horizontal: Spacing.xSmall,
                 ),
-                child: CustomScrollView(
-                  slivers: [
-                    if (event != null)
-                      Builder(
-                        builder: (context) {
-                          if (result.isLoading) {
-                            return SliverToBoxAdapter(
-                              child: Loading.defaultLoading(context),
+                child: SmartRefresher(
+                  controller: _refreshCtrl,
+                  onRefresh: () {
+                    refetch?.call();
+                    context.read<AuthBloc>().add(
+                          const AuthEvent.refreshData(),
+                        );
+                    _refreshCtrl.refreshCompleted();
+                  },
+                  child: CustomScrollView(
+                    slivers: [
+                      if (event != null)
+                        Builder(
+                          builder: (context) {
+                            if (result.isLoading) {
+                              return SliverToBoxAdapter(
+                                child: Loading.defaultLoading(context),
+                              );
+                            }
+                            if (result.hasException ||
+                                result.parsedData == null) {
+                              return const SliverToBoxAdapter(
+                                child: EmptyList(),
+                              );
+                            }
+                            final ticketTypes = result
+                                    .parsedData?.listEventTicketTypes
+                                    .map((item) {
+                                  return EventTicketType.fromDto(
+                                    EventTicketTypeDto.fromJson(
+                                      item.toJson(),
+                                    ),
+                                  );
+                                }).toList() ??
+                                [];
+                            return EventTicketTiersList(
+                              event: event,
+                              onRefreshTicketTiersList: () => refetch?.call(),
+                              ticketTypes: ticketTypes,
                             );
-                          }
-                          if (result.hasException ||
-                              result.parsedData == null) {
-                            return const SliverToBoxAdapter(
-                              child: EmptyList(),
-                            );
-                          }
-                          final ticketTypes = result
-                                  .parsedData?.listEventTicketTypes
-                                  .map((item) {
-                                return EventTicketType.fromDto(
-                                  EventTicketTypeDto.fromJson(
-                                    item.toJson(),
-                                  ),
-                                );
-                              }).toList() ??
-                              [];
-                          return EventTicketTiersList(
-                            event: event,
-                            onRefreshTicketTiersList: () => refetch?.call(),
-                            ticketTypes: ticketTypes,
-                          );
-                        },
+                          },
+                        ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.smMedium,
+                        ),
                       ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Spacing.smMedium,
+                      const SliverToBoxAdapter(
+                        child: PayoutAccountsWidget(),
                       ),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: PayoutAccountsWidget(),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: Spacing.xLarge * 3),
-                    ),
-                  ],
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: Spacing.xLarge * 3),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Align(
