@@ -30,10 +30,15 @@ class EventOrderSlideToPay extends StatelessWidget {
   final String? selectedNetwork;
   final GlobalKey<SlideActionState> slideActionKey;
 
-  get _totalCryptoAmount {
+  BigInt get _totalCryptoAmount {
     return (pricingInfo?.cryptoTotal ?? BigInt.zero) +
         // add fee if available for EthereumRelay
         (pricingInfo?.paymentAccounts?.firstOrNull?.cryptoFee ?? BigInt.zero);
+  }
+
+  double get _totalFiatAmount {
+    return (pricingInfo?.fiatTotal ?? 0) +
+        (pricingInfo?.paymentAccounts?.firstOrNull?.fiatFee ?? 0);
   }
 
   @override
@@ -50,8 +55,9 @@ class EventOrderSlideToPay extends StatelessWidget {
             decimals: currencyInfo?.decimals ?? 2,
           )
         : NumberUtils.formatCurrency(
-            amount: pricingInfo?.fiatTotal ?? 0,
+            amount: _totalFiatAmount,
             currency: selectedCurrency,
+            attemptedDecimals: currencyInfo?.decimals ?? 2,
           );
 
     return SizedBox(
