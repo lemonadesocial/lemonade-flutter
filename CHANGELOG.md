@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.31.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.30.0...v1.31.0) (2024-08-26)
+
+
+### Features
+
+* handle manual checkin ([#705](https://github.com/lemonadesocial/lemonade-flutter/issues/705)) ([fcf3202](https://github.com/lemonadesocial/lemonade-flutter/commit/fcf3202565e9ca1a19678b925e175ac9e57917a5))
+* notifications remake ([#699](https://github.com/lemonadesocial/lemonade-flutter/issues/699)) ([7a22d65](https://github.com/lemonadesocial/lemonade-flutter/commit/7a22d650bb56b74489cc22878d408f638fe290f4))
+
 ## [1.30.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.29.0...v1.30.0) (2024-08-26)
 
 
