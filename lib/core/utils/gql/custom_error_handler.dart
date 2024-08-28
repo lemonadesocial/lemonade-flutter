@@ -2,7 +2,9 @@
 
 import 'package:app/core/config.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
+import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -18,6 +20,7 @@ class GraphQLErrorCodeStrings {
   static const String BAD_REQUEST = "BAD_REQUEST";
   static const String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
   static const String UNKNOWN_ERROR = "UNKNOWN_ERROR";
+  static const String UNAUTHENTICATED = "UNAUTHENTICATED";
   static const String FORBIDDEN = "FORBIDDEN";
 }
 
@@ -78,12 +81,20 @@ class CustomErrorHandler {
     final errors = response.errors;
     final errorCode = getFirstErrorCode(errors);
     final errorMessage = getErrorMessage(errors);
+
     if (kDebugMode) {
       print('--- handleGraphQLError request: ${request.toString()}');
       print('--- handleGraphQLError response : ${response.toString()}');
     }
+    // TODO: temp solution to prevent show 401 error to user when logged out
+    // the root cause is query widget still called when loggedout
+    final unauthenticatedErrorAfterLogout =
+        errorCode == GraphQLErrorCodeStrings.UNAUTHENTICATED &&
+            getIt<AppOauth>().tokenState != OAuthTokenState.valid;
 
-    showSnackbarError(errorCode, errorMessage);
+    if (!unauthenticatedErrorAfterLogout) {
+      showSnackbarError(errorCode, errorMessage);
+    }
     CrashAnalyticsManager().crashAnalyticsService?.captureError(
           errors,
           StackTrace.fromString(request.toString()),

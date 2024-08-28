@@ -1,4 +1,5 @@
 import 'package:app/core/data/notification/dtos/notification_dtos.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 class Notification {
@@ -10,9 +11,11 @@ class Notification {
   String? from;
   bool? isSeen;
   String? refEvent;
+  Event? refEventExpanded;
   String? refRoom;
   String? refStoreOrder;
   String? refUser;
+  User? refUserExpanded;
   Map<String, dynamic>? data;
 
   Notification({
@@ -24,9 +27,11 @@ class Notification {
     this.from,
     this.isSeen,
     this.refEvent,
+    this.refEventExpanded,
     this.refRoom,
     this.refStoreOrder,
     this.refUser,
+    this.refUserExpanded,
     this.data,
   });
 
@@ -41,9 +46,17 @@ class Notification {
       from: dto.from,
       isSeen: dto.isSeen,
       refEvent: dto.refEvent,
+      refEventExpanded: dto.refEventExpanded != null
+          ? Event.fromDto(
+              dto.refEventExpanded!,
+            )
+          : null,
       refRoom: dto.refRoom,
       refStoreOrder: dto.refStoreOrder,
       refUser: dto.refUser,
+      refUserExpanded: dto.refUserExpanded != null
+          ? User.fromDto(dto.refUserExpanded!)
+          : null,
       data: dto.data,
     );
   }

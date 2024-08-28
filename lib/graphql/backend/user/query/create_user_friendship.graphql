@@ -1,0 +1,20 @@
+mutation createUserFriendship($user: MongoID!, $type: UserFriendshipType) {
+  friendship: createUserFriendship(input: { user: $user, type: $type }) {
+    _id
+    user1
+    user2
+    state
+    type
+    other_expanded {
+      _id
+      name
+      username
+      matrix_localpart
+      new_photos_expanded(limit: 1) {
+        _id
+        key
+        bucket
+      }
+    }
+  }
+}

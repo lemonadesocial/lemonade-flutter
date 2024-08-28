@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.31.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.30.0...v1.31.0) (2024-08-26)
+
+
+### Features
+
+* handle manual checkin ([#705](https://github.com/lemonadesocial/lemonade-flutter/issues/705)) ([fcf3202](https://github.com/lemonadesocial/lemonade-flutter/commit/fcf3202565e9ca1a19678b925e175ac9e57917a5))
+* notifications remake ([#699](https://github.com/lemonadesocial/lemonade-flutter/issues/699)) ([7a22d65](https://github.com/lemonadesocial/lemonade-flutter/commit/7a22d650bb56b74489cc22878d408f638fe290f4))
+
+## [1.30.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.29.0...v1.30.0) (2024-08-26)
+
+
+### Features
+
+* add event virtual url ([#695](https://github.com/lemonadesocial/lemonade-flutter/issues/695)) ([042b972](https://github.com/lemonadesocial/lemonade-flutter/commit/042b972b4d1e18752d8fbbd9d53b90bd2bdfa0c3))
+* add google wallet ticket ([#689](https://github.com/lemonadesocial/lemonade-flutter/issues/689)) ([9a08845](https://github.com/lemonadesocial/lemonade-flutter/commit/9a0884589bb19f712b84edc5695282d2365d8686))
+* create event with tags ([#686](https://github.com/lemonadesocial/lemonade-flutter/issues/686)) ([352f687](https://github.com/lemonadesocial/lemonade-flutter/commit/352f687c4cc0655e46ffcd5771048e7c81a8b7ea))
+* implement create sub event ([#684](https://github.com/lemonadesocial/lemonade-flutter/issues/684)) ([42e603f](https://github.com/lemonadesocial/lemonade-flutter/commit/42e603f5a6642cbc820e8eca67ef5512c463e234))
+* implement edit and delete user role flow ([#698](https://github.com/lemonadesocial/lemonade-flutter/issues/698)) ([f9ff39a](https://github.com/lemonadesocial/lemonade-flutter/commit/f9ff39a0b5b72bbe0763b24bdfbccce947443a93))
+* implement team role listing + add team role flow ([#697](https://github.com/lemonadesocial/lemonade-flutter/issues/697)) ([c1f7e2e](https://github.com/lemonadesocial/lemonade-flutter/commit/c1f7e2e861acb428d865d0b99a495c69c7ea627a))
+* show/hide feature depend on user role ([#701](https://github.com/lemonadesocial/lemonade-flutter/issues/701)) ([bfd4aa8](https://github.com/lemonadesocial/lemonade-flutter/commit/bfd4aa8795b60597cfa3fff4414f8c2e24f8f029))
+* sub event filter bottomsheet ([#693](https://github.com/lemonadesocial/lemonade-flutter/issues/693)) ([b00aeab](https://github.com/lemonadesocial/lemonade-flutter/commit/b00aeab751715c0b807bb96b8132a358beba56d9))
+* sub event new ui updated ([#690](https://github.com/lemonadesocial/lemonade-flutter/issues/690)) ([9d5e301](https://github.com/lemonadesocial/lemonade-flutter/commit/9d5e30158912d5f75858a91548046636e942ea85))
+* ticket apple wallet ([#688](https://github.com/lemonadesocial/lemonade-flutter/issues/688)) ([5d9159a](https://github.com/lemonadesocial/lemonade-flutter/commit/5d9159a0b9bad27bdbf197b3c7bcf807a4b264c7))
+* UI flow for team members setting listing  ([#687](https://github.com/lemonadesocial/lemonade-flutter/issues/687)) ([55c054e](https://github.com/lemonadesocial/lemonade-flutter/commit/55c054ecaf36115b7311ec15fbc653f797a1aae5))
+* update target android sdk to 34 ([#703](https://github.com/lemonadesocial/lemonade-flutter/issues/703)) ([17aff0e](https://github.com/lemonadesocial/lemonade-flutter/commit/17aff0e54cd95d4b31dba73b01970c0e1fdeea41))
+
+
+### Bug Fixes
+
+* add use full screen intent sdk34 ([#707](https://github.com/lemonadesocial/lemonade-flutter/issues/707)) ([bd84f57](https://github.com/lemonadesocial/lemonade-flutter/commit/bd84f573f3b38240b027191a5b00f80037984a96))
+* enhance event feature role for promotion flow ([#702](https://github.com/lemonadesocial/lemonade-flutter/issues/702)) ([1af997e](https://github.com/lemonadesocial/lemonade-flutter/commit/1af997e54de1b8657e71445fc70bf90693989f14))
+* fix showing subevents ([#700](https://github.com/lemonadesocial/lemonade-flutter/issues/700)) ([2219f82](https://github.com/lemonadesocial/lemonade-flutter/commit/2219f82819ed32731b0c3861788e50baf74196d0))
+* hide cover photo if not available & add loading state at beginning ([#704](https://github.com/lemonadesocial/lemonade-flutter/issues/704)) ([f61c170](https://github.com/lemonadesocial/lemonade-flutter/commit/f61c1709f45ee2664ea2970a710a542a307497c0))
+* hide event roles ([#706](https://github.com/lemonadesocial/lemonade-flutter/issues/706)) ([ec0f199](https://github.com/lemonadesocial/lemonade-flutter/commit/ec0f199da7958e77fe923e39161a9ca37daba3e3))
+* quest UI polishment ([#694](https://github.com/lemonadesocial/lemonade-flutter/issues/694)) ([c08ed9c](https://github.com/lemonadesocial/lemonade-flutter/commit/c08ed9c72a27f3bb89d10e3f572acef9305e3a69))
+* re-add application form setting ([#692](https://github.com/lemonadesocial/lemonade-flutter/issues/692)) ([7e622e0](https://github.com/lemonadesocial/lemonade-flutter/commit/7e622e064be5850f479c5be49376a0139a7d4c10))
+* update web3modal flutter lib ([#691](https://github.com/lemonadesocial/lemonade-flutter/issues/691)) ([cb0ff11](https://github.com/lemonadesocial/lemonade-flutter/commit/cb0ff117a24d6f646acef678c9b58eec4b75dfbb))
+
 ## [1.29.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.28.0...v1.29.0) (2024-07-18)
 
 

@@ -1,4 +1,9 @@
 {
     "notifications": "Notifications",
-    "emptyNotifications": "No notifications yet"
+    "emptyNotifications": "No notifications yet",
+    "tabs": {
+        "all": "All",
+        "events": "Events",
+        "activity": "Activity"
+    }
 }
