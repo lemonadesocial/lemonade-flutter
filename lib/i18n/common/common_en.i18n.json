@@ -71,7 +71,8 @@
         "go": "go",
         "patse": "Paste",
         "viewTicket": "View ticket",
-        "viewEvent": "View event"
+        "viewEvent": "View event",
+        "create": "Create"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
