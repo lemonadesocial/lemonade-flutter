@@ -170,6 +170,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           Assets.icons.icMoreVertical.svg(
             width: Sizing.small,
             height: Sizing.small,
+            color: colorScheme.onSecondary,
           ),
           if (showRedDot == true) ...[
             Positioned(

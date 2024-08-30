@@ -1,9 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -31,51 +28,43 @@ class QuestPointsWidget extends StatelessWidget {
             );
         AutoRouter.of(context).navigate(const QuestRoute());
       },
-      child: Stack(
-        children: [
-          ThemeSvgIcon(
-            builder: (filter) => Assets.icons.icTargetLine.svg(
-              colorFilter: filter,
-              width: Sizing.small,
-              height: Sizing.small,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.xSmall,
+          vertical: Spacing.superExtraSmall,
+        ),
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              width: 1,
+              color: colorScheme.outline,
             ),
+            borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
-          Positioned(
-            bottom: 0.w,
-            right: 0.w,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 2.w,
-                vertical: 1.w,
-              ),
-              decoration: ShapeDecoration(
-                color: colorScheme.secondaryContainer,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    LemonRadius.extraSmall / 2,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    (questPoints ?? 0).toString(),
-                    textAlign: TextAlign.center,
-                    style: Typo.xSmall.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w900,
-                      height: 0,
-                      fontFamily: FontFamily.spaceGrotesk,
-                    ),
-                  ),
-                ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: Assets.icons.icQuestLemonadeGradient.svg(
+                width: 20.w,
+                height: 20.w,
               ),
             ),
-          ),
-        ],
+            SizedBox(width: Spacing.superExtraSmall),
+            Text(
+              (questPoints ?? 0).toString(),
+              textAlign: TextAlign.center,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
+                height: 0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
