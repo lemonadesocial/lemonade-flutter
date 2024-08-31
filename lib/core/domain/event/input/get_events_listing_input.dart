@@ -64,6 +64,7 @@ abstract class GetUpcomingEventsInput with _$GetUpcomingEventsInput {
     @JsonKey(includeIfNull: false) String? id,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
+    @JsonKey(includeIfNull: false) bool? host,
   }) = _GetUpcomingEventsInput;
 
   factory GetUpcomingEventsInput.fromJson(Map<String, dynamic> json) =>

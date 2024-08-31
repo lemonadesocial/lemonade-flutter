@@ -375,8 +375,8 @@ final getHostingEventsQuery = gql('''
 ''');
 
 final getUpcomingEventsQuery = gql('''
-  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
-  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip) {
+  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0, \$host: Boolean) {
+  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
     _id
     title
     slug
