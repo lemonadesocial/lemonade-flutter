@@ -31,5 +31,11 @@
         "postDesc": "Speak your mind",
         "event": "Event",
         "eventDesc": "Virutal, IRL, or hybrid"
+    },
+    "pendingInvites": {
+        "title": "Invites",
+        "cohostRequest": "Co-host request",
+        "eventInvite": "Event invite",
+        "friendRequest": "Friend request"
     }
 }

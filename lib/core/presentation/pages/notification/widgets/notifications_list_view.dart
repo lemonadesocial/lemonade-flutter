@@ -30,6 +30,7 @@ class NotificationListView extends StatefulWidget {
 
 class _NotificationListViewState extends State<NotificationListView> {
   List<String> removedNotificationIds = [];
+  bool hasNextPage = true;
 
   void removeItem(
     context, {
@@ -127,6 +128,13 @@ class _NotificationListViewState extends State<NotificationListView> {
                             ...(fetchMoreResult?['getNotifications'] ?? [])
                                 as List<dynamic>,
                           ];
+                          if (((fetchMoreResult?['getNotifications'] ?? [])
+                                  as List<dynamic>)
+                              .isEmpty) {
+                            setState(() {
+                              hasNextPage = false;
+                            });
+                          }
                           fetchMoreResult?['getNotifications'] = finalList;
                           return fetchMoreResult;
                         },
@@ -143,12 +151,15 @@ class _NotificationListViewState extends State<NotificationListView> {
                     sliver: SliverList.builder(
                       itemBuilder: (ctx, index) {
                         if (index == notifications.length) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: Spacing.smMedium,
-                            ),
-                            child: Loading.defaultLoading(context),
-                          );
+                          if (hasNextPage) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: Spacing.smMedium,
+                              ),
+                              child: Loading.defaultLoading(context),
+                            );
+                          }
+                          return const SizedBox.shrink();
                         }
                         if (removedNotificationIds
                             .contains(notifications[index].id)) {
