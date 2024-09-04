@@ -1,7 +1,10 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -23,6 +26,10 @@ class HomeEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final cohostsCount = event.cohosts?.length;
+    final guestsCount = event.guests;
+    final checkInCount = event.checkInCount;
+    final pendingRequestsCount = event.pendingRequestCount ?? 0;
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigate(
@@ -86,8 +93,8 @@ class HomeEventCard extends StatelessWidget {
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Container(
-                              width: 2,
-                              height: 2,
+                              width: 3.w,
+                              height: 3.w,
                               decoration: BoxDecoration(
                                 color: LemonColor.white18,
                                 shape: BoxShape.circle,
@@ -110,8 +117,11 @@ class HomeEventCard extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.location_on,
-                                      size: 16, color: colorScheme.onSecondary),
+                                  Icon(
+                                    Icons.location_on,
+                                    size: Sizing.mSmall,
+                                    color: colorScheme.onSecondary,
+                                  ),
                                   SizedBox(width: Spacing.extraSmall),
                                   Expanded(
                                     child: Text(
@@ -130,30 +140,32 @@ class HomeEventCard extends StatelessWidget {
                           children: [
                             LemonCircleAvatar(
                               url: event.hostExpanded?.imageAvatar ?? '',
-                              size: 25.w,
+                              size: Sizing.mSmall,
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Text(
-                              event.hostExpanded?.name ?? '',
+                              (cohostsCount ?? 0) > 0
+                                  ? '${event.hostExpanded!.name} + $cohostsCount'
+                                  : event.hostExpanded?.name ?? '',
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),
                             ),
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  SizedBox(width: 14.w),
                   Container(
                     width: 90.w,
                     height: 90.w,
                     decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: Colors.white.withOpacity(0.09),
+                          color: LemonColor.white09,
                         ),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
                     child: ClipRRect(
@@ -186,60 +198,72 @@ class HomeEventCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        Icons.people,
-                        size: 16,
-                        color: colorScheme.onSecondary,
+                      ThemeSvgIcon(
+                        builder: (colorFilter) => Assets.icons.icGuests.svg(
+                          width: Sizing.mSmall,
+                          height: Sizing.mSmall,
+                        ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: Spacing.superExtraSmall),
                       Text(
-                        '234/500',
-                        style: TextStyle(
+                        '$checkInCount/$guestsCount',
+                        style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
-                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(width: 14),
-                  Row(
-                    children: [
-                      Icon(Icons.pending,
-                          size: 16, color: colorScheme.onSecondary),
-                      const SizedBox(width: 6),
-                      Text(
-                        '3 pending',
-                        style: TextStyle(
-                          color: colorScheme.onSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                  SizedBox(width: 14.w),
+                  if (pendingRequestsCount > 0)
+                    Row(
+                      children: [
+                        ThemeSvgIcon(
+                          builder: (colorFilter) => Assets.icons.icError.svg(
+                            width: Sizing.mSmall,
+                            height: Sizing.mSmall,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: Spacing.superExtraSmall),
+                        Text(
+                          t.event.pendingCount(n: pendingRequestsCount),
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   const Spacer(),
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
                     decoration: ShapeDecoration(
-                      color: Colors.white.withOpacity(0.09),
+                      color: LemonColor.white09,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(
+                          LemonRadius.small / 2,
+                        ),
                       ),
                     ),
                     child: Row(
                       children: [
                         Text(
                           'Manage',
-                          style: TextStyle(
+                          style: Typo.small.copyWith(
                             color: colorScheme.onSecondary,
-                            fontSize: 12,
+                            height: 0,
                           ),
                         ),
                         const SizedBox(width: 6),
-                        Icon(Icons.settings,
-                            size: 12, color: colorScheme.onSecondary),
+                        ThemeSvgIcon(
+                          color: colorScheme.onSurfaceVariant,
+                          builder: (filter) => Assets.icons.icArrowRight.svg(
+                            width: 15.w,
+                            height: 15.w,
+                            colorFilter: filter,
+                          ),
+                        ),
                       ],
                     ),
                   ),

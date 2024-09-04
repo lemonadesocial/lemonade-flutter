@@ -12,6 +12,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 part 'event.freezed.dart';
 part 'event.g.dart';
@@ -61,6 +62,7 @@ class Event with _$Event {
     int? checkInCount,
     int? attendingCount,
     int? pendingRequestCount,
+    int? guests,
     List<EventSession>? sessions,
     List<EventApplicationQuestion>? applicationQuestions,
     List<EventApplicationProfileField>? applicationProfileFields,
@@ -143,6 +145,7 @@ class Event with _$Event {
       checkInCount: dto.checkInCount?.toInt() ?? 0,
       attendingCount: dto.attendingCount?.toInt() ?? 0,
       pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
+      guests: dto.guests?.toInt() ?? 0,
       sessions: List.from(dto.sessions ?? [])
           .map((item) => EventSession.fromDto(item))
           .toList(),

@@ -7,6 +7,7 @@ const eventHostExpandedFragment = '''
     name
     display_name
     username
+    image_avatar
     new_photos_expanded(limit: 1) {
       _id
       key
@@ -381,9 +382,11 @@ final getUpcomingEventsQuery = gql('''
     title
     slug
     host
+    cohosts
     host_expanded {
       _id
       name
+      image_avatar
       new_photos_expanded {
         _id
         key
@@ -403,6 +406,8 @@ final getUpcomingEventsQuery = gql('''
       title
       region
     }
+    guests
+    checkin_count
   }
 }
 ''');
@@ -417,6 +422,7 @@ final getPastEventsQuery = gql('''
     host_expanded {
       _id
       name
+      image_avatar
       new_photos_expanded {
         _id
         key

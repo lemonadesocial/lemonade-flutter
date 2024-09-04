@@ -63,6 +63,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'checkin_count') double? checkInCount,
     @JsonKey(name: 'attending_count') double? attendingCount,
     @JsonKey(name: 'pending_request_count') double? pendingRequestCount,
+    double? guests,
     List<EventSessionDto>? sessions,
     @JsonKey(name: 'application_questions')
     List<EventApplicationQuestionDto>? applicationQuestions,

@@ -3,6 +3,7 @@ import 'package:app/core/application/event/upcoming_attending_events_bloc/upcomi
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -52,6 +53,14 @@ class HomeViewView extends StatelessWidget {
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: Spacing.small),
+            sliver: const SliverToBoxAdapter(
+              child: PendingInvitesCard(
+                count: 6,
+              ),
+            ),
+          ),
           SliverPadding(
             padding: EdgeInsets.symmetric(vertical: Spacing.small),
             sliver: SliverToBoxAdapter(
