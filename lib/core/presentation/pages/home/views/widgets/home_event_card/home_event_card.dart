@@ -1,7 +1,9 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -13,6 +15,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
@@ -145,14 +148,14 @@ class HomeEventCard extends StatelessWidget {
                             SizedBox(width: Spacing.extraSmall),
                             Text(
                               (cohostsCount ?? 0) > 0
-                                  ? '${event.hostExpanded!.name} + $cohostsCount'
+                                  ? '${event.hostExpanded?.name} + $cohostsCount'
                                   : event.hostExpanded?.name ?? '',
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -235,39 +238,66 @@ class HomeEventCard extends StatelessWidget {
                       ],
                     ),
                   const Spacer(),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-                    decoration: ShapeDecoration(
-                      color: LemonColor.white09,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          LemonRadius.small / 2,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Manage',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                            height: 0,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        ThemeSvgIcon(
-                          color: colorScheme.onSurfaceVariant,
-                          builder: (filter) => Assets.icons.icArrowRight.svg(
-                            width: 15.w,
-                            height: 15.w,
-                            colorFilter: filter,
-                          ),
-                        ),
-                      ],
-                    ),
+                  _BottomRightButton(
+                    event: event,
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomRightButton extends StatelessWidget {
+  final Event event;
+  const _BottomRightButton({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (session) => session.userId,
+          orElse: () => '',
+        );
+    final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
+    final isAttending = EventUtils.isAttending(event: event, userId: userId);
+    final colorScheme = Theme.of(context).colorScheme;
+    var label = '';
+    if (isOwnEvent) {
+      label = t.event.manage;
+    } else if (isAttending) {
+      label = t.common.actions.viewTicket;
+    }
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+        decoration: ShapeDecoration(
+          color: LemonColor.white09,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              LemonRadius.small / 2,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+                height: 0,
+              ),
+            ),
+            const SizedBox(width: 6),
+            ThemeSvgIcon(
+              color: colorScheme.onSurfaceVariant,
+              builder: (filter) => Assets.icons.icArrowRight.svg(
+                width: 15.w,
+                height: 15.w,
+                colorFilter: filter,
               ),
             ),
           ],

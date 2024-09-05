@@ -686,5 +686,6 @@
         "one": "$n pending invite",
         "other": "$n pending invites"
     },
-    "pendingCount": "$n pending"
+    "pendingCount": "$n pending",
+    "manage": "Manage"
 }
