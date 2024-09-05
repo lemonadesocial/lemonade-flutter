@@ -62,11 +62,10 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
               ),
             ),
           ),
-        SizedBox(height: Spacing.xSmall),
         SizedBox(
-          height: 87.w,
+          height: 65.w,
           child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+            padding: EdgeInsets.only(left: Spacing.xSmall),
             itemCount: pendingSwipes.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => InkWell(
@@ -83,7 +82,7 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
               ),
             ),
             separatorBuilder: (context, index) => SizedBox(
-              width: Spacing.xSmall,
+              width: 10.w,
             ),
           ),
         ),
@@ -100,7 +99,6 @@ class _PersonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: 68.w,
       child: Column(
@@ -138,17 +136,6 @@ class _PersonItem extends StatelessWidget {
                   child: Assets.icons.icCollaboratorBubbleChat.svg(),
                 ),
             ],
-          ),
-          SizedBox(height: Spacing.superExtraSmall),
-          Text(
-            swipe.otherExpanded?.name ?? '',
-            textAlign: TextAlign.center,
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

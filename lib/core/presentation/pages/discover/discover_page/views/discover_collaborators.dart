@@ -50,14 +50,11 @@ class DiscoverCollaborators extends StatelessWidget {
             child: SizedBox.shrink(),
           );
         }
-        return SliverPadding(
-          padding: EdgeInsets.only(bottom: 2 * Spacing.xSmall),
-          sliver: SliverToBoxAdapter(
-            child: HorizontalCollaboratorLikesList(
-              headerVisible: false,
-              pendingSwipes: pendingSwipes,
-              refetch: refetch,
-            ),
+        return SliverToBoxAdapter(
+          child: HorizontalCollaboratorLikesList(
+            headerVisible: false,
+            pendingSwipes: pendingSwipes,
+            refetch: refetch,
           ),
         );
       },

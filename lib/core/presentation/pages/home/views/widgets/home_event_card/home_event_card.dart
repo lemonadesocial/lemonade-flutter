@@ -1,12 +1,7 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -15,9 +10,10 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_left.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_right.dart';
 
 class HomeEventCard extends StatelessWidget {
   final Event event;
@@ -30,9 +26,6 @@ class HomeEventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final cohostsCount = event.cohosts?.length;
-    final guestsCount = event.guests;
-    final checkInCount = event.checkInCount;
-    final pendingRequestsCount = event.pendingRequestCount ?? 0;
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigate(
@@ -199,105 +192,12 @@ class HomeEventCard extends StatelessWidget {
               padding: EdgeInsets.all(14.w),
               child: Row(
                 children: [
-                  Row(
-                    children: [
-                      ThemeSvgIcon(
-                        builder: (colorFilter) => Assets.icons.icGuests.svg(
-                          width: Sizing.mSmall,
-                          height: Sizing.mSmall,
-                        ),
-                      ),
-                      SizedBox(width: Spacing.superExtraSmall),
-                      Text(
-                        '$checkInCount/$guestsCount',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 14.w),
-                  if (pendingRequestsCount > 0)
-                    Row(
-                      children: [
-                        ThemeSvgIcon(
-                          builder: (colorFilter) => Assets.icons.icError.svg(
-                            width: Sizing.mSmall,
-                            height: Sizing.mSmall,
-                          ),
-                        ),
-                        SizedBox(width: Spacing.superExtraSmall),
-                        Text(
-                          t.event.pendingCount(n: pendingRequestsCount),
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                  HomeEventCardFooterLeft(event: event),
                   const Spacer(),
-                  _BottomRightButton(
+                  HomeEventCardFooterRight(
                     event: event,
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomRightButton extends StatelessWidget {
-  final Event event;
-  const _BottomRightButton({required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    final userId = context.watch<AuthBloc>().state.maybeWhen(
-          authenticated: (session) => session.userId,
-          orElse: () => '',
-        );
-    final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
-    final isAttending = EventUtils.isAttending(event: event, userId: userId);
-    final colorScheme = Theme.of(context).colorScheme;
-    var label = '';
-    if (isOwnEvent) {
-      label = t.event.manage;
-    } else if (isAttending) {
-      label = t.common.actions.viewTicket;
-    }
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-        decoration: ShapeDecoration(
-          color: LemonColor.white09,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              LemonRadius.small / 2,
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(
-              label,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
-                height: 0,
-              ),
-            ),
-            const SizedBox(width: 6),
-            ThemeSvgIcon(
-              color: colorScheme.onSurfaceVariant,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                width: 15.w,
-                height: 15.w,
-                colorFilter: filter,
               ),
             ),
           ],

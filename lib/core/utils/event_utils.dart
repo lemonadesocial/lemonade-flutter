@@ -84,4 +84,12 @@ class EventUtils {
     }
     return const EventPickMyTicketRoute();
   }
+
+  static bool isEventLive(Event event) {
+    final now = DateTime.now();
+    return event.start != null &&
+        event.end != null &&
+        now.isAfter(event.start!) &&
+        now.isBefore(event.end!);
+  }
 }

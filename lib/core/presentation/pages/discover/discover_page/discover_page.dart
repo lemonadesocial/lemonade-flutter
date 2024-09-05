@@ -23,7 +23,6 @@ class DiscoverPage extends StatelessWidget {
       appBar: HomeAppBar(title: t.discover.discover),
       body: CustomScrollView(
         slivers: [
-          const DiscoverCollaborators(),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
             sliver: const DiscoverCards(),

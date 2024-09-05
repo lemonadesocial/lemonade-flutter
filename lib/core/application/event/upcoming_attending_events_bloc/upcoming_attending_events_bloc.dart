@@ -15,7 +15,6 @@ class UpcomingAttendingEventsBloc
       : super(UpcomingAttendingEventsState.loading()) {
     on<UpcomingAttendingEventsEvent>(_onFetch);
   }
-
   Future<void> _onFetch(
       UpcomingAttendingEventsEvent event, Emitter emit) async {
     if (userId.isEmpty) {
@@ -30,11 +29,22 @@ class UpcomingAttendingEventsBloc
     );
     result.fold(
       (l) => emit(UpcomingAttendingEventsState.failure()),
-      (events) => emit(
-        UpcomingAttendingEventsState.fetched(
-          events: events,
-        ),
-      ),
+      (events) {
+        final now = DateTime.now();
+        List<Event> upcomingAttendingEvents = events
+            .where(
+              (event) => event.end?.isAfter(now) ?? false,
+            )
+            .toList()
+          ..sort(
+            (a, b) => a.start?.compareTo(b.start ?? DateTime(0)) ?? 0,
+          );
+        emit(
+          UpcomingAttendingEventsState.fetched(
+            events: upcomingAttendingEvents,
+          ),
+        );
+      },
     );
   }
 }

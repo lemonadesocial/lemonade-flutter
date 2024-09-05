@@ -20,21 +20,31 @@ class UpcomingHostingEventsBloc
     if (userId.isEmpty) {
       return emit(UpcomingHostingEventsState.fetched(events: []));
     }
-    final result = await _eventRepository.getUpcomingEvents(
-      input: GetUpcomingEventsInput(
+    final result = await _eventRepository.getHostingEvents(
+      input: GetHostingEventsInput(
         id: userId,
         skip: 0,
         limit: 100,
-        host: true,
       ),
     );
     result.fold(
       (l) => emit(UpcomingHostingEventsState.failure()),
-      (events) => emit(
-        UpcomingHostingEventsState.fetched(
-          events: events,
-        ),
-      ),
+      (events) {
+        final now = DateTime.now();
+        List<Event> upcomingHostingEvents = events
+            .where(
+              (event) => event.end?.isAfter(now) ?? false,
+            )
+            .toList()
+          ..sort(
+            (a, b) => a.start?.compareTo(b.start ?? DateTime(0)) ?? 0,
+          );
+        emit(
+          UpcomingHostingEventsState.fetched(
+            events: upcomingHostingEvents,
+          ),
+        );
+      },
     );
   }
 }

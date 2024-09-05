@@ -687,5 +687,9 @@
         "other": "$n pending invites"
     },
     "pendingCount": "$n pending",
-    "manage": "Manage"
+    "manage": "Manage",
+    "liveNow": "LIVE NOW",
+    "startsIn": "Starts in $time",
+    "noUpcomingEvents": "No Upcoming Events",
+    "noUpcomingEventsDescription": "Events you are attending & hosting will show up here"
 }
