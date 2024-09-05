@@ -88,7 +88,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           BlocProvider<NewsfeedListingBloc>(
             create: (context) => NewsfeedListingBloc(
               NewsfeedService(NewsfeedRepositoryImpl()),
-            ),
+            )..add(
+                NewsfeedListingEvent.fetch(),
+              ),
           ),
           // TODO: blocker user should not be global
           BlocProvider(

@@ -4,15 +4,11 @@ import 'package:app/core/domain/farcaster/entities/farcaster_channel.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/widgets/airstack_gql_provider_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/farcaster_airstack/query/get_farcaster_channels.graphql.dart';
 import 'package:app/graphql/farcaster_airstack/schema.graphql.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -31,39 +27,8 @@ class DiscoverFarcasterChannels extends StatefulWidget {
 class _DiscoverFarcasterChannelsState extends State<DiscoverFarcasterChannels> {
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     return MultiSliver(
       children: [
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-          sliver: SliverToBoxAdapter(
-            child: InkWell(
-              onTap: () {
-                AutoRouter.of(context).push(const FarcasterDiscoverRoute());
-              },
-              child: Row(
-                children: [
-                  Text(
-                    t.farcaster.discover.discoverTabs.channels,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(width: Spacing.extraSmall),
-                  ThemeSvgIcon(
-                    builder: (filter) => Assets.icons.icArrowRight.svg(
-                      color: colorScheme.onSecondary,
-                      width: Sizing.mSmall,
-                      height: Sizing.mSmall,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
         SliverToBoxAdapter(
           child: SizedBox(
             height: Spacing.xSmall,
@@ -105,7 +70,7 @@ class _DiscoverFarcasterChannelsState extends State<DiscoverFarcasterChannels> {
               }
               return SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 124.w,
+                  height: 88.w,
                   child: ListView.separated(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
                     scrollDirection: Axis.horizontal,
@@ -151,12 +116,12 @@ class _ChannelItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 96.w,
+      width: 62.w,
       child: Column(
         children: [
           Container(
-            height: 96.w,
-            width: 96.w,
+            height: 62.w,
+            width: 62.w,
             decoration: BoxDecoration(
               border: Border.all(
                 color: LemonColor.paleViolet,
@@ -166,9 +131,9 @@ class _ChannelItem extends StatelessWidget {
             ),
             child: Center(
               child: LemonNetworkImage(
-                width: 88.w,
-                height: 88.w,
-                borderRadius: BorderRadius.circular(88.w),
+                width: 55.w,
+                height: 55.w,
+                borderRadius: BorderRadius.circular(55.w),
                 imageUrl: channel.imageUrl ?? '',
                 placeholder: ImagePlaceholder.defaultPlaceholder(),
               ),
