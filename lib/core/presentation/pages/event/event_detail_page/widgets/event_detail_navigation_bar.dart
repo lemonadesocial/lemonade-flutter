@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/helper/event_detail_navigation_bar_helper.dart';
-import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/utils/animation_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/theme/spacing.dart';
@@ -45,6 +45,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
 
   List<double> get snapSizes => _snapSizes;
 
+  // ignore: unused_element
   bool get _visibleWhenExpanded => animation.value > 0.4;
 
   @override
@@ -82,61 +83,81 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: LemonSnapBottomSheet(
-        resizeToAvoidBottomInset: false,
-        controller: dragController,
-        minSnapSize: snapSizes[0],
-        maxSnapSize: snapSizes[1],
-        snapSizes: snapSizes,
-        defaultSnapSize: snapSizes[0],
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromRGBO(33, 33, 33, 1),
-              Color.fromRGBO(23, 23, 23, 1),
-            ],
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(LemonRadius.normal),
-            topRight: Radius.circular(LemonRadius.normal),
-          ),
-        ),
-        builder: (scrollController) {
-          return Expanded(
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Spacing.extraSmall,
-                  ),
-                  child: CustomScrollView(
-                    controller: scrollController,
-                    slivers: [
-                      AnimatedBuilder(
-                        animation: animation,
-                        builder: (context, child) => SliverVisibility(
-                          visible: _visibleWhenExpanded,
-                          replacementSliver: _buildHorizontalList(
-                              // eventUserRole: widget.eventUserRole,
-                              ),
-                          sliver: _buildGridList(
-                              // eventUserRole: widget.eventUserRole,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    return SafeArea(
+      child: SizedBox(
+        height: 100.w,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const BottomSheetGrabber(),
+            SizedBox(height: Spacing.small),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  _buildHorizontalList(),
+                ],
+              ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
+    // TODO: Temporary disabled
+    // return SizedBox(
+    //   height: MediaQuery.of(context).size.height,
+    //   child: LemonSnapBottomSheet(
+    //     resizeToAvoidBottomInset: false,
+    //     controller: dragController,
+    //     minSnapSize: snapSizes[0],
+    //     maxSnapSize: snapSizes[1],
+    //     snapSizes: snapSizes,
+    //     defaultSnapSize: snapSizes[0],
+    //     decoration: BoxDecoration(
+    //       gradient: const LinearGradient(
+    //         begin: Alignment.topCenter,
+    //         end: Alignment.bottomCenter,
+    //         colors: [
+    //           Color.fromRGBO(33, 33, 33, 1),
+    //           Color.fromRGBO(23, 23, 23, 1),
+    //         ],
+    //       ),
+    //       borderRadius: BorderRadius.only(
+    //         topLeft: Radius.circular(LemonRadius.normal),
+    //         topRight: Radius.circular(LemonRadius.normal),
+    //       ),
+    //     ),
+    //     builder: (scrollController) {
+    //       return Expanded(
+    //         child: Stack(
+    //           children: [
+    //             Padding(
+    //               padding: EdgeInsets.symmetric(
+    //                 vertical: Spacing.extraSmall,
+    //               ),
+    //               child: CustomScrollView(
+    //                 controller: scrollController,
+    //                 slivers: [
+    //                   AnimatedBuilder(
+    //                     animation: animation,
+    //                     builder: (context, child) => SliverVisibility(
+    //                       visible: _visibleWhenExpanded,
+    //                       replacementSliver: _buildHorizontalList(
+    //                           // eventUserRole: widget.eventUserRole,
+    //                           ),
+    //                       sliver: _buildGridList(
+    //                           // eventUserRole: widget.eventUserRole,
+    //                           ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
   }
 
   SliverToBoxAdapter _buildHorizontalList() {
@@ -178,7 +199,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
               separatorBuilder: (context, index) =>
-                  SizedBox(width: Spacing.extraSmall),
+                  SizedBox(width: Spacing.small),
               scrollDirection: Axis.horizontal,
               itemCount: features.length,
               itemBuilder: (context, index) {
@@ -195,6 +216,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     );
   }
 
+  // ignore: unused_element
   SliverPadding _buildGridList() {
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
