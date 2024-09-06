@@ -1,4 +1,5 @@
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
+import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_circle_widget.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_counter_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -67,21 +68,28 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
           height: 65.w,
           child: ListView.separated(
             padding: EdgeInsets.only(left: Spacing.xSmall),
-            itemCount: pendingSwipes.length,
+            itemCount: pendingSwipes.length + 1,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                AutoRouter.of(context).push(
-                  CollaboratorLikePreviewRoute(
-                    swipe: pendingSwipes[index],
-                    refetch: refetch,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const CollaboratorCircleWidget();
+              } else {
+                final swipeIndex = index - 1;
+                return InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).push(
+                      CollaboratorLikePreviewRoute(
+                        swipe: pendingSwipes[swipeIndex],
+                        refetch: refetch,
+                      ),
+                    );
+                  },
+                  child: _PersonItem(
+                    swipe: pendingSwipes[swipeIndex],
                   ),
                 );
-              },
-              child: _PersonItem(
-                swipe: pendingSwipes[index],
-              ),
-            ),
+              }
+            },
             separatorBuilder: (context, index) => SizedBox(
               width: 10.w,
             ),

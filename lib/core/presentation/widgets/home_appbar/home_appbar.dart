@@ -79,7 +79,7 @@ class _Leading extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: Spacing.xSmall),
+        padding: EdgeInsets.only(left: Spacing.small),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -10,6 +10,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_collaborators.dart';
 import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -78,40 +79,6 @@ class _HomeViewState extends State<_HomeView> {
         );
   }
 
-  Widget _buildHostingEventsList(List<Event> hostingEvents) {
-    const int maxVisibleEvents = 2;
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          t.event.hosting.toUpperCase(),
-          style: Typo.small.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: Spacing.small),
-        ...hostingEvents.take(maxVisibleEvents).map(
-              (event) => Padding(
-                padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                child: HomeEventCard(event: event),
-              ),
-            ),
-        if (hostingEvents.length > maxVisibleEvents)
-          Padding(
-            padding: EdgeInsets.only(top: Spacing.xSmall),
-            child: ViewMoreEventsCard(
-              moreEventsCount: hostingEvents.length - maxVisibleEvents,
-            ),
-          ),
-        SizedBox(height: Spacing.medium),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -160,7 +127,7 @@ class _HomeViewState extends State<_HomeView> {
 
               return SliverPadding(
                 padding: EdgeInsets.only(
-                  top: 30.w,
+                  top: Spacing.medium,
                   left: Spacing.small,
                   right: Spacing.small,
                 ),
@@ -172,27 +139,89 @@ class _HomeViewState extends State<_HomeView> {
               );
             },
           ),
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 30.w,
-          ),
-        ),
         if (userId.isNotEmpty)
           SliverPadding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
+            padding: EdgeInsets.only(
+              top: 30.w,
+              left: Spacing.small,
+              right: Spacing.small,
             ),
             sliver: BlocBuilder<UpcomingHostingEventsBloc,
                 UpcomingHostingEventsState>(
               builder: (context, hostingState) {
-                return hostingState.when(
-                  loading: () => SliverToBoxAdapter(
-                    child: Loading.defaultLoading(context),
-                  ),
-                  failure: () => const SliverToBoxAdapter(child: EmptyList()),
-                  fetched: (hostingEvents) {
-                    return SliverToBoxAdapter(
-                      child: _buildHostingEventsList(hostingEvents),
+                return BlocBuilder<UpcomingAttendingEventsBloc,
+                    UpcomingAttendingEventsState>(
+                  builder: (context, attendingState) {
+                    if (hostingState is UpcomingHostingEventsStateLoading ||
+                        attendingState is UpcomingAttendingEventsStateLoading) {
+                      return SliverToBoxAdapter(
+                        child: Loading.defaultLoading(context),
+                      );
+                    }
+
+                    if (hostingState is UpcomingHostingEventsStateFailure ||
+                        attendingState is UpcomingAttendingEventsStateFailure) {
+                      return const SliverToBoxAdapter(child: EmptyList());
+                    }
+
+                    final hostingEvents =
+                        (hostingState as UpcomingHostingEventsStateFetched)
+                            .events;
+                    final attendingEvents =
+                        (attendingState as UpcomingAttendingEventsStateFetched)
+                            .events;
+
+                    if (hostingEvents.isEmpty && attendingEvents.isEmpty) {
+                      return const SliverToBoxAdapter(
+                        child: NoUpcomingEventsCard(),
+                      );
+                    }
+
+                    return SliverList(
+                      delegate: SliverChildListDelegate([
+                        if (hostingEvents.isNotEmpty) ...[
+                          Text(
+                            t.event.hosting.toUpperCase(),
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.small),
+                          ...hostingEvents.take(2).map(
+                                (event) => Padding(
+                                  padding:
+                                      EdgeInsets.only(bottom: Spacing.xSmall),
+                                  child: HomeEventCard(event: event),
+                                ),
+                              ),
+                          if (hostingEvents.length > 2)
+                            Padding(
+                              padding: EdgeInsets.only(top: Spacing.xSmall),
+                              child: ViewMoreEventsCard(
+                                moreEventsCount: hostingEvents.length - 2,
+                              ),
+                            ),
+                          SizedBox(height: Spacing.medium),
+                        ],
+                        if (attendingEvents.isNotEmpty) ...[
+                          Text(
+                            t.event.myEvents.toUpperCase(),
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.small),
+                          ...attendingEvents.map(
+                            (event) => Padding(
+                              padding: EdgeInsets.only(bottom: Spacing.xSmall),
+                              child: HomeEventCard(event: event),
+                            ),
+                          ),
+                          SizedBox(height: Spacing.medium),
+                        ],
+                      ]),
                     );
                   },
                 );
