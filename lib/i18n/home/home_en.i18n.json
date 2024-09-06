@@ -9,7 +9,7 @@
     "roomDesc": "virtual hangouts, discussions, etc",
     "event": "Event",
     "eventDesc": "virtual, offline, hybrid events",
-    "poap":"POAP",
+    "poap": "POAP",
     "poapDesc": "turn tickets into digital collectibles",
     "collectible": "Collectible",
     "collectibleDesc": "virtual or IRL collectibles",
@@ -24,5 +24,18 @@
             "followLemonade": "Follow Lemonade",
             "signOut": "Sign out"
         }
+    },
+    "quickCreate": {
+        "quickCreateDesc": "What are we creating today?",
+        "post": "Post",
+        "postDesc": "Speak your mind",
+        "event": "Event",
+        "eventDesc": "Virutal, IRL, or hybrid"
+    },
+    "pendingInvites": {
+        "title": "Invites",
+        "cohostRequest": "Co-host request",
+        "eventInvite": "Event invite",
+        "friendRequest": "Friend request"
     }
 }

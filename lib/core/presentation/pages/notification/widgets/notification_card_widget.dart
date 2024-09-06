@@ -1,4 +1,5 @@
 import 'package:app/core/application/notification/delete_notifications_bloc/delete_notifications_bloc.dart';
+import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/cohost_request_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/default_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_invited_notification_item.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/event_join_request_notification_item.dart';
@@ -128,6 +129,20 @@ class NotificationCardView extends StatelessWidget {
             if (notification.type ==
                 Enum$NotificationType.user_friendship_request.name) {
               return FriendRequestNotificationItem(
+                notification: notification,
+                onRemove: () {
+                  onRemove?.call(
+                    index,
+                    notification,
+                    false,
+                  );
+                },
+              );
+            }
+
+            if (notification.type ==
+                Enum$NotificationType.event_cohost_request.name) {
+              return CohostRequestNotificationItem(
                 notification: notification,
                 onRemove: () {
                   onRemove?.call(

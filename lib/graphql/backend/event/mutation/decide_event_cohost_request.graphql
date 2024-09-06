@@ -1,0 +1,3 @@
+mutation DecideEventCohostRequest($input: DecideEventCohostRequestInput!) {
+  decideEventCohostRequest(input: $input)
+}

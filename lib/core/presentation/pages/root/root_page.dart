@@ -15,8 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:upgrader/upgrader.dart';
 
-import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-
 @RoutePage(name: 'RootRoute')
 class RootPage extends StatefulWidget {
   const RootPage({super.key});
@@ -55,7 +53,6 @@ class _RootPageViewState extends State<RootPage> {
           );
         },
         builder: (context, authState) {
-          context.read<NewsfeedListingBloc>().add(NewsfeedListingEvent.fetch());
           return UpgradeAlert(
             upgrader: Upgrader(
               durationUntilAlertAgain: const Duration(seconds: 30),
@@ -76,7 +73,7 @@ class _RootPageViewState extends State<RootPage> {
                   backgroundColor: primaryColor,
                   routes: [
                     const HomeRoute(),
-                    const DiscoverRoute(),
+                    DiscoverRoute(),
                     authState.maybeWhen(
                       authenticated: (session) => const NotificationRoute(),
                       orElse: EmptyRoute.new,
