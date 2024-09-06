@@ -103,6 +103,10 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: AIRoute.page),
         AutoRoute(page: MyEventsRoute.page),
         AutoRoute(path: '/chat/detail/:id', page: ChatRoute.page),
+        AutoRoute(
+          path: '/pending-invites',
+          page: HomePendingInvitesRoute.page,
+        ),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
