@@ -12,7 +12,6 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 part 'event.freezed.dart';
 part 'event.g.dart';

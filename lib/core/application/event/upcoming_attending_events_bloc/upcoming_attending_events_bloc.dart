@@ -16,7 +16,9 @@ class UpcomingAttendingEventsBloc
     on<UpcomingAttendingEventsEvent>(_onFetch);
   }
   Future<void> _onFetch(
-      UpcomingAttendingEventsEvent event, Emitter emit) async {
+    UpcomingAttendingEventsEvent event,
+    Emitter emit,
+  ) async {
     if (userId.isEmpty) {
       return emit(UpcomingAttendingEventsState.fetched(events: []));
     }
