@@ -4,7 +4,6 @@ import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/horizontal_collaborator_likes_list.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

@@ -4,8 +4,10 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/router/app_router.gr.dart';
 
 class PendingInvitesCard extends StatelessWidget {
   final int count;
@@ -15,7 +17,9 @@ class PendingInvitesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        AutoRouter.of(context).push(const HomePendingInvitesRoute());
+      },
       child: Container(
         padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(

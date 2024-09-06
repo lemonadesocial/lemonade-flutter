@@ -7,6 +7,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -99,6 +100,7 @@ class _PersonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: 68.w,
       child: Column(
@@ -115,25 +117,39 @@ class _PersonItem extends StatelessWidget {
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
-                      width: 2.w,
-                      color: LemonColor.paleViolet,
+                      width: 1.w,
+                      color: colorScheme.onPrimary,
                     ),
                     borderRadius: BorderRadius.circular(64.r),
                   ),
                 ),
-                child: LemonNetworkImage(
-                  imageUrl: swipe.otherExpanded?.imageAvatar ?? '',
-                  width: 60.w,
-                  height: 60.w,
-                  borderRadius: BorderRadius.circular(60.w),
-                  placeholder: ImagePlaceholder.avatarPlaceholder(),
+                child: Padding(
+                  padding: EdgeInsets.all(2.w),
+                  child: LemonNetworkImage(
+                    imageUrl: swipe.otherExpanded?.imageAvatar ?? '',
+                    width: 60.w,
+                    height: 60.w,
+                    borderRadius: BorderRadius.circular(60.w),
+                    placeholder: ImagePlaceholder.avatarPlaceholder(),
+                  ),
                 ),
               ),
               if (swipe.message?.isNotEmpty == true)
                 Positioned(
-                  bottom: 4.w,
-                  right: 4.w,
-                  child: Assets.icons.icCollaboratorBubbleChat.svg(),
+                  bottom: 2.w,
+                  right: 2.w,
+                  child: Container(
+                    width: Sizing.xxSmall * 1.5,
+                    height: Sizing.xxSmall * 1.5,
+                    decoration: BoxDecoration(
+                      color: LemonColor.coralReef,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: colorScheme.background,
+                        width: 3.w,
+                      ),
+                    ),
+                  ),
                 ),
             ],
           ),

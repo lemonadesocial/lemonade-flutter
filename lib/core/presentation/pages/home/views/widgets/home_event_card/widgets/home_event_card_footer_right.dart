@@ -31,38 +31,35 @@ class HomeEventCardFooterRight extends StatelessWidget {
     } else if (isAttending) {
       label = t.common.actions.viewTicket;
     }
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-        decoration: ShapeDecoration(
-          color: LemonColor.white09,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              LemonRadius.small / 2,
-            ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+      decoration: ShapeDecoration(
+        color: LemonColor.white09,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            LemonRadius.small / 2,
           ),
         ),
-        child: Row(
-          children: [
-            Text(
-              label,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
-                height: 0,
-              ),
+      ),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: Typo.small.copyWith(
+              color: colorScheme.onSecondary,
+              height: 0,
             ),
-            const SizedBox(width: 6),
-            ThemeSvgIcon(
-              color: colorScheme.onSurfaceVariant,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                width: 15.w,
-                height: 15.w,
-                colorFilter: filter,
-              ),
+          ),
+          const SizedBox(width: 6),
+          ThemeSvgIcon(
+            color: colorScheme.onSurfaceVariant,
+            builder: (filter) => Assets.icons.icArrowRight.svg(
+              width: 15.w,
+              height: 15.w,
+              colorFilter: filter,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

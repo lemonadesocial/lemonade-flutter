@@ -14,6 +14,8 @@ import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_c
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
+import 'package:app/graphql/backend/notification/query/get_notifications.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
@@ -22,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/view_more_events_card.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -127,17 +130,53 @@ class _HomeViewState extends State<_HomeView> {
           sliver: DiscoverCollaborators(),
         ),
         if (userId.isNotEmpty)
-          SliverPadding(
-            padding: EdgeInsets.symmetric(
-              vertical: 30.w,
-              horizontal: Spacing.small,
-            ),
-            sliver: const SliverToBoxAdapter(
-              child: PendingInvitesCard(
-                count: 6,
+          Query$GetNotifications$Widget(
+            options: Options$Query$GetNotifications(
+              fetchPolicy: FetchPolicy.networkOnly,
+              variables: Variables$Query$GetNotifications(
+                limit: 20,
+                skip: 0,
+                type: Input$NotificationTypeFilterInput(
+                  $in: [
+                    Enum$NotificationType.event_cohost_request,
+                    Enum$NotificationType.event_invite,
+                    Enum$NotificationType.user_friendship_request,
+                  ],
+                ),
               ),
             ),
+            builder: (result, {refetch, fetchMore}) {
+              if (result.hasException ||
+                  result.isLoading ||
+                  result.data == null) {
+                return SliverToBoxAdapter(
+                  child: Loading.defaultLoading(context),
+                );
+              }
+              final notifications = result.parsedData?.getNotifications ?? [];
+              if (notifications.isEmpty) {
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              }
+
+              return SliverPadding(
+                padding: EdgeInsets.only(
+                  top: 30.w,
+                  left: Spacing.small,
+                  right: Spacing.small,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: PendingInvitesCard(
+                    count: notifications.length,
+                  ),
+                ),
+              );
+            },
           ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 30.w,
+          ),
+        ),
         if (userId.isNotEmpty)
           SliverPadding(
             padding: EdgeInsets.symmetric(
