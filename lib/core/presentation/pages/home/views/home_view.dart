@@ -3,13 +3,13 @@ import 'package:app/core/application/event/events_listing_bloc/base_events_listi
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_collaborators.dart';
 import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -21,6 +21,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/view_more_events_card.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -50,7 +51,7 @@ class HomeView extends StatelessWidget {
             ),
         ),
       ],
-      child: _HomeView(),
+      child: const _HomeView(),
     );
   }
 }
@@ -72,6 +73,40 @@ class _HomeViewState extends State<_HomeView> {
     context.read<HomeEventListingBloc>().add(
           BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter),
         );
+  }
+
+  Widget _buildHostingEventsList(List<Event> hostingEvents) {
+    const int maxVisibleEvents = 2;
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.event.hosting.toUpperCase(),
+          style: Typo.small.copyWith(
+            color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: Spacing.small),
+        ...hostingEvents.take(maxVisibleEvents).map(
+              (event) => Padding(
+                padding: EdgeInsets.only(bottom: Spacing.xSmall),
+                child: HomeEventCard(event: event),
+              ),
+            ),
+        if (hostingEvents.length > maxVisibleEvents)
+          Padding(
+            padding: EdgeInsets.only(top: Spacing.xSmall),
+            child: ViewMoreEventsCard(
+              moreEventsCount: hostingEvents.length - maxVisibleEvents,
+            ),
+          ),
+        SizedBox(height: Spacing.medium),
+      ],
+    );
   }
 
   @override
@@ -111,77 +146,14 @@ class _HomeViewState extends State<_HomeView> {
             sliver: BlocBuilder<UpcomingHostingEventsBloc,
                 UpcomingHostingEventsState>(
               builder: (context, hostingState) {
-                return BlocBuilder<UpcomingAttendingEventsBloc,
-                    UpcomingAttendingEventsState>(
-                  builder: (context, upcomingAttendingEventsState) {
-                    return hostingState.when(
-                      loading: () => SliverToBoxAdapter(
-                        child: Loading.defaultLoading(context),
-                      ),
-                      failure: () =>
-                          const SliverToBoxAdapter(child: EmptyList()),
-                      fetched: (hostingEvents) {
-                        return upcomingAttendingEventsState.when(
-                          loading: () => SliverToBoxAdapter(
-                            child: Loading.defaultLoading(context),
-                          ),
-                          failure: () =>
-                              const SliverToBoxAdapter(child: EmptyList()),
-                          fetched: (upcomingAttendingEvents) {
-                            if (hostingEvents.isEmpty &&
-                                upcomingAttendingEvents.isEmpty) {
-                              return const SliverToBoxAdapter(
-                                child: NoUpcomingEventsCard(),
-                              );
-                            }
-
-                            return SliverList(
-                              delegate: SliverChildListDelegate([
-                                if (hostingEvents.isNotEmpty) ...[
-                                  Text(
-                                    t.event.hosting.toUpperCase(),
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onPrimary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: Spacing.small),
-                                  ...hostingEvents.map(
-                                    (event) => Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: Spacing.xSmall,
-                                      ),
-                                      child: HomeEventCard(event: event),
-                                    ),
-                                  ),
-                                  SizedBox(height: Spacing.medium),
-                                ],
-                                if (upcomingAttendingEvents.isNotEmpty) ...[
-                                  Text(
-                                    t.event.myEvents.toUpperCase(),
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onPrimary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: Spacing.small),
-                                  ...upcomingAttendingEvents.map(
-                                    (event) => Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: Spacing.xSmall,
-                                      ),
-                                      child: HomeEventCard(event: event),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: Spacing.medium,
-                                  ),
-                                ],
-                              ]),
-                            );
-                          },
-                        );
-                      },
+                return hostingState.when(
+                  loading: () => SliverToBoxAdapter(
+                    child: Loading.defaultLoading(context),
+                  ),
+                  failure: () => const SliverToBoxAdapter(child: EmptyList()),
+                  fetched: (hostingEvents) {
+                    return SliverToBoxAdapter(
+                      child: _buildHostingEventsList(hostingEvents),
                     );
                   },
                 );

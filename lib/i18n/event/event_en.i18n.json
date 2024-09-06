@@ -689,7 +689,8 @@
     "pendingCount": "$n pending",
     "manage": "Manage",
     "liveNow": "LIVE NOW",
-    "startsIn": "Starts in $time",
+    "startingIn": "Starting in $time",
     "noUpcomingEvents": "No Upcoming Events",
-    "noUpcomingEventsDescription": "Events you are attending & hosting will show up here"
+    "noUpcomingEventsDescription": "Events you are attending & hosting will show up here",
+    "register": "Register"
 }

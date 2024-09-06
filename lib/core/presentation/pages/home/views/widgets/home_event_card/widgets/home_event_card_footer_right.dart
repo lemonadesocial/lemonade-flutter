@@ -25,7 +25,7 @@ class HomeEventCardFooterRight extends StatelessWidget {
     final isCohost = EventUtils.isCohost(event: event, userId: userId);
     final isAttending = EventUtils.isAttending(event: event, userId: userId);
     final colorScheme = Theme.of(context).colorScheme;
-    var label = '';
+    var label = t.event.register;
     if (isOwnEvent || isCohost) {
       label = t.event.manage;
     } else if (isAttending) {

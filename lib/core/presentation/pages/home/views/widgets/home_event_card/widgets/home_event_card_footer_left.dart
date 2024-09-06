@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_price_info.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,7 +12,6 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart'; // Add this import
 
 class HomeEventCardFooterLeft extends StatelessWidget {
   final Event event;
@@ -29,8 +29,9 @@ class HomeEventCardFooterLeft extends StatelessWidget {
           orElse: () => '',
         );
     final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
+    final isCohost = EventUtils.isCohost(event: event, userId: userId);
     final isAttending = EventUtils.isAttending(event: event, userId: userId);
-    if (isOwnEvent) {
+    if (isOwnEvent || isCohost) {
       return Row(
         children: [
           Row(
@@ -79,7 +80,7 @@ class HomeEventCardFooterLeft extends StatelessWidget {
       return _buildAttendingLabel(context);
     }
 
-    return const SizedBox.shrink();
+    return HomeEventCardPriceInfo(event: event);
   }
 
   Widget _buildAttendingLabel(BuildContext context) {
@@ -95,7 +96,7 @@ class HomeEventCardFooterLeft extends StatelessWidget {
     final formattedTime = _formatTimeUntilEvent(difference);
     return _buildLabel(
       context,
-      t.event.startsIn(time: formattedTime),
+      t.event.startingIn(time: formattedTime),
       colorScheme.onSecondary,
     );
   }
@@ -107,7 +108,9 @@ class HomeEventCardFooterLeft extends StatelessWidget {
     } else if (difference.inDays > 0) {
       return '${difference.inDays} ${difference.inDays == 1 ? 'day' : 'days'}';
     } else {
-      return DateFormat.Hm().format(DateTime.now().add(difference));
+      final hours = difference.inHours;
+      final minutes = difference.inMinutes.remainder(60);
+      return '${hours}h ${minutes}m';
     }
   }
 

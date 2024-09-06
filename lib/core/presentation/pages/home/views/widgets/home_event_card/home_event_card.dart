@@ -88,12 +88,17 @@ class HomeEventCard extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: Spacing.extraSmall),
-                            Container(
-                              width: 3.w,
-                              height: 3.w,
-                              decoration: BoxDecoration(
-                                color: LemonColor.white18,
-                                shape: BoxShape.circle,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 2.w,
+                              ),
+                              child: Container(
+                                width: 3.w,
+                                height: 3.w,
+                                decoration: BoxDecoration(
+                                  color: LemonColor.white18,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
                             SizedBox(width: Spacing.extraSmall),
