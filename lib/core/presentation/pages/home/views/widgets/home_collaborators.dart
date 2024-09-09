@@ -50,16 +50,12 @@ class HomeCollaborators extends StatelessWidget {
             .where((element) => element.user1 != loggedInUserId)
             .toList();
         if (pendingSwipes.isEmpty) {
-          return const SliverToBoxAdapter(
-            child: _EmptyCollaboratorLikes(),
-          );
+          return const _EmptyCollaboratorLikes();
         }
-        return SliverToBoxAdapter(
-          child: HorizontalCollaboratorLikesList(
-            headerVisible: false,
-            pendingSwipes: pendingSwipes,
-            refetch: refetch,
-          ),
+        return HorizontalCollaboratorLikesList(
+          headerVisible: false,
+          pendingSwipes: pendingSwipes,
+          refetch: refetch,
         );
       },
     );

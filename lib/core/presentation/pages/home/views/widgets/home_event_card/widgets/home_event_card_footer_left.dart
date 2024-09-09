@@ -102,14 +102,15 @@ class HomeEventCardFooterLeft extends StatelessWidget {
   }
 
   String _formatTimeUntilEvent(Duration difference) {
-    if (difference.inDays >= 7) {
-      final weeks = (difference.inDays / 7).floor();
-      return '$weeks ${weeks == 1 ? 'week' : 'weeks'}';
-    } else if (difference.inDays > 0) {
-      return '${difference.inDays} ${difference.inDays == 1 ? 'day' : 'days'}';
+    final absoluteDifference = difference.abs();
+    if (absoluteDifference.inDays >= 7) {
+      final weeks = (absoluteDifference.inDays / 7).floor();
+      return t.common.week(n: weeks);
+    } else if (absoluteDifference.inDays > 0) {
+      return t.common.day(n: absoluteDifference.inDays);
     } else {
-      final hours = difference.inHours;
-      final minutes = difference.inMinutes.remainder(60);
+      final hours = absoluteDifference.inHours;
+      final minutes = absoluteDifference.inMinutes.remainder(60);
       return '${hours}h ${minutes}m';
     }
   }

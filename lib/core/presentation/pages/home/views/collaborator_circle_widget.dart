@@ -4,6 +4,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollaboratorCircleWidget extends StatelessWidget {
   const CollaboratorCircleWidget({super.key});
@@ -12,8 +13,8 @@ class CollaboratorCircleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      width: Sizing.xLarge,
-      height: Sizing.xLarge,
+      width: 63.w,
+      height: 63.w,
       padding: EdgeInsets.all(Spacing.small),
       decoration: ShapeDecoration(
         gradient: LinearGradient(

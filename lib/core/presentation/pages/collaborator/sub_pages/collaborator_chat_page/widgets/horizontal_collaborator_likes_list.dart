@@ -1,6 +1,6 @@
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
-import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_circle_widget.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_counter_widget.dart';
+import 'package:app/core/presentation/pages/home/views/collaborator_circle_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -65,7 +65,7 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
             ),
           ),
         SizedBox(
-          height: 65.w,
+          height: 64.w,
           child: ListView.separated(
             padding: EdgeInsets.only(left: Spacing.xSmall),
             itemCount: pendingSwipes.length + 1,

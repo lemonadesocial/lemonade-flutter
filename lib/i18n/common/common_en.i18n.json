@@ -210,5 +210,13 @@
     "result(ordinal)": {
         "one": "$n result",
         "other": "$n results"
+    },
+    "day(ordinal)": {
+        "one": "$n day",
+        "other": "$n days"
+    },
+    "week(ordinal)": {
+        "one": "$n week",
+        "other": "$n weeks"
     }
 }
