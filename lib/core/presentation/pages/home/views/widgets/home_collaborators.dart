@@ -1,8 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/collaborator/dtos/user_discovery_swipe_dto/user_discovery_swipe_dto.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
-import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/collaborator_circle_widget.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/horizontal_collaborator_likes_list.dart';
+import 'package:app/core/presentation/pages/home/views/collaborator_circle_widget.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -13,8 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class DiscoverCollaborators extends StatelessWidget {
-  const DiscoverCollaborators({super.key});
+class HomeCollaborators extends StatelessWidget {
+  const HomeCollaborators({super.key});
 
   @override
   Widget build(BuildContext context) {

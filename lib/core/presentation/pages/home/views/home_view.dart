@@ -6,8 +6,8 @@ import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
-import 'package:app/core/presentation/pages/discover/discover_page/views/discover_collaborators.dart';
 import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
@@ -93,7 +93,7 @@ class _HomeViewState extends State<_HomeView> {
           padding: EdgeInsets.only(
             top: 0,
           ),
-          sliver: DiscoverCollaborators(),
+          sliver: HomeCollaborators(),
         ),
         if (userId.isNotEmpty)
           Query$GetNotifications$Widget(
