@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
@@ -29,6 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal_flutter;
 
 class PayoutAccountsWidget extends StatefulWidget {
@@ -207,16 +210,20 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
                 loggedInUser?.stripeConnectedAccount != null &&
                     loggedInUser?.stripeConnectedAccount?.connected == true;
             return PayoutAccountItem(
-              title: t.event.ticketTierSetting.creditDebit,
-              subTitle: hasStripeConnected
-                  ? t.event.ticketTierSetting.connected
-                  : t.event.ticketTierSetting.connectAccount,
-              icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icBank.svg(
-                  colorFilter: filter,
-                ),
-              ),
+              radiusTop: true,
+              radiusBottom: false,
+              title: hasStripeConnected
+                  ? t.event.ticketTierSetting.stripeConnected
+                  : t.event.ticketTierSetting.connectStripe,
+              subTitle: t.event.ticketTierSetting.connectStripeDesc,
+              icon: hasStripeConnected
+                  ? Assets.icons.icStripe.svg()
+                  : ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icBank.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
               buttonBuilder: () {
                 if (hasStripeConnected) {
                   return LinearGradientButton(
@@ -240,24 +247,45 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
             );
           },
         ),
-        SizedBox(height: Spacing.xSmall),
-        FutureBuilder<web3modal_flutter.W3MSession?>(
-          future: getIt<WalletConnectService>().getActiveSession(),
-          builder: (context, walletConnectSnapshot) {
-            final activeSession = walletConnectSnapshot.data;
+        Divider(
+          height: 1,
+          color: colorScheme.outline,
+        ),
+        BlocBuilder<WalletBloc, WalletState>(
+          builder: (context, state) {
+            final fallbackIcon = ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icWallet.svg(
+                colorFilter: filter,
+              ),
+            );
+            final activeSession = state.activeSession;
             final userWalletAddress =
                 getIt<WalletConnectService>().w3mService.session?.address ?? '';
             return PayoutAccountItem(
-              title: t.event.ticketTierSetting.crypto,
+              radiusTop: false,
+              radiusBottom: true,
+              title: activeSession != null
+                  ? t.event.ticketTierSetting.walletConnected
+                  : t.event.ticketTierSetting.connectWallet,
               subTitle: activeSession != null
                   ? Web3Utils.formatIdentifier(userWalletAddress)
-                  : t.common.actions.connectWallet,
-              icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icWallet.svg(
-                  colorFilter: filter,
-                ),
-              ),
+                  : t.event.ticketTierSetting.connectWalletDesc,
+              icon: activeSession != null
+                  ? LemonNetworkImage(
+                      imageUrl: explorerService.instance.getWalletImageUrl(
+                        getIt<WalletConnectService>()
+                                .w3mService
+                                .selectedWallet
+                                ?.listing
+                                .imageId ??
+                            '',
+                      ),
+                      height: Sizing.mSmall,
+                      width: Sizing.mSmall,
+                      placeholder: fallbackIcon,
+                    )
+                  : fallbackIcon,
               buttonBuilder: () {
                 if (activeSession != null) {
                   return InkWell(
@@ -296,6 +324,8 @@ class PayoutAccountItem extends StatelessWidget {
   final String subTitle;
   final Widget icon;
   final Widget Function()? buttonBuilder;
+  final bool radiusTop;
+  final bool radiusBottom;
 
   const PayoutAccountItem({
     super.key,
@@ -303,6 +333,8 @@ class PayoutAccountItem extends StatelessWidget {
     required this.subTitle,
     required this.icon,
     this.buttonBuilder,
+    this.radiusTop = false,
+    this.radiusBottom = false,
   });
 
   @override
@@ -312,21 +344,20 @@ class PayoutAccountItem extends StatelessWidget {
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
         color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.small),
+        borderRadius: BorderRadius.only(
+          topLeft:
+              radiusTop ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          topRight:
+              radiusTop ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          bottomLeft:
+              radiusBottom ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          bottomRight:
+              radiusBottom ? Radius.circular(LemonRadius.medium) : Radius.zero,
+        ),
       ),
       child: Row(
         children: [
-          Container(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            decoration: BoxDecoration(
-              color: colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(Sizing.medium),
-            ),
-            child: Center(
-              child: icon,
-            ),
-          ),
+          icon,
           SizedBox(width: Spacing.xSmall),
           Expanded(
             child: Column(

@@ -19,7 +19,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
 class EventTicketTiersListingPage extends StatelessWidget {
-  final Function()? onNext;
+  final Function(BuildContext context)? onNext;
   const EventTicketTiersListingPage({
     super.key,
     this.onNext,
@@ -33,33 +33,41 @@ class EventTicketTiersListingPage extends StatelessWidget {
           fetched: (event) => event,
           orElse: () => null,
         );
+    if (event == null) {
+      return Scaffold(
+        backgroundColor: colorScheme.background,
+        appBar: const LemonAppBar(),
+        body: Center(
+          child: Loading.defaultLoading(context),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(),
       body: Query$ListEventTicketTypes$Widget(
         options: Options$Query$ListEventTicketTypes(
           variables: Variables$Query$ListEventTicketTypes(
-            event: event?.id ?? '',
+            event: event.id ?? '',
           ),
           fetchPolicy: FetchPolicy.networkOnly,
           onComplete: (data, parsedData) {
-            if (event != null) {
-              final ticketTypes = parsedData?.listEventTicketTypes.map((item) {
-                    return EventTicketType.fromDto(
-                      EventTicketTypeDto.fromJson(
-                        item.toJson(),
-                      ),
-                    );
-                  }).toList() ??
-                  [];
-              context.read<GetEventDetailBloc>().add(
-                    GetEventDetailEvent.replace(
-                      event: event.copyWith(
-                        eventTicketTypes: ticketTypes,
-                      ),
+            final ticketTypes = parsedData?.listEventTicketTypes.map((item) {
+                  return EventTicketType.fromDto(
+                    EventTicketTypeDto.fromJson(
+                      item.toJson(),
                     ),
                   );
-            }
+                }).toList() ??
+                [];
+            context.read<GetEventDetailBloc>().add(
+                  GetEventDetailEvent.replace(
+                    event: event.copyWith(
+                      eventTicketTypes: ticketTypes,
+                    ),
+                  ),
+                );
           },
         ),
         builder: (result, {refetch, fetchMore}) {
@@ -100,34 +108,34 @@ class EventTicketTiersListingPage extends StatelessWidget {
                         height: Spacing.smMedium * 2,
                       ),
                     ),
-                    if (event != null)
-                      Builder(
-                        builder: (context) {
-                          if (result.isLoading) {
-                            return SliverToBoxAdapter(
-                              child: Loading.defaultLoading(context),
-                            );
-                          }
-                          if (result.hasException || result.parsedData == null) {
-                            return const SliverToBoxAdapter(
-                              child: EmptyList(),
-                            );
-                          }
-                          final ticketTypes = result.parsedData?.listEventTicketTypes.map((item) {
-                                return EventTicketType.fromDto(
-                                  EventTicketTypeDto.fromJson(
-                                    item.toJson(),
-                                  ),
-                                );
-                              }).toList() ??
-                              [];
-                          return EventTicketTiersList(
-                            event: event,
-                            onRefreshTicketTiersList: () => refetch?.call(),
-                            ticketTypes: ticketTypes,
+                    Builder(
+                      builder: (context) {
+                        if (result.isLoading) {
+                          return SliverToBoxAdapter(
+                            child: Loading.defaultLoading(context),
                           );
-                        },
-                      ),
+                        }
+                        if (result.hasException || result.parsedData == null) {
+                          return const SliverToBoxAdapter(
+                            child: EmptyList(),
+                          );
+                        }
+                        final ticketTypes =
+                            result.parsedData?.listEventTicketTypes.map((item) {
+                                  return EventTicketType.fromDto(
+                                    EventTicketTypeDto.fromJson(
+                                      item.toJson(),
+                                    ),
+                                  );
+                                }).toList() ??
+                                [];
+                        return EventTicketTiersList(
+                          event: event,
+                          onRefreshTicketTiersList: () => refetch?.call(),
+                          ticketTypes: ticketTypes,
+                        );
+                      },
+                    ),
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
                         vertical: Spacing.smMedium,
@@ -154,6 +162,7 @@ class EventTicketTiersListingPage extends StatelessWidget {
                     ),
                     child: SafeArea(
                       child: LinearGradientButton.secondaryButton(
+                        onTap: () => onNext?.call(context),
                         label: t.common.next,
                       ),
                     ),

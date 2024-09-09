@@ -304,7 +304,13 @@
             "name": "Name",
             "description": "Description"
         },
-        "emptyTicketTypes": "No ticket tiers found"
+        "emptyTicketTypes": "No ticket tiers found",
+        "connectStripe": "Connect Stripe",
+        "connectStripeDesc": "Receive debit/credit payments",
+        "connectWallet": "Connect Wallet",
+        "connectWalletDesc": "Receive crypto payments",
+        "stripeConnected": "Stripe connected",
+        "walletConnected": "Wallet connected"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
