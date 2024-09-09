@@ -108,15 +108,12 @@ class EventTicketTiersListingPage extends StatelessWidget {
                               child: Loading.defaultLoading(context),
                             );
                           }
-                          if (result.hasException ||
-                              result.parsedData == null) {
+                          if (result.hasException || result.parsedData == null) {
                             return const SliverToBoxAdapter(
                               child: EmptyList(),
                             );
                           }
-                          final ticketTypes = result
-                                  .parsedData?.listEventTicketTypes
-                                  .map((item) {
+                          final ticketTypes = result.parsedData?.listEventTicketTypes.map((item) {
                                 return EventTicketType.fromDto(
                                   EventTicketTypeDto.fromJson(
                                     item.toJson(),

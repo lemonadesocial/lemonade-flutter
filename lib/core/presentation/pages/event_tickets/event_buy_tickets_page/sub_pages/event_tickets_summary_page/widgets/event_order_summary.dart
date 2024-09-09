@@ -30,6 +30,11 @@ class EventOrderSummary extends StatelessWidget {
         (pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ?? BigInt.zero);
   }
 
+  double get _totalFiatAmount {
+    return (pricingInfo.fiatTotal ?? 0) +
+        (pricingInfo.paymentAccounts?.firstOrNull?.fiatFee ?? 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -138,8 +143,9 @@ class EventOrderSummary extends StatelessWidget {
                       decimals: currencyInfo?.decimals ?? 0,
                     )
                   : NumberUtils.formatCurrency(
-                      amount: pricingInfo.fiatTotal ?? 0,
+                      amount: _totalFiatAmount,
                       currency: selectedCurrency,
+                      attemptedDecimals: currencyInfo?.decimals ?? 2,
                     ),
               textStyle: Typo.mediumPlus.copyWith(
                 color: colorScheme.onPrimary,

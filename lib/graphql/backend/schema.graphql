@@ -50,12 +50,8 @@ type Query {
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
-  getEventSessionReservations(
-    input: GetEventSessionReservationsInput
-  ): [EventSessionReservation!]!
-  getEventSessionReservationSummary(
-    input: GetEventSessionReservationSummaryInput!
-  ): [EventSessionReservationSummary!]!
+  getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
+  getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
   getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
@@ -81,22 +77,9 @@ type Query {
   getRoomCredentials(input: GetRoomCredentialsInput!): RoomCredentials!
   getSafeFreeLimit(network: String!): FreeSafeInitInfo!
   getInitSafeTransaction(input: GetInitSafeTransactionInput!): RawTransaction!
-  getSites(
-    skip: Int! = 0
-    limit: Int! = 25
-    _id: [MongoID!]
-    active: Boolean
-  ): [Site!]!
-  listSpaceMembers(
-    space: MongoID!
-    role: SpaceRole
-    state: SpaceMembershipState
-    visible: Boolean
-  ): [SpaceMember!]!
-  listSpaceRoleFeatures(
-    space: MongoID!
-    role: SpaceRole!
-  ): ListSpaceRoleFeaturesResponse!
+  getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
+  listSpaceMembers(space: MongoID!, role: SpaceRole, state: SpaceMembershipState, visible: Boolean): [SpaceMember!]!
+  listSpaceRoleFeatures(space: MongoID!, role: SpaceRole!): ListSpaceRoleFeaturesResponse!
   getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
   getStoreCategory(_id: MongoID!): StoreCategory
   getStoreCategories(skip: Int! = 0, limit: Int! = 25, store: MongoID, parents: MongoID): [StoreCategory!]!
@@ -108,7 +91,7 @@ type Query {
   getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
   getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
-  getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
+  getStripeCards(skip: Int! = 0, limit: Int! = 25): [StripeCard!]!
   tgGetMyChannels(input: ScanChannelsInput!): ScanChannelsResult!
   joinChannel(event_ids: MongoID!): Boolean!
   exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
@@ -248,6 +231,7 @@ type User {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -359,6 +343,11 @@ enum UserPaymentVerificationState {
 type UserDao {
   network: String!
   address: String!
+}
+
+type StripeConnectedAccount {
+  account_id: String!
+  connected: Boolean
 }
 
 type UserIcebreaker {
@@ -1460,6 +1449,7 @@ type UserWithEmail {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -2367,7 +2357,6 @@ type StripeCard {
   _id: MongoID!
   active: Boolean!
   stamp: DateTimeISO!
-  payment_account: MongoID!
   provider_id: String!
   user: MongoID!
   brand: String!
@@ -2757,11 +2746,7 @@ type Mutation {
   deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
   updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
   requestSpaceMembership(space: MongoID!): SpaceMember!
-  decideSpaceMembership(
-    decision: Boolean!
-    user: MongoID!
-    space: MongoID!
-  ): SpaceMember
+  decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   createSpace(input: SpaceInput!): Space!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
   pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
@@ -2788,8 +2773,10 @@ type Mutation {
   createStore(input: StoreInput!): Store!
   updateStore(_id: MongoID!, input: StoreInput!): Store!
   deleteStore(_id: MongoID!): Boolean!
-  createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
+  createStripeCard(payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
+  disconnectStripeAccount: Boolean!
+  generateStripeAccountLink(refresh_url: String!, return_url: String!): GenerateStripeAccountLinkResponse!
   tgSendCode(input: SendCodeInput!): String!
   tgVerify(input: VerifyCodeInput!): Boolean!
   tgUnlinkAccount: Boolean!
@@ -3579,9 +3566,7 @@ type Space {
   description: String
   creator: MongoID!
 
-  """
-  Private space requires moderation for membership
-  """
+  """Private space requires moderation for membership"""
   private: Boolean
   followers: [MongoID!]
   daos: SpaceDao
@@ -3589,9 +3574,7 @@ type Space {
   handle_instagram: String
   events: [MongoID!]
 
-  """
-  Events that are being listed on space home page
-  """
+  """Events that are being listed on space home page"""
   listed_events: [MongoID!]
 }
 
@@ -3605,9 +3588,7 @@ input SpaceInput {
   title: String!
   description: String
 
-  """
-  Private space requires moderation for membership
-  """
+  """Private space requires moderation for membership"""
   private: Boolean
   handle_twitter: String
   handle_instagram: String
@@ -3746,6 +3727,10 @@ input SalesTaxInput {
   ratio_map: JSON
   countries: [String!]
   regions: [String!]
+}
+
+type GenerateStripeAccountLinkResponse {
+  url: String!
 }
 
 input SendCodeInput {

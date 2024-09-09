@@ -17,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class EventTicketsPaymentMethodPage extends StatelessWidget {
-  final String paymentAccount;
   final String publishableKey;
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
@@ -25,7 +24,6 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
 
   const EventTicketsPaymentMethodPage({
     super.key,
-    required this.paymentAccount,
     required this.publishableKey,
     this.onSelectCard,
     this.onCardAdded,
@@ -92,7 +90,6 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
                                     onPressAdd: () async {
                                       final newCard = await AddCardBottomSheet(
                                         publishableKey: publishableKey,
-                                        paymentAccountId: paymentAccount,
                                       ).showAsBottomSheet(context);
                                       if (newCard != null) {
                                         onCardAdded?.call(newCard);

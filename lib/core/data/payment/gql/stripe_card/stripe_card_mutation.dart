@@ -4,8 +4,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 final createStripeCardMutation = gql('''
   $stripeCardFragment
 
-  mutation CreateStripeCard(\$paymentAccount: MongoID!, \$paymentMethod: String!) {
-    createStripeCard(payment_account: \$paymentAccount, payment_method: \$paymentMethod) {
+  mutation CreateStripeCard(\$paymentMethod: String!) {
+    createStripeCard(payment_method: \$paymentMethod) {
       ...stripeCardFragment
     }
 }

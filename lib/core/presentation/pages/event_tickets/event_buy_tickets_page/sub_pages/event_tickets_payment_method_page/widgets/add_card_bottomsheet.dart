@@ -18,11 +18,9 @@ class AddCardBottomSheet extends StatelessWidget with LemonBottomSheet {
   AddCardBottomSheet({
     super.key,
     required this.publishableKey,
-    required this.paymentAccountId,
   });
 
   final String publishableKey;
-  final String paymentAccountId;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,6 @@ class AddCardBottomSheet extends StatelessWidget with LemonBottomSheet {
       create: (context) => AddNewCardBloc(),
       child: AddCardBottomSheetView(
         publishableKey: publishableKey,
-        paymentAccountId: paymentAccountId,
       ),
     );
   }
@@ -38,12 +35,10 @@ class AddCardBottomSheet extends StatelessWidget with LemonBottomSheet {
 
 class AddCardBottomSheetView extends StatelessWidget {
   final String publishableKey;
-  final String paymentAccountId;
 
   AddCardBottomSheetView({
     super.key,
     required this.publishableKey,
-    required this.paymentAccountId,
   });
 
   final expireDateFocusNode = FocusNode();
@@ -182,7 +177,6 @@ class AddCardBottomSheetView extends StatelessWidget {
                   onTap: state.fieldValidated
                       ? () => addCardBloc.addNewCard(
                             publishableKey: publishableKey,
-                            paymentAccountId: paymentAccountId,
                           )
                       : null,
                   radius: BorderRadius.circular(LemonRadius.large),

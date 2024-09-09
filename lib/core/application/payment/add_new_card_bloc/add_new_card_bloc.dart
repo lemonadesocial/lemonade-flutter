@@ -55,7 +55,6 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
 
   Future<void> addNewCard({
     required String publishableKey,
-    required String paymentAccountId,
   }) async {
     try {
       emit(state.copyWith(status: AddNewCardBlocStatus.loading));
@@ -85,7 +84,6 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
 
       final result = await _paymentRepository.createStripeCard(
         input: CreateStripeCardInput(
-          paymentAccount: paymentAccountId,
           paymentMethod: paymentMethod.id,
         ),
       );

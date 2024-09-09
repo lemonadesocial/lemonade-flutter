@@ -5,7 +5,6 @@ const stripeCardFragment = '''
     _id
     active
     stamp
-    payment_account
     provider_id
     user
     brand
@@ -17,8 +16,8 @@ const stripeCardFragment = '''
 final getStripeCardsQuery = gql('''
   $stripeCardFragment
 
-  query GetStripeCards(\$skip: Int!, \$limit: Int!, \$paymentAccount: MongoID) {
-    getStripeCards(skip: \$skip, limit: \$limit, payment_account: \$paymentAccount) {
+  query GetStripeCards(\$skip: Int!, \$limit: Int!) {
+    getStripeCards(skip: \$skip, limit: \$limit) {
       ...stripeCardFragment
     }
   }
