@@ -4,12 +4,18 @@ import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/ticket_tier_item.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/string_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_ticket_categories.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -63,6 +69,17 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
 
         return MultiSliver(
           children: [
+            SliverToBoxAdapter(
+              child: Text(
+                StringUtils.capitalize(t.event.tickets(n: 2)),
+                style: Typo.mediumPlus.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.xSmall),
+            ),
             if (ticketCategories.isNotEmpty) ...[
               SliverToBoxAdapter(
                 child: SizedBox(
@@ -144,29 +161,49 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: SizedBox(height: Spacing.medium),
+                child: SizedBox(height: Spacing.xSmall),
               ),
             ],
-            if (filteredTicketTypes.isEmpty)
-              SliverToBoxAdapter(
-                child: EmptyList(
-                  emptyText: t.event.ticketTierSetting.emptyTicketTypes,
-                ),
-              ),
-            if (filteredTicketTypes.isNotEmpty)
-              SliverList.separated(
-                separatorBuilder: (context, index) =>
-                    SizedBox(height: Spacing.xSmall),
-                itemBuilder: (context, index) => TicketTierItem(
+            SliverList.separated(
+              separatorBuilder: (context, index) =>
+                  SizedBox(height: Spacing.xSmall),
+              itemBuilder: (context, i) {
+                if (i == 0) {
+                  return LemonOutlineButton(
+                    onTap: () {
+                      AutoRouter.of(context).navigate(
+                        EventCreateTicketTierRoute(
+                          onRefresh: widget.onRefreshTicketTiersList,
+                        ),
+                      );
+                    },
+                    label: t.event.ticketTierSetting.newTicket,
+                    leading: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icAdd.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
+                    height: 50.w,
+                    radius: BorderRadius.circular(LemonRadius.medium),
+                    textStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  );
+                }
+
+                final index = i - 1;
+                return TicketTierItem(
                   isFirst: index == 0,
                   isLast: index == filteredTicketTypes.length - 1,
                   onRefresh: () async {
                     await widget.onRefreshTicketTiersList.call();
                   },
                   eventTicketType: filteredTicketTypes[index],
-                ),
-                itemCount: filteredTicketTypes.length,
-              ),
+                );
+              },
+              itemCount: filteredTicketTypes.length + 1,
+            ),
           ],
         );
       },

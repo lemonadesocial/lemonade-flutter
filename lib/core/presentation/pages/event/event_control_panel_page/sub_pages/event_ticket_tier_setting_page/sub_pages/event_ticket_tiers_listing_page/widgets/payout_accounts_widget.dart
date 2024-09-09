@@ -43,14 +43,6 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.event.ticketTierSetting.payoutAccounts,
-          style: Typo.medium.copyWith(
-            fontWeight: FontWeight.w600,
-            color: colorScheme.onPrimary,
-          ),
-        ),
-        SizedBox(height: Spacing.xSmall),
         PayoutAccountItem(
           title: t.event.ticketTierSetting.creditDebit,
           subTitle: hasStripePaymentAccount

@@ -7,19 +7,23 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/string_utils.dart';
 import 'package:app/graphql/backend/event/query/list_event_ticket_types.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
 class EventTicketTiersListingPage extends StatelessWidget {
-  const EventTicketTiersListingPage({super.key});
+  final Function()? onNext;
+  const EventTicketTiersListingPage({
+    super.key,
+    this.onNext,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +35,7 @@ class EventTicketTiersListingPage extends StatelessWidget {
         );
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: LemonAppBar(
-        title: StringUtils.capitalize(
-          t.event.tickets(n: 2),
-        ),
-      ),
+      appBar: const LemonAppBar(),
       body: Query$ListEventTicketTypes$Widget(
         options: Options$Query$ListEventTicketTypes(
           variables: Variables$Query$ListEventTicketTypes(
@@ -71,6 +71,35 @@ class EventTicketTiersListingPage extends StatelessWidget {
                 ),
                 child: CustomScrollView(
                   slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            t.event.ticketTierSetting.ticketTierSettingTitle,
+                            style: Typo.extraLarge.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                          ),
+                          SizedBox(height: 2.w),
+                          Text(
+                            t.event.ticketTierSetting.ticketTierSettingDesc,
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.smMedium * 2),
+                        ],
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: PayoutAccountsWidget(),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.smMedium * 2,
+                      ),
+                    ),
                     if (event != null)
                       Builder(
                         builder: (context) {
@@ -107,34 +136,32 @@ class EventTicketTiersListingPage extends StatelessWidget {
                         vertical: Spacing.smMedium,
                       ),
                     ),
-                    const SliverToBoxAdapter(
-                      child: PayoutAccountsWidget(),
-                    ),
                     SliverToBoxAdapter(
                       child: SizedBox(height: Spacing.xLarge * 3),
                     ),
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: colorScheme.background,
-                  padding: EdgeInsets.all(Spacing.smMedium),
-                  child: SafeArea(
-                    child: LinearGradientButton.secondaryButton(
-                      onTap: () {
-                        AutoRouter.of(context).navigate(
-                          EventCreateTicketTierRoute(
-                            onRefresh: refetch,
-                          ),
-                        );
-                      },
-                      label: t.event.ticketTierSetting.newTicket,
+              if (onNext != null)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    padding: EdgeInsets.all(Spacing.smMedium),
+                    decoration: BoxDecoration(
+                      color: colorScheme.background,
+                      border: Border(
+                        top: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: LinearGradientButton.secondaryButton(
+                        label: t.common.next,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           );
         },
