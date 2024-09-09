@@ -23,9 +23,7 @@ class HomeCollaborators extends StatelessWidget {
         .state
         .maybeWhen(orElse: () => '', authenticated: (user) => user.userId);
     if (loggedInUserId.isEmpty) {
-      return const SliverToBoxAdapter(
-        child: SizedBox.shrink(),
-      );
+      return const SizedBox.shrink();
     }
     return Query$GetUserDiscoverySwipes$Widget(
       options: Options$Query$GetUserDiscoverySwipes(
