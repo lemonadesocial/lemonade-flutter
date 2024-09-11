@@ -312,7 +312,7 @@ class EventRepositoryImpl implements EventRepository {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(
-      (result.parsedData?.getEventJoinRequests ?? [])
+      (result.parsedData?.getEventJoinRequests.records ?? [])
           .map(
             (item) => EventJoinRequest.fromDto(
               EventJoinRequestDto.fromJson(

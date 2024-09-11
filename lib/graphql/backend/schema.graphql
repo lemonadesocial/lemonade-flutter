@@ -29,10 +29,12 @@ type Query {
   getEventAttestationDiff(chain_id: String!, event: MongoID!): EventAttestationDiff
   getEventEmailSetting(_id: MongoID!): EmailSetting!
   listEventEmailSettings(event: MongoID!, system: Boolean, scheduled: Boolean, sent: Boolean): [EmailSetting!]!
+  getEventFeedbackSummary(event: MongoID!): EventFeedbackSummary!
+  listEventFeedBacks(skip: Int! = 0, limit: Int! = 25, event: MongoID!, rate_value: Float): [EventFeedback!]!
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
-  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState): [EventJoinRequest!]!
+  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState): GetEventJoinRequestsResponse!
   getMyEventJoinRequest(event: MongoID!): EventJoinRequest
   getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getEventPendingInvites: GetEventPendingInvitesResponse!
@@ -50,13 +52,10 @@ type Query {
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
-  getEventSessionReservations(
-    input: GetEventSessionReservationsInput
-  ): [EventSessionReservation!]!
-  getEventSessionReservationSummary(
-    input: GetEventSessionReservationSummaryInput!
-  ): [EventSessionReservationSummary!]!
+  getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
+  getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
   getEventTicketCategories(event: MongoID!): [EventTicketCategory!]!
+  getEventTicketSales(event: MongoID!): EventTicketSaleResponse!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
@@ -81,22 +80,9 @@ type Query {
   getRoomCredentials(input: GetRoomCredentialsInput!): RoomCredentials!
   getSafeFreeLimit(network: String!): FreeSafeInitInfo!
   getInitSafeTransaction(input: GetInitSafeTransactionInput!): RawTransaction!
-  getSites(
-    skip: Int! = 0
-    limit: Int! = 25
-    _id: [MongoID!]
-    active: Boolean
-  ): [Site!]!
-  listSpaceMembers(
-    space: MongoID!
-    role: SpaceRole
-    state: SpaceMembershipState
-    visible: Boolean
-  ): [SpaceMember!]!
-  listSpaceRoleFeatures(
-    space: MongoID!
-    role: SpaceRole!
-  ): ListSpaceRoleFeaturesResponse!
+  getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
+  listSpaceMembers(space: MongoID!, role: SpaceRole, state: SpaceMembershipState, visible: Boolean): [SpaceMember!]!
+  listSpaceRoleFeatures(space: MongoID!, role: SpaceRole!): ListSpaceRoleFeaturesResponse!
   getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
   getStoreCategory(_id: MongoID!): StoreCategory
   getStoreCategories(skip: Int! = 0, limit: Int! = 25, store: MongoID, parents: MongoID): [StoreCategory!]!
@@ -135,7 +121,7 @@ type Query {
   listUserExpertises: [UserExpertise!]!
   getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
   getMe: User!
-  getUser(_id: MongoID, username: String, matrix_localpart: String): User
+  getUser(_id: MongoID, username: String, email: String, matrix_localpart: String): User
   getUsers(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], tag_recommended: Boolean, wallets: [String!], search: String): [User!]!
   getUsersSpotlight: [User!]!
   getUserWalletRequest(wallet: String!): UserWalletRequest!
@@ -442,6 +428,7 @@ type Event {
   accepted: [MongoID!]
   declined: [MongoID!]
   payment_fee: Float!
+  application_required: Boolean
   application_form_url: String
   application_profile_fields: [ApplicationProfileField!]
   accepted_store_promotion: MongoID
@@ -543,6 +530,7 @@ type Event {
   pending_request_count: Float
   sessions: [EventSession!]
   has_terms_accepted: Boolean
+  checkedin: Boolean
   data: JSON
   host_expanded: User
   subevent_parent_expanded: Event
@@ -1334,6 +1322,25 @@ type RecipientDetail {
   image_avatar: String
 }
 
+type EventFeedbackSummary {
+  rates: [RateSummary!]!
+}
+
+type RateSummary {
+  rate_value: Int!
+  count: Int!
+}
+
+type EventFeedback {
+  user: MongoID
+  email: String
+  event: MongoID!
+  rate_value: Float!
+  comment: String
+  created_at: DateTimeISO!
+  user_info: User
+}
+
 type BasicUserInfo {
   _id: MongoID!
   name: String!
@@ -1342,6 +1349,11 @@ type BasicUserInfo {
   job_title: String
   company_name: String
   matrix_localpart: String
+}
+
+type GetEventJoinRequestsResponse {
+  total: Int!
+  records: [EventJoinRequest!]!
 }
 
 type EventJoinRequest {
@@ -1598,6 +1610,17 @@ type EventSessionReservationSummary {
 input GetEventSessionReservationSummaryInput {
   event: MongoID!
   session: MongoID
+}
+
+type EventTicketSaleResponse {
+  last_update: DateTimeISO!
+  sales: [SaleAmountResponse!]!
+}
+
+type SaleAmountResponse {
+  currency: String!
+  amount: String!
+  decimals: Int!
 }
 
 type GetEventTicketTypesResponse {
@@ -2683,6 +2706,7 @@ type Mutation {
   createEventEmailSetting(input: CreateEventEmailSettingInput!): EmailSetting
   updateEventEmailSetting(input: UpdateEventEmailSettingInput!): EmailSetting!
   deleteEventEmailSetting(_id: MongoID!): Boolean!
+  submitEventFeedback(input: SubmitEventFeedbackInput!): Boolean!
   createEventJoinRequest(input: CreateEventJoinRequestInput!): EventJoinRequest!
   decideUserJoinRequests(input: DecideUserJoinRequestsInput!): Boolean!
   createEvent(input: EventInput!): Event!
@@ -2757,11 +2781,7 @@ type Mutation {
   deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
   updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
   requestSpaceMembership(space: MongoID!): SpaceMember!
-  decideSpaceMembership(
-    decision: Boolean!
-    user: MongoID!
-    space: MongoID!
-  ): SpaceMember
+  decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   createSpace(input: SpaceInput!): Space!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
   pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
@@ -2929,6 +2949,12 @@ input UpdateEventEmailSettingInput {
   scheduled_at: DateTimeISO
   recipient_types: [EmailRecipientType!]
   _id: MongoID!
+}
+
+input SubmitEventFeedbackInput {
+  rate_value: Float!
+  comment: String
+  token: String!
 }
 
 input CreateEventJoinRequestInput {
@@ -3579,9 +3605,7 @@ type Space {
   description: String
   creator: MongoID!
 
-  """
-  Private space requires moderation for membership
-  """
+  """Private space requires moderation for membership"""
   private: Boolean
   followers: [MongoID!]
   daos: SpaceDao
@@ -3589,9 +3613,7 @@ type Space {
   handle_instagram: String
   events: [MongoID!]
 
-  """
-  Events that are being listed on space home page
-  """
+  """Events that are being listed on space home page"""
   listed_events: [MongoID!]
 }
 
@@ -3605,9 +3627,7 @@ input SpaceInput {
   title: String!
   description: String
 
-  """
-  Private space requires moderation for membership
-  """
+  """Private space requires moderation for membership"""
   private: Boolean
   handle_twitter: String
   handle_instagram: String

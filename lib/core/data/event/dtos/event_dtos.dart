@@ -85,6 +85,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'subevent_settings') SubEventSettingsDto? subeventSettings,
     @JsonKey(name: 'inherited_cohosts') List<String>? inheritedCohosts,
     List<String>? tags,
+    @JsonKey(name: 'application_required') bool? applicationRequired,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
