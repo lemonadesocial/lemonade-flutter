@@ -12,7 +12,10 @@ query GetEventJoinRequests(
     limit: $limit
     state: $state
   ) {
-    ...EventJoinRequest
+    total
+    records {
+      ...EventJoinRequest
+    }
   }
 }
 
