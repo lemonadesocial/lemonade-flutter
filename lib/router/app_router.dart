@@ -260,18 +260,6 @@ final eventDetailRoutes = AutoRoute(
           ],
         ),
         AutoRoute(
-          page: EventRewardSettingRoute.page,
-          children: [
-            AutoRoute(
-              initial: true,
-              page: EventRewardsListingRoute.page,
-            ),
-            AutoRoute(
-              page: EventCreateRewardRoute.page,
-            ),
-          ],
-        ),
-        AutoRoute(
           page: EventApplicationFormSettingRoute.page,
         ),
         AutoRoute(
@@ -381,6 +369,18 @@ final eventDetailRoutes = AutoRoute(
     ),
     AutoRoute(
       page: SubEventsListingRoute.page,
+    ),
+    AutoRoute(
+      page: EventRewardSettingRoute.page,
+      children: [
+        AutoRoute(
+          initial: true,
+          page: EventRewardsListingRoute.page,
+        ),
+        AutoRoute(
+          page: EventCreateRewardRoute.page,
+        ),
+      ],
     ),
   ],
 );
