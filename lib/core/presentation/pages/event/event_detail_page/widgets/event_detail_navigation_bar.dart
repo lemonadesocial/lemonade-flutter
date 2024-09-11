@@ -360,7 +360,7 @@ class EventDetailNavigationBarItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: feature.backgroundColor ??
                   colorScheme.onPrimary.withOpacity(0.06),
-              borderRadius: BorderRadius.circular(21.r),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: Center(child: feature.iconData),
           ),
