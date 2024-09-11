@@ -57,20 +57,15 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
         if (isVisible) return _hide();
         _show();
       },
-      child: Container(
+      child: SizedBox(
         width: Sizing.medium,
         height: Sizing.medium,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(Sizing.medium),
-          border: Border.all(color: colorScheme.outline),
-        ),
         child: Center(
           child: Assets.icons.icFilter.svg(
             width: 18,
             height: 18,
             colorFilter:
-                ColorFilter.mode(colorScheme.onSurface, BlendMode.srcIn),
+                ColorFilter.mode(colorScheme.onSecondary, BlendMode.srcIn),
           ),
         ),
       ),

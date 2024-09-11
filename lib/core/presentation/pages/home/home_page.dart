@@ -1,12 +1,10 @@
-import 'package:app/core/presentation/pages/home/views/list/home_newsfeed_list.dart';
+import 'package:app/core/presentation/pages/home/views/home_view.dart';
 import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/shake/shake_service.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -55,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         );
     return Scaffold(
       appBar: HomeAppBar(
-        title: t.home.newsfeed,
+        title: "",
         actions: [
           if (isProcessingLogin) ...[
             Loading.defaultLoading(context),
@@ -78,18 +76,7 @@ class _HomePageState extends State<HomePage> {
           ],
           if (isLoggedIn) ...[
             const QuestPointsWidget(),
-            SizedBox(width: Spacing.medium),
-            InkWell(
-              onTap: () {
-                AutoRouter.of(context).navigate(MyEventTicketsListRoute());
-              },
-              child: ThemeSvgIcon(
-                builder: (filter) => Assets.icons.icTicket.svg(
-                  colorFilter: filter,
-                ),
-              ),
-            ),
-            SizedBox(width: Spacing.medium),
+            SizedBox(width: Spacing.xSmall),
             Padding(
               padding: EdgeInsets.only(right: Spacing.xSmall),
               child: const HomeAppBarDefaultMoreActionsWidget(),
@@ -98,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: LemonColor.black,
-      body: const HomeNewsfeedListView(),
+      body: const HomeView(),
     );
   }
 }

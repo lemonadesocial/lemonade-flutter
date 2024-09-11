@@ -52,5 +52,7 @@
         "addPhotosDescription": "Select photos you want to showcase on your collaborators profile!"
     },
     "ageVerificationRequired": "Age Verification Required",
-    "ageVerificationRequiredDescription": "To continue using this feature, please enter your date of birth and confirm that you are at least 18 years old"
+    "ageVerificationRequiredDescription": "To continue using this feature, please enter your date of birth and confirm that you are at least 18 years old",
+    "noMatchesYet": "No matches yet",
+    "noMatchesYetDescription": "Connect to collaborate with like-minded people"
 }

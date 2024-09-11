@@ -681,5 +681,16 @@
         "addVirtualLink": "Add virtual link",
         "addVirtualLinkDescription": "Please enter the virtual event link for your guests to join",
         "enterLink": "Enter link"
-    }
+    },
+    "pendingInvite(ordinal)": {
+        "one": "$n pending invite",
+        "other": "$n pending invites"
+    },
+    "pendingCount": "$n pending",
+    "manage": "Manage",
+    "liveNow": "LIVE NOW",
+    "startingIn": "Starting in $time",
+    "noUpcomingEvents": "No Upcoming Events",
+    "noUpcomingEventsDescription": "Events you are attending & hosting will show up here",
+    "register": "Register"
 }

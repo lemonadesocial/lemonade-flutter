@@ -7,6 +7,7 @@ const eventHostExpandedFragment = '''
     name
     display_name
     username
+    image_avatar
     new_photos_expanded(limit: 1) {
       _id
       key
@@ -375,15 +376,17 @@ final getHostingEventsQuery = gql('''
 ''');
 
 final getUpcomingEventsQuery = gql('''
-  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
-  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip) {
+  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0, \$host: Boolean) {
+  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
     _id
     title
     slug
     host
+    cohosts
     host_expanded {
       _id
       name
+      image_avatar
       new_photos_expanded {
         _id
         key
@@ -403,6 +406,8 @@ final getUpcomingEventsQuery = gql('''
       title
       region
     }
+    guests
+    checkin_count
   }
 }
 ''');
@@ -417,6 +422,7 @@ final getPastEventsQuery = gql('''
     host_expanded {
       _id
       name
+      image_avatar
       new_photos_expanded {
         _id
         key

@@ -1,0 +1,188 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
+import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
+import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
+import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
+import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_discover_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_hosting_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/event/event_service.dart';
+import 'package:app/graphql/backend/notification/query/get_notifications.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.userId,
+          orElse: () => '',
+        );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UpcomingHostingEventsBloc(userId: userId)
+            ..add(UpcomingHostingEventsEvent.fetch()),
+        ),
+        BlocProvider(
+          create: (context) => UpcomingAttendingEventsBloc(userId: userId)
+            ..add(UpcomingAttendingEventsEvent.fetch()),
+        ),
+        BlocProvider(
+          create: (context) => HomeEventListingBloc(
+            EventService(getIt<EventRepository>()),
+            defaultInput: const GetHomeEventsInput(),
+          )..add(
+              BaseEventsListingEvent.fetch(),
+            ),
+        ),
+      ],
+      child: const _HomeView(),
+    );
+  }
+}
+
+class _HomeView extends StatefulWidget {
+  const _HomeView();
+
+  @override
+  State<_HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<_HomeView> {
+  EventTimeFilter? eventTimeFilter;
+
+  void _selectEventTimeFilter(EventTimeFilter? mEventTimeFilter) {
+    setState(() {
+      eventTimeFilter = mEventTimeFilter;
+    });
+    context.read<HomeEventListingBloc>().add(
+          BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.userId,
+          orElse: () => '',
+        );
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        const SliverToBoxAdapter(
+          child: HomeCollaborators(),
+        ),
+        if (userId.isNotEmpty)
+          Query$GetNotifications$Widget(
+            options: Options$Query$GetNotifications(
+              fetchPolicy: FetchPolicy.networkOnly,
+              variables: Variables$Query$GetNotifications(
+                limit: 20,
+                skip: 0,
+                type: Input$NotificationTypeFilterInput(
+                  $in: [
+                    Enum$NotificationType.event_cohost_request,
+                    Enum$NotificationType.event_invite,
+                    Enum$NotificationType.user_friendship_request,
+                  ],
+                ),
+              ),
+            ),
+            builder: (result, {refetch, fetchMore}) {
+              if (result.hasException ||
+                  result.isLoading ||
+                  result.data == null) {
+                return SliverToBoxAdapter(
+                  child: Loading.defaultLoading(context),
+                );
+              }
+              final notifications = result.parsedData?.getNotifications ?? [];
+              if (notifications.isEmpty) {
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              }
+
+              return SliverPadding(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                  left: Spacing.small,
+                  right: Spacing.small,
+                ),
+                sliver: SliverToBoxAdapter(
+                  child: PendingInvitesCard(
+                    count: notifications.length,
+                  ),
+                ),
+              );
+            },
+          ),
+        if (userId.isNotEmpty)
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: 30.w,
+              left: Spacing.small,
+              right: Spacing.small,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const HomeHostingEventsList(),
+                  SizedBox(height: Spacing.medium),
+                  const HomeMyEventsList(),
+                ],
+              ),
+            ),
+          ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  t.discover.discover.toUpperCase(),
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                EventTimeFilterButton(
+                  onSelect: _selectEventTimeFilter,
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Spacing.superExtraSmall),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+          sliver: HomeDiscoverEventsList(eventTimeFilter: eventTimeFilter),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 120.h),
+        ),
+      ],
+    );
+  }
+}

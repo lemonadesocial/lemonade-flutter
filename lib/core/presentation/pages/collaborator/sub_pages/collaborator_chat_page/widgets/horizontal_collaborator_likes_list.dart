@@ -1,5 +1,6 @@
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_counter_widget.dart';
+import 'package:app/core/presentation/pages/home/views/collaborator_circle_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -7,6 +8,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -62,28 +64,34 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
               ),
             ),
           ),
-        SizedBox(height: Spacing.xSmall),
         SizedBox(
-          height: 87.w,
+          height: 64.w,
           child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-            itemCount: pendingSwipes.length,
+            padding: EdgeInsets.only(left: Spacing.xSmall),
+            itemCount: pendingSwipes.length + 1,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => InkWell(
-              onTap: () {
-                AutoRouter.of(context).push(
-                  CollaboratorLikePreviewRoute(
-                    swipe: pendingSwipes[index],
-                    refetch: refetch,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const CollaboratorCircleWidget();
+              } else {
+                final swipeIndex = index - 1;
+                return InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).push(
+                      CollaboratorLikePreviewRoute(
+                        swipe: pendingSwipes[swipeIndex],
+                        refetch: refetch,
+                      ),
+                    );
+                  },
+                  child: _PersonItem(
+                    swipe: pendingSwipes[swipeIndex],
                   ),
                 );
-              },
-              child: _PersonItem(
-                swipe: pendingSwipes[index],
-              ),
-            ),
+              }
+            },
             separatorBuilder: (context, index) => SizedBox(
-              width: Spacing.xSmall,
+              width: 10.w,
             ),
           ),
         ),
@@ -117,38 +125,41 @@ class _PersonItem extends StatelessWidget {
                 decoration: ShapeDecoration(
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
-                      width: 2.w,
-                      color: LemonColor.paleViolet,
+                      width: 1.w,
+                      color: colorScheme.onPrimary,
                     ),
                     borderRadius: BorderRadius.circular(64.r),
                   ),
                 ),
-                child: LemonNetworkImage(
-                  imageUrl: swipe.otherExpanded?.imageAvatar ?? '',
-                  width: 60.w,
-                  height: 60.w,
-                  borderRadius: BorderRadius.circular(60.w),
-                  placeholder: ImagePlaceholder.avatarPlaceholder(),
+                child: Padding(
+                  padding: EdgeInsets.all(2.w),
+                  child: LemonNetworkImage(
+                    imageUrl: swipe.otherExpanded?.imageAvatar ?? '',
+                    width: 60.w,
+                    height: 60.w,
+                    borderRadius: BorderRadius.circular(60.w),
+                    placeholder: ImagePlaceholder.avatarPlaceholder(),
+                  ),
                 ),
               ),
               if (swipe.message?.isNotEmpty == true)
                 Positioned(
-                  bottom: 4.w,
-                  right: 4.w,
-                  child: Assets.icons.icCollaboratorBubbleChat.svg(),
+                  bottom: 2.w,
+                  right: 2.w,
+                  child: Container(
+                    width: Sizing.xxSmall * 1.5,
+                    height: Sizing.xxSmall * 1.5,
+                    decoration: BoxDecoration(
+                      color: LemonColor.coralReef,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: colorScheme.background,
+                        width: 3.w,
+                      ),
+                    ),
+                  ),
                 ),
             ],
-          ),
-          SizedBox(height: Spacing.superExtraSmall),
-          Text(
-            swipe.otherExpanded?.name ?? '',
-            textAlign: TextAlign.center,
-            style: Typo.xSmall.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

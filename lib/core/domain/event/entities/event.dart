@@ -61,6 +61,7 @@ class Event with _$Event {
     int? checkInCount,
     int? attendingCount,
     int? pendingRequestCount,
+    int? guests,
     List<EventSession>? sessions,
     List<EventApplicationQuestion>? applicationQuestions,
     List<EventApplicationProfileField>? applicationProfileFields,
@@ -143,6 +144,7 @@ class Event with _$Event {
       checkInCount: dto.checkInCount?.toInt() ?? 0,
       attendingCount: dto.attendingCount?.toInt() ?? 0,
       pendingRequestCount: dto.pendingRequestCount?.toInt() ?? 0,
+      guests: dto.guests?.toInt() ?? 0,
       sessions: List.from(dto.sessions ?? [])
           .map((item) => EventSession.fromDto(item))
           .toList(),
