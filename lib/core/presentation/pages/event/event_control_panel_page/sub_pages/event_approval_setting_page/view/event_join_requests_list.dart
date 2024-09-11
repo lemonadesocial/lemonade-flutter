@@ -68,7 +68,8 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
           }
 
           final joinRequests =
-              (result.parsedData?.getEventJoinRequests ?? []).map((item) {
+              (result.parsedData?.getEventJoinRequests.records ?? [])
+                  .map((item) {
             return EventJoinRequest.fromDto(
               EventJoinRequestDto.fromJson(item.toJson()),
             );
