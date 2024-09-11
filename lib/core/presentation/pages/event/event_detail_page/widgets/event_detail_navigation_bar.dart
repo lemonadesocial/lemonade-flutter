@@ -71,6 +71,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     animationController.animateTo(interpolatedValue);
   }
 
+  // ignore: unused_element
   Offset _calculateGridRowOffset({
     required int index,
     required double maxWidth,
@@ -85,7 +86,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
   Widget build(BuildContext context) {
     return SafeArea(
       child: SizedBox(
-        height: 100.w,
+        height: 0.3.sh,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -94,7 +95,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
             Expanded(
               child: CustomScrollView(
                 slivers: [
-                  _buildHorizontalList(),
+                  _buildGridList(),
                 ],
               ),
             ),
@@ -160,6 +161,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
     // );
   }
 
+  // ignore: unused_element
   SliverToBoxAdapter _buildHorizontalList() {
     late List features = [];
     final userId = context.read<AuthBloc>().state.maybeWhen(
@@ -294,12 +296,14 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
                 return AnimatedBuilder(
                   animation: animation,
                   builder: (context, child) => Transform.translate(
-                    offset: index == 0
-                        ? Offset.zero
-                        : _calculateGridRowOffset(
-                            index: index,
-                            maxWidth: maxWidth,
-                          ),
+                    offset: Offset.zero,
+                    // TODO: no need
+                    // offset: index == 0
+                    //     ? Offset.zero
+                    //     : _calculateGridRowOffset(
+                    //         index: index,
+                    //         maxWidth: maxWidth,
+                    //       ),
                     child: child,
                   ),
                   child: Row(
@@ -343,7 +347,9 @@ class EventDetailNavigationBarItem extends StatelessWidget {
     final width = isCardMode ? 75.w : 54.w;
     final height = isCardMode ? 75.w : 42.w;
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        Navigator.of(context, rootNavigator: true).pop();
+        await Future.delayed(const Duration(milliseconds: 300));
         feature.onTap();
       },
       child: Column(
