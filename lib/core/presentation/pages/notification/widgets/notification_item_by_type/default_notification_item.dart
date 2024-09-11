@@ -56,7 +56,10 @@ class DefaultNotificationItem extends StatelessWidget {
         padding: EdgeInsets.only(right: Spacing.small),
         child: LemonCircleAvatar(
           url: ImageUtils.generateUrl(
-            file: notification.fromExpanded?.newPhotosExpanded?.first,
+            file:
+                notification.fromExpanded?.newPhotosExpanded?.isNotEmpty == true
+                    ? notification.fromExpanded?.newPhotosExpanded?.first
+                    : null,
             imageConfig: ImageConfig.profile,
           ),
           size: Sizing.medium,
