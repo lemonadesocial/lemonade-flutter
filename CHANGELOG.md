@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.32.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.31.0...v1.32.0) (2024-09-11)
+
+
+### Features
+
+* discover page remake ([#714](https://github.com/lemonadesocial/lemonade-flutter/issues/714)) ([8457122](https://github.com/lemonadesocial/lemonade-flutter/commit/8457122743cffcf447be19caa8b089c96c9dce81))
+* home pending invites page ([#713](https://github.com/lemonadesocial/lemonade-flutter/issues/713)) ([fa09f5e](https://github.com/lemonadesocial/lemonade-flutter/commit/fa09f5e43429551091fe7ab8b05c9ffa86567f2c))
+* home quick create panel ([#711](https://github.com/lemonadesocial/lemonade-flutter/issues/711)) ([da17d74](https://github.com/lemonadesocial/lemonade-flutter/commit/da17d74756f9a5ad9ae5bf6b1231d903376d75be))
+* home screen remake ([#716](https://github.com/lemonadesocial/lemonade-flutter/issues/716)) ([ca2d18a](https://github.com/lemonadesocial/lemonade-flutter/commit/ca2d18a9e28f1b46a6e4120b022271d0f040fe3a))
+* remake event detail navigation bar ([#715](https://github.com/lemonadesocial/lemonade-flutter/issues/715)) ([ff45fb9](https://github.com/lemonadesocial/lemonade-flutter/commit/ff45fb947f49be72cde7a1f460afa800ae88eaef))
+
+
+### Bug Fixes
+
+* remove get applicant in notification item ([#717](https://github.com/lemonadesocial/lemonade-flutter/issues/717)) ([7e2d1e6](https://github.com/lemonadesocial/lemonade-flutter/commit/7e2d1e6f43fac8ebda7bde53daa38d47d8c0ba1b))
+* update event navigation bar ([#720](https://github.com/lemonadesocial/lemonade-flutter/issues/720)) ([29f6235](https://github.com/lemonadesocial/lemonade-flutter/commit/29f6235f79827de60ba415ecdfa20d702fa3aa29))
+* update get event join requests api ([#719](https://github.com/lemonadesocial/lemonade-flutter/issues/719)) ([4dabeed](https://github.com/lemonadesocial/lemonade-flutter/commit/4dabeedcd47ee3424100c33eb97cce50cf7bb40a))
+
 ## [1.31.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.30.0...v1.31.0) (2024-08-26)
 
 
