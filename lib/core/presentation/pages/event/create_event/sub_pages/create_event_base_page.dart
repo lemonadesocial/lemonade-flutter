@@ -14,16 +14,18 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
+import 'widgets/create_event_banner_photo_card.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -65,15 +67,43 @@ class CreateEventBasePage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
+            hideLeading: true,
             title: state.parentEventId != null
                 ? t.event.subEvent.createSubEvent
                 : t.event.eventCreation.createEvent,
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: Spacing.smMedium),
+                child: InkWell(
+                  onTap: () {
+                    Vibrate.feedback(FeedbackType.light);
+                    AutoRouter.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: Sizing.small,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
           ),
           body: SafeArea(
             child: Stack(
               children: [
                 CustomScrollView(
                   slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: const SliverToBoxAdapter(
+                        child: CreateEventBannerPhotoCard(),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: Spacing.xSmall),
+                    ),
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
                         horizontal: Spacing.smMedium,
@@ -87,6 +117,16 @@ class CreateEventBasePage extends StatelessWidget {
                               .add(EventTitleChanged(title: value)),
                           errorText: state.title.displayError?.getMessage(
                             t.event.eventCreation.title,
+                          ),
+                          labelStyle: Typo.extraMedium.copyWith(
+                            color: colorScheme.onSecondary,
+                            fontWeight: FontWeight.w500,
+                            height: 0,
+                          ),
+                          placeholderStyle: Typo.extraMedium.copyWith(
+                            color: LemonColor.white23,
+                            fontWeight: FontWeight.w500,
+                            height: 0,
                           ),
                         ),
                       ),
