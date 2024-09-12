@@ -10,14 +10,14 @@ import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:timezone/timezone.dart';
 
-part 'create_event_bloc.freezed.dart';
+part 'edit_event_bloc.freezed.dart';
 
-class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
+class EditEventBloc extends Bloc<EditEventEvent, EditEventState> {
   final String? parentEventId;
-  CreateEventBloc({
+  EditEventBloc({
     this.parentEventId,
   }) : super(
-          CreateEventState(
+          EditEventState(
             parentEventId: parentEventId,
           ),
         ) {
@@ -31,7 +31,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onTitleChanged(
     EventTitleChanged event,
-    Emitter<CreateEventState> emit,
+    Emitter<EditEventState> emit,
   ) async {
     final title = StringFormz.dirty(event.title);
     emit(
@@ -44,7 +44,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onDescriptionChanged(
     EventDescriptionChanged event,
-    Emitter<CreateEventState> emit,
+    Emitter<EditEventState> emit,
   ) async {
     final description = StringFormz.dirty(event.description);
     emit(
@@ -62,7 +62,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onVirtualLinkChanged(
     VirtualLinkChanged event,
-    Emitter<CreateEventState> emit,
+    Emitter<EditEventState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -74,7 +74,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onTagsChanged(
     TagsChanged event,
-    Emitter<CreateEventState> emit,
+    Emitter<EditEventState> emit,
   ) async {
     emit(
       state.copyWith(
@@ -85,7 +85,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onFormSubmitted(
     FormSubmitted event,
-    Emitter<CreateEventState> emit,
+    Emitter<EditEventState> emit,
   ) async {
     // Convert the target selected datetime into utc
     final location = getLocation(event.timezone);
@@ -163,21 +163,21 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 }
 
 @freezed
-class CreateEventEvent with _$CreateEventEvent {
-  const factory CreateEventEvent.eventTitleChanged({required String title}) =
+class EditEventEvent with _$EditEventEvent {
+  const factory EditEventEvent.eventTitleChanged({required String title}) =
       EventTitleChanged;
 
-  const factory CreateEventEvent.eventDescriptionChanged({
+  const factory EditEventEvent.eventDescriptionChanged({
     required String description,
   }) = EventDescriptionChanged;
 
-  const factory CreateEventEvent.virtualLinkChanged({String? virtualUrl}) =
+  const factory EditEventEvent.virtualLinkChanged({String? virtualUrl}) =
       VirtualLinkChanged;
 
-  const factory CreateEventEvent.tagsChanged({required List<String> tags}) =
+  const factory EditEventEvent.tagsChanged({required List<String> tags}) =
       TagsChanged;
 
-  const factory CreateEventEvent.formSubmitted({
+  const factory EditEventEvent.formSubmitted({
     required DateTime start,
     required DateTime end,
     required String timezone,
@@ -192,8 +192,8 @@ class CreateEventEvent with _$CreateEventEvent {
 }
 
 @freezed
-class CreateEventState with _$CreateEventState {
-  const factory CreateEventState({
+class EditEventState with _$EditEventState {
+  const factory EditEventState({
     @Default(StringFormz.pure()) StringFormz title,
     @Default(StringFormz.pure()) StringFormz description,
     @Default(false) bool virtual,
@@ -204,5 +204,5 @@ class CreateEventState with _$CreateEventState {
     String? eventId,
     // Subevent related
     String? parentEventId,
-  }) = _CreateEventState;
+  }) = _EditEventState;
 }

@@ -222,7 +222,6 @@ final getMeQuery = gql('''
   $privateFragment
   $userTermFragment
   $userFarcasterInfoFragment
-  $userStripeFragment
 
   query() {
     getMe() {
@@ -231,7 +230,6 @@ final getMeQuery = gql('''
       ...privateFragment
       ...userTermFragment
       ...userFarcasterInfoFragment
-      ...userStripeFragment
     }
 }
 ''');

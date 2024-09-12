@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/edit_event_bloc/edit_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
@@ -34,7 +34,7 @@ class CreateEventBasePage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BlocConsumer<CreateEventBloc, CreateEventState>(
+    return BlocConsumer<EditEventBloc, EditEventState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
           SnackBarUtils.showSuccess(
@@ -83,7 +83,7 @@ class CreateEventBasePage extends StatelessWidget {
                           hintText: t.event.eventCreation.titleHint,
                           initialText: state.title.value,
                           onChange: (value) => context
-                              .read<CreateEventBloc>()
+                              .read<EditEventBloc>()
                               .add(EventTitleChanged(title: value)),
                           errorText: state.title.displayError?.getMessage(
                             t.event.eventCreation.title,
@@ -103,7 +103,7 @@ class CreateEventBasePage extends StatelessWidget {
                           title: t.event.eventCreation.description,
                           subTitle: StringUtils.stripHtmlTags(
                             context
-                                .read<CreateEventBloc>()
+                                .read<EditEventBloc>()
                                 .state
                                 .description
                                 .value,
@@ -123,7 +123,7 @@ class CreateEventBasePage extends StatelessWidget {
                               EventDescriptionFieldRoute(
                                 description: state.description.value,
                                 onDescriptionChanged: (value) {
-                                  context.read<CreateEventBloc>().add(
+                                  context.read<EditEventBloc>().add(
                                         EventDescriptionChanged(
                                           description: value,
                                         ),
@@ -157,8 +157,8 @@ class CreateEventBasePage extends StatelessWidget {
                       sliver: SliverToBoxAdapter(
                         child: SelectEventTagsDropdown(
                           onChange: (tags) {
-                            context.read<CreateEventBloc>().add(
-                                  CreateEventEvent.tagsChanged(tags: tags),
+                            context.read<EditEventBloc>().add(
+                                  EditEventEvent.tagsChanged(tags: tags),
                                 );
                           },
                           initialSelectedTags: const [],
@@ -193,7 +193,7 @@ class CreateEventBasePage extends StatelessWidget {
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<CreateEventBloc, CreateEventState>(
+    return BlocBuilder<EditEventBloc, EditEventState>(
       builder: (context, state) {
         return Container(
           color: colorScheme.background,
@@ -226,7 +226,7 @@ class CreateEventBasePage extends StatelessWidget {
                 final timezone =
                     context.read<EventDateTimeSettingsBloc>().state.timezone ??
                         '';
-                context.read<CreateEventBloc>().add(
+                context.read<EditEventBloc>().add(
                       FormSubmitted(
                         start: start,
                         end: end,
