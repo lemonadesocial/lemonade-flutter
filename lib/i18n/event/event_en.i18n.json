@@ -230,10 +230,13 @@
     },
     "ticketTier": "Ticket tiers",
     "ticketTierSetting": {
+        "ticketTierSettingTitle": "Tickets & Payments",
+        "ticketTierSettingDesc": "Set up your event tickets with debit/credit card & crypto payment options",
         "payoutAccounts": "Payout accounts",
         "creditDebit": "Credit/Debit",
         "erc20": "ERC20",
         "connectAccount": "Connect account",
+        "connected": "Connected",
         "selectAccount": "Select account",
         "crypto": "Crypto",
         "newTicket": "New ticket",
@@ -301,7 +304,13 @@
             "name": "Name",
             "description": "Description"
         },
-        "emptyTicketTypes": "No ticket tiers found"
+        "emptyTicketTypes": "No ticket tiers found",
+        "connectStripe": "Connect Stripe",
+        "connectStripeDesc": "Receive debit/credit payments",
+        "connectWallet": "Connect Wallet",
+        "connectWalletDesc": "Receive crypto payments",
+        "stripeConnected": "Stripe connected",
+        "walletConnected": "Wallet connected"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

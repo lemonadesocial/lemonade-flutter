@@ -94,7 +94,7 @@ type Query {
   getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
   getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
   getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
-  getStripeCards(skip: Int! = 0, limit: Int! = 25, payment_account: MongoID): [StripeCard!]!
+  getStripeCards(skip: Int! = 0, limit: Int! = 25): [StripeCard!]!
   tgGetMyChannels(input: ScanChannelsInput!): ScanChannelsResult!
   joinChannel(event_ids: MongoID!): Boolean!
   exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
@@ -234,6 +234,7 @@ type User {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -345,6 +346,11 @@ enum UserPaymentVerificationState {
 type UserDao {
   network: String!
   address: String!
+}
+
+type StripeConnectedAccount {
+  account_id: String!
+  connected: Boolean
 }
 
 type UserIcebreaker {
@@ -1472,6 +1478,7 @@ type UserWithEmail {
   twitter2_user_info: JSON
   zoom_user_info: JSON
   telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
   farcaster_fid: Float
   quest_points: Float
   icebreakers: [UserIcebreaker!]
@@ -2390,7 +2397,6 @@ type StripeCard {
   _id: MongoID!
   active: Boolean!
   stamp: DateTimeISO!
-  payment_account: MongoID!
   provider_id: String!
   user: MongoID!
   brand: String!
@@ -2808,8 +2814,10 @@ type Mutation {
   createStore(input: StoreInput!): Store!
   updateStore(_id: MongoID!, input: StoreInput!): Store!
   deleteStore(_id: MongoID!): Boolean!
-  createStripeCard(payment_account: MongoID!, payment_method: String!): StripeCard!
+  createStripeCard(payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
+  disconnectStripeAccount: Boolean!
+  generateStripeAccountLink(refresh_url: String!, return_url: String!): GenerateStripeAccountLinkResponse!
   tgSendCode(input: SendCodeInput!): String!
   tgVerify(input: VerifyCodeInput!): Boolean!
   tgUnlinkAccount: Boolean!
@@ -3766,6 +3774,10 @@ input SalesTaxInput {
   ratio_map: JSON
   countries: [String!]
   regions: [String!]
+}
+
+type GenerateStripeAccountLinkResponse {
+  url: String!
 }
 
 input SendCodeInput {

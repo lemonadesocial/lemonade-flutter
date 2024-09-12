@@ -1,5 +1,6 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/collaborator/entities/user_expertise/user_expertise.dart';
+import 'package:app/core/domain/payment/entities/stripe_connected_account/stripe_connected_account.dart';
 import 'package:app/core/domain/user/entities/user_farcaster_info.dart';
 import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
@@ -109,6 +110,7 @@ class User with _$User {
     String? locationLine,
     double? age,
     int? questPoints,
+    StripeConnectedAccount? stripeConnectedAccount,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -210,6 +212,9 @@ class User with _$User {
       age: dto.age,
       locationLine: dto.locationLine,
       questPoints: dto.questPoints,
+      stripeConnectedAccount: dto.stripeConnectedAccount != null
+          ? StripeConnectedAccount.fromDto(dto.stripeConnectedAccount!)
+          : null,
     );
   }
 

@@ -1,13 +1,26 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/config.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/payment/payment_repository.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/payment/mutation/disconnect_stripe_account_mutation.graphql.dart';
+import 'package:app/graphql/backend/payment/mutation/generate_stripe_account_link_mutation.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -17,7 +30,9 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
+import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal_flutter;
 
 class PayoutAccountsWidget extends StatefulWidget {
   const PayoutAccountsWidget({super.key});
@@ -26,86 +41,251 @@ class PayoutAccountsWidget extends StatefulWidget {
   State<PayoutAccountsWidget> createState() => _PayoutAccountsWidgetState();
 }
 
-class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
+class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
+    with WidgetsBindingObserver {
+  bool stripePaymentAccountCreated = false;
+
+  bool hasStripePaymentAccount(Event? event) {
+    final eventPaymentAccountsExpanded = event?.paymentAccountsExpanded ?? [];
+    final hasStripePaymentAccount = eventPaymentAccountsExpanded.any(
+      (item) => item.provider == PaymentProvider.stripe,
+    );
+    return hasStripePaymentAccount;
+  }
+
+  bool hasStripeConnected(User? loggedInUser) {
+    final hasStripeConnected = loggedInUser?.stripeConnectedAccount != null &&
+        loggedInUser?.stripeConnectedAccount?.connected == true;
+    return hasStripeConnected;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
+            orElse: () => null,
+            authenticated: (user) => user,
+          );
+      final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+            orElse: () => null,
+            fetched: (event) => event,
+          );
+      if (hasStripeConnected(loggedInUser)) {
+        if (!hasStripePaymentAccount(event)) {
+          _createStripePaymentAccount();
+        } else {
+          stripePaymentAccountCreated = true;
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) return;
+    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
+
+    final hasStripeConnected = loggedInUser?.stripeConnectedAccount != null &&
+        loggedInUser?.stripeConnectedAccount?.connected == true;
+    if (!hasStripeConnected) {
+      context.read<AuthBloc>().add(const AuthEvent.refreshData());
+    }
+  }
+
+  Future<void> _createStripePaymentAccount() async {
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => null,
+        );
+
+    final response = await showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        final createPaymentAccountResult =
+            await getIt<PaymentRepository>().createPaymentAccount(
+          input: CreatePaymentAccountInput(
+            type: PaymentAccountType.digital,
+            provider: PaymentProvider.stripe,
+          ),
+        );
+        if (createPaymentAccountResult.isLeft()) {
+          return null;
+        }
+        final newPaymentAccount =
+            createPaymentAccountResult.getOrElse(() => PaymentAccount());
+        final updateEventResult = await getIt<EventRepository>().updateEvent(
+          input: Input$EventInput(
+            payment_accounts_new: [
+              ...event?.paymentAccountsNew ?? [],
+              newPaymentAccount.id ?? '',
+            ],
+          ),
+          id: event?.id ?? '',
+        );
+        return updateEventResult.fold((l) => null, (r) => r);
+      },
+    );
+
+    if (response.result != null) {
+      stripePaymentAccountCreated = true;
+
+      context.read<GetEventDetailBloc>().add(
+            GetEventDetailEvent.replace(event: response.result!),
+          );
+    }
+  }
+
+  Future<void> _connectStripe() async {
+    final response = await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<AppGQL>().client.mutate$GenerateStripeAccountLink(
+            Options$Mutation$GenerateStripeAccountLink(
+              variables: Variables$Mutation$GenerateStripeAccountLink(
+                returnUrl: AppConfig.webUrl,
+                refreshUrl: AppConfig.webUrl,
+              ),
+            ),
+          ),
+    );
+    final url = response.result?.parsedData?.generateStripeAccountLink.url;
+    if (url != null) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _disconnectStripe() async {
+    final response = await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<AppGQL>().client.mutate$disconnectStripeAccount(),
+    );
+    if (response.result?.parsedData?.disconnectStripeAccount == true) {
+      context.read<AuthBloc>().add(const AuthEvent.refreshData());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final eventPaymentAccountsExpanded =
-        context.watch<GetEventDetailBloc>().state.maybeWhen(
-              fetched: (event) => event.paymentAccountsExpanded,
-              orElse: () => [] as List<PaymentAccount>,
-            );
-    final hasStripePaymentAccount = eventPaymentAccountsExpanded!.any(
-      (item) => item.provider == PaymentProvider.stripe,
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.event.ticketTierSetting.payoutAccounts,
-          style: Typo.medium.copyWith(
-            fontWeight: FontWeight.w600,
-            color: colorScheme.onPrimary,
-          ),
-        ),
-        SizedBox(height: Spacing.xSmall),
-        PayoutAccountItem(
-          title: t.event.ticketTierSetting.creditDebit,
-          subTitle: hasStripePaymentAccount
-              ? t.event.ticketTierSetting.selectAccount
-              : t.event.ticketTierSetting.connectAccount,
-          icon: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icBank.svg(
-              colorFilter: filter,
-            ),
-          ),
-          buttonBuilder: () {
-            if (hasStripePaymentAccount) {
-              return InkWell(
-                onTap: () {},
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSurfaceVariant,
-                  builder: (filter) => Assets.icons.icArrowRight.svg(
-                    colorFilter: filter,
-                  ),
-                ),
-              );
+        BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (stripePaymentAccountCreated) {
+              return;
             }
-            return LinearGradientButton(
-              onTap: () => SnackBarUtils.showComingSoon(),
-              // TODO:
-              // onTap: () => Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => const StripeOauthPage(),
-              //   ),
-              // ),
-              height: Sizing.medium,
-              radius: BorderRadius.circular(LemonRadius.small * 2),
-              label: t.common.actions.connect,
+            final loggedInUser = state.maybeWhen(
+              orElse: () => null,
+              authenticated: (user) => user,
+            );
+            final event = context
+                .read<GetEventDetailBloc>()
+                .state
+                .maybeWhen(orElse: () => null, fetched: (event) => event);
+            if (hasStripeConnected(loggedInUser)) {
+              if (!hasStripePaymentAccount(event)) {
+                _createStripePaymentAccount();
+              }
+            }
+          },
+          builder: (context, state) {
+            final loggedInUser = state.maybeWhen(
+              orElse: () => null,
+              authenticated: (user) => user,
+            );
+
+            final hasStripeConnected =
+                loggedInUser?.stripeConnectedAccount != null &&
+                    loggedInUser?.stripeConnectedAccount?.connected == true;
+            return PayoutAccountItem(
+              radiusTop: true,
+              radiusBottom: false,
+              title: hasStripeConnected
+                  ? t.event.ticketTierSetting.stripeConnected
+                  : t.event.ticketTierSetting.connectStripe,
+              subTitle: t.event.ticketTierSetting.connectStripeDesc,
+              icon: hasStripeConnected
+                  ? Assets.icons.icStripe.svg()
+                  : ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icBank.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
+              buttonBuilder: () {
+                if (hasStripeConnected) {
+                  return LinearGradientButton(
+                    onTap: () {
+                      _disconnectStripe();
+                    },
+                    height: Sizing.medium,
+                    radius: BorderRadius.circular(LemonRadius.small * 2),
+                    label: t.common.actions.disconnect,
+                  );
+                }
+                return LinearGradientButton(
+                  onTap: () {
+                    _connectStripe();
+                  },
+                  height: Sizing.medium,
+                  radius: BorderRadius.circular(LemonRadius.small * 2),
+                  label: t.common.actions.connect,
+                );
+              },
             );
           },
         ),
-        SizedBox(height: Spacing.xSmall),
-        FutureBuilder<W3MSession?>(
-          future: getIt<WalletConnectService>().getActiveSession(),
-          builder: (context, walletConnectSnapshot) {
-            final activeSession = walletConnectSnapshot.data;
+        Divider(
+          height: 1,
+          color: colorScheme.outline,
+        ),
+        BlocBuilder<WalletBloc, WalletState>(
+          builder: (context, state) {
+            final fallbackIcon = ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icWallet.svg(
+                colorFilter: filter,
+              ),
+            );
+            final activeSession = state.activeSession;
             final userWalletAddress =
                 getIt<WalletConnectService>().w3mService.session?.address ?? '';
             return PayoutAccountItem(
-              title: t.event.ticketTierSetting.crypto,
+              radiusTop: false,
+              radiusBottom: true,
+              title: activeSession != null
+                  ? t.event.ticketTierSetting.walletConnected
+                  : t.event.ticketTierSetting.connectWallet,
               subTitle: activeSession != null
                   ? Web3Utils.formatIdentifier(userWalletAddress)
-                  : t.common.actions.connectWallet,
-              icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icWallet.svg(
-                  colorFilter: filter,
-                ),
-              ),
+                  : t.event.ticketTierSetting.connectWalletDesc,
+              icon: activeSession != null
+                  ? LemonNetworkImage(
+                      imageUrl: explorerService.instance.getWalletImageUrl(
+                        getIt<WalletConnectService>()
+                                .w3mService
+                                .selectedWallet
+                                ?.listing
+                                .imageId ??
+                            '',
+                      ),
+                      height: Sizing.mSmall,
+                      width: Sizing.mSmall,
+                      placeholder: fallbackIcon,
+                    )
+                  : fallbackIcon,
               buttonBuilder: () {
                 if (activeSession != null) {
                   return InkWell(
@@ -122,8 +302,8 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget> {
                 return ConnectWalletButton(
                   builder: (onPressConnect, connectButtonState) =>
                       LinearGradientButton(
-                    loadingWhen:
-                        connectButtonState == ConnectButtonState.connecting,
+                    loadingWhen: connectButtonState ==
+                        web3modal_flutter.ConnectButtonState.connecting,
                     height: Sizing.medium,
                     radius: BorderRadius.circular(LemonRadius.small * 2),
                     label: t.common.actions.connect,
@@ -144,6 +324,8 @@ class PayoutAccountItem extends StatelessWidget {
   final String subTitle;
   final Widget icon;
   final Widget Function()? buttonBuilder;
+  final bool radiusTop;
+  final bool radiusBottom;
 
   const PayoutAccountItem({
     super.key,
@@ -151,6 +333,8 @@ class PayoutAccountItem extends StatelessWidget {
     required this.subTitle,
     required this.icon,
     this.buttonBuilder,
+    this.radiusTop = false,
+    this.radiusBottom = false,
   });
 
   @override
@@ -160,21 +344,20 @@ class PayoutAccountItem extends StatelessWidget {
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
         color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.small),
+        borderRadius: BorderRadius.only(
+          topLeft:
+              radiusTop ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          topRight:
+              radiusTop ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          bottomLeft:
+              radiusBottom ? Radius.circular(LemonRadius.medium) : Radius.zero,
+          bottomRight:
+              radiusBottom ? Radius.circular(LemonRadius.medium) : Radius.zero,
+        ),
       ),
       child: Row(
         children: [
-          Container(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            decoration: BoxDecoration(
-              color: colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(Sizing.medium),
-            ),
-            child: Center(
-              child: icon,
-            ),
-          ),
+          icon,
           SizedBox(width: Spacing.xSmall),
           Expanded(
             child: Column(

@@ -34,12 +34,6 @@ class EventOrderSummaryFooter extends StatelessWidget {
   final String? selectedNetwork;
   final bool isFree;
 
-  String get paymentAccountId {
-    return pricingInfo?.paymentAccounts?.isNotEmpty == true
-        ? pricingInfo?.paymentAccounts?.first.id ?? ''
-        : '';
-  }
-
   String get stripePublishableKey {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
         ? pricingInfo?.paymentAccounts?.first.accountInfo?.publishableKey ?? ''
@@ -86,7 +80,6 @@ class EventOrderSummaryFooter extends StatelessWidget {
                   onPressedSelect: () {
                     AutoRouter.of(context).navigate(
                       EventTicketsPaymentMethodRoute(
-                        paymentAccount: paymentAccountId,
                         publishableKey: stripePublishableKey,
                         onCardAdded: onCardAdded,
                         onSelectCard: onSelectCard,
@@ -103,7 +96,6 @@ class EventOrderSummaryFooter extends StatelessWidget {
                       onPressedSelect: () {
                         AutoRouter.of(context).navigate(
                           EventTicketsPaymentMethodRoute(
-                            paymentAccount: paymentAccountId,
                             publishableKey: stripePublishableKey,
                             onCardAdded: onCardAdded,
                             onSelectCard: onSelectCard,

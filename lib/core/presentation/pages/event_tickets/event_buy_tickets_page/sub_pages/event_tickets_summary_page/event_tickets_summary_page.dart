@@ -490,6 +490,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                           currency: selectedCurrency,
                                           items: selectedTickets,
                                           total: pricingInfo.total ?? '0',
+                                          fee: pricingInfo.paymentAccounts
+                                                  ?.firstOrNull?.fee ??
+                                              '0',
                                           transferParams: isFree
                                               ? null
                                               : BuyTicketsTransferParamsInput(
