@@ -1,11 +1,12 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubEventHostFilterItemWidget extends StatelessWidget {
   final User host;
@@ -26,48 +27,38 @@ class SubEventHostFilterItemWidget extends StatelessWidget {
       onTap: () {
         onTap?.call();
       },
-      child: Column(
+      child: Row(
         children: [
-          Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.all(2.w),
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(
-                    side: BorderSide(
-                      color: selected
-                          ? colorScheme.onPrimary
-                          : colorScheme.outline,
-                    ),
-                  ),
-                ),
-                child: Opacity(
-                  opacity: selected ? 0.5 : 1,
-                  child: LemonNetworkImage(
-                    imageUrl: host.imageAvatar ?? '',
-                    width: 70.w,
-                    height: 70.w,
-                    borderRadius: BorderRadius.circular(70.r),
-                    placeholder: ImagePlaceholder.avatarPlaceholder(),
-                  ),
-                ),
-              ),
-              if (selected)
-                Positioned.fill(
-                  right: 0,
-                  bottom: 0,
-                  child: Center(
-                    child: Assets.icons.icChecked.svg(),
-                  ),
-                ),
-            ],
-          ),
-          SizedBox(height: Spacing.superExtraSmall),
-          Text(
-            host.name ?? '',
-            style: Typo.small.copyWith(
-              color: selected ? colorScheme.onPrimary : colorScheme.onSecondary,
+          LemonNetworkImage(
+            imageUrl: host.imageAvatar ?? '',
+            width: Sizing.medium,
+            height: Sizing.medium,
+            borderRadius: BorderRadius.circular(Sizing.medium),
+            placeholder: ImagePlaceholder.avatarPlaceholder(),
+            border: Border.all(
+              color: colorScheme.outline,
             ),
+          ),
+          SizedBox(width: Spacing.small),
+          Expanded(
+            child: Text(
+              host.name ?? '',
+              style: Typo.medium.copyWith(
+                color:
+                    selected ? colorScheme.onPrimary : colorScheme.onSecondary,
+              ),
+            ),
+          ),
+          SizedBox(width: Spacing.small),
+          ThemeSvgIcon(
+            color: selected ? colorScheme.onPrimary : colorScheme.onSecondary,
+            builder: (filter) => selected
+                ? Assets.icons.icChecked.svg(
+                    colorFilter: filter,
+                  )
+                : Assets.icons.icUncheck.svg(
+                    colorFilter: filter,
+                  ),
           ),
         ],
       ),
