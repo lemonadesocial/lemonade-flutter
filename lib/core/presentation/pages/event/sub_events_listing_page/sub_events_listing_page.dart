@@ -3,7 +3,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_filter_bottomsheet_view/sub_events_filter_bottomsheet_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_grid_view/sub_events_listing_grid_view.dart';
-import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_regular_view.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_list_view/sub_events_listing_list_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_event_calendar_day_cell_widget.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_events_date_filter_bar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -78,6 +78,7 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
   SubEventViewMode _viewMode = SubEventViewMode.calendar;
   Map<String, bool> addedCalendarEventsMap = {};
 
+  // ignore: unused_element
   List<Event> _getEventsByDate(
     Map<DateTime, List<Event>> eventsGroupByDate,
     DateTime selectedDate,
@@ -313,21 +314,31 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
               ),
               if (_calendarVisible) SizedBox(height: Spacing.xSmall),
               if (_viewMode == SubEventViewMode.listing)
-                SubEventsListingRegularView(
+                SubEventsListingListView(
                   isCalendarShowing: _calendarVisible,
                   onScroll: _onScroll,
-                  events: _getEventsByDate(
-                    state.eventsGroupByDate,
-                    state.selectedDate,
-                  )
-                      .where(
-                        (event) => getSubEventByFilter(
-                          event,
-                          selectedHosts: state.selectedHosts,
-                          selectedTags: state.selectedTags,
-                        ),
-                      )
-                      .toList(),
+                  selectedDate: state.selectedDate,
+                  eventsGroupByDate: Map.from(state.eventsGroupByDate)
+                    // ..removeWhere((date, value) {
+                    //   if (date.month == state.selectedDate.month && date.year == state.selectedDate.year) {
+                    //     return false;
+                    //   }
+                    //   return true;
+                    // })
+                    ..map(
+                      (date, events) => MapEntry(
+                        date,
+                        events
+                            .where(
+                              (event) => getSubEventByFilter(
+                                event,
+                                selectedHosts: state.selectedHosts,
+                                selectedTags: state.selectedTags,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                 ),
               if (_viewMode == SubEventViewMode.calendar)
                 calendar_view.CalendarControllerProvider(

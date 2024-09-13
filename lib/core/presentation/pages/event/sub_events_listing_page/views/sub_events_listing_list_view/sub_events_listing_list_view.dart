@@ -12,23 +12,31 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
-class SubEventsListingRegularView extends StatelessWidget {
+class SubEventsListingListView extends StatelessWidget {
   final bool isCalendarShowing;
   final void Function(ScrollMetrics metrics)? onScroll;
-  final List<Event> events;
-  const SubEventsListingRegularView({
+  final Map<DateTime, List<Event>> eventsGroupByDate;
+  final DateTime selectedDate;
+  final AutoScrollController _scrollController = AutoScrollController();
+
+  SubEventsListingListView({
     super.key,
-    required this.events,
     this.isCalendarShowing = false,
     this.onScroll,
+    required this.eventsGroupByDate,
+    required this.selectedDate,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (events.isEmpty) {
+    final datesInMonth = selectedDate.datesOfMonths();
+    if (eventsGroupByDate.isEmpty) {
       return Expanded(
         child: CustomScrollView(
           slivers: [
@@ -59,15 +67,31 @@ class SubEventsListingRegularView extends StatelessWidget {
                   return true;
                 },
                 child: CustomScrollView(
+                  controller: _scrollController,
                   slivers: [
-                    SliverList.separated(
-                      itemCount: events.length,
-                      itemBuilder: (context, index) {
-                        return _EventItem(event: events[index]);
-                      },
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: Spacing.xSmall),
-                    ),
+                    ...datesInMonth.asMap().entries.map((entry) {
+                      final dateInMonth = entry.value.withoutTime;
+                      final events = eventsGroupByDate[dateInMonth] ?? [];
+                      if (DateUtils.isSameDay(selectedDate, dateInMonth)) {
+                        return _EventsByDateSection(
+                          selectedDate: selectedDate,
+                          date: dateInMonth,
+                          events: events,
+                        );
+                      }
+                      if (events.isEmpty ||
+                          (dateInMonth.month != selectedDate.month &&
+                              dateInMonth.year != selectedDate.year)) {
+                        return const SliverToBoxAdapter(
+                          child: SizedBox.shrink(),
+                        );
+                      }
+                      return _EventsByDateSection(
+                        selectedDate: selectedDate,
+                        date: dateInMonth,
+                        events: events,
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -75,6 +99,65 @@ class SubEventsListingRegularView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _EventsByDateSection extends StatelessWidget {
+  final DateTime selectedDate;
+  final DateTime date;
+  final List<Event> events;
+  const _EventsByDateSection({
+    required this.date,
+    required this.events,
+    required this.selectedDate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    if (events.isEmpty && !DateUtils.isSameDay(selectedDate, date)) {
+      return const SliverToBoxAdapter(
+        child: SizedBox.shrink(),
+      );
+    }
+
+    return MultiSliver(
+      children: [
+        SliverToBoxAdapter(
+          child: Text(
+            DateFormatUtils.custom(date, pattern: 'MMM d, EEEE'),
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Spacing.xSmall),
+        ),
+        if (events.isEmpty)
+          SliverToBoxAdapter(
+            child: Text(
+              t.event.subEvent.emptySessions,
+              style: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ),
+        if (events.isNotEmpty)
+          SliverList.separated(
+            itemCount: events.length,
+            itemBuilder: (context, index) {
+              return _EventItem(event: events[index]);
+            },
+            separatorBuilder: (context, index) =>
+                SizedBox(height: Spacing.xSmall),
+          ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Spacing.medium),
+        ),
+      ],
     );
   }
 }
