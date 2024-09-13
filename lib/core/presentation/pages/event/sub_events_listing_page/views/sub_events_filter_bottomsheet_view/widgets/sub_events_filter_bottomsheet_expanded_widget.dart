@@ -14,12 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubEventsFilterBottomsheetExpandedWidget extends StatefulWidget {
-  final DraggableScrollableController dragController;
-  final ScrollController scrollController;
   const SubEventsFilterBottomsheetExpandedWidget({
     super.key,
-    required this.scrollController,
-    required this.dragController,
   });
 
   @override
@@ -44,7 +40,6 @@ class _SubEventsFilterBottomsheetExpandedWidgetState
               slivers: [
                 SliverToBoxAdapter(
                   child: SingleChildScrollView(
-                    controller: widget.scrollController,
                     physics: const ClampingScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -53,7 +48,7 @@ class _SubEventsFilterBottomsheetExpandedWidgetState
                         LemonAppBar(
                           leading: const SizedBox.shrink(),
                           title: t.common.filters,
-                          backgroundColor: LemonColor.chineseBlack,
+                          backgroundColor: LemonColor.atomicBlack,
                           actions: [
                             Padding(
                               padding: EdgeInsets.symmetric(
@@ -111,13 +106,11 @@ class _SubEventsFilterBottomsheetExpandedWidgetState
                 ),
               ],
             ),
-            Positioned(
+            const Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: SubEventsFilterBottomsheetExpandedFooter(
-                dragController: widget.dragController,
-              ),
+              child: SubEventsFilterBottomsheetExpandedFooter(),
             ),
           ],
         ),

@@ -212,4 +212,10 @@ class DateUtils {
     }
     return dateList;
   }
+
+  static bool isInSameWeek(DateTime date1, DateTime date2) {
+    final startOfWeek1 = date1.subtract(Duration(days: date1.weekday - 1));
+    final startOfWeek2 = date2.subtract(Duration(days: date2.weekday - 1));
+    return startOfWeek1 == startOfWeek2;
+  }
 }
