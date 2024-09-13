@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.33.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.32.0...v1.33.0) (2024-09-13)
+
+
+### Features
+
+* event session polish ([#721](https://github.com/lemonadesocial/lemonade-flutter/issues/721)) ([b4b2b4d](https://github.com/lemonadesocial/lemonade-flutter/commit/b4b2b4ded01fe1f111824364c27b2568c7309f80))
+
 ## [1.32.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.31.0...v1.32.0) (2024-09-11)
 
 
