@@ -4,7 +4,7 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/edit_event_config_grid.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
@@ -12,7 +12,6 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -21,6 +20,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/widgets.dart';
@@ -250,6 +250,23 @@ class CreateEventBasePage extends StatelessWidget {
                   child: SizedBox(height: Spacing.xSmall),
                 ),
                 SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: Spacing.smMedium,
+                      bottom: Spacing.medium,
+                    ),
+                    child: Container(
+                      height: 1.h,
+                      decoration: BoxDecoration(
+                        color: colorScheme.outline,
+                      ),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: CreateEventRegistrationSection(),
+                ),
+                SliverToBoxAdapter(
                   child: _buildSubmitButton(context),
                 ),
               ],
@@ -270,7 +287,7 @@ class CreateEventBasePage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: Spacing.smMedium,
-              vertical: Spacing.xSmall,
+              vertical: Spacing.medium,
             ),
             child: LinearGradientButton.primaryButton(
               label: state.parentEventId != null
