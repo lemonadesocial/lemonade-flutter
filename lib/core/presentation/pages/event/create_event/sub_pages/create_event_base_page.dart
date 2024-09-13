@@ -22,6 +22,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -144,8 +145,8 @@ class CreateEventBasePage extends StatelessWidget {
                         child: EventDateTimeSettingSection(),
                       ),
                     ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: 30.h),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.xSmall),
                     ),
                     SliverPadding(
                       padding: EdgeInsets.symmetric(
@@ -190,8 +191,8 @@ class CreateEventBasePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: 30.h),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.xSmall),
                     ),
                     SliverPadding(
                       padding: EdgeInsets.symmetric(

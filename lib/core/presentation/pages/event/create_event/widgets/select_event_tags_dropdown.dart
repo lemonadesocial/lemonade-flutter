@@ -3,6 +3,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_tags.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -50,26 +51,38 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
             onChanged: (value) {},
             customButton: Container(
               width: double.infinity,
-              padding: EdgeInsets.all(Spacing.smMedium),
+              padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
                 color: LemonColor.atomicBlack,
               ),
               child: Row(
                 children: [
+                  ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) => Assets.icons.icTag.svg(
+                      width: Sizing.mSmall,
+                      height: Sizing.mSmall,
+                      colorFilter: filter,
+                    ),
+                  ),
+                  SizedBox(width: Spacing.small),
                   Expanded(
                     child: Text(
                       selectedItems.isEmpty
                           ? t.event.eventTags.addTags
                           : selectedItems.join(", "),
-                      style: Theme.of(context).textTheme.bodyText1,
+                      // style: Theme.of(context).textTheme.bodyText1,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
                     ),
                   ),
                   SizedBox(width: Spacing.xSmall),
                   ThemeSvgIcon(
                     color: colorScheme.onSecondary,
                     builder: (filter) =>
-                        Assets.icons.icArrowDown.svg(colorFilter: filter),
+                        Assets.icons.icArrowUpDown.svg(colorFilter: filter),
                   ),
                 ],
               ),
