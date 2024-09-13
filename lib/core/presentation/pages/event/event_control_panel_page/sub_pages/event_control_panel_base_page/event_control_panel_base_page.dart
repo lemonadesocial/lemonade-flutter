@@ -1,10 +1,9 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/edit_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_collaborations_grid_config.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_tickets_grid_config.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -142,7 +141,7 @@ class EventControlPanelBasePage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                         horizontal: Spacing.smMedium,
                       ),
-                      sliver: CreateEventConfigGrid(event: event),
+                      sliver: EditEventConfigGrid(event: event),
                     ),
                     // if (canShowEventSettings)
                     SliverPadding(
@@ -184,12 +183,12 @@ class EventControlPanelBasePage extends StatelessWidget {
                       ),
                     ),
                     // if (canShowEventSettings)
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                      ),
-                      sliver: EventCollaborationsGridConfig(event: event),
-                    ),
+                    // SliverPadding(
+                    //   padding: EdgeInsets.symmetric(
+                    //     horizontal: Spacing.smMedium,
+                    //   ),
+                    //   sliver: EventCollaborationsGridConfig(event: event),
+                    // ),
                     // SliverToBoxAdapter(
                     //   child: SizedBox(
                     //     height: Spacing.xLarge,

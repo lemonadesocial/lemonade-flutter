@@ -1,9 +1,10 @@
-import 'package:app/core/application/event/edit_event_bloc/edit_event_bloc.dart';
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/create_event_config_grid.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/edit_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -25,7 +26,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'widgets/create_event_banner_photo_card.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -36,31 +36,31 @@ class CreateEventBasePage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BlocConsumer<EditEventBloc, EditEventState>(
+    return BlocConsumer<CreateEventBloc, CreateEventState>(
       listener: (context, state) {
-        if (state.status.isSuccess) {
-          SnackBarUtils.showSuccess(
-            message: t.event.eventCreation.createEventSuccessfully,
-          );
-          AutoRouter.of(context).root.popUntilRoot();
-          AutoRouter.of(context).root.push(
-                EventDetailRoute(
-                  eventId: state.eventId ?? '',
-                  children: [
-                    const EventDetailBaseRoute(),
-                    EventTicketTierSettingRoute(
-                      children: [
-                        EventTicketTiersListingRoute(
-                          onNext: (mContext) => AutoRouter.of(mContext).replace(
-                            const HostEventPublishFlowRoute(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-        }
+        // if (state.status.isSuccess) {
+        //   SnackBarUtils.showSuccess(
+        //     message: t.event.eventCreation.createEventSuccessfully,
+        //   );
+        //   AutoRouter.of(context).root.popUntilRoot();
+        //   AutoRouter.of(context).root.push(
+        //         EventDetailRoute(
+        //           eventId: state.eventId ?? '',
+        //           children: [
+        //             const EventDetailBaseRoute(),
+        //             EventTicketTierSettingRoute(
+        //               children: [
+        //                 EventTicketTiersListingRoute(
+        //                   onNext: (mContext) => AutoRouter.of(mContext).replace(
+        //                     const HostEventPublishFlowRoute(),
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        // }
       },
       builder: (context, state) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -112,9 +112,12 @@ class CreateEventBasePage extends StatelessWidget {
                         child: LemonTextField(
                           hintText: t.event.eventCreation.titleHint,
                           initialText: state.title.value,
-                          onChange: (value) => context
-                              .read<EditEventBloc>()
-                              .add(EventTitleChanged(title: value)),
+                          onChange: (value) =>
+                              context.read<CreateEventBloc>().add(
+                                    CreateEventEvent.createEventTitleChanged(
+                                      title: value,
+                                    ),
+                                  ),
                           errorText: state.title.displayError?.getMessage(
                             t.event.eventCreation.title,
                           ),
@@ -126,7 +129,6 @@ class CreateEventBasePage extends StatelessWidget {
                           placeholderStyle: Typo.extraMedium.copyWith(
                             color: LemonColor.white23,
                             fontWeight: FontWeight.w500,
-                            height: 0,
                           ),
                         ),
                       ),
@@ -143,7 +145,7 @@ class CreateEventBasePage extends StatelessWidget {
                           title: t.event.eventCreation.description,
                           subTitle: StringUtils.stripHtmlTags(
                             context
-                                .read<EditEventBloc>()
+                                .read<CreateEventBloc>()
                                 .state
                                 .description
                                 .value,
@@ -163,8 +165,9 @@ class CreateEventBasePage extends StatelessWidget {
                               EventDescriptionFieldRoute(
                                 description: state.description.value,
                                 onDescriptionChanged: (value) {
-                                  context.read<EditEventBloc>().add(
-                                        EventDescriptionChanged(
+                                  context.read<CreateEventBloc>().add(
+                                        CreateEventEvent
+                                            .createEventDescriptionChanged(
                                           description: value,
                                         ),
                                       );
@@ -197,8 +200,10 @@ class CreateEventBasePage extends StatelessWidget {
                       sliver: SliverToBoxAdapter(
                         child: SelectEventTagsDropdown(
                           onChange: (tags) {
-                            context.read<EditEventBloc>().add(
-                                  EditEventEvent.tagsChanged(tags: tags),
+                            context.read<CreateEventBloc>().add(
+                                  CreateEventEvent.createEventTagsChanged(
+                                    tags: tags,
+                                  ),
                                 );
                           },
                           initialSelectedTags: const [],
@@ -207,12 +212,6 @@ class CreateEventBasePage extends StatelessWidget {
                     ),
                     SliverPadding(
                       padding: EdgeInsets.only(top: 30.h),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                      ),
-                      sliver: const CreateEventConfigGrid(),
                     ),
                   ],
                 ),
@@ -233,7 +232,7 @@ class CreateEventBasePage extends StatelessWidget {
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<EditEventBloc, EditEventState>(
+    return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Container(
           color: colorScheme.background,
@@ -266,8 +265,8 @@ class CreateEventBasePage extends StatelessWidget {
                 final timezone =
                     context.read<EventDateTimeSettingsBloc>().state.timezone ??
                         '';
-                context.read<EditEventBloc>().add(
-                      FormSubmitted(
+                context.read<CreateEventBloc>().add(
+                      CreateEventEvent.createEventFormSubmitted(
                         start: start,
                         end: end,
                         timezone: timezone,

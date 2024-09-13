@@ -23,9 +23,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum EventPrivacy { public, private }
 
-class CreateEventConfigGrid extends StatelessWidget {
+class EditEventConfigGrid extends StatelessWidget {
   final Event? event;
-  const CreateEventConfigGrid({super.key, this.event});
+  const EditEventConfigGrid({super.key, this.event});
 
   onTap(
     BuildContext context,
