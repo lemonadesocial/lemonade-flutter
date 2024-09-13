@@ -70,7 +70,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
                   Expanded(
                     child: Text(
                       selectedItems.isEmpty
-                          ? t.event.eventTags.addTags
+                          ? t.event.eventTags.tags
                           : selectedItems.join(", "),
                       // style: Theme.of(context).textTheme.bodyText1,
                       style: Typo.medium.copyWith(

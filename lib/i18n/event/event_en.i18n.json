@@ -665,6 +665,7 @@
         "createSideEventDescription": "Host independent events within the main event"
     },
     "eventTags": {
+        "tags": "Tags",
         "addTags": "Add tags"
     },
     "teamMembers": {

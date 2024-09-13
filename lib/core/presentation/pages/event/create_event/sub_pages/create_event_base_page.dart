@@ -92,176 +92,164 @@ class CreateEventBasePage extends StatelessWidget {
             ],
           ),
           body: SafeArea(
-            child: Stack(
-              children: [
-                CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: const SliverToBoxAdapter(
+                    child: CreateEventBannerPhotoCard(),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.only(top: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: LemonTextField(
+                      hintText: t.event.eventCreation.titleHint,
+                      initialText: state.title.value,
+                      onChange: (value) => context.read<CreateEventBloc>().add(
+                            CreateEventEvent.createEventTitleChanged(
+                              title: value,
+                            ),
+                          ),
+                      errorText: state.title.displayError?.getMessage(
+                        t.event.eventCreation.title,
                       ),
-                      sliver: const SliverToBoxAdapter(
-                        child: CreateEventBannerPhotoCard(),
+                      labelStyle: Typo.extraMedium.copyWith(
+                        color: colorScheme.onSecondary,
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                      placeholderStyle: Typo.extraMedium.copyWith(
+                        color: LemonColor.white23,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: Spacing.xSmall),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.only(top: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: const SliverToBoxAdapter(
+                    child: EventDateTimeSettingSection(),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: SettingTileWidget(
+                      title: t.event.virtualLinkSetting.virtualLink,
+                      leading: Icon(
+                        Icons.videocam_rounded,
+                        size: 18.w,
+                        color: colorScheme.onSecondary,
                       ),
-                      sliver: SliverToBoxAdapter(
-                        child: LemonTextField(
-                          hintText: t.event.eventCreation.titleHint,
-                          initialText: state.title.value,
-                          onChange: (value) =>
-                              context.read<CreateEventBloc>().add(
-                                    CreateEventEvent.createEventTitleChanged(
-                                      title: value,
-                                    ),
-                                  ),
-                          errorText: state.title.displayError?.getMessage(
-                            t.event.eventCreation.title,
-                          ),
-                          labelStyle: Typo.extraMedium.copyWith(
-                            color: colorScheme.onSecondary,
-                            fontWeight: FontWeight.w500,
-                            height: 0,
-                          ),
-                          placeholderStyle: Typo.extraMedium.copyWith(
-                            color: LemonColor.white23,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                      leadingCircle: false,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
                       ),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: Spacing.xSmall),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
+                      titleStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
                       ),
-                      sliver: const SliverToBoxAdapter(
-                        child: EventDateTimeSettingSection(),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: Spacing.xSmall),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: SettingTileWidget(
-                          title: t.event.virtualLinkSetting.virtualLink,
-                          leading: Icon(
-                            Icons.videocam_rounded,
-                            size: 18.w,
-                            color: colorScheme.onSecondary,
-                          ),
-                          leadingCircle: false,
-                          trailing: Assets.icons.icArrowBack.svg(
-                            width: 18.w,
-                            height: 18.w,
-                          ),
-                          titleStyle: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                          radius: LemonRadius.small,
-                          onTap: () {
-                            Vibrate.feedback(FeedbackType.light);
-                            showCupertinoModalBottomSheet(
-                              context: context,
-                              useRootNavigator: true,
-                              builder: (mContext) {
-                                return EventVirtualLinkSettingPage(
-                                  defaultUrl: "",
-                                  onConfirm: (virtualUrl) {},
-                                );
-                              },
+                      radius: LemonRadius.small,
+                      onTap: () {
+                        Vibrate.feedback(FeedbackType.light);
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          builder: (mContext) {
+                            return EventVirtualLinkSettingPage(
+                              defaultUrl: "",
+                              onConfirm: (virtualUrl) {},
                             );
                           },
-                        ),
-                      ),
+                        );
+                      },
                     ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: Spacing.xSmall),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: SettingTileWidget(
+                      title: t.event.eventCreation.description,
+                      subTitle: StringUtils.stripHtmlTags(
+                        context.read<CreateEventBloc>().state.description.value,
                       ),
-                      sliver: SliverToBoxAdapter(
-                        child: SettingTileWidget(
-                          title: t.event.eventCreation.description,
-                          subTitle: StringUtils.stripHtmlTags(
-                            context
-                                .read<CreateEventBloc>()
-                                .state
-                                .description
-                                .value,
+                      leading: Assets.icons.icDescription.svg(),
+                      leadingCircle: false,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      titleStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                      radius: LemonRadius.small,
+                      onTap: () {
+                        AutoRouter.of(context).navigate(
+                          EventDescriptionFieldRoute(
+                            description: state.description.value,
+                            onDescriptionChanged: (value) {
+                              context.read<CreateEventBloc>().add(
+                                    CreateEventEvent
+                                        .createEventDescriptionChanged(
+                                      description: value,
+                                    ),
+                                  );
+                            },
                           ),
-                          leading: Assets.icons.icDescription.svg(),
-                          leadingCircle: false,
-                          trailing: Assets.icons.icArrowBack.svg(
-                            width: 18.w,
-                            height: 18.w,
-                          ),
-                          titleStyle: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                          radius: LemonRadius.small,
-                          onTap: () {
-                            AutoRouter.of(context).navigate(
-                              EventDescriptionFieldRoute(
-                                description: state.description.value,
-                                onDescriptionChanged: (value) {
-                                  context.read<CreateEventBloc>().add(
-                                        CreateEventEvent
-                                            .createEventDescriptionChanged(
-                                          description: value,
-                                        ),
-                                      );
-                                },
+                        );
+                      },
+                      isError: state.description.displayError != null,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: SelectEventTagsDropdown(
+                      onChange: (tags) {
+                        context.read<CreateEventBloc>().add(
+                              CreateEventEvent.createEventTagsChanged(
+                                tags: tags,
                               ),
                             );
-                          },
-                          isError: state.description.displayError != null,
-                        ),
-                      ),
+                      },
+                      initialSelectedTags: const [],
                     ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: Spacing.xSmall),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: SelectEventTagsDropdown(
-                          onChange: (tags) {
-                            context.read<CreateEventBloc>().add(
-                                  CreateEventEvent.createEventTagsChanged(
-                                    tags: tags,
-                                  ),
-                                );
-                          },
-                          initialSelectedTags: const [],
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: 120.w),
-                    ),
-                  ],
+                  ),
                 ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xSmall),
+                ),
+                SliverToBoxAdapter(
                   child: _buildSubmitButton(context),
                 ),
               ],
