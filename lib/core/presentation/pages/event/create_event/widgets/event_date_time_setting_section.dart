@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/timezone_select_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -28,17 +29,12 @@ class EventDateTimeSettingSection extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(Spacing.xSmall),
+          padding: EdgeInsets.all(Spacing.small),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
             color: LemonColor.atomicBlack,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(LemonRadius.small),
-                topRight: Radius.circular(LemonRadius.small),
-                bottomLeft: Radius.circular(LemonRadius.extraSmall),
-                bottomRight: Radius.circular(LemonRadius.extraSmall),
-              ),
+              borderRadius: BorderRadius.circular(LemonRadius.normal),
             ),
           ),
           child: BlocBuilder<EventDateTimeSettingsBloc,
@@ -69,6 +65,15 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: Spacing.smMedium),
+                  Container(
+                    height: 1.h,
+                    decoration: BoxDecoration(
+                      color: LemonColor.white06,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    margin: EdgeInsets.only(left: 30.w),
+                  ),
+                  SizedBox(height: Spacing.smMedium),
                   _DateTimeRowItem(
                     color: LemonColor.coralReef,
                     text: t.event.datetimeSettings.ends,
@@ -90,95 +95,85 @@ class EventDateTimeSettingSection extends StatelessWidget {
                       );
                     },
                   ),
-                ],
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: Spacing.superExtraSmall,
-        ),
-        InkWell(
-          onTap: () {
-            showCupertinoModalBottomSheet(
-              bounce: true,
-              backgroundColor: LemonColor.atomicBlack,
-              context: context,
-              enableDrag: false,
-              builder: (newContext) {
-                return TimezoneSelectBottomSheet(
-                  event: event,
-                );
-              },
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.all(Spacing.xSmall),
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              color: LemonColor.atomicBlack,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(LemonRadius.extraSmall),
-                  topRight: Radius.circular(LemonRadius.extraSmall),
-                  bottomLeft: Radius.circular(LemonRadius.small),
-                  bottomRight: Radius.circular(LemonRadius.small),
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                  SizedBox(height: Spacing.smMedium),
+                  Container(
+                    height: 1.h,
+                    decoration: BoxDecoration(
+                      color: LemonColor.white06,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    margin: EdgeInsets.only(left: 30.w),
+                  ),
+                  SizedBox(height: Spacing.smMedium),
+                  InkWell(
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        bounce: true,
+                        backgroundColor: LemonColor.atomicBlack,
+                        context: context,
+                        enableDrag: false,
+                        builder: (newContext) {
+                          return TimezoneSelectBottomSheet(
+                            event: event,
+                          );
+                        },
+                      );
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Assets.icons.icGlobe.svg(),
-                        SizedBox(
-                          width: Spacing.smMedium / 2,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Assets.icons.icGlobe.svg(),
+                                SizedBox(
+                                  width: 14.w,
+                                ),
+                                BlocBuilder<EventDateTimeSettingsBloc,
+                                    EventDateTimeSettingsState>(
+                                  builder: (context, state) {
+                                    final timezoneText = EventConstants
+                                            .timezoneOptions
+                                            .toList()
+                                            .firstWhere(
+                                              (element) =>
+                                                  element['value'] ==
+                                                  state.timezone,
+                                              orElse: () => {},
+                                            )['text'] ??
+                                        '';
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          timezoneText,
+                                          style: Typo.medium.copyWith(
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        Text(
-                          t.event.timezoneSetting.timezone,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
+                        ThemeSvgIcon(
+                          color: colorScheme.onSurfaceVariant,
+                          builder: (filter) => Assets.icons.icArrowRight.svg(
+                            colorFilter: filter,
+                            width: 18.w,
+                            height: 18.w,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: Spacing.superExtraSmall,
-                    ),
-                    BlocBuilder<EventDateTimeSettingsBloc,
-                        EventDateTimeSettingsState>(
-                      builder: (context, state) {
-                        final timezoneText =
-                            EventConstants.timezoneOptions.toList().firstWhere(
-                                      (element) =>
-                                          element['value'] == state.timezone,
-                                      orElse: () => {},
-                                    )['text'] ??
-                                '';
-                        return Row(
-                          children: [
-                            Text(
-                              timezoneText,
-                              style: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Assets.icons.icArrowUpDown.svg(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                ),
-              ],
-            ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],
@@ -216,13 +211,30 @@ class _DateTimeRowItem extends StatelessWidget {
                   text,
                   style: Typo.medium.copyWith(
                     color: colorScheme.onSecondary,
+                    height: 0,
                   ),
                 ),
-                Text(
-                  date,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      date,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary,
+                        height: 0,
+                      ),
+                    ),
+                    SizedBox(
+                      width: Spacing.smMedium / 2,
+                    ),
+                    ThemeSvgIcon(
+                      color: colorScheme.onSurfaceVariant,
+                      builder: (filter) => Assets.icons.icEdit.svg(
+                        colorFilter: filter,
+                        width: Sizing.xSmall,
+                        height: Sizing.xSmall,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

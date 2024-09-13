@@ -140,6 +140,17 @@ class CreateEventBasePage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                         horizontal: Spacing.smMedium,
                       ),
+                      sliver: const SliverToBoxAdapter(
+                        child: EventDateTimeSettingSection(),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 30.h),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
                       sliver: SliverToBoxAdapter(
                         child: SettingTileWidget(
                           title: t.event.eventCreation.description,
@@ -177,17 +188,6 @@ class CreateEventBasePage extends StatelessWidget {
                           },
                           isError: state.description.displayError != null,
                         ),
-                      ),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: 30.h),
-                    ),
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.smMedium,
-                      ),
-                      sliver: const SliverToBoxAdapter(
-                        child: EventDateTimeSettingSection(),
                       ),
                     ),
                     SliverPadding(
