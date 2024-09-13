@@ -7,6 +7,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/edit_event_config_grid.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -154,6 +156,46 @@ class CreateEventBasePage extends StatelessWidget {
                       ),
                       sliver: SliverToBoxAdapter(
                         child: SettingTileWidget(
+                          title: t.event.virtualLinkSetting.virtualLink,
+                          leading: Icon(
+                            Icons.videocam_rounded,
+                            size: 18.w,
+                            color: colorScheme.onSecondary,
+                          ),
+                          leadingCircle: false,
+                          trailing: Assets.icons.icArrowBack.svg(
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                          titleStyle: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          radius: LemonRadius.small,
+                          onTap: () {
+                            Vibrate.feedback(FeedbackType.light);
+                            showCupertinoModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              builder: (mContext) {
+                                return EventVirtualLinkSettingPage(
+                                  defaultUrl: "",
+                                  onConfirm: (virtualUrl) {},
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.xSmall),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: SettingTileWidget(
                           title: t.event.eventCreation.description,
                           subTitle: StringUtils.stripHtmlTags(
                             context
@@ -211,8 +253,8 @@ class CreateEventBasePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SliverPadding(
-                      padding: EdgeInsets.only(top: 30.h),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: 120.w),
                     ),
                   ],
                 ),
