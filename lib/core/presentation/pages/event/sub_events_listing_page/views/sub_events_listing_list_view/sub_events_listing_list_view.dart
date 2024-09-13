@@ -1,4 +1,6 @@
+import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_events_empty_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -14,6 +16,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -21,84 +24,115 @@ import 'package:sliver_tools/sliver_tools.dart';
 class SubEventsListingListView extends StatelessWidget {
   final bool isCalendarShowing;
   final void Function(ScrollMetrics metrics)? onScroll;
-  final Map<DateTime, List<Event>> eventsGroupByDate;
-  final DateTime selectedDate;
   final AutoScrollController _scrollController = AutoScrollController();
+  final String parentEventId;
 
   SubEventsListingListView({
     super.key,
+    required this.parentEventId,
     this.isCalendarShowing = false,
     this.onScroll,
-    required this.eventsGroupByDate,
-    required this.selectedDate,
   });
 
   @override
   Widget build(BuildContext context) {
-    final datesInMonth = selectedDate.datesOfMonths();
-    if (eventsGroupByDate.isEmpty) {
-      return Expanded(
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(top: Spacing.small),
-              sliver: const SliverToBoxAdapter(
-                child: SubEventsEmptyWidget(),
-              ),
+    return BlocBuilder<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
+      builder: (context, state) {
+        final selectedDate = state.selectedDate;
+        final eventsGroupByDate = state.eventsGroupByDate.map(
+          (date, events) => MapEntry(
+            date,
+            events
+                .where(
+                  (event) => getSubEventByFilter(
+                    event,
+                    selectedHosts: state.selectedHosts,
+                    selectedTags: state.selectedTags,
+                  ),
+                )
+                .toList(),
+          ),
+        );
+        final datesInMonth = selectedDate.datesOfMonths();
+        if (eventsGroupByDate.isEmpty) {
+          return Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.only(top: Spacing.small),
+                  sliver: const SliverToBoxAdapter(
+                    child: SubEventsEmptyWidget(),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      );
-    }
-    return Expanded(
-      child: Column(
-        children: [
-          if (isCalendarShowing) SizedBox(height: Spacing.xSmall),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.xSmall,
-              ),
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (notification) {
-                  if (notification is ScrollUpdateNotification) {
-                    onScroll?.call(notification.metrics);
-                  }
-                  return true;
-                },
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    ...datesInMonth.asMap().entries.map((entry) {
-                      final dateInMonth = entry.value.withoutTime;
-                      final events = eventsGroupByDate[dateInMonth] ?? [];
-                      if (DateUtils.isSameDay(selectedDate, dateInMonth)) {
-                        return _EventsByDateSection(
-                          selectedDate: selectedDate,
-                          date: dateInMonth,
-                          events: events,
-                        );
+          );
+        }
+        return Expanded(
+          child: Column(
+            children: [
+              if (isCalendarShowing) SizedBox(height: Spacing.xSmall),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.xSmall,
+                  ),
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is ScrollUpdateNotification) {
+                        onScroll?.call(notification.metrics);
                       }
-                      if (events.isEmpty ||
-                          (dateInMonth.month != selectedDate.month &&
-                              dateInMonth.year != selectedDate.year)) {
-                        return const SliverToBoxAdapter(
-                          child: SizedBox.shrink(),
-                        );
-                      }
-                      return _EventsByDateSection(
-                        selectedDate: selectedDate,
-                        date: dateInMonth,
-                        events: events,
-                      );
-                    }),
-                  ],
+                      return true;
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        ...datesInMonth.asMap().entries.map((entry) {
+                          final dateInMonth = entry.value.withoutTime;
+                          final events = eventsGroupByDate[dateInMonth] ?? [];
+                          if (DateUtils.isSameDay(selectedDate, dateInMonth)) {
+                            return _EventsByDateSection(
+                              selectedDate: selectedDate,
+                              date: dateInMonth,
+                              events: events,
+                              onEmptyTap: () {
+                                AutoRouter.of(context).push(
+                                  CreateEventRoute(
+                                    parentEventId: parentEventId,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          if (events.isEmpty ||
+                              (dateInMonth.month != selectedDate.month &&
+                                  dateInMonth.year != selectedDate.year)) {
+                            return const SliverToBoxAdapter(
+                              child: SizedBox.shrink(),
+                            );
+                          }
+                          return _EventsByDateSection(
+                            selectedDate: selectedDate,
+                            date: dateInMonth,
+                            events: events,
+                            onEmptyTap: () {
+                              AutoRouter.of(context).push(
+                                CreateEventRoute(
+                                  parentEventId: parentEventId,
+                                ),
+                              );
+                            },
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -107,10 +141,13 @@ class _EventsByDateSection extends StatelessWidget {
   final DateTime selectedDate;
   final DateTime date;
   final List<Event> events;
+  final VoidCallback? onEmptyTap;
+
   const _EventsByDateSection({
     required this.date,
     required this.events,
     required this.selectedDate,
+    this.onEmptyTap,
   });
 
   @override
@@ -138,10 +175,15 @@ class _EventsByDateSection extends StatelessWidget {
         ),
         if (events.isEmpty)
           SliverToBoxAdapter(
-            child: Text(
-              t.event.subEvent.emptySessions,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
+            child: InkWell(
+              onTap: () {
+                onEmptyTap?.call();
+              },
+              child: Text(
+                t.event.subEvent.emptySessions,
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
               ),
             ),
           ),

@@ -315,30 +315,9 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
               if (_calendarVisible) SizedBox(height: Spacing.xSmall),
               if (_viewMode == SubEventViewMode.listing)
                 SubEventsListingListView(
+                  parentEventId: widget.parentEventId,
                   isCalendarShowing: _calendarVisible,
                   onScroll: _onScroll,
-                  selectedDate: state.selectedDate,
-                  eventsGroupByDate: Map.from(state.eventsGroupByDate)
-                    // ..removeWhere((date, value) {
-                    //   if (date.month == state.selectedDate.month && date.year == state.selectedDate.year) {
-                    //     return false;
-                    //   }
-                    //   return true;
-                    // })
-                    ..map(
-                      (date, events) => MapEntry(
-                        date,
-                        events
-                            .where(
-                              (event) => getSubEventByFilter(
-                                event,
-                                selectedHosts: state.selectedHosts,
-                                selectedTags: state.selectedTags,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
                 ),
               if (_viewMode == SubEventViewMode.calendar)
                 calendar_view.CalendarControllerProvider(
