@@ -40,6 +40,17 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   icon: Assets.icons.icPublic,
                   title: 'Visibility',
                   value: 'Public',
+                  trailingIcon: Assets.icons.icArrowUpDown,
+                ),
+                Container(
+                  height: 1.h,
+                  decoration: BoxDecoration(
+                    color: LemonColor.white06,
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  margin: EdgeInsets.only(
+                    left: Spacing.xLarge + Spacing.superExtraSmall,
+                  ),
                 ),
                 _buildSettingRow(
                   context,
@@ -47,17 +58,39 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   title: 'Require approval',
                   isSwitch: true,
                 ),
+                Container(
+                  height: 1.h,
+                  decoration: BoxDecoration(
+                    color: LemonColor.white06,
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  margin: EdgeInsets.only(
+                    left: Spacing.xLarge + Spacing.superExtraSmall,
+                  ),
+                ),
                 _buildSettingRow(
                   context,
-                  icon: Assets.icons.icArrowUp,
+                  icon: Assets.icons.icArrowUpToLine,
                   title: 'Guest limit',
                   value: 'Unlimited',
+                  trailingIcon: Assets.icons.icEdit,
+                ),
+                Container(
+                  height: 1.h,
+                  decoration: BoxDecoration(
+                    color: LemonColor.white06,
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  margin: EdgeInsets.only(
+                    left: Spacing.xLarge + Spacing.superExtraSmall,
+                  ),
                 ),
                 _buildSettingRow(
                   context,
                   icon: Assets.icons.icPersonAddOutline,
                   title: 'Invite limit per guest',
                   value: 'Unlimited',
+                  trailingIcon: Assets.icons.icEdit,
                 ),
               ],
             ),
@@ -67,13 +100,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingRow(
-    BuildContext context, {
-    required SvgGenImage icon,
-    required String title,
-    String? value,
-    bool isSwitch = false,
-  }) {
+  Widget _buildSettingRow(BuildContext context,
+      {required SvgGenImage icon,
+      required String title,
+      String? value,
+      bool isSwitch = false,
+      SvgGenImage? trailingIcon,
+      prop}) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.all(Spacing.small),
@@ -101,24 +134,29 @@ class CreateEventRegistrationSection extends StatelessWidget {
             ),
           ),
           if (isSwitch)
-            Switch(
-              value: false,
-              onChanged: (_) {},
-              activeColor: colorScheme.primary,
+            SizedBox(
+              height: Sizing.small,
+              child: Switch(
+                value: false,
+                onChanged: (_) {},
+                activeColor: colorScheme.primary,
+              ),
             )
           else if (value != null) ...[
             Text(
               value,
-              style: Typo.medium.copyWith(color: colorScheme.onSurface),
+              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
             ),
             SizedBox(width: Spacing.xSmall),
-            ThemeSvgIcon(
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                width: Sizing.xSmall,
-                height: Sizing.xSmall,
-                colorFilter: filter,
+            if (trailingIcon != null) // Check if trailingIcon is provided
+              ThemeSvgIcon(
+                color: colorScheme.onSurfaceVariant,
+                builder: (filter) => trailingIcon.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: filter,
+                ),
               ),
-            ),
           ],
         ],
       ),

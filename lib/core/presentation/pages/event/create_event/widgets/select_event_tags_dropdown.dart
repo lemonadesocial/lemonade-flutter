@@ -68,14 +68,30 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
                   ),
                   SizedBox(width: Spacing.small),
                   Expanded(
-                    child: Text(
-                      selectedItems.isEmpty
-                          ? t.event.eventTags.tags
-                          : selectedItems.join(", "),
-                      // style: Theme.of(context).textTheme.bodyText1,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.event.eventTags.tags,
+                          style: Typo.medium.copyWith(
+                            color: selectedItems.isNotEmpty
+                                ? colorScheme.onPrimary
+                                : colorScheme.onSecondary,
+                          ),
+                        ),
+                        if (selectedItems.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: Spacing.superExtraSmall / 2,
+                            ),
+                            child: Text(
+                              selectedItems.join(", "),
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   SizedBox(width: Spacing.xSmall),
