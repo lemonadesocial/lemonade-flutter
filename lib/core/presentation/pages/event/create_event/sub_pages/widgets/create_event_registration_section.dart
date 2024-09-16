@@ -4,12 +4,15 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+enum EventVisibility { public, private }
 
 class CreateEventRegistrationSection extends StatelessWidget {
   const CreateEventRegistrationSection({super.key});
@@ -39,12 +42,40 @@ class CreateEventRegistrationSection extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _buildSettingRow(
-                  context,
-                  icon: Assets.icons.icPublic,
-                  title: 'Visibility',
-                  value: 'Public',
-                  trailingIcon: Assets.icons.icArrowUpDown,
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2<EventVisibility>(
+                    value: EventVisibility.public,
+                    onChanged: (value) {},
+                    customButton: _buildSettingRow(
+                      context,
+                      icon: Assets.icons.icPublic,
+                      title: t.event.visibility,
+                      value: t.event.public,
+                      trailingIcon: Assets.icons.icArrowUpDown,
+                    ),
+                    items: EventVisibility.values
+                        .map((EventVisibility visibility) {
+                      return DropdownMenuItem<EventVisibility>(
+                        value: visibility,
+                        child: Text(
+                          visibility == EventVisibility.public
+                              ? t.event.public
+                              : t.event.private,
+                        ),
+                      );
+                    }).toList(),
+                    dropdownStyleData: DropdownStyleData(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                        color: colorScheme.secondaryContainer,
+                      ),
+                      offset: Offset(0, -Spacing.superExtraSmall),
+                    ),
+                    menuItemStyleData: const MenuItemStyleData(
+                      overlayColor:
+                          MaterialStatePropertyAll(LemonColor.darkBackground),
+                    ),
+                  ),
                 ),
                 Container(
                   height: 1.h,
@@ -204,7 +235,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 style: Typo.medium.copyWith(color: colorScheme.onPrimary),
               ),
               SizedBox(width: Spacing.xSmall),
-              if (trailingIcon != null) // Check if trailingIcon is provided
+              if (trailingIcon != null)
                 ThemeSvgIcon(
                   color: colorScheme.onSurfaceVariant,
                   builder: (filter) => trailingIcon.svg(

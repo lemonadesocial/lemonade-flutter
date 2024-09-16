@@ -709,5 +709,7 @@
     "startingIn": "Starting in $time",
     "noUpcomingEvents": "No Upcoming Events",
     "noUpcomingEventsDescription": "Events you are attending & hosting will show up here",
-    "register": "Register"
+    "register": "Register",
+    "visibility": "Visibility",
+    "requireApproval": "Require approval"
 }
