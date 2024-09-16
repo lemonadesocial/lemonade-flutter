@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/guest_limit_select_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -9,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-enum EventVisibility { public, private }
 
 class CreateEventRegistrationSection extends StatelessWidget {
   const CreateEventRegistrationSection({super.key});
@@ -20,6 +21,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final state = context.watch<CreateEventBloc>().state;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
@@ -28,7 +30,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Registration',
+            t.event.registration,
             style: Typo.medium.copyWith(
               color: colorScheme.onSurface.withOpacity(0.54),
             ),
@@ -43,27 +45,34 @@ class CreateEventRegistrationSection extends StatelessWidget {
             child: Column(
               children: [
                 DropdownButtonHideUnderline(
-                  child: DropdownButton2<EventVisibility>(
-                    value: EventVisibility.public,
-                    onChanged: (value) {},
+                  child: DropdownButton2<bool>(
+                    value: state.private ?? false,
+                    onChanged: (value) {
+                      context.read<CreateEventBloc>().add(
+                            CreateEventEvent.createEventPrivateChanged(
+                              private: value ?? false,
+                            ),
+                          );
+                    },
                     customButton: _buildSettingRow(
                       context,
                       icon: Assets.icons.icPublic,
                       title: t.event.visibility,
-                      value: t.event.public,
+                      value: state.private == true
+                          ? t.event.private
+                          : t.event.public,
                       trailingIcon: Assets.icons.icArrowUpDown,
                     ),
-                    items: EventVisibility.values
-                        .map((EventVisibility visibility) {
-                      return DropdownMenuItem<EventVisibility>(
-                        value: visibility,
-                        child: Text(
-                          visibility == EventVisibility.public
-                              ? t.event.public
-                              : t.event.private,
-                        ),
-                      );
-                    }).toList(),
+                    items: [
+                      DropdownMenuItem<bool>(
+                        value: false,
+                        child: Text(t.event.public),
+                      ),
+                      DropdownMenuItem<bool>(
+                        value: true,
+                        child: Text(t.event.private),
+                      ),
+                    ],
                     dropdownStyleData: DropdownStyleData(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(LemonRadius.small),
@@ -72,8 +81,9 @@ class CreateEventRegistrationSection extends StatelessWidget {
                       offset: Offset(0, -Spacing.superExtraSmall),
                     ),
                     menuItemStyleData: const MenuItemStyleData(
-                      overlayColor:
-                          MaterialStatePropertyAll(LemonColor.darkBackground),
+                      overlayColor: MaterialStatePropertyAll(
+                        LemonColor.darkBackground,
+                      ),
                     ),
                   ),
                 ),
@@ -90,8 +100,16 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 _buildSettingRow(
                   context,
                   icon: Assets.icons.icOutlineVerified,
-                  title: 'Require approval',
+                  title: t.event.requireApproval,
                   isSwitch: true,
+                  switchValue: state.approvalRequired ?? false,
+                  onToggleSwitch: (value) {
+                    context.read<CreateEventBloc>().add(
+                          CreateEventEvent.createEventApprovalRequiredChanged(
+                            approvalRequired: value,
+                          ),
+                        );
+                  },
                 ),
                 Container(
                   height: 1.h,
@@ -107,7 +125,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   context,
                   icon: Assets.icons.icArrowUpToLine,
                   title: t.event.guestSettings.guestLimit,
-                  value: t.event.guestSettings.unlimited,
+                  value: state.guestLimit ?? t.event.guestSettings.unlimited,
                   trailingIcon: Assets.icons.icEdit,
                   onTap: () {
                     showCupertinoModalBottomSheet(
@@ -120,14 +138,17 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           title: t.event.guestSettings.guestLimit,
                           description:
                               t.event.guestSettings.guestLimitDescription,
-                          initialValue: 100,
+                          initialValue: int.tryParse(state.guestLimit ?? '100'),
                           onRemove: () {
-                            print('remove');
                             AutoRouter.of(context).pop();
                           },
                           onSetLimit: (value) {
-                            print(value);
                             AutoRouter.of(context).pop();
+                            context.read<CreateEventBloc>().add(
+                                  CreateEventEvent.createEventGuestLimitChanged(
+                                    guestLimit: value.toString(),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -148,7 +169,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   context,
                   icon: Assets.icons.icPersonAddOutline,
                   title: t.event.guestSettings.inviteLimitPerGuest,
-                  value: t.event.guestSettings.unlimited,
+                  value: state.guestLimitPer ?? t.event.guestSettings.unlimited,
                   trailingIcon: Assets.icons.icEdit,
                   onTap: () {
                     showCupertinoModalBottomSheet(
@@ -161,14 +182,19 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           title: t.event.guestSettings.inviteLimitPerGuest,
                           description:
                               t.event.guestSettings.inviteLimitDescription,
-                          initialValue: 5,
+                          initialValue:
+                              int.tryParse(state.guestLimitPer ?? '5'),
                           onRemove: () {
-                            print('remove');
                             AutoRouter.of(context).pop();
                           },
                           onSetLimit: (value) {
-                            print(value);
                             AutoRouter.of(context).pop();
+                            context.read<CreateEventBloc>().add(
+                                  CreateEventEvent
+                                      .createEventGuestLimitPerChanged(
+                                    guestLimitPer: value.toString(),
+                                  ),
+                                );
                           },
                         );
                       },
@@ -189,8 +215,10 @@ class CreateEventRegistrationSection extends StatelessWidget {
     required String title,
     String? value,
     bool isSwitch = false,
+    bool? switchValue,
     SvgGenImage? trailingIcon,
     Function()? onTap,
+    Function(bool)? onToggleSwitch,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
@@ -221,13 +249,19 @@ class CreateEventRegistrationSection extends StatelessWidget {
               ),
             ),
             if (isSwitch)
-              SizedBox(
-                height: Sizing.small,
-                child: Switch(
-                  value: false,
-                  onChanged: (_) {},
-                  activeColor: colorScheme.primary,
-                ),
+              FlutterSwitch(
+                inactiveColor: colorScheme.outline,
+                inactiveToggleColor: colorScheme.onSurfaceVariant,
+                activeColor: LemonColor.paleViolet,
+                activeToggleColor: colorScheme.onPrimary,
+                height: 24.h,
+                width: 42.w,
+                value: switchValue ?? false,
+                onToggle: (value) {
+                  if (onToggleSwitch != null) {
+                    onToggleSwitch(value);
+                  }
+                },
               )
             else if (value != null) ...[
               Text(

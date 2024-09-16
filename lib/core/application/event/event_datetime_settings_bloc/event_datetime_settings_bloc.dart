@@ -154,6 +154,8 @@ class EventDateTimeSettingsBloc
         ),
       );
     } else {
+      print("?????");
+      print(event.timezone);
       emit(
         state.copyWith(
           timezone: event.timezone,

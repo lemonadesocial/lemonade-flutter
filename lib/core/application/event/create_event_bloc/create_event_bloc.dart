@@ -26,6 +26,11 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventVirtualLinkChanged>(_onCreateEventVirtualLinkChanged);
     on<CreateEventFormSubmitted>(_onCreateEventFormSubmitted);
     on<CreateEventTagsChanged>(_onCreateEventTagsChanged);
+    on<CreateEventPrivateChanged>(_onCreateEventPrivateChanged);
+    on<CreateEventApprovalRequiredChanged>(
+        _onCreateEventApprovalRequiredChanged);
+    on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
+    on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -79,6 +84,50 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     emit(
       state.copyWith(
         tags: event.tags,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventPrivateChanged(
+    CreateEventPrivateChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        private: event.private,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventApprovalRequiredChanged(
+    CreateEventApprovalRequiredChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        approvalRequired: event.approvalRequired,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventGuestLimitChanged(
+    CreateEventGuestLimitChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        guestLimit: event.guestLimit,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventGuestLimitPerChanged(
+    CreateEventGuestLimitPerChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        guestLimitPer: event.guestLimitPer,
       ),
     );
   }
@@ -191,6 +240,22 @@ class CreateEventEvent with _$CreateEventEvent {
     bool? subEventEnabled,
     SubEventSettings? subEventSettings,
   }) = CreateEventFormSubmitted;
+
+  const factory CreateEventEvent.createEventPrivateChanged({
+    required bool private,
+  }) = CreateEventPrivateChanged;
+
+  const factory CreateEventEvent.createEventApprovalRequiredChanged({
+    required bool approvalRequired,
+  }) = CreateEventApprovalRequiredChanged;
+
+  const factory CreateEventEvent.createEventGuestLimitChanged({
+    required String guestLimit,
+  }) = CreateEventGuestLimitChanged;
+
+  const factory CreateEventEvent.createEventGuestLimitPerChanged({
+    required String guestLimitPer,
+  }) = CreateEventGuestLimitPerChanged;
 }
 
 @freezed
@@ -203,6 +268,10 @@ class CreateEventState with _$CreateEventState {
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default([]) List<String> tags,
+    bool? private,
+    bool? approvalRequired,
+    String? guestLimit,
+    String? guestLimitPer,
     String? eventId,
     // Subevent related
     String? parentEventId,

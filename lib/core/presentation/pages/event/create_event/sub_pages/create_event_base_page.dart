@@ -119,12 +119,11 @@ class CreateEventBasePage extends StatelessWidget {
                       errorText: state.title.displayError?.getMessage(
                         t.event.eventCreation.title,
                       ),
-                      labelStyle: Typo.extraMedium.copyWith(
+                      labelStyle: Typo.mediumPlus.copyWith(
                         color: colorScheme.onSecondary,
                         fontWeight: FontWeight.w500,
-                        height: 0,
                       ),
-                      placeholderStyle: Typo.extraMedium.copyWith(
+                      placeholderStyle: Typo.mediumPlus.copyWith(
                         color: LemonColor.white23,
                         fontWeight: FontWeight.w500,
                       ),
@@ -152,6 +151,7 @@ class CreateEventBasePage extends StatelessWidget {
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
                       title: t.event.virtualLinkSetting.virtualLink,
+                      subTitle: state.virtualUrl,
                       leading: Icon(
                         Icons.videocam_rounded,
                         size: 18.w,
@@ -173,8 +173,15 @@ class CreateEventBasePage extends StatelessWidget {
                           useRootNavigator: true,
                           builder: (mContext) {
                             return EventVirtualLinkSettingPage(
-                              defaultUrl: "",
-                              onConfirm: (virtualUrl) {},
+                              defaultUrl: state.virtualUrl,
+                              onConfirm: (virtualUrl) {
+                                context.read<CreateEventBloc>().add(
+                                      CreateEventEvent
+                                          .createEventVirtualLinkChanged(
+                                        virtualUrl: virtualUrl,
+                                      ),
+                                    );
+                              },
                             );
                           },
                         );
