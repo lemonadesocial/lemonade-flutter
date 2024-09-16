@@ -73,7 +73,8 @@
         "patse": "Paste",
         "viewTicket": "View ticket",
         "viewEvent": "View event",
-        "create": "Create"
+        "create": "Create",
+        "setLimit": "Set limit"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

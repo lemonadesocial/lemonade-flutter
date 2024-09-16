@@ -160,7 +160,13 @@
         "guestUnlockLimitDescription": "Number of friends and matches a guest can unlock this experience for",
         "totalGuestLimit": "Total guest limit",
         "totalGuestLimitDescription": "Total number of people who can attend this experience",
-        "noGuestLimit": "No guest limit"
+        "noGuestLimit": "No guest limit",
+        "guestLimit": "Guest limit",
+        "guestLimitDescription": "Set maximum guests allowed in this event. Registration closes when the limit is reached.",
+        "inviteLimitPerGuest": "Invite limit per guest",
+        "inviteLimit": "Invite limit",
+        "inviteLimitDescription": "Set maximum invites a guest is allowed to send in this event.",
+        "unlimited": "Unlimited"
     },
     "dateAndTime": "Date & Time",
     "datetimeSettings": {

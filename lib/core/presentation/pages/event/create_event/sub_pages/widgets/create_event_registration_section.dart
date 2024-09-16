@@ -1,11 +1,15 @@
+import 'package:app/core/presentation/pages/event/create_event/widgets/guest_limit_select_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CreateEventRegistrationSection extends StatelessWidget {
   const CreateEventRegistrationSection({super.key});
@@ -71,9 +75,33 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 _buildSettingRow(
                   context,
                   icon: Assets.icons.icArrowUpToLine,
-                  title: 'Guest limit',
-                  value: 'Unlimited',
+                  title: t.event.guestSettings.guestLimit,
+                  value: t.event.guestSettings.unlimited,
                   trailingIcon: Assets.icons.icEdit,
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      bounce: true,
+                      backgroundColor: LemonColor.atomicBlack,
+                      context: context,
+                      enableDrag: false,
+                      builder: (newContext) {
+                        return GuestLimitSelectBottomSheet(
+                          title: t.event.guestSettings.guestLimit,
+                          description:
+                              t.event.guestSettings.guestLimitDescription,
+                          initialValue: 100,
+                          onRemove: () {
+                            print('remove');
+                            AutoRouter.of(context).pop();
+                          },
+                          onSetLimit: (value) {
+                            print(value);
+                            AutoRouter.of(context).pop();
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
                 Container(
                   height: 1.h,
@@ -88,9 +116,33 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 _buildSettingRow(
                   context,
                   icon: Assets.icons.icPersonAddOutline,
-                  title: 'Invite limit per guest',
-                  value: 'Unlimited',
+                  title: t.event.guestSettings.inviteLimitPerGuest,
+                  value: t.event.guestSettings.unlimited,
                   trailingIcon: Assets.icons.icEdit,
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      bounce: true,
+                      backgroundColor: LemonColor.atomicBlack,
+                      context: context,
+                      enableDrag: false,
+                      builder: (newContext) {
+                        return GuestLimitSelectBottomSheet(
+                          title: t.event.guestSettings.inviteLimitPerGuest,
+                          description:
+                              t.event.guestSettings.inviteLimitDescription,
+                          initialValue: 5,
+                          onRemove: () {
+                            print('remove');
+                            AutoRouter.of(context).pop();
+                          },
+                          onSetLimit: (value) {
+                            print(value);
+                            AutoRouter.of(context).pop();
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
@@ -100,65 +152,70 @@ class CreateEventRegistrationSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingRow(BuildContext context,
-      {required SvgGenImage icon,
-      required String title,
-      String? value,
-      bool isSwitch = false,
-      SvgGenImage? trailingIcon,
-      prop}) {
+  Widget _buildSettingRow(
+    BuildContext context, {
+    required SvgGenImage icon,
+    required String title,
+    String? value,
+    bool isSwitch = false,
+    SvgGenImage? trailingIcon,
+    Function()? onTap,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      child: Row(
-        children: [
-          Center(
-            child: SizedBox(
-              width: Sizing.mSmall,
-              height: Sizing.mSmall,
-              child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => icon.svg(
-                  width: Sizing.mSmall,
-                  height: Sizing.mSmall,
-                  colorFilter: filter,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        child: Row(
+          children: [
+            Center(
+              child: SizedBox(
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => icon.svg(
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                    colorFilter: filter,
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 14.w),
-          Expanded(
-            child: Text(
-              title,
-              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-            ),
-          ),
-          if (isSwitch)
-            SizedBox(
-              height: Sizing.small,
-              child: Switch(
-                value: false,
-                onChanged: (_) {},
-                activeColor: colorScheme.primary,
+            SizedBox(width: 14.w),
+            Expanded(
+              child: Text(
+                title,
+                style: Typo.medium.copyWith(color: colorScheme.onPrimary),
               ),
-            )
-          else if (value != null) ...[
-            Text(
-              value,
-              style: Typo.medium.copyWith(color: colorScheme.onPrimary),
             ),
-            SizedBox(width: Spacing.xSmall),
-            if (trailingIcon != null) // Check if trailingIcon is provided
-              ThemeSvgIcon(
-                color: colorScheme.onSurfaceVariant,
-                builder: (filter) => trailingIcon.svg(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                  colorFilter: filter,
+            if (isSwitch)
+              SizedBox(
+                height: Sizing.small,
+                child: Switch(
+                  value: false,
+                  onChanged: (_) {},
+                  activeColor: colorScheme.primary,
                 ),
+              )
+            else if (value != null) ...[
+              Text(
+                value,
+                style: Typo.medium.copyWith(color: colorScheme.onPrimary),
               ),
+              SizedBox(width: Spacing.xSmall),
+              if (trailingIcon != null) // Check if trailingIcon is provided
+                ThemeSvgIcon(
+                  color: colorScheme.onSurfaceVariant,
+                  builder: (filter) => trailingIcon.svg(
+                    width: Sizing.xSmall,
+                    height: Sizing.xSmall,
+                    colorFilter: filter,
+                  ),
+                ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
