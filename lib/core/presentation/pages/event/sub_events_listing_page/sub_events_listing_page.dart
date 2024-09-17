@@ -158,7 +158,13 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
         }
 
         if (!_hasMovedToFirstEventDate) {
-          _onCalendarChanged(state.eventsGroupByDate.keys.first);
+          DateTime? targetDate;
+          final now = DateTime.now().toLocal().withoutTime;
+          targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) => mDate.isAfter(now) || mDate.isAtSameMomentAs(now),
+          );
+          targetDate = targetDate ?? state.eventsGroupByDate.keys.first;
+          _onCalendarChanged(targetDate);
           _hasMovedToFirstEventDate = true;
         }
 
