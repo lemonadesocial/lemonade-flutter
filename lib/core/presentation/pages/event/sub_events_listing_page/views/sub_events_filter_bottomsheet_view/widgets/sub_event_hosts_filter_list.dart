@@ -24,22 +24,22 @@ class SubEventHostsFilterList extends StatelessWidget {
                 vertical: Spacing.xSmall,
                 horizontal: Spacing.small,
               ),
-              sliver: SliverGrid.count(
-                crossAxisCount: 4,
-                childAspectRatio: 0.6,
-                mainAxisSpacing: Spacing.xSmall,
-                crossAxisSpacing: Spacing.xSmall,
-                children: allHosts.map((item) {
-                  final selected = state.selectedHosts.contains(item.userId);
+              sliver: SliverList.separated(
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: Spacing.small),
+                itemCount: allHosts.length,
+                itemBuilder: (context, index) {
+                  final host = allHosts[index];
+                  final selected = state.selectedHosts.contains(host.userId);
                   return SubEventHostFilterItemWidget(
-                    host: item,
+                    host: host,
                     selected: selected,
                     onTap: () {
                       final newSelectedHosts = selected
                           ? state.selectedHosts
-                              .where((element) => element != item.userId)
+                              .where((element) => element != host.userId)
                               .toList()
-                          : [...state.selectedHosts, item.userId];
+                          : [...state.selectedHosts, host.userId];
                       context.read<GetSubEventsByCalendarBloc>().add(
                             GetSubEventsByCalendarEvent.updateFilter(
                               selectedHosts: newSelectedHosts,
@@ -47,7 +47,7 @@ class SubEventHostsFilterList extends StatelessWidget {
                           );
                     },
                   );
-                }).toList(),
+                },
               ),
             ),
           ],

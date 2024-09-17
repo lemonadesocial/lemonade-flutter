@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubEventsFilterBottomsheetExpandedFooter extends StatelessWidget {
-  final DraggableScrollableController dragController;
+  // final DraggableScrollableController dragController;
   const SubEventsFilterBottomsheetExpandedFooter({
     super.key,
-    required this.dragController,
+    // required this.dragController,
   });
 
   @override
@@ -40,7 +40,7 @@ class SubEventsFilterBottomsheetExpandedFooter extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(Spacing.smMedium),
             decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
+              color: LemonColor.atomicBlack,
               border: Border(
                 top: BorderSide(
                   color: colorScheme.outline,
@@ -74,7 +74,7 @@ class SubEventsFilterBottomsheetExpandedFooter extends StatelessWidget {
                   width: Sizing.medium * 2.5,
                   child: LinearGradientButton.primaryButton(
                     onTap: () {
-                      dragController.jumpTo(0.25);
+                      Navigator.of(context, rootNavigator: true).pop();
                     },
                     label: t.common.apply,
                     textStyle: Typo.medium.copyWith(
