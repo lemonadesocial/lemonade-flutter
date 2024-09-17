@@ -42,7 +42,9 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     emit(
       state.copyWith(
         title: title.isValid ? title : StringFormz.pure(event.title),
-        isValid: Formz.validate([title, state.description]),
+        isValid: Formz.validate([
+          title,
+        ]),
       ),
     );
   }
@@ -51,16 +53,9 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     CreateEventDescriptionChanged event,
     Emitter<CreateEventState> emit,
   ) async {
-    final description = StringFormz.dirty(event.description);
     emit(
       state.copyWith(
-        description: description.isValid
-            ? description
-            : StringFormz.pure(event.description),
-        isValid: Formz.validate([
-          state.title,
-          description,
-        ]),
+        description: event.description,
       ),
     );
   }
@@ -143,19 +138,19 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     final endUtcDateTime = event.end
         .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
-    final description = StringFormz.dirty(state.description.value);
     emit(
       state.copyWith(
         title: title,
-        description: description,
-        isValid: Formz.validate([title, description]),
+        isValid: Formz.validate([
+          title,
+        ]),
       ),
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       Input$EventInput input = Input$EventInput(
         title: title.value,
-        description: description.value,
+        description: state.description,
         private: state.private,
         approval_required: state.approvalRequired,
         start: DateTime.parse(startUtcDateTime.toIso8601String()),
@@ -194,6 +189,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         ),
         tags: state.tags,
       );
+      print("input: ${input.toJson()}");
+      return;
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
         (failure) =>
@@ -213,8 +210,9 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
 @freezed
 class CreateEventEvent with _$CreateEventEvent {
-  const factory CreateEventEvent.createEventTitleChanged(
-      {required String title}) = CreateEventTitleChanged;
+  const factory CreateEventEvent.createEventTitleChanged({
+    required String title,
+  }) = CreateEventTitleChanged;
 
   const factory CreateEventEvent.createEventDescriptionChanged({
     required String description,
@@ -262,7 +260,7 @@ class CreateEventEvent with _$CreateEventEvent {
 class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
-    @Default(StringFormz.pure()) StringFormz description,
+    String? description,
     @Default(false) bool virtual,
     String? virtualUrl,
     @Default(false) bool isValid,

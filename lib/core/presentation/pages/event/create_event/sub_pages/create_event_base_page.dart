@@ -7,6 +7,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -199,9 +200,45 @@ class CreateEventBasePage extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
+                      title: t.event.locationSetting.chooseLocation,
+                      subTitle: "",
+                      leading: Icon(
+                        Icons.location_on_outlined,
+                        size: 18.w,
+                        color: colorScheme.onSecondary,
+                      ),
+                      leadingCircle: false,
+                      trailing: Assets.icons.icArrowBack.svg(
+                        width: 18.w,
+                        height: 18.w,
+                      ),
+                      titleStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                      radius: LemonRadius.small,
+                      onTap: () {
+                        showCupertinoModalBottomSheet(
+                          context: context,
+                          builder: (mContext) {
+                            return const EventLocationSettingPage();
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.xSmall),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: SettingTileWidget(
                       title: t.event.eventCreation.description,
                       subTitle: StringUtils.stripHtmlTags(
-                        context.read<CreateEventBloc>().state.description.value,
+                        state.description ?? '',
                       ),
                       leading: Assets.icons.icDescription.svg(),
                       leadingCircle: false,
@@ -216,7 +253,7 @@ class CreateEventBasePage extends StatelessWidget {
                       onTap: () {
                         AutoRouter.of(context).navigate(
                           EventDescriptionFieldRoute(
-                            description: state.description.value,
+                            description: state.description ?? '',
                             onDescriptionChanged: (value) {
                               context.read<CreateEventBloc>().add(
                                     CreateEventEvent
@@ -228,7 +265,6 @@ class CreateEventBasePage extends StatelessWidget {
                           ),
                         );
                       },
-                      isError: state.description.displayError != null,
                     ),
                   ),
                 ),

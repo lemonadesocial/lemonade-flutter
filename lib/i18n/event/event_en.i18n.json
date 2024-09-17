@@ -181,6 +181,7 @@
         "timezoneUpdated": "Timezone has been updated"
     },
     "locationSetting": {
+        "chooseLocation": "Choose location",
         "addLocation": "Add location",
         "myPlaces": "My places",
         "description": "Select or add a location to your event",
