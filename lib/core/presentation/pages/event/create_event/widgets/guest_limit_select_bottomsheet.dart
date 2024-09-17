@@ -167,7 +167,7 @@ class GuestLimitSelectBottomSheetState
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

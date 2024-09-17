@@ -27,7 +27,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventTagsChanged>(_onCreateEventTagsChanged);
     on<CreateEventPrivateChanged>(_onCreateEventPrivateChanged);
     on<CreateEventApprovalRequiredChanged>(
-        _onCreateEventApprovalRequiredChanged);
+      _onCreateEventApprovalRequiredChanged,
+    );
     on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);

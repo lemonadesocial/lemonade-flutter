@@ -397,7 +397,7 @@ class CreateEventBasePage extends StatelessWidget {
                       ),
                     );
               },
-              // loadingWhen: state.status.isInProgress,
+              loadingWhen: state.status.isInProgress,
             ),
           ),
         );
