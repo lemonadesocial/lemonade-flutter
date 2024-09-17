@@ -99,7 +99,7 @@ class CreateEventBasePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.smMedium,
                   ),
-                  sliver: const SliverToBoxAdapter(
+                  sliver: SliverToBoxAdapter(
                     child: CreateEventBannerPhotoCard(),
                   ),
                 ),

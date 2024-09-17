@@ -31,6 +31,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         _onCreateEventApprovalRequiredChanged);
     on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
+    on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -67,7 +68,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     emit(
       state.copyWith(
         virtualUrl: event.virtualUrl,
-        virtual: event.virtualUrl?.isNotEmpty == true,
       ),
     );
   }
@@ -127,6 +127,17 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
+  Future<void> _onCreateEventPhotoImageIdChanged(
+    CreateEventPhotoImageIdChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        photoImageId: event.photoImageId,
+      ),
+    );
+  }
+
   Future<void> _onCreateEventFormSubmitted(
     CreateEventFormSubmitted event,
     Emitter<CreateEventState> emit,
@@ -156,13 +167,12 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         start: DateTime.parse(startUtcDateTime.toIso8601String()),
         end: DateTime.parse(endUtcDateTime.toIso8601String()),
         timezone: event.timezone,
-        guest_limit: double.parse(
-          state.guestLimit ?? EventConstants.defaultEventGuestLimit,
-        ),
-        guest_limit_per: double.parse(
-          state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
-        ),
-        virtual: state.virtual,
+        guest_limit:
+            state.guestLimit != null ? double.parse(state.guestLimit!) : null,
+        guest_limit_per: state.guestLimitPer != null
+            ? double.parse(state.guestLimitPer!)
+            : null,
+        virtual: true,
         virtual_url: state.virtualUrl,
         address: event.address != null
             ? Input$AddressInput(
@@ -188,9 +198,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
               event.subEventSettings?.ticketRequiredForPurchase,
         ),
         tags: state.tags,
+        new_new_photos: state.photoImageId != null ? [state.photoImageId!] : [],
       );
-      print("input: ${input.toJson()}");
-      return;
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
         (failure) =>
@@ -254,6 +263,10 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.createEventGuestLimitPerChanged({
     required String guestLimitPer,
   }) = CreateEventGuestLimitPerChanged;
+
+  const factory CreateEventEvent.createEventPhotoImageIdChanged({
+    required String photoImageId,
+  }) = CreateEventPhotoImageIdChanged;
 }
 
 @freezed
@@ -261,7 +274,6 @@ class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
     String? description,
-    @Default(false) bool virtual,
     String? virtualUrl,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
@@ -271,6 +283,7 @@ class CreateEventState with _$CreateEventState {
     String? guestLimit,
     String? guestLimitPer,
     String? eventId,
+    String? photoImageId,
     // Subevent related
     String? parentEventId,
   }) = _CreateEventState;

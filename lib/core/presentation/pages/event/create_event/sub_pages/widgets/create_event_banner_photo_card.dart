@@ -1,63 +1,125 @@
+import 'dart:io';
+
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/file/file_upload_service.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CreateEventBannerPhotoCard extends StatelessWidget {
-  const CreateEventBannerPhotoCard({super.key});
+class CreateEventBannerPhotoCard extends StatefulWidget {
+  late FileUploadService _uploadService;
+
+  CreateEventBannerPhotoCard({
+    super.key,
+  }) {
+    final gqlClient = getIt<AppGQL>().client;
+    _uploadService = FileUploadService(gqlClient);
+  }
+
+  @override
+  State<CreateEventBannerPhotoCard> createState() =>
+      _CreateEventBannerPhotoCardState();
+}
+
+class _CreateEventBannerPhotoCardState
+    extends State<CreateEventBannerPhotoCard> {
+  final _imagePicker = ImagePicker();
+  String? _localImagePath;
+
+  Future<String?> _pickAndUploadImage() async {
+    final localImage = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    if (localImage == null) {
+      return null;
+    }
+    setState(() {
+      _localImagePath = localImage.path;
+    });
+    final imageId = await widget._uploadService
+        .uploadSingleFile(localImage, FileDirectory.event);
+    return imageId;
+  }
+
+  Future<void> _addPhotoToEvent() async {
+    final imageId = await _pickAndUploadImage();
+    if (imageId == null) {
+      return;
+    }
+    context.read<CreateEventBloc>().add(
+          CreateEventEvent.createEventPhotoImageIdChanged(
+            photoImageId: imageId,
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1.w,
-              color: LemonColor.white06,
+    return InkWell(
+      onTap: () async {
+        await showFutureLoadingDialog(
+          context: context,
+          future: _addPhotoToEvent,
+        );
+      },
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1.w,
+                color: LemonColor.white06,
+              ),
+              borderRadius: BorderRadius.circular(16.r),
             ),
-            borderRadius: BorderRadius.circular(16.r),
           ),
-        ),
-        child: Stack(
-          children: [
-            CachedNetworkImage(
-              width: double.infinity,
-              fit: BoxFit.cover,
-              placeholder: (_, __) => ImagePlaceholder.eventCard(),
-              errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-              imageUrl: "",
-            ),
-            Positioned(
-              right: Spacing.small,
-              bottom: Spacing.small,
-              child: Container(
-                padding: EdgeInsets.all(Sizing.xxSmall),
-                decoration: ShapeDecoration(
-                  color: LemonColor.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(LemonRadius.normal),
+          child: Stack(
+            children: [
+              _localImagePath != null
+                  ? Image.file(
+                      File(_localImagePath!),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : ImagePlaceholder
+                      .eventCard(), // Show placeholder if no image is selected
+              Positioned(
+                right: Spacing.small,
+                bottom: Spacing.small,
+                child: Container(
+                  padding: EdgeInsets.all(Sizing.xxSmall),
+                  decoration: ShapeDecoration(
+                    color: LemonColor.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(LemonRadius.normal),
+                    ),
                   ),
-                ),
-                child: ThemeSvgIcon(
-                  color: colorScheme.surfaceVariant,
-                  builder: (filter) => Assets.icons.icUpload.svg(
-                    width: Sizing.xSmall,
-                    height: Sizing.xSmall,
-                    colorFilter: filter,
+                  child: ThemeSvgIcon(
+                    color: colorScheme.surfaceVariant,
+                    builder: (filter) => Assets.icons.icUpload.svg(
+                      width: Sizing.xSmall,
+                      height: Sizing.xSmall,
+                      colorFilter: filter,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
