@@ -84,7 +84,7 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
   bool _isMonthChanging = false;
   bool _hasMovedToFirstEventDate = false;
   final Debouncer _debouncer = Debouncer(milliseconds: 200);
-  SubEventViewMode _viewMode = SubEventViewMode.calendar;
+  SubEventViewMode _viewMode = SubEventViewMode.listing;
   Map<String, bool> addedCalendarEventsMap = {};
 
   // ignore: unused_element
