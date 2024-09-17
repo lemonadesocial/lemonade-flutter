@@ -17,14 +17,11 @@ import 'package:app/theme/color.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateEventBannerPhotoCard extends StatefulWidget {
-  late FileUploadService _uploadService;
+  final FileUploadService _uploadService;
 
   CreateEventBannerPhotoCard({
     super.key,
-  }) {
-    final gqlClient = getIt<AppGQL>().client;
-    _uploadService = FileUploadService(gqlClient);
-  }
+  }) : _uploadService = FileUploadService(getIt<AppGQL>().client);
 
   @override
   State<CreateEventBannerPhotoCard> createState() =>

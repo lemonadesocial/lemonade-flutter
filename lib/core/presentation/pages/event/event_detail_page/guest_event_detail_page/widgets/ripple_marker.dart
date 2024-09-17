@@ -3,8 +3,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math show sin, pi, sqrt;
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 class RippleMarker extends StatefulWidget {
   const RippleMarker({
     super.key,
