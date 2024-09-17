@@ -124,6 +124,9 @@ class _FullDayEventsDayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: Spacing.xSmall,
+      ),
       decoration: const BoxDecoration(),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(

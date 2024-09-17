@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
@@ -23,6 +24,7 @@ import 'package:calendar_view/calendar_view.dart' as calendar_view;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:collection/collection.dart';
 
 enum SubEventViewMode {
   listing,
@@ -39,11 +41,18 @@ class SubEventsListingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final parentEvent = context.read<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (event) => event,
+        );
     return BlocProvider(
       create: (context) =>
           GetSubEventsByCalendarBloc(parentEventId: parentEventId)
             ..add(
-              GetSubEventsByCalendarEvent.fetch(),
+              GetSubEventsByCalendarEvent.fetch(
+                from: parentEvent?.start?.toUtc(),
+                to: parentEvent?.end?.toUtc(),
+              ),
             ),
       child: SubEventsListingPageView(
         parentEventId: parentEventId,
@@ -151,6 +160,18 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
         if (!_hasMovedToFirstEventDate) {
           _onCalendarChanged(state.eventsGroupByDate.keys.first);
           _hasMovedToFirstEventDate = true;
+        }
+
+        if (_hasMovedToFirstEventDate) {
+          final targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) =>
+                state.selectedDate.month == mDate.month &&
+                state.selectedDate.year == mDate.year,
+          );
+          if (targetDate == null) {
+            return;
+          }
+          _onCalendarChanged(targetDate);
         }
       },
       builder: (context, state) {
@@ -301,8 +322,15 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
                       },
                     ),
                     value: [state.selectedDate],
+                    displayedMonthDate: state.selectedDate,
                     onDisplayedMonthChanged: (date) {
-                      _onCalendarChanged(date);
+                      final targetDate =
+                          state.eventsGroupByDate.keys.firstWhereOrNull(
+                        (mDate) =>
+                            date.month == mDate.month &&
+                            date.year == mDate.year,
+                      );
+                      _onCalendarChanged(targetDate ?? date);
                     },
                     onValueChanged: (dates) {
                       if (dates.isNotEmpty) {
