@@ -19,6 +19,7 @@ class GetSubEventsByCalendarBloc
     extends Bloc<GetSubEventsByCalendarEvent, GetSubEventsByCalendarState> {
   final _client = getIt<AppGQL>().client;
   final String parentEventId;
+
   GetSubEventsByCalendarBloc({
     required this.parentEventId,
   }) : super(
@@ -80,6 +81,16 @@ class GetSubEventsByCalendarBloc
       state.selectedDate.year,
       state.selectedDate.month,
     );
+    DateTime startFrom = event.from ??
+        DateTime(state.selectedDate.year, state.selectedDate.month, 1).toUtc();
+    DateTime startTo = event.to ??
+        DateTime(
+          state.selectedDate.year,
+          state.selectedDate.month,
+          dayInMonth,
+          23,
+          59,
+        ).toUtc();
     final result = await _client.query$GetEvents(
       Options$Query$GetEvents(
         fetchPolicy: FetchPolicy.networkOnly,
@@ -88,16 +99,8 @@ class GetSubEventsByCalendarBloc
           subevent_parent: parentEventId,
           // TODO: to be confirmed with PO
           // unpublished: true,
-          startFrom:
-              DateTime(state.selectedDate.year, state.selectedDate.month, 1)
-                  .toUtc(),
-          startTo: DateTime(
-            state.selectedDate.year,
-            state.selectedDate.month,
-            dayInMonth,
-            23,
-            59,
-          ).toUtc(),
+          startFrom: startFrom,
+          startTo: startTo,
         ),
       ),
     );
@@ -149,8 +152,10 @@ class GetSubEventsByCalendarEvent with _$GetSubEventsByCalendarEvent {
   factory GetSubEventsByCalendarEvent.dateChanged({
     required DateTime selectedDate,
   }) = _GetSubEventsByCalendarEventOnDateChanged;
-  factory GetSubEventsByCalendarEvent.fetch() =
-      _GetSubEventsByCalendarEventOnFetch;
+  factory GetSubEventsByCalendarEvent.fetch({
+    DateTime? from,
+    DateTime? to,
+  }) = _GetSubEventsByCalendarEventOnFetch;
   factory GetSubEventsByCalendarEvent.updateFilter({
     List<String>? selectedTags,
     List<String>? selectedHosts,

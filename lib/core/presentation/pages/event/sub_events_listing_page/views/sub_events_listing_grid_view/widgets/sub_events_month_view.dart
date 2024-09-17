@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:collection/collection.dart';
 
 class SubEventsMonthView extends StatelessWidget {
   final DateTime? selectedDate;
@@ -31,71 +32,78 @@ class SubEventsMonthView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return MonthView(
-      borderSize: 0.5.w,
-      borderColor: colorScheme.outline,
-      key: monthViewState,
-      minMonth: DateTime(2000),
-      maxMonth: DateTime(2050),
-      onPageChange: (date, page) async {
-        await Future.delayed(const Duration(milliseconds: 500));
-        if (selectedDate == null ||
-            !date_utils.DateUtils.isInSameWeek(selectedDate!, date)) {
-          onDateChanged?.call(date);
-        }
-      },
-      pageViewPhysics: isCalendarShowing
-          ? const NeverScrollableScrollPhysics()
-          : const AlwaysScrollableScrollPhysics(),
-      initialMonth: selectedDate,
-      cellAspectRatio: 0.55,
-      startDay: WeekDays.monday,
-      headerBuilder: MonthHeader.hidden,
-      showWeekTileBorder: false,
-      hideDaysNotInMonth: true,
-      weekDayBuilder: (dayIndex) {
-        return Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.zero,
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          decoration: BoxDecoration(
-            color: colorScheme.background,
-            border: Border(
-              left: BorderSide(
-                color: colorScheme.outline,
-                width: 0.5,
+    return BlocBuilder<GetSubEventsByCalendarBloc, GetSubEventsByCalendarState>(
+      builder: (context, state) {
+        return MonthView(
+          borderSize: 0.5.w,
+          borderColor: colorScheme.outline,
+          key: monthViewState,
+          minMonth: DateTime(2000),
+          maxMonth: DateTime(2050),
+          onPageChange: (date, page) async {
+            await Future.delayed(const Duration(milliseconds: 500));
+            if (selectedDate == null ||
+                !date_utils.DateUtils.isInSameWeek(selectedDate!, date)) {
+              final targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
+                (mDate) => mDate.month == date.month && mDate.year == date.year,
+              );
+              onDateChanged?.call(targetDate ?? date);
+            }
+          },
+          pageViewPhysics: isCalendarShowing
+              ? const NeverScrollableScrollPhysics()
+              : const AlwaysScrollableScrollPhysics(),
+          initialMonth: selectedDate,
+          cellAspectRatio: 0.55,
+          startDay: WeekDays.monday,
+          headerBuilder: MonthHeader.hidden,
+          showWeekTileBorder: false,
+          hideDaysNotInMonth: true,
+          weekDayBuilder: (dayIndex) {
+            return Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.zero,
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              decoration: BoxDecoration(
+                color: colorScheme.background,
+                border: Border(
+                  left: BorderSide(
+                    color: colorScheme.outline,
+                    width: 0.5,
+                  ),
+                  right: BorderSide(
+                    color: colorScheme.outline,
+                    width: 0.5,
+                  ),
+                ),
               ),
-              right: BorderSide(
-                color: colorScheme.outline,
-                width: 0.5,
+              child: Text(
+                [
+                  t.common.weekDays.mon,
+                  t.common.weekDays.tue,
+                  t.common.weekDays.wed,
+                  t.common.weekDays.thu,
+                  t.common.weekDays.fri,
+                  t.common.weekDays.sat,
+                  t.common.weekDays.sun,
+                ][dayIndex],
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
               ),
-            ),
-          ),
-          child: Text(
-            [
-              t.common.weekDays.mon,
-              t.common.weekDays.tue,
-              t.common.weekDays.wed,
-              t.common.weekDays.thu,
-              t.common.weekDays.fri,
-              t.common.weekDays.sat,
-              t.common.weekDays.sun,
-            ][dayIndex],
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-        );
-      },
-      cellBuilder: (date, events, isToday, isInMonth, hideDaysNotInMonth) {
-        return CustomMonthFilledCell(
-          date: date,
-          shouldHighlight: isToday,
-          backgroundColor: colorScheme.background,
-          events: events,
-          isInMonth: isInMonth,
-          titleColor: colorScheme.onPrimary,
-          highlightColor: colorScheme.outline,
+            );
+          },
+          cellBuilder: (date, events, isToday, isInMonth, hideDaysNotInMonth) {
+            return CustomMonthFilledCell(
+              date: date,
+              shouldHighlight: isToday,
+              backgroundColor: colorScheme.background,
+              events: events,
+              isInMonth: isInMonth,
+              titleColor: colorScheme.onPrimary,
+              highlightColor: colorScheme.outline,
+            );
+          },
         );
       },
     );
