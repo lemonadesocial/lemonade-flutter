@@ -4,6 +4,7 @@ import 'package:app/core/application/event/event_guest_settings_bloc/event_guest
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
@@ -226,6 +227,29 @@ class CreateEventBasePage extends StatelessWidget {
                       },
                     ),
                   ),
+                ),
+                BlocBuilder<EventLocationSettingBloc,
+                    EventLocationSettingState>(
+                  builder: (context, state) {
+                    if (state.selectedAddress == null) {
+                      return const SliverToBoxAdapter(
+                        child: SizedBox.shrink(),
+                      );
+                    }
+                    return SliverPadding(
+                      padding: EdgeInsets.only(
+                        top: Spacing.xSmall,
+                        left: Spacing.smMedium,
+                        right: Spacing.smMedium,
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: CreateEventMapLocationCard(
+                          latitude: state.selectedAddress?.latitude ?? 0,
+                          longitude: state.selectedAddress?.longitude ?? 0,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(height: Spacing.xSmall),
