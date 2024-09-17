@@ -156,16 +156,16 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
       Input$EventInput input = Input$EventInput(
         title: title.value,
         description: description.value,
-        private: event.private,
-        approval_required: event.approvalRequired,
+        private: state.private,
+        approval_required: state.approvalRequired,
         start: DateTime.parse(startUtcDateTime.toIso8601String()),
         end: DateTime.parse(endUtcDateTime.toIso8601String()),
         timezone: event.timezone,
         guest_limit: double.parse(
-          event.guestLimit ?? EventConstants.defaultEventGuestLimit,
+          state.guestLimit ?? EventConstants.defaultEventGuestLimit,
         ),
         guest_limit_per: double.parse(
-          event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
+          state.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
         ),
         virtual: state.virtual,
         virtual_url: state.virtualUrl,

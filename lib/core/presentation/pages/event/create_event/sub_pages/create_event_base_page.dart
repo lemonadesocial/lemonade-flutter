@@ -12,6 +12,7 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -39,29 +40,29 @@ class CreateEventBasePage extends StatelessWidget {
 
     return BlocConsumer<CreateEventBloc, CreateEventState>(
       listener: (context, state) {
-        // if (state.status.isSuccess) {
-        //   SnackBarUtils.showSuccess(
-        //     message: t.event.eventCreation.createEventSuccessfully,
-        //   );
-        //   AutoRouter.of(context).root.popUntilRoot();
-        //   AutoRouter.of(context).root.push(
-        //         EventDetailRoute(
-        //           eventId: state.eventId ?? '',
-        //           children: [
-        //             const EventDetailBaseRoute(),
-        //             EventTicketTierSettingRoute(
-        //               children: [
-        //                 EventTicketTiersListingRoute(
-        //                   onNext: (mContext) => AutoRouter.of(mContext).replace(
-        //                     const HostEventPublishFlowRoute(),
-        //                   ),
-        //                 ),
-        //               ],
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        // }
+        if (state.status.isSuccess) {
+          SnackBarUtils.showSuccess(
+            message: t.event.eventCreation.createEventSuccessfully,
+          );
+          AutoRouter.of(context).root.popUntilRoot();
+          AutoRouter.of(context).root.push(
+                EventDetailRoute(
+                  eventId: state.eventId ?? '',
+                  children: [
+                    const EventDetailBaseRoute(),
+                    EventTicketTierSettingRoute(
+                      children: [
+                        EventTicketTiersListingRoute(
+                          onNext: (mContext) => AutoRouter.of(mContext).replace(
+                            const HostEventPublishFlowRoute(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+        }
       },
       builder: (context, state) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -336,7 +337,7 @@ class CreateEventBasePage extends StatelessWidget {
                       ),
                     );
               },
-              loadingWhen: state.status.isInProgress,
+              // loadingWhen: state.status.isInProgress,
             ),
           ),
         );
