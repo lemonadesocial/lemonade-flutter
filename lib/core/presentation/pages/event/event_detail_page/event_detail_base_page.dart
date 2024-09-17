@@ -58,6 +58,7 @@ class _EventDetailBasePageView extends StatelessWidget {
           ),
         ),
         loading: () => Scaffold(
+          appBar: const LemonAppBar(),
           backgroundColor: colorScheme.primary,
           body: Center(
             child: Loading.defaultLoading(context),
