@@ -23,6 +23,7 @@ class PaymentAccount with _$PaymentAccount {
     // EthereumRelay
     String? fee,
     BigInt? cryptoFee,
+    double? fiatFee,
     Relay? relay,
   }) = _PaymentAccount;
 
@@ -37,6 +38,7 @@ class PaymentAccount with _$PaymentAccount {
             ? AccountInfo.fromDto(dto.accountInfo!)
             : null,
         fee: dto.fee,
+        fiatFee: dto.fee != null ? double.parse(dto.fee!) : null,
         cryptoFee: dto.fee != null ? BigInt.parse(dto.fee!) : null,
         relay: dto.relay != null ? Relay.fromDto(dto.relay!) : null,
       );

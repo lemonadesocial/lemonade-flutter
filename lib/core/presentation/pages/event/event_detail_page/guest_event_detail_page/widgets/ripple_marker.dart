@@ -1,4 +1,5 @@
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math show sin, pi, sqrt;
 
@@ -38,26 +39,39 @@ class RippleMarkerState extends State<RippleMarker>
 
   Widget _center() {
     return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(widget.size),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: <Color>[
-                widget.color,
-                Colors.black,
-              ],
-            ),
-          ),
-          child: ScaleTransition(
-            scale: Tween(begin: 0.5, end: 1.0).animate(
-              CurvedAnimation(
-                parent: _controller,
-                curve: CurveWave(),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(widget.size),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: <Color>[
+                    widget.color,
+                    Colors.black,
+                  ],
+                ),
+              ),
+              child: ScaleTransition(
+                scale: Tween(begin: 0.5, end: 1.0).animate(
+                  CurvedAnimation(
+                    parent: _controller,
+                    curve: CurveWave(),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          Container(
+            width: Sizing.xSmall,
+            height: Sizing.xSmall,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -87,9 +101,9 @@ class _CirclePainter extends CustomPainter {
   final Animation<double> _animation;
 
   void circle(Canvas canvas, Rect rect, double value) {
-    final double opacity = (1.0 - (value / 4.0)).clamp(0.0, 1.0);
+    final double opacity = (0.6 - (value / 4.0)).clamp(0.0, 1.0);
     final Color mColor = color.withOpacity(opacity);
-    final double size = rect.width / 2;
+    final double size = rect.width / 1.5;
     final double area = size * size;
     final double radius = math.sqrt(area * value / 4);
     final Paint paint = Paint()..color = mColor;

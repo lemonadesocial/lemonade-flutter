@@ -1,4 +1,3 @@
-import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -21,59 +20,60 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
             parentEventId: parentEventId,
           ),
         ) {
-    on<EventTitleChanged>(_onTitleChanged);
-    on<EventDescriptionChanged>(_onDescriptionChanged);
-    on<VirtualLinkChanged>(_onVirtualLinkChanged);
-    on<FormSubmitted>(_onFormSubmitted);
-    on<TagsChanged>(_onTagsChanged);
+    on<CreateEventTitleChanged>(_onEventTitleChanged);
+    on<CreateEventDescriptionChanged>(_onCreateEventDescriptionChanged);
+    on<CreateEventVirtualLinkChanged>(_onCreateEventVirtualLinkChanged);
+    on<CreateEventFormSubmitted>(_onCreateEventFormSubmitted);
+    on<CreateEventTagsChanged>(_onCreateEventTagsChanged);
+    on<CreateEventPrivateChanged>(_onCreateEventPrivateChanged);
+    on<CreateEventApprovalRequiredChanged>(
+      _onCreateEventApprovalRequiredChanged,
+    );
+    on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
+    on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
+    on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
-  Future<void> _onTitleChanged(
-    EventTitleChanged event,
+  Future<void> _onEventTitleChanged(
+    CreateEventTitleChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     final title = StringFormz.dirty(event.title);
     emit(
       state.copyWith(
         title: title.isValid ? title : StringFormz.pure(event.title),
-        isValid: Formz.validate([title, state.description]),
-      ),
-    );
-  }
-
-  Future<void> _onDescriptionChanged(
-    EventDescriptionChanged event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    final description = StringFormz.dirty(event.description);
-    emit(
-      state.copyWith(
-        description: description.isValid
-            ? description
-            : StringFormz.pure(event.description),
         isValid: Formz.validate([
-          state.title,
-          description,
+          title,
         ]),
       ),
     );
   }
 
-  Future<void> _onVirtualLinkChanged(
-    VirtualLinkChanged event,
+  Future<void> _onCreateEventDescriptionChanged(
+    CreateEventDescriptionChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        description: event.description,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventVirtualLinkChanged(
+    CreateEventVirtualLinkChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     emit(
       state.copyWith(
         virtualUrl: event.virtualUrl,
-        virtual: event.virtualUrl?.isNotEmpty == true,
       ),
     );
   }
 
-  Future<void> _onTagsChanged(
-    TagsChanged event,
+  Future<void> _onCreateEventTagsChanged(
+    CreateEventTagsChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     emit(
@@ -83,8 +83,63 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
-  Future<void> _onFormSubmitted(
-    FormSubmitted event,
+  Future<void> _onCreateEventPrivateChanged(
+    CreateEventPrivateChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        private: event.private,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventApprovalRequiredChanged(
+    CreateEventApprovalRequiredChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        approvalRequired: event.approvalRequired,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventGuestLimitChanged(
+    CreateEventGuestLimitChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        guestLimit: event.guestLimit,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventGuestLimitPerChanged(
+    CreateEventGuestLimitPerChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        guestLimitPer: event.guestLimitPer,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventPhotoImageIdChanged(
+    CreateEventPhotoImageIdChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        photoImageId: event.photoImageId,
+      ),
+    );
+  }
+
+  Future<void> _onCreateEventFormSubmitted(
+    CreateEventFormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
     // Convert the target selected datetime into utc
@@ -94,31 +149,30 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     final endUtcDateTime = event.end
         .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
-    final description = StringFormz.dirty(state.description.value);
     emit(
       state.copyWith(
         title: title,
-        description: description,
-        isValid: Formz.validate([title, description]),
+        isValid: Formz.validate([
+          title,
+        ]),
       ),
     );
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       Input$EventInput input = Input$EventInput(
         title: title.value,
-        description: description.value,
-        private: event.private,
-        approval_required: event.approvalRequired,
+        description: state.description,
+        private: state.private,
+        approval_required: state.approvalRequired,
         start: DateTime.parse(startUtcDateTime.toIso8601String()),
         end: DateTime.parse(endUtcDateTime.toIso8601String()),
         timezone: event.timezone,
-        guest_limit: double.parse(
-          event.guestLimit ?? EventConstants.defaultEventGuestLimit,
-        ),
-        guest_limit_per: double.parse(
-          event.guestLimitPer ?? EventConstants.defaultEventGuestLimitPer,
-        ),
-        virtual: state.virtual,
+        guest_limit:
+            state.guestLimit != null ? double.parse(state.guestLimit!) : null,
+        guest_limit_per: state.guestLimitPer != null
+            ? double.parse(state.guestLimitPer!)
+            : null,
+        virtual: true,
         virtual_url: state.virtualUrl,
         address: event.address != null
             ? Input$AddressInput(
@@ -144,6 +198,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
               event.subEventSettings?.ticketRequiredForPurchase,
         ),
         tags: state.tags,
+        new_new_photos: state.photoImageId != null ? [state.photoImageId!] : [],
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
@@ -164,20 +219,23 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
 @freezed
 class CreateEventEvent with _$CreateEventEvent {
-  const factory CreateEventEvent.eventTitleChanged({required String title}) =
-      EventTitleChanged;
+  const factory CreateEventEvent.createEventTitleChanged({
+    required String title,
+  }) = CreateEventTitleChanged;
 
-  const factory CreateEventEvent.eventDescriptionChanged({
+  const factory CreateEventEvent.createEventDescriptionChanged({
     required String description,
-  }) = EventDescriptionChanged;
+  }) = CreateEventDescriptionChanged;
 
-  const factory CreateEventEvent.virtualLinkChanged({String? virtualUrl}) =
-      VirtualLinkChanged;
+  const factory CreateEventEvent.createEventVirtualLinkChanged({
+    String? virtualUrl,
+  }) = CreateEventVirtualLinkChanged;
 
-  const factory CreateEventEvent.tagsChanged({required List<String> tags}) =
-      TagsChanged;
+  const factory CreateEventEvent.createEventTagsChanged({
+    required List<String> tags,
+  }) = CreateEventTagsChanged;
 
-  const factory CreateEventEvent.formSubmitted({
+  const factory CreateEventEvent.createEventFormSubmitted({
     required DateTime start,
     required DateTime end,
     required String timezone,
@@ -188,20 +246,44 @@ class CreateEventEvent with _$CreateEventEvent {
     String? guestLimitPer,
     bool? subEventEnabled,
     SubEventSettings? subEventSettings,
-  }) = FormSubmitted;
+  }) = CreateEventFormSubmitted;
+
+  const factory CreateEventEvent.createEventPrivateChanged({
+    required bool private,
+  }) = CreateEventPrivateChanged;
+
+  const factory CreateEventEvent.createEventApprovalRequiredChanged({
+    required bool approvalRequired,
+  }) = CreateEventApprovalRequiredChanged;
+
+  const factory CreateEventEvent.createEventGuestLimitChanged({
+    required String guestLimit,
+  }) = CreateEventGuestLimitChanged;
+
+  const factory CreateEventEvent.createEventGuestLimitPerChanged({
+    required String guestLimitPer,
+  }) = CreateEventGuestLimitPerChanged;
+
+  const factory CreateEventEvent.createEventPhotoImageIdChanged({
+    required String photoImageId,
+  }) = CreateEventPhotoImageIdChanged;
 }
 
 @freezed
 class CreateEventState with _$CreateEventState {
   const factory CreateEventState({
     @Default(StringFormz.pure()) StringFormz title,
-    @Default(StringFormz.pure()) StringFormz description,
-    @Default(false) bool virtual,
+    String? description,
     String? virtualUrl,
     @Default(false) bool isValid,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default([]) List<String> tags,
+    bool? private,
+    bool? approvalRequired,
+    String? guestLimit,
+    String? guestLimitPer,
     String? eventId,
+    String? photoImageId,
     // Subevent related
     String? parentEventId,
   }) = _CreateEventState;

@@ -1,4 +1,4 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/edit_event_bloc/edit_event_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
@@ -23,9 +23,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum EventPrivacy { public, private }
 
-class CreateEventConfigGrid extends StatelessWidget {
+class EditEventConfigGrid extends StatelessWidget {
   final Event? event;
-  const CreateEventConfigGrid({super.key, this.event});
+  const EditEventConfigGrid({super.key, this.event});
 
   onTap(
     BuildContext context,
@@ -251,7 +251,7 @@ class CreateEventConfigGrid extends StatelessWidget {
                 },
               );
             case EventConfigurationType.virtual:
-              return BlocBuilder<CreateEventBloc, CreateEventState>(
+              return BlocBuilder<EditEventBloc, EditEventState>(
                 builder: (context, state) {
                   return EventConfigCard(
                     title: eventConfig.title,
@@ -266,8 +266,8 @@ class CreateEventConfigGrid extends StatelessWidget {
                           return EventVirtualLinkSettingPage(
                             defaultUrl: state.virtualUrl,
                             onConfirm: (virtualUrl) {
-                              context.read<CreateEventBloc>().add(
-                                    CreateEventEvent.virtualLinkChanged(
+                              context.read<EditEventBloc>().add(
+                                    EditEventEvent.virtualLinkChanged(
                                       virtualUrl: virtualUrl,
                                     ),
                                   );

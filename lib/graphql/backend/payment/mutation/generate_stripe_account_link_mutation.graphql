@@ -1,0 +1,5 @@
+mutation GenerateStripeAccountLink($refreshUrl: String!, $returnUrl: String!) {
+  generateStripeAccountLink(refresh_url: $refreshUrl, return_url: $returnUrl) {
+    url
+  }
+}
