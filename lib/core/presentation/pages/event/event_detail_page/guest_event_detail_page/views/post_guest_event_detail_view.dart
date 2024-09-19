@@ -2,11 +2,13 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_about.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_programs.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_social_lounge_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_photos.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_virtual_link.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_floating_menu_button.dart';
@@ -94,6 +96,36 @@ class PostGuestEventDetailView extends StatelessWidget {
                   right: Spacing.smMedium,
                 ),
                 child: PostGuestEventLocation(event: event),
+              ),
+            if (event.virtualUrl?.isNotEmpty == true)
+              Container(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: colorScheme.outline,
+                      width: 0.5.w,
+                    ),
+                  ),
+                ),
+                child: PostGuestEventDetailVirtualLink(event: event),
+              ),
+            if (event.sessions?.isNotEmpty == true)
+              Container(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: colorScheme.outline,
+                      width: 0.5.w,
+                    ),
+                  ),
+                ),
+                child: PostGuestEventDetailPrograms(event: event),
               ),
             if ((event.newNewPhotosExpanded ?? []).isNotEmpty &&
                 (event.newNewPhotosExpanded ?? []).length > 1)

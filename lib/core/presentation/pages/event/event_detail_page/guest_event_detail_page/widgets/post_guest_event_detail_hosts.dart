@@ -63,7 +63,7 @@ class PostGuestEventDetailHosts extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
           child: Text(
             StringUtils.capitalize(t.common.host(n: 2)),
-            style: Typo.mediumPlus.copyWith(
+            style: Typo.extraMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: colorScheme.onPrimary,
             ),

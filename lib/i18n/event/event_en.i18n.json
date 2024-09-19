@@ -32,6 +32,7 @@
     "tagsType": "type",
     "hosts": "hosts",
     "about": "About",
+    "virtualLink": "Virtual Link",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",

@@ -72,7 +72,9 @@
         "patse": "Paste",
         "viewTicket": "View ticket",
         "viewEvent": "View event",
-        "create": "Create"
+        "create": "Create",
+        "joinNow": "Join now",
+        "viewAll": "View all"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
