@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_about.dart';
@@ -8,6 +9,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_photos.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_subevents.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_virtual_link.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
@@ -47,6 +49,9 @@ class PostGuestEventDetailView extends StatelessWidget {
           body: Loading.defaultLoading(context),
         ),
         fetched: (event) {
+          final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
+          final subEvents = getSubEventsBloc.state.events;
+
           final widgets = [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -126,6 +131,24 @@ class PostGuestEventDetailView extends StatelessWidget {
                   ),
                 ),
                 child: PostGuestEventDetailPrograms(event: event),
+              ),
+            if (event.subeventParent == null && subEvents.isNotEmpty == true)
+              Container(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: colorScheme.outline,
+                      width: 0.5.w,
+                    ),
+                  ),
+                ),
+                child: PostGuestEventDetailSubEvents(
+                  event: event,
+                  subEvents: subEvents,
+                ),
               ),
             if ((event.newNewPhotosExpanded ?? []).isNotEmpty &&
                 (event.newNewPhotosExpanded ?? []).length > 1)
