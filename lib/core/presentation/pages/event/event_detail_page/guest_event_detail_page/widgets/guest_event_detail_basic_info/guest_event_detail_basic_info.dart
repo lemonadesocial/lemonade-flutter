@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -74,19 +75,22 @@ class _EventCountDown extends StatelessWidget {
 
   final Event event;
 
-  Duration? get durationToEvent {
-    if (event.start == null) return null;
-    var now = DateTime.now();
-
-    if (event.start!.isBefore(now)) return null;
-
-    return event.start!.difference(now);
+  DurationTersity _getDurationTersity(String durationToEvent) {
+    final duration = Duration(seconds: int.parse(durationToEvent));
+    if (duration.inDays >= 1) {
+      return DurationTersity.day;
+    } else if (duration.inHours >= 1) {
+      return DurationTersity.hour;
+    } else {
+      return DurationTersity.minute;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final durationToEvent = EventUtils.getDurationToEventText(event);
 
     return InkWell(
       onTap: () {
@@ -166,12 +170,8 @@ class _EventCountDown extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: " ${prettyDuration(
-                                  durationToEvent!,
-                                  tersity: (durationToEvent?.inDays ?? 0) < 1
-                                      ? (durationToEvent?.inHours ?? 0) >= 1
-                                          ? DurationTersity.hour
-                                          : DurationTersity.minute
-                                      : DurationTersity.day,
+                                  Duration(seconds: int.parse(durationToEvent)),
+                                  tersity: _getDurationTersity(durationToEvent),
                                   upperTersity: DurationTersity.day,
                                 )}",
                                 style: Typo.medium.copyWith(
