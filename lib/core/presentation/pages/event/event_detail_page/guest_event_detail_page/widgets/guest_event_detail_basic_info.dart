@@ -55,8 +55,6 @@ class _EventCountDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
