@@ -18,6 +18,7 @@ import 'package:app/graphql/backend/notification/query/get_notifications.graphql
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,7 @@ class _HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<_HomeView> {
   EventTimeFilter? eventTimeFilter;
+  bool _isRefreshing = false;
 
   void _selectEventTimeFilter(EventTimeFilter? mEventTimeFilter) {
     setState(() {
@@ -77,6 +79,29 @@ class _HomeViewState extends State<_HomeView> {
         );
   }
 
+  Future<void> _refreshData() async {
+    if (_isRefreshing) return;
+
+    setState(() {
+      _isRefreshing = true;
+    });
+    try {
+      // Simulate a delay to show the loading state
+      await Future.delayed(const Duration(milliseconds: 1000));
+      context
+          .read<UpcomingHostingEventsBloc>()
+          .add(UpcomingHostingEventsEvent.fetch());
+      context
+          .read<UpcomingAttendingEventsBloc>()
+          .add(UpcomingAttendingEventsEvent.fetch());
+      context.read<HomeEventListingBloc>().add(BaseEventsListingEvent.fetch());
+    } finally {
+      setState(() {
+        _isRefreshing = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -85,104 +110,116 @@ class _HomeViewState extends State<_HomeView> {
           authenticated: (authSession) => authSession.userId,
           orElse: () => '',
         );
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        const SliverToBoxAdapter(
-          child: HomeCollaborators(),
-        ),
-        if (userId.isNotEmpty)
-          Query$GetNotifications$Widget(
-            options: Options$Query$GetNotifications(
-              fetchPolicy: FetchPolicy.networkOnly,
-              variables: Variables$Query$GetNotifications(
-                limit: 20,
-                skip: 0,
-                type: Input$NotificationTypeFilterInput(
-                  $in: [
-                    Enum$NotificationType.event_cohost_request,
-                    Enum$NotificationType.event_invite,
-                    Enum$NotificationType.user_friendship_request,
+    return RefreshIndicator(
+      color: colorScheme.onPrimary,
+      backgroundColor: LemonColor.chineseBlack,
+      onRefresh: _refreshData,
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          if (_isRefreshing)
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+              sliver: SliverToBoxAdapter(
+                child: Loading.defaultLoading(context),
+              ),
+            ),
+          const SliverToBoxAdapter(
+            child: HomeCollaborators(),
+          ),
+          if (userId.isNotEmpty)
+            Query$GetNotifications$Widget(
+              options: Options$Query$GetNotifications(
+                fetchPolicy: FetchPolicy.networkOnly,
+                variables: Variables$Query$GetNotifications(
+                  limit: 20,
+                  skip: 0,
+                  type: Input$NotificationTypeFilterInput(
+                    $in: [
+                      Enum$NotificationType.event_cohost_request,
+                      Enum$NotificationType.event_invite,
+                      Enum$NotificationType.user_friendship_request,
+                    ],
+                  ),
+                ),
+              ),
+              builder: (result, {refetch, fetchMore}) {
+                if (result.hasException ||
+                    result.isLoading ||
+                    result.data == null) {
+                  return SliverToBoxAdapter(
+                    child: Loading.defaultLoading(context),
+                  );
+                }
+                final notifications = result.parsedData?.getNotifications ?? [];
+                if (notifications.isEmpty) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+
+                return SliverPadding(
+                  padding: EdgeInsets.only(
+                    top: Spacing.medium,
+                    left: Spacing.small,
+                    right: Spacing.small,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: PendingInvitesCard(
+                      count: notifications.length,
+                    ),
+                  ),
+                );
+              },
+            ),
+          if (userId.isNotEmpty)
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: 30.w,
+                left: Spacing.small,
+                right: Spacing.small,
+              ),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const HomeHostingEventsList(),
+                    SizedBox(height: Spacing.medium),
+                    const HomeMyEventsList(),
                   ],
                 ),
               ),
             ),
-            builder: (result, {refetch, fetchMore}) {
-              if (result.hasException ||
-                  result.isLoading ||
-                  result.data == null) {
-                return SliverToBoxAdapter(
-                  child: Loading.defaultLoading(context),
-                );
-              }
-              final notifications = result.parsedData?.getNotifications ?? [];
-              if (notifications.isEmpty) {
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              }
-
-              return SliverPadding(
-                padding: EdgeInsets.only(
-                  top: Spacing.medium,
-                  left: Spacing.small,
-                  right: Spacing.small,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: PendingInvitesCard(
-                    count: notifications.length,
-                  ),
-                ),
-              );
-            },
-          ),
-        if (userId.isNotEmpty)
           SliverPadding(
-            padding: EdgeInsets.only(
-              top: 30.w,
-              left: Spacing.small,
-              right: Spacing.small,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: Spacing.small),
             sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const HomeHostingEventsList(),
-                  SizedBox(height: Spacing.medium),
-                  const HomeMyEventsList(),
+                  Text(
+                    t.discover.discover.toUpperCase(),
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  EventTimeFilterButton(
+                    onSelect: _selectEventTimeFilter,
+                  ),
                 ],
               ),
             ),
           ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  t.discover.discover.toUpperCase(),
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                EventTimeFilterButton(
-                  onSelect: _selectEventTimeFilter,
-                ),
-              ],
-            ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: Spacing.superExtraSmall),
           ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: Spacing.superExtraSmall),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-          sliver: HomeDiscoverEventsList(eventTimeFilter: eventTimeFilter),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 120.h),
-        ),
-      ],
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+            sliver: HomeDiscoverEventsList(eventTimeFilter: eventTimeFilter),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 120.h),
+          ),
+        ],
+      ),
     );
   }
 }
