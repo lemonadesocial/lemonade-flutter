@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
@@ -95,22 +96,35 @@ class _EventDetailBasePageView extends StatelessWidget {
             //     featureCodes: [Enum$FeatureCode.CheckIn],
             //   ),
             // ).canShowFeature;
-
             return const HostEventDetailView();
           }
           if (!isAttending) return const PreGuestEventDetailView();
           return isAttending
-              ? BlocProvider(
-                  create: (context) => GetMyTicketsBloc(
-                    input: GetTicketsInput(
-                      event: event.id,
-                      user: userId,
-                      skip: 0,
-                      limit: 100,
+              ? MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => GetSubEventsByCalendarBloc(
+                        parentEventId: event.id ?? '',
+                      )..add(
+                          GetSubEventsByCalendarEvent.fetch(
+                            from: event.start?.toUtc(),
+                            to: event.end?.toUtc(),
+                          ),
+                        ),
                     ),
-                  )..add(
-                      GetMyTicketsEvent.fetch(),
+                    BlocProvider(
+                      create: (context) => GetMyTicketsBloc(
+                        input: GetTicketsInput(
+                          event: event.id,
+                          user: userId,
+                          skip: 0,
+                          limit: 100,
+                        ),
+                      )..add(
+                          GetMyTicketsEvent.fetch(),
+                        ),
                     ),
+                  ],
                   child: const PostGuestEventDetailView(),
                 )
               : const PreGuestEventDetailView();

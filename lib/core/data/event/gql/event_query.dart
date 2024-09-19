@@ -15,6 +15,7 @@ const eventHostExpandedFragment = '''
     }
     job_title
     __typename
+    matrix_localpart
   }
 ''';
 

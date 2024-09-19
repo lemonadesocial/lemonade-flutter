@@ -103,6 +103,7 @@ class MapUtils {
       context: context,
       useRootNavigator: true,
       backgroundColor: LemonColor.atomicBlack,
+      barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) => MapOptionBottomSheet(
         lat: latitude,
         lng: longitude,
