@@ -137,6 +137,8 @@ class LemonColor {
   // farcaster
   static const farcasterViolet = Color.fromRGBO(134, 96, 204, 1);
   static const aero = Color(0xff68A0F5);
+
+  static const rajah = Color(0xffF5AC68);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

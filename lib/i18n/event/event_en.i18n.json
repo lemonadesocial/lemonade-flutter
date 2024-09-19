@@ -31,6 +31,7 @@
     "hostedBy": "Hosted by",
     "tagsType": "type",
     "hosts": "hosts",
+    "about": "About",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -486,7 +487,9 @@
         "eventLoungeTitle": "Lounge",
         "liveChatDescription": "Connect with other attendees!",
         "newMessages": "New messages",
-        "emptyStories": "No posts added yet, Create one and start\ninteracting now!"
+        "emptyStories": "No posts added yet, Create one and start\ninteracting now!",
+        "socialLounge": "Social Lounge",
+        "socialLoungeDescription": "Discover & engage with other guests!"
     },
     "eventGuestDirectory": {
         "eventGuestDirectoryTitle": "Guests"
