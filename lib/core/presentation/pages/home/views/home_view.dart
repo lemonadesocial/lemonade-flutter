@@ -85,23 +85,16 @@ class _HomeViewState extends State<_HomeView> {
     setState(() {
       _isRefreshing = true;
     });
-
     try {
       // Simulate a delay to show the loading state
       await Future.delayed(const Duration(milliseconds: 1000));
-      await Future.wait(
-        [
-          context
-              .read<UpcomingHostingEventsBloc>()
-              .add(UpcomingHostingEventsEvent.fetch()),
-          context
-              .read<UpcomingAttendingEventsBloc>()
-              .add(UpcomingAttendingEventsEvent.fetch()),
-          context
-              .read<HomeEventListingBloc>()
-              .add(BaseEventsListingEvent.fetch()),
-        ].map((e) => Future(() => e)),
-      );
+      context
+          .read<UpcomingHostingEventsBloc>()
+          .add(UpcomingHostingEventsEvent.fetch());
+      context
+          .read<UpcomingAttendingEventsBloc>()
+          .add(UpcomingAttendingEventsEvent.fetch());
+      context.read<HomeEventListingBloc>().add(BaseEventsListingEvent.fetch());
     } finally {
       setState(() {
         _isRefreshing = false;
