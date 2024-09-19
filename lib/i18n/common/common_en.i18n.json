@@ -25,6 +25,7 @@
     "actions": {
         "edit": "edit",
         "connect": "connect",
+        "disconnect": "disconnect",
         "editProfile": "Edit profile",
         "shareProfile": "Share profile",
         "follow": "Follow",
@@ -74,7 +75,8 @@
         "viewEvent": "View event",
         "create": "Create",
         "joinNow": "Join now",
-        "viewAll": "View all"
+        "viewAll": "View all",
+        "setLimit": "Set limit"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

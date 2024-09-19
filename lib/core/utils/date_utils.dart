@@ -148,7 +148,7 @@ class DateUtils {
   }
 
   static formatForDateSetting(DateTime dateTime) {
-    String formattedDate = DateFormat('d MMM').format(dateTime);
+    String formattedDate = DateFormat('MMM d').format(dateTime);
     String formattedTime = DateFormat('h:mma').format(dateTime).toLowerCase();
     return '$formattedDate at $formattedTime';
   }

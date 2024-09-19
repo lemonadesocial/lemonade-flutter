@@ -162,7 +162,13 @@
         "guestUnlockLimitDescription": "Number of friends and matches a guest can unlock this experience for",
         "totalGuestLimit": "Total guest limit",
         "totalGuestLimitDescription": "Total number of people who can attend this experience",
-        "noGuestLimit": "No guest limit"
+        "noGuestLimit": "No guest limit",
+        "guestLimit": "Guest limit",
+        "guestLimitDescription": "Set maximum guests allowed in this event. Registration closes when the limit is reached.",
+        "inviteLimitPerGuest": "Invite limit per guest",
+        "inviteLimit": "Invite limit",
+        "inviteLimitDescription": "Set maximum invites a guest is allowed to send in this event.",
+        "unlimited": "Unlimited"
     },
     "dateAndTime": "Date & Time",
     "datetimeSettings": {
@@ -177,6 +183,7 @@
         "timezoneUpdated": "Timezone has been updated"
     },
     "locationSetting": {
+        "chooseLocation": "Choose location",
         "addLocation": "Add location",
         "myPlaces": "My places",
         "description": "Select or add a location to your event",
@@ -232,10 +239,13 @@
     },
     "ticketTier": "Ticket tiers",
     "ticketTierSetting": {
+        "ticketTierSettingTitle": "Tickets & Payments",
+        "ticketTierSettingDesc": "Set up your event tickets with debit/credit card & crypto payment options",
         "payoutAccounts": "Payout accounts",
         "creditDebit": "Credit/Debit",
         "erc20": "ERC20",
         "connectAccount": "Connect account",
+        "connected": "Connected",
         "selectAccount": "Select account",
         "crypto": "Crypto",
         "newTicket": "New ticket",
@@ -303,7 +313,13 @@
             "name": "Name",
             "description": "Description"
         },
-        "emptyTicketTypes": "No ticket tiers found"
+        "emptyTicketTypes": "No ticket tiers found",
+        "connectStripe": "Connect Stripe",
+        "connectStripeDesc": "Receive debit/credit payments",
+        "connectWallet": "Connect Wallet",
+        "connectWalletDesc": "Receive crypto payments",
+        "stripeConnected": "Stripe connected",
+        "walletConnected": "Wallet connected"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
@@ -661,6 +677,7 @@
         "createSideEventDescription": "Host independent events within the main event"
     },
     "eventTags": {
+        "tags": "Tags",
         "addTags": "Add tags"
     },
     "teamMembers": {
@@ -683,6 +700,7 @@
         "editMember": "Edit Member"
     },
     "virtualLinkSetting": {
+        "virtualLink": "Virtual link",
         "addVirtualLink": "Add virtual link",
         "addVirtualLinkDescription": "Please enter the virtual event link for your guests to join",
         "enterLink": "Enter link"
@@ -697,5 +715,8 @@
     "startingIn": "Starting in $time",
     "noUpcomingEvents": "No Upcoming Events",
     "noUpcomingEventsDescription": "Events you are attending & hosting will show up here",
-    "register": "Register"
+    "register": "Register",
+    "visibility": "Visibility",
+    "requireApproval": "Require approval",
+    "registration": "Registration"
 }

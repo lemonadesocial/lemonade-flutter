@@ -54,85 +54,93 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
         );
-    return BlocListener<EditEventDetailBloc, EditEventDetailState>(
-      listener: (context, state) {
-        if (state.status == EditEventDetailBlocStatus.success) {
-          AutoRouter.of(context).pop();
-        }
-      },
-      child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-        builder: (context, state) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
-              vertical: Spacing.small,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.event.locationSetting.description,
-                  style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-                ),
-                SizedBox(
-                  height: 15.h,
-                ),
-                InkWell(
-                  onTap: () => _onTapAddNew(),
-                  child: Container(
-                    height: 80.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          LemonColor.darkCharcoalGray,
-                          LemonColor.darkCharcoalGray,
-                        ],
-                      ),
+
+    Widget content =
+        BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: Spacing.small,
+            vertical: Spacing.small,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                t.event.locationSetting.description,
+                style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              InkWell(
+                onTap: () => _onTapAddNew(),
+                child: Container(
+                  height: 80.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        LemonColor.darkCharcoalGray,
+                        LemonColor.darkCharcoalGray,
+                      ],
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 25.w,
-                        vertical: 10.h,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.event.locationSetting.addNew.toUpperCase(),
-                            style: Typo.extraMedium.copyWith(
-                              fontFamily: FontFamily.nohemiVariable,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 25.w,
+                      vertical: 10.h,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          t.event.locationSetting.addNew.toUpperCase(),
+                          style: Typo.extraMedium.copyWith(
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const Icon(Icons.add_circle_outline_rounded),
-                        ],
-                      ),
+                        ),
+                        const Icon(Icons.add_circle_outline_rounded),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                Text(
-                  t.event.locationSetting.myPlaces,
-                  style: Typo.extraMedium,
-                ),
-                SizedBox(
-                  height: 12.h,
-                ),
-                Expanded(
-                  child: AddressList(addresses: addresses, event: widget.event),
-                ),
-                _buildSaveButton(),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+              SizedBox(
+                height: 25.h,
+              ),
+              Text(
+                t.event.locationSetting.myPlaces,
+                style: Typo.extraMedium,
+              ),
+              SizedBox(
+                height: 12.h,
+              ),
+              Expanded(
+                child: AddressList(addresses: addresses, event: widget.event),
+              ),
+              _buildSaveButton(),
+            ],
+          ),
+        );
+      },
     );
+
+    if (widget.event != null) {
+      content = BlocListener<EditEventDetailBloc, EditEventDetailState>(
+        listener: (context, state) {
+          if (state.status == EditEventDetailBlocStatus.success) {
+            AutoRouter.of(context).pop();
+          }
+        },
+        child: content,
+      );
+    }
+
+    return content;
   }
 
   _onTapAddNew() {

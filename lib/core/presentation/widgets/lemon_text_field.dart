@@ -33,6 +33,8 @@ class LemonTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.enableSuggestions,
     this.autocorrect,
+    this.labelStyle,
+    this.placeholderStyle,
   });
 
   final ValueChanged<String>? onChange;
@@ -61,7 +63,8 @@ class LemonTextField extends StatelessWidget {
   final Function(String newValue)? onFieldSubmitted;
   final bool? enableSuggestions;
   final bool? autocorrect;
-
+  final TextStyle? labelStyle;
+  final TextStyle? placeholderStyle;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -114,8 +117,9 @@ class LemonTextField extends StatelessWidget {
           autofocus: autofocus,
           onChanged: onChange,
           focusNode: focusNode,
-          style: theme.textTheme.bodyMedium!
-              .copyWith(color: theme.colorScheme.onPrimary),
+          style: labelStyle ??
+              theme.textTheme.bodyMedium!
+                  .copyWith(color: theme.colorScheme.onPrimary),
           minLines: minLines,
           maxLines: maxLines ?? minLines,
           cursorColor: theme.colorScheme.onPrimary,
@@ -123,8 +127,10 @@ class LemonTextField extends StatelessWidget {
           keyboardType: textInputType,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: theme.textTheme.bodyMedium!
-                .copyWith(color: theme.colorScheme.outlineVariant),
+            hintStyle: placeholderStyle ??
+                theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.outlineVariant,
+                ),
             errorText: errorText,
             enabledBorder: border,
             focusedBorder: border,

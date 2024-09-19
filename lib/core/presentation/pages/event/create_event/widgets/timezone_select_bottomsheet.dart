@@ -70,11 +70,13 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
             showIconContainer: true,
             iconContainerColor: LemonColor.acidGreen,
           );
-          context.read<GetEventDetailBloc>().add(
-                GetEventDetailEvent.fetch(
-                  eventId: widget.event!.id ?? '',
-                ),
-              );
+          if (widget.event != null) {
+            context.read<GetEventDetailBloc>().add(
+                  GetEventDetailEvent.fetch(
+                    eventId: widget.event!.id ?? '',
+                  ),
+                );
+          }
           AutoRouter.of(context).pop();
         }
       },
@@ -141,26 +143,12 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
                       ),
                       child: LinearGradientButton.primaryButton(
                         onTap: () {
-                          // Edit event
-                          if (widget.event != null) {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventSaveChangesTimezone(
-                                    event: widget.event,
-                                    timezone: selectedTimezone ?? '',
-                                  ),
-                                );
-                          }
-                          // Create new event
-                          else {
-                            SnackBarUtils.showCustom(
-                              title: "${t.common.saved}!",
-                              message: t.event.datetimeSettings.timezoneUpdated,
-                              icon: Assets.icons.icSave.svg(),
-                              showIconContainer: true,
-                              iconContainerColor: LemonColor.acidGreen,
-                            );
-                            AutoRouter.of(context).pop();
-                          }
+                          context.read<EventDateTimeSettingsBloc>().add(
+                                EventDateTimeSettingsEventSaveChangesTimezone(
+                                  event: widget.event,
+                                  timezone: selectedTimezone ?? '',
+                                ),
+                              );
                         },
                         label: t.common.actions.saveChanges,
                         loadingWhen:

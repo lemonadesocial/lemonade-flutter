@@ -1,5 +1,6 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/payment/dtos/stripe_connected_account_dto/stripe_connected_account_dto.dart';
 import 'package:app/core/data/user/dtos/user_expertise_dto/user_expertise_dto.dart';
 import 'package:app/core/data/user/dtos/user_farcaster_info_dto/user_farcaster_info_dto.dart';
 import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
@@ -91,6 +92,8 @@ class UserDto with _$UserDto {
     double? age,
     @JsonKey(name: 'location_line') String? locationLine,
     @JsonKey(name: 'quest_points') int? questPoints,
+    @JsonKey(name: 'stripe_connected_account')
+    StripeConnectedAccountDto? stripeConnectedAccount,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

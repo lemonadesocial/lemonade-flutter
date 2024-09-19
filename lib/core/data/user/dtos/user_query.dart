@@ -207,6 +207,15 @@ const userFarcasterInfoFragment = '''
   }
 ''';
 
+const userStripeFragment = '''
+  fragment userStripeFragment on User {
+    stripe_connected_account {
+        account_id
+        connected
+    }
+  }
+''';
+
 final getMeQuery = gql('''
   $baseUserFragment
   $userProfileFragment
