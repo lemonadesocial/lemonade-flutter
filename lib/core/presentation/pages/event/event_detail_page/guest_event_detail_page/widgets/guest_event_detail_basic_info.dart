@@ -15,11 +15,11 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:app/core/utils/event_utils.dart';
 
 class GuestEventDetailBasicInfo extends StatelessWidget {
   const GuestEventDetailBasicInfo({
@@ -51,15 +51,6 @@ class _EventCountDown extends StatelessWidget {
   });
 
   final Event event;
-
-  Duration? get durationToEvent {
-    if (event.start == null) return null;
-    var now = DateTime.now();
-
-    if (event.start!.isBefore(now)) return null;
-
-    return event.start!.difference(now);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,24 +141,8 @@ class _EventCountDown extends StatelessWidget {
                                     height: 3.h,
                                   ),
                                   Text(
-                                    durationToEvent != null
-                                        ? t.event.eventStartIn(
-                                            time: prettyDuration(
-                                              durationToEvent!,
-                                              tersity: (durationToEvent
-                                                              ?.inDays ??
-                                                          0) <
-                                                      1
-                                                  ? (durationToEvent?.inHours ??
-                                                              0) >=
-                                                          1
-                                                      ? DurationTersity.hour
-                                                      : DurationTersity.minute
-                                                  : DurationTersity.day,
-                                              upperTersity: DurationTersity.day,
-                                            ),
-                                          )
-                                        : t.event.eventEnded,
+                                    EventUtils.getDurationToEventText(event) ??
+                                        '',
                                     style: Typo.mediumPlus.copyWith(
                                       color: colorScheme.onPrimary,
                                       fontWeight: FontWeight.w800,

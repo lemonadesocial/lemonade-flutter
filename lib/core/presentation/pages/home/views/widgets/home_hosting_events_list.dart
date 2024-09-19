@@ -32,7 +32,7 @@ class HomeHostingEventsList extends StatelessWidget {
               ),
             ),
             SizedBox(height: Spacing.small),
-            ...events.take(100).map(
+            ...events.take(2).map(
                   (event) => Padding(
                     padding: EdgeInsets.only(bottom: Spacing.xSmall),
                     child: HomeEventCard(event: event),

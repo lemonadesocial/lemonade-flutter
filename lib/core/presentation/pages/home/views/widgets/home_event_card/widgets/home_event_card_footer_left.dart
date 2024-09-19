@@ -21,9 +21,11 @@ class HomeEventCardFooterLeft extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final guestsCount = event.guests;
-    final checkInCount = event.checkInCount;
+    final checkInCount = event.checkInCount ?? 0;
+    final attendingCount = event.attendingCount ?? 0;
     final pendingRequestsCount = event.pendingRequestCount ?? 0;
+    final totalGuestsCount = checkInCount + attendingCount;
+
     final userId = context.watch<AuthBloc>().state.maybeWhen(
           authenticated: (session) => session.userId,
           orElse: () => '',
@@ -44,7 +46,7 @@ class HomeEventCardFooterLeft extends StatelessWidget {
               ),
               SizedBox(width: Spacing.superExtraSmall),
               Text(
-                '$checkInCount/$guestsCount',
+                '$checkInCount/$totalGuestsCount',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                   fontWeight: FontWeight.w500,
@@ -88,7 +90,6 @@ class HomeEventCardFooterLeft extends StatelessWidget {
     final now = DateTime.now();
     final eventStart = event.start;
     final difference = eventStart?.difference(now) ?? Duration.zero;
-
     if (EventUtils.isEventLive(event)) {
       return _buildLabel(context, t.event.liveNow, LemonColor.coralReef);
     }

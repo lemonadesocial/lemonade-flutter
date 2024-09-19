@@ -36,7 +36,7 @@ class UpcomingHostingEventsBloc
               (event) => event_utils.EventUtils.isLiveOrUpcoming(event),
             )
             .toList()
-          ..sort((a, b) => b.start!.compareTo(a.start!));
+          ..sort((a, b) => a.start!.compareTo(b.start!));
         emit(
           UpcomingHostingEventsState.fetched(
             events: upcomingHostingEvents,

@@ -14,7 +14,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -29,36 +28,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
 
   final Event event;
   // final EventUserRole? eventUserRole;
-
-  String? get durationText {
-    final now = DateTime.now();
-    if (event.start == null && event.end == null) return null;
-    // Is Live event
-    if (event.start!.isBefore(now) && event.end!.isAfter(now)) {
-      final Duration difference = now.difference(event.start!);
-      final int days = difference.inDays;
-      if (days == 0) {
-        return t.event.eventStarted;
-      }
-      return t.event.eventStartedDaysAgo(days: days);
-    }
-    // Is upcoming event
-    else if (event.start!.isAfter(now) && event.end!.isAfter(now)) {
-      final durationToEvent = event.start!.difference(now);
-      return t.event.eventStartIn(
-        time: prettyDuration(
-          durationToEvent,
-          tersity: (durationToEvent.inDays) < 1
-              ? (durationToEvent.inHours) >= 1
-                  ? DurationTersity.hour
-                  : DurationTersity.minute
-              : DurationTersity.day,
-          upperTersity: DurationTersity.day,
-        ),
-      );
-    }
-    return t.event.eventEnded;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +127,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                       height: 3.h,
                                     ),
                                     Text(
-                                      durationText ?? '',
+                                      EventUtils.getDurationToEventText(
+                                            event,
+                                          ) ??
+                                          '',
                                       style: Typo.mediumPlus.copyWith(
                                         color: colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
