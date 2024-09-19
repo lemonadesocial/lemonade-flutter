@@ -74,6 +74,15 @@ class _EventCountDown extends StatelessWidget {
 
   final Event event;
 
+  Duration? get durationToEvent {
+    if (event.start == null) return null;
+    var now = DateTime.now();
+
+    if (event.start!.isBefore(now)) return null;
+
+    return event.start!.difference(now);
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
