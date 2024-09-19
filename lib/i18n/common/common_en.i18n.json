@@ -74,6 +74,8 @@
         "viewTicket": "View ticket",
         "viewEvent": "View event",
         "create": "Create",
+        "joinNow": "Join now",
+        "viewAll": "View all",
         "setLimit": "Set limit"
     },
     "followed": "Followed",

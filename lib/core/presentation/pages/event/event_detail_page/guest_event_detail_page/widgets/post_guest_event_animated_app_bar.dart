@@ -103,7 +103,12 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
     return AppBar(
       backgroundColor: backgroundColor ?? primary,
       automaticallyImplyLeading: hideLeading ?? true,
-      leading: hideLeading ?? false ? null : leading ?? const LemonBackButton(),
+      leading: hideLeading ?? false
+          ? null
+          : leading ??
+              LemonBackButton(
+                color: colorScheme.onSecondary,
+              ),
       actions: actions ??
           [
             Padding(
@@ -164,8 +169,8 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
                   }
                 },
                 child: ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
-                  builder: (filter) => Assets.icons.icMoreHoriz.svg(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icMoreVertical.svg(
                     colorFilter: filter,
                     width: 25.w,
                     height: 25.w,
@@ -174,6 +179,13 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
               ),
             ),
           ],
+      title: Text(
+        event.title ?? '',
+        style: Typo.extraMedium.copyWith(
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
       centerTitle: true,
       elevation: 0,
       toolbarHeight: preferredSize.height,

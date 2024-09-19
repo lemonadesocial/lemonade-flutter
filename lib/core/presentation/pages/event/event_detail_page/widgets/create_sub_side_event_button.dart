@@ -20,6 +20,7 @@ class CreateSubSideEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -33,6 +34,10 @@ class CreateSubSideEventButton extends StatelessWidget {
           title: t.event.subEvent.createSubEvent,
           subTitle: t.event.subEvent.createSubEventDescription,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
+          border: Border.all(
+            color: colorScheme.outline,
+            width: 0.5.w,
+          ),
         ),
         // TODO: Coming soon feature
         // SizedBox(height: Spacing.superExtraSmall),
@@ -61,12 +66,14 @@ class _Button extends StatelessWidget {
   final String title;
   final String subTitle;
   final BorderRadius? borderRadius;
+  final Border? border;
 
   const _Button({
     required this.icon,
     required this.title,
     required this.subTitle,
     this.borderRadius,
+    this.border,
     this.onTap,
   });
 
@@ -81,6 +88,7 @@ class _Button extends StatelessWidget {
           color: LemonColor.atomicBlack,
           borderRadius:
               borderRadius ?? BorderRadius.circular(LemonRadius.extraSmall),
+          border: border,
         ),
         child: Row(
           children: [
