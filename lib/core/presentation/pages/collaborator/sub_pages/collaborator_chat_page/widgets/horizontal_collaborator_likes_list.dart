@@ -72,7 +72,12 @@ class HorizontalCollaboratorLikesList extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return const CollaboratorCircleWidget();
+                return InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).push(CollaboratorRoute());
+                  },
+                  child: const CollaboratorCircleWidget(),
+                );
               } else {
                 final swipeIndex = index - 1;
                 return InkWell(

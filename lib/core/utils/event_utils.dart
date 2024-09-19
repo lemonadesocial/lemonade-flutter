@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -91,5 +92,13 @@ class EventUtils {
         event.end != null &&
         now.isAfter(event.start!) &&
         now.isBefore(event.end!);
+  }
+
+  static bool isLiveOrUpcoming(Event event) {
+    return event.start != null &&
+        (!date_utils.DateUtils.isPast(event.start) ||
+            (date_utils.DateUtils.isPast(event.start) &&
+                event.end != null &&
+                !date_utils.DateUtils.isPast(event.end)));
   }
 }

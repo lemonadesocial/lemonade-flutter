@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:app/core/utils/event_utils.dart' as event_utils;
 
 part 'upcoming_attending_events_bloc.freezed.dart';
 
@@ -32,15 +33,12 @@ class UpcomingAttendingEventsBloc
     result.fold(
       (l) => emit(UpcomingAttendingEventsState.failure()),
       (events) {
-        final now = DateTime.now();
         List<Event> upcomingAttendingEvents = events
             .where(
-              (event) => event.end?.isAfter(now) ?? false,
+              (event) => event_utils.EventUtils.isLiveOrUpcoming(event),
             )
             .toList()
-          ..sort(
-            (a, b) => a.start?.compareTo(b.start ?? DateTime(0)) ?? 0,
-          );
+          ..sort((a, b) => b.start!.compareTo(a.start!));
         emit(
           UpcomingAttendingEventsState.fetched(
             events: upcomingAttendingEvents,
