@@ -104,8 +104,10 @@ class EventUtils {
                 !date_utils.DateUtils.isPast(event.end)));
   }
 
-  static String? getDurationToEventText(Event event,
-      {bool durationOnly = false}) {
+  static String? getDurationToEventText(
+    Event event, {
+    bool durationOnly = false,
+  }) {
     final now = DateTime.now();
     if (event.start == null && event.end == null) return null;
     // Is Live event
