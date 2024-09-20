@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -16,7 +17,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,19 +74,12 @@ class _EventCountDown extends StatelessWidget {
 
   final Event event;
 
-  Duration? get durationToEvent {
-    if (event.start == null) return null;
-    var now = DateTime.now();
-
-    if (event.start!.isBefore(now)) return null;
-
-    return event.start!.difference(now);
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final durationToEvent =
+        EventUtils.getDurationToEventText(event, durationOnly: true);
 
     return InkWell(
       onTap: () {
@@ -165,25 +158,13 @@ class _EventCountDown extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: " ${prettyDuration(
-                                  durationToEvent!,
-                                  tersity: (durationToEvent?.inDays ?? 0) < 1
-                                      ? (durationToEvent?.inHours ?? 0) >= 1
-                                          ? DurationTersity.hour
-                                          : DurationTersity.minute
-                                      : DurationTersity.day,
-                                  upperTersity: DurationTersity.day,
-                                )}",
+                                text: durationToEvent,
                                 style: Typo.medium.copyWith(
                                   color: LemonColor.rajah,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
-                          ),
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
                           ),
                         )
                       : Text(
