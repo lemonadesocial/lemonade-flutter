@@ -2,14 +2,11 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/sub_event_general_settings_section_widget.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -20,7 +17,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum EventPrivacy { public, private }
 
@@ -234,35 +230,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                               );
                         },
                       ),
-                      SizedBox(
-                        height: Spacing.medium,
-                      ),
                     ],
-                    SettingTileWidget(
-                      title: t.event.deleteEvent,
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          barrierColor: Colors.black.withOpacity(0.8),
-                          topRadius: Radius.circular(30.r),
-                          builder: (mContext) {
-                            return DeleteEventConfirmationBottomSheet(
-                              event: widget.event,
-                            );
-                          },
-                        );
-                      },
-                      color: LemonColor.chineseBlack,
-                      titleColor: LemonColor.coralReef,
-                      leadingCircle: false,
-                      leading: ThemeSvgIcon(
-                        color: LemonColor.coralReef,
-                        builder: (filter) {
-                          return Assets.icons.icDelete
-                              .svg(colorFilter: filter, width: 18, height: 18);
-                        },
-                      ),
-                    ),
                     const SizedBox(
                       height: 150,
                     ),
