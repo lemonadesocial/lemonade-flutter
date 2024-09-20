@@ -80,7 +80,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
     return BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
       listener: (context, state) {
         state.maybeWhen(
-          orElse: () => null,
+          orElse: () => controller.start(),
           success: () async {
             SnackBarUtils.showSuccess(
               message: t.event.scanQR.checkedinSuccessfully,
