@@ -31,7 +31,14 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
     autoStart: true,
+    detectionSpeed: DetectionSpeed.noDuplicates,
   );
+
+  @override
+  void initState() {
+    controller.start();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -39,22 +46,27 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
     super.dispose();
   }
 
-  void onBarcodeDetect(BarcodeCapture barcodeCapture) {
+  Future<void> onBarcodeDetect(BarcodeCapture barcodeCapture) async {
+    await controller.stop();
+    final userId = barcodeCapture.barcodes.isNotEmpty
+        ? barcodeCapture.barcodes.last.displayValue?.toString() ?? ''
+        : '';
     if (widget.selectedScannerTabIndex == SelectedScannerTab.checkIn.index) {
       context.read<UpdateEventCheckinBloc>().add(
             UpdateEventCheckinEvent.checkinUser(
-              eventId: widget.event.id ?? '',
               active: true,
-              userId: barcodeCapture.barcodes.last.displayValue.toString(),
+              eventId: widget.event.id ?? '',
+              userId: userId,
             ),
           );
-    }
-    if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
-      AutoRouter.of(context).navigate(
-        ClaimRewardsRoute(
-          userId: barcodeCapture.barcodes.last.displayValue.toString(),
-        ),
+    } else if (widget.selectedScannerTabIndex ==
+        SelectedScannerTab.rewards.index) {
+      await AutoRouter.of(context).navigate(
+        ClaimRewardsRoute(userId: userId),
       );
+      controller.start();
+    } else {
+      controller.start();
     }
   }
 
@@ -68,12 +80,13 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
     return BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
       listener: (context, state) {
         state.maybeWhen(
-          orElse: () => null,
-          success: () {
+          orElse: () => controller.start(),
+          success: () async {
             SnackBarUtils.showSuccess(
               message: t.event.scanQR.checkedinSuccessfully,
             );
-            AutoRouter.of(context).pop();
+            await AutoRouter.of(context).pop();
+            controller.start();
           },
         );
       },
@@ -87,6 +100,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
                 children: [
                   Center(
                     child: MobileScanner(
+                      startDelay: true,
                       fit: BoxFit.cover,
                       onDetect: onBarcodeDetect,
                       controller: controller,
