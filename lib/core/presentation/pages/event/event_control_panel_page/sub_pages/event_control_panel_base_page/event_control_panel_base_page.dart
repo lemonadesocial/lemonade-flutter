@@ -5,9 +5,12 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_config_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_control_panel_base_page/widgets/event_tickets_grid_config.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -17,6 +20,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class EventControlPanelBasePage extends StatelessWidget {
@@ -168,17 +172,61 @@ class EventControlPanelBasePage extends StatelessWidget {
                       ),
                     ),
                     // if (canShowEventSettings)
+                    // SliverPadding(
+                    //   padding: EdgeInsets.only(
+                    //     left: Spacing.smMedium,
+                    //     right: Spacing.smMedium,
+                    //     top: Spacing.xLarge,
+                    //     bottom: Spacing.xSmall,
+                    //   ),
+                    //   sliver: SliverToBoxAdapter(
+                    //     child: Text(
+                    //       t.event.collaborations,
+                    //       style: Typo.medium.copyWith(),
+                    //     ),
+                    //   ),
+                    // ),
                     SliverPadding(
-                      padding: EdgeInsets.only(
-                        left: Spacing.smMedium,
-                        right: Spacing.smMedium,
-                        top: Spacing.xLarge,
-                        bottom: Spacing.xSmall,
+                      padding: EdgeInsets.symmetric(
+                        vertical: Spacing.smMedium,
+                        horizontal: Spacing.smMedium,
                       ),
                       sliver: SliverToBoxAdapter(
-                        child: Text(
-                          t.event.collaborations,
-                          style: Typo.medium.copyWith(),
+                        child: InkWell(
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              context: context,
+                              barrierColor: Colors.black.withOpacity(0.8),
+                              topRadius: Radius.circular(30.r),
+                              builder: (mContext) {
+                                return DeleteEventConfirmationBottomSheet(
+                                  event: event,
+                                );
+                              },
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ThemeSvgIcon(
+                                color: LemonColor.coralReef,
+                                builder: (filter) {
+                                  return Assets.icons.icDelete.svg(
+                                    colorFilter: filter,
+                                    width: 18,
+                                    height: 18,
+                                  );
+                                },
+                              ),
+                              SizedBox(width: Spacing.extraSmall),
+                              Text(
+                                t.event.deleteEvent,
+                                style: Typo.medium.copyWith(
+                                  color: LemonColor.coralReef,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
