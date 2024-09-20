@@ -1,11 +1,16 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +36,14 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
   final MobileScannerController controller = MobileScannerController(
     formats: const [BarcodeFormat.qrCode],
     autoStart: true,
+    detectionSpeed: DetectionSpeed.noDuplicates,
   );
+
+  @override
+  void initState() {
+    controller.start();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -39,22 +51,27 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
     super.dispose();
   }
 
-  void onBarcodeDetect(BarcodeCapture barcodeCapture) {
+  Future<void> onBarcodeDetect(BarcodeCapture barcodeCapture) async {
+    await controller.stop();
+    final userId = barcodeCapture.barcodes.isNotEmpty
+        ? barcodeCapture.barcodes.last.displayValue?.toString() ?? ''
+        : '';
     if (widget.selectedScannerTabIndex == SelectedScannerTab.checkIn.index) {
       context.read<UpdateEventCheckinBloc>().add(
             UpdateEventCheckinEvent.checkinUser(
-              eventId: widget.event.id ?? '',
               active: true,
-              userId: barcodeCapture.barcodes.last.displayValue.toString(),
+              eventId: widget.event.id ?? '',
+              userId: userId,
             ),
           );
-    }
-    if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
-      AutoRouter.of(context).navigate(
-        ClaimRewardsRoute(
-          userId: barcodeCapture.barcodes.last.displayValue.toString(),
-        ),
+    } else if (widget.selectedScannerTabIndex ==
+        SelectedScannerTab.rewards.index) {
+      await AutoRouter.of(context).navigate(
+        ClaimRewardsRoute(userId: userId),
       );
+      controller.start();
+    } else {
+      controller.start();
     }
   }
 
@@ -69,11 +86,12 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
       listener: (context, state) {
         state.maybeWhen(
           orElse: () => null,
-          success: () {
+          success: () async {
             SnackBarUtils.showSuccess(
               message: t.event.scanQR.checkedinSuccessfully,
             );
-            AutoRouter.of(context).pop();
+            await AutoRouter.of(context).pop();
+            controller.start();
           },
         );
       },
@@ -87,6 +105,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
                 children: [
                   Center(
                     child: MobileScanner(
+                      startDelay: true,
                       fit: BoxFit.cover,
                       onDetect: onBarcodeDetect,
                       controller: controller,
