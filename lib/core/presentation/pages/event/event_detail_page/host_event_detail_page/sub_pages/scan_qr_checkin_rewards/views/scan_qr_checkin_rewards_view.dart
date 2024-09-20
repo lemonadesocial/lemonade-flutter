@@ -72,11 +72,29 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
 
   @override
   Widget build(BuildContext context) {
+    final scanWindowSize = 200.w;
+
+    // Get the actual visible area of the screen
+    final screenSize = MediaQuery.of(context).size;
+    final safeArea = MediaQuery.of(context).padding;
+    final appBarHeight = AppBar().preferredSize.height;
+    final tabBarHeight = 100.w;
+    final spacingBottom = 35.w;
+    final availableHeight = screenSize.height -
+        safeArea.top -
+        safeArea.bottom -
+        appBarHeight -
+        tabBarHeight -
+        spacingBottom;
+
+    final centerY = (availableHeight / 2);
+
     final scanWindow = Rect.fromCenter(
-      center: MediaQuery.of(context).size.center(Offset.zero),
-      width: 200.w,
-      height: 200.w,
+      center: Offset(screenSize.width / 2, centerY),
+      width: scanWindowSize,
+      height: scanWindowSize,
     );
+
     return BlocListener<UpdateEventCheckinBloc, UpdateEventCheckinState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -90,35 +108,27 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           },
         );
       },
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Center(
-                    child: MobileScanner(
-                      startDelay: true,
-                      fit: BoxFit.cover,
-                      onDetect: onBarcodeDetect,
-                      controller: controller,
-                      scanWindow: scanWindow,
-                      errorBuilder: (context, error, child) {
-                        return ScannerErrorWidget(error: error);
-                      },
-                    ),
-                  ),
-                  CustomPaint(
-                    painter: ScannerOverlay(scanWindow),
-                  ),
-                  ScannerActions(controller: controller),
-                ],
-              ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Center(
+            child: MobileScanner(
+              fit: BoxFit.cover,
+              onDetect: onBarcodeDetect,
+              controller: controller,
+              scanWindow: scanWindow,
+              errorBuilder: (context, error, child) {
+                return ScannerErrorWidget(error: error);
+              },
             ),
-          ],
-        ),
+          ),
+          CustomPaint(
+            painter: ScannerOverlay(scanWindow: scanWindow),
+          ),
+          SafeArea(
+            child: ScannerActions(controller: controller),
+          ),
+        ],
       ),
     );
   }

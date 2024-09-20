@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScannerOverlay extends CustomPainter {
-  ScannerOverlay(this.scanWindow);
+  const ScannerOverlay({
+    required this.scanWindow,
+    this.borderRadius = 12.0,
+  });
 
   final Rect scanWindow;
-  final double borderRadius = 12.0;
+  final double borderRadius;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final backgroundPath = Path()..addRect(Rect.largest);
-
-    final verticalCenter = size.height / 2 - 50.w;
-    final scanWindowHeight = scanWindow.height;
-    final scanWindowTop = verticalCenter - (scanWindowHeight / 2);
-
-    final centeredScanWindow = Rect.fromLTWH(
-      scanWindow.left,
-      scanWindowTop,
-      scanWindow.width,
-      scanWindowHeight,
-    );
+    final backgroundPath = Path()..addRect(Offset.zero & size);
 
     final cutoutPath = Path()
       ..addRRect(
         RRect.fromRectAndCorners(
-          centeredScanWindow,
+          scanWindow,
           topLeft: Radius.circular(borderRadius),
           topRight: Radius.circular(borderRadius),
           bottomLeft: Radius.circular(borderRadius),
@@ -50,20 +41,23 @@ class ScannerOverlay extends CustomPainter {
       ..strokeWidth = 4.0;
 
     final borderRect = RRect.fromRectAndCorners(
-      centeredScanWindow,
+      scanWindow,
       topLeft: Radius.circular(borderRadius),
       topRight: Radius.circular(borderRadius),
       bottomLeft: Radius.circular(borderRadius),
       bottomRight: Radius.circular(borderRadius),
     );
 
-    // Draw the white border
+    // First, draw the background,
+    // with a cutout area that is a bit larger than the scan window.
+    // Finally, draw the scan window itself.
     canvas.drawPath(backgroundWithCutout, backgroundPaint);
     canvas.drawRRect(borderRect, borderPaint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(ScannerOverlay oldDelegate) {
+    return scanWindow != oldDelegate.scanWindow ||
+        borderRadius != oldDelegate.borderRadius;
   }
 }
