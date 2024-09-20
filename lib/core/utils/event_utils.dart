@@ -104,13 +104,17 @@ class EventUtils {
                 !date_utils.DateUtils.isPast(event.end)));
   }
 
-  static String? getDurationToEventText(Event event) {
+  static String? getDurationToEventText(Event event,
+      {bool durationOnly = false}) {
     final now = DateTime.now();
     if (event.start == null && event.end == null) return null;
     // Is Live event
     if (event.start!.isBefore(now) && event.end!.isAfter(now)) {
       final Duration difference = now.difference(event.start!);
       final int days = difference.inDays;
+      if (durationOnly) {
+        return prettyDuration(difference, tersity: DurationTersity.day);
+      }
       if (days == 0) {
         return t.event.eventStarted;
       }
@@ -119,18 +123,20 @@ class EventUtils {
     // Is upcoming event
     else if (event.start!.isAfter(now) && event.end!.isAfter(now)) {
       final durationToEvent = event.start!.difference(now);
-      return t.event.eventStartIn(
-        time: prettyDuration(
-          durationToEvent,
-          tersity: (durationToEvent.inDays) < 1
-              ? (durationToEvent.inHours) >= 1
-                  ? DurationTersity.hour
-                  : DurationTersity.minute
-              : DurationTersity.day,
-          upperTersity: DurationTersity.day,
-        ),
+      final prettyDurationString = prettyDuration(
+        durationToEvent,
+        tersity: (durationToEvent.inDays) < 1
+            ? (durationToEvent.inHours) >= 1
+                ? DurationTersity.hour
+                : DurationTersity.minute
+            : DurationTersity.day,
+        upperTersity: DurationTersity.day,
       );
+      if (durationOnly) {
+        return prettyDurationString;
+      }
+      return t.event.eventStartIn(time: prettyDurationString);
     }
-    return t.event.eventEnded;
+    return durationOnly ? null : t.event.eventEnded;
   }
 }
