@@ -197,11 +197,10 @@ class TicketTierItem extends StatelessWidget {
                         BigInt.parse(parsedAmount),
                         decimals: decimals,
                       );
-                      displayedAmount = doubleAmount.toString();
+                      displayedAmount =
+                          '$doubleAmount ${firstTicketPrice?.currency}';
                     }
-                    displayedAmount = isFree
-                        ? t.event.free
-                        : '$displayedAmount ${firstTicketPrice?.currency}';
+                    displayedAmount = isFree ? t.event.free : displayedAmount;
                     return loading
                         ? Loading.defaultLoading(context)
                         : RichText(
