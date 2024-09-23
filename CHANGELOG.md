@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.34.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.33.0...v1.34.0) (2024-09-23)
+
+
+### Features
+
+* create event flow remake ([#723](https://github.com/lemonadesocial/lemonade-flutter/issues/723)) ([90c5aaf](https://github.com/lemonadesocial/lemonade-flutter/commit/90c5aafb72ce16504c8b328c49bbdae795e31a35))
+* post guest event detail UI remake ([#727](https://github.com/lemonadesocial/lemonade-flutter/issues/727)) ([a7010fc](https://github.com/lemonadesocial/lemonade-flutter/commit/a7010fc9ffe033bc5f95167c54f155add4e1f5b5))
+
+
+### Bug Fixes
+
+* add back button for loading state of event detail ([#726](https://github.com/lemonadesocial/lemonade-flutter/issues/726)) ([fdabfa5](https://github.com/lemonadesocial/lemonade-flutter/commit/fdabfa57e5e2ec285ca5e513543acef54a9e3b69))
+* check in guest flow ([#731](https://github.com/lemonadesocial/lemonade-flutter/issues/731)) ([3dfc20e](https://github.com/lemonadesocial/lemonade-flutter/commit/3dfc20e57be209caa1fbaf08764e8d28c92d8604))
+* enhance sessions ([#724](https://github.com/lemonadesocial/lemonade-flutter/issues/724)) ([29bd584](https://github.com/lemonadesocial/lemonade-flutter/commit/29bd584846ea90c550aa1044e036b7f4041b3185))
+* fix events display in home screen & improvement ([#728](https://github.com/lemonadesocial/lemonade-flutter/issues/728)) ([51deb09](https://github.com/lemonadesocial/lemonade-flutter/commit/51deb09c6b48780c1824f98c2b95f825c69b601f))
+* improve guest setting bottomSheet & fix minor bugs ([#734](https://github.com/lemonadesocial/lemonade-flutter/issues/734)) ([f9b48b3](https://github.com/lemonadesocial/lemonade-flutter/commit/f9b48b300c3ba680bfb658359a0be5d2f9b05028))
+* move delete event to control panel page ([#733](https://github.com/lemonadesocial/lemonade-flutter/issues/733)) ([fd46f12](https://github.com/lemonadesocial/lemonade-flutter/commit/fd46f12705d4a6cddd556b4dfb01bfa411a1dd1c))
+* scan qr code overlay ([#732](https://github.com/lemonadesocial/lemonade-flutter/issues/732)) ([f6fea71](https://github.com/lemonadesocial/lemonade-flutter/commit/f6fea7103cf9e886b84752c05f47281575c003c4))
+* wrong duration time display for event ([#730](https://github.com/lemonadesocial/lemonade-flutter/issues/730)) ([49df7c4](https://github.com/lemonadesocial/lemonade-flutter/commit/49df7c446add9ce631d57fefb5d3057881ea2bd9))
+
 ## [1.33.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.32.0...v1.33.0) (2024-09-13)
 
 
