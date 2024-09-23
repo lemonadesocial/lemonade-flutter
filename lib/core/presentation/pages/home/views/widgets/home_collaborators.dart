@@ -6,8 +6,10 @@ import 'package:app/core/presentation/pages/home/views/collaborator_circle_widge
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,7 +74,12 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const CollaboratorCircleWidget(),
+          InkWell(
+            onTap: () {
+              AutoRouter.of(context).push(CollaboratorRoute());
+            },
+            child: const CollaboratorCircleWidget(),
+          ),
           SizedBox(width: Spacing.xSmall),
           Column(
             mainAxisSize: MainAxisSize.min,
