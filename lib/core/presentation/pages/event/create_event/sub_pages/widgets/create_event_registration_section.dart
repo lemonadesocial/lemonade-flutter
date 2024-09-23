@@ -141,6 +141,12 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           initialValue: int.tryParse(state.guestLimit ?? '100'),
                           onRemove: () {
                             AutoRouter.of(context).pop();
+                            context.read<CreateEventBloc>().add(
+                                  const CreateEventEvent
+                                      .createEventGuestLimitChanged(
+                                    guestLimit: null,
+                                  ),
+                                );
                           },
                           onSetLimit: (value) {
                             AutoRouter.of(context).pop();
@@ -186,6 +192,12 @@ class CreateEventRegistrationSection extends StatelessWidget {
                               int.tryParse(state.guestLimitPer ?? '5'),
                           onRemove: () {
                             AutoRouter.of(context).pop();
+                            context.read<CreateEventBloc>().add(
+                                  const CreateEventEvent
+                                      .createEventGuestLimitPerChanged(
+                                    guestLimitPer: null,
+                                  ),
+                                );
                           },
                           onSetLimit: (value) {
                             AutoRouter.of(context).pop();

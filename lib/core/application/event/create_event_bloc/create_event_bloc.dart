@@ -257,11 +257,11 @@ class CreateEventEvent with _$CreateEventEvent {
   }) = CreateEventApprovalRequiredChanged;
 
   const factory CreateEventEvent.createEventGuestLimitChanged({
-    required String guestLimit,
+    required String? guestLimit,
   }) = CreateEventGuestLimitChanged;
 
   const factory CreateEventEvent.createEventGuestLimitPerChanged({
-    required String guestLimitPer,
+    required String? guestLimitPer,
   }) = CreateEventGuestLimitPerChanged;
 
   const factory CreateEventEvent.createEventPhotoImageIdChanged({

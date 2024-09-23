@@ -33,22 +33,35 @@ class GuestLimitSelectBottomSheet extends StatefulWidget {
 class GuestLimitSelectBottomSheetState
     extends State<GuestLimitSelectBottomSheet> {
   late int initialNumber;
+  late TextEditingController _textEditingController;
 
   @override
   void initState() {
     super.initState();
     initialNumber = widget.initialValue ?? 0;
+    _textEditingController =
+        TextEditingController(text: initialNumber.toString());
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 
   void _increment() {
     setState(() {
       initialNumber++;
+      _textEditingController.text = initialNumber.toString();
     });
   }
 
   void _decrement() {
     setState(() {
-      initialNumber--;
+      if (initialNumber > 0) {
+        initialNumber--;
+        _textEditingController.text = initialNumber.toString();
+      }
     });
   }
 
@@ -110,12 +123,41 @@ class GuestLimitSelectBottomSheetState
                           ),
                         ),
                         Expanded(
-                          child: Text(
-                            initialNumber.toString(),
+                          child: TextField(
+                            controller: _textEditingController,
                             textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
                             style: Typo.large.copyWith(
                               color: colorScheme.onSurface,
                             ),
+                            cursorColor: colorScheme.onSurface,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 8),
+                            ),
+                            onTap: () {
+                              _textEditingController.selection =
+                                  TextSelection.fromPosition(
+                                TextPosition(
+                                  offset: _textEditingController.text.length,
+                                ),
+                              );
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                initialNumber =
+                                    int.tryParse(value) ?? initialNumber;
+                                _textEditingController.text =
+                                    initialNumber.toString();
+                                _textEditingController.selection =
+                                    TextSelection.fromPosition(
+                                  TextPosition(
+                                    offset: _textEditingController.text.length,
+                                  ),
+                                );
+                              });
+                            },
                           ),
                         ),
                         _MinusPlusButton(
