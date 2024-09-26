@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -113,9 +114,11 @@ class TicketCardTop extends StatelessWidget {
                         height: 2.w,
                       ),
                       Text(
-                        DateFormatUtils.custom(
-                          event.start,
-                          pattern: 'EEEE, HH:mma',
+                        EventUtils.formatDateWithTimezone(
+                          dateTime: event.start ?? DateTime.now(),
+                          timezone: event.timezone ?? '',
+                          format: 'EEEE, HH:mm a',
+                          withTimezoneOffset: true,
                         ),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,

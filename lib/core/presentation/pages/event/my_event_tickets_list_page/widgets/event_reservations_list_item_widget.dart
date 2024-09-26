@@ -9,6 +9,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventReservationsListItemWidget extends StatelessWidget {
   final Event event;
@@ -67,15 +68,17 @@ class EventReservationsListItemWidget extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+                SizedBox(height: 2.w),
                 Text(
                   EventUtils.formatDateWithTimezone(
                     dateTime: event.start ?? DateTime.now(),
                     timezone: event.timezone ?? '',
                     withTimezoneOffset: true,
                   ),
-                  style: Typo.medium.copyWith(
+                  style: Typo.small.copyWith(
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w700,
+                    height: 0,
                   ),
                 ),
               ],

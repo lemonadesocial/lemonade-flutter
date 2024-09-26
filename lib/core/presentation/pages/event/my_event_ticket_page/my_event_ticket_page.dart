@@ -14,8 +14,8 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -114,9 +114,11 @@ class MyEventTicketPageView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            DateFormatUtils.custom(
-                              eventDetail.start,
-                              pattern: 'EEEE, dd MMMM  •  hh:mm a',
+                            EventUtils.formatDateWithTimezone(
+                              dateTime: eventDetail.start ?? DateTime.now(),
+                              timezone: eventDetail.timezone ?? '',
+                              withTimezoneOffset: true,
+                              format: 'EEEE, dd MMMM  •  hh:mm a',
                             ),
                             style: Typo.medium.copyWith(
                               color: colorScheme.onSecondary,
