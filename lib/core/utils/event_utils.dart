@@ -166,8 +166,23 @@ class EventUtils {
     return match?.group(1) ?? '';
   }
 
+  /// Formats the event date and time for display.
+  ///
+  /// This function handles both single-day and multi-day events:
+  ///
+  /// 1. Single-day events:
+  ///    - Date: Full day name and date (e.g., "Thursday, September 26")
+  ///    - Time: Start and end times with GMT offset (e.g., "11:00 AM - 1:00 PM GMT+4")
+  ///
+  /// 2. Multi-day events:
+  ///    - Date: Start day's full name and date (e.g., "Thursday, September 26")
+  ///    - Time: Start time, end date, end time, and GMT offset
+  ///      (e.g., "11:00 AM - September 30, 12:00 PM GMT+1")
+  ///
+  /// Returns a tuple of (formattedDate, formattedTime).
+  /// If event data is incomplete, returns empty strings.
   static (String, String) getFormattedEventDateAndTime(Event event) {
-    if (event.start == null || event.end == null) {
+    if (event.start == null || event.end == null || event.timezone == null) {
       return ('', '');
     }
 
@@ -177,17 +192,22 @@ class EventUtils {
 
     final dateFormatter = DateFormat('EEEE, MMMM d');
     final timeFormatter = DateFormat('h:mm a');
+    final endDateFormatter = DateFormat('MMMM d');
 
     final startDateStr = dateFormatter.format(event.start!);
     final startTimeStr = timeFormatter.format(event.start!);
+    final endTimeStr = timeFormatter.format(event.end!);
+    final gmtOffset = getGMTOffsetText(event.timezone!);
 
+    // Format output based on whether it's a single-day or multi-day event
     if (isSameDay) {
-      final endTimeStr = timeFormatter.format(event.end!);
-      return (startDateStr, '$startTimeStr - $endTimeStr');
+      return (startDateStr, '$startTimeStr - $endTimeStr $gmtOffset');
     } else {
-      final endDateStr = dateFormatter.format(event.end!);
-      final endTimeStr = timeFormatter.format(event.end!);
-      return (startDateStr, '$startTimeStr - $endDateStr, $endTimeStr');
+      final endDateStr = endDateFormatter.format(event.end!);
+      return (
+        startDateStr,
+        '$startTimeStr - $endDateStr, $endTimeStr $gmtOffset'
+      );
     }
   }
 }
