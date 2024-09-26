@@ -158,8 +158,6 @@ class EventUtils {
 
       return match?.group(1) ?? '';
     } catch (e) {
-      // Log the error if needed
-      // print('Error in getGMTOffsetText: $e');
       return '';
     }
   }
