@@ -145,6 +145,26 @@ class EventUtils {
     return durationOnly ? null : t.event.eventEnded;
   }
 
+  static String getGMTOffsetText(String? value) {
+    if (value == null || value.isEmpty) {
+      return '';
+    }
+    try {
+      final option = EventConstants.timezoneOptions.firstWhere(
+        (option) => option['value'] == value,
+        orElse: () => {'text': '', 'value': value},
+      );
+      final text = option['text'] ?? '';
+      final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
+
+      return match?.group(1) ?? '';
+    } catch (e) {
+      // Log the error if needed
+      // print('Error in getGMTOffsetText: $e');
+      return '';
+    }
+  }
+
   static String formatDateWithTimezone({
     required DateTime dateTime,
     required String timezone,
@@ -152,18 +172,6 @@ class EventUtils {
   }) {
     final formattedDate = DateFormat(format).format(dateTime);
     return formattedDate;
-  }
-
-  static String getGMTOffsetText(String value) {
-    final option = EventConstants.timezoneOptions.firstWhere(
-      (option) => option['value'] == value,
-      orElse: () => {'text': '', 'value': value},
-    );
-
-    final text = option['text'] ?? '';
-    final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
-
-    return match?.group(1) ?? '';
   }
 
   /// Formats the event date and time for display.
