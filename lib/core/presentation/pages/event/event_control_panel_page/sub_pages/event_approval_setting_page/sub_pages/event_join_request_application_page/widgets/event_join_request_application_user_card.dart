@@ -95,6 +95,7 @@ class _Social extends StatelessWidget {
                 Uri.parse(
                   '${_socialUrls[entry.key]}/${entry.value ?? ''}',
                 ),
+                mode: LaunchMode.externalApplication,
               );
             },
             child: Container(
