@@ -87,12 +87,6 @@ class EditEventBloc extends Bloc<EditEventEvent, EditEventState> {
     FormSubmitted event,
     Emitter<EditEventState> emit,
   ) async {
-    // Convert the target selected datetime into utc
-    final location = getLocation(event.timezone);
-    final startUtcDateTime = event.start
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-    final endUtcDateTime = event.end
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
     final description = StringFormz.dirty(state.description.value);
     emit(
@@ -109,8 +103,8 @@ class EditEventBloc extends Bloc<EditEventEvent, EditEventState> {
         description: description.value,
         private: event.private,
         approval_required: event.approvalRequired,
-        start: DateTime.parse(startUtcDateTime.toIso8601String()),
-        end: DateTime.parse(endUtcDateTime.toIso8601String()),
+        start: DateTime.parse(event.start.toIso8601String()),
+        end: DateTime.parse(event.end.toIso8601String()),
         timezone: event.timezone,
         guest_limit: double.parse(
           event.guestLimit ?? EventConstants.defaultEventGuestLimit,

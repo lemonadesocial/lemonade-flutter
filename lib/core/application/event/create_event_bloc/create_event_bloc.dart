@@ -142,12 +142,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     CreateEventFormSubmitted event,
     Emitter<CreateEventState> emit,
   ) async {
-    // Convert the target selected datetime into utc
-    final location = getLocation(event.timezone);
-    final startUtcDateTime = event.start
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-    final endUtcDateTime = event.end
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
     final title = StringFormz.dirty(state.title.value);
     emit(
       state.copyWith(
@@ -164,8 +158,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         description: state.description,
         private: state.private,
         approval_required: state.approvalRequired,
-        start: DateTime.parse(startUtcDateTime.toIso8601String()),
-        end: DateTime.parse(endUtcDateTime.toIso8601String()),
+        start: DateTime.parse(event.start.toIso8601String()),
+        end: DateTime.parse(event.end.toIso8601String()),
         timezone: event.timezone,
         guest_limit:
             state.guestLimit != null ? double.parse(state.guestLimit!) : null,
