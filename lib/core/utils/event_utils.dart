@@ -1,3 +1,4 @@
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/image_utils.dart';
@@ -6,6 +7,8 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
+import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -140,5 +143,51 @@ class EventUtils {
       return t.event.eventStartIn(time: prettyDurationString);
     }
     return durationOnly ? null : t.event.eventEnded;
+  }
+
+  static String formatDateWithTimezone({
+    required DateTime dateTime,
+    required String timezone,
+    String format = 'MMM d, yyyy h:mm a',
+  }) {
+    final formattedDate = DateFormat(format).format(dateTime);
+    return formattedDate;
+  }
+
+  static String getGMTOffsetText(String value) {
+    final option = EventConstants.timezoneOptions.firstWhere(
+      (option) => option['value'] == value,
+      orElse: () => {'text': '', 'value': value},
+    );
+
+    final text = option['text'] ?? '';
+    final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
+
+    return match?.group(1) ?? '';
+  }
+
+  static (String, String) getFormattedEventDateAndTime(Event event) {
+    if (event.start == null || event.end == null) {
+      return ('', '');
+    }
+
+    final isSameDay = event.start!.year == event.end!.year &&
+        event.start!.month == event.end!.month &&
+        event.start!.day == event.end!.day;
+
+    final dateFormatter = DateFormat('EEEE, MMMM d');
+    final timeFormatter = DateFormat('h:mm a');
+
+    final startDateStr = dateFormatter.format(event.start!);
+    final startTimeStr = timeFormatter.format(event.start!);
+
+    if (isSameDay) {
+      final endTimeStr = timeFormatter.format(event.end!);
+      return (startDateStr, '$startTimeStr - $endTimeStr');
+    } else {
+      final endDateStr = dateFormatter.format(event.end!);
+      final endTimeStr = timeFormatter.format(event.end!);
+      return (startDateStr, '$startTimeStr - $endDateStr, $endTimeStr');
+    }
   }
 }

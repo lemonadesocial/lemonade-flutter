@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_left.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_right.dart';
+import 'package:app/core/utils/event_utils.dart';
 
 class HomeEventCard extends StatelessWidget {
   final Event event;
@@ -80,32 +81,11 @@ class HomeEventCard extends StatelessWidget {
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Text(
-                              DateFormat('EEE, d MMM').format(
-                                event.start?.toLocal() ?? DateTime.now(),
-                              ),
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                            ),
-                            SizedBox(width: Spacing.extraSmall),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: 2.w,
-                              ),
-                              child: Container(
-                                width: 3.w,
-                                height: 3.w,
-                                decoration: BoxDecoration(
-                                  color: LemonColor.white18,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: Spacing.extraSmall),
-                            Text(
-                              DateFormat('h:mm a').format(
-                                event.start?.toLocal() ?? DateTime.now(),
-                              ),
+                              '${EventUtils.formatDateWithTimezone(
+                                dateTime: event.start ?? DateTime.now(),
+                                timezone: event.timezone ?? '',
+                                format: 'EEE, d MMM h:mm a',
+                              )} ${EventUtils.getGMTOffsetText(event.timezone ?? '')}',
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),
@@ -159,8 +139,8 @@ class HomeEventCard extends StatelessWidget {
                   ),
                   SizedBox(width: 14.w),
                   Container(
-                    width: 90.w,
-                    height: 90.w,
+                    width: 80.w,
+                    height: 80.w,
                     decoration: ShapeDecoration(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
