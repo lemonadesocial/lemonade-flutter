@@ -5,7 +5,6 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/t
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';

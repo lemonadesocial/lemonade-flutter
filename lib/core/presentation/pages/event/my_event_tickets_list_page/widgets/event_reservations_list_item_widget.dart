@@ -68,7 +68,11 @@ class EventReservationsListItemWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  DateFormatUtils.custom(event.start, pattern: 'EEE, dd MMM'),
+                  EventUtils.formatDateWithTimezone(
+                    dateTime: event.start ?? DateTime.now(),
+                    timezone: event.timezone ?? '',
+                    withTimezoneOffset: true,
+                  ),
                   style: Typo.medium.copyWith(
                     color: colorScheme.onSecondary,
                     fontWeight: FontWeight.w700,

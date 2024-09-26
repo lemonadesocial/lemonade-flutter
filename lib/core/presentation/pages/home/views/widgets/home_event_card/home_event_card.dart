@@ -80,11 +80,12 @@ class HomeEventCard extends StatelessWidget {
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Text(
-                              '${EventUtils.formatDateWithTimezone(
+                              EventUtils.formatDateWithTimezone(
                                 dateTime: event.start ?? DateTime.now(),
                                 timezone: event.timezone ?? '',
                                 format: 'EEE, d MMM h:mm a',
-                              )} ${EventUtils.getGMTOffsetText(event.timezone ?? '')}',
+                                withTimezoneOffset: true,
+                              ),
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),

@@ -8,7 +8,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -169,9 +168,12 @@ class EventUtils {
     required DateTime dateTime,
     required String timezone,
     String format = 'MMM d, yyyy h:mm a',
+    bool withTimezoneOffset = false,
   }) {
     final formattedDate = DateFormat(format).format(dateTime);
-    return formattedDate;
+    return withTimezoneOffset
+        ? '$formattedDate ${EventUtils.getGMTOffsetText(timezone)}'
+        : formattedDate;
   }
 
   /// Formats the event date and time for display.
