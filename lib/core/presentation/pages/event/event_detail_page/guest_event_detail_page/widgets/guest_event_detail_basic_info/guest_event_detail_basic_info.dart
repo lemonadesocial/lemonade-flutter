@@ -183,6 +183,7 @@ class _EventCountDown extends StatelessWidget {
                       height: 0,
                     ),
                   ),
+                  SizedBox(height: 2.w),
                   Text(
                     formattedTime,
                     style: Typo.small.copyWith(
