@@ -144,14 +144,14 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                     ),
                                     Text(
                                       formattedDate,
-                                      style: Typo.extraSmall.copyWith(
+                                      style: Typo.xSmall.copyWith(
                                         color: colorScheme.onSecondary,
                                         height: 0,
                                       ),
                                     ),
                                     Text(
                                       formattedTime,
-                                      style: Typo.extraSmall.copyWith(
+                                      style: Typo.xSmall.copyWith(
                                         color: colorScheme.onSecondary,
                                         height: 0,
                                       ),
