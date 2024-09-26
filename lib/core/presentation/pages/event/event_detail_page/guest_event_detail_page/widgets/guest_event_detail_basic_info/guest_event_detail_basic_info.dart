@@ -80,7 +80,8 @@ class _EventCountDown extends StatelessWidget {
     final t = Translations.of(context);
     final durationToEvent =
         EventUtils.getDurationToEventText(event, durationOnly: true);
-
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
@@ -176,9 +177,17 @@ class _EventCountDown extends StatelessWidget {
                         ),
                   SizedBox(height: 2.w),
                   Text(
-                    DateFormatUtils.fullDateWithTime(event.start),
+                    formattedDate,
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
+                      height: 0,
+                    ),
+                  ),
+                  Text(
+                    formattedTime,
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                      height: 0,
                     ),
                   ),
                 ],
