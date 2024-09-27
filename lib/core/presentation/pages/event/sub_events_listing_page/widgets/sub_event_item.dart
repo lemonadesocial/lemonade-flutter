@@ -54,7 +54,11 @@ class SubEventItem extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                DateFormatUtils.fullDateWithTime(event.start),
+                EventUtils.formatDateWithTimezone(
+                  dateTime: event.start ?? DateTime.now(),
+                  timezone: event.timezone ?? '',
+                  format: DateTimeFormat.fullDateWithTime,
+                ),
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),

@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/device_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -164,7 +165,11 @@ class EventPostCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    DateFormatUtils.dateOnly(event.start),
+                    EventUtils.formatDateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      format: DateTimeFormat.dateOnly,
+                    ),
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,
@@ -183,7 +188,11 @@ class EventPostCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormatUtils.timeOnly(event.start),
+                    EventUtils.formatDateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      format: DateTimeFormat.timeOnly,
+                    ),
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,

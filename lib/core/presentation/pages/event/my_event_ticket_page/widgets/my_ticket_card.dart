@@ -116,7 +116,7 @@ class TicketCardTop extends StatelessWidget {
                         EventUtils.formatDateWithTimezone(
                           dateTime: event.start ?? DateTime.now(),
                           timezone: event.timezone ?? '',
-                          format: 'EEEE, HH:mm a',
+                          customFormat: 'EEEE, HH:mm a',
                           withTimezoneOffset: true,
                         ),
                         style: Typo.medium.copyWith(

@@ -1,6 +1,7 @@
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -8,6 +9,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
+
+enum DateTimeFormat {
+  defaultFormat,
+  fullDateWithTime,
+  dateOnly,
+  monthYearOnly,
+  timeOnly,
+  custom,
+}
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -165,12 +175,34 @@ class EventUtils {
   static String formatDateWithTimezone({
     required DateTime dateTime,
     required String timezone,
-    String format = 'MMM d, yyyy h:mm a',
+    DateTimeFormat format = DateTimeFormat.defaultFormat,
+    String? customFormat,
     bool withTimezoneOffset = false,
   }) {
-    final formattedDate = DateFormat(format).format(dateTime);
+    String dateFormat;
+    switch (format) {
+      case DateTimeFormat.defaultFormat:
+        dateFormat = 'MMM d, yyyy h:mm a';
+      case DateTimeFormat.fullDateWithTime:
+        dateFormat = DateFormatUtils.defaultDateFormat;
+      case DateTimeFormat.dateOnly:
+        dateFormat = DateFormatUtils.dateOnlyFormat;
+      case DateTimeFormat.monthYearOnly:
+        dateFormat = DateFormatUtils.monthYearOnlyFormat;
+      case DateTimeFormat.timeOnly:
+        dateFormat = DateFormatUtils.timeOnlyFormat;
+      case DateTimeFormat.custom:
+        if (customFormat == null) {
+          throw ArgumentError(
+            'customFormat must be provided when using DateTimeFormat.custom',
+          );
+        }
+        dateFormat = customFormat;
+    }
+
+    final formattedDate = DateFormat(dateFormat).format(dateTime);
     return withTimezoneOffset
-        ? '$formattedDate ${EventUtils.getGMTOffsetText(timezone)}'
+        ? '$formattedDate ${getGMTOffsetText(timezone)}'
         : formattedDate;
   }
 

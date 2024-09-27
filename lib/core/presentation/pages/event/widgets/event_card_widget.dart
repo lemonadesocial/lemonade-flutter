@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_buy_ticket_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -106,7 +107,11 @@ class EventCard extends StatelessWidget {
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(
-                    DateFormatUtils.fullDateWithTime(event.start),
+                    EventUtils.formatDateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      format: DateTimeFormat.fullDateWithTime,
+                    ),
                     style: Typo.small.copyWith(color: colorScheme.onSecondary),
                   ),
                 ],

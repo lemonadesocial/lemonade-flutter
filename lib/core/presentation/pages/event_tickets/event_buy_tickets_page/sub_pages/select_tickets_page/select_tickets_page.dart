@@ -368,7 +368,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                           ),
                         ),
                         Text(
-                          "${widget.event.title}  •  ${DateFormatUtils.dateOnly(widget.event.start)}",
+                          "${widget.event.title}  •  ${EventUtils.formatDateWithTimezone(
+                            dateTime: widget.event.start ?? DateTime.now(),
+                            timezone: widget.event.timezone ?? '',
+                            format: DateTimeFormat.dateOnly,
+                          )}",
                           style: Typo.mediumPlus.copyWith(
                             color: colorScheme.onSecondary,
                           ),

@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
@@ -116,7 +117,11 @@ class _EventInfo extends StatelessWidget {
           height: 2.w,
         ),
         Text(
-          DateFormatUtils.dateOnly(event.start),
+          EventUtils.formatDateWithTimezone(
+            dateTime: event.start ?? DateTime.now(),
+            timezone: event.timezone ?? '',
+            format: DateTimeFormat.dateOnly,
+          ),
           maxLines: 1,
           style: Typo.xSmall.copyWith(
             fontSize: 9.sp,
