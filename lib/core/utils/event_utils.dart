@@ -177,7 +177,7 @@ class EventUtils {
     required String timezone,
     DateTimeFormat format = DateTimeFormat.defaultFormat,
     String? customFormat,
-    bool withTimezoneOffset = false,
+    bool withTimezoneOffset = true,
   }) {
     String dateFormat;
     switch (format) {

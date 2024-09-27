@@ -117,7 +117,6 @@ class MyEventTicketPageView extends StatelessWidget {
                             EventUtils.formatDateWithTimezone(
                               dateTime: eventDetail.start ?? DateTime.now(),
                               timezone: eventDetail.timezone ?? '',
-                              withTimezoneOffset: true,
                               format: DateTimeFormat.defaultFormat,
                             ),
                             style: Typo.medium.copyWith(

@@ -72,7 +72,6 @@ class EventReservationsListItemWidget extends StatelessWidget {
                   EventUtils.formatDateWithTimezone(
                     dateTime: event.start ?? DateTime.now(),
                     timezone: event.timezone ?? '',
-                    withTimezoneOffset: true,
                   ),
                   style: Typo.small.copyWith(
                     color: colorScheme.onSecondary,

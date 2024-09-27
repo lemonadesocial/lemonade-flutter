@@ -85,7 +85,6 @@ class HomeEventCard extends StatelessWidget {
                                 timezone: event.timezone ?? '',
                                 format: DateTimeFormat.custom,
                                 customFormat: 'EEE, d MMM h:mm a',
-                                withTimezoneOffset: true,
                               ),
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
