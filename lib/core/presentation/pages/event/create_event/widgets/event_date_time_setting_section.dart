@@ -120,52 +120,44 @@ class EventDateTimeSettingSection extends StatelessWidget {
                       );
                     },
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Assets.icons.icGlobe.svg(),
-                                SizedBox(
-                                  width: 14.w,
+                        SizedBox(width: 2.5.w),
+                        Assets.icons.icGlobe.svg(),
+                        SizedBox(width: 14.w),
+                        Expanded(
+                          child: BlocBuilder<EventDateTimeSettingsBloc,
+                              EventDateTimeSettingsState>(
+                            builder: (context, state) {
+                              final timezoneText = EventConstants
+                                      .timezoneOptions
+                                      .toList()
+                                      .firstWhere(
+                                        (element) =>
+                                            element['value'] == state.timezone,
+                                        orElse: () => {},
+                                      )['text'] ??
+                                  '';
+                              return Text(
+                                timezoneText,
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onSecondary,
                                 ),
-                                BlocBuilder<EventDateTimeSettingsBloc,
-                                    EventDateTimeSettingsState>(
-                                  builder: (context, state) {
-                                    final timezoneText = EventConstants
-                                            .timezoneOptions
-                                            .toList()
-                                            .firstWhere(
-                                              (element) =>
-                                                  element['value'] ==
-                                                  state.timezone,
-                                              orElse: () => {},
-                                            )['text'] ??
-                                        '';
-                                    return Row(
-                                      children: [
-                                        Text(
-                                          timezoneText,
-                                          style: Typo.medium.copyWith(
-                                            color: colorScheme.onSecondary,
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            },
+                          ),
                         ),
-                        ThemeSvgIcon(
-                          color: colorScheme.onSurfaceVariant,
-                          builder: (filter) => Assets.icons.icArrowRight.svg(
-                            colorFilter: filter,
-                            width: 18.w,
-                            height: 18.w,
+                        SizedBox(width: 8.w),
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.h),
+                          child: ThemeSvgIcon(
+                            color: colorScheme.onSurfaceVariant,
+                            builder: (filter) => Assets.icons.icArrowRight.svg(
+                              colorFilter: filter,
+                              width: 18.w,
+                              height: 18.w,
+                            ),
                           ),
                         ),
                       ],

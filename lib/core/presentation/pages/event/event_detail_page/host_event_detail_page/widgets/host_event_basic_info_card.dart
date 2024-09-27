@@ -39,6 +39,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
         false;
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
+
+    print("event.start : ${event.start}");
     // final canShowGuestList = FeatureManager(
     //   EventRoleBasedEventFeatureVisibilityStrategy(
     //     eventUserRole: eventUserRole,
@@ -144,14 +146,14 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                     ),
                                     Text(
                                       formattedDate,
-                                      style: Typo.xSmall.copyWith(
+                                      style: Typo.small.copyWith(
                                         color: colorScheme.onSecondary,
                                         height: 0,
                                       ),
                                     ),
                                     Text(
                                       formattedTime,
-                                      style: Typo.xSmall.copyWith(
+                                      style: Typo.small.copyWith(
                                         color: colorScheme.onSecondary,
                                         height: 0,
                                       ),
