@@ -39,8 +39,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
         false;
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
-
-    print("event.start : ${event.start}");
     // final canShowGuestList = FeatureManager(
     //   EventRoleBasedEventFeatureVisibilityStrategy(
     //     eventUserRole: eventUserRole,
