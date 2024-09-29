@@ -11,8 +11,8 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/date_utils.dart' as core_date_utils;
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -293,10 +293,10 @@ class _EventItem extends StatelessWidget {
                     height: Spacing.superExtraSmall / 2,
                   ),
                   Text(
-                    EventUtils.formatDateWithTimezone(
+                    DateFormatUtils.dateWithTimezone(
                       dateTime: event.start ?? DateTime.now(),
                       timezone: event.timezone ?? '',
-                      format: DateTimeFormat.dateOnly,
+                      pattern: DateFormatUtils.dateOnlyFormat,
                     ),
                     style: Typo.small.copyWith(color: colorScheme.onSurface),
                   ),

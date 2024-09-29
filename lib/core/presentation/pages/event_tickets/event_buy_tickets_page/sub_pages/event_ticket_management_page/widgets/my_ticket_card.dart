@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dar
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -227,10 +226,10 @@ class TicketCardBottom extends StatelessWidget {
                                 ),
                                 SizedBox(height: 2.w),
                                 Text(
-                                  EventUtils.formatDateWithTimezone(
+                                  DateFormatUtils.dateWithTimezone(
                                     dateTime: event.start ?? DateTime.now(),
                                     timezone: event.timezone ?? '',
-                                    format: DateTimeFormat.timeOnly,
+                                    pattern: DateFormatUtils.fullDateFormat,
                                   ),
                                   style: valueTextStyle,
                                 ),

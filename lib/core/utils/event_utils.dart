@@ -10,15 +10,6 @@ import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
 
-enum DateTimeFormat {
-  defaultFormat,
-  fullDateWithTime,
-  dateOnly,
-  monthYearOnly,
-  timeOnly,
-  custom,
-}
-
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
     if (event.id == null) return false;
@@ -154,58 +145,6 @@ class EventUtils {
     return durationOnly ? null : t.event.eventEnded;
   }
 
-  static String getGMTOffsetText(String? value) {
-    if (value == null || value.isEmpty) {
-      return '';
-    }
-    try {
-      final option = EventConstants.timezoneOptions.firstWhere(
-        (option) => option['value'] == value,
-        orElse: () => {'text': '', 'value': value},
-      );
-      final text = option['text'] ?? '';
-      final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
-
-      return match?.group(1) ?? '';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  static String formatDateWithTimezone({
-    required DateTime dateTime,
-    required String timezone,
-    DateTimeFormat format = DateTimeFormat.defaultFormat,
-    String? customFormat,
-    bool withTimezoneOffset = true,
-  }) {
-    String dateFormat;
-    switch (format) {
-      case DateTimeFormat.defaultFormat:
-        dateFormat = 'MMM d, yyyy h:mm a';
-      case DateTimeFormat.fullDateWithTime:
-        dateFormat = DateFormatUtils.defaultDateFormat;
-      case DateTimeFormat.dateOnly:
-        dateFormat = DateFormatUtils.dateOnlyFormat;
-      case DateTimeFormat.monthYearOnly:
-        dateFormat = DateFormatUtils.monthYearOnlyFormat;
-      case DateTimeFormat.timeOnly:
-        dateFormat = DateFormatUtils.timeOnlyFormat;
-      case DateTimeFormat.custom:
-        if (customFormat == null) {
-          throw ArgumentError(
-            'customFormat must be provided when using DateTimeFormat.custom',
-          );
-        }
-        dateFormat = customFormat;
-    }
-
-    final formattedDate = DateFormat(dateFormat).format(dateTime);
-    return withTimezoneOffset
-        ? '$formattedDate ${getGMTOffsetText(timezone)}'
-        : formattedDate;
-  }
-
   /// Formats the event date and time for display.
   ///
   /// This function handles both single-day and multi-day events:
@@ -237,7 +176,7 @@ class EventUtils {
     final startDateStr = dateFormatter.format(event.start!);
     final startTimeStr = timeFormatter.format(event.start!);
     final endTimeStr = timeFormatter.format(event.end!);
-    final gmtOffset = getGMTOffsetText(event.timezone!);
+    final gmtOffset = DateFormatUtils.getGMTOffsetText(event.timezone!);
 
     // Format output based on whether it's a single-day or multi-day event
     if (isSameDay) {

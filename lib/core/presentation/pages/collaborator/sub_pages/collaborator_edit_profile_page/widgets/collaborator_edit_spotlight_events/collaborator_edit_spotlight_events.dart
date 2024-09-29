@@ -7,7 +7,7 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -176,10 +176,10 @@ class _SpotlightItem extends StatelessWidget {
                     ),
                     SizedBox(height: 2.w),
                     Text(
-                      EventUtils.formatDateWithTimezone(
+                      DateFormatUtils.dateWithTimezone(
                         dateTime: event?.start ?? DateTime.now(),
                         timezone: event?.timezone ?? '',
-                        format: DateTimeFormat.dateOnly,
+                        pattern: DateFormatUtils.dateOnlyFormat,
                       ),
                       style: Typo.xSmall.copyWith(
                         color: colorScheme.onSecondary,

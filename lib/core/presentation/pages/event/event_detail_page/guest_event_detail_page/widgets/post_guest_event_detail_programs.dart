@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -78,10 +77,10 @@ class PostGuestEventDetailPrograms extends StatelessWidget {
           SizedBox(height: Spacing.smMedium),
           if (dateToDisplay != null) ...[
             Text(
-              EventUtils.formatDateWithTimezone(
+              DateFormatUtils.dateWithTimezone(
                 dateTime: dateToDisplay ?? DateTime.now(),
                 timezone: event.timezone ?? '',
-                format: DateTimeFormat.dateOnly,
+                pattern: DateFormatUtils.fullDateFormat,
               ),
               style: Typo.medium.copyWith(
                 color: colorScheme.onSecondary,

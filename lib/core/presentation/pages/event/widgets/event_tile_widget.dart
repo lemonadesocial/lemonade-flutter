@@ -1,8 +1,7 @@
-import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -57,10 +56,10 @@ class EventTileWidget extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          EventUtils.formatDateWithTimezone(
+          DateFormatUtils.dateWithTimezone(
             dateTime: event.start ?? DateTime.now(),
             timezone: event.timezone ?? '',
-            format: DateTimeFormat.fullDateWithTime,
+            pattern: DateFormatUtils.fullDateFormat,
           ),
           style: Typo.small.copyWith(color: colorScheme.onSecondary),
         ),

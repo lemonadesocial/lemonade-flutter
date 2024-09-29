@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -80,11 +81,10 @@ class HomeEventCard extends StatelessWidget {
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Text(
-                              EventUtils.formatDateWithTimezone(
+                              DateFormatUtils.dateWithTimezone(
                                 dateTime: event.start ?? DateTime.now(),
                                 timezone: event.timezone ?? '',
-                                format: DateTimeFormat.custom,
-                                customFormat: 'EEE, d MMM h:mm a',
+                                pattern: 'EEE, d MMM h:mm a',
                               ),
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
