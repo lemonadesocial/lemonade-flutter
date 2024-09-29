@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_left.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_right.dart';
-import 'package:app/core/utils/event_utils.dart';
 
 class HomeEventCard extends StatelessWidget {
   final Event event;

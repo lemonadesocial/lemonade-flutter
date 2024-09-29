@@ -2,7 +2,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/bottomsheet_utils.dart';
-import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -71,10 +71,10 @@ class GuestEventDetailAboutCard extends StatelessWidget {
                           ),
                           SizedBox(height: 3.w),
                           Text(
-                            '${event.title ?? ''}  •  ${EventUtils.formatDateWithTimezone(
+                            '${event.title ?? ''}  •  ${DateFormatUtils.dateWithTimezone(
                               dateTime: event.start ?? DateTime.now(),
                               timezone: event.timezone ?? '',
-                              format: DateTimeFormat.dateOnly,
+                              pattern: DateFormatUtils.dateOnlyFormat,
                             )}',
                             style: Typo.medium.copyWith(
                               color: colorScheme.onSecondary,

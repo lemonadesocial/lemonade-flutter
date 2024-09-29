@@ -1,4 +1,3 @@
-import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/utils/date_format_utils.dart';

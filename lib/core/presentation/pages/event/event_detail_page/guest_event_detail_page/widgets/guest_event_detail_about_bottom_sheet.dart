@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/widgets/common/bottomsheet/lemon_snap_bottom_sheet_widget.dart';
+import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
@@ -54,10 +55,10 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
                           height: 3.w,
                         ),
                         Text(
-                          EventUtils.formatDateWithTimezone(
+                          DateFormatUtils.dateWithTimezone(
                             dateTime: event.start ?? DateTime.now(),
                             timezone: event.timezone ?? '',
-                            format: DateTimeFormat.fullDateWithTime,
+                            pattern: DateFormatUtils.fullDateFormat,
                           ),
                           style: Typo.medium.copyWith(
                             color: colorScheme.onSurfaceVariant,
