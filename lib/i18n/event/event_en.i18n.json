@@ -43,7 +43,7 @@
         "selectTickets": "Select tickets",
         "selectCategory": "Select category",
         "orderSummary": "Order summary",
-        "enterPromoCode": "Enter promo code",
+        "enterPromoCode": "Enter discount code",
         "selectCurrency": "Please select currency first",
         "paymentMethods": {
             "card": "Card",
@@ -63,7 +63,11 @@
         "ticketLocked": "Ticket locked!",
         "ticketLockedDescription": "You need to be on the whitelist to purchase it",
         "ticketsPurchased": "Tickets purchased!",
-        "addictionalTicketsPurchasedSuccess": "You have $count additional tickets to assign to your friends. You can do this later inside the event."
+        "addictionalTicketsPurchasedSuccess": "You have $count additional tickets to assign to your friends. You can do this later inside the event.",
+        "addDiscountCode": "Add discount code",
+        "discountCode": "Discount code",
+        "discount": "Discount",
+        "discountDescription": "Apply a discount code to discount your purchase"
     },
     "eventOrder": {
         "itemTotal": "Item total",

@@ -9,28 +9,32 @@ import 'package:app/core/application/payment/payment_listener/payment_listener.d
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/buy_tickets_listener.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/buy_tickets_with_crypto_listener.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/handler/wait_for_payment_notification_handler.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/add_promo_code_input.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_info_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_summary_footer.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_tickets_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/pay_by_crypto_button.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/promo_code/promo_code_summary.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -307,7 +311,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             children: [
               Scaffold(
                 backgroundColor: colorScheme.background,
-                appBar: const LemonAppBar(),
+                appBar: LemonAppBar(
+                  title: t.event.eventBuyTickets.orderSummary,
+                ),
                 body: SafeArea(
                   child: Stack(
                     children: [
@@ -317,29 +323,13 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: Spacing.smMedium,
+                                horizontal: Spacing.xSmall,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    t.event.eventBuyTickets.orderSummary,
-                                    style: Typo.extraLarge.copyWith(
-                                      color: colorScheme.onPrimary,
-                                      fontFamily: FontFamily.nohemiVariable,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
-                                    style: Typo.mediumPlus.copyWith(
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                  ),
-                                ],
+                              child: EventInfoSummary(
+                                event: event,
                               ),
                             ),
-                            SizedBox(height: Spacing.large),
+                            SizedBox(height: Spacing.medium),
                             BlocBuilder<CalculateEventTicketPricingBloc,
                                 CalculateEventTicketPricingState>(
                               builder: (context, state) {
@@ -349,7 +339,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                       Loading.defaultLoading(context),
                                   failure: (pricingInfo, isFree) {
                                     if (pricingInfo != null) {
-                                      return EventTicketsSummary(
+                                      return _TicketsAndOrderSummary(
                                         ticketTypes: ticketTypes,
                                         selectedTickets: selectedTickets,
                                         selectedCurrency: selectedCurrency,
@@ -362,7 +352,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                     );
                                   },
                                   success: (pricingInfo, isFree) =>
-                                      EventTicketsSummary(
+                                      _TicketsAndOrderSummary(
                                     ticketTypes: ticketTypes,
                                     selectedTickets: selectedTickets,
                                     selectedCurrency: selectedCurrency,
@@ -372,64 +362,6 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                 );
                               },
                             ),
-                            SizedBox(height: Spacing.smMedium),
-                            BlocBuilder<CalculateEventTicketPricingBloc,
-                                CalculateEventTicketPricingState>(
-                              builder: (context, state) => AddPromoCodeInput(
-                                pricingInfo: state.maybeWhen(
-                                  orElse: () => null,
-                                  failure: ((pricingInfo, isFree) =>
-                                      pricingInfo),
-                                  success: (pricingInfo, isFree) => pricingInfo,
-                                ),
-                                onPressApply: (promoCode) {
-                                  context
-                                      .read<CalculateEventTicketPricingBloc>()
-                                      .add(
-                                        CalculateEventTicketPricingEvent
-                                            .calculate(
-                                          input: CalculateTicketsPricingInput(
-                                            discount: promoCode,
-                                            eventId: event.id ?? '',
-                                            items: selectedTickets,
-                                            currency: selectedCurrency,
-                                            network: selectedNetwork,
-                                          ),
-                                        ),
-                                      );
-                                },
-                              ),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            BlocBuilder<CalculateEventTicketPricingBloc,
-                                CalculateEventTicketPricingState>(
-                              builder: (context, state) {
-                                return state.when(
-                                  idle: () => const SizedBox.shrink(),
-                                  loading: () =>
-                                      Loading.defaultLoading(context),
-                                  failure: (pricingInfo, isFree) {
-                                    if (pricingInfo != null) {
-                                      return EventOrderSummary(
-                                        selectedCurrency: selectedCurrency,
-                                        selectedNetwork: selectedNetwork,
-                                        pricingInfo: pricingInfo,
-                                      );
-                                    }
-                                    return EmptyList(
-                                      emptyText: t.common.somethingWrong,
-                                    );
-                                  },
-                                  success: (pricingInfo, isFree) =>
-                                      EventOrderSummary(
-                                    selectedCurrency: selectedCurrency,
-                                    selectedNetwork: selectedNetwork,
-                                    pricingInfo: pricingInfo,
-                                  ),
-                                );
-                              },
-                            ),
-                            SizedBox(height: 150.w + Spacing.medium),
                           ],
                         ),
                       ),
@@ -565,6 +497,106 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _TicketsAndOrderSummary extends StatelessWidget {
+  const _TicketsAndOrderSummary({
+    required this.ticketTypes,
+    required this.selectedTickets,
+    required this.selectedCurrency,
+    required this.selectedNetwork,
+    required this.pricingInfo,
+  });
+
+  final List<PurchasableTicketType> ticketTypes;
+  final List<PurchasableItem> selectedTickets;
+  final String selectedCurrency;
+  final String? selectedNetwork;
+  final EventTicketsPricingInfo pricingInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    final event = context.read<EventProviderBloc>().event;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            StringUtils.capitalize(t.event.tickets(n: 2)),
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: Spacing.xSmall),
+          Container(
+            decoration: BoxDecoration(
+              color: LemonColor.atomicBlack,
+              border: Border.all(
+                color: colorScheme.outline,
+                width: 0.5.w,
+              ),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(Spacing.small),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      EventTicketsSummary(
+                        ticketTypes: ticketTypes,
+                        selectedTickets: selectedTickets,
+                        selectedCurrency: selectedCurrency,
+                        selectedNetwork: selectedNetwork,
+                        pricingInfo: pricingInfo,
+                      ),
+                      SizedBox(height: Spacing.xSmall),
+                      PromoCodeSummary(
+                        pricingInfo: pricingInfo,
+                        onPressApply: ({promoCode}) {
+                          context.read<CalculateEventTicketPricingBloc>().add(
+                                CalculateEventTicketPricingEvent.calculate(
+                                  input: CalculateTicketsPricingInput(
+                                    discount: promoCode,
+                                    eventId: event.id ?? '',
+                                    items: selectedTickets,
+                                    currency: selectedCurrency,
+                                    network: selectedNetwork,
+                                  ),
+                                ),
+                              );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  thickness: 0.5.w,
+                  color: colorScheme.outline,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(Spacing.small),
+                  child: EventOrderSummary(
+                    selectedCurrency: selectedCurrency,
+                    selectedNetwork: selectedNetwork,
+                    pricingInfo: pricingInfo,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
@@ -66,11 +67,11 @@ class _EventDetailBasePageView extends StatelessWidget {
           ),
         ),
         fetched: (event) {
-          final userId = context.read<AuthBloc>().state.maybeWhen(
-                orElse: () => '',
-                authenticated: (session) => session.userId,
+          final user = context.watch<AuthBloc>().state.maybeWhen(
+                orElse: () => null,
+                authenticated: (user) => user,
               );
-
+          final userId = user?.userId ?? '';
           final isCohost = EventUtils.isCohost(
             event: event,
             userId: userId,
