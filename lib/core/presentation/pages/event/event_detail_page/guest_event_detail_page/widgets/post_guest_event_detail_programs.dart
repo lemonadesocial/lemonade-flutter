@@ -77,7 +77,11 @@ class PostGuestEventDetailPrograms extends StatelessWidget {
           SizedBox(height: Spacing.smMedium),
           if (dateToDisplay != null) ...[
             Text(
-              DateFormatUtils.dateOnly(dateToDisplay),
+              DateFormatUtils.dateWithTimezone(
+                dateTime: dateToDisplay ?? DateTime.now(),
+                timezone: event.timezone ?? '',
+                pattern: DateFormatUtils.fullDateFormat,
+              ),
               style: Typo.medium.copyWith(
                 color: colorScheme.onSecondary,
               ),

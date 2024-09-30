@@ -218,4 +218,22 @@ class DateUtils {
     final startOfWeek2 = date2.subtract(Duration(days: date2.weekday - 1));
     return startOfWeek1 == startOfWeek2;
   }
+
+  static String getGMTOffsetText(String? value) {
+    if (value == null || value.isEmpty) {
+      return '';
+    }
+    try {
+      final option = EventConstants.timezoneOptions.firstWhere(
+        (option) => option['value'] == value,
+        orElse: () => {'text': '', 'value': value},
+      );
+      final text = option['text'] ?? '';
+      final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
+
+      return match?.group(1) ?? '';
+    } catch (e) {
+      return '';
+    }
+  }
 }

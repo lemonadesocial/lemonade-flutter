@@ -115,7 +115,11 @@ class _EventInfo extends StatelessWidget {
           ),
         ),
         Text(
-          DateFormatUtils.dateOnly(event.start),
+          DateFormatUtils.dateWithTimezone(
+            dateTime: event.start ?? DateTime.now(),
+            timezone: event.timezone ?? '',
+            pattern: DateFormatUtils.dateOnlyFormat,
+          ),
           maxLines: 1,
           style: Typo.xSmall.copyWith(
             fontSize: 9.sp,

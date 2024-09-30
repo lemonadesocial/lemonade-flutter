@@ -5,7 +5,6 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/t
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
@@ -80,7 +79,8 @@ class _EventCountDown extends StatelessWidget {
     final t = Translations.of(context);
     final durationToEvent =
         EventUtils.getDurationToEventText(event, durationOnly: true);
-
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
@@ -176,9 +176,18 @@ class _EventCountDown extends StatelessWidget {
                         ),
                   SizedBox(height: 2.w),
                   Text(
-                    DateFormatUtils.fullDateWithTime(event.start),
+                    formattedDate,
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
+                      height: 0,
+                    ),
+                  ),
+                  SizedBox(height: 2.w),
+                  Text(
+                    formattedTime,
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                      height: 0,
                     ),
                   ),
                 ],

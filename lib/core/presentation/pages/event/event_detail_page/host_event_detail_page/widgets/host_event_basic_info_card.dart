@@ -37,6 +37,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
           (element) => element.type == PaymentAccountType.ethereumRelay,
         ) ??
         false;
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     // final canShowGuestList = FeatureManager(
     //   EventRoleBasedEventFeatureVisibilityStrategy(
     //     eventUserRole: eventUserRole,
@@ -52,7 +54,6 @@ class HostEventBasicInfoCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 78.w,
           decoration: BoxDecoration(
             color: colorScheme.onPrimary.withOpacity(0.06),
             borderRadius: BorderRadius.only(
@@ -72,9 +73,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
                     child: Stack(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
-                            horizontal: Spacing.smMedium,
+                          padding: EdgeInsets.only(
+                            top: Spacing.smMedium,
+                            bottom: Spacing.smMedium,
+                            left: Spacing.smMedium,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -135,6 +137,23 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                         color: colorScheme.onPrimary,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: FontFamily.nohemiVariable,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 3.h,
+                                    ),
+                                    Text(
+                                      formattedDate,
+                                      style: Typo.small.copyWith(
+                                        color: colorScheme.onSecondary,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Text(
+                                      formattedTime,
+                                      style: Typo.small.copyWith(
+                                        color: colorScheme.onSecondary,
+                                        height: 0,
                                       ),
                                     ),
                                   ],

@@ -113,9 +113,10 @@ class TicketCardTop extends StatelessWidget {
                         height: 2.w,
                       ),
                       Text(
-                        DateFormatUtils.custom(
-                          event.start,
-                          pattern: 'EEEE, HH:mma',
+                        DateFormatUtils.dateWithTimezone(
+                          dateTime: event.start ?? DateTime.now(),
+                          timezone: event.timezone ?? '',
+                          pattern: 'EEEE, HH:mm a',
                         ),
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,

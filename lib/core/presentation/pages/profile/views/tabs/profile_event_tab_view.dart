@@ -293,7 +293,11 @@ class _EventItem extends StatelessWidget {
                     height: Spacing.superExtraSmall / 2,
                   ),
                   Text(
-                    DateFormatUtils.dateOnly(event.start),
+                    DateFormatUtils.dateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      pattern: DateFormatUtils.dateOnlyFormat,
+                    ),
                     style: Typo.small.copyWith(color: colorScheme.onSurface),
                   ),
                 ],

@@ -331,7 +331,11 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    "${event.title}  •  ${DateFormatUtils.dateOnly(event.start)}",
+                                    "${event.title}  •  ${DateFormatUtils.dateWithTimezone(
+                                      dateTime: event.start ?? DateTime.now(),
+                                      timezone: event.timezone ?? '',
+                                      pattern: DateFormatUtils.dateOnlyFormat,
+                                    )}",
                                     style: Typo.mediumPlus.copyWith(
                                       color: colorScheme.onSecondary,
                                     ),

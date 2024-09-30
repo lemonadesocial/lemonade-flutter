@@ -176,7 +176,11 @@ class _SpotlightItem extends StatelessWidget {
                     ),
                     SizedBox(height: 2.w),
                     Text(
-                      DateFormatUtils.dateOnly(DateTime.now()),
+                      DateFormatUtils.dateWithTimezone(
+                        dateTime: event?.start ?? DateTime.now(),
+                        timezone: event?.timezone ?? '',
+                        pattern: DateFormatUtils.dateOnlyFormat,
+                      ),
                       style: Typo.xSmall.copyWith(
                         color: colorScheme.onSecondary,
                       ),

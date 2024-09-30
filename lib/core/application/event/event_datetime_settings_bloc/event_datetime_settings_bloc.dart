@@ -32,19 +32,10 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
     final finalTimezone =
         event.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue();
-    final location = getLocation(finalTimezone);
-    final start = DateTimeFormz.dirty(
-      event.startDateTime
-          .add(Duration(milliseconds: location.currentTimeZone.offset)),
-    );
-    final end = DateTimeFormz.dirty(
-      event.endDateTime
-          .add(Duration(milliseconds: location.currentTimeZone.offset)),
-    );
     emit(
       state.copyWith(
-        start: start,
-        end: end,
+        start: DateTimeFormz.dirty(event.startDateTime),
+        end: DateTimeFormz.dirty(event.endDateTime),
         timezone: finalTimezone,
       ),
     );
