@@ -1,4 +1,4 @@
-import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/utils/date_utils.dart';
 import 'package:intl/intl.dart';
 
 class DateFormatUtils {
@@ -35,24 +35,6 @@ class DateFormatUtils {
     return DateFormat(pattern).format(date.toLocal());
   }
 
-  static String getGMTOffsetText(String? value) {
-    if (value == null || value.isEmpty) {
-      return '';
-    }
-    try {
-      final option = EventConstants.timezoneOptions.firstWhere(
-        (option) => option['value'] == value,
-        orElse: () => {'text': '', 'value': value},
-      );
-      final text = option['text'] ?? '';
-      final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
-
-      return match?.group(1) ?? '';
-    } catch (e) {
-      return '';
-    }
-  }
-
   static String dateWithTimezone({
     required DateTime dateTime,
     required String timezone,
@@ -61,7 +43,7 @@ class DateFormatUtils {
   }) {
     final formattedDate = DateFormat(pattern).format(dateTime.toLocal());
     return withTimezoneOffset
-        ? '$formattedDate ${getGMTOffsetText(timezone)}'
+        ? '$formattedDate ${DateUtils.getGMTOffsetText(timezone)}'
         : formattedDate;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/date_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -175,7 +175,7 @@ class EventUtils {
     final startDateStr = dateFormatter.format(event.start!);
     final startTimeStr = timeFormatter.format(event.start!);
     final endTimeStr = timeFormatter.format(event.end!);
-    final gmtOffset = DateFormatUtils.getGMTOffsetText(event.timezone!);
+    final gmtOffset = DateUtils.getGMTOffsetText(event.timezone!);
 
     // Format output based on whether it's a single-day or multi-day event
     if (isSameDay) {
