@@ -54,6 +54,7 @@ class PaymentRepositoryImpl extends PaymentRepository {
       QueryOptions(
         document: getStripeCardsQuery,
         variables: input.toJson(),
+        fetchPolicy: FetchPolicy.networkOnly,
         parserFn: (data) => List.from(
           data['getStripeCards'] ?? [],
         )
