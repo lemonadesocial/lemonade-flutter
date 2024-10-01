@@ -122,7 +122,7 @@ class CreateEventBasePage extends StatelessWidget {
                       errorText: state.title.displayError?.getMessage(
                         t.event.eventCreation.title,
                       ),
-                      labelStyle: Typo.mediumPlus.copyWith(
+                      style: Typo.mediumPlus.copyWith(
                         color: colorScheme.onSecondary,
                         fontWeight: FontWeight.w500,
                       ),

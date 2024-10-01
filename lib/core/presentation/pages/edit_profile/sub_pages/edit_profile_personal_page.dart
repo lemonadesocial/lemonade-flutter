@@ -4,13 +4,11 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/dropdown/frosted_glass_drop_down_v2.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -55,13 +53,14 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
       },
       child: BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
+          final fieldItemBackgroundColor = LemonColor.chineseBlack;
           return GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Scaffold(
               appBar: LemonAppBar(
-                backgroundColor: colorScheme.onPrimaryContainer,
+                backgroundColor: LemonColor.atomicBlack,
               ),
-              backgroundColor: colorScheme.onPrimaryContainer,
+              backgroundColor: LemonColor.atomicBlack,
               body: Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 child: Column(
@@ -75,14 +74,16 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                             Text(
                               t.profile.personalInfo,
                               style: Typo.extraLarge.copyWith(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: FontFamily.nohemiVariable,
+                                color: colorScheme.onPrimary,
                               ),
                             ),
                             SizedBox(height: Spacing.superExtraSmall),
                             Text(
                               t.profile.personalInfoLongDesc,
                               style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary.withOpacity(0.56),
+                                color: colorScheme.onSecondary,
                               ),
                             ),
                             SizedBox(height: Spacing.smMedium),
@@ -96,6 +97,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                     );
                               },
                               value: widget.userProfile?.jobTitle,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -108,23 +110,21 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                     );
                               },
                               value: widget.userProfile?.companyName,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                             SizedBox(height: Spacing.smMedium),
-                            FrostedGlassDropDownV2(
-                              label: t.profile.industry,
-                              hintText: t.profile.hint.industry,
-                              listItem: LemonIndustry.values
-                                  .map((e) => e.industry)
-                                  .toList(),
-                              onValueChange: (value) {
+                            EditProfileFieldItem(
+                              profileFieldKey: ProfileFieldKey.industry,
+                              onChange: (value) {
                                 context.read<EditProfileBloc>().add(
                                       EditProfileEvent.industrySelect(
                                         industry: value,
                                       ),
                                     );
                               },
-                              selectedValue: state.industry ??
+                              value: state.industry ??
                                   widget.userProfile?.industry,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -137,6 +137,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                     );
                               },
                               value: widget.userProfile?.educationTitle,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             EditProfileFieldItem(
@@ -150,6 +151,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                               },
                               value:
                                   state.gender ?? widget.userProfile?.newGender,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             Focus(
@@ -172,6 +174,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                                 },
                                 value:
                                     widget.userProfile?.dateOfBirth.toString(),
+                                backgroundColor: fieldItemBackgroundColor,
                               ),
                               onFocusChange: (hasFocus) {
                                 if (!hasFocus) {
@@ -205,6 +208,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                               },
                               value: state.ethnicity ??
                                   widget.userProfile?.ethnicity,
+                              backgroundColor: fieldItemBackgroundColor,
                             ),
                           ],
                         ),
@@ -212,20 +216,13 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      child: LinearGradientButton(
+                      child: LinearGradientButton.primaryButton(
                         onTap: () {
                           context.read<EditProfileBloc>().add(
                                 EditProfileEvent.submitEditProfile(),
                               );
                         },
                         label: t.profile.saveChanges,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: GradientButtonMode.lavenderMode,
                         loadingWhen: state.status == EditProfileStatus.loading,
                       ),
                     ),

@@ -162,18 +162,25 @@ class EditProfileView extends StatelessWidget {
                                     );
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(Spacing.xSmall),
                                     decoration: BoxDecoration(
-                                      color: colorScheme.onPrimary
-                                          .withOpacity(0.06),
+                                      color: LemonColor.atomicBlack,
                                       borderRadius: BorderRadius.circular(
                                         LemonRadius.normal,
                                       ),
                                     ),
                                     child: ListTile(
-                                      title: Text(t.profile.socialHandle),
-                                      subtitle:
-                                          Text(t.profile.socialHandleDesc),
+                                      title: Text(
+                                        t.profile.socialHandle,
+                                        style: Typo.medium.copyWith(
+                                          color: colorScheme.onPrimary,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        t.profile.socialHandleDesc,
+                                        style: Typo.small.copyWith(
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                      ),
                                       trailing: Assets.icons.icArrowBack.svg(
                                         width: 18.w,
                                         height: 18.w,
@@ -201,18 +208,25 @@ class EditProfileView extends StatelessWidget {
                                     );
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(Spacing.xSmall),
                                     decoration: BoxDecoration(
-                                      color: colorScheme.onPrimary
-                                          .withOpacity(0.06),
+                                      color: LemonColor.atomicBlack,
                                       borderRadius: BorderRadius.circular(
                                         LemonRadius.normal,
                                       ),
                                     ),
                                     child: ListTile(
-                                      title: Text(t.profile.personalInfo),
-                                      subtitle:
-                                          Text(t.profile.personalInfoDesc),
+                                      title: Text(
+                                        t.profile.personalInfo,
+                                        style: Typo.medium.copyWith(
+                                          color: colorScheme.onPrimary,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        t.profile.personalInfoDesc,
+                                        style: Typo.small.copyWith(
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                      ),
                                       trailing: Assets.icons.icArrowBack.svg(
                                         width: 18.w,
                                         height: 18.w,
