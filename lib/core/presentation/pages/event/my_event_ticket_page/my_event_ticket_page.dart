@@ -114,9 +114,9 @@ class MyEventTicketPageView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            DateFormatUtils.custom(
-                              eventDetail.start,
-                              pattern: 'EEEE, dd MMMM  •  hh:mm a',
+                            DateFormatUtils.dateWithTimezone(
+                              dateTime: eventDetail.start ?? DateTime.now(),
+                              timezone: eventDetail.timezone ?? '',
                             ),
                             style: Typo.medium.copyWith(
                               color: colorScheme.onSecondary,

@@ -226,7 +226,11 @@ class TicketCardBottom extends StatelessWidget {
                                 ),
                                 SizedBox(height: 2.w),
                                 Text(
-                                  DateFormatUtils.timeOnly(event.start),
+                                  DateFormatUtils.dateWithTimezone(
+                                    dateTime: event.start ?? DateTime.now(),
+                                    timezone: event.timezone ?? '',
+                                    pattern: DateFormatUtils.fullDateFormat,
+                                  ),
                                   style: valueTextStyle,
                                 ),
                               ],

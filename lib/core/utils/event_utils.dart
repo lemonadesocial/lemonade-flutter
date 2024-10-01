@@ -1,11 +1,13 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/utils/date_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
+import 'package:intl/intl.dart';
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -140,5 +142,50 @@ class EventUtils {
       return t.event.eventStartIn(time: prettyDurationString);
     }
     return durationOnly ? null : t.event.eventEnded;
+  }
+
+  /// Formats the event date and time for display.
+  ///
+  /// This function handles both single-day and multi-day events:
+  ///
+  /// 1. Single-day events:
+  ///    - Date: Full day name and date (e.g., "Thursday, September 26")
+  ///    - Time: Start and end times with GMT offset (e.g., "11:00 AM - 1:00 PM GMT+4")
+  ///
+  /// 2. Multi-day events:
+  ///    - Date: Start day's full name and date (e.g., "Thursday, September 26")
+  ///    - Time: Start time, end date, end time, and GMT offset
+  ///      (e.g., "11:00 AM - September 30, 12:00 PM GMT+1")
+  ///
+  /// Returns a tuple of (formattedDate, formattedTime).
+  /// If event data is incomplete, returns empty strings.
+  static (String, String) getFormattedEventDateAndTime(Event event) {
+    if (event.start == null || event.end == null || event.timezone == null) {
+      return ('', '');
+    }
+
+    final isSameDay = event.start!.year == event.end!.year &&
+        event.start!.month == event.end!.month &&
+        event.start!.day == event.end!.day;
+
+    final dateFormatter = DateFormat('EEEE, MMMM d');
+    final timeFormatter = DateFormat('h:mm a');
+    final endDateFormatter = DateFormat('MMMM d');
+
+    final startDateStr = dateFormatter.format(event.start!);
+    final startTimeStr = timeFormatter.format(event.start!);
+    final endTimeStr = timeFormatter.format(event.end!);
+    final gmtOffset = DateUtils.getGMTOffsetText(event.timezone!);
+
+    // Format output based on whether it's a single-day or multi-day event
+    if (isSameDay) {
+      return (startDateStr, '$startTimeStr - $endTimeStr $gmtOffset');
+    } else {
+      final endDateStr = endDateFormatter.format(event.end!);
+      return (
+        startDateStr,
+        '$startTimeStr - $endDateStr, $endTimeStr $gmtOffset'
+      );
+    }
   }
 }

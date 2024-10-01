@@ -4,6 +4,7 @@ query GetUpcomingEvents($id: MongoID!, $limit: Int = 100, $skip: Int = 0) {
     title
     slug
     host
+    timezone
     host_expanded {
       _id
       name

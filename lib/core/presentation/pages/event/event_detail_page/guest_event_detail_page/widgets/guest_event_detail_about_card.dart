@@ -71,7 +71,11 @@ class GuestEventDetailAboutCard extends StatelessWidget {
                           ),
                           SizedBox(height: 3.w),
                           Text(
-                            '${event.title ?? ''}  •  ${DateFormatUtils.dateOnly(event.start)}',
+                            '${event.title ?? ''}  •  ${DateFormatUtils.dateWithTimezone(
+                              dateTime: event.start ?? DateTime.now(),
+                              timezone: event.timezone ?? '',
+                              pattern: DateFormatUtils.dateOnlyFormat,
+                            )}',
                             style: Typo.medium.copyWith(
                               color: colorScheme.onSecondary,
                               fontWeight: FontWeight.w600,

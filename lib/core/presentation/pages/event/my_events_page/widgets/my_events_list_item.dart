@@ -1,7 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -24,6 +23,8 @@ class MyEventsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigate(
@@ -77,7 +78,7 @@ class MyEventsListItem extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: Spacing.small),
-                      Flexible(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -88,43 +89,37 @@ class MyEventsListItem extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 color: colorScheme.onPrimary,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
+                            SizedBox(height: 4.h),
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  DateFormatUtils.custom(
-                                    event.start,
-                                    pattern: 'E, dd MMM yyyy',
-                                  ),
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Spacing.superExtraSmall,
-                                ),
-                                Container(
-                                  width: 2.w,
-                                  height: 2.h,
-                                  decoration: ShapeDecoration(
-                                    color: colorScheme.onSurfaceVariant,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(LemonRadius.xSmall),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        formattedDate,
+                                        style: Typo.small.copyWith(
+                                          color: colorScheme.onSurfaceVariant,
+                                          height: 0,
+                                        ),
                                       ),
-                                    ),
+                                      Text(
+                                        formattedTime,
+                                        style: Typo.small.copyWith(
+                                          color: colorScheme.onSurfaceVariant,
+                                          height: 0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+                                SizedBox(width: Spacing.small),
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    SizedBox(
-                                      width: Spacing.superExtraSmall,
-                                    ),
                                     ThemeSvgIcon(
                                       color: colorScheme.onSecondary,
                                       builder: (filter) =>
@@ -134,9 +129,7 @@ class MyEventsListItem extends StatelessWidget {
                                         height: Sizing.small / 2,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: Spacing.superExtraSmall,
-                                    ),
+                                    SizedBox(width: Spacing.superExtraSmall),
                                     Text(
                                       event.invitedCount.toString(),
                                       style: Typo.small.copyWith(

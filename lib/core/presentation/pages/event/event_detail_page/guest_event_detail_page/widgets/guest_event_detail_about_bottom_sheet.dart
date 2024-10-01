@@ -54,8 +54,10 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
                           height: 3.w,
                         ),
                         Text(
-                          DateFormatUtils.fullDateWithTime(
-                            event.start,
+                          DateFormatUtils.dateWithTimezone(
+                            dateTime: event.start ?? DateTime.now(),
+                            timezone: event.timezone ?? '',
+                            pattern: DateFormatUtils.fullDateFormat,
                           ),
                           style: Typo.medium.copyWith(
                             color: colorScheme.onSurfaceVariant,

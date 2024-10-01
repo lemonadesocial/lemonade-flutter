@@ -1,7 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/cast_on_farcaster_button/cast_on_farcaster_button.dart';
 import 'package:app/core/presentation/widgets/common/readmore/readmore_widget.dart';
-import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -18,6 +18,8 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -31,7 +33,13 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
         ),
         SizedBox(height: Spacing.superExtraSmall / 2),
         Text(
-          DateFormatUtils.fullDateWithTime(event.start),
+          formattedDate,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        Text(
+          formattedTime,
           style: Typo.medium.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),

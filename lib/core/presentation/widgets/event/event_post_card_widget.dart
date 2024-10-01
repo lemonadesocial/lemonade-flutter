@@ -164,7 +164,11 @@ class EventPostCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    DateFormatUtils.dateOnly(event.start),
+                    DateFormatUtils.dateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      pattern: DateFormatUtils.dateOnlyFormat,
+                    ),
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,
@@ -183,7 +187,11 @@ class EventPostCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormatUtils.timeOnly(event.start),
+                    DateFormatUtils.dateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      pattern: DateFormatUtils.timeOnlyFormat,
+                    ),
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,
