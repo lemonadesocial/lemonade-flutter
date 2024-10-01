@@ -42,7 +42,7 @@
     "eventBuyTickets": {
         "selectTickets": "Select tickets",
         "selectCategory": "Select category",
-        "orderSummary": "Order summary",
+        "registration": "Registration",
         "enterPromoCode": "Enter discount code",
         "selectCurrency": "Please select currency first",
         "paymentMethods": {
@@ -68,7 +68,14 @@
         "discountCode": "Discount code",
         "discount": "Discount",
         "discountDescription": "Apply a discount code to discount your purchase",
-        "payAmount": "Pay $amount"
+        "payAmount": "Pay $amount",
+        "signaturePending": "Signature pending",
+        "signaturePendingDescription": "Check your wallet $walletAddress to sign the transaction for $amount",
+        "confirmingTransaction": "Confirming transaction",
+        "confirmingTransactionDescription": "Your transaction is being verified. This could sometimes take up to $duration...",
+        "viewTransaction": "View transaction",
+        "processingPayment": "Processing payment",
+        "processingPaymentDescription": "Your payment is being processed. This could sometimes take up to 60 seconds"
     },
     "eventOrder": {
         "itemTotal": "Item total",

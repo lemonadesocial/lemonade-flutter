@@ -13,9 +13,15 @@ import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
+import 'package:app/core/domain/web3/web3_repository.dart';
+import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/handler/buy_tickets_listener.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/handler/buy_tickets_with_crypto_listener.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/handler/wait_for_payment_notification_handler.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/payment_processing_view.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/transaction_confirming_view.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/wallet_signature_pending_view.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -31,6 +37,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
@@ -417,7 +424,7 @@ class _EventBuyTicketsProcessingPageViewState
           body: Builder(
             builder: (context) {
               if (!_submittingApplicationFormDone) {
-                return const _PaymentProcessingView();
+                return const PaymentProcessingView();
               }
               if (isCryptoCurrency) {
                 return BlocBuilder<BuyTicketsWithCryptoBloc,
@@ -427,54 +434,41 @@ class _EventBuyTicketsProcessingPageViewState
                       orElse: () => const SizedBox.shrink(),
                       loading: (data) {
                         if (data.signature == null) {
-                          return const _SignaturePendingView();
+                          return const WalletSignaturePendingView();
                         }
-                        return const _PaymentProcessingView();
+                        return const PaymentProcessingView();
                       },
-                      signed: (data) => const _PaymentProcessingView(),
-                      done: (data) => const _ConfirmingTransactionView(),
+                      signed: (data) => const PaymentProcessingView(),
+                      done: (data) =>
+                          FutureBuilder<dartz.Either<Failure, Chain?>>(
+                        future: getIt<Web3Repository>()
+                            .getChainById(chainId: selectedNetwork ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError ||
+                              snapshot.data == null ||
+                              snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                            return const PaymentProcessingView();
+                          }
+                          final chain = snapshot.data?.getOrElse(() => null);
+                          final duration = (chain?.blockTime ?? 0) *
+                              (chain?.safeConfirmations ?? 0);
+                          return TransactionConfirmingView(
+                            duration:
+                                duration != 0 ? duration.toInt() + 10 : 60,
+                            chain: chain,
+                          );
+                        },
+                      ),
                     );
                   },
                 );
               }
-              return const _PaymentProcessingView();
+              return const PaymentProcessingView();
             },
           ),
         ),
       ),
-    );
-  }
-}
-
-class _PaymentProcessingView extends StatelessWidget {
-  const _PaymentProcessingView();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Processing payment...'),
-    );
-  }
-}
-
-class _SignaturePendingView extends StatelessWidget {
-  const _SignaturePendingView();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Signing transaction...'),
-    );
-  }
-}
-
-class _ConfirmingTransactionView extends StatelessWidget {
-  const _ConfirmingTransactionView();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Confirming transaction...'),
     );
   }
 }

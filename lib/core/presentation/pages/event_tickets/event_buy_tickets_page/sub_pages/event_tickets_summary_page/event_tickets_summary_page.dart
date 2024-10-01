@@ -138,7 +138,7 @@ class EventTicketsSummaryPageView extends StatelessWidget {
             Scaffold(
               backgroundColor: colorScheme.background,
               appBar: LemonAppBar(
-                title: t.event.eventBuyTickets.orderSummary,
+                title: t.event.eventBuyTickets.registration,
               ),
               body: SafeArea(
                 child: Stack(

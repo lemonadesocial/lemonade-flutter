@@ -1,13 +1,9 @@
-import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/buy_tickets_with_crypto_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
-import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_button.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/presentation/widgets/web3/wallet_connect_active_session.dart';
-import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
