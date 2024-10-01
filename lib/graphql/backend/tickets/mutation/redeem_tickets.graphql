@@ -1,0 +1,17 @@
+mutation RedeemTickets($input: RedeemTicketsInput!) {
+  redeemTickets(input: $input) {
+    join_request {
+      _id
+    }
+    tickets {
+      _id
+      event
+      type
+      accepted
+      assigned_email
+      assigned_to
+      invited_by
+      cancelled_by
+    }
+  }
+}
