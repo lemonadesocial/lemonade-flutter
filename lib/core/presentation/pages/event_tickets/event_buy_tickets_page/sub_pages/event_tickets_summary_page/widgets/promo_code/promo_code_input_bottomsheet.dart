@@ -86,7 +86,6 @@ class _PromoCodeInputBottomsheetState extends State<PromoCodeInputBottomsheet> {
                 Opacity(
                   opacity: isValid ? 1 : 0.5,
                   child: LinearGradientButton.primaryButton(
-                    radius: BorderRadius.circular(LemonRadius.small),
                     label: t.common.actions.apply,
                     onTap: () {
                       if (promoTextController.text.isEmpty) {

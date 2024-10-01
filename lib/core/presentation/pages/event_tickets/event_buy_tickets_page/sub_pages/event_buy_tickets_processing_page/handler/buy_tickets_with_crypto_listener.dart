@@ -7,11 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class BuyTicketsWithCryptoListener {
   static BlocListener create({
     Function(BuyTicketsWithCryptoStateData data)? onDone,
+    Function(BuyTicketsWithCryptoStateData data)? onSigned,
+    Function()? onFailure,
   }) {
     return BlocListener<BuyTicketsWithCryptoBloc, BuyTicketsWithCryptoState>(
       listener: (context, state) {
         state.maybeWhen(
           orElse: () => null,
+          signed: (data) {
+            onSigned?.call(data);
+          },
           failure: (data, failureReason) {
             if (failureReason is InitCryptoPaymentFailure ||
                 failureReason is UpdateCryptoPaymentFailure ||
@@ -20,7 +25,7 @@ class BuyTicketsWithCryptoListener {
                 context: context,
                 builder: (context) => LemonAlertDialog(
                   onClose: () => Navigator.of(context).pop(),
-                  child: Text(t.common.pleaseTryAgain),
+                  child: Text(failureReason.message ?? t.common.pleaseTryAgain),
                 ),
               );
             }
@@ -40,6 +45,7 @@ class BuyTicketsWithCryptoListener {
                     state: BuyTicketsWithCryptoState.idle(data: state.data),
                   ),
                 );
+            onFailure?.call();
           },
           done: (data) {
             // TODO: will trigger timeout 30s and if payment noti not coming yet => manually

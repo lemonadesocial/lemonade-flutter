@@ -101,9 +101,10 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             if (refetch != null) refetch!();
           },
           applicationFormNotCompleted: (user) async {
-            await AutoRouter.of(context)
-                .navigate(GuestEventApplicationRoute(event: event, user: user));
-            if (refetch != null) refetch!();
+            // Application form is moved to events buy tickets page
+            await AutoRouter.of(context).navigate(
+              EventBuyTicketsRoute(event: event),
+            );
           },
           allPassed: () async {
             await AutoRouter.of(context).navigate(

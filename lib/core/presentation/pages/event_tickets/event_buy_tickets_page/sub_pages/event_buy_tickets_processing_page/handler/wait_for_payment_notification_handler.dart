@@ -73,21 +73,16 @@ class WaitForPaymentNotificationHandler {
     Function()? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
-    timer = Timer(maxDurationToWaitForNotification, () async {
-      final getChainResult =
-          await getIt<Web3Repository>().getChainById(chainId: chainId);
-      final chain = getChainResult.getOrElse(() => null);
+    final getChainResult =
+        await getIt<Web3Repository>().getChainById(chainId: chainId);
+    final chain = getChainResult.getOrElse(() => null);
+    final waitTime = (chain?.blockTime?.toInt() ?? 1) *
+        (chain?.safeConfirmations?.toInt() ?? 1);
+    timer = Timer(Duration(seconds: waitTime * 2), () async {
       final receipt = await Web3Utils.waitForReceipt(
         rpcUrl: chain?.rpcUrl ?? '',
         txHash: txHash,
         deplayDuration: delayIntervalDuration,
-      );
-      // This make sure BE already confirmed after transaction receipt is retured
-      await Future.delayed(
-        Duration(
-          seconds: (chain?.blockTime?.toInt() ?? 1) *
-              (chain?.safeConfirmations?.toInt() ?? 1),
-        ),
       );
       final payment = await _checkPayment(paymentId);
 

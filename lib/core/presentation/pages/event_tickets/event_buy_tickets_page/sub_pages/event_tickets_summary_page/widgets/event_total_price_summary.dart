@@ -8,8 +8,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
-class EventOrderSummary extends StatelessWidget {
-  const EventOrderSummary({
+class EventTotalPriceSummary extends StatelessWidget {
+  const EventTotalPriceSummary({
     super.key,
     required this.pricingInfo,
     required this.selectedCurrency,

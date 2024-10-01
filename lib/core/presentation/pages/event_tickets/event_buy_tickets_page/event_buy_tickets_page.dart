@@ -1,5 +1,8 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/event/event_buy_additional_tickets_bloc/event_buy_additonal_tickets_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
+import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
@@ -24,6 +27,10 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
+    final user = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (user) => user,
+          orElse: () => null,
+        );
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -51,6 +58,18 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
           create: (context) => EventBuyAdditionalTicketsBloc(
             isBuyMore: isBuyMore,
           ),
+        ),
+        BlocProvider(
+          create: (context) => CalculateEventTicketPricingBloc(),
+        ),
+        BlocProvider(
+          create: (context) => EventApplicationFormBloc()
+            ..add(
+              EventApplicationFormBlocEvent.initFieldState(
+                event: event,
+                user: user,
+              ),
+            ),
         ),
       ],
       child: this,

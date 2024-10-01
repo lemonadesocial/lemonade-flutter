@@ -27,7 +27,7 @@ class EventInfoSummary extends StatelessWidget {
         color: LemonColor.atomicBlack,
         border: Border.all(
           color: colorScheme.outline,
-          width: 0.5.w,
+          width: 1.w,
         ),
         borderRadius: BorderRadius.circular(
           LemonRadius.normal,
@@ -59,7 +59,7 @@ class EventInfoSummary extends StatelessWidget {
             ),
           ),
           Divider(
-            thickness: 0.5.w,
+            thickness: 1.w,
             color: colorScheme.outline,
           ),
           Padding(

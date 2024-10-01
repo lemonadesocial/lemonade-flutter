@@ -67,7 +67,8 @@
         "addDiscountCode": "Add discount code",
         "discountCode": "Discount code",
         "discount": "Discount",
-        "discountDescription": "Apply a discount code to discount your purchase"
+        "discountDescription": "Apply a discount code to discount your purchase",
+        "payAmount": "Pay $amount"
     },
     "eventOrder": {
         "itemTotal": "Item total",

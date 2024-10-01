@@ -1,4 +1,5 @@
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
@@ -130,6 +131,7 @@ class Event with _$Event {
       address: dto.address != null ? Address.fromDto(dto.address!) : null,
       paymentAccountsNew: dto.paymentAccountsNew ?? [],
       paymentAccountsExpanded: List.from(dto.paymentAccountsExpanded ?? [])
+          .whereType<PaymentAccountDto>()
           .map((item) => PaymentAccount.fromDto(item))
           .toList(),
       guestLimit: dto.guestLimit,
