@@ -1,6 +1,7 @@
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -10,103 +11,111 @@ class LocationItem extends StatelessWidget {
   final Address location;
   final Function onPressEdit;
   final Function onPressDelete;
-  final Function onPressItem;
-  final bool? selected;
 
   const LocationItem({
     super.key,
     required this.location,
     required this.onPressEdit,
     required this.onPressDelete,
-    required this.onPressItem,
-    this.selected,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: () async {
-        onPressItem();
-      },
-      child: Column(
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
+      child: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    selected == true
-                        ? Icon(
-                            Icons.check_circle_outline_outlined,
-                            size: Spacing.medium,
-                            color: colorScheme.onSurface,
-                          )
-                        : Icon(
-                            Icons.circle_outlined,
-                            size: Spacing.medium,
-                            color: colorScheme.onSurface,
-                          ),
-                    SizedBox(
-                      width: Spacing.small,
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  width: Sizing.medium,
+                  height: Sizing.medium,
+                  decoration: ShapeDecoration(
+                    color: colorScheme.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(LemonRadius.normal),
                     ),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            location.title ?? '',
-                            style: Typo.medium.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 2.w),
-                          Text(
-                            location.street1 ?? '',
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onSecondary,
-                            ),
-                          ),
-                        ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        child: ThemeSvgIcon(
+                          color: colorScheme.onSurface,
+                          builder: (filter) =>
+                              Assets.icons.icRoundHistory.svg(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: Spacing.small,
+                ),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        location.title ?? '',
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                          height: 0,
+                        ),
+                      ),
+                      SizedBox(height: 2.w),
+                      Text(
+                        location.street1 ?? '',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                          height: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              InkWell(
+                onTap: () async {
+                  onPressEdit();
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) {
+                    return Assets.icons.icEdit.svg(
+                      colorFilter: filter,
+                      width: Sizing.xSmall,
+                      height: Sizing.xSmall,
+                    );
+                  },
                 ),
               ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      onPressEdit();
-                    },
-                    icon: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icEdit.svg(
-                          colorFilter: filter,
-                          width: 20.w,
-                          height: 20.w,
-                        );
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      onPressDelete();
-                    },
-                    icon: ThemeSvgIcon(
-                      color: colorScheme.onPrimary,
-                      builder: (filter) {
-                        return Assets.icons.icDelete.svg(
-                          colorFilter: filter,
-                          width: 20.w,
-                          height: 20.w,
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              SizedBox(width: Spacing.xSmall),
+              InkWell(
+                onTap: () async {
+                  onPressDelete();
+                },
+                child: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) {
+                    return Assets.icons.icDelete.svg(
+                      colorFilter: filter,
+                      width: Sizing.xSmall + 2.w,
+                      height: Sizing.xSmall + 2.w,
+                    );
+                  },
+                ),
               ),
             ],
           ),

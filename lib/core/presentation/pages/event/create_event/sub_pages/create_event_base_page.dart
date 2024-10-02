@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_datetime_settings_bloc/event_da
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/choose_location_page.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
@@ -220,8 +221,13 @@ class CreateEventBasePage extends StatelessWidget {
                       onTap: () {
                         showCupertinoModalBottomSheet(
                           context: context,
+                          backgroundColor: LemonColor.atomicBlack,
+                          topRadius: Radius.circular(30.r),
+                          bounce: true,
+                          expand: true,
+                          enableDrag: false,
                           builder: (mContext) {
-                            return const EventLocationSettingPage();
+                            return const ChooseLocationPage();
                           },
                         );
                       },
