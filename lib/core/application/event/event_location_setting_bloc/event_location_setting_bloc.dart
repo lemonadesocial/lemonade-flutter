@@ -31,6 +31,7 @@ class EventLocationSettingBloc
     on<SubmitAddLocation>(_onSubmitAddLocation);
     on<DeleteLocation>(_onDeleteLocation);
     on<SelectAddress>(_onSelectAddress);
+    on<AdditionalDirectionsChanged>(_onAdditionalDirectionsChanged);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -57,6 +58,7 @@ class EventLocationSettingBloc
           longitude: address?.longitude ?? 0,
           status: FormzSubmissionStatus.initial,
           deleteStatus: FormzSubmissionStatus.initial,
+          // additionalDirections: address?.additionalDirections ?? '',
         ),
       );
     } else {
@@ -75,6 +77,7 @@ class EventLocationSettingBloc
           longitude: 0,
           status: FormzSubmissionStatus.initial,
           deleteStatus: FormzSubmissionStatus.initial,
+          additionalDirections: '',
         ),
       );
     }
@@ -402,6 +405,17 @@ class EventLocationSettingBloc
       );
     }
   }
+
+  Future<void> _onAdditionalDirectionsChanged(
+    AdditionalDirectionsChanged event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        additionalDirections: event.additionalDirections,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -456,6 +470,10 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
   const factory EventLocationSettingEvent.selectAddress({
     required Address address,
   }) = SelectAddress;
+
+  const factory EventLocationSettingEvent.additionalDirectionsChanged({
+    required String additionalDirections,
+  }) = AdditionalDirectionsChanged;
 }
 
 @freezed
@@ -476,5 +494,6 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus deleteStatus,
     @Default(false) bool isValid,
     Address? selectedAddress,
+    @Default('') String additionalDirections,
   }) = _EventLocationSettingState;
 }

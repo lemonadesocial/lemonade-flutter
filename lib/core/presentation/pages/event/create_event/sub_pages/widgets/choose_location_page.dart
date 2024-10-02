@@ -4,11 +4,11 @@ import 'package:app/core/application/event/event_location_setting_bloc/event_loc
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:google_maps_webservice/places.dart' as google_places_service;
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class ChooseLocationPage extends StatefulWidget {
@@ -100,14 +101,14 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
     context
         .read<EventLocationSettingBloc>()
         .add(PlaceDetailsChanged(placeDetails: detail.result));
-    AutoRouter.of(context).navigate(
-      EventLocationSettingDetailRoute(
-        address: Address(
-          title: detail.result.name,
-          street1: detail.result.formattedAddress,
-          longitude: detail.result.geometry?.location.lng,
-          latitude: detail.result.geometry?.location.lat,
-        ),
+
+    showBottomSheetDetail(
+      context,
+      Address(
+        title: detail.result.name,
+        street1: detail.result.formattedAddress,
+        longitude: detail.result.geometry?.location.lng,
+        latitude: detail.result.geometry?.location.lat,
       ),
     );
   }
@@ -239,7 +240,22 @@ class AddressList extends StatelessWidget {
 
   _onTapEdit(Address address, BuildContext context) {
     Vibrate.feedback(FeedbackType.light);
-    AutoRouter.of(context)
-        .navigate(EventLocationSettingDetailRoute(address: address));
+    showBottomSheetDetail(context, address);
   }
+}
+
+void showBottomSheetDetail(BuildContext context, Address address) {
+  showCupertinoModalBottomSheet(
+    expand: true,
+    context: context,
+    backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+    topRadius: Radius.circular(30.r),
+    useRootNavigator: true,
+    builder: (mContext) {
+      return BlocProvider.value(
+        value: context.read<EventLocationSettingBloc>(),
+        child: EventLocationSettingDetailPage(address: address),
+      );
+    },
+  );
 }
