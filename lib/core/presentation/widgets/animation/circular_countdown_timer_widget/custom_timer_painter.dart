@@ -45,11 +45,11 @@ class CustomTimerPainter extends CustomPainter {
     double progress = (animation!.value) * 2 * math.pi;
     double startAngle = math.pi * 1.5;
 
-    // if ((!isReverse! && isReverseAnimation!) ||
-    //     (isReverse! && isReverseAnimation!)) {
-    //   progress = progress * -1;
-    //   startAngle = -math.pi / 2;
-    // }
+    if ((!isReverse! && isReverseAnimation!) ||
+        (isReverse! && isReverseAnimation!)) {
+      progress = progress * -1;
+      startAngle = -math.pi / 2;
+    }
 
     if (fillGradient != null) {
       final rect = Rect.fromCircle(
