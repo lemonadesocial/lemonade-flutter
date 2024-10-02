@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.35.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.34.0...v1.35.0) (2024-09-30)
+
+
+### Features
+
+* adjust timezone display for entire app ([#738](https://github.com/lemonadesocial/lemonade-flutter/issues/738)) ([dce86cf](https://github.com/lemonadesocial/lemonade-flutter/commit/dce86cfe4ebb1275c3f2ffe17abb245154ca2bb4))
+
+
+### Bug Fixes
+
+* fix navigation to social app ([#735](https://github.com/lemonadesocial/lemonade-flutter/issues/735)) ([4666968](https://github.com/lemonadesocial/lemonade-flutter/commit/4666968f276c5e26c87854ecf1d25a9f68291fb1))
+
 ## [1.34.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.33.0...v1.34.0) (2024-09-23)
 
 
