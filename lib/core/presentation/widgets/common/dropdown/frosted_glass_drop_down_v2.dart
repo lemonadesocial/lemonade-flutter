@@ -15,14 +15,20 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
     this.label,
     this.hintText,
     this.showRequired,
+    this.backgroundColor,
+    this.labelStyle,
+    this.border,
   });
 
   final String? label;
+  final TextStyle? labelStyle;
   final String? hintText;
   final List<String> listItem;
   final String? selectedValue;
   final ValueChanged<String?> onValueChange;
   final bool? showRequired;
+  final Color? backgroundColor;
+  final Border? border;
 
   @override
   Widget build(BuildContext context) {
@@ -35,37 +41,38 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                label!,
-                style: Typo.small.copyWith(
-                  color: colorScheme.onPrimary.withOpacity(0.36),
-                ),
-              ),
-              if (showRequired == true) ...[
-                SizedBox(
-                  width: Spacing.superExtraSmall,
-                ),
-                Text(
-                  "*",
-                  style: Typo.mediumPlus.copyWith(
-                    color: LemonColor.coralReef,
-                    fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    text: label ?? '',
+                    style: labelStyle ??
+                        Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                    children: [
+                      if (showRequired == true)
+                        TextSpan(
+                          text: " *",
+                          style: Typo.mediumPlus.copyWith(
+                            color: LemonColor.coralReef,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ],
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],
         Container(
           width: 1.sw,
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.smMedium,
-            vertical: Spacing.xSmall,
-          ),
+          height: 54.w,
           decoration: BoxDecoration(
+            border: border,
             borderRadius: BorderRadius.circular(12.r),
-            color: colorScheme.onPrimary.withOpacity(0.06),
+            color: backgroundColor ?? colorScheme.onPrimary.withOpacity(0.06),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton2<String>(
@@ -87,21 +94,15 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
               hint: Text(
                 hintText ?? Translations.of(context).common.selectItem,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary.withOpacity(0.36),
+                  color: colorScheme.onSurfaceVariant,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
+              buttonStyleData: ButtonStyleData(
+                padding: EdgeInsets.only(right: Spacing.xSmall),
+              ),
               value: selectedValue,
               onChanged: onValueChange,
-              buttonStyleData: ButtonStyleData(
-                height: 40.h,
-                width: 1.sw,
-                overlayColor: MaterialStatePropertyAll(
-                  colorScheme.onPrimary.withOpacity(
-                    0.06,
-                  ),
-                ),
-              ),
               dropdownStyleData: DropdownStyleData(
                 offset: Offset(-18.w, 0),
                 decoration: BoxDecoration(

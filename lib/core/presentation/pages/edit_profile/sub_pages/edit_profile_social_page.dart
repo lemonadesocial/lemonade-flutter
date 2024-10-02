@@ -9,13 +9,12 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/sizing.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
   final User? userProfile;
@@ -25,6 +24,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final fieldItemBackgroundColor = LemonColor.chineseBlack;
     return BlocListener<EditProfileBloc, EditProfileState>(
       listener: (context, state) {
         if (state.status == EditProfileStatus.success) {
@@ -36,9 +36,9 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
       },
       child: Scaffold(
         appBar: LemonAppBar(
-          backgroundColor: colorScheme.onPrimaryContainer,
+          backgroundColor: LemonColor.atomicBlack,
         ),
-        backgroundColor: colorScheme.onPrimaryContainer,
+        backgroundColor: LemonColor.atomicBlack,
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
           child: Column(
@@ -50,13 +50,17 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                     children: [
                       Text(
                         t.profile.socialHandle,
-                        style: Typo.extraLarge,
+                        style: Typo.extraLarge.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       SizedBox(height: Spacing.superExtraSmall),
                       Text(
                         t.profile.socialHandleLongDesc,
                         style: Typo.mediumPlus.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.56),
+                          color: colorScheme.onSecondary,
                         ),
                       ),
                       SizedBox(height: Spacing.medium),
@@ -70,6 +74,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleTwitter,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -82,6 +87,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleLinkedin,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -94,6 +100,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleInstagram,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -106,6 +113,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleFarcaster,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -118,6 +126,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleGithub,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -130,6 +139,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleLens,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                       SizedBox(height: Spacing.medium),
                       EditProfileFieldItem(
@@ -142,6 +152,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                               );
                         },
                         value: userProfile?.handleMirror,
+                        backgroundColor: fieldItemBackgroundColor,
                       ),
                     ],
                   ),
@@ -151,21 +162,13 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                 builder: (context, state) {
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                    width: 1.sw,
-                    child: LinearGradientButton(
+                    child: LinearGradientButton.primaryButton(
                       onTap: () {
                         context.read<EditProfileBloc>().add(
                               EditProfileEvent.submitEditProfile(),
                             );
                       },
                       label: t.profile.saveChanges,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: GradientButtonMode.lavenderMode,
                       loadingWhen: state.status == EditProfileStatus.loading,
                     ),
                   );

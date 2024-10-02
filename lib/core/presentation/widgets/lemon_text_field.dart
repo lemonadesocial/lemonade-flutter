@@ -33,6 +33,7 @@ class LemonTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.enableSuggestions,
     this.autocorrect,
+    this.style,
     this.labelStyle,
     this.placeholderStyle,
   });
@@ -63,14 +64,15 @@ class LemonTextField extends StatelessWidget {
   final Function(String newValue)? onFieldSubmitted;
   final bool? enableSuggestions;
   final bool? autocorrect;
+  final TextStyle? style;
   final TextStyle? labelStyle;
   final TextStyle? placeholderStyle;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final border = OutlineInputBorder(
-      borderSide:
-          BorderSide(color: borderColor ?? theme.colorScheme.outlineVariant),
+      borderSide: BorderSide(color: borderColor ?? theme.colorScheme.outline),
       borderRadius: BorderRadius.circular(radius),
     );
     final errorBorder = OutlineInputBorder(
@@ -86,23 +88,24 @@ class LemonTextField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (showRequired == true) ...[
-                Text(
-                  "*",
-                  style: Typo.mediumPlus.copyWith(
-                    color: LemonColor.coralReef,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  width: Spacing.superExtraSmall,
-                ),
-              ],
               Expanded(
-                child: Text(
-                  label ?? '',
-                  style: Typo.small.copyWith(
-                    color: theme.colorScheme.onPrimary.withOpacity(0.36),
+                child: Text.rich(
+                  TextSpan(
+                    text: label ?? '',
+                    style: labelStyle ??
+                        Typo.small.copyWith(
+                          color: theme.colorScheme.onSecondary,
+                        ),
+                    children: [
+                      if (showRequired == true)
+                        TextSpan(
+                          text: " *",
+                          style: Typo.mediumPlus.copyWith(
+                            color: LemonColor.coralReef,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -117,7 +120,7 @@ class LemonTextField extends StatelessWidget {
           autofocus: autofocus,
           onChanged: onChange,
           focusNode: focusNode,
-          style: labelStyle ??
+          style: style ??
               theme.textTheme.bodyMedium!
                   .copyWith(color: theme.colorScheme.onPrimary),
           minLines: minLines,

@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/widgets/common/circular_loading/circular_loading_widget.dart';
+import 'package:app/core/presentation/widgets/animation/circular_loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -19,7 +19,7 @@ class EventInviteLoadingView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           const Spacer(),
-          const CircularLoading(),
+          const CircularLoadingWidget(),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

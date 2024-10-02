@@ -66,11 +66,11 @@ class _EventDetailBasePageView extends StatelessWidget {
           ),
         ),
         fetched: (event) {
-          final userId = context.read<AuthBloc>().state.maybeWhen(
-                orElse: () => '',
-                authenticated: (session) => session.userId,
+          final user = context.watch<AuthBloc>().state.maybeWhen(
+                orElse: () => null,
+                authenticated: (user) => user,
               );
-
+          final userId = user?.userId ?? '';
           final isCohost = EventUtils.isCohost(
             event: event,
             userId: userId,

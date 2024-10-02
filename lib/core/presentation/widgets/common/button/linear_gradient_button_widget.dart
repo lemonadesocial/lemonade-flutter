@@ -142,6 +142,7 @@ class LinearGradientButton extends StatelessWidget {
     Widget? trailing,
     TextStyle? textStyle,
     double? height,
+    BorderRadius? radius,
   }) =>
       LinearGradientButton(
         onTap: onTap,
@@ -155,7 +156,7 @@ class LinearGradientButton extends StatelessWidget {
             ),
         mode: GradientButtonMode.lavenderMode,
         height: height ?? Sizing.large,
-        radius: BorderRadius.circular(LemonRadius.small * 2),
+        radius: radius ?? BorderRadius.circular(LemonRadius.small * 2),
         trailing: trailing,
       );
 

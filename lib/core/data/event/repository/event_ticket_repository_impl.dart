@@ -20,7 +20,6 @@ import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calc
 import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
-import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -33,6 +32,7 @@ import 'package:app/graphql/backend/event/mutation/delete_event_ticket_type.grap
 import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/tickets/mutation/redeem_tickets.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -88,24 +88,26 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
 
   @override
   Future<Either<Failure, RedeemTicketsResponse>> redeemTickets({
-    required RedeemTicketsInput input,
+    required Input$RedeemTicketsInput input,
   }) async {
-    final result = await _client.mutate(
-      MutationOptions(
-        document: redeemTicketsMutation,
-        variables: {
-          'input': input.toJson(),
-        },
-        parserFn: (data) => RedeemTicketsResponse.fromDto(
-          RedeemTicketsResponseDto.fromJson(data['redeemTickets'] ?? []),
+    final result = await _client.mutate$RedeemTickets(
+      Options$Mutation$RedeemTickets(
+        variables: Variables$Mutation$RedeemTickets(
+          input: input,
         ),
       ),
     );
 
-    if (result.hasException) {
+    if (result.hasException || result.parsedData?.redeemTickets == null) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData!);
+    return Right(
+      RedeemTicketsResponse.fromDto(
+        RedeemTicketsResponseDto.fromJson(
+          result.parsedData!.redeemTickets.toJson(),
+        ),
+      ),
+    );
   }
 
   @override

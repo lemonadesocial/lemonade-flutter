@@ -34,15 +34,6 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     emit(BuyTicketsState.loading());
     final paymentMethod = event.input.transferParams?.paymentMethod ?? '';
 
-    if (_currentPayment != null) {
-      add(
-        BuyTicketsEvent.processPaymentIntent(
-          paymentMethod: event.input.transferParams?.paymentMethod ?? '',
-          payment: _currentPayment!,
-        ),
-      );
-    }
-
     final result = await eventTicketRepository.buyTickets(input: event.input);
 
     result.fold(
@@ -89,32 +80,72 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
     final payment = event.payment;
     _currentPayment = payment;
     try {
-      // TODO: will remove after confirmation with BE
-      // @deprecated
-      // final stripePublicKey = payment.transferMetadata?.tryGet('public_key') ?? '';
-      // final stripeClientSecret = payment.transferMetadata?.tryGet('client_secret') ?? '';
-      // final paymentMethodId = event.paymentMethod;
+      final stripePublicKey = payment.transferMetadata?['public_key'] ?? '';
+      final stripeClientSecret =
+          payment.transferMetadata?['client_secret'] ?? '';
+      final paymentMethodId = event.paymentMethod;
 
-      // Stripe.publishableKey = stripePublicKey;
+      Stripe.stripeAccountId =
+          _currentPayment?.accountExpanded?.accountInfo?.accountId ?? '';
+      Stripe.publishableKey = stripePublicKey;
 
-      // // if payment method not defined then have to use stripe payment sheet
-      // if (paymentMethodId == null || paymentMethodId.isEmpty) {
-      //   await Stripe.instance.initPaymentSheet(
-      //     paymentSheetParameters: SetupPaymentSheetParameters(
-      //       paymentIntentClientSecret: stripeClientSecret,
-      //       style: ThemeMode.dark,
-      //     ),
-      //   );
-
-      //   await Stripe.instance.presentPaymentSheet();
-      // }
-
-      add(
-        BuyTicketsEvent.processUpdatePayment(
-          payment: payment,
-          paymentMethod: event.paymentMethod,
+      // update payment with payment method to see if it's 3D secure or requiring action
+      final updatePaymentResult = await paymentRepository.updatePayment(
+        input: UpdatePaymentInput(
+          id: event.payment.id ?? '',
+          transferParams: UpdatePaymentTransferParams(
+            paymentMethod: event.paymentMethod,
+            returnUrl: '${AppConfig.appScheme}://payment',
+          ),
         ),
       );
+
+      if (updatePaymentResult.isLeft()) {
+        return emit(
+          BuyTicketsState.failure(
+            failureReason: InitPaymentFailure(),
+          ),
+        );
+      }
+      final updatedPayment = updatePaymentResult.fold((l) => null, (r) => r);
+
+      final nextActionUrl =
+          (updatedPayment?.transferMetadata?['next_action_url'] ?? '')
+              as String;
+      final actionRequired = nextActionUrl.isNotEmpty;
+
+      // 3D secure card
+      if (actionRequired) {
+        final intent = await Stripe.instance.confirmPayment(
+          paymentIntentClientSecret: stripeClientSecret,
+          data: const PaymentMethodParams.card(
+            paymentMethodData: PaymentMethodData(),
+          ),
+        );
+
+        if (intent.status == PaymentIntentsStatus.Succeeded) {
+          add(
+            BuyTicketsEvent.processUpdatePayment(
+              payment: payment,
+              paymentMethod: paymentMethodId,
+            ),
+          );
+        } else {
+          emit(
+            BuyTicketsState.failure(
+              failureReason: InitPaymentFailure(),
+            ),
+          );
+        }
+      } else {
+        // If card is not 3D secure, then update payment
+        add(
+          BuyTicketsEvent.processUpdatePayment(
+            payment: payment,
+            paymentMethod: paymentMethodId,
+          ),
+        );
+      }
     } catch (e) {
       if (e is StripeException) {
         return emit(
@@ -123,6 +154,7 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
           ),
         );
       }
+
       emit(
         BuyTicketsState.failure(
           failureReason: InitPaymentFailure(),
