@@ -6,7 +6,7 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -80,15 +80,36 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
       return;
     }
     FocusScope.of(context).requestFocus(FocusNode());
-    // Get place detail (lat/lng)
-    final places = google_places_service.GoogleMapsPlaces(
-      apiKey: AppConfig.googleMapKey,
-      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    final result = await showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        // Get place detail (lat/lng)
+        final places = google_places_service.GoogleMapsPlaces(
+          apiKey: AppConfig.googleMapKey,
+          apiHeaders: await const GoogleApiHeaders().getHeaders(),
+        );
+        return await places.getDetailsByPlaceId(p.placeId!);
+      },
     );
-    final detail = await places.getDetailsByPlaceId(p.placeId!);
+
+    if (result.error != null) {
+      return;
+    }
+
+    final detail = result.result!;
     context
         .read<EventLocationSettingBloc>()
         .add(PlaceDetailsChanged(placeDetails: detail.result));
+    AutoRouter.of(context).navigate(
+      EventLocationSettingDetailRoute(
+        address: Address(
+          title: detail.result.name,
+          street1: detail.result.formattedAddress,
+          longitude: detail.result.geometry?.location.lng,
+          latitude: detail.result.geometry?.location.lat,
+        ),
+      ),
+    );
   }
 
   Widget _buildContent() {
@@ -109,11 +130,29 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LemonTextField(
-                onChange: (value) {},
-                hintText: t.event.locationSetting.searchLocation,
+              InkWell(
                 onTap: _onTapEnterAddress,
-                controller: placeDetailsController,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.small,
+                    vertical: Spacing.xSmall,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: colorScheme.outline),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          t.event.locationSetting.searchLocation,
+                          style:
+                              Typo.medium.copyWith(color: colorScheme.outline),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(
                 height: 25.h,
