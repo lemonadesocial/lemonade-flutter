@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:formz/formz.dart';
 import 'package:google_maps_webservice/places.dart' as google_places_service;
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -121,57 +122,65 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
           orElse: () => [],
         );
     Widget content =
-        BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-      builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.small,
-            vertical: Spacing.small,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: _onTapEnterAddress,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.small,
-                    vertical: Spacing.xSmall,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: colorScheme.outline),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          t.event.locationSetting.searchLocation,
-                          style:
-                              Typo.medium.copyWith(color: colorScheme.outline),
+        BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
+      listener: (context, state) {
+        if (state.deleteStatus == FormzSubmissionStatus.success) {
+          context.read<AuthBloc>().add(const AuthEvent.refreshData());
+        }
+      },
+      child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.small,
+              vertical: Spacing.small,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: _onTapEnterAddress,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.small,
+                      vertical: Spacing.xSmall,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: colorScheme.outline),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            t.event.locationSetting.searchLocation,
+                            style: Typo.medium
+                                .copyWith(color: colorScheme.outline),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 25.h,
-              ),
-              Text(
-                t.event.locationSetting.savedLocations,
-                style: Typo.extraMedium.copyWith(color: colorScheme.onPrimary),
-              ),
-              SizedBox(
-                height: Spacing.xSmall,
-              ),
-              Expanded(
-                child: AddressList(addresses: addresses, event: widget.event),
-              ),
-            ],
-          ),
-        );
-      },
+                SizedBox(
+                  height: 25.h,
+                ),
+                Text(
+                  t.event.locationSetting.savedLocations,
+                  style:
+                      Typo.extraMedium.copyWith(color: colorScheme.onPrimary),
+                ),
+                SizedBox(
+                  height: Spacing.xSmall,
+                ),
+                Expanded(
+                  child: AddressList(addresses: addresses, event: widget.event),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
 
     if (widget.event != null) {
@@ -210,6 +219,7 @@ class AddressList extends StatelessWidget {
               Vibrate.feedback(FeedbackType.light);
             },
             child: LocationItem(
+              isDeleting: state.deletingId == addresses[index].id,
               location: addresses[index],
               onPressEdit: () {
                 Vibrate.feedback(FeedbackType.light);

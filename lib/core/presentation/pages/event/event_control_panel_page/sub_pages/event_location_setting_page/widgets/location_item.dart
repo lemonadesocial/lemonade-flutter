@@ -1,4 +1,5 @@
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class LocationItem extends StatelessWidget {
   final Address location;
   final Function onPressEdit;
+  final bool isDeleting;
   final Function onPressDelete;
 
   const LocationItem({
@@ -17,6 +19,7 @@ class LocationItem extends StatelessWidget {
     required this.location,
     required this.onPressEdit,
     required this.onPressDelete,
+    this.isDeleting = false,
   });
 
   @override
@@ -102,21 +105,23 @@ class LocationItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.xSmall),
-              InkWell(
-                onTap: () async {
-                  onPressDelete();
-                },
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) {
-                    return Assets.icons.icDelete.svg(
-                      colorFilter: filter,
-                      width: Sizing.xSmall + 2.w,
-                      height: Sizing.xSmall + 2.w,
-                    );
-                  },
-                ),
-              ),
+              isDeleting
+                  ? Loading.defaultLoading(context)
+                  : InkWell(
+                      onTap: () async {
+                        onPressDelete();
+                      },
+                      child: ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) {
+                          return Assets.icons.icDelete.svg(
+                            colorFilter: filter,
+                            width: Sizing.xSmall + 2.w,
+                            height: Sizing.xSmall + 2.w,
+                          );
+                        },
+                      ),
+                    ),
             ],
           ),
         ],

@@ -354,7 +354,10 @@ class EventLocationSettingBloc
           orElse: () => null,
         );
     if (userAddresses == null) return;
-    emit(state.copyWith(deleteStatus: FormzSubmissionStatus.inProgress));
+    emit(state.copyWith(
+      deleteStatus: FormzSubmissionStatus.inProgress,
+      deletingId: event.id,
+    ));
 
     // Create a new mutable list from the immutable one
     List<Address> mutableAddresses = List.from(userAddresses);
@@ -381,11 +384,15 @@ class EventLocationSettingBloc
       ),
     );
     result.fold((failure) {
-      print("failure : $failure");
-      emit(state.copyWith(deleteStatus: FormzSubmissionStatus.failure));
+      emit(state.copyWith(
+        deleteStatus: FormzSubmissionStatus.failure,
+        deletingId: null,
+      ));
     }, (success) {
-      print("success : $success");
-      emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success));
+      emit(state.copyWith(
+        deleteStatus: FormzSubmissionStatus.success,
+        deletingId: null,
+      ));
     });
   }
 
@@ -498,5 +505,6 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(false) bool isValid,
     Address? selectedAddress,
     String? additionalDirections,
+    String? deletingId,
   }) = _EventLocationSettingState;
 }
