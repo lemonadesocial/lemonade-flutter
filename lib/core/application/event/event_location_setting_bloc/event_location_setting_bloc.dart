@@ -336,10 +336,12 @@ class EventLocationSettingBloc
           orElse: () => null,
         );
     if (userAddresses == null) return;
-    emit(state.copyWith(
-      deleteStatus: FormzSubmissionStatus.inProgress,
-      deletingId: event.id,
-    ));
+    emit(
+      state.copyWith(
+        deleteStatus: FormzSubmissionStatus.inProgress,
+        deletingId: event.id,
+      ),
+    );
 
     // Create a new mutable list from the immutable one
     List<Address> mutableAddresses = List.from(userAddresses);
