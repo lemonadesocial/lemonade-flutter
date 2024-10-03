@@ -11,7 +11,6 @@ import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calc
 import 'package:app/core/domain/event/input/get_event_currencies_input/get_event_currencies_input.dart';
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
-import 'package:app/core/domain/event/input/redeem_tickets_input/redeem_tickets_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/event/mutation/create_event_ticket_discount.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
@@ -30,7 +29,7 @@ abstract class EventTicketRepository {
   });
 
   Future<Either<Failure, RedeemTicketsResponse>> redeemTickets({
-    required RedeemTicketsInput input,
+    required Input$RedeemTicketsInput input,
   });
 
   Future<Either<Failure, bool>> assignTickets({

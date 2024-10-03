@@ -58,7 +58,7 @@ class AddNewCardBloc extends Cubit<AddNewCardState> {
   }) async {
     try {
       emit(state.copyWith(status: AddNewCardBlocStatus.loading));
-      // For debugging purpose
+      Stripe.stripeAccountId = null;
       Stripe.publishableKey = publishableKey;
 
       final expirationMonth = int.parse(state.validThrough!.substring(0, 2));

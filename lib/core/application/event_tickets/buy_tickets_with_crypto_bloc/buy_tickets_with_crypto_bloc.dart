@@ -233,7 +233,9 @@ class BuyTicketsWithCryptoBloc
             return emit(
               BuyTicketsWithCryptoState.failure(
                 data: state.data,
-                failureReason: WalletConnectFailure(),
+                failureReason: WalletConnectFailure(
+                  message: txHash,
+                ),
               ),
             );
           }
@@ -326,7 +328,9 @@ class BuyTicketsWithCryptoBloc
         emit(
           BuyTicketsWithCryptoState.failure(
             data: state.data,
-            failureReason: WalletConnectFailure(),
+            failureReason: WalletConnectFailure(
+              message: _txHash,
+            ),
           ),
         );
       }
@@ -475,17 +479,33 @@ class BuyTicketsWithCryptoStateData with _$BuyTicketsWithCryptoStateData {
   }) = _BuyTicketsWithCryptoStateData;
 }
 
-class BuyWithCryptoFailure {}
-
-class InitCryptoPaymentFailure extends BuyWithCryptoFailure {}
-
-class WalletConnectFailure extends BuyWithCryptoFailure {
+class BuyWithCryptoFailure {
   final String? message;
-  WalletConnectFailure({
+  BuyWithCryptoFailure({
     this.message,
   });
 }
 
-class UpdateCryptoPaymentFailure extends BuyWithCryptoFailure {}
+class InitCryptoPaymentFailure extends BuyWithCryptoFailure {
+  InitCryptoPaymentFailure({
+    super.message,
+  });
+}
 
-class NotificationCryptoPaymentFailure extends BuyWithCryptoFailure {}
+class WalletConnectFailure extends BuyWithCryptoFailure {
+  WalletConnectFailure({
+    super.message,
+  });
+}
+
+class UpdateCryptoPaymentFailure extends BuyWithCryptoFailure {
+  UpdateCryptoPaymentFailure({
+    super.message,
+  });
+}
+
+class NotificationCryptoPaymentFailure extends BuyWithCryptoFailure {
+  NotificationCryptoPaymentFailure({
+    super.message,
+  });
+}

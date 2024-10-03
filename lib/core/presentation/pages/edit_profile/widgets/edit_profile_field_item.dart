@@ -20,6 +20,8 @@ class EditProfileFieldItem extends StatelessWidget {
     this.controller,
     this.showRequired,
     required this.value,
+    this.backgroundColor,
+    this.labelStyle,
   });
 
   // final User userProfile;
@@ -29,11 +31,16 @@ class EditProfileFieldItem extends StatelessWidget {
   final TextEditingController? controller;
   final bool? showRequired;
   final String? value;
+  final Color? backgroundColor;
+  final TextStyle? labelStyle;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final border = Border.all(
+      color: colorScheme.outline,
+    );
     switch (profileFieldKey) {
       //
       // Dropdown
@@ -45,6 +52,7 @@ class EditProfileFieldItem extends StatelessWidget {
             : "";
         return FrostedGlassDropDownV2(
           label: t.profile.pronoun,
+          labelStyle: labelStyle,
           hintText: t.profile.pronoun,
           listItem: LemonPronoun.values.map((e) => e.pronoun).toList(),
           onValueChange: (value) {
@@ -54,10 +62,13 @@ class EditProfileFieldItem extends StatelessWidget {
           },
           selectedValue: value == '' ? null : newValue,
           showRequired: showRequired,
+          backgroundColor: backgroundColor,
+          border: border,
         );
       case ProfileFieldKey.industry:
         return FrostedGlassDropDownV2(
           label: t.profile.industry,
+          labelStyle: labelStyle,
           hintText: t.profile.hint.industry,
           listItem: LemonIndustry.values.map((e) => e.industry).toList(),
           onValueChange: (value) {
@@ -67,10 +78,13 @@ class EditProfileFieldItem extends StatelessWidget {
           },
           selectedValue: value == '' ? null : value,
           showRequired: showRequired,
+          backgroundColor: backgroundColor,
+          border: border,
         );
       case ProfileFieldKey.newGender:
         return FrostedGlassDropDownV2(
           label: t.profile.gender,
+          labelStyle: labelStyle,
           hintText: t.profile.hint.gender,
           listItem: LemonGender.values.map((e) => e.newGender).toList(),
           onValueChange: (value) {
@@ -80,10 +94,13 @@ class EditProfileFieldItem extends StatelessWidget {
           },
           selectedValue: value == '' ? null : value,
           showRequired: showRequired,
+          backgroundColor: backgroundColor,
+          border: border,
         );
       case ProfileFieldKey.ethnicity:
         return FrostedGlassDropDownV2(
           label: t.profile.ethnicity,
+          labelStyle: labelStyle,
           hintText: t.profile.hint.ethnicity,
           listItem: LemonEthnicity.values.map((e) => e.ethnicity).toList(),
           onValueChange: (value) {
@@ -93,6 +110,8 @@ class EditProfileFieldItem extends StatelessWidget {
           },
           selectedValue: value == '' ? null : value,
           showRequired: showRequired,
+          backgroundColor: backgroundColor,
+          border: border,
         );
       //
       // DateTimePicker mode
@@ -100,10 +119,13 @@ class EditProfileFieldItem extends StatelessWidget {
       case ProfileFieldKey.dateOfBirth:
         return LemonTextField(
           label: t.profile.dob,
+          labelStyle: labelStyle,
           onChange: onChange,
           controller: controller,
           hintText: t.profile.hint.dob,
           showRequired: showRequired,
+          fillColor: backgroundColor,
+          filled: backgroundColor != null,
           inputFormatters: [
             CustomDateTextFormatter(),
             LengthLimitingTextInputFormatter(10),
@@ -145,10 +167,13 @@ class EditProfileFieldItem extends StatelessWidget {
       default:
         return LemonTextField(
           label: profileFieldKey.label,
+          labelStyle: labelStyle,
           hintText: '',
           initialText: value,
           onChange: onChange,
           showRequired: showRequired,
+          fillColor: backgroundColor,
+          filled: backgroundColor != null,
         );
     }
   }

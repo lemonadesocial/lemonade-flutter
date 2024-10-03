@@ -2,9 +2,8 @@ import 'package:app/core/application/payment/select_payment_card_cubit/select_pa
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_card_tile.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_order_slide_to_pay.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/select_card_button.dart';
-import 'package:app/core/presentation/widgets/common/slide_to_act/slide_to_act.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_button.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/select_card_button.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -12,27 +11,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class EventOrderSummaryFooter extends StatelessWidget {
-  const EventOrderSummaryFooter({
+class PayByStripeFooter extends StatelessWidget {
+  const PayByStripeFooter({
     super.key,
     this.pricingInfo,
-    required this.onSlideToPay,
-    required this.slideActionKey,
     required this.selectedCurrency,
     this.selectedNetwork,
     this.onSelectCard,
     this.onCardAdded,
     this.isFree = false,
+    this.disabled = false,
   });
-
-  final Function() onSlideToPay;
   final EventTicketsPricingInfo? pricingInfo;
-  final GlobalKey<SlideActionState> slideActionKey;
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
   final String selectedCurrency;
   final String? selectedNetwork;
   final bool isFree;
+  final bool disabled;
 
   String get stripePublishableKey {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
@@ -64,10 +60,9 @@ class EventOrderSummaryFooter extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  EventOrderSlideToPay(
-                    onSlideToPay: onSlideToPay,
+                  PayButton(
+                    disabled: disabled,
                     pricingInfo: pricingInfo,
-                    slideActionKey: slideActionKey,
                     selectedCurrency: selectedCurrency,
                     selectedNetwork: selectedNetwork,
                   ),
@@ -99,13 +94,9 @@ class EventOrderSummaryFooter extends StatelessWidget {
                             publishableKey: stripePublishableKey,
                             onCardAdded: onCardAdded,
                             onSelectCard: onSelectCard,
-                            buyButton: EventOrderSlideToPay(
-                              onSlideToPay: () async {
-                                await AutoRouter.of(context).pop();
-                                onSlideToPay();
-                              },
+                            buyButton: PayButton(
+                              disabled: disabled,
                               pricingInfo: pricingInfo,
-                              slideActionKey: GlobalKey<SlideActionState>(),
                               selectedCurrency: selectedCurrency,
                               selectedNetwork: selectedNetwork,
                             ),
@@ -115,10 +106,9 @@ class EventOrderSummaryFooter extends StatelessWidget {
                       paymentCard: selectedPaymentCard,
                     ),
                     SizedBox(height: Spacing.smMedium),
-                    EventOrderSlideToPay(
-                      onSlideToPay: onSlideToPay,
+                    PayButton(
+                      disabled: disabled,
                       pricingInfo: pricingInfo,
-                      slideActionKey: slideActionKey,
                       selectedCurrency: selectedCurrency,
                       selectedNetwork: selectedNetwork,
                     ),

@@ -63,7 +63,11 @@ class EventApplicationFormSettingBloc extends Bloc<
   ) {
     List<Input$QuestionInput> newQuestions = [
       ...state.questions,
-      Input$QuestionInput(question: "", required: false),
+      Input$QuestionInput(
+        question: "",
+        required: false,
+        type: Enum$QuestionType.text,
+      ),
     ];
 
     emit(
@@ -131,6 +135,7 @@ class EventApplicationFormSettingBloc extends Bloc<
                   $_id: item.id,
                   question: item.question ?? '',
                   required: item.isRequired,
+                  type: Enum$QuestionType.text,
                 ),
               )
               .toList(),

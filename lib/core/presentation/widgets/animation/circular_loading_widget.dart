@@ -4,14 +4,14 @@ import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CircularLoading extends StatefulWidget {
-  const CircularLoading({super.key});
+class CircularLoadingWidget extends StatefulWidget {
+  const CircularLoadingWidget({super.key});
 
   @override
-  State<CircularLoading> createState() => CircularLoadingState();
+  State<CircularLoadingWidget> createState() => CircularLoadingWidgetState();
 }
 
-class CircularLoadingState extends State<CircularLoading>
+class CircularLoadingWidgetState extends State<CircularLoadingWidget>
     with TickerProviderStateMixin {
   late AnimationController _animationContrl;
   late Animation<double> _animation;

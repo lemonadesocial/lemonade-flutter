@@ -50,9 +50,7 @@ class SelectTicketItem extends StatelessWidget {
     required String currency,
     String? network,
   }) {
-    if (newCount < (ticketType.limit ?? 0)) {
-      onCountChange(newCount, currency, network);
-    }
+    onCountChange(newCount, currency, network);
   }
 
   void minus({

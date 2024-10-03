@@ -1,7 +1,7 @@
 import 'package:app/core/presentation/widgets/animation/success_circle_animation_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/circular_loading/circular_loading_widget.dart';
+import 'package:app/core/presentation/widgets/animation/circular_loading_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -50,7 +50,7 @@ class _WaitingClaimView extends StatelessWidget {
     return Column(
       children: [
         const Spacer(),
-        const CircularLoading(),
+        const CircularLoadingWidget(),
         const Spacer(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
