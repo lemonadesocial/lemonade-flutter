@@ -279,7 +279,7 @@ class EventLocationSettingBloc
           region: state.region.value,
           latitude: state.latitude,
           longitude: state.longitude,
-          additional_directions: state.additionalDirections ?? '',
+          additional_directions: state.additionalDirections,
         );
       } else {
         addressInput = Input$AddressInput(
@@ -292,7 +292,7 @@ class EventLocationSettingBloc
           region: userAddress.region,
           latitude: userAddress.latitude,
           longitude: userAddress.longitude,
-          additional_directions: userAddress.additionalDirections ?? '',
+          additional_directions: userAddress.additionalDirections,
         );
       }
 

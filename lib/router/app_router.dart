@@ -442,9 +442,6 @@ final createEventRoutes = AutoRoute(
       page: EventDatetimeSettingsRoute.page,
     ),
     AutoRoute(
-      page: ChooseLocationRoute.page,
-    ),
-    AutoRoute(
       page: EventLocationSettingRoute.page,
     ),
     AutoRoute(
