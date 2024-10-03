@@ -58,7 +58,7 @@ class EventLocationSettingBloc
           longitude: address?.longitude ?? 0,
           status: FormzSubmissionStatus.initial,
           deleteStatus: FormzSubmissionStatus.initial,
-          // additionalDirections: address?.additionalDirections ?? '',
+          additionalDirections: address?.additionalDirections ?? '',
         ),
       );
     } else {
@@ -258,91 +258,73 @@ class EventLocationSettingBloc
     SubmitAddLocation event,
     Emitter<EventLocationSettingState> emit,
   ) async {
-    final title = StringFormz.dirty(state.title.value);
-    final street1 = StringFormz.dirty(state.street1.value);
-    final region = StringFormz.dirty(state.region.value);
-    final country = StringFormz.dirty(state.country.value);
-    final city = StringFormz.dirty(state.city.value);
-    final postal = StringFormz.dirty(state.postal.value);
-    emit(
-      state.copyWith(
-        title: title,
-        street1: street1,
-        postal: postal,
-        city: city,
-        region: region,
-        country: country,
-        isValid:
-            Formz.validate([title, street1, postal, region, city, country]),
-      ),
-    );
-    if (state.isValid) {
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      final userAddresses = getIt<AuthBloc>().state.maybeWhen(
-            authenticated: (authSession) => authSession.addresses,
-            orElse: () => null,
-          );
-      if (userAddresses == null) return;
-      List<Input$AddressInput> newUserAddresses = [];
-      for (var i = 0; i < userAddresses.length; i++) {
-        final userAddress = userAddresses[i];
-        Input$AddressInput addressInput;
-        if (state.id != '' && userAddress.id == state.id) {
-          addressInput = Input$AddressInput(
-            title: state.title.value,
-            street_1: state.street1.value,
-            street_2: state.street2,
-            city: state.city.value,
-            country: state.country.value,
-            postal: state.postal.value,
-            region: state.region.value,
-            latitude: state.latitude,
-            longitude: state.longitude,
-          );
-        } else {
-          addressInput = Input$AddressInput(
-            title: userAddress.title,
-            street_1: userAddress.street1,
-            street_2: userAddress.street2,
-            city: userAddress.city,
-            country: userAddress.country,
-            postal: userAddress.postal,
-            region: userAddress.region,
-            latitude: userAddress.latitude,
-            longitude: userAddress.longitude,
-          );
-        }
-
-        newUserAddresses.add(addressInput);
-      }
-
-      if (state.id == '') {
-        newUserAddresses.add(
-          Input$AddressInput(
-            title: state.title.value,
-            street_1: state.street1.value,
-            street_2: state.street2,
-            city: state.city.value,
-            country: state.country.value,
-            postal: state.postal.value,
-            region: state.region.value,
-            latitude: state.latitude,
-            longitude: state.longitude,
-          ),
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final userAddresses = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.addresses,
+          orElse: () => null,
+        );
+    if (userAddresses == null) return;
+    List<Input$AddressInput> newUserAddresses = [];
+    for (var i = 0; i < userAddresses.length; i++) {
+      final userAddress = userAddresses[i];
+      Input$AddressInput addressInput;
+      if (state.id != '' && userAddress.id == state.id) {
+        addressInput = Input$AddressInput(
+          title: state.title.value,
+          street_1: state.street1.value,
+          street_2: state.street2,
+          city: state.city.value,
+          country: state.country.value,
+          postal: state.postal.value,
+          region: state.region.value,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          additional_directions: state.additionalDirections ?? '',
+        );
+      } else {
+        addressInput = Input$AddressInput(
+          title: userAddress.title,
+          street_1: userAddress.street1,
+          street_2: userAddress.street2,
+          city: userAddress.city,
+          country: userAddress.country,
+          postal: userAddress.postal,
+          region: userAddress.region,
+          latitude: userAddress.latitude,
+          longitude: userAddress.longitude,
+          additional_directions: userAddress.additionalDirections ?? '',
         );
       }
-      final result = await _userRepository.updateUserAddresses(
-        input: Input$UserInput(
-          addresses: newUserAddresses,
+
+      newUserAddresses.add(addressInput);
+    }
+
+    if (state.id == '') {
+      newUserAddresses.add(
+        Input$AddressInput(
+          title: state.title.value,
+          street_1: state.street1.value,
+          street_2: state.street2,
+          city: state.city.value,
+          country: state.country.value,
+          postal: state.postal.value,
+          region: state.region.value,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          additional_directions: state.additionalDirections ?? '',
         ),
       );
-      result.fold(
-        (failure) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-        (createEvent) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.success)),
-      );
     }
+    final result = await _userRepository.updateUserAddresses(
+      input: Input$UserInput(
+        addresses: newUserAddresses,
+      ),
+    );
+    result.fold(
+      (failure) => emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+      (createEvent) =>
+          emit(state.copyWith(status: FormzSubmissionStatus.success)),
+    );
   }
 
   Future<void> _onDeleteLocation(

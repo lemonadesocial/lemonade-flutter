@@ -56,8 +56,8 @@ class _EventLocationSettingDetailPageState
         regionController.text = widget.address?.region ?? '';
         postalController.text = widget.address?.postal ?? '';
         countryController.text = widget.address?.country ?? '';
-        // additionalDirectionsController.text =
-        //     widget.address?.additionalDirections ?? '';
+        additionalDirectionsController.text =
+            widget.address?.additionalDirections ?? '';
       }
     });
   }
@@ -91,7 +91,7 @@ class _EventLocationSettingDetailPageState
         regionController.text = state.region.value;
         postalController.text = state.postal.value;
         countryController.text = state.country.value;
-        // additionalDirectionsController.text = state.additionalDirections;
+        additionalDirectionsController.text = state.additionalDirections ?? '';
       },
       builder: (context, state) {
         return Scaffold(
@@ -167,7 +167,7 @@ class _EventLocationSettingDetailPageState
                           },
                         ),
                         SizedBox(height: Spacing.smMedium * 2),
-                        _buildSaveButton(),
+                        _buildConfirmLocationButton(),
                       ],
                     ),
                   ),
@@ -180,7 +180,7 @@ class _EventLocationSettingDetailPageState
     );
   }
 
-  _buildSaveButton() {
+  _buildConfirmLocationButton() {
     return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
       builder: (context, state) {
         return LinearGradientButton(

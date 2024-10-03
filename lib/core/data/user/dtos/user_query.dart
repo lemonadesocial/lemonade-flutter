@@ -115,6 +115,7 @@ const userProfileFragment = '''
     latitude
     title
     postal
+    additional_directions
     _id
   }
   tagline
