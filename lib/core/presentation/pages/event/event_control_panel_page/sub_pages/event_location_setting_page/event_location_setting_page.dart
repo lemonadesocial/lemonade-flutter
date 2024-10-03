@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventLocationSettingPage extends StatefulWidget {
@@ -36,6 +37,10 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    List<Address> addresses = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.addresses ?? [],
+          orElse: () => [],
+        );
     return Scaffold(
       appBar: LemonAppBar(
         backgroundColor: colorScheme.onPrimaryContainer,
@@ -43,104 +48,87 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
       ),
       backgroundColor: colorScheme.onPrimaryContainer,
       resizeToAvoidBottomInset: true,
-      body: _buildContent(),
-    );
-  }
-
-  Widget _buildContent() {
-    final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    List<Address> addresses = context.watch<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession.addresses ?? [],
-          orElse: () => [],
-        );
-
-    Widget content =
-        BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-      builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Spacing.small,
-            vertical: Spacing.small,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                t.event.locationSetting.description,
-                style: Typo.medium.copyWith(color: colorScheme.onSecondary),
-              ),
-              SizedBox(
-                height: 15.h,
-              ),
-              InkWell(
-                onTap: () => _onTapAddNew(),
-                child: Container(
-                  height: 80.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        LemonColor.darkCharcoalGray,
-                        LemonColor.darkCharcoalGray,
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 25.w,
-                      vertical: 10.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          t.event.locationSetting.addNew.toUpperCase(),
-                          style: Typo.extraMedium.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Icon(Icons.add_circle_outline_rounded),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 25.h,
-              ),
-              Text(
-                t.event.locationSetting.myPlaces,
-                style: Typo.extraMedium,
-              ),
-              SizedBox(
-                height: 12.h,
-              ),
-              Expanded(
-                child: AddressList(addresses: addresses, event: widget.event),
-              ),
-              _buildSaveButton(),
-            ],
-          ),
-        );
-      },
-    );
-
-    if (widget.event != null) {
-      content = BlocListener<EditEventDetailBloc, EditEventDetailState>(
+      body: BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
         listener: (context, state) {
-          if (state.status == EditEventDetailBlocStatus.success) {
-            AutoRouter.of(context).pop();
+          if (state.deleteStatus == FormzSubmissionStatus.success) {
+            context.read<AuthBloc>().add(const AuthEvent.refreshData());
           }
         },
-        child: content,
-      );
-    }
-
-    return content;
+        child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
+          builder: (context, state) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Spacing.small,
+                vertical: Spacing.small,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.event.locationSetting.description,
+                    style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                  InkWell(
+                    onTap: () => _onTapAddNew(),
+                    child: Container(
+                      height: 80.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20.r)),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            LemonColor.darkCharcoalGray,
+                            LemonColor.darkCharcoalGray,
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 25.w,
+                          vertical: 10.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              t.event.locationSetting.addNew.toUpperCase(),
+                              style: Typo.extraMedium.copyWith(
+                                fontFamily: FontFamily.nohemiVariable,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Icon(Icons.add_circle_outline_rounded),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  Text(
+                    t.event.locationSetting.myPlaces,
+                    style: Typo.extraMedium,
+                  ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  Expanded(
+                    child:
+                        AddressList(addresses: addresses, event: widget.event),
+                  ),
+                  _buildSaveButton(),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   _onTapAddNew() {

@@ -91,7 +91,7 @@ class _EventLocationSettingDetailPageState
         regionController.text = state.region.value;
         postalController.text = state.postal.value;
         countryController.text = state.country.value;
-        additionalDirectionsController.text = state.additionalDirections;
+        // additionalDirectionsController.text = state.additionalDirections;
       },
       builder: (context, state) {
         return Scaffold(

@@ -355,35 +355,38 @@ class EventLocationSettingBloc
         );
     if (userAddresses == null) return;
     emit(state.copyWith(deleteStatus: FormzSubmissionStatus.inProgress));
-    userAddresses.removeWhere((address) => address.id == event.id);
-    List<Input$AddressInput> newUserAddresses = [];
-    for (var i = 0; i < userAddresses.length; i++) {
-      final userAddress = userAddresses[i];
-      newUserAddresses.add(
-        Input$AddressInput(
-          title: userAddress.title,
-          street_1: userAddress.street1,
-          street_2: userAddress.street2,
-          city: userAddress.city,
-          country: userAddress.country,
-          postal: userAddress.postal,
-          region: userAddress.region,
-          latitude: userAddress.latitude,
-          longitude: userAddress.longitude,
-        ),
-      );
-    }
+
+    // Create a new mutable list from the immutable one
+    List<Address> mutableAddresses = List.from(userAddresses);
+    mutableAddresses.removeWhere((address) => address.id == event.id);
+
+    List<Input$AddressInput> newUserAddresses = mutableAddresses
+        .map(
+          (userAddress) => Input$AddressInput(
+            title: userAddress.title,
+            street_1: userAddress.street1,
+            street_2: userAddress.street2,
+            city: userAddress.city,
+            country: userAddress.country,
+            postal: userAddress.postal,
+            region: userAddress.region,
+            latitude: userAddress.latitude,
+            longitude: userAddress.longitude,
+          ),
+        )
+        .toList();
     final result = await _userRepository.updateUserAddresses(
       input: Input$UserInput(
         addresses: newUserAddresses,
       ),
     );
-    result.fold(
-      (failure) =>
-          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.failure)),
-      (createEvent) =>
-          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success)),
-    );
+    result.fold((failure) {
+      print("failure : $failure");
+      emit(state.copyWith(deleteStatus: FormzSubmissionStatus.failure));
+    }, (success) {
+      print("success : $success");
+      emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success));
+    });
   }
 
   Future<void> _onSelectAddress(
@@ -494,6 +497,6 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus deleteStatus,
     @Default(false) bool isValid,
     Address? selectedAddress,
-    @Default('') String additionalDirections,
+    String? additionalDirections,
   }) = _EventLocationSettingState;
 }
