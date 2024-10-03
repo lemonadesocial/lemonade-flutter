@@ -6,6 +6,7 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -39,16 +40,16 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
-        title: t.event.locationSetting.chooseLocation,
-      ),
-      backgroundColor: colorScheme.onPrimaryContainer,
-      resizeToAvoidBottomInset: true,
-      body: _buildContent(),
+    return Column(
+      children: [
+        const BottomSheetGrabber(),
+        LemonAppBar(
+          backgroundColor: Colors.transparent,
+          title: t.event.locationSetting.chooseLocation,
+        ),
+        Expanded(child: _buildContent()),
+      ],
     );
   }
 
