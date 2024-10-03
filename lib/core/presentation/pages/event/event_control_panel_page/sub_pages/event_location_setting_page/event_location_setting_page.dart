@@ -238,6 +238,7 @@ class AddressList extends StatelessWidget {
               },
               onPressItem: () async {
                 Vibrate.feedback(FeedbackType.light);
+                // Edit event
                 if (event != null) {
                   context.read<EditEventDetailBloc>().add(
                         EditEventDetailEvent.update(
@@ -245,6 +246,11 @@ class AddressList extends StatelessWidget {
                           address: addresses[index],
                         ),
                       );
+                } else {
+                  context
+                      .read<EventLocationSettingBloc>()
+                      .add(SelectAddress(address: addresses[index]));
+                  AutoRouter.of(context).pop();
                 }
               },
               // selected: state.selectedAddress != null

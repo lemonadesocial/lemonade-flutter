@@ -357,6 +357,7 @@ class EventLocationSettingBloc
             region: userAddress.region,
             latitude: userAddress.latitude,
             longitude: userAddress.longitude,
+            additional_directions: userAddress.additionalDirections,
           ),
         )
         .toList();
@@ -366,15 +367,19 @@ class EventLocationSettingBloc
       ),
     );
     result.fold((failure) {
-      emit(state.copyWith(
-        deleteStatus: FormzSubmissionStatus.failure,
-        deletingId: null,
-      ));
+      emit(
+        state.copyWith(
+          deleteStatus: FormzSubmissionStatus.failure,
+          deletingId: null,
+        ),
+      );
     }, (success) {
-      emit(state.copyWith(
-        deleteStatus: FormzSubmissionStatus.success,
-        deletingId: null,
-      ));
+      emit(
+        state.copyWith(
+          deleteStatus: FormzSubmissionStatus.success,
+          deletingId: null,
+        ),
+      );
     });
   }
 

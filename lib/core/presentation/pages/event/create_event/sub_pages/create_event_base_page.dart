@@ -200,30 +200,35 @@ class CreateEventBasePage extends StatelessWidget {
                     horizontal: Spacing.smMedium,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: SettingTileWidget(
-                      title: t.event.locationSetting.chooseLocation,
-                      subTitle: "",
-                      leading: Icon(
-                        Icons.location_on_outlined,
-                        size: 18.w,
-                        color: colorScheme.onSecondary,
-                      ),
-                      leadingCircle: false,
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                      radius: LemonRadius.small,
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          backgroundColor: LemonColor.atomicBlack,
-                          topRadius: Radius.circular(30.r),
-                          builder: (mContext) {
-                            return const EventLocationSettingPage();
+                    child: BlocBuilder<EventLocationSettingBloc,
+                        EventLocationSettingState>(
+                      builder: (context, locationState) {
+                        return SettingTileWidget(
+                          title: t.event.locationSetting.chooseLocation,
+                          subTitle: locationState.selectedAddress?.title,
+                          leading: Icon(
+                            Icons.location_on_outlined,
+                            size: 18.w,
+                            color: colorScheme.onSecondary,
+                          ),
+                          leadingCircle: false,
+                          trailing: Assets.icons.icArrowBack.svg(
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                          titleStyle: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                          radius: LemonRadius.small,
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              context: context,
+                              backgroundColor: LemonColor.atomicBlack,
+                              topRadius: Radius.circular(30.r),
+                              builder: (mContext) {
+                                return const EventLocationSettingPage();
+                              },
+                            );
                           },
                         );
                       },
@@ -245,9 +250,13 @@ class CreateEventBasePage extends StatelessWidget {
                         right: Spacing.smMedium,
                       ),
                       sliver: SliverToBoxAdapter(
-                        child: CreateEventMapLocationCard(
-                          latitude: state.selectedAddress?.latitude ?? 0,
-                          longitude: state.selectedAddress?.longitude ?? 0,
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.small),
+                          child: CreateEventMapLocationCard(
+                            latitude: state.selectedAddress?.latitude ?? 0,
+                            longitude: state.selectedAddress?.longitude ?? 0,
+                          ),
                         ),
                       ),
                     );
