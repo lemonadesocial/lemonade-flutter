@@ -8,6 +8,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -188,6 +189,9 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
       content = BlocListener<EditEventDetailBloc, EditEventDetailState>(
         listener: (context, state) {
           if (state.status == EditEventDetailBlocStatus.success) {
+            SnackBarUtils.showSuccess(
+              message: t.event.editEventSuccessfully,
+            );
             AutoRouter.of(context).pop();
           }
         },
@@ -232,12 +236,17 @@ class AddressList extends StatelessWidget {
                     .read<EventLocationSettingBloc>()
                     .add(DeleteLocation(id: addresses[index].id));
               },
-              // onPressItem: () {
-              //   Vibrate.feedback(FeedbackType.light);
-              //   context
-              //       .read<EventLocationSettingBloc>()
-              //       .add(SelectAddress(address: addresses[index]));
-              // },
+              onPressItem: () async {
+                Vibrate.feedback(FeedbackType.light);
+                if (event != null) {
+                  context.read<EditEventDetailBloc>().add(
+                        EditEventDetailEvent.update(
+                          eventId: event?.id ?? '',
+                          address: addresses[index],
+                        ),
+                      );
+                }
+              },
               // selected: state.selectedAddress != null
               //     ? state.selectedAddress?.id == addresses[index].id
               //     : event?.address?.title == addresses[index].title,
