@@ -14,6 +14,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GuestEventDetailRSVPStatusButton extends StatelessWidget {
   final Event event;
@@ -106,7 +107,15 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
 
         return SafeArea(
           child: Container(
-            color: colorScheme.primary,
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              border: Border(
+                top: BorderSide(
+                  color: colorScheme.outline,
+                  width: 1.w,
+                ),
+              ),
+            ),
             padding: EdgeInsets.symmetric(
               vertical: Spacing.smMedium,
               horizontal: Spacing.smMedium,

@@ -30,6 +30,11 @@ class GuestEventDetailAppBar extends StatefulWidget {
 class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
   bool _isSliverAppBarCollapsed = false;
 
+  double get bannerHeight {
+    final isIpad = DeviceUtils.isIpad();
+    return isIpad ? 200.h : 325.w;
+  }
+
   DbFile? get cover {
     if (widget.event.newNewPhotosExpanded == null ||
         widget.event.newNewPhotosExpanded!.isEmpty) {
@@ -65,14 +70,12 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
       );
     }
 
-    final isIpad = DeviceUtils.isIpad();
     return SliverAppBar(
       pinned: true,
       stretch: true,
-      floating: true,
       leading: const SizedBox.shrink(),
       collapsedHeight: kToolbarHeight,
-      expandedHeight: isIpad ? 280.h : 188.h,
+      expandedHeight: bannerHeight,
       centerTitle: true,
       title: AnimatedOpacity(
         duration: const Duration(milliseconds: 300),
@@ -88,6 +91,7 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
         expandedTitleScale: 1,
         collapseMode: CollapseMode.pin,
         background: _EventDetailCover(
+          height: bannerHeight,
           event: widget.event,
         ),
       ),
@@ -97,14 +101,16 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
 
 class _EventDetailCover extends StatelessWidget {
   final Event event;
+  final double height;
   const _EventDetailCover({
     required this.event,
+    required this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 188.w,
+      height: height,
       child: Stack(
         children: [
           Positioned.fill(

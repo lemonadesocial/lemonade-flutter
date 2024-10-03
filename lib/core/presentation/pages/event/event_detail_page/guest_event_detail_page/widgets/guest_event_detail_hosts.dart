@@ -3,21 +3,25 @@ import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/matrix_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,7 +63,7 @@ class GuestEventDetailHosts extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
           child: Text(
             StringUtils.capitalize(t.common.host(n: 2)),
-            style: Typo.mediumPlus.copyWith(
+            style: Typo.extraMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: colorScheme.onPrimary,
             ),
@@ -68,24 +72,22 @@ class GuestEventDetailHosts extends StatelessWidget {
         SizedBox(
           height: Spacing.xSmall,
         ),
-        SizedBox(
-          height: isAttending ? 178.w : 144.w,
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) => SizedBox(
-              width: Spacing.extraSmall,
-            ),
-            itemCount: hosts.length,
-            itemBuilder: (context, index) {
-              final host = hosts[index];
-              return _EventHostItem(
-                host: host,
-                colorScheme: colorScheme,
-                isAttending: isAttending,
-              );
-            },
+        ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+          shrinkWrap: true,
+          separatorBuilder: (context, index) => SizedBox(
+            height: Spacing.xSmall,
           ),
+          itemCount: hosts.length,
+          itemBuilder: (context, index) {
+            final host = hosts[index];
+            return _EventHostItem(
+              host: host,
+              colorScheme: colorScheme,
+              isAttending: isAttending,
+            );
+          },
         ),
       ],
     );
@@ -117,115 +119,123 @@ class _EventHostItem extends StatelessWidget {
               .navigate(ProfileRoute(userId: host?.userId ?? ''));
         },
         child: Container(
-          width: 130.w,
-          decoration: ShapeDecoration(
-            color: colorScheme.onPrimary.withOpacity(0.06),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.r),
+          padding: EdgeInsets.all(Spacing.small),
+          decoration: BoxDecoration(
+            color: LemonColor.atomicBlack,
+            borderRadius: BorderRadius.circular(LemonRadius.medium),
+            border: Border.all(
+              color: colorScheme.outline,
+              width: 0.5.w,
             ),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.r),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Spacing.small,
-                    horizontal: Spacing.extraSmall,
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60.w),
+          child: Row(
+            children: [
+              LemonNetworkImage(
+                width: Sizing.medium,
+                height: Sizing.medium,
+                borderRadius: BorderRadius.circular(Sizing.medium),
+                border: Border.all(
+                  color: colorScheme.outline,
+                  width: 0.5.w,
+                ),
+                fit: BoxFit.cover,
+                placeholder: ImagePlaceholder.avatarPlaceholder(),
+                imageUrl: ImageUtils.generateUrl(
+                  file: host?.newPhotosExpanded?.isNotEmpty == true
+                      ? host?.newPhotosExpanded?.firstOrNull
+                      : null,
+                  imageConfig: ImageConfig.eventPhoto,
+                ),
+              ),
+              SizedBox(width: Spacing.small),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      host?.displayName ?? host?.name ?? '',
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 3.w),
+                    if (host?.username?.isNotEmpty == true)
+                      Text(
+                        '@${host?.username}',
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                ),
+              ),
+              if (isAttending) ...[
+                SizedBox(height: Spacing.xSmall),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _FollowButton(host: host),
+                    SizedBox(width: Spacing.superExtraSmall),
+                    InkWell(
+                      onTap: () async {
+                        final response = await showFutureLoadingDialog(
+                          context: context,
+                          future: () async {
+                            return getIt<MatrixService>()
+                                .client
+                                .startDirectChat(
+                                  LemonadeMatrixUtils.generateMatrixUserId(
+                                    lemonadeMatrixLocalpart:
+                                        host?.matrixLocalpart ?? '',
+                                  ),
+                                );
+                          },
+                        );
+                        if (response.result?.isNotEmpty == true) {
+                          AutoRouter.of(context).push(
+                            ChatRoute(
+                              roomId: response.result!,
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: Sizing.medium,
+                        height: Sizing.medium,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.superExtraSmall,
+                        ),
+                        decoration: BoxDecoration(
+                          color: LemonColor.chineseBlack,
+                          borderRadius: BorderRadius.circular(
+                            Sizing.medium,
                           ),
-                          width: 60.w,
-                          height: 60.w,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60.r),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              placeholder: (_, __) =>
-                                  ImagePlaceholder.defaultPlaceholder(),
-                              errorWidget: (_, __, ___) =>
-                                  ImagePlaceholder.defaultPlaceholder(),
-                              imageUrl: ImageUtils.generateUrl(
-                                file:
-                                    host?.newPhotosExpanded?.isNotEmpty == true
-                                        ? host?.newPhotosExpanded?.firstOrNull
-                                        : null,
-                                imageConfig: ImageConfig.eventPhoto,
-                              ),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 0.5.w,
+                          ),
+                        ),
+                        child: Center(
+                          child: ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (filter) => Assets.icons.icChatBubble.svg(
+                              colorFilter: filter,
+                              width: Sizing.xSmall,
+                              height: Sizing.xSmall,
                             ),
                           ),
                         ),
-                        SizedBox(height: Spacing.xSmall),
-                        Text(
-                          host?.displayName ?? host?.name ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          host?.jobTitle ?? '',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (isAttending) ...[
-                          SizedBox(height: Spacing.xSmall),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _FollowButton(host: host),
-                              SizedBox(width: Spacing.superExtraSmall),
-                              InkWell(
-                                onTap: () {
-                                  AutoRouter.of(context)
-                                      .navigate(const ChatListRoute());
-                                },
-                                child: Container(
-                                  height: 30.w,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.superExtraSmall,
-                                  ),
-                                  decoration: ShapeDecoration(
-                                    color:
-                                        colorScheme.onPrimary.withOpacity(0.06),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        LemonRadius.xSmall,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: ThemeSvgIcon(
-                                      color: colorScheme.onSecondary,
-                                      builder: (filter) =>
-                                          Assets.icons.icChatBubble.svg(
-                                        colorFilter: filter,
-                                        width: Sizing.xSmall,
-                                        height: Sizing.xSmall,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
-            ),
+            ],
           ),
         ),
       ),
@@ -243,16 +253,18 @@ class _FollowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      height: 30.w,
+      height: Sizing.medium,
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.xSmall,
       ),
-      decoration: ShapeDecoration(
-        color: colorScheme.onPrimary.withOpacity(0.06),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            LemonRadius.xSmall,
-          ),
+      decoration: BoxDecoration(
+        color: LemonColor.chineseBlack,
+        borderRadius: BorderRadius.circular(
+          LemonRadius.normal,
+        ),
+        border: Border.all(
+          color: colorScheme.outline,
+          width: 0.5.w,
         ),
       ),
       child: BlocBuilder<UserFollowsBloc, UserFollowsState>(
@@ -288,6 +300,7 @@ class _FollowButton extends StatelessWidget {
                       following ? t.common.followed : t.common.actions.follow,
                       style: Typo.small.copyWith(
                         color: colorScheme.onSecondary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
             ),

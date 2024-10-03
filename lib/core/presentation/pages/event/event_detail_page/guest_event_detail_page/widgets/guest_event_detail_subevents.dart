@@ -12,10 +12,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostGuestEventDetailSubEvents extends StatelessWidget {
+class GuestEventDetailSubEvents extends StatelessWidget {
   final Event event;
   final List<Event> subEvents;
-  const PostGuestEventDetailSubEvents({
+  const GuestEventDetailSubEvents({
     super.key,
     required this.event,
     required this.subEvents,

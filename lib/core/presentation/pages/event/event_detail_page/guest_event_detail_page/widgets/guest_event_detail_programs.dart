@@ -19,9 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostGuestEventDetailPrograms extends StatelessWidget {
+class GuestEventDetailPrograms extends StatelessWidget {
   final Event event;
-  const PostGuestEventDetailPrograms({
+  const GuestEventDetailPrograms({
     super.key,
     required this.event,
   });

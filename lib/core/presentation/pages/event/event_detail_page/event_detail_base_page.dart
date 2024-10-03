@@ -98,7 +98,6 @@ class _EventDetailBasePageView extends StatelessWidget {
             // ).canShowFeature;
             return const HostEventDetailView();
           }
-          if (!isAttending) return const PreGuestEventDetailView();
           return isAttending
               ? MultiBlocProvider(
                   providers: [
@@ -127,7 +126,21 @@ class _EventDetailBasePageView extends StatelessWidget {
                   ],
                   child: const PostGuestEventDetailView(),
                 )
-              : const PreGuestEventDetailView();
+              : MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => GetSubEventsByCalendarBloc(
+                        parentEventId: event.id ?? '',
+                      )..add(
+                          GetSubEventsByCalendarEvent.fetch(
+                            from: event.start?.toUtc(),
+                            to: event.end?.toUtc(),
+                          ),
+                        ),
+                    ),
+                  ],
+                  child: const PreGuestEventDetailView(),
+                );
         },
       ),
     );

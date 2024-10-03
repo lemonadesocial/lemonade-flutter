@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PostGuestEventDetailAbout extends StatelessWidget {
-  const PostGuestEventDetailAbout({
+class GuestEventDetailAbout extends StatelessWidget {
+  const GuestEventDetailAbout({
     super.key,
     required this.event,
+    this.showTitle = true,
   });
 
   final Event event;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +23,20 @@ class PostGuestEventDetailAbout extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          t.event.about,
-          style: Typo.extraMedium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
+        if (showTitle) ...[
+          Text(
+            t.event.about,
+            style: Typo.extraMedium.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-        SizedBox(
-          height: Spacing.xSmall,
-        ),
+          SizedBox(
+            height: Spacing.xSmall,
+          ),
+        ],
         MarkdownBody(
           data: event.description ?? '',
           styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
