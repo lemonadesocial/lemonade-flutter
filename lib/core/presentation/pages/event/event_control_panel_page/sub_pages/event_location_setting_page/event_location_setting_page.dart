@@ -1,14 +1,16 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/sub_pages/event_location_setting_detail_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/widgets/location_item.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/google/google_place_autocomplete_service.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -16,13 +18,12 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:google_maps_webservice/places.dart' as google_places_service;
-import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'dart:async';
 
 @RoutePage()
 class EventLocationSettingPage extends StatefulWidget {
@@ -38,82 +39,57 @@ class EventLocationSettingPage extends StatefulWidget {
 }
 
 class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
-  final TextEditingController placeDetailsController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  List<Prediction> _predictions = [];
+  Timer? _debounce;
+  late GooglePlaceAutocompleteService _placeAutocompleteService;
+  bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    return Scaffold(
-      appBar: LemonAppBar(
-        backgroundColor: LemonColor.atomicBlack,
-        title: t.event.locationSetting.chooseLocation,
-      ),
-      backgroundColor: LemonColor.atomicBlack,
-      resizeToAvoidBottomInset: true,
-      body: _buildContent(),
-    );
+  void initState() {
+    super.initState();
+    _placeAutocompleteService = GooglePlaceAutocompleteService();
   }
 
-  _onTapEnterAddress() async {
-    // show input autocomplete with selected mode
-    // then get the Prediction selected
-    final p = await PlacesAutocomplete.show(
-      context: context,
-      apiKey: AppConfig.googleMapKey,
-      onError: (response) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.errorMessage ?? 'Unknown error'),
-          ),
-        );
-      },
-      mode: Mode.fullscreen,
-      resultTextStyle: Theme.of(context).textTheme.titleMedium,
-    );
-    await displayPrediction(
-      p != null ? google_places_service.Prediction.fromJson(p.toJson()) : null,
-      ScaffoldMessenger.of(context),
-    );
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounce?.cancel();
+    super.dispose();
   }
 
-  Future<void> displayPrediction(
-    google_places_service.Prediction? p,
-    ScaffoldMessengerState messengerState,
-  ) async {
-    if (p == null) {
-      return;
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (query.isNotEmpty) {
+        _searchPlaces(query);
+      } else {
+        setState(() {
+          _predictions = [];
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  Future<void> _searchPlaces(String query) async {
+    if (query.isEmpty) return;
+
+    setState(() => _isLoading = true);
+    try {
+      final predictions =
+          await _placeAutocompleteService.getAutocompleteSuggestions(query);
+      setState(() {
+        _predictions = predictions;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching autocomplete suggestions: $e');
+      setState(() {
+        _predictions = [];
+        _isLoading = false;
+      });
     }
-    FocusScope.of(context).requestFocus(FocusNode());
-    final result = await showFutureLoadingDialog(
-      context: context,
-      future: () async {
-        // Get place detail (lat/lng)
-        final places = google_places_service.GoogleMapsPlaces(
-          apiKey: AppConfig.googleMapKey,
-          apiHeaders: await const GoogleApiHeaders().getHeaders(),
-        );
-        return await places.getDetailsByPlaceId(p.placeId!);
-      },
-    );
-
-    if (result.error != null) {
-      return;
-    }
-
-    final detail = result.result!;
-    context
-        .read<EventLocationSettingBloc>()
-        .add(PlaceDetailsChanged(placeDetails: detail.result));
-
-    showBottomSheetDetail(
-      context,
-      Address(
-        title: detail.result.name,
-        street1: detail.result.formattedAddress,
-        longitude: detail.result.geometry?.location.lng,
-        latitude: detail.result.geometry?.location.lat,
-      ),
-    );
   }
 
   Widget _buildContent() {
@@ -123,83 +99,148 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
           authenticated: (authSession) => authSession.addresses ?? [],
           orElse: () => [],
         );
-    Widget content =
-        BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
+
+    return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
         if (state.deleteStatus == FormzSubmissionStatus.success) {
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
+          _searchController.clear();
+          setState(() {
+            _predictions = [];
+          });
         }
       },
       child: BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
         builder: (context, state) {
           return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
-              vertical: Spacing.small,
+            padding: EdgeInsets.only(
+              left: Spacing.small,
+              right: Spacing.small,
+              top: Spacing.superExtraSmall,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                  onTap: _onTapEnterAddress,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Spacing.small,
-                      vertical: Spacing.xSmall,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: colorScheme.outline),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            t.event.locationSetting.searchLocation,
-                            style: Typo.medium
-                                .copyWith(color: colorScheme.outline),
+                LemonTextField(
+                  controller: _searchController,
+                  onChange: _onSearchChanged,
+                  hintText: t.event.locationSetting.searchLocation,
+                ),
+                SizedBox(height: Spacing.smMedium),
+                if (_isLoading)
+                  Padding(
+                    padding: EdgeInsets.only(top: Spacing.small),
+                    child: Loading.defaultLoading(context),
+                  )
+                else
+                  Expanded(
+                    child: _predictions.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: _predictions.length,
+                            itemBuilder: (context, index) {
+                              return LocationItem(
+                                location: Address(
+                                  id: _predictions[index].placeId ?? '',
+                                  title: _predictions[index]
+                                          .structuredFormatting
+                                          ?.mainText ??
+                                      '',
+                                  street1: _predictions[index]
+                                          .structuredFormatting
+                                          ?.secondaryText ??
+                                      '',
+                                ),
+                                onPressItem: () =>
+                                    _onSelectPrediction(_predictions[index]),
+                                isGooglePrediction: true,
+                              );
+                            },
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Spacing.xSmall,
+                                ),
+                                child: Text(
+                                  t.event.locationSetting.savedLocations,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: AddressList(
+                                  addresses: addresses,
+                                  event: widget.event,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                Text(
-                  t.event.locationSetting.savedLocations,
-                  style:
-                      Typo.extraMedium.copyWith(color: colorScheme.onPrimary),
-                ),
-                SizedBox(
-                  height: Spacing.xSmall,
-                ),
-                Expanded(
-                  child: AddressList(addresses: addresses, event: widget.event),
-                ),
               ],
             ),
           );
         },
       ),
     );
+  }
 
-    if (widget.event != null) {
-      content = BlocListener<EditEventDetailBloc, EditEventDetailState>(
-        listener: (context, state) {
-          if (state.status == EditEventDetailBlocStatus.success) {
-            SnackBarUtils.showSuccess(
-              message: t.event.editEventSuccessfully,
-            );
-            AutoRouter.of(context).pop();
-          }
-        },
-        child: content,
-      );
-    }
+  Future<void> _onSelectPrediction(Prediction prediction) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    final result = await showFutureLoadingDialog(
+      context: context,
+      future: () async {
+        return await _placeAutocompleteService
+            .getPlaceDetails(prediction.placeId!);
+      },
+    );
 
-    return content;
+    if (result.error != null) return;
+
+    final detail = result.result!;
+    final address = Address(
+      title: detail.result.name,
+      street1: detail.result.formattedAddress,
+      longitude: detail.result.geometry?.location.lng,
+      latitude: detail.result.geometry?.location.lat,
+    );
+
+    context
+        .read<EventLocationSettingBloc>()
+        .add(PlaceDetailsChanged(placeDetails: detail.result));
+
+    showBottomSheetDetail(context, address);
+
+    // Clear the search text and reset to show saved locations
+    _searchController.clear();
+    setState(() {
+      _predictions = [];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return Scaffold(
+      backgroundColor: colorScheme.secondaryContainer,
+      resizeToAvoidBottomInset: true,
+      body: Column(
+        children: [
+          const BottomSheetGrabber(),
+          LemonAppBar(
+            backgroundColor: Colors.transparent,
+            title: t.event.locationSetting.chooseLocation,
+          ),
+          Expanded(
+            child: _buildContent(),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -253,9 +294,6 @@ class AddressList extends StatelessWidget {
                   AutoRouter.of(context).pop();
                 }
               },
-              // selected: state.selectedAddress != null
-              //     ? state.selectedAddress?.id == addresses[index].id
-              //     : event?.address?.title == addresses[index].title,
             ),
           ),
           itemCount: addresses.length,

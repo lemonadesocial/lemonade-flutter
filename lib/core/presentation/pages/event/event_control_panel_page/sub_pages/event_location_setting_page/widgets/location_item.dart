@@ -10,18 +10,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocationItem extends StatelessWidget {
   final Address location;
-  final Function onPressEdit;
+  final Function? onPressEdit;
   final bool isDeleting;
-  final Function onPressDelete;
+  final Function? onPressDelete;
   final Function? onPressItem;
+  final bool? isGooglePrediction;
 
   const LocationItem({
     super.key,
     required this.location,
-    required this.onPressEdit,
-    required this.onPressDelete,
+    this.onPressEdit,
+    this.onPressDelete,
     this.isDeleting = false,
     this.onPressItem,
+    this.isGooglePrediction = false,
   });
 
   @override
@@ -57,11 +59,26 @@ class LocationItem extends StatelessWidget {
                         SizedBox(
                           width: Sizing.mSmall,
                           height: Sizing.mSmall,
-                          child: ThemeSvgIcon(
-                            color: colorScheme.onSurface,
-                            builder: (filter) =>
-                                Assets.icons.icRoundHistory.svg(),
-                          ),
+                          child: isGooglePrediction != null &&
+                                  isGooglePrediction == true
+                              ? ThemeSvgIcon(
+                                  color: colorScheme.onSecondary,
+                                  builder: (filter) =>
+                                      Assets.icons.icLocationPin.svg(
+                                    colorFilter: filter,
+                                    width: 15.w,
+                                    height: 15.w,
+                                  ),
+                                )
+                              : ThemeSvgIcon(
+                                  color: colorScheme.onSurface,
+                                  builder: (filter) =>
+                                      Assets.icons.icRoundHistory.svg(
+                                    colorFilter: filter,
+                                    width: 15.w,
+                                    height: 15.w,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -75,9 +92,10 @@ class LocationItem extends StatelessWidget {
                       children: [
                         Text(
                           location.title ?? '',
-                          style: Typo.medium.copyWith(
+                          style: Typo.small.copyWith(
                             color: colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
+                            fontSize: 13.sp,
                             height: 0,
                           ),
                         ),
@@ -95,43 +113,44 @@ class LocationItem extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () async {
-                    onPressEdit();
-                  },
-                  child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) {
-                      return Assets.icons.icEdit.svg(
-                        colorFilter: filter,
-                        width: Sizing.xSmall,
-                        height: Sizing.xSmall,
-                      );
+            if (isGooglePrediction == false)
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      onPressEdit?.call();
                     },
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) {
+                        return Assets.icons.icEdit.svg(
+                          colorFilter: filter,
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-                isDeleting
-                    ? Loading.defaultLoading(context)
-                    : InkWell(
-                        onTap: () async {
-                          onPressDelete();
-                        },
-                        child: ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
-                          builder: (filter) {
-                            return Assets.icons.icDelete.svg(
-                              colorFilter: filter,
-                              width: Sizing.xSmall + 2.w,
-                              height: Sizing.xSmall + 2.w,
-                            );
+                  SizedBox(width: Spacing.xSmall),
+                  isDeleting
+                      ? Loading.defaultLoading(context)
+                      : InkWell(
+                          onTap: () async {
+                            onPressDelete?.call();
                           },
+                          child: ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (filter) {
+                              return Assets.icons.icDelete.svg(
+                                colorFilter: filter,
+                                width: Sizing.xSmall + 2.w,
+                                height: Sizing.xSmall + 2.w,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),

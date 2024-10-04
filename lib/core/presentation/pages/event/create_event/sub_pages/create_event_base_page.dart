@@ -224,7 +224,8 @@ class CreateEventBasePage extends StatelessWidget {
                             showCupertinoModalBottomSheet(
                               context: context,
                               backgroundColor: LemonColor.atomicBlack,
-                              topRadius: Radius.circular(30.r),
+                              topRadius: Radius.circular(LemonRadius.small),
+                              enableDrag: false,
                               builder: (mContext) {
                                 return const EventLocationSettingPage();
                               },
