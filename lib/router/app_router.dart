@@ -433,6 +433,7 @@ final createEventRoutes = AutoRoute(
   children: [
     AutoRoute(
       initial: true,
+      path: 'event/create',
       page: CreateEventBaseRoute.page,
     ),
     AutoRoute(

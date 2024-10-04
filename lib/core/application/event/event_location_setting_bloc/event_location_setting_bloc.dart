@@ -32,6 +32,7 @@ class EventLocationSettingBloc
     on<DeleteLocation>(_onDeleteLocation);
     on<SelectAddress>(_onSelectAddress);
     on<AdditionalDirectionsChanged>(_onAdditionalDirectionsChanged);
+    on<ClearSelectedAddress>(_onClearSelectedAddress);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -322,8 +323,7 @@ class EventLocationSettingBloc
     );
     result.fold(
       (failure) => emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-      (createEvent) =>
-          emit(state.copyWith(status: FormzSubmissionStatus.success)),
+      (address) => emit(state.copyWith(status: FormzSubmissionStatus.success)),
     );
   }
 
@@ -415,6 +415,17 @@ class EventLocationSettingBloc
       ),
     );
   }
+
+  Future<void> _onClearSelectedAddress(
+    ClearSelectedAddress event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        selectedAddress: null,
+      ),
+    );
+  }
 }
 
 @freezed
@@ -473,6 +484,9 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
   const factory EventLocationSettingEvent.additionalDirectionsChanged({
     required String additionalDirections,
   }) = AdditionalDirectionsChanged;
+
+  const factory EventLocationSettingEvent.clearSelectedAddress() =
+      ClearSelectedAddress;
 }
 
 @freezed

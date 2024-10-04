@@ -22,6 +22,7 @@ class SettingTileWidget extends StatelessWidget {
     this.borderRadius,
     this.isError,
     this.titleColor,
+    this.onTapTrailing,
   });
 
   final String title;
@@ -38,6 +39,7 @@ class SettingTileWidget extends StatelessWidget {
   final BorderRadius? borderRadius;
   final bool? isError;
   final Color? titleColor;
+  final VoidCallback? onTapTrailing;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +117,12 @@ class SettingTileWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: Spacing.small),
-                  trailing ?? const SizedBox.shrink(),
+                  trailing != null
+                      ? InkWell(
+                          onTap: onTapTrailing,
+                          child: trailing!,
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
             ),

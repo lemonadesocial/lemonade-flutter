@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -76,10 +75,8 @@ class _EventLocationSettingDetailPageState
       listener: (context, state) {
         if (state.status.isSuccess) {
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
-          SnackBarUtils.showSuccess(
-            message: t.event.locationSetting.addNewLocationSuccessfully,
-          );
-          AutoRouter.of(context).popTop();
+          Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
+          Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
         }
         if (state.placeDetailsText != '') {
           placeDetailsController.text = state.placeDetailsText;
@@ -190,6 +187,18 @@ class _EventLocationSettingDetailPageState
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
+            context.read<EventLocationSettingBloc>().add(
+                  SelectAddress(
+                    address: Address(
+                      id: state.id,
+                      title: state.title.value,
+                      street1: state.street1.value,
+                      latitude: state.latitude,
+                      longitude: state.longitude,
+                      additionalDirections: state.additionalDirections,
+                    ),
+                  ),
+                );
             context
                 .read<EventLocationSettingBloc>()
                 .add(const SubmitAddLocation());

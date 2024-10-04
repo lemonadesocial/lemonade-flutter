@@ -11,8 +11,9 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/google/google_place_autocomplete_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -84,7 +85,6 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching autocomplete suggestions: $e');
       setState(() {
         _predictions = [];
         _isLoading = false;
@@ -214,7 +214,6 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 
     showBottomSheetDetail(context, address);
 
-    // Clear the search text and reset to show saved locations
     _searchController.clear();
     setState(() {
       _predictions = [];
