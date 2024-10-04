@@ -20,6 +20,8 @@ class AddressDto with _$AddressDto {
     double? longitude,
     @JsonKey(name: 'recipient_name', includeIfNull: false)
     String? recipientName,
+    @JsonKey(name: 'additional_directions', includeIfNull: false)
+    String? additionalDirections,
   }) = _AddressDto;
 
   factory AddressDto.fromJson(Map<String, dynamic> json) =>

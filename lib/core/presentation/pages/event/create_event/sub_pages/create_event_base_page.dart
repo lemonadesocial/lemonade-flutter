@@ -14,6 +14,7 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -200,28 +201,60 @@ class CreateEventBasePage extends StatelessWidget {
                     horizontal: Spacing.smMedium,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: SettingTileWidget(
-                      title: t.event.locationSetting.chooseLocation,
-                      subTitle: "",
-                      leading: Icon(
-                        Icons.location_on_outlined,
-                        size: 18.w,
-                        color: colorScheme.onSecondary,
-                      ),
-                      leadingCircle: false,
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                      radius: LemonRadius.small,
-                      onTap: () {
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          builder: (mContext) {
-                            return const EventLocationSettingPage();
+                    child: BlocBuilder<EventLocationSettingBloc,
+                        EventLocationSettingState>(
+                      builder: (context, locationState) {
+                        return SettingTileWidget(
+                          title: locationState.selectedAddress != null
+                              ? locationState.selectedAddress?.title ?? ''
+                              : t.event.locationSetting.chooseLocation,
+                          subTitle: locationState.selectedAddress?.street1,
+                          leading: Icon(
+                            Icons.location_on_outlined,
+                            size: 18.w,
+                            color: colorScheme.onSecondary,
+                          ),
+                          leadingCircle: false,
+                          trailing: locationState.selectedAddress != null
+                              ? ThemeSvgIcon(
+                                  color: colorScheme.onSecondary,
+                                  builder: (filter) => Assets.icons.icClose.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                    colorFilter: filter,
+                                  ),
+                                )
+                              : Assets.icons.icArrowBack.svg(
+                                  width: 18.w,
+                                  height: 18.w,
+                                ),
+                          titleStyle: Typo.medium.copyWith(
+                            color: locationState.selectedAddress != null
+                                ? colorScheme.onPrimary
+                                : colorScheme.onSecondary,
+                          ),
+                          radius: LemonRadius.small,
+                          onTap: () {
+                            showCupertinoModalBottomSheet(
+                              useRootNavigator: true,
+                              context: context,
+                              backgroundColor: LemonColor.atomicBlack,
+                              topRadius: Radius.circular(LemonRadius.small),
+                              enableDrag: false,
+                              builder: (mContext) {
+                                return BlocProvider.value(
+                                  value:
+                                      context.read<EventLocationSettingBloc>(),
+                                  child: const EventLocationSettingPage(),
+                                );
+                              },
+                            );
+                          },
+                          onTapTrailing: () {
+                            context.read<EventLocationSettingBloc>().add(
+                                  const EventLocationSettingEvent
+                                      .clearSelectedAddress(),
+                                );
                           },
                         );
                       },
@@ -243,9 +276,13 @@ class CreateEventBasePage extends StatelessWidget {
                         right: Spacing.smMedium,
                       ),
                       sliver: SliverToBoxAdapter(
-                        child: CreateEventMapLocationCard(
-                          latitude: state.selectedAddress?.latitude ?? 0,
-                          longitude: state.selectedAddress?.longitude ?? 0,
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.small),
+                          child: CreateEventMapLocationCard(
+                            latitude: state.selectedAddress?.latitude ?? 0,
+                            longitude: state.selectedAddress?.longitude ?? 0,
+                          ),
                         ),
                       ),
                     );

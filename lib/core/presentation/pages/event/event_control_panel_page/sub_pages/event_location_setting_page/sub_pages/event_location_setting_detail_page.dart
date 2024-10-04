@@ -1,7 +1,10 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -13,18 +16,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:google_maps_webservice/places.dart' as google_places_service;
-import 'package:google_api_headers/google_api_headers.dart';
 
 @RoutePage()
 class EventLocationSettingDetailPage extends StatefulWidget {
-  const EventLocationSettingDetailPage({super.key, this.address});
+  const EventLocationSettingDetailPage({super.key, this.address, this.event});
 
   final Address? address;
-
+  final Event? event;
   @override
   State<EventLocationSettingDetailPage> createState() =>
       _EventLocationSettingDetailPageState();
@@ -40,6 +40,8 @@ class _EventLocationSettingDetailPageState
   final TextEditingController regionController = TextEditingController();
   final TextEditingController postalController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
+  final TextEditingController additionalDirectionsController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -56,6 +58,8 @@ class _EventLocationSettingDetailPageState
         regionController.text = widget.address?.region ?? '';
         postalController.text = widget.address?.postal ?? '';
         countryController.text = widget.address?.country ?? '';
+        additionalDirectionsController.text =
+            widget.address?.additionalDirections ?? '';
       }
     });
   }
@@ -69,207 +73,159 @@ class _EventLocationSettingDetailPageState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      appBar: LemonAppBar(
-        backgroundColor: colorScheme.onPrimaryContainer,
-        title: widget.address != null
-            ? t.event.locationSetting.edit
-            : t.event.locationSetting.addNew,
-      ),
-      backgroundColor: colorScheme.onPrimaryContainer,
-      body: SafeArea(
-        child:
-            BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
-          listener: (context, state) async {
-            if (state.status.isSuccess) {
-              context.read<AuthBloc>().add(const AuthEvent.refreshData());
-              SnackBarUtils.showSuccess(
-                message: t.event.locationSetting.addNewLocationSuccessfully,
-              );
-              AutoRouter.of(context).popTop();
-            }
-            if (state.placeDetailsText != '') {
-              placeDetailsController.text = state.placeDetailsText;
-            }
-            titleController.text = state.title.value;
-            street1Controller.text = state.street1.value;
-            street2Controller.text = state.street2;
-            cityController.text = state.city.value;
-            regionController.text = state.region.value;
-            postalController.text = state.postal.value;
-            countryController.text = state.country.value;
-          },
-          child:
-              BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
-            builder: (context, state) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: Column(
+
+    return BlocConsumer<EventLocationSettingBloc, EventLocationSettingState>(
+      listener: (context, state) {
+        if (state.status.isSuccess) {
+          // Edit event
+          if (widget.event != null) {
+            SnackBarUtils.showSuccess(
+              title: t.common.success,
+              message: t.event.editEventSuccessfully,
+            );
+            AutoRouter.of(context).pop();
+          }
+          // Create event
+          else if (widget.event == null) {
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
+          }
+          context.read<AuthBloc>().add(const AuthEvent.refreshData());
+        }
+        if (state.placeDetailsText != '') {
+          placeDetailsController.text = state.placeDetailsText;
+        }
+        titleController.text = state.title.value;
+        street1Controller.text = state.street1.value;
+        street2Controller.text = state.street2;
+        cityController.text = state.city.value;
+        regionController.text = state.region.value;
+        postalController.text = state.postal.value;
+        countryController.text = state.country.value;
+        additionalDirectionsController.text = state.additionalDirections ?? '';
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: Column(
+            children: [
+              Expanded(
+                child: Stack(
                   children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.only(bottom: Spacing.xLarge),
-                        child: Column(
-                          children: [
-                            LemonTextField(
-                              onChange: (value) {},
-                              hintText: t.event.locationSetting.enterAnAddress,
-                              onTap: _onTapEnterAddress,
-                              controller: placeDetailsController,
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(TitleChanged(title: value)),
-                              hintText: t.event.locationSetting.nameThisPlace,
-                              controller: titleController,
-                              errorText: state.title.displayError?.getMessage(
-                                t.event.locationSetting.nameThisPlace,
-                              ),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(Street1Changed(street1: value)),
-                              hintText: t.event.locationSetting.street1,
-                              controller: street1Controller,
-                              errorText: state.street1.displayError?.getMessage(
-                                t.event.locationSetting.street1,
-                              ),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              hintText: t.event.locationSetting.street2,
-                              controller: street2Controller,
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(Street2Changed(street2: value)),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              hintText: t.event.locationSetting.city,
-                              controller: cityController,
-                              errorText: state.city.displayError?.getMessage(
-                                t.event.locationSetting.city,
-                              ),
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(CityChanged(city: value)),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              hintText: t.event.locationSetting.region,
-                              controller: regionController,
-                              errorText: state.region.displayError?.getMessage(
-                                t.event.locationSetting.region,
-                              ),
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(RegionChanged(region: value)),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              hintText: t.event.locationSetting.postalCode,
-                              controller: postalController,
-                              errorText: state.postal.displayError?.getMessage(
-                                t.event.locationSetting.postalCode,
-                              ),
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(PostalChanged(postal: value)),
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            LemonTextField(
-                              hintText: t.event.locationSetting.country,
-                              controller: countryController,
-                              errorText: state.country.displayError?.getMessage(
-                                t.event.locationSetting.country,
-                              ),
-                              onChange: (value) => context
-                                  .read<EventLocationSettingBloc>()
-                                  .add(CountryChanged(country: value)),
-                            ),
-                          ],
-                        ),
+                    Positioned.fill(
+                      child: CreateEventMapLocationCard(
+                        latitude: state.latitude,
+                        longitude: state.longitude,
                       ),
                     ),
-                    _buildSaveButton(),
+                    Column(
+                      children: [
+                        SizedBox(height: 10.w),
+                        const BottomSheetGrabber(),
+                        const LemonAppBar(
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  _onTapEnterAddress() async {
-    // show input autocomplete with selected mode
-    // then get the Prediction selected
-    final p = await PlacesAutocomplete.show(
-      context: context,
-      apiKey: AppConfig.googleMapKey,
-      onError: (response) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.errorMessage ?? 'Unknown error'),
+              ),
+              // Input fields and button
+              Container(
+                color: colorScheme.onPrimaryContainer,
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: Spacing.smMedium,
+                      left: Spacing.smMedium,
+                      right: Spacing.smMedium,
+                      bottom: Spacing.superExtraSmall,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (state.title.value.isNotEmpty)
+                          Text(
+                            state.title.value,
+                            style: Typo.large.copyWith(
+                              color: colorScheme.onPrimary,
+                              height: 0,
+                            ),
+                          ),
+                        if (state.street1.value.isNotEmpty) ...[
+                          SizedBox(height: Spacing.extraSmall),
+                          Text(
+                            state.street1.value,
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onSecondary,
+                              height: 0,
+                            ),
+                          ),
+                        ],
+                        SizedBox(height: Spacing.small),
+                        LemonTextField(
+                          controller: additionalDirectionsController,
+                          hintText:
+                              t.event.locationSetting.additionalDirections,
+                          onChange: (value) {
+                            context.read<EventLocationSettingBloc>().add(
+                                  EventLocationSettingEvent
+                                      .additionalDirectionsChanged(
+                                    additionalDirections: value,
+                                  ),
+                                );
+                          },
+                        ),
+                        SizedBox(height: Spacing.smMedium * 2),
+                        _buildConfirmLocationButton(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
-      mode: Mode.overlay,
-      resultTextStyle: Theme.of(context).textTheme.titleMedium,
-    );
-    await displayPrediction(
-      p != null ? google_places_service.Prediction.fromJson(p.toJson()) : null,
-      ScaffoldMessenger.of(context),
     );
   }
 
-  Future<void> displayPrediction(
-    google_places_service.Prediction? p,
-    ScaffoldMessengerState messengerState,
-  ) async {
-    if (p == null) {
-      return;
-    }
-    FocusScope.of(context).requestFocus(FocusNode());
-    // Get place detail (lat/lng)
-    final places = google_places_service.GoogleMapsPlaces(
-      apiKey: AppConfig.googleMapKey,
-      apiHeaders: await const GoogleApiHeaders().getHeaders(),
-    );
-    final detail = await places.getDetailsByPlaceId(p.placeId!);
-    context
-        .read<EventLocationSettingBloc>()
-        .add(PlaceDetailsChanged(placeDetails: detail.result));
-  }
-
-  _buildSaveButton() {
+  _buildConfirmLocationButton() {
     return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
       builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: 15.h),
-          child: LinearGradientButton(
-            label: widget.address != null
-                ? t.common.actions.edit
-                : t.common.actions.add,
-            height: 48.h,
-            radius: BorderRadius.circular(24),
-            textStyle: Typo.medium.copyWith(),
-            mode: state.placeDetailsText == ''
-                ? GradientButtonMode.lavenderDisableMode
-                : GradientButtonMode.lavenderMode,
-            onTap: () {
-              Vibrate.feedback(FeedbackType.light);
-              context
-                  .read<EventLocationSettingBloc>()
-                  .add(const SubmitAddLocation());
-            },
-            loadingWhen: state.status.isInProgress,
-          ),
+        return LinearGradientButton(
+          label: t.event.locationSetting.confirmLocation,
+          height: 48.h,
+          radius: BorderRadius.circular(24),
+          mode: GradientButtonMode.lavenderMode,
+          onTap: () {
+            Vibrate.feedback(FeedbackType.light);
+            final address = Address(
+              id: state.id,
+              title: state.title.value,
+              street1: state.street1.value,
+              latitude: state.latitude,
+              longitude: state.longitude,
+              additionalDirections: state.additionalDirections,
+            );
+            // Edit event
+            if (widget.event != null) {
+              context.read<EditEventDetailBloc>().add(
+                    EditEventDetailEvent.update(
+                      eventId: widget.event?.id ?? '',
+                      address: address,
+                    ),
+                  );
+            }
+            context.read<EventLocationSettingBloc>().add(
+                  SelectAddress(address: address),
+                );
+            context
+                .read<EventLocationSettingBloc>()
+                .add(const SubmitAddLocation());
+          },
+          loadingWhen: state.status.isInProgress,
         );
       },
     );

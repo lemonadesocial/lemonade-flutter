@@ -21,6 +21,7 @@ class Address with _$Address {
     double? latitude,
     double? longitude,
     String? recipientName,
+    String? additionalDirections,
   }) = _Address;
 
   factory Address.fromDto(AddressDto dto) {
@@ -36,6 +37,7 @@ class Address with _$Address {
       latitude: dto.latitude,
       longitude: dto.longitude,
       recipientName: dto.recipientName,
+      additionalDirections: dto.additionalDirections,
     );
   }
 

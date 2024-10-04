@@ -210,7 +210,11 @@
         "postalCode": "Postal code",
         "country": "Country",
         "addNewLocationSuccessfully": "Add new location successfully",
-        "removeNewLocationSuccessfully": "Remove location successfully"
+        "removeNewLocationSuccessfully": "Remove location successfully",
+        "searchLocation": "Search location",
+        "savedLocations": "Saved locations",
+        "confirmLocation": "Confirm location",
+        "additionalDirections": "Additional directions"
     },
     "timezoneSetting": {
         "timezone": "Timezone",

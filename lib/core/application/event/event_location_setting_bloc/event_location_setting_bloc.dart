@@ -31,6 +31,8 @@ class EventLocationSettingBloc
     on<SubmitAddLocation>(_onSubmitAddLocation);
     on<DeleteLocation>(_onDeleteLocation);
     on<SelectAddress>(_onSelectAddress);
+    on<AdditionalDirectionsChanged>(_onAdditionalDirectionsChanged);
+    on<ClearSelectedAddress>(_onClearSelectedAddress);
   }
 
   final _userRepository = getIt<UserRepository>();
@@ -57,6 +59,7 @@ class EventLocationSettingBloc
           longitude: address?.longitude ?? 0,
           status: FormzSubmissionStatus.initial,
           deleteStatus: FormzSubmissionStatus.initial,
+          additionalDirections: address?.additionalDirections ?? '',
         ),
       );
     } else {
@@ -75,6 +78,7 @@ class EventLocationSettingBloc
           longitude: 0,
           status: FormzSubmissionStatus.initial,
           deleteStatus: FormzSubmissionStatus.initial,
+          additionalDirections: '',
         ),
       );
     }
@@ -255,91 +259,72 @@ class EventLocationSettingBloc
     SubmitAddLocation event,
     Emitter<EventLocationSettingState> emit,
   ) async {
-    final title = StringFormz.dirty(state.title.value);
-    final street1 = StringFormz.dirty(state.street1.value);
-    final region = StringFormz.dirty(state.region.value);
-    final country = StringFormz.dirty(state.country.value);
-    final city = StringFormz.dirty(state.city.value);
-    final postal = StringFormz.dirty(state.postal.value);
-    emit(
-      state.copyWith(
-        title: title,
-        street1: street1,
-        postal: postal,
-        city: city,
-        region: region,
-        country: country,
-        isValid:
-            Formz.validate([title, street1, postal, region, city, country]),
-      ),
-    );
-    if (state.isValid) {
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      final userAddresses = getIt<AuthBloc>().state.maybeWhen(
-            authenticated: (authSession) => authSession.addresses,
-            orElse: () => null,
-          );
-      if (userAddresses == null) return;
-      List<Input$AddressInput> newUserAddresses = [];
-      for (var i = 0; i < userAddresses.length; i++) {
-        final userAddress = userAddresses[i];
-        Input$AddressInput addressInput;
-        if (state.id != '' && userAddress.id == state.id) {
-          addressInput = Input$AddressInput(
-            title: state.title.value,
-            street_1: state.street1.value,
-            street_2: state.street2,
-            city: state.city.value,
-            country: state.country.value,
-            postal: state.postal.value,
-            region: state.region.value,
-            latitude: state.latitude,
-            longitude: state.longitude,
-          );
-        } else {
-          addressInput = Input$AddressInput(
-            title: userAddress.title,
-            street_1: userAddress.street1,
-            street_2: userAddress.street2,
-            city: userAddress.city,
-            country: userAddress.country,
-            postal: userAddress.postal,
-            region: userAddress.region,
-            latitude: userAddress.latitude,
-            longitude: userAddress.longitude,
-          );
-        }
-
-        newUserAddresses.add(addressInput);
-      }
-
-      if (state.id == '') {
-        newUserAddresses.add(
-          Input$AddressInput(
-            title: state.title.value,
-            street_1: state.street1.value,
-            street_2: state.street2,
-            city: state.city.value,
-            country: state.country.value,
-            postal: state.postal.value,
-            region: state.region.value,
-            latitude: state.latitude,
-            longitude: state.longitude,
-          ),
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final userAddresses = getIt<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.addresses,
+          orElse: () => null,
+        );
+    if (userAddresses == null) return;
+    List<Input$AddressInput> newUserAddresses = [];
+    for (var i = 0; i < userAddresses.length; i++) {
+      final userAddress = userAddresses[i];
+      Input$AddressInput addressInput;
+      if (state.id != '' && userAddress.id == state.id) {
+        addressInput = Input$AddressInput(
+          title: state.title.value,
+          street_1: state.street1.value,
+          street_2: state.street2,
+          city: state.city.value,
+          country: state.country.value,
+          postal: state.postal.value,
+          region: state.region.value,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          additional_directions: state.additionalDirections,
+        );
+      } else {
+        addressInput = Input$AddressInput(
+          title: userAddress.title,
+          street_1: userAddress.street1,
+          street_2: userAddress.street2,
+          city: userAddress.city,
+          country: userAddress.country,
+          postal: userAddress.postal,
+          region: userAddress.region,
+          latitude: userAddress.latitude,
+          longitude: userAddress.longitude,
+          additional_directions: userAddress.additionalDirections,
         );
       }
-      final result = await _userRepository.updateUserAddresses(
-        input: Input$UserInput(
-          addresses: newUserAddresses,
+
+      newUserAddresses.add(addressInput);
+    }
+
+    if (state.id == '') {
+      newUserAddresses.add(
+        Input$AddressInput(
+          title: state.title.value,
+          street_1: state.street1.value,
+          street_2: state.street2,
+          city: state.city.value,
+          country: state.country.value,
+          postal: state.postal.value,
+          region: state.region.value,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          additional_directions: state.additionalDirections ?? '',
         ),
       );
-      result.fold(
-        (failure) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.failure)),
-        (createEvent) =>
-            emit(state.copyWith(status: FormzSubmissionStatus.success)),
-      );
     }
+    final result = await _userRepository.updateUserAddresses(
+      input: Input$UserInput(
+        addresses: newUserAddresses,
+      ),
+    );
+    result.fold(
+      (failure) => emit(state.copyWith(status: FormzSubmissionStatus.failure)),
+      (address) => emit(state.copyWith(status: FormzSubmissionStatus.success)),
+    );
   }
 
   Future<void> _onDeleteLocation(
@@ -351,36 +336,53 @@ class EventLocationSettingBloc
           orElse: () => null,
         );
     if (userAddresses == null) return;
-    emit(state.copyWith(deleteStatus: FormzSubmissionStatus.inProgress));
-    userAddresses.removeWhere((address) => address.id == event.id);
-    List<Input$AddressInput> newUserAddresses = [];
-    for (var i = 0; i < userAddresses.length; i++) {
-      final userAddress = userAddresses[i];
-      newUserAddresses.add(
-        Input$AddressInput(
-          title: userAddress.title,
-          street_1: userAddress.street1,
-          street_2: userAddress.street2,
-          city: userAddress.city,
-          country: userAddress.country,
-          postal: userAddress.postal,
-          region: userAddress.region,
-          latitude: userAddress.latitude,
-          longitude: userAddress.longitude,
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        deleteStatus: FormzSubmissionStatus.inProgress,
+        deletingId: event.id,
+      ),
+    );
+
+    // Create a new mutable list from the immutable one
+    List<Address> mutableAddresses = List.from(userAddresses);
+    mutableAddresses.removeWhere((address) => address.id == event.id);
+
+    List<Input$AddressInput> newUserAddresses = mutableAddresses
+        .map(
+          (userAddress) => Input$AddressInput(
+            title: userAddress.title,
+            street_1: userAddress.street1,
+            street_2: userAddress.street2,
+            city: userAddress.city,
+            country: userAddress.country,
+            postal: userAddress.postal,
+            region: userAddress.region,
+            latitude: userAddress.latitude,
+            longitude: userAddress.longitude,
+            additional_directions: userAddress.additionalDirections,
+          ),
+        )
+        .toList();
     final result = await _userRepository.updateUserAddresses(
       input: Input$UserInput(
         addresses: newUserAddresses,
       ),
     );
-    result.fold(
-      (failure) =>
-          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.failure)),
-      (createEvent) =>
-          emit(state.copyWith(deleteStatus: FormzSubmissionStatus.success)),
-    );
+    result.fold((failure) {
+      emit(
+        state.copyWith(
+          deleteStatus: FormzSubmissionStatus.failure,
+          deletingId: null,
+        ),
+      );
+    }, (success) {
+      emit(
+        state.copyWith(
+          deleteStatus: FormzSubmissionStatus.success,
+          deletingId: null,
+        ),
+      );
+    });
   }
 
   Future<void> _onSelectAddress(
@@ -401,6 +403,28 @@ class EventLocationSettingBloc
         ),
       );
     }
+  }
+
+  Future<void> _onAdditionalDirectionsChanged(
+    AdditionalDirectionsChanged event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        additionalDirections: event.additionalDirections,
+      ),
+    );
+  }
+
+  Future<void> _onClearSelectedAddress(
+    ClearSelectedAddress event,
+    Emitter<EventLocationSettingState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        selectedAddress: null,
+      ),
+    );
   }
 }
 
@@ -456,6 +480,13 @@ class EventLocationSettingEvent with _$EventLocationSettingEvent {
   const factory EventLocationSettingEvent.selectAddress({
     required Address address,
   }) = SelectAddress;
+
+  const factory EventLocationSettingEvent.additionalDirectionsChanged({
+    required String additionalDirections,
+  }) = AdditionalDirectionsChanged;
+
+  const factory EventLocationSettingEvent.clearSelectedAddress() =
+      ClearSelectedAddress;
 }
 
 @freezed
@@ -476,5 +507,7 @@ class EventLocationSettingState with _$EventLocationSettingState {
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus deleteStatus,
     @Default(false) bool isValid,
     Address? selectedAddress,
+    String? additionalDirections,
+    String? deletingId,
   }) = _EventLocationSettingState;
 }
