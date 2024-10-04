@@ -77,7 +77,8 @@
         "joinNow": "Join now",
         "viewAll": "View all",
         "setLimit": "Set limit",
-        "apply": "Apply"
+        "apply": "Apply",
+        "skip": "Skip"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

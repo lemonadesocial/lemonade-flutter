@@ -10,7 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 enum GradientButtonMode {
   defaultMode,
   lavenderMode,
-  lavenderDisableMode;
+  lavenderDisableMode,
+  light;
 
   List<Color> get gradients {
     switch (this) {
@@ -25,6 +26,11 @@ enum GradientButtonMode {
         return [
           LemonColor.disableButtonLavender,
           LemonColor.disableButtonLavender,
+        ];
+      case light:
+        return [
+          const Color.fromRGBO(255, 255, 255, 0.87),
+          const Color.fromRGBO(255, 255, 255, 0.87),
         ];
       default:
         return [];
@@ -169,6 +175,7 @@ class LinearGradientButton extends StatelessWidget {
     Widget? trailing,
     TextStyle? textStyle,
     double? height,
+    GradientButtonMode? mode,
   }) =>
       LinearGradientButton(
         onTap: onTap,
@@ -180,7 +187,7 @@ class LinearGradientButton extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: textColor ?? LemonColor.white,
             ),
-        mode: GradientButtonMode.defaultMode,
+        mode: mode ?? GradientButtonMode.defaultMode,
         height: height ?? Sizing.large,
         radius: BorderRadius.circular(LemonRadius.small * 2),
         leading: leading,
