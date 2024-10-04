@@ -14,10 +14,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -147,8 +145,7 @@ class EventPickMyTicketView extends StatelessWidget {
                           t.event.eventPickMyTickets.pickYourTicket,
                           style: Typo.extraLarge.copyWith(
                             color: colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
@@ -213,45 +210,41 @@ class EventPickMyTicketView extends StatelessWidget {
                       assignTicketsState is AssignTicketsStateLoading ||
                           acceptEventState is AcceptEventStateLoading;
                   final isInvalid = state.selectedTicketType == null;
-                  return Padding(
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                    ),
                     padding: EdgeInsets.symmetric(
                       horizontal: Spacing.smMedium,
                       vertical: Spacing.smMedium,
                     ),
-                    child: SizedBox(
-                      height: Sizing.large,
-                      child: Opacity(
-                        opacity: isButtonLoading || isInvalid ? 0.5 : 1,
-                        child: LinearGradientButton(
-                          onTap: () {
-                            if (isButtonLoading || isInvalid) return;
-                            final ticketToAssign = context
-                                .read<SelectSelfAssignTicketBloc>()
-                                .getTicketToAssign();
-                            if (ticketToAssign == null) return;
+                    child: Opacity(
+                      opacity: isButtonLoading || isInvalid ? 0.5 : 1,
+                      child: LinearGradientButton.primaryButton(
+                        onTap: () {
+                          if (isButtonLoading || isInvalid) return;
+                          final ticketToAssign = context
+                              .read<SelectSelfAssignTicketBloc>()
+                              .getTicketToAssign();
+                          if (ticketToAssign == null) return;
 
-                            context.read<AssignTicketsBloc>().add(
-                                  AssignTicketsEvent.assign(
-                                    assignees: [
-                                      TicketAssignee(
-                                        ticket: ticketToAssign.id ?? '',
-                                        user: userId,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                          },
-                          radius: BorderRadius.circular(LemonRadius.small * 2),
-                          mode: GradientButtonMode.lavenderMode,
-                          label: isButtonLoading
-                              ? '${t.common.processing}...'
-                              : t.common.confirm,
-                          textStyle: Typo.medium.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary.withOpacity(0.87),
-                          ),
-                        ),
+                          context.read<AssignTicketsBloc>().add(
+                                AssignTicketsEvent.assign(
+                                  assignees: [
+                                    TicketAssignee(
+                                      ticket: ticketToAssign.id ?? '',
+                                      user: userId,
+                                    ),
+                                  ],
+                                ),
+                              );
+                        },
+                        label: t.common.confirm,
+                        loadingWhen: isButtonLoading,
                       ),
                     ),
                   );

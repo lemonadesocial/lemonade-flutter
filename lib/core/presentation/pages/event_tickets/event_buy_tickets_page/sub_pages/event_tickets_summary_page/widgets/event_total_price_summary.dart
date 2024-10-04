@@ -41,7 +41,8 @@ class EventTotalPriceSummary extends StatelessWidget {
 
     return Column(
       children: [
-        if (pricingInfo.paymentAccounts?.first.fee?.isNotEmpty == true) ...[
+        if (pricingInfo.paymentAccounts?.firstOrNull?.fee?.isNotEmpty ==
+            true) ...[
           SummaryRow(
             label: t.event.eventOrder.fee,
             value: Web3Utils.formatCryptoCurrency(

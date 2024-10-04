@@ -363,8 +363,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                               : t.event.eventBuyTickets.selectTickets,
                           style: Typo.extraLarge.copyWith(
                             color: colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(

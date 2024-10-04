@@ -1,12 +1,11 @@
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
+import 'package:app/core/application/event_tickets/assign_multiple_tickets_form_bloc/assign_multiple_tickets_form_bloc.dart';
+import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/my_ticket_card.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/ticket_assign_popup.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_ticket_management_page/widgets/ticket_assignments_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -14,12 +13,9 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +33,12 @@ class EventTicketManagementPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => AssignTicketsBloc(event: event),
+        ),
+        BlocProvider(
+          create: (context) => AssignMultipleTicketsFormBloc(),
+        ),
+        BlocProvider(
           create: (context) => GetMyTicketsBloc(
             input: GetTicketsInput(
               skip: 0,
@@ -53,30 +55,30 @@ class EventTicketManagementPage extends StatelessWidget {
 }
 
 class EventTicketManagementView extends StatelessWidget {
+  final Event event;
+
   const EventTicketManagementView({
     super.key,
     required this.event,
   });
 
-  final Event event;
-
-  void showAssignPopup(
-    BuildContext context, {
-    required EventTicket eventTicket,
-    PurchasableTicketType? ticketType,
-  }) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => TicketAssignPopup(
-        event: event,
-        eventTicket: eventTicket,
-        ticketType: ticketType,
-        onAssignSuccess: () => {
-          context.read<GetMyTicketsBloc>().add(GetMyTicketsEvent.fetch()),
-        },
-      ),
-    );
+  void popToEventDetail(BuildContext context) {
+    final hasEventsList = AutoRouter.of(context).root.stack.any(
+          (route) => route.routeData.name == EventsListingRoute.name,
+        );
+    if (!hasEventsList) {
+      AutoRouter.of(context).root.popUntilRoot();
+    } else {
+      AutoRouter.of(context).root.popUntilRouteWithPath(
+            '/events',
+          );
+    }
+    AutoRouter.of(context).root.push(
+          EventDetailRoute(
+            key: UniqueKey(),
+            eventId: event.id ?? '',
+          ),
+        );
   }
 
   @override
@@ -106,23 +108,10 @@ class EventTicketManagementView extends StatelessWidget {
                     emptyText: t.common.somethingWrong,
                   ),
                   success: (myTickets) {
-                    final myAssignedTicket = myTickets.firstWhere(
-                      (ticket) =>
-                          EventTicketUtils.isTicketAccepted(ticket) &&
-                          EventTicketUtils.isTicketAssignedToMe(
-                            ticket,
-                            userId: userId,
-                          ),
-                    );
-                    final myAssignedTicketType =
-                        EventTicketUtils.getTicketTypeById(
-                      eventTicketTypesResponse.ticketTypes ?? [],
-                      ticketTypeId: myAssignedTicket.type ?? '',
-                    );
-
                     final otherTickets = myTickets
                         .where(
                           (ticket) =>
+                              EventTicketUtils.isTicketNotAssigned(ticket) &&
                               !EventTicketUtils.isTicketAccepted(ticket) &&
                               !EventTicketUtils.isTicketAssignedToMe(
                                 ticket,
@@ -130,58 +119,23 @@ class EventTicketManagementView extends StatelessWidget {
                               ),
                         )
                         .toList();
-
+                    context.read<AssignMultipleTicketsFormBloc>().add(
+                          AssignMultipleTicketsFormEvent.add(
+                            assignees: otherTickets
+                                .map(
+                                  (e) => TicketAssignee(
+                                    ticket: e.id ?? '',
+                                    email: '',
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
                     return SafeArea(
                       child: Stack(
                         children: [
                           CustomScrollView(
                             slivers: [
-                              SliverToBoxAdapter(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.smMedium,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        t.event.eventTicketManagement.myTicket,
-                                        style: Typo.extraLarge.copyWith(
-                                          color: colorScheme.onPrimary,
-                                          fontFamily: FontFamily.nohemiVariable,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                      Text(
-                                        t.event.eventTicketManagement
-                                            .myTicketDescription,
-                                        style: Typo.mediumPlus.copyWith(
-                                          color: colorScheme.onSecondary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SliverToBoxAdapter(
-                                child: SizedBox(height: Spacing.smMedium),
-                              ),
-                              SliverToBoxAdapter(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.smMedium,
-                                  ),
-                                  child: MyTicketCard(
-                                    event: event,
-                                    eventTicket: myAssignedTicket,
-                                    ticketType: myAssignedTicketType,
-                                  ),
-                                ),
-                              ),
-                              SliverToBoxAdapter(
-                                child: SizedBox(height: Spacing.large),
-                              ),
                               TicketAssignmentList(
                                 controller: this,
                                 ticketTypes:
@@ -195,73 +149,98 @@ class EventTicketManagementView extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: SafeArea(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: Spacing.smMedium,
-                                  horizontal: Spacing.smMedium,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.background,
-                                  border: Border(
-                                    top: BorderSide(
-                                      width: 2.w,
-                                      color: colorScheme.onPrimary
-                                          .withOpacity(0.06),
+                          BlocBuilder<AssignMultipleTicketsFormBloc,
+                              AssignMultipleTicketsFormState>(
+                            builder: (context, state) {
+                              return Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SafeArea(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: Spacing.smMedium,
+                                      horizontal: Spacing.smMedium,
                                     ),
-                                  ),
-                                ),
-                                child: SizedBox(
-                                  height: Sizing.large,
-                                  child: Opacity(
-                                    opacity: 1, // 0.5 for disabled state,
-                                    child: LinearGradientButton(
-                                      onTap: () async {
-                                        final hasEventsList =
-                                            AutoRouter.of(context)
-                                                .root
-                                                .stack
-                                                .any(
-                                                  (route) =>
-                                                      route.routeData.name ==
-                                                      EventsListingRoute.name,
-                                                );
-                                        if (!hasEventsList) {
-                                          AutoRouter.of(context)
-                                              .root
-                                              .popUntilRoot();
-                                        } else {
-                                          AutoRouter.of(context)
-                                              .root
-                                              .popUntilRouteWithPath(
-                                                '/events',
-                                              );
-                                        }
-                                        AutoRouter.of(context).root.push(
-                                              EventDetailRoute(
-                                                key: UniqueKey(),
-                                                eventId: event.id ?? '',
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.background,
+                                      border: Border(
+                                        top: BorderSide(
+                                          width: 2.w,
+                                          color: colorScheme.onPrimary
+                                              .withOpacity(0.06),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: LinearGradientButton
+                                              .secondaryButton(
+                                            mode: GradientButtonMode.light,
+                                            textColor: Colors.black,
+                                            label: t.common.actions.skip,
+                                            onTap: () async {
+                                              popToEventDetail(context);
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(width: Spacing.small),
+                                        BlocConsumer<AssignTicketsBloc,
+                                            AssignTicketsState>(
+                                          listener: (context, assignState) {
+                                            if (assignState
+                                                is AssignTicketsStateSuccess) {
+                                              popToEventDetail(context);
+                                            }
+                                          },
+                                          builder: (context, assignState) {
+                                            return Expanded(
+                                              child: Opacity(
+                                                opacity:
+                                                    state.isValid ? 1 : 0.5,
+                                                child: LinearGradientButton
+                                                    .primaryButton(
+                                                  loadingWhen: assignState
+                                                      is AssignTicketsStateLoading,
+                                                  onTap: () {
+                                                    if (!state.isValid) return;
+                                                    if (assignState
+                                                        is AssignTicketsStateLoading) {
+                                                      return;
+                                                    }
+                                                    context
+                                                        .read<
+                                                            AssignTicketsBloc>()
+                                                        .add(
+                                                          AssignTicketsEvent
+                                                              .assign(
+                                                            assignees:
+                                                                state.assignees
+                                                                    .where(
+                                                                      (element) =>
+                                                                          element.email?.isNotEmpty ==
+                                                                              true ||
+                                                                          element.user?.isNotEmpty ==
+                                                                              true,
+                                                                    )
+                                                                    .toList(),
+                                                          ),
+                                                        );
+                                                  },
+                                                  label: t
+                                                      .event
+                                                      .eventTicketManagement
+                                                      .assignTicket,
+                                                ),
                                               ),
                                             );
-                                      },
-                                      radius: BorderRadius.circular(
-                                        LemonRadius.small * 2,
-                                      ),
-                                      mode: GradientButtonMode.lavenderMode,
-                                      label: t.event.takeMeToEvent,
-                                      textStyle: Typo.medium.copyWith(
-                                        fontFamily: FontFamily.nohemiVariable,
-                                        fontWeight: FontWeight.w600,
-                                        color: colorScheme.onPrimary
-                                            .withOpacity(0.87),
-                                      ),
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ],
                       ),
