@@ -23,6 +23,7 @@ class GuestEventDetailPhotos extends StatelessWidget {
 
   List<String> get photoUrls {
     return (event.newNewPhotosExpanded ?? [])
+        .skip(1)
         .map(
           (item) => ImageUtils.generateUrl(
             file: item,

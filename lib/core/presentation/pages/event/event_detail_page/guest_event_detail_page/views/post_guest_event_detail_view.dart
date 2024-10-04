@@ -2,14 +2,14 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_about.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_programs.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_programs.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_social_lounge_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_hosts.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_photos.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_subevents.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_virtual_link.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
@@ -130,7 +130,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: PostGuestEventDetailPrograms(event: event),
+                child: GuestEventDetailPrograms(event: event),
               ),
             if (event.subeventParent == null && subEvents.isNotEmpty == true)
               Container(
@@ -145,7 +145,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: PostGuestEventDetailSubEvents(
+                child: GuestEventDetailSubEvents(
                   event: event,
                   subEvents: subEvents,
                 ),
@@ -164,7 +164,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: PostGuestEventDetailPhotos(
+                child: GuestEventDetailPhotos(
                   event: event,
                   showTitle: false,
                 ),
@@ -181,7 +181,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                   ),
                 ),
               ),
-              child: PostGuestEventDetailHosts(
+              child: GuestEventDetailHosts(
                 event: event,
               ),
             ),
@@ -200,7 +200,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                   right: Spacing.smMedium,
                   top: Spacing.medium,
                 ),
-                child: PostGuestEventDetailAbout(event: event),
+                child: GuestEventDetailAbout(event: event),
               ),
           ];
           return Scaffold(

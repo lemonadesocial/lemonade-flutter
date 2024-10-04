@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
@@ -10,6 +11,8 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_programs.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -46,6 +49,9 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           authenticated: (session) => session.userId,
           orElse: () => '',
         );
+    final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
+    final subEvents = getSubEventsBloc.state.events;
+
     return Scaffold(
       backgroundColor: colorScheme.primary,
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
@@ -79,11 +85,62 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                   child: GuestEventLocation(event: event),
                 ),
-              if ((event.newNewPhotosExpanded ?? []).isNotEmpty)
-                GuestEventDetailPhotos(event: event),
-              GuestEventDetailHosts(event: event),
+              if ((event.newNewPhotosExpanded ?? []).isNotEmpty &&
+                  (event.newNewPhotosExpanded ?? []).length > 1)
+                GuestEventDetailPhotos(
+                  event: event,
+                  showTitle: false,
+                ),
+              if (event.sessions?.isNotEmpty == true)
+                Container(
+                  padding: EdgeInsets.only(
+                    top: Spacing.medium,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: colorScheme.outline,
+                        width: 0.5.w,
+                      ),
+                    ),
+                  ),
+                  child: GuestEventDetailPrograms(event: event),
+                ),
+              if (event.subeventParent == null && subEvents.isNotEmpty == true)
+                Container(
+                  padding: EdgeInsets.only(
+                    top: Spacing.medium,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: colorScheme.outline,
+                        width: 0.5.w,
+                      ),
+                    ),
+                  ),
+                  child: GuestEventDetailSubEvents(
+                    event: event,
+                    subEvents: subEvents,
+                  ),
+                ),
+              Container(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: colorScheme.outline,
+                      width: 0.5.w,
+                    ),
+                  ),
+                ),
+                child: GuestEventDetailHosts(event: event),
+              ),
             ];
             return SafeArea(
+              top: false,
               child: Stack(
                 children: [
                   CustomScrollView(
@@ -104,18 +161,20 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                           return widgets[index];
                         },
                         separatorBuilder: (context, index) => SizedBox(
-                          height: Spacing.smMedium * 2,
+                          height: Spacing.medium,
                         ),
                       ),
                       SliverToBoxAdapter(
-                        child: SizedBox(height: 84.w),
+                        child: SizedBox(height: 100.w),
                       ),
                     ],
                   ),
                   if (coverPhoto.isNotEmpty)
-                    _FloatingButtonsBar(
-                      scrollController: _scrollController,
-                      event: event,
+                    SafeArea(
+                      child: _FloatingButtonsBar(
+                        scrollController: _scrollController,
+                        event: event,
+                      ),
                     ),
                   if (!isOwnEvent)
                     Align(

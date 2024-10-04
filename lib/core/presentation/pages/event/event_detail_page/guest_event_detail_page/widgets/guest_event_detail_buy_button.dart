@@ -118,7 +118,14 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             state is EventBuyTicketsPrerequisiteCheckStateChecking;
         return SafeArea(
           child: Container(
-            color: colorScheme.primary,
+            decoration: BoxDecoration(
+              color: colorScheme.primary,
+              border: Border(
+                top: BorderSide(
+                  color: colorScheme.outline,
+                ),
+              ),
+            ),
             padding: EdgeInsets.symmetric(
               vertical: Spacing.smMedium,
               horizontal: Spacing.smMedium,
