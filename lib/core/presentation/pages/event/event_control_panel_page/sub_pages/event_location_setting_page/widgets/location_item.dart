@@ -10,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocationItem extends StatelessWidget {
   final Address location;
-  final Function? onPressEdit;
   final bool isDeleting;
   final Function? onPressDelete;
   final Function? onPressItem;
@@ -19,7 +18,6 @@ class LocationItem extends StatelessWidget {
   const LocationItem({
     super.key,
     required this.location,
-    this.onPressEdit,
     this.onPressDelete,
     this.isDeleting = false,
     this.onPressItem,
@@ -116,20 +114,15 @@ class LocationItem extends StatelessWidget {
             if (isGooglePrediction == false)
               Row(
                 children: [
-                  InkWell(
-                    onTap: () async {
-                      onPressEdit?.call();
+                  ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (filter) {
+                      return Assets.icons.icEdit.svg(
+                        colorFilter: filter,
+                        width: Sizing.xSmall,
+                        height: Sizing.xSmall,
+                      );
                     },
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) {
-                        return Assets.icons.icEdit.svg(
-                          colorFilter: filter,
-                          width: Sizing.xSmall,
-                          height: Sizing.xSmall,
-                        );
-                      },
-                    ),
                   ),
                   SizedBox(width: Spacing.xSmall),
                   isDeleting

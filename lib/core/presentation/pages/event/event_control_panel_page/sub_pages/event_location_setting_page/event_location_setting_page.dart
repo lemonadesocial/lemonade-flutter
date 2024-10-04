@@ -11,9 +11,7 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/google/google_place_autocomplete_service.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -212,7 +210,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
         .read<EventLocationSettingBloc>()
         .add(PlaceDetailsChanged(placeDetails: detail.result));
 
-    showBottomSheetDetail(context, address);
+    showBottomSheetDetail(context, address, widget.event);
 
     _searchController.clear();
     setState(() {
@@ -266,10 +264,6 @@ class AddressList extends StatelessWidget {
             child: LocationItem(
               isDeleting: state.deletingId == addresses[index].id,
               location: addresses[index],
-              onPressEdit: () {
-                Vibrate.feedback(FeedbackType.light);
-                _onTapEdit(addresses[index], context);
-              },
               onPressDelete: () {
                 Vibrate.feedback(FeedbackType.light);
                 context
@@ -278,20 +272,7 @@ class AddressList extends StatelessWidget {
               },
               onPressItem: () async {
                 Vibrate.feedback(FeedbackType.light);
-                // Edit event
-                if (event != null) {
-                  context.read<EditEventDetailBloc>().add(
-                        EditEventDetailEvent.update(
-                          eventId: event?.id ?? '',
-                          address: addresses[index],
-                        ),
-                      );
-                } else {
-                  context
-                      .read<EventLocationSettingBloc>()
-                      .add(SelectAddress(address: addresses[index]));
-                  AutoRouter.of(context).pop();
-                }
+                _onTapEdit(addresses[index], context);
               },
             ),
           ),
@@ -303,11 +284,15 @@ class AddressList extends StatelessWidget {
 
   _onTapEdit(Address address, BuildContext context) {
     Vibrate.feedback(FeedbackType.light);
-    showBottomSheetDetail(context, address);
+    showBottomSheetDetail(context, address, event);
   }
 }
 
-void showBottomSheetDetail(BuildContext context, Address address) {
+void showBottomSheetDetail(
+  BuildContext context,
+  Address address,
+  Event? event,
+) {
   showCupertinoModalBottomSheet(
     expand: true,
     context: context,
@@ -315,9 +300,17 @@ void showBottomSheetDetail(BuildContext context, Address address) {
     topRadius: Radius.circular(30.r),
     useRootNavigator: true,
     builder: (mContext) {
-      return BlocProvider.value(
-        value: context.read<EventLocationSettingBloc>(),
-        child: EventLocationSettingDetailPage(address: address),
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: context.read<EventLocationSettingBloc>(),
+          ),
+          if (event != null)
+            BlocProvider.value(
+              value: context.read<EditEventDetailBloc>(),
+            ),
+        ],
+        child: EventLocationSettingDetailPage(address: address, event: event),
       );
     },
   );

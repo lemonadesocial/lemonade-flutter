@@ -1,12 +1,16 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -18,10 +22,10 @@ import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventLocationSettingDetailPage extends StatefulWidget {
-  const EventLocationSettingDetailPage({super.key, this.address});
+  const EventLocationSettingDetailPage({super.key, this.address, this.event});
 
   final Address? address;
-
+  final Event? event;
   @override
   State<EventLocationSettingDetailPage> createState() =>
       _EventLocationSettingDetailPageState();
@@ -74,9 +78,20 @@ class _EventLocationSettingDetailPageState
     return BlocConsumer<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
+          // Edit event
+          if (widget.event != null) {
+            SnackBarUtils.showSuccess(
+              title: t.common.success,
+              message: t.event.editEventSuccessfully,
+            );
+            AutoRouter.of(context).pop();
+          }
+          // Create event
+          else if (widget.event == null) {
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
+          }
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
-          Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
-          Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
         }
         if (state.placeDetailsText != '') {
           placeDetailsController.text = state.placeDetailsText;
@@ -187,17 +202,25 @@ class _EventLocationSettingDetailPageState
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            context.read<EventLocationSettingBloc>().add(
-                  SelectAddress(
-                    address: Address(
-                      id: state.id,
-                      title: state.title.value,
-                      street1: state.street1.value,
-                      latitude: state.latitude,
-                      longitude: state.longitude,
-                      additionalDirections: state.additionalDirections,
+            final address = Address(
+              id: state.id,
+              title: state.title.value,
+              street1: state.street1.value,
+              latitude: state.latitude,
+              longitude: state.longitude,
+              additionalDirections: state.additionalDirections,
+            );
+            // Edit event
+            if (widget.event != null) {
+              context.read<EditEventDetailBloc>().add(
+                    EditEventDetailEvent.update(
+                      eventId: widget.event?.id ?? '',
+                      address: address,
                     ),
-                  ),
+                  );
+            }
+            context.read<EventLocationSettingBloc>().add(
+                  SelectAddress(address: address),
                 );
             context
                 .read<EventLocationSettingBloc>()

@@ -15,6 +15,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,10 +53,17 @@ class EditEventConfigGrid extends StatelessWidget {
         );
         break;
       case EventConfigurationType.location:
-        page = EventLocationSettingPage(
-          event: event,
+        return showCupertinoModalBottomSheet(
+          context: context,
+          backgroundColor: LemonColor.atomicBlack,
+          topRadius: Radius.circular(LemonRadius.small),
+          enableDrag: false,
+          builder: (mContext) {
+            return EventLocationSettingPage(
+              event: event,
+            );
+          },
         );
-        break;
       case EventConfigurationType.applicationForm:
         return AutoRouter.of(context)
             .navigate(EventApplicationFormSettingRoute());
