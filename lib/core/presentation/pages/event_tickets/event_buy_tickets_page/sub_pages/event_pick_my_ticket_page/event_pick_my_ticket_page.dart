@@ -150,7 +150,7 @@ class EventPickMyTicketView extends StatelessWidget {
                         ),
                         Text(
                           t.event.eventPickMyTickets.pickYourTicketDescription,
-                          style: Typo.mediumPlus.copyWith(
+                          style: Typo.medium.copyWith(
                             color: colorScheme.onSecondary,
                           ),
                         ),
