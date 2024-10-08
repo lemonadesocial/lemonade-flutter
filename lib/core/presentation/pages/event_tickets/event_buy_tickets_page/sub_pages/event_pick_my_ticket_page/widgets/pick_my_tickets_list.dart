@@ -45,6 +45,7 @@ class PickMyTicketsList extends StatelessWidget {
                     );
 
                     return PickTicketItem(
+                      event: event,
                       ticketType: ticketType,
                       total: total,
                       currency: event.currency,
