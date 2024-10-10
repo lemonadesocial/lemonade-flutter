@@ -108,7 +108,7 @@ class _InfoCard extends StatelessWidget {
     final formattedEndDate = DateFormatUtils.dateWithTimezone(
       dateTime: event.end ?? DateTime.now(),
       timezone: event.timezone ?? '',
-      pattern: 'MMM, d, hh:mm a',
+      pattern: 'MMM d, hh:mm a',
     );
     final wigets = [
       Padding(
