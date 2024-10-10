@@ -6,7 +6,6 @@ import 'package:app/core/application/event/event_location_setting_bloc/event_loc
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()

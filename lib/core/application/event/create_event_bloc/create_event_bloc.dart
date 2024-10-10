@@ -157,8 +157,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         description: state.description,
         private: state.private,
         approval_required: state.approvalRequired,
-        start: DateTime.parse(event.start.toIso8601String()),
-        end: DateTime.parse(event.end.toIso8601String()),
+        start: event.start.toUtc(),
+        end: event.end.toUtc(),
         timezone: event.timezone,
         guest_limit:
             state.guestLimit != null ? double.parse(state.guestLimit!) : null,

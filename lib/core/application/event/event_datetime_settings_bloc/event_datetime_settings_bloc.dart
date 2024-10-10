@@ -10,7 +10,7 @@ import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
-import 'package:timezone/timezone.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 part 'event_datetime_settings_bloc.freezed.dart';
 
@@ -32,10 +32,13 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
     final finalTimezone =
         event.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue();
+    final location = tz.getLocation(finalTimezone);
+    final start = tz.TZDateTime.from(event.startDateTime, location);
+    final end = tz.TZDateTime.from(event.endDateTime, location);
     emit(
       state.copyWith(
-        start: DateTimeFormz.dirty(event.startDateTime),
-        end: DateTimeFormz.dirty(event.endDateTime),
+        start: DateTimeFormz.dirty(start),
+        end: DateTimeFormz.dirty(end),
         timezone: finalTimezone,
       ),
     );
@@ -48,16 +51,7 @@ class EventDateTimeSettingsBloc
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final newStart = event.newStart;
     final newEnd = event.newEnd;
-    final location = getLocation(state.timezone ?? '');
-    final startUtcDateTime = newStart
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-    final endUtcDateTime = newEnd
-        .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-
-    final now = DateTime.now();
-    final tomorrowMidnight = DateTime.utc(now.year, now.month, now.day + 1);
-    if (newStart.isBefore(tomorrowMidnight) ||
-        newEnd.isBefore(tomorrowMidnight)) {
+    if (newStart.isBefore(DateTime.now())) {
       emit(
         state.copyWith(
           start: DateTimeFormz.dirty(newStart),
@@ -82,8 +76,8 @@ class EventDateTimeSettingsBloc
       if (event.event != null) {
         final result = await eventRepository.updateEvent(
           input: Input$EventInput(
-            start: DateTime.parse(startUtcDateTime.toIso8601String()),
-            end: DateTime.parse(endUtcDateTime.toIso8601String()),
+            start: newStart.toUtc(),
+            end: newEnd.toUtc(),
           ),
           id: event.event?.id ?? '',
         );
@@ -117,18 +111,30 @@ class EventDateTimeSettingsBloc
     Emitter emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final location = tz.getLocation(event.timezone);
+    final newStart = tz.TZDateTime(
+      location,
+      state.start.value!.year,
+      state.start.value!.month,
+      state.start.value!.day,
+      state.start.value!.hour,
+      state.start.value!.minute,
+    );
+
+    final newEnd = tz.TZDateTime(
+      location,
+      state.end.value!.year,
+      state.end.value!.month,
+      state.end.value!.day,
+      state.end.value!.hour,
+      state.end.value!.minute,
+    );
     // Edit mode
     if (event.event != null) {
-      final location = getLocation(event.timezone);
-      final startUtcDateTime = state.start.value!
-          .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-      final endUtcDateTime = state.end.value!
-          .add(Duration(milliseconds: location.currentTimeZone.offset * -1));
-
       final result = await eventRepository.updateEvent(
         input: Input$EventInput(
-          start: DateTime.parse(startUtcDateTime.toIso8601String()),
-          end: DateTime.parse(endUtcDateTime.toIso8601String()),
+          start: newStart.toUtc(),
+          end: newEnd.toUtc(),
           timezone: event.timezone,
         ),
         id: event.event?.id ?? '',
@@ -147,6 +153,8 @@ class EventDateTimeSettingsBloc
     } else {
       emit(
         state.copyWith(
+          start: DateTimeFormz.dirty(newStart),
+          end: DateTimeFormz.dirty(newEnd),
           timezone: event.timezone,
           isValid: true,
           status: FormzSubmissionStatus.success,
