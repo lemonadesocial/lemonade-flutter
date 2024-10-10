@@ -1,4 +1,5 @@
 import 'package:timezone/timezone.dart' as tz;
+import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 class EventConstants {
   /// Guest limit per 2
@@ -287,19 +288,25 @@ class EventConstants {
 }
 
 class EventDateTimeConstants {
-  static final DateTime currentDateTime = DateTime.now();
+  static DateTime get currentDateTime => tz.TZDateTime.now(
+        tz.getLocation(date_utils.DateUtils.getUserTimezoneOptionValue()),
+      );
 
-  static final DateTime defaultStartDateTime = DateTime.utc(
-    currentDateTime.year,
-    currentDateTime.month,
-    currentDateTime.day + 3,
-    10,
-  );
+  static DateTime get defaultStartDateTime {
+    return DateTime(
+      currentDateTime.year,
+      currentDateTime.month,
+      currentDateTime.day + 3,
+      10,
+    );
+  }
 
-  static final DateTime defaultEndDateTime = DateTime.utc(
-    currentDateTime.year,
-    currentDateTime.month,
-    currentDateTime.day + 6,
-    18,
-  );
+  static DateTime get defaultEndDateTime {
+    return DateTime(
+      currentDateTime.year,
+      currentDateTime.month,
+      currentDateTime.day + 6,
+      18,
+    );
+  }
 }

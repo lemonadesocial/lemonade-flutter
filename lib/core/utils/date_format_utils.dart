@@ -1,5 +1,6 @@
 import 'package:app/core/utils/date_utils.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class DateFormatUtils {
   static const String fullDateFormat = 'EE, MMM d • hh:mm a';
@@ -41,7 +42,11 @@ class DateFormatUtils {
     String? pattern = 'MMM d, yyyy h:mm a',
     bool withTimezoneOffset = true,
   }) {
-    final formattedDate = DateFormat(pattern).format(dateTime.toLocal());
+    final location =
+        timezone.isNotEmpty == true ? tz.getLocation(timezone) : null;
+    final timezoneDateTime =
+        location != null ? tz.TZDateTime.from(dateTime, location) : dateTime;
+    final formattedDate = DateFormat(pattern).format(timezoneDateTime);
     return withTimezoneOffset
         ? '$formattedDate ${DateUtils.getGMTOffsetText(timezone)}'
         : formattedDate;

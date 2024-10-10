@@ -8,6 +8,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -160,21 +161,25 @@ class EventUtils {
   /// Returns a tuple of (formattedDate, formattedTime).
   /// If event data is incomplete, returns empty strings.
   static (String, String) getFormattedEventDateAndTime(Event event) {
-    if (event.start == null || event.end == null || event.timezone == null) {
+    if (event.start == null ||
+        event.end == null ||
+        event.timezone?.isNotEmpty != true) {
       return ('', '');
     }
-
+    final location = tz.getLocation(event.timezone!);
     final isSameDay = event.start!.year == event.end!.year &&
         event.start!.month == event.end!.month &&
         event.start!.day == event.end!.day;
 
+    final timezoneStartDate = tz.TZDateTime.from(event.start!, location);
+    final timezoneEndDate = tz.TZDateTime.from(event.end!, location);
     final dateFormatter = DateFormat('EEEE, MMMM d');
     final timeFormatter = DateFormat('h:mm a');
     final endDateFormatter = DateFormat('MMMM d');
 
-    final startDateStr = dateFormatter.format(event.start!);
-    final startTimeStr = timeFormatter.format(event.start!);
-    final endTimeStr = timeFormatter.format(event.end!);
+    final startDateStr = dateFormatter.format(timezoneStartDate);
+    final startTimeStr = timeFormatter.format(timezoneStartDate);
+    final endTimeStr = timeFormatter.format(timezoneEndDate);
     final gmtOffset = DateUtils.getGMTOffsetText(event.timezone!);
 
     // Format output based on whether it's a single-day or multi-day event
