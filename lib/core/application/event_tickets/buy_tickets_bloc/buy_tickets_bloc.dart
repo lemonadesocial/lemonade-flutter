@@ -123,7 +123,8 @@ class BuyTicketsBloc extends Bloc<BuyTicketsEvent, BuyTicketsState> {
           ),
         );
 
-        if (intent.status == PaymentIntentsStatus.Succeeded) {
+        if (intent.status == PaymentIntentsStatus.Succeeded ||
+            intent.status == PaymentIntentsStatus.RequiresCapture) {
           add(
             BuyTicketsEvent.processUpdatePayment(
               payment: payment,

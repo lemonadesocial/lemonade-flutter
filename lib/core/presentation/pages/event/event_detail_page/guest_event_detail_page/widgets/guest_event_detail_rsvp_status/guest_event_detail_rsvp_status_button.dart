@@ -92,7 +92,7 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
           button = LinearGradientButton.primaryButton(
             label: t.common.actions.continueNext,
             onTap: () {
-              AutoRouter.of(context).navigate(
+              AutoRouter.of(context).push(
                 EventBuyTicketsRoute(
                   event: event,
                 ),

@@ -94,6 +94,7 @@ class _PayByCryptoFooterViewState extends State<PayByCryptoFooterView> {
                     selectedCurrency: widget.selectedCurrency,
                     selectedNetwork: widget.selectedNetwork,
                     pricingInfo: widget.pricingInfo,
+                    isFree: widget.isFree,
                   ),
                 ],
               );

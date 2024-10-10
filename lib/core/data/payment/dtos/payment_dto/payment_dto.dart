@@ -1,7 +1,7 @@
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/payment/dtos/billing_info_dto/billing_info_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment_dto.freezed.dart';
@@ -14,7 +14,7 @@ class PaymentDto with _$PaymentDto {
     String? user,
     @JsonKey(name: 'transfer_params') Map<String, dynamic>? transferParams,
     @JsonKey(name: 'transfer_metadata') Map<String, dynamic>? transferMetadata,
-    PaymentState? state,
+    Enum$NewPaymentState? state,
     Map<String, DateTime>? stamps,
     @JsonKey(name: 'failure_reason') String? failureReason,
     String? currency,

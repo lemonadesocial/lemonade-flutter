@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/input/get_payment_input/get_payment_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class WaitForPaymentNotificationHandler {
   static get delayIntervalDuration => const Duration(seconds: 5);
 
   Future<Payment?> _checkPayment(String paymentId) async {
-    int remainingAttempt = 10;
+    int remainingAttempt = 20;
     Payment? payment;
     while (remainingAttempt > 0) {
       Future.delayed(
@@ -32,7 +32,8 @@ class WaitForPaymentNotificationHandler {
         (l) => null,
         (r) => r,
       );
-      if (payment?.state == PaymentState.succeeded) {
+      if (payment?.state == Enum$NewPaymentState.succeeded ||
+          payment?.state == Enum$NewPaymentState.await_capture) {
         return payment;
       }
       remainingAttempt--;
@@ -43,22 +44,15 @@ class WaitForPaymentNotificationHandler {
   start(
     BuildContext context, {
     required String paymentId,
-    Function()? onPaymentDone,
+    Function(Payment? payment)? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
-    timer = Timer(maxDurationToWaitForNotification, () async {
-      final paymentResult = await getIt<PaymentRepository>().getPayment(
-        input: GetPaymentInput(
-          id: paymentId,
-        ),
-      );
-      final payment = paymentResult.fold(
-        (l) => null,
-        (r) => r,
-      );
+    timer = Timer(const Duration(seconds: 15), () async {
+      final payment = await _checkPayment(paymentId);
 
-      if (payment?.state == PaymentState.succeeded) {
-        onPaymentDone?.call();
+      if (payment?.state == Enum$NewPaymentState.succeeded ||
+          payment?.state == Enum$NewPaymentState.await_capture) {
+        onPaymentDone?.call(payment);
       } else {
         onPaymentFailed?.call();
       }
@@ -70,7 +64,7 @@ class WaitForPaymentNotificationHandler {
     required String chainId,
     required String txHash,
     required String paymentId,
-    Function()? onPaymentDone,
+    Function(Payment? payment)? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
     final getChainResult =
@@ -86,8 +80,10 @@ class WaitForPaymentNotificationHandler {
       );
       final payment = await _checkPayment(paymentId);
 
-      if (receipt?.status == true && payment?.state == PaymentState.succeeded) {
-        onPaymentDone?.call();
+      if (receipt?.status == true &&
+          (payment?.state == Enum$NewPaymentState.succeeded ||
+              payment?.state == Enum$NewPaymentState.await_capture)) {
+        onPaymentDone?.call(payment);
       } else {
         onPaymentFailed?.call();
       }
