@@ -50,7 +50,8 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
             );
       },
     );
-    if (response.result?.parsedData?.decideUserJoinRequests == true) {
+    if (response.result?.parsedData?.decideUserJoinRequests.isNotEmpty ==
+        true) {
       onRemove?.call();
     }
   }

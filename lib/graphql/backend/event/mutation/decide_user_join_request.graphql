@@ -1,3 +1,6 @@
 mutation DecideUserJoinRequests($input: DecideUserJoinRequestsInput!) {
-  decideUserJoinRequests(input: $input)
+  decideUserJoinRequests(input: $input) {
+    _id
+    processed
+  }
 }

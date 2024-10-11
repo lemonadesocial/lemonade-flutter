@@ -79,6 +79,13 @@ class PayByStripeFooter extends StatelessWidget {
                         publishableKey: stripePublishableKey,
                         onCardAdded: onCardAdded,
                         onSelectCard: onSelectCard,
+                        buyButton: PayButton(
+                          disabled: disabled,
+                          pricingInfo: pricingInfo,
+                          selectedCurrency: selectedCurrency,
+                          selectedNetwork: selectedNetwork,
+                          isFree: isFree,
+                        ),
                       ),
                     );
                   },
@@ -100,6 +107,7 @@ class PayByStripeFooter extends StatelessWidget {
                               pricingInfo: pricingInfo,
                               selectedCurrency: selectedCurrency,
                               selectedNetwork: selectedNetwork,
+                              isFree: isFree,
                             ),
                           ),
                         );
