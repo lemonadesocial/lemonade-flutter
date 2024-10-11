@@ -134,12 +134,13 @@ class _EventDatetimeSettingsPageState
                 showIconContainer: true,
                 iconContainerColor: LemonColor.acidGreen,
               );
+              AutoRouter.of(context).pop();
+              Future.delayed(const Duration(milliseconds: 500));
               context.read<GetEventDetailBloc>().add(
                     GetEventDetailEvent.fetch(
                       eventId: widget.event!.id ?? '',
                     ),
                   );
-              AutoRouter.of(context).pop();
             }
           },
           builder: (context, state) {
