@@ -16,12 +16,14 @@ class PayButton extends StatelessWidget {
     required this.selectedNetwork,
     required this.disabled,
     this.pricingInfo,
+    this.isFree = false,
   });
 
   final EventTicketsPricingInfo? pricingInfo;
   final String selectedCurrency;
   final String? selectedNetwork;
   final bool disabled;
+  final bool isFree;
 
   BigInt get _totalCryptoAmount {
     return (pricingInfo?.cryptoTotal ?? BigInt.zero) +
@@ -55,7 +57,9 @@ class PayButton extends StatelessWidget {
     return Opacity(
       opacity: disabled ? 0.5 : 1,
       child: LinearGradientButton.primaryButton(
-        label: t.event.eventBuyTickets.payAmount(amount: amountText),
+        label: isFree
+            ? t.event.eventBuyTickets.redeem
+            : t.event.eventBuyTickets.payAmount(amount: amountText),
         onTap: () {
           if (disabled) return;
           AutoRouter.of(context).push(const EventBuyTicketsProcessingRoute());

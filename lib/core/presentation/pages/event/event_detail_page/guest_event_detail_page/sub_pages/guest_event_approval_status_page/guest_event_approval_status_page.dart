@@ -95,7 +95,7 @@ class GuestEventApprovalStatusPage extends StatelessWidget {
                     LinearGradientButton.primaryButton(
                       onTap: () async {
                         await AutoRouter.of(context).pop();
-                        AutoRouter.of(context).navigate(
+                        AutoRouter.of(context).push(
                           EventBuyTicketsRoute(event: event),
                         );
                       },

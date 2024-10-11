@@ -3,6 +3,7 @@ import 'package:app/core/application/event_tickets/assign_tickets_bloc/assign_ti
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
 import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
@@ -24,6 +25,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
   final String? selectedCurrency;
   final String? selectedNetwork;
   final Either<double, BigInt>? totalAmount;
+  final Event event;
 
   const SelectTicketSubmitButton({
     super.key,
@@ -31,6 +33,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
     required this.totalAmount,
     required this.selectedCurrency,
     required this.selectedNetwork,
+    required this.event,
   });
 
   @override
@@ -81,7 +84,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
             height: Sizing.large,
             onTap: () {
               if (!state.isSelectionValid || isLoading) return;
-              if (state.isPaymentRequired) {
+              if (state.isPaymentRequired || event.approvalRequired == true) {
                 context.router.push(
                   const EventTicketsSummaryRoute(),
                 );

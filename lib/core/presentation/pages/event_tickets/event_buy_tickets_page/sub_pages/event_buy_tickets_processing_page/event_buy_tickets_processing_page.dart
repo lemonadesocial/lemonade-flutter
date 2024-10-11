@@ -10,6 +10,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
+import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -246,6 +247,7 @@ class _EventBuyTicketsProcessingPageViewState
   Future<void> _onNavigateWhenPaymentConfirmed(
     BuildContext context,
     Event event,
+    Payment? payment,
   ) {
     final selectedTicketTypes =
         context.read<SelectEventTicketsBloc>().state.selectedTickets;
@@ -269,6 +271,12 @@ class _EventBuyTicketsProcessingPageViewState
               : null,
           buttonBuilder: (newContext) => LinearGradientButton(
             onTap: () {
+              if (payment?.state == Enum$NewPaymentState.await_capture) {
+                AutoRouter.of(newContext).root.popUntil(
+                      (route) => route.data?.name == EventDetailRoute.name,
+                    );
+                return;
+              }
               AutoRouter.of(newContext).replaceAll([
                 EventUtils.getAssignTicketsRouteForBuyFlow(
                   event: event,
@@ -315,8 +323,12 @@ class _EventBuyTicketsProcessingPageViewState
                       ),
                     );
               },
-              onPaymentDone: () {
-                _onNavigateWhenPaymentConfirmed(context, event);
+              onPaymentDone: (payment) {
+                _onNavigateWhenPaymentConfirmed(
+                  context,
+                  event,
+                  payment,
+                );
               },
             );
           },
@@ -368,8 +380,12 @@ class _EventBuyTicketsProcessingPageViewState
                       ),
                     );
               },
-              onPaymentDone: () {
-                _onNavigateWhenPaymentConfirmed(context, event);
+              onPaymentDone: (payment) {
+                _onNavigateWhenPaymentConfirmed(
+                  context,
+                  event,
+                  payment,
+                );
               },
             );
           },
@@ -417,7 +433,11 @@ class _EventBuyTicketsProcessingPageViewState
           }
           if (eventId == event.id) {
             _waitForNotificationTimer.cancel();
-            _onNavigateWhenPaymentConfirmed(context, event);
+            _onNavigateWhenPaymentConfirmed(
+              context,
+              event,
+              payment,
+            );
           }
         },
         child: Scaffold(

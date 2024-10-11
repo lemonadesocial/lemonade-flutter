@@ -2,7 +2,7 @@ import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/billing_info/billing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'payment.freezed.dart';
@@ -16,7 +16,7 @@ class Payment with _$Payment {
     String? user,
     Map<String, dynamic>? transferParams,
     Map<String, dynamic>? transferMetadata,
-    PaymentState? state,
+    Enum$NewPaymentState? state,
     Map<String, DateTime>? stamps,
     String? failureReason,
     String? currency,

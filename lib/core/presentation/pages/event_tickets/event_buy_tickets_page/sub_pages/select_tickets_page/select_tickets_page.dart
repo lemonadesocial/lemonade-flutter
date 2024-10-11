@@ -691,6 +691,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   ),
                   color: colorScheme.background,
                   child: SelectTicketSubmitButton(
+                    event: widget.event,
                     paymentMethod: selectedPaymentMethod,
                     selectedCurrency: selectedCurrency,
                     selectedNetwork: selectedNetwork,
