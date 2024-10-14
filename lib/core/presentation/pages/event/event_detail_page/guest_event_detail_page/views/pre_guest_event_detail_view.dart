@@ -8,7 +8,6 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_programs.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
@@ -72,11 +71,12 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                   event: event,
                 ),
               ),
-              if (event.latitude != null && event.longitude != null)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  child: GuestEventLocation(event: event),
-                ),
+              // NOTE: requirement - Hide location in pre-rsvp
+              // if (event.latitude != null && event.longitude != null)
+              //   Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+              //     child: GuestEventLocation(event: event),
+              //   ),
               if ((event.newNewPhotosExpanded ?? []).isNotEmpty &&
                   (event.newNewPhotosExpanded ?? []).length > 1)
                 GuestEventDetailPhotos(
@@ -229,8 +229,8 @@ class _FloatingButtonsBarState extends State<_FloatingButtonsBar> {
             BlurCircle(
               child: LemonBackButton(
                 color: _isSliverAppBarCollapsed
-                    ? colorScheme.onPrimary
-                    : colorScheme.onSurface,
+                    ? colorScheme.onSecondary
+                    : colorScheme.onSecondary,
               ),
             ),
             GuestEventMoreActions(

@@ -30,7 +30,7 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
               color: LemonColor.atomicBlack,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               border: Border.all(
-                color: colorScheme.outline,
+                color: colorScheme.outlineVariant,
                 width: 1.w,
               ),
             ),
@@ -53,7 +53,7 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
               color: LemonColor.atomicBlack,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               border: Border.all(
-                color: colorScheme.outline,
+                color: colorScheme.outlineVariant,
                 width: 1.w,
               ),
             ),

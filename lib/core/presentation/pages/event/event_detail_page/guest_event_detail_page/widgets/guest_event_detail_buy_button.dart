@@ -9,12 +9,10 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,7 +132,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
             ),
             child: SizedBox(
               height: Sizing.large,
-              child: LinearGradientButton(
+              child: LinearGradientButton.primaryButton(
                 onTap: () {
                   if (isLoading) {
                     return;
@@ -161,15 +159,8 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                       Assets.icons.icTicketBold.svg(colorFilter: filter),
                 ),
                 label: getDisplayPrice(),
-                radius: BorderRadius.circular(LemonRadius.small * 2),
-                mode: GradientButtonMode.lavenderMode,
                 loadingWhen: isLoading,
-                textStyle: Typo.medium.copyWith(
-                  fontFamily: FontFamily.nohemiVariable,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.onPrimary.withOpacity(0.87),
-                  height: 1.5,
-                ),
+                textColor: colorScheme.onPrimary,
               ),
             ),
           ),

@@ -177,7 +177,7 @@ final ColorScheme lemonadeDarkThemeColorScheme = ColorScheme.dark(
   onSurface: LemonColor.white72,
   onSurfaceVariant: LemonColor.white36,
   outline: LemonColor.white12,
-  outlineVariant: LemonColor.white18,
+  outlineVariant: LemonColor.white03,
   tertiaryContainer: LemonColor.tertiaryBlack,
   onPrimaryContainer: LemonColor.dialogBackground,
   onSecondaryContainer: LemonColor.disableButtonLavender,

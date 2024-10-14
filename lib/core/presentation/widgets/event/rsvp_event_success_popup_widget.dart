@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -81,17 +80,8 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
                       child: buttonBuilder != null
                           ? buttonBuilder?.call(context)
-                          : LinearGradientButton(
+                          : LinearGradientButton.primaryButton(
                               onTap: () => onPressed?.call(context),
-                              mode: GradientButtonMode.lavenderMode,
-                              height: Sizing.large,
-                              textStyle: Typo.medium.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary.withOpacity(0.87),
-                                fontFamily: FontFamily.nohemiVariable,
-                              ),
-                              radius:
-                                  BorderRadius.circular(LemonRadius.small * 2),
                               label: t.event.takeMeToEvent,
                             ),
                     ),

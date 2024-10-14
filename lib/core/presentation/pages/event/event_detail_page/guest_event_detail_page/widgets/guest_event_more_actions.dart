@@ -95,8 +95,8 @@ class GuestEventMoreActions extends StatelessWidget {
         child: Center(
           child: ThemeSvgIcon(
             color: isAppBarCollapsed
-                ? colorScheme.onPrimary
-                : colorScheme.onSurface,
+                ? colorScheme.onSecondary
+                : colorScheme.onSecondary,
             builder: (filter) => Assets.icons.icMoreHoriz.svg(
               colorFilter: filter,
             ),

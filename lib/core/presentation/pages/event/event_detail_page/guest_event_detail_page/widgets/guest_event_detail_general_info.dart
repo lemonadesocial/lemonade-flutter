@@ -5,7 +5,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -96,7 +96,7 @@ class _HostInfo extends StatelessWidget {
           ),
           SizedBox(width: Spacing.extraSmall),
           Text(
-            (event.hostExpanded?.name ?? '').toUpperCase(),
+            event.hostExpanded?.name ?? '',
             style: Typo.medium.copyWith(
               color: colorScheme.onSecondary,
             ),
@@ -123,16 +123,8 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final formattedStartDate = DateFormatUtils.dateWithTimezone(
-      dateTime: event.start ?? DateTime.now(),
-      timezone: event.timezone ?? '',
-      pattern: 'MMM d, hh:mm a',
-    );
-    final formattedEndDate = DateFormatUtils.dateWithTimezone(
-      dateTime: event.end ?? DateTime.now(),
-      timezone: event.timezone ?? '',
-      pattern: 'MMM d, hh:mm a',
-    );
+    final (formattedDate, formattedTime) =
+        EventUtils.getFormattedEventDateAndTime(event);
     final wigets = [
       Padding(
         padding: EdgeInsets.all(
@@ -142,14 +134,14 @@ class _InfoCard extends StatelessWidget {
           children: [
             ThemeSvgIcon(
               color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icCalendar.svg(
+              builder: (filter) => Assets.icons.icCalendarClockOutline.svg(
                 colorFilter: filter,
               ),
             ),
             SizedBox(width: Spacing.small),
             Flexible(
               child: Text(
-                '$formattedStartDate - $formattedEndDate',
+                '$formattedDate, $formattedTime',
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -196,8 +188,7 @@ class _InfoCard extends StatelessWidget {
             SizedBox(width: Spacing.small),
             Expanded(
               child: Text(
-                '${(event.hostExpanded?.name ?? '')} ${event.cohostsExpanded?.isNotEmpty == true ? ' +${event.cohostsExpanded?.length}' : ''}'
-                    .toUpperCase(),
+                '${(event.hostExpanded?.name ?? '')} ${event.cohostsExpanded?.isNotEmpty == true ? ' +${event.cohostsExpanded?.length}' : ''}',
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -216,7 +207,7 @@ class _InfoCard extends StatelessWidget {
         color: LemonColor.atomicBlack,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
         border: Border.all(
-          color: colorScheme.outline,
+          color: colorScheme.outlineVariant,
           width: 1.w,
         ),
       ),
@@ -228,7 +219,7 @@ class _InfoCard extends StatelessWidget {
         separatorBuilder: (context, index) => Divider(
           height: 1.w,
           thickness: 1.w,
-          color: colorScheme.outline,
+          color: colorScheme.outlineVariant,
         ),
         itemCount: wigets.length,
       ),

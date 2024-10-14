@@ -21,7 +21,9 @@ enum GradientButtonMode {
           LemonColor.charlestonGreen.withOpacity(0.6),
         ];
       case lavenderMode:
-        return [LemonColor.buttonLinear1, LemonColor.buttonLinear2];
+        // old design
+        // return [LemonColor.buttonLinear1, LemonColor.buttonLinear2];
+        return [LemonColor.lavender, LemonColor.lavender];
       case lavenderDisableMode:
         return [
           LemonColor.disableButtonLavender,
@@ -149,6 +151,7 @@ class LinearGradientButton extends StatelessWidget {
     TextStyle? textStyle,
     double? height,
     BorderRadius? radius,
+    Widget? leading,
   }) =>
       LinearGradientButton(
         onTap: onTap,
@@ -156,13 +159,13 @@ class LinearGradientButton extends StatelessWidget {
         loadingWhen: loadingWhen ?? false,
         textStyle: textStyle ??
             Typo.medium.copyWith(
-              fontFamily: FontFamily.nohemiVariable,
               fontWeight: FontWeight.w600,
-              color: textColor,
+              color: textColor ?? Colors.white,
             ),
         mode: GradientButtonMode.lavenderMode,
         height: height ?? Sizing.large,
-        radius: radius ?? BorderRadius.circular(LemonRadius.small * 2),
+        radius: radius ?? BorderRadius.circular(LemonRadius.medium),
+        leading: leading,
         trailing: trailing,
       );
 
@@ -189,7 +192,7 @@ class LinearGradientButton extends StatelessWidget {
             ),
         mode: mode ?? GradientButtonMode.defaultMode,
         height: height ?? Sizing.large,
-        radius: BorderRadius.circular(LemonRadius.small * 2),
+        radius: BorderRadius.circular(LemonRadius.medium),
         leading: leading,
         trailing: trailing,
       );

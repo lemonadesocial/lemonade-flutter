@@ -151,8 +151,8 @@ class _JoinRequestStatusCard extends StatelessWidget {
           LemonRadius.medium,
         ),
         border: Border.all(
-          color: colorScheme.outline,
-          width: 1,
+          color: colorScheme.outlineVariant,
+          width: 1.w,
         ),
       ),
       child: Row(
