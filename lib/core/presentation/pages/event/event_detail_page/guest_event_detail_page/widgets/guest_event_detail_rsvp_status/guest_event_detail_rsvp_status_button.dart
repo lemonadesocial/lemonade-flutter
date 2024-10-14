@@ -39,6 +39,10 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
       );
     }
 
+    if (event.registrationDisabled == true) {
+      return const SizedBox.shrink();
+    }
+
     return Query$GetMyEventJoinRequest$Widget(
       options: Options$Query$GetMyEventJoinRequest(
         variables: Variables$Query$GetMyEventJoinRequest(

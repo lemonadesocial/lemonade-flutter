@@ -509,7 +509,9 @@
         "requestDeclinedDepositDescription": "Hosts have denied your request to join. Claim your 100% refund of $amount",
         "requestDeclinedDirectDescription": "Hosts have denied your request to join.",
         "claimRefund": "Claim refund",
-        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet"
+        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet",
+        "registrationClosed": "Registration closed",
+        "registrationClosedDescription": "This event is not longer taking registrations"
     },
     "cancelReservation": {
         "cancelReservationTitle": "Cancel Reservation?",

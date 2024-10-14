@@ -25,14 +25,13 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
       children: [
         if (event.approvalRequired == true)
           Container(
-            padding: EdgeInsets.all(Spacing.smMedium),
+            padding: EdgeInsets.all(Spacing.small),
             decoration: BoxDecoration(
               color: LemonColor.atomicBlack,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(LemonRadius.normal),
-                topRight: Radius.circular(LemonRadius.normal),
-                bottomLeft: Radius.circular(LemonRadius.xSmall),
-                bottomRight: Radius.circular(LemonRadius.xSmall),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+              border: Border.all(
+                color: colorScheme.outline,
+                width: 1.w,
               ),
             ),
             child: _RowInfo(
@@ -47,16 +46,15 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
             ),
           ),
         if (event.guestLimit != null) ...[
-          SizedBox(height: Spacing.superExtraSmall),
+          SizedBox(height: Spacing.xSmall),
           Container(
             padding: EdgeInsets.all(Spacing.smMedium),
             decoration: BoxDecoration(
               color: LemonColor.atomicBlack,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(LemonRadius.xSmall),
-                topRight: Radius.circular(LemonRadius.xSmall),
-                bottomLeft: Radius.circular(LemonRadius.normal),
-                bottomRight: Radius.circular(LemonRadius.normal),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+              border: Border.all(
+                color: colorScheme.outline,
+                width: 1.w,
               ),
             ),
             child: _RowInfo(

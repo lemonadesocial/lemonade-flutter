@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_hosts_avatars.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -30,40 +31,7 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
-          onTap: () {
-            AutoRouter.of(context).push(
-              ProfileRoute(
-                userId: event.hostExpanded?.userId ?? '',
-              ),
-            );
-          },
-          child: Row(
-            children: [
-              LemonNetworkImage(
-                imageUrl: event.hostExpanded?.imageAvatar ?? '',
-                width: 18.w,
-                height: 18.w,
-                borderRadius: BorderRadius.circular(18.w),
-                placeholder: ImagePlaceholder.avatarPlaceholder(),
-              ),
-              SizedBox(width: Spacing.extraSmall),
-              Text(
-                (event.hostExpanded?.name ?? '').toUpperCase(),
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
-                ),
-              ),
-              SizedBox(width: Spacing.superExtraSmall),
-              ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icArrowRight.svg(
-                  colorFilter: filter,
-                ),
-              ),
-            ],
-          ),
-        ),
+        _HostInfo(event: event),
         SizedBox(
           height: Spacing.superExtraSmall,
         ),
@@ -74,7 +42,15 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
             color: colorScheme.onPrimary,
           ),
         ),
-        SizedBox(height: Spacing.medium),
+        SizedBox(height: Spacing.xSmall),
+        if (event.approvalRequired == true ||
+            event.guestLimit != null ||
+            event.registrationDisabled == true) ...[
+          GuestEventDetailRSVPStatus(
+            event: event,
+          ),
+          SizedBox(height: Spacing.xSmall),
+        ],
         _InfoCard(event: event),
         if (event.description != null && event.description!.isNotEmpty) ...[
           SizedBox(
@@ -87,6 +63,53 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
         ],
         // CastOnFarcasterButton(event: event),
       ],
+    );
+  }
+}
+
+class _HostInfo extends StatelessWidget {
+  const _HostInfo({
+    required this.event,
+  });
+
+  final Event event;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          ProfileRoute(
+            userId: event.hostExpanded?.userId ?? '',
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          LemonNetworkImage(
+            imageUrl: event.hostExpanded?.imageAvatar ?? '',
+            width: 18.w,
+            height: 18.w,
+            borderRadius: BorderRadius.circular(18.w),
+            placeholder: ImagePlaceholder.avatarPlaceholder(),
+          ),
+          SizedBox(width: Spacing.extraSmall),
+          Text(
+            (event.hostExpanded?.name ?? '').toUpperCase(),
+            style: Typo.medium.copyWith(
+              color: colorScheme.onSecondary,
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
+          ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icArrowRight.svg(
+              colorFilter: filter,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

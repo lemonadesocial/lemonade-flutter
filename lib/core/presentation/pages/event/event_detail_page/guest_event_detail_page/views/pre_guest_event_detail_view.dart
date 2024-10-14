@@ -7,7 +7,6 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_general_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
@@ -73,13 +72,6 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                   event: event,
                 ),
               ),
-              if (event.approvalRequired == true || event.guestLimit != null)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  child: GuestEventDetailRSVPStatus(
-                    event: event,
-                  ),
-                ),
               if (event.latitude != null && event.longitude != null)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
