@@ -131,10 +131,7 @@ class AddNewCardState with _$AddNewCardState {
   factory AddNewCardState.initial() => AddNewCardState();
 
   bool get fieldValidated =>
-      cardHolderName != null &&
-      cardNumber?.length == 19 &&
-      validThrough?.length == 5 &&
-      cvv?.length == 3;
+      cardNumber?.length == 19 && validThrough?.length == 5 && cvv?.length == 3;
 }
 
 enum AddNewCardBlocStatus {

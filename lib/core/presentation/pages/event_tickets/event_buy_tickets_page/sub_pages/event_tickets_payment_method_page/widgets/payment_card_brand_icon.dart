@@ -1,9 +1,7 @@
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentCardBrandIcon extends StatelessWidget {
   final PaymentCardBrand cardBrand;
@@ -17,10 +15,7 @@ class PaymentCardBrandIcon extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (cardBrand == PaymentCardBrand.visa) {
-      return Assets.icons.icVisa.image(
-        width: Sizing.small,
-        height: 7.w,
-      );
+      return Assets.icons.icVisa.image();
     }
 
     if (cardBrand == PaymentCardBrand.mastercard) {

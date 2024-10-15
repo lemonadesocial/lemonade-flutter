@@ -1,7 +1,6 @@
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_card_tile.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_button.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/select_card_button.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -34,6 +33,40 @@ class PayByStripeFooter extends StatelessWidget {
     return pricingInfo?.paymentAccounts?.isNotEmpty == true
         ? pricingInfo?.paymentAccounts?.first.accountInfo?.publishableKey ?? ''
         : '';
+  }
+
+  void _onPressedSelectCard(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    AutoRouter.of(context).navigate(
+      EventTicketsPaymentMethodRoute(
+        publishableKey: stripePublishableKey,
+        onCardAdded: onCardAdded,
+        onSelectCard: onSelectCard,
+        buyButton: SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              top: Spacing.smMedium,
+              left: Spacing.smMedium,
+              right: Spacing.smMedium,
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  width: 1.w,
+                  color: colorScheme.outline,
+                ),
+              ),
+            ),
+            child: PayButton(
+              disabled: disabled,
+              pricingInfo: pricingInfo,
+              selectedCurrency: selectedCurrency,
+              selectedNetwork: selectedNetwork,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -73,37 +106,15 @@ class PayByStripeFooter extends StatelessWidget {
             return state.when(
               empty: () {
                 return SelectCardButton(
-                  onPressedSelect: () {
-                    AutoRouter.of(context).navigate(
-                      EventTicketsPaymentMethodRoute(
-                        publishableKey: stripePublishableKey,
-                        onCardAdded: onCardAdded,
-                        onSelectCard: onSelectCard,
-                      ),
-                    );
-                  },
+                  onPressedSelect: () => _onPressedSelectCard(context),
                 );
               },
               cardSelected: (selectedPaymentCard) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    EventCardTile(
-                      onPressedSelect: () {
-                        AutoRouter.of(context).navigate(
-                          EventTicketsPaymentMethodRoute(
-                            publishableKey: stripePublishableKey,
-                            onCardAdded: onCardAdded,
-                            onSelectCard: onSelectCard,
-                            buyButton: PayButton(
-                              disabled: disabled,
-                              pricingInfo: pricingInfo,
-                              selectedCurrency: selectedCurrency,
-                              selectedNetwork: selectedNetwork,
-                            ),
-                          ),
-                        );
-                      },
+                    SelectCardButton(
+                      onPressedSelect: () => _onPressedSelectCard(context),
                       paymentCard: selectedPaymentCard,
                     ),
                     SizedBox(height: Spacing.smMedium),

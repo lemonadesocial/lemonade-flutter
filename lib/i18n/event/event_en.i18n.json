@@ -103,7 +103,10 @@
         "howYouPay": "How would you like to pay?",
         "selectCard": "Select card",
         "invalidDate": "Invalid date",
-        "paymentNotificationTimeoutMessage": "The payment confirmation might take some time.\nWould you like to leave and check out other events in the meantime?"
+        "paymentNotificationTimeoutMessage": "The payment confirmation might take some time.\nWould you like to leave and check out other events in the meantime?",
+        "paymentMethod": "Payment method",
+        "newCard": "New card",
+        "saveAndSelectCard": "Save & select card"
     },
     "eventCryptoPayment": {
         "connectWallet": "Connect wallet",

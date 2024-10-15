@@ -70,11 +70,15 @@ class _PromoCodeInputBottomsheetState extends State<PromoCodeInputBottomsheet> {
                   child: LemonTextField(
                     filled: true,
                     fillColor: LemonColor.chineseBlack,
+                    borderColor: colorScheme.outlineVariant,
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
                     controller: promoTextController,
                     hintText: t.event.eventBuyTickets.enterPromoCode,
+                    placeholderStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                     onChange: (v) {
                       setState(() {
                         isValid = v.isNotEmpty;

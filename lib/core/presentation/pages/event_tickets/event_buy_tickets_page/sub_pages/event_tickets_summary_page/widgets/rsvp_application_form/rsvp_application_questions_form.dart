@@ -38,6 +38,7 @@ class RSVPApplicationQuestionsForm extends StatelessWidget {
                 LemonTextField(
                   filled: true,
                   fillColor: LemonColor.atomicBlack,
+                  borderColor: colorScheme.outlineVariant,
                   label: applicationQuestion.question,
                   labelStyle: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,

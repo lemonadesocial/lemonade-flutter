@@ -306,7 +306,7 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
             decoration: BoxDecoration(
               color: LemonColor.atomicBlack,
               border: Border.all(
-                color: colorScheme.outline,
+                color: colorScheme.outlineVariant,
                 width: 1.w,
               ),
               borderRadius: BorderRadius.circular(LemonRadius.medium),
@@ -350,7 +350,7 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                 ),
                 Divider(
                   thickness: 1.w,
-                  color: colorScheme.outline,
+                  color: colorScheme.outlineVariant,
                 ),
                 Padding(
                   padding: EdgeInsets.all(Spacing.small),

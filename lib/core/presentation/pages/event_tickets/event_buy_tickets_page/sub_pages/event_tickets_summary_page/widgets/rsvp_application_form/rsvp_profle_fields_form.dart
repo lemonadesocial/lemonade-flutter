@@ -75,6 +75,7 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                 if (profileFieldKey == ProfileFieldKey.dateOfBirth)
                   Focus(
                     child: EditProfileFieldItem(
+                      borderColor: colorScheme.outlineVariant,
                       controller: birthDayCtrl,
                       profileFieldKey: profileFieldKey,
                       onChange: (value) {
@@ -123,6 +124,7 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                   )
                 else
                   EditProfileFieldItem(
+                    borderColor: colorScheme.outlineVariant,
                     profileFieldKey: profileFieldKey,
                     onChange: (value) {
                       context.read<EventApplicationFormBloc>().add(

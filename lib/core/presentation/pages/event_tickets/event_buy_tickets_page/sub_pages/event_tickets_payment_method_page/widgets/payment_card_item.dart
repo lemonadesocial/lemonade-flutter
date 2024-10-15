@@ -29,21 +29,24 @@ class PaymentCardItem extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.all(Spacing.smMedium),
+        padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(LemonRadius.small),
-          color: colorScheme.onPrimary.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+          color: LemonColor.atomicBlack,
+          border: Border.all(
+            color: colorScheme.outlineVariant,
+          ),
         ),
         child: Row(
           children: [
             if (paymentCard.brand != null)
               Container(
-                width: Sizing.medium,
-                height: Sizing.medium,
-                clipBehavior: Clip.hardEdge,
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+                padding: EdgeInsets.all(1.w),
                 decoration: BoxDecoration(
                   color: colorScheme.onPrimary,
-                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Center(
                   child: PaymentCardBrandIcon(cardBrand: paymentCard.brand!),
