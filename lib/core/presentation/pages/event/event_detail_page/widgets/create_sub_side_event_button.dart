@@ -30,13 +30,13 @@ class CreateSubSideEventButton extends StatelessWidget {
               CreateEventRoute(parentEventId: event.id ?? ''),
             );
           },
-          icon: Assets.icons.icDirectoryLine.svg(),
+          icon: Assets.icons.icSessionsGradient.svg(),
           title: t.event.subEvent.createSubEvent,
           subTitle: t.event.subEvent.createSubEventDescription,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
           border: Border.all(
-            color: colorScheme.outline,
-            width: 0.5.w,
+            color: colorScheme.outlineVariant,
+            width: 1.w,
           ),
         ),
         // TODO: Coming soon feature
@@ -83,7 +83,7 @@ class _Button extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(Spacing.smMedium),
+        padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
           color: LemonColor.atomicBlack,
           borderRadius:
@@ -92,8 +92,21 @@ class _Button extends StatelessWidget {
         ),
         child: Row(
           children: [
-            icon,
-            SizedBox(width: Spacing.xSmall),
+            Container(
+              padding: EdgeInsets.all(
+                Spacing.extraSmall,
+              ),
+              decoration: BoxDecoration(
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+              ),
+              child: Center(
+                child: icon,
+              ),
+            ),
+            SizedBox(
+              width: Spacing.small,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

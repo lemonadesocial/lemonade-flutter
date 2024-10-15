@@ -65,8 +65,8 @@ class PostGuestEventDetailAddTicketToWalletButton extends StatelessWidget {
           color: LemonColor.chineseBlack,
           borderRadius: BorderRadius.circular(Sizing.medium),
           border: Border.all(
-            color: colorScheme.outline,
-            width: 0.5.w,
+            color: colorScheme.outlineVariant,
+            width: 1.w,
           ),
         ),
         child: Center(

@@ -32,8 +32,8 @@ class PostGuestEventDetailSocialLoungeButton extends StatelessWidget {
           color: LemonColor.atomicBlack,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
           border: Border.all(
-            color: colorScheme.outline,
-            width: 0.5.w,
+            color: colorScheme.outlineVariant,
+            width: 1.w,
           ),
         ),
         child: Row(
