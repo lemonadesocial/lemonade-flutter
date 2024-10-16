@@ -103,7 +103,10 @@
         "howYouPay": "How would you like to pay?",
         "selectCard": "Select card",
         "invalidDate": "Invalid date",
-        "paymentNotificationTimeoutMessage": "The payment confirmation might take some time.\nWould you like to leave and check out other events in the meantime?"
+        "paymentNotificationTimeoutMessage": "The payment confirmation might take some time.\nWould you like to leave and check out other events in the meantime?",
+        "paymentMethod": "Payment method",
+        "newCard": "New card",
+        "saveAndSelectCard": "Save & select card"
     },
     "eventCryptoPayment": {
         "connectWallet": "Connect wallet",
@@ -280,6 +283,8 @@
         },
         "guestLimit": "Guest limit",
         "unlimitedGuests": "Unlimited guests",
+        "groupRegistration": "Group registration",
+        "groupRegistrationDescription": "Ticket per guest",
         "unlimitedOfGuestsAllowed": "Unlimited guests allowed",
         "limitOfGuestsAllowed": "Limited no. of guests allowed",
         "activateTicket": "Activate ticket",
@@ -509,7 +514,9 @@
         "requestDeclinedDepositDescription": "Hosts have denied your request to join. Claim your 100% refund of $amount",
         "requestDeclinedDirectDescription": "Hosts have denied your request to join.",
         "claimRefund": "Claim refund",
-        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet"
+        "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet",
+        "registrationClosed": "Registration closed",
+        "registrationClosedDescription": "This event is not longer taking registrations"
     },
     "cancelReservation": {
         "cancelReservationTitle": "Cancel Reservation?",

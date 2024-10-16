@@ -22,6 +22,7 @@ class EditProfileFieldItem extends StatelessWidget {
     required this.value,
     this.backgroundColor,
     this.labelStyle,
+    this.borderColor,
   });
 
   // final User userProfile;
@@ -33,13 +34,14 @@ class EditProfileFieldItem extends StatelessWidget {
   final String? value;
   final Color? backgroundColor;
   final TextStyle? labelStyle;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final border = Border.all(
-      color: colorScheme.outline,
+      color: borderColor ?? colorScheme.outline,
     );
     switch (profileFieldKey) {
       //
@@ -126,6 +128,7 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           fillColor: backgroundColor,
           filled: backgroundColor != null,
+          borderColor: borderColor,
           inputFormatters: [
             CustomDateTextFormatter(),
             LengthLimitingTextInputFormatter(10),
@@ -174,6 +177,7 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           fillColor: backgroundColor,
           filled: backgroundColor != null,
+          borderColor: borderColor,
         );
     }
   }

@@ -39,8 +39,8 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
           LemonRadius.medium,
         ),
         border: Border.all(
-          color: colorScheme.outline,
-          width: 0.5.w,
+          color: colorScheme.outlineVariant,
+          width: 1.w,
         ),
       ),
       child: Column(
@@ -50,14 +50,14 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
           ),
           Divider(
             height: 1,
-            thickness: 0.5,
-            color: colorScheme.outline,
+            thickness: 1.w,
+            color: colorScheme.outlineVariant,
           ),
           const _CheckinButton(),
           Divider(
             height: 1,
-            thickness: 0.5,
-            color: colorScheme.outline,
+            thickness: 1.w,
+            color: colorScheme.outlineVariant,
           ),
           _AssignTicketsButton(event: event),
         ],
@@ -124,7 +124,7 @@ class _EventCountDown extends StatelessWidget {
                     color: LemonColor.chineseBlack,
                     borderRadius: BorderRadius.circular(Sizing.medium),
                     border: Border.all(
-                      color: colorScheme.outline,
+                      color: colorScheme.outlineVariant,
                     ),
                   ),
                   width: Sizing.medium,
@@ -156,6 +156,10 @@ class _EventCountDown extends StatelessWidget {
                             text: t.event.eventStartIn(
                               time: "",
                             ),
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
                             children: [
                               TextSpan(
                                 text: durationToEvent,
@@ -171,7 +175,7 @@ class _EventCountDown extends StatelessWidget {
                           t.event.eventEnded,
                           style: Typo.medium.copyWith(
                             color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                   SizedBox(height: 2.w),

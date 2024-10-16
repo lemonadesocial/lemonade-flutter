@@ -37,6 +37,18 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
     if (!isLoggedIn) {
       return GuestEventDetailApprovalRequiredBadge(event: event);
     }
+    if (event.registrationDisabled == true) {
+      return _JoinRequestStatusCard(
+        title: t.event.rsvpStatus.registrationClosed,
+        subTitle: t.event.rsvpStatus.registrationClosedDescription,
+        icon: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
+          builder: (colorFilter) => Assets.icons.icDoNotDisturb.svg(
+            colorFilter: colorFilter,
+          ),
+        ),
+      );
+    }
 
     return Query$GetMyEventJoinRequest$Widget(
       options: Options$Query$GetMyEventJoinRequest(
@@ -66,10 +78,13 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
           return _JoinRequestStatusCard(
             title: t.event.rsvpStatus.pendingApproval,
             subTitle: t.event.rsvpStatus.pendingApprovalDescription,
-            icon: Assets.icons.icSandClock.svg(
-              width: Sizing.small,
-              height: Sizing.small,
-              color: colorScheme.onSecondary,
+            icon: SizedBox(
+              width: 12.w,
+              height: 12.w,
+              child: CircularProgressIndicator(
+                color: colorScheme.onSecondary,
+                strokeWidth: 2.w,
+              ),
             ),
             onPressCancel: () {},
           );
@@ -128,34 +143,42 @@ class _JoinRequestStatusCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.all(
-        Spacing.smMedium,
+        Spacing.small,
       ),
       decoration: BoxDecoration(
         color: LemonColor.atomicBlack,
         borderRadius: BorderRadius.circular(
-          LemonRadius.small,
+          LemonRadius.medium,
+        ),
+        border: Border.all(
+          color: colorScheme.outlineVariant,
+          width: 1.w,
         ),
       ),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [icon],
-          ),
-          SizedBox(height: Spacing.smMedium),
-          Text(
-            title,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-            ),
-          ),
-          SizedBox(height: 2.w),
-          Text(
-            subTitle,
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
+          icon,
+          SizedBox(width: Spacing.small),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 2.w),
+                Text(
+                  subTitle,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

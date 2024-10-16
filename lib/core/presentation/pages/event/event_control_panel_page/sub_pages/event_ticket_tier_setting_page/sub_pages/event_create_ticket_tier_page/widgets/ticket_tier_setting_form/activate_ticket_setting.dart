@@ -48,7 +48,7 @@ class ActivateTicketSetting extends StatelessWidget {
             builder: (context, state) => FlutterSwitch(
               inactiveColor: colorScheme.outline,
               inactiveToggleColor: colorScheme.onSurfaceVariant,
-              activeColor: LemonColor.paleViolet,
+              activeColor: LemonColor.switchActive,
               activeToggleColor: colorScheme.onPrimary,
               height: Sizing.small,
               width: 42.w,

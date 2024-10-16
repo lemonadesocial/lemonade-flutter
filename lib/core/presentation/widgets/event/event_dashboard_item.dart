@@ -15,6 +15,7 @@ class EventDashboardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Flexible(
       child: InkWell(
         onTap: onTap,
@@ -26,9 +27,9 @@ class EventDashboardItem extends StatelessWidget {
             bottom: Spacing.superExtraSmall,
           ),
           decoration: ShapeDecoration(
-            color: LemonColor.chineseBlack,
+            color: LemonColor.atomicBlack,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(21.r),
             ),
           ),
           child: Row(
@@ -36,17 +37,22 @@ class EventDashboardItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 61.w,
-                  padding: const EdgeInsets.all(15),
+                  height: 52.w,
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
                     gradient: LinearGradient(
                       begin: const Alignment(0.00, -1.00),
                       end: const Alignment(0, 1),
-                      colors: [LemonColor.chineseBlack, Colors.black],
+                      colors: [
+                        colorScheme.outlineVariant,
+                        colorScheme.onPrimary.withOpacity(0.06),
+                      ],
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.r),
+                      side: BorderSide(
+                        color: colorScheme.outlineVariant,
+                      ),
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
                   ),
                   child: Column(

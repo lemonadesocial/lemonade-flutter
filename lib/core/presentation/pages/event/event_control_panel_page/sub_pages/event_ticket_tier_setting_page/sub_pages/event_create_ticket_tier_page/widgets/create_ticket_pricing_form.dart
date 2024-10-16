@@ -36,6 +36,7 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => '',
           fetched: (event) => event.id ?? '',
@@ -49,7 +50,8 @@ class _CreateTicketPricingFormState extends State<CreateTicketPricingForm> {
               Text(
                 t.event.ticketTierSetting.pricingAndPaymentMethods,
                 style: Typo.medium.copyWith(
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onPrimary,
                 ),
               ),
               SizedBox(height: Spacing.xSmall),

@@ -18,6 +18,7 @@ class ModifyTicketTypeBloc
     on<_ModifyTicketTypeEventOnTitleChanged>(_onTitleChanged);
     on<_ModifyTicketTypeEventOnDescriptionChanged>(_onDescriptionChanged);
     on<_ModifyTicketTypeEventOnGuestsLimitChanged>(_onGuestsLimitChanged);
+    on<_ModifyTicketTypeEventOnTicketLimitPerChanged>(_onTicketLimitPerChanged);
     on<_ModifyTicketTypeEventOnActiveChanged>(_onActiveChanged);
     on<_ModifyTicketTypeEventOnPrivateChanged>(_onPrivateChanged);
     on<_ModifyTicketTypeEventOnLimitedChanged>(_onLimitedChanged);
@@ -61,6 +62,16 @@ class ModifyTicketTypeBloc
   ) {
     final newState = state.copyWith(
       limit: event.limit,
+    );
+    emit(_validate(newState));
+  }
+
+  void _onTicketLimitPerChanged(
+    _ModifyTicketTypeEventOnTicketLimitPerChanged event,
+    Emitter emit,
+  ) {
+    final newState = state.copyWith(
+      ticketLimitPer: event.ticketLimitPer,
     );
     emit(_validate(newState));
   }
@@ -236,6 +247,7 @@ class ModifyTicketTypeBloc
           description:
               OptionalStringFormz.pure(initialTicketType?.description ?? ''),
           limit: initialTicketType?.ticketLimit,
+          ticketLimitPer: initialTicketType?.ticketLimitPer,
           active: initialTicketType?.active,
           private: initialTicketType?.private,
           limited: initialTicketType?.limited,
@@ -271,6 +283,9 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
   factory ModifyTicketTypeEvent.onGuestsLimitChanged({
     double? limit,
   }) = _ModifyTicketTypeEventOnGuestsLimitChanged;
+  factory ModifyTicketTypeEvent.onTicketLimitPerChanged({
+    double? ticketLimitPer,
+  }) = _ModifyTicketTypeEventOnTicketLimitPerChanged;
   factory ModifyTicketTypeEvent.onActiveChanged({
     bool? active,
   }) = _ModifyTicketTypeEventOnActiveChanged;
@@ -312,6 +327,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
   factory ModifyTicketTypeState({
     required StringFormz title,
     required OptionalStringFormz description,
+    double? ticketLimitPer,
     double? limit,
     bool? active,
     bool? private,
@@ -326,6 +342,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
   factory ModifyTicketTypeState.initial() => ModifyTicketTypeState(
         title: const StringFormz.pure(),
         description: const OptionalStringFormz.pure(),
+        ticketLimitPer: 1,
         limit: null,
         active: true,
         private: false,

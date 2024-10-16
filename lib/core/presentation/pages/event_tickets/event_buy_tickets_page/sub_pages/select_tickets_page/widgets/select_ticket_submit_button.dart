@@ -9,12 +9,9 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +36,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final redeemState = context.watch<RedeemTicketsBloc>().state;
     final acceptEventState = context.watch<AcceptEventBloc>().state;
     final assignTicketsState = context.watch<AssignTicketsBloc>().state;
@@ -80,8 +76,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         child: Opacity(
           opacity: state.isSelectionValid && !isLoading ? 1 : 0.5,
-          child: LinearGradientButton(
-            height: Sizing.large,
+          child: LinearGradientButton.primaryButton(
             onTap: () {
               if (!state.isSelectionValid || isLoading) return;
               if (state.isPaymentRequired || event.approvalRequired == true) {
@@ -96,12 +91,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
                     );
               }
             },
-            textStyle: Typo.medium.copyWith(
-              fontFamily: FontFamily.nohemiVariable,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onPrimary.withOpacity(0.87),
-            ),
-            radius: BorderRadius.circular(LemonRadius.small * 2),
             label: isLoading
                 ? t.common.processing
                 : !state.isPaymentRequired
@@ -111,7 +100,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
                             .trim()
                         : '${t.event.eventBuyTickets.payViaWallet}  $amountText'
                             .trim(),
-            mode: GradientButtonMode.lavenderMode,
           ),
         ),
       ),

@@ -80,6 +80,7 @@ class EventTicketTypeDto with _$EventTicketTypeDto {
     @JsonKey(name: 'photos_expanded') List<DbFileDto>? photosExpanded,
     @JsonKey(name: 'ticket_limit') double? ticketLimit,
     @JsonKey(name: 'ticket_count') double? ticketCount,
+    @JsonKey(name: 'ticket_limit_per') double? ticketLimitPer,
     @JsonKey(name: 'limited_whitelist_users')
     List<WhitelistUserInfoDto>? limitedWhitelistUsers,
     String? category,

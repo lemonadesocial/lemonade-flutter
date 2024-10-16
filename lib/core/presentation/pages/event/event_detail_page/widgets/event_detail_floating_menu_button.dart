@@ -21,7 +21,8 @@ class EventDetailFloatingMenuButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(100),
         side: BorderSide(
-          color: colorScheme.outline, // Use the secondary color for the border
+          color: colorScheme
+              .outlineVariant, // Use the secondary color for the border
           width: 2.w, // Adjust the border width as needed
         ),
       ),

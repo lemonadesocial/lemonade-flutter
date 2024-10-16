@@ -80,6 +80,7 @@ class Event with _$Event {
     List<String>? inheritedCohosts,
     List<String>? tags,
     bool? applicationRequired,
+    bool? registrationDisabled,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -181,6 +182,7 @@ class Event with _$Event {
       inheritedCohosts: dto.inheritedCohosts,
       tags: dto.tags,
       applicationRequired: dto.applicationRequired,
+      registrationDisabled: dto.registrationDisabled,
     );
   }
 

@@ -87,6 +87,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'inherited_cohosts') List<String>? inheritedCohosts,
     List<String>? tags,
     @JsonKey(name: 'application_required') bool? applicationRequired,
+    @JsonKey(name: 'registration_disabled') bool? registrationDisabled,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

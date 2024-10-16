@@ -414,7 +414,7 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData?.decideUserJoinRequests ?? false);
+    return Right(result.parsedData?.decideUserJoinRequests.isNotEmpty == true);
   }
 
   @override
@@ -431,7 +431,7 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData?.decideUserJoinRequests ?? false);
+    return Right(result.parsedData?.decideUserJoinRequests.isNotEmpty == true);
   }
 
   @override

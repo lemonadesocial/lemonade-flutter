@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/activate_ticket_setting.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/guest_limit_ticket_setting.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_limit_per_setting.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/limited_ticket_setting.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/private_ticket_setting.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -17,6 +17,7 @@ class TicketTierSettingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
 
     return Column(
@@ -24,12 +25,13 @@ class TicketTierSettingForm extends StatelessWidget {
       children: [
         Text(
           t.event.ticketTierSetting.guests,
-          style: Typo.mediumPlus.copyWith(
+          style: Typo.medium.copyWith(
             fontWeight: FontWeight.w600,
+            color: colorScheme.onPrimary,
           ),
         ),
         SizedBox(height: Spacing.small),
-        const GuestLimitTicketSetting(),
+        const TicketLimitPerSetting(),
         SizedBox(height: Spacing.smMedium),
         const ActivateTicketSetting(),
         SizedBox(height: Spacing.smMedium),

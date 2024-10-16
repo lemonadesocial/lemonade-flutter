@@ -124,8 +124,8 @@ class _EventHostItem extends StatelessWidget {
             color: LemonColor.atomicBlack,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
             border: Border.all(
-              color: colorScheme.outline,
-              width: 0.5.w,
+              color: colorScheme.outlineVariant,
+              width: 1.w,
             ),
           ),
           child: Row(
@@ -136,7 +136,7 @@ class _EventHostItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(Sizing.medium),
                 border: Border.all(
                   color: colorScheme.outline,
-                  width: 0.5.w,
+                  width: 1.w,
                 ),
                 fit: BoxFit.cover,
                 placeholder: ImagePlaceholder.avatarPlaceholder(),

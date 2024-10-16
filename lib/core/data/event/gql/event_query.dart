@@ -224,6 +224,7 @@ const eventApplicationFormFragment = '''
       required
     }
     application_form_submission
+    registration_disabled
   }
 ''';
 
