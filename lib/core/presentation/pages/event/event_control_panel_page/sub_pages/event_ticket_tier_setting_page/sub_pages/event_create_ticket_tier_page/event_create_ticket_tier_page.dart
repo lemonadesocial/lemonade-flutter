@@ -19,7 +19,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class EventCreateTicketTierPage extends StatelessWidget {
@@ -75,6 +74,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
           )
           .toList(),
       ticket_limit: state.limit,
+      ticket_limit_per: state.ticketLimitPer,
       active: state.active,
       private: state.private,
       limited: state.limited,
@@ -120,6 +120,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                     style: Typo.extraLarge.copyWith(
                       fontWeight: FontWeight.w800,
                       fontFamily: FontFamily.nohemiVariable,
+                      color: colorScheme.onPrimary,
                     ),
                   ),
                 ),
@@ -158,13 +159,24 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              color: colorScheme.background,
-              padding: EdgeInsets.all(Spacing.smMedium),
+              padding: EdgeInsets.only(
+                top: Spacing.smMedium,
+                left: Spacing.smMedium,
+                right: Spacing.smMedium,
+              ),
+              decoration: BoxDecoration(
+                color: colorScheme.background,
+                border: Border(
+                  top: BorderSide(
+                    color: colorScheme.outline,
+                  ),
+                ),
+              ),
               child: SafeArea(
                 child: BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
                   builder: (context, state) => Opacity(
                     opacity: state.isValid ? 1 : 0.5,
-                    child: LinearGradientButton(
+                    child: LinearGradientButton.primaryButton(
                       onTap: () async {
                         if (!state.isValid) return;
                         final futureResult = await showFutureLoadingDialog<
@@ -178,15 +190,9 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                           context.router.pop();
                         }
                       },
-                      height: 42.w,
-                      radius: BorderRadius.circular(LemonRadius.small * 2),
-                      mode: GradientButtonMode.lavenderMode,
                       label: initialTicketType != null
                           ? t.common.actions.saveChanges
                           : t.event.ticketTierSetting.addTicket,
-                      textStyle: Typo.medium.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
                     ),
                   ),
                 ),

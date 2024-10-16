@@ -145,6 +145,7 @@ class EventTicketType with _$EventTicketType {
     EventTicketPrice? defaultPrice,
     List<DbFile>? photosExpanded,
     double? ticketLimit,
+    double? ticketLimitPer,
     double? ticketCount,
     List<WhitelistUserInfo>? limitedWhitelistUsers,
     String? category,
@@ -177,6 +178,7 @@ class EventTicketType with _$EventTicketType {
             .map((item) => DbFile.fromDto(item))
             .toList(),
         ticketLimit: dto.ticketLimit,
+        ticketLimitPer: dto.ticketLimitPer,
         ticketCount: dto.ticketCount,
         limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
             .map((item) => WhitelistUserInfo.fromDto(item))

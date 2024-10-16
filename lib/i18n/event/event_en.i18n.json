@@ -283,6 +283,8 @@
         },
         "guestLimit": "Guest limit",
         "unlimitedGuests": "Unlimited guests",
+        "groupRegistration": "Group registration",
+        "groupRegistrationDescription": "Ticket per guest",
         "unlimitedOfGuestsAllowed": "Unlimited guests allowed",
         "limitOfGuestsAllowed": "Limited no. of guests allowed",
         "activateTicket": "Activate ticket",
