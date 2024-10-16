@@ -38,6 +38,10 @@ class TicketAssignmentFormItem extends StatelessWidget {
         LemonTextField(
           filled: true,
           fillColor: LemonColor.atomicBlack,
+          placeholderStyle: Typo.medium.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+          borderColor: colorScheme.outlineVariant,
           hintText: t.common.email,
           onChange: (value) {
             onChangeEmail(value);
