@@ -84,6 +84,7 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
                                       if (newCard != null) {
                                         onCardAdded?.call(newCard);
                                       }
+                                      AutoRouter.of(context).pop();
                                     },
                                   );
                                 }
@@ -103,7 +104,14 @@ class EventTicketsPaymentMethodPage extends StatelessWidget {
                             ),
                           ),
                           if (selectedCard != null)
-                            buyButton ?? const SizedBox.shrink(),
+                            buyButton != null
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Spacing.smMedium,
+                                    ),
+                                    child: buyButton!,
+                                  )
+                                : const SizedBox.shrink(),
                         ],
                       ),
                     );

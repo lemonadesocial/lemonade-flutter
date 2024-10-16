@@ -62,6 +62,7 @@ class PayByStripeFooter extends StatelessWidget {
               pricingInfo: pricingInfo,
               selectedCurrency: selectedCurrency,
               selectedNetwork: selectedNetwork,
+              isFree: isFree,
             ),
           ),
         ),
