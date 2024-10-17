@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_provider_bloc/event_provider_bl
 import 'package:app/core/application/event_tickets/buy_tickets_bloc/buy_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/buy_tickets_with_crypto_bloc.dart';
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
+import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
@@ -29,14 +30,10 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
-import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
@@ -51,6 +48,7 @@ class EventBuyTicketsProcessingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedNetwork =
         context.read<SelectEventTicketsBloc>().state.selectedNetwork;
+    final event = context.read<EventProviderBloc>().event;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -60,6 +58,9 @@ class EventBuyTicketsProcessingPage extends StatelessWidget {
           create: (context) => BuyTicketsWithCryptoBloc(
             selectedNetwork: selectedNetwork,
           ),
+        ),
+        BlocProvider(
+          create: (context) => RedeemTicketsBloc(event: event),
         ),
       ],
       child: const EventBuyTicketsProcessingPageView(),
@@ -133,6 +134,11 @@ class _EventBuyTicketsProcessingPageViewState
     try {
       await _checkAndSubmitApplicationForm(context);
 
+      if (isFree && (pricingInfo?.paymentAccounts ?? []).isEmpty == true) {
+        _processRedeem(context);
+        return;
+      }
+
       if (isCryptoCurrency) {
         _processCryptoPayment(context);
       } else {
@@ -146,13 +152,21 @@ class _EventBuyTicketsProcessingPageViewState
     }
   }
 
+  void _processRedeem(BuildContext context) {
+    context.read<RedeemTicketsBloc>().add(
+          RedeemTicketsEvent.redeem(
+            ticketItems: selectedTickets,
+          ),
+        );
+  }
+
   void _proceessStripePayment(BuildContext context) {
     context.read<BuyTicketsBloc>().add(
           BuyTicketsEvent.buy(
             input: BuyTicketsInput(
               discount: pricingInfo?.promoCode,
               eventId: event.id ?? '',
-              accountId: pricingInfo?.paymentAccounts?.first.id ?? '',
+              accountId: pricingInfo?.paymentAccounts?.firstOrNull?.id ?? '',
               currency: selectedCurrency ?? '',
               items: selectedTickets,
               total: pricingInfo?.total ?? '0',
@@ -173,13 +187,13 @@ class _EventBuyTicketsProcessingPageViewState
             userWalletAddress: userWalletAddress,
             input: BuyTicketsInput(
               eventId: event.id ?? '',
-              accountId: pricingInfo?.paymentAccounts?.first.id ?? '',
+              accountId: pricingInfo?.paymentAccounts?.firstOrNull?.id ?? '',
               currency: selectedCurrency ?? '',
               items: selectedTickets,
               total: pricingInfo?.total ?? '0',
               network: selectedNetwork ?? '',
               discount: pricingInfo?.promoCode,
-              fee: pricingInfo?.paymentAccounts?.first.fee,
+              fee: pricingInfo?.paymentAccounts?.firstOrNull?.fee,
             ),
           ),
         );
@@ -269,7 +283,7 @@ class _EventBuyTicketsProcessingPageViewState
                   count: totalTicketsCount,
                 )
               : null,
-          buttonBuilder: (newContext) => LinearGradientButton(
+          buttonBuilder: (newContext) => LinearGradientButton.primaryButton(
             onTap: () {
               if (payment?.state == Enum$NewPaymentState.await_capture) {
                 AutoRouter.of(newContext).root.popUntil(
@@ -284,13 +298,38 @@ class _EventBuyTicketsProcessingPageViewState
                 ),
               ]);
             },
-            height: Sizing.large,
-            textStyle: Typo.medium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
-              fontFamily: FontFamily.nohemiVariable,
-            ),
-            radius: BorderRadius.circular(LemonRadius.small * 2),
+            label: t.common.next,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _onNavigateWhenRedeemSucess(
+    BuildContext context, {
+    int? ticketsCount,
+  }) {
+    final userId = AuthUtils.getUserId(context);
+    final isAttending = EventUtils.isAttending(event: event, userId: userId);
+    AutoRouter.of(context).pushAll(
+      [
+        RSVPEventSuccessPopupRoute(
+          event: event,
+          primaryMessage:
+              isAttending ? t.event.eventBuyTickets.ticketsPurchased : null,
+          secondaryMessage: isAttending
+              ? t.event.eventBuyTickets
+                  .addictionalTicketsPurchasedSuccess(count: ticketsCount ?? 0)
+              : null,
+          buttonBuilder: (newContext) => LinearGradientButton.primaryButton(
+            onTap: () {
+              AutoRouter.of(newContext).replaceAll([
+                EventUtils.getAssignTicketsRouteForBuyFlow(
+                  event: event,
+                  userId: userId,
+                ),
+              ]);
+            },
             label: t.common.next,
           ),
         ),
@@ -302,6 +341,29 @@ class _EventBuyTicketsProcessingPageViewState
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        BlocListener<RedeemTicketsBloc, RedeemTicketsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              orElse: () => null,
+              failure: (failure) {
+                AutoRouter.of(context).pop();
+              },
+              success: (redeemTicketsResponse) async {
+                final ticketsCount = redeemTicketsResponse.tickets?.length ?? 0;
+                if (redeemTicketsResponse.joinRequest != null) {
+                  AutoRouter.of(context).root.popUntil(
+                        (route) => route.data?.name == EventDetailRoute.name,
+                      );
+                  return;
+                }
+                _onNavigateWhenRedeemSucess(
+                  context,
+                  ticketsCount: ticketsCount,
+                );
+              },
+            );
+          },
+        ),
         BuyTicketsListener.create(
           onFailure: () {
             AutoRouter.of(context).pop();
@@ -312,6 +374,14 @@ class _EventBuyTicketsProcessingPageViewState
           }) {
             if (eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
+            }
+            if (isFree) {
+              _onNavigateWhenPaymentConfirmed(
+                context,
+                event,
+                payment,
+              );
+              return;
             }
             _waitForNotificationTimer.start(
               context,
@@ -366,6 +436,14 @@ class _EventBuyTicketsProcessingPageViewState
           onDone: (data) {
             if (data.eventJoinRequest != null) {
               return _handleEventRequireApproval(context);
+            }
+            if (isFree) {
+              _onNavigateWhenPaymentConfirmed(
+                context,
+                event,
+                data.payment,
+              );
+              return;
             }
             _waitForNotificationTimer.startWithCrypto(
               context,

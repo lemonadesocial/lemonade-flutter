@@ -77,7 +77,8 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.xLarge),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: Spacing.xLarge),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                       child: buttonBuilder != null
                           ? buttonBuilder?.call(context)
                           : LinearGradientButton.primaryButton(

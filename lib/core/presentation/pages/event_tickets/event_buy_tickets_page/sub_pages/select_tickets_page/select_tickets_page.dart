@@ -54,6 +54,9 @@ class SelectTicketsPage extends StatelessWidget {
         BlocProvider(
           create: (context) => AcceptEventBloc(event: event),
         ),
+        BlocProvider(
+          create: (context) => RedeemTicketsBloc(event: event),
+        ),
       ],
       child: SelectTicketView(event: event),
     );

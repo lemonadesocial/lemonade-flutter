@@ -4,7 +4,6 @@ import 'package:app/core/application/event/event_buy_additional_tickets_bloc/eve
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
 import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/get_event_ticket_types_bloc.dart';
-import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_tickets_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
@@ -44,9 +43,6 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
         ),
         BlocProvider(
           create: (context) => SelectEventTicketsBloc(),
-        ),
-        BlocProvider(
-          create: (context) => RedeemTicketsBloc(event: event),
         ),
         BlocProvider(
           create: (context) => GetPaymentCardsBloc(),
