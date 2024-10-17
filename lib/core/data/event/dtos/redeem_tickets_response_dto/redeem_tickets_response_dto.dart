@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -7,6 +8,7 @@ part 'redeem_tickets_response_dto.g.dart';
 @freezed
 class RedeemTicketsResponseDto with _$RedeemTicketsResponseDto {
   factory RedeemTicketsResponseDto({
+    @JsonKey(name: 'join_request') EventJoinRequestDto? joinRequest,
     List<EventTicketDto>? tickets,
   }) = _RedeemTicketsResponseDto;
 

@@ -2,6 +2,9 @@ mutation RedeemTickets($input: RedeemTicketsInput!) {
   redeemTickets(input: $input) {
     join_request {
       _id
+      event
+      state
+      user
     }
     tickets {
       _id
