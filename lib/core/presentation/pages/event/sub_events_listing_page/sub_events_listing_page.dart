@@ -289,6 +289,7 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
                   height: _calendarVisible ? 300 : 0,
                   child: CalendarDatePicker2(
                     config: CalendarDatePicker2Config(
+                      firstDayOfWeek: 1,
                       controlsHeight: 0,
                       nextMonthIcon: const SizedBox.shrink(),
                       lastMonthIcon: const SizedBox.shrink(),

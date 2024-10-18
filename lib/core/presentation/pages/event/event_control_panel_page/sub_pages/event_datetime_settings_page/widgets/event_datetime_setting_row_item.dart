@@ -150,6 +150,7 @@ class _EventDatetimeSettingRowItemState
                 children: [
                   CalendarDatePicker2(
                     config: CalendarDatePicker2WithActionButtonsConfig(
+                      firstDayOfWeek: 1,
                       calendarType: CalendarDatePicker2Type.single,
                       selectedDayTextStyle: TextStyle(
                         color: LemonColor.paleViolet,
