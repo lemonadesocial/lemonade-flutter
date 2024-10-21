@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.36.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.35.0...v1.36.0) (2024-10-18)
+
+
+### Features
+
+* handle await capture payment ([#746](https://github.com/lemonadesocial/lemonade-flutter/issues/746)) ([8be2ce1](https://github.com/lemonadesocial/lemonade-flutter/commit/8be2ce19b0478a79fa7bd8f202afe31ac8545dd9))
+* new rsvp flow ([#739](https://github.com/lemonadesocial/lemonade-flutter/issues/739)) ([b412df5](https://github.com/lemonadesocial/lemonade-flutter/commit/b412df53104f8be465332e33eaa2ba6213425b5b))
+* pre-rsvp event detail remake ([#742](https://github.com/lemonadesocial/lemonade-flutter/issues/742)) ([64a8478](https://github.com/lemonadesocial/lemonade-flutter/commit/64a84788b4bf4a49660089395512e320cdf98ec8))
+* remake choose location setting ([#741](https://github.com/lemonadesocial/lemonade-flutter/issues/741)) ([c7d2e01](https://github.com/lemonadesocial/lemonade-flutter/commit/c7d2e01be8e76d0f5e4f45f29c7e7064714f8666))
+* rsvp flow pick my ticket page remake ([#744](https://github.com/lemonadesocial/lemonade-flutter/issues/744)) ([87f91cf](https://github.com/lemonadesocial/lemonade-flutter/commit/87f91cfa743ef37d3192a92e949905cc882bf006))
+* rsvp ticket assignments page remake ([#743](https://github.com/lemonadesocial/lemonade-flutter/issues/743)) ([4222546](https://github.com/lemonadesocial/lemonade-flutter/commit/422254666683a473bd769021a1589404d989c55c))
+
+
+### Bug Fixes
+
+* allow redeem free ticket without payment acc setup ([#750](https://github.com/lemonadesocial/lemonade-flutter/issues/750)) ([b607ed2](https://github.com/lemonadesocial/lemonade-flutter/commit/b607ed2a756ebb4b47e3645804fa04e2cc3009d0))
+* change first day of week of calendar date picker ([#751](https://github.com/lemonadesocial/lemonade-flutter/issues/751)) ([f0f57bf](https://github.com/lemonadesocial/lemonade-flutter/commit/f0f57bf28b2f071ffb7890a2300242494939b352))
+* event date logic ([#745](https://github.com/lemonadesocial/lemonade-flutter/issues/745)) ([e9fa8dd](https://github.com/lemonadesocial/lemonade-flutter/commit/e9fa8dd0a7265b54bb01f16a64bc769756d1f3b4))
+* fix event close registration ([#749](https://github.com/lemonadesocial/lemonade-flutter/issues/749)) ([c992041](https://github.com/lemonadesocial/lemonade-flutter/commit/c992041939bd9da10ccc28dd5139fe24800ad583))
+* fix event date setting not pop when save ([#747](https://github.com/lemonadesocial/lemonade-flutter/issues/747)) ([eea1acf](https://github.com/lemonadesocial/lemonade-flutter/commit/eea1acf392cf6048826e8490905551e24df4f08d))
+
 ## [1.35.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.34.0...v1.35.0) (2024-09-30)
 
 
