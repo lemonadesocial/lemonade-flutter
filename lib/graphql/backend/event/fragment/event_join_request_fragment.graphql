@@ -20,6 +20,13 @@ fragment EventJoinRequest on EventJoinRequest {
     wallets
     email
   }
+  non_login_user {
+    _id
+    name
+    display_name
+    email
+    image_avatar
+  }
   event_expanded {
     _id
   }

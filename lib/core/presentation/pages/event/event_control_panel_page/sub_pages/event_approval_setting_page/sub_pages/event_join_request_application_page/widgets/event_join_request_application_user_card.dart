@@ -1,6 +1,6 @@
 import 'package:app/core/config.dart';
-import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -12,11 +12,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EventJoinRequestApplicationUserCard extends StatelessWidget {
   final EventJoinRequest eventJoinRequest;
-  final Applicant? applicant;
+  final User? userInfo;
   const EventJoinRequestApplicationUserCard({
     super.key,
     required this.eventJoinRequest,
-    this.applicant,
+    this.userInfo,
   });
 
   @override
@@ -38,7 +38,7 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                 Flexible(
                   child: JoinRequestUserAvatar(
                     direction: Axis.vertical,
-                    user: eventJoinRequest.userExpanded,
+                    eventJoinRequest: eventJoinRequest,
                     avatarSize: Sizing.large,
                   ),
                 ),
@@ -47,7 +47,9 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    _Social(applicant: applicant),
+                    _Social(
+                      userInfo: userInfo,
+                    ),
                   ],
                 ),
               ],
@@ -60,9 +62,9 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
 }
 
 class _Social extends StatelessWidget {
-  final Applicant? applicant;
+  final User? userInfo;
   const _Social({
-    this.applicant,
+    this.userInfo,
   });
 
   List<SvgGenImage> get _socialIconsSvg => [
@@ -85,9 +87,9 @@ class _Social extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          applicant?.handleLinkedin,
-          applicant?.handleInstagram,
-          applicant?.handleTwitter,
+          userInfo?.handleLinkedin,
+          userInfo?.handleInstagram,
+          userInfo?.handleTwitter,
         ].asMap().entries.map((entry) {
           return GestureDetector(
             onTap: () async {

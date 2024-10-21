@@ -102,7 +102,7 @@ class _EventPendingJoinRequestItemState
             child: Row(
               children: [
                 JoinRequestUserAvatar(
-                  user: widget.eventJoinRequest.userExpanded,
+                  eventJoinRequest: widget.eventJoinRequest,
                 ),
                 const Spacer(),
                 InkWell(

@@ -16,6 +16,7 @@ class EventJoinRequestDto with _$EventJoinRequestDto {
     @JsonKey(name: 'decided_at') DateTime? decidedAt,
     @JsonKey(name: 'decided_by') String? decidedBy,
     @JsonKey(name: 'user_expanded') UserDto? userExpanded,
+    @JsonKey(name: 'non_login_user') UserDto? nonLoginUser,
     @JsonKey(name: 'decided_by_expanded') UserDto? decidedByExpanded,
     @JsonKey(name: 'event_expanded') EventDto? eventExpanded,
     Enum$EventJoinRequestState? state,
