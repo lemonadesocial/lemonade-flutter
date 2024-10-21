@@ -65,7 +65,7 @@ class EventJoinRequestStatusHistory extends StatelessWidget {
     final steps = [
       EventJoinRequestStatusHistoryStep(
         leading: JoinRequestUserAvatar(
-          user: eventJoinRequest.userExpanded,
+          eventJoinRequest: eventJoinRequest,
         ),
         title: '',
         subTitle: '',

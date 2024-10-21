@@ -1,5 +1,9 @@
-query GetEventApplicationAnswers($event: MongoID!, $user: MongoID) {
-  getEventApplicationAnswers(event: $event, user: $user) {
+query GetEventApplicationAnswers(
+  $event: MongoID!
+  $user: MongoID
+  $email: String
+) {
+  getEventApplicationAnswers(event: $event, user: $user, email: $email) {
     _id
     answer
     question

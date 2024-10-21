@@ -17,6 +17,7 @@ class EventJoinRequest with _$EventJoinRequest {
     DateTime? decidedAt,
     String? decidedBy,
     User? userExpanded,
+    User? nonLoginUser,
     User? decidedByExpanded,
     Event? eventExpanded,
     Enum$EventJoinRequestState? state,
@@ -30,6 +31,8 @@ class EventJoinRequest with _$EventJoinRequest {
         decidedBy: dto.decidedBy,
         userExpanded:
             dto.userExpanded != null ? User.fromDto(dto.userExpanded!) : null,
+        nonLoginUser:
+            dto.nonLoginUser != null ? User.fromDto(dto.nonLoginUser!) : null,
         decidedByExpanded: dto.decidedByExpanded != null
             ? User.fromDto(dto.decidedByExpanded!)
             : null,

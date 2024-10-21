@@ -1,0 +1,32 @@
+query getUserFromUserMigration($email: String) {
+  getUserFromUserMigration(email: $email) {
+    _id
+    age
+    calendly_url
+    company_name
+    country
+    date_of_birth
+    description
+    display_name
+    education_title
+    email
+    ethnicity
+    handle_facebook
+    handle_farcaster
+    handle_github
+    handle_instagram
+    handle_lens
+    handle_linkedin
+    handle_mirror
+    handle_twitter
+    industry
+    job_title
+    name
+    phone
+    pronoun
+    tagline
+    username
+    url
+    url_go
+  }
+}

@@ -1,6 +1,5 @@
-import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -9,18 +8,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class JoinRequestUserAvatar extends StatelessWidget {
-  final User? user;
+  final EventJoinRequest eventJoinRequest;
   final Axis direction;
   final double? avatarSize;
 
   const JoinRequestUserAvatar({
     super.key,
-    this.user,
+    required this.eventJoinRequest,
     this.direction = Axis.horizontal,
     this.avatarSize,
   });
 
   double get _size => avatarSize ?? Sizing.medium;
+
+  bool get _isNonLoginUser => eventJoinRequest.user == null;
+
+  String get _name => _isNonLoginUser
+      ? eventJoinRequest.nonLoginUser?.displayName ?? ''
+      : eventJoinRequest.userExpanded?.displayName ?? '';
+
+  String get _email => _isNonLoginUser
+      ? eventJoinRequest.nonLoginUser?.email ?? ''
+      : eventJoinRequest.userExpanded?.email ?? '';
+
+  String get _imageUrl => _isNonLoginUser
+      ? eventJoinRequest.nonLoginUser?.imageAvatar ?? ''
+      : eventJoinRequest.userExpanded?.imageAvatar ?? '';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +44,10 @@ class JoinRequestUserAvatar extends StatelessWidget {
             children: [
               _avatar(),
               SizedBox(width: Spacing.xSmall),
-              _Name(user: user),
+              _Name(
+                name: _name,
+                email: _email,
+              ),
             ],
           )
         : Column(
@@ -39,7 +55,10 @@ class JoinRequestUserAvatar extends StatelessWidget {
             children: [
               _avatar(),
               SizedBox(height: Spacing.small),
-              _Name(user: user),
+              _Name(
+                name: _name,
+                email: _email,
+              ),
             ],
           );
   }
@@ -50,7 +69,7 @@ class JoinRequestUserAvatar extends StatelessWidget {
       child: CachedNetworkImage(
         width: _size,
         height: _size,
-        imageUrl: user?.imageAvatar ?? '',
+        imageUrl: _imageUrl,
         placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
         errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
       ),
@@ -60,13 +79,14 @@ class JoinRequestUserAvatar extends StatelessWidget {
 
 class _Name extends StatelessWidget {
   const _Name({
-    required this.user,
+    required this.name,
+    required this.email,
   });
-  final User? user;
+  final String name;
+  final String email;
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: Sizing.xLarge * 3),
@@ -74,7 +94,7 @@ class _Name extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            user?.displayName ?? user?.email ?? t.common.anonymous,
+            name,
             style: Typo.medium.copyWith(
               color: colorScheme.onPrimary,
             ),
@@ -82,7 +102,7 @@ class _Name extends StatelessWidget {
           ),
           SizedBox(height: 2.w),
           Text(
-            user?.username != null ? '@${user?.username}' : user?.email ?? '',
+            email,
             style: Typo.small.copyWith(
               color: colorScheme.onSecondary,
             ),

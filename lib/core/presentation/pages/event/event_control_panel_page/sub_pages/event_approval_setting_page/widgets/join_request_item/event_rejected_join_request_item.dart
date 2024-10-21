@@ -40,7 +40,7 @@ class EventRejectedJoinRequestItem extends StatelessWidget {
             child: Row(
               children: [
                 JoinRequestUserAvatar(
-                  user: eventJoinRequest.userExpanded,
+                  eventJoinRequest: eventJoinRequest,
                 ),
               ],
             ),
