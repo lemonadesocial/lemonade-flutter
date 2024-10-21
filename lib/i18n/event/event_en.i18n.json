@@ -383,6 +383,7 @@
         "guests": "Guests",
         "tabs": {
             "reservations": "Reservations",
+            "guestList": "Guest list",
             "pending": "Pending",
             "confirmed": "Confirmed",
             "rejected": "Rejected",
