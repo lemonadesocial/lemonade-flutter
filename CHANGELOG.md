@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.36.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.36.0...v1.36.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* handle non login user join request with applications form ([#752](https://github.com/lemonadesocial/lemonade-flutter/issues/752)) ([f87fa40](https://github.com/lemonadesocial/lemonade-flutter/commit/f87fa40d5edec5c2f57ab8bf0c90f044041e87b3))
+
 ## [1.36.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.35.0...v1.36.0) (2024-10-18)
 
 
