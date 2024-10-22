@@ -11,6 +11,7 @@ class EventTicketExport with _$EventTicketExport {
     String? ticketType,
     DateTime? checkinDate,
     String? buyerId,
+    String? shortId,
     String? buyerEmail,
     String? buyerName,
     String? buyerAvatar,

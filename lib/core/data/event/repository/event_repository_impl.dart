@@ -1,4 +1,5 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
+import 'package:app/core/data/event/dtos/event_checkin_dto/event_checkin_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
@@ -259,7 +260,7 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> updateEventCheckin({
+  Future<Either<Failure, EventCheckin>> updateEventCheckin({
     required Input$UpdateEventCheckinInput input,
   }) async {
     final result = await client.mutate$UpdateEventCheckin(
@@ -267,10 +268,16 @@ class EventRepositoryImpl implements EventRepository {
         variables: Variables$Mutation$UpdateEventCheckin(input: input),
       ),
     );
-    if (result.hasException) {
+    if (result.hasException || result.parsedData?.updateEventCheckin == null) {
       return Left(Failure.withGqlException(result.exception));
     }
-    return Right(result.parsedData!.updateEventCheckin);
+    return Right(
+      EventCheckin.fromDto(
+        EventCheckinDto.fromJson(
+          result.parsedData!.updateEventCheckin.toJson(),
+        ),
+      ),
+    );
   }
 
   @override

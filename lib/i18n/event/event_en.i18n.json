@@ -361,7 +361,7 @@
         "checkedIn": "checked in",
         "pleaseScan": "Please scan QR Code",
         "checkin": "Check in",
-        "checkedinSuccessfully": "Checked in successfully",
+        "checkedinSuccessfully": "Successfully checked in",
         "rewards": "Rewards"
     },
     "rewardSetting": {
@@ -428,7 +428,8 @@
             "paid": "paid"
         },
         "searchRegistrations": "Search registrations",
-        "searchPending": "Search pending"
+        "searchPending": "Search pending",
+        "checkedinSuccessfully": "Successfully checked in"
     },
     "eventInvited": {
         "joined": "Registered",

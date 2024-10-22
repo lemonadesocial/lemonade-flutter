@@ -7,6 +7,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
@@ -214,18 +215,17 @@ class _GuestActions extends StatelessWidget {
               Options$Mutation$UpdateEventCheckin(
                 variables: Variables$Mutation$UpdateEventCheckin(
                   input: Input$UpdateEventCheckinInput(
-                    event: event?.id ?? '',
                     active: true,
-                    // TODO: will remove this
-                    user: eventAccepted.buyerId ?? '',
-                    // TODO: handle checking by short Id (checkin By ticket not user anymore)
-                    // shortid: eventAccepted.shortId ?? '',
+                    shortid: eventAccepted.shortId ?? '',
                   ),
                 ),
               ),
             ),
       );
-      if (response.result?.parsedData?.updateEventCheckin == true) {
+      if (response.result?.parsedData?.updateEventCheckin != null) {
+        SnackBarUtils.showSuccess(
+          message: t.event.eventApproval.checkedinSuccessfully,
+        );
         refetch?.call();
       }
     }
