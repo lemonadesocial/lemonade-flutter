@@ -84,6 +84,7 @@ final getTicketsQuery = gql('''
       assigned_email
       assigned_to
       invited_by
+      shortid
     }
   }
 ''');

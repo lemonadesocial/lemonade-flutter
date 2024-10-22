@@ -1,3 +1,9 @@
 mutation UpdateEventCheckin($input: UpdateEventCheckinInput!) {
-    updateEventCheckin(input: $input)
+  updateEventCheckin(input: $input) {
+    _id
+    active
+    email
+    event
+    user
+  }
 }

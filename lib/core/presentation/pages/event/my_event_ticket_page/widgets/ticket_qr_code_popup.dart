@@ -1,4 +1,3 @@
-import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,14 @@ import 'package:qr_flutter/qr_flutter.dart';
 class TicketQRCodePopup extends StatelessWidget {
   const TicketQRCodePopup({
     super.key,
+    required this.data,
   });
+
+  final String data;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final userId = AuthUtils.getUserId(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
@@ -36,7 +37,7 @@ class TicketQRCodePopup extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(LemonRadius.small),
               child: QrImageView(
-                data: userId,
+                data: data,
                 backgroundColor: colorScheme.onPrimary,
               ),
             ),

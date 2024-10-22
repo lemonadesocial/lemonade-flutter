@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/t
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:collection/collection.dart';
 
 class GuestEventDetailBasicInfo extends StatelessWidget {
   const GuestEventDetailBasicInfo({
@@ -211,53 +213,68 @@ class _CheckinButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-
-    return InkWell(
-      onTap: () {
-        Vibrate.feedback(FeedbackType.light);
-        showDialog(
-          context: context,
-          builder: (context) => const TicketQRCodePopup(),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: Spacing.small,
-          horizontal: Spacing.small,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icCheckin.svg(
-                colorFilter: filter,
-                width: Sizing.mSmall,
-                height: Sizing.mSmall,
-              ),
-            ),
-            SizedBox(width: Spacing.small),
-            Expanded(
-              child: Text(
-                t.event.configuration.checkIn,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
+    final userId = AuthUtils.getUserId(context);
+    return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
+      builder: (context, myTicketsState) {
+        return InkWell(
+          onTap: () {
+            final assignedToMeTicket = myTicketsState.maybeWhen(
+              orElse: () => null,
+              success: (myTickets) => myTickets.firstWhereOrNull(
+                (ticket) => EventTicketUtils.isTicketAssignedToMe(
+                  ticket,
+                  userId: userId,
                 ),
               ),
-            ),
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                colorFilter: filter,
-                width: Sizing.mSmall,
-                height: Sizing.mSmall,
+            );
+            Vibrate.feedback(FeedbackType.light);
+            showDialog(
+              context: context,
+              builder: (context) => TicketQRCodePopup(
+                data: assignedToMeTicket?.shortId ?? '',
               ),
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: Spacing.small,
+              horizontal: Spacing.small,
             ),
-          ],
-        ),
-      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icCheckin.svg(
+                    colorFilter: filter,
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                  ),
+                ),
+                SizedBox(width: Spacing.small),
+                Expanded(
+                  child: Text(
+                    t.event.configuration.checkIn,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
+                    colorFilter: filter,
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

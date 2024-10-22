@@ -81,10 +81,11 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
             padding: EdgeInsets.only(right: Spacing.small),
             child: InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const TicketQRCodePopup(),
-                );
+                // TODO: Add reward QR code popup later
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => const TicketQRCodePopup(),
+                // );
               },
               child: ThemeSvgIcon(
                 builder: (filter) => Assets.icons.icQr.svg(

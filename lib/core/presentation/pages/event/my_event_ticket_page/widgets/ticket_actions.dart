@@ -100,11 +100,13 @@ class EventTicketActions extends StatelessWidget {
               height: 27.w,
             ),
           ),
-          onPressed: () => {
+          onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => const TicketQRCodePopup(),
-            ),
+              builder: (context) => TicketQRCodePopup(
+                data: assignedToMeTicket?.shortId ?? '',
+              ),
+            );
           },
         ),
         ActionItem(

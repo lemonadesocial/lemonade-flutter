@@ -19,6 +19,7 @@ class EventTicket with _$EventTicket {
     String? invitedBy,
     String? type,
     User? assignedToExpanded,
+    String? shortId,
   }) = _EventTicket;
 
   factory EventTicket.fromDto(EventTicketDto dto) => EventTicket(
@@ -32,6 +33,7 @@ class EventTicket with _$EventTicket {
         assignedToExpanded: dto.assignedToExpanded != null
             ? User.fromDto(dto.assignedToExpanded!)
             : null,
+        shortId: dto.shortId,
       );
 
   factory EventTicket.fromJson(Map<String, dynamic> json) =>
