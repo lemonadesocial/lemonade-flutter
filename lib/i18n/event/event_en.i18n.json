@@ -426,7 +426,9 @@
             "inProcess": "In process",
             "refundComplete": "Refund complete",
             "paid": "paid"
-        }
+        },
+        "searchRegistrations": "Search registrations",
+        "searchPending": "Search pending"
     },
     "eventInvited": {
         "joined": "Registered",

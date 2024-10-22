@@ -2,15 +2,15 @@ query ExportEventTickets(
   $id: MongoID!
   $pagination: PaginationInput
   # TODO: currently not required on Mobile
-  # $ticket_type_ids: [MongoID!]
-  # $searchText: String
+  $ticket_type_ids: [MongoID!]
+  $searchText: String
 ) {
   exportEventTickets(
     _id: $id
     pagination: $pagination
     # TODO: currently not required on Mobile
-    # ticket_type_ids: $ticket_type_ids
-    # search_text: $searchText
+    ticket_type_ids: $ticket_type_ids
+    search_text: $searchText
   ) {
     count
     tickets {

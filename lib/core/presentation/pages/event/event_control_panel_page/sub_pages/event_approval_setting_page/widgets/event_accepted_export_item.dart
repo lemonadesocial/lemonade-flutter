@@ -64,6 +64,7 @@ class EventAcceptedExportItem extends StatelessWidget {
                             event: event,
                             eventAccepted: eventAccepted,
                             onTapCancelTicket: onTapCancelTicket,
+                            refetch: refetch,
                           )
                         : _InfoTag(
                             icon: null,
@@ -218,7 +219,10 @@ class _GuestActions extends StatelessWidget {
                   input: Input$UpdateEventCheckinInput(
                     event: event?.id ?? '',
                     active: true,
+                    // TODO: will remove this
                     user: eventAccepted.buyerId ?? '',
+                    // TODO: handle checking by short Id (checkin By ticket not user anymore)
+                    // shortid: eventAccepted.shortId ?? '',
                   ),
                 ),
               ),
