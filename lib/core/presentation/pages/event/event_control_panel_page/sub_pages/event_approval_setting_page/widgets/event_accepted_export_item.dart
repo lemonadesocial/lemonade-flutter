@@ -153,9 +153,7 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                eventAccepted.buyerUsername != null
-                    ? '@${eventAccepted.buyerUsername}'
-                    : eventAccepted.buyerEmail ?? '',
+                eventAccepted.buyerEmail ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
@@ -197,7 +195,6 @@ class _GuestActions extends StatelessWidget {
     this.event,
     required this.eventAccepted,
     this.onTapCancelTicket,
-    // ignore: unused_element
     this.refetch,
   });
 
@@ -242,10 +239,13 @@ class _GuestActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final alreadyCheckedIn = eventAccepted.checkinDate != null;
+    final ableToCheckIn =
+        eventAccepted.assignedEmail != null || eventAccepted.assignedTo != null;
     return FloatingFrostedGlassDropdown(
       containerWidth: 170.w,
       items: [
-        if (eventAccepted.checkinDate == null)
+        if (!alreadyCheckedIn && ableToCheckIn)
           DropdownItemDpo(
             value: _GuestAction.checkIn,
             label: t.event.configuration.checkIn,

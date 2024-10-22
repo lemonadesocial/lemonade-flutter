@@ -1358,6 +1358,7 @@ type EmailTracking {
 
 enum EmailTemplateType {
   invitation
+  invitation_cancelled
   join_request_approved
   join_request_approved_with_tickets
   join_request_declined
@@ -2717,9 +2718,10 @@ type ExportedTickets {
 }
 
 type TicketExport {
-  """Ticket id"""
   _id: MongoID!
   shortid: String
+  assigned_email: String
+  assigned_to: MongoID
   buyer_name: String
   buyer_first_name: String
   buyer_last_name: String

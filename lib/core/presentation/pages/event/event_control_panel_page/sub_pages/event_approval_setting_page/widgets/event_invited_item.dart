@@ -111,9 +111,7 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                guest.userExpanded?.username != null
-                    ? '@${guest.userExpanded?.username}'
-                    : guest.email ?? '',
+                guest.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),

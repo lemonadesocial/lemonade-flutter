@@ -34,6 +34,8 @@ class EventTicketExport with _$EventTicketExport {
     DateTime? purchaseDate,
     double? quantity,
     String? ticketCategory,
+    String? assignedEmail,
+    String? assignedTo,
   }) = _EventAcceptedExport;
 
   factory EventTicketExport.fromJson(Map<String, dynamic> json) =>

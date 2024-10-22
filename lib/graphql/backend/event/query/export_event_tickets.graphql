@@ -40,6 +40,8 @@ query ExportEventTickets(
       purchaseDate: purchase_date
       quanity: quantity
       ticketCategory: ticket_category
+      assignedEmail: assigned_email
+      assignedTo: assigned_to
     }
   }
 }
