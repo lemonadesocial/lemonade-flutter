@@ -4,6 +4,7 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -16,7 +17,6 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -128,15 +128,12 @@ class _GuestInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ClipRRect(
+        LemonNetworkImage(
           borderRadius: BorderRadius.circular(Sizing.medium),
-          child: CachedNetworkImage(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            imageUrl: eventAccepted.buyerAvatar ?? '',
-            placeholder: (_, __) => ImagePlaceholder.avatarPlaceholder(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.avatarPlaceholder(),
-          ),
+          width: Sizing.medium,
+          height: Sizing.medium,
+          imageUrl: eventAccepted.buyerAvatar ?? '',
+          placeholder: ImagePlaceholder.avatarPlaceholder(),
         ),
         SizedBox(width: Spacing.xSmall),
         ConstrainedBox(

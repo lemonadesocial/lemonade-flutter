@@ -1,9 +1,9 @@
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -42,7 +42,10 @@ class JoinRequestUserAvatar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              _avatar(),
+              _Avatar(
+                size: _size,
+                imageUrl: _imageUrl,
+              ),
               SizedBox(width: Spacing.xSmall),
               _Name(
                 name: _name,
@@ -53,7 +56,10 @@ class JoinRequestUserAvatar extends StatelessWidget {
         : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _avatar(),
+              _Avatar(
+                size: _size,
+                imageUrl: _imageUrl,
+              ),
               SizedBox(height: Spacing.small),
               _Name(
                 name: _name,
@@ -62,17 +68,26 @@ class JoinRequestUserAvatar extends StatelessWidget {
             ],
           );
   }
+}
 
-  Widget _avatar() {
-    return ClipRRect(
+class _Avatar extends StatelessWidget {
+  const _Avatar({
+    required double size,
+    required String imageUrl,
+  })  : _size = size,
+        _imageUrl = imageUrl;
+
+  final double _size;
+  final String _imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return LemonNetworkImage(
       borderRadius: BorderRadius.circular(Sizing.medium),
-      child: CachedNetworkImage(
-        width: _size,
-        height: _size,
-        imageUrl: _imageUrl,
-        placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-        errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-      ),
+      width: _size,
+      height: _size,
+      imageUrl: _imageUrl,
+      placeholder: ImagePlaceholder.avatarPlaceholder(),
     );
   }
 }
