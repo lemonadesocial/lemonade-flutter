@@ -40,6 +40,10 @@ abstract class EventTicketRepository {
     required GetTicketsInput input,
   });
 
+  Future<Either<Failure, EventTicket>> getTicket({
+    required String shortId,
+  });
+
   Future<Either<Failure, BuyTicketsResponse>> buyTickets({
     required BuyTicketsInput input,
   });

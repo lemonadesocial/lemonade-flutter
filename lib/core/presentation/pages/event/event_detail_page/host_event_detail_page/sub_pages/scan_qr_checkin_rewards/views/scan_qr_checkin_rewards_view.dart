@@ -1,5 +1,6 @@
 import 'package:app/core/application/event/update_event_checkin_bloc/update_event_checkin_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
@@ -11,6 +12,7 @@ import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,20 +66,29 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
               ),
             ),
       );
-      if (response.result?.parsedData?.updateEventCheckin == true) {
+      if (response.result?.parsedData?.updateEventCheckin != null) {
         SnackBarUtils.showSuccess(
           message: t.event.scanQR.checkedinSuccessfully,
         );
         await AutoRouter.of(context).pop();
       }
     }
-    // TODO: Try adapt rewards flow after
-    // else if (widget.selectedScannerTabIndex ==
-    //     SelectedScannerTab.rewards.index) {
-    //   await AutoRouter.of(context).navigate(
-    //     ClaimRewardsRoute(userId: userId),
-    //   );
-    // }
+    else if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
+      final response = await showFutureLoadingDialog(
+        context: context,
+        future: () => getIt<EventTicketRepository>().getTicket(shortId: shortId),
+      );
+      
+      response.result?.fold(
+        (failure) => null,
+        (ticket) async {
+          final assignedTo = ticket.assignedTo;
+          if (assignedTo != null) {
+            await AutoRouter.of(context).popAndPush(ClaimRewardsRoute(userId: assignedTo));
+          }
+        },
+      );
+    }
     controller.start();
   }
 

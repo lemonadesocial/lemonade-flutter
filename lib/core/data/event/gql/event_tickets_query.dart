@@ -89,6 +89,22 @@ final getTicketsQuery = gql('''
   }
 ''');
 
+
+final getTicketQuery = gql('''
+  query GetTicket(\$shortid: String!) {
+    getTicket(shortid: \$shortid) {
+      _id
+      event
+      type
+      accepted
+      assigned_email
+      assigned_to
+      invited_by
+      shortid
+    }
+  }
+''');
+
 final getEventCurrenciesQuery = gql('''
   query GetEventCurrencies(\$id: MongoID!, \$used: Boolean) {
     getEventCurrencies(_id: \$id, used: \$used) {

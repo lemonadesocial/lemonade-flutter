@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_reward_uses_bloc/get_event_reward_uses_bloc.dart';
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event_reward_use.dart';
 import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/sub_pages/guest_event_reward_uses_page/widgets/guest_event_reward_uses_listing.dart';
@@ -9,6 +10,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -18,6 +20,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 @RoutePage()
 class GuestEventRewardUsesPage extends StatelessWidget {
@@ -72,6 +75,18 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
       (previousValue, element) => previousValue + (element.limitPer ?? 0),
     );
 
+    final assignedToMeTicket =
+        context.watch<GetMyTicketsBloc>().state.maybeWhen(
+              orElse: () => null,
+              success: (myTickets) => myTickets.firstWhereOrNull(
+                (ticket) =>
+                  EventTicketUtils.isTicketAssignedToMe(
+                ticket,
+                  userId: userId,
+                ),
+              ),
+            );
+
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: LemonAppBar(
@@ -81,11 +96,12 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
             padding: EdgeInsets.only(right: Spacing.small),
             child: InkWell(
               onTap: () {
-                // TODO: Add reward QR code popup later
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => const TicketQRCodePopup(),
-                // );
+                showDialog(
+                  context: context,
+                  builder: (context) => TicketQRCodePopup(
+                    data: assignedToMeTicket?.shortId ?? '',
+                  ),
+                );
               },
               child: ThemeSvgIcon(
                 builder: (filter) => Assets.icons.icQr.svg(
