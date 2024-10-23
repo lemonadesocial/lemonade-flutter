@@ -30,7 +30,7 @@ class EventPublishCoverPhotoChecklistItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return CheckListItemBaseWidget(
       onTap: () {
-        AutoRouter.of(context).push(EventPhotosSettingRoute());
+        AutoRouter.of(context).push(const EventPhotosSettingRoute());
       },
       title: t.event.eventPublish.addCoverPhoto,
       icon: Assets.icons.icCoverPhoto,
