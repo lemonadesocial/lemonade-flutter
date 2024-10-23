@@ -224,7 +224,7 @@ class _GuestActions extends StatelessWidget {
               ),
             ),
       );
-      if (response.result?.parsedData?.updateEventCheckin == true) {
+      if (response.result?.parsedData?.updateEventCheckin != null) {
         refetch?.call();
       }
     }
