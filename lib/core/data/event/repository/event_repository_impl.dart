@@ -271,6 +271,7 @@ class EventRepositoryImpl implements EventRepository {
     if (result.hasException || result.parsedData?.updateEventCheckin == null) {
       return Left(Failure.withGqlException(result.exception));
     }
+
     return Right(
       EventCheckin.fromDto(
         EventCheckinDto.fromJson(
