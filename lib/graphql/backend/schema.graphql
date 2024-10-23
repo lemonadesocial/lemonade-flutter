@@ -1087,7 +1087,7 @@ type EventPaymentTicketDiscount {
 
 type TicketBase {
   _id: MongoID!
-  shortid: String
+  shortid: String!
   event: MongoID!
   type: MongoID!
   accepted: Boolean
@@ -1230,12 +1230,235 @@ type EventCheckin {
   event: MongoID!
   user: MongoID
   email: String
-  user_expanded: User
+  ticket: MongoID
+  login_user: UserWithEmail
+  non_login_user: NonloginUser
+}
+
+type UserWithEmail {
+  _id: MongoID
+  active: Boolean!
+  created_at: DateTimeISO!
+  updated_at: DateTimeISO!
+  name: String!
+  verified: Boolean
+  phone: String
+  phone_verified: Boolean
+  email: String
+  email_marketing: Boolean
+  email_verified: Boolean
+  country: String
+  display_name: String
+  first_name: String
+  last_name: String
+  type: UserType
+  search_range: Float
+  lemon_amount: Float!
+  lemon_cap: Float!
+  discovery: UserDiscoverySettings
+  addresses: [Address!]
+  age: Float
+  blocked: [MongoID!]
+  calendly_url: String
+  currency: String
+  company_address: Address
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  expertise: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  handle_facebook: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSection!]
+  location_line: String
+  music: [String!]
+  offers: [UserOffer!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  service_offers: [MongoID!]
+  tag_recommended: Boolean
+  tag_site: Boolean
+  tag_timeline: Boolean
+  tag_verified: Boolean
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  wallets: [String!]
+  wallets_new: JSON
+  wallet_custodial: String
+  attended: Float
+  followers: Float
+  following: Float
+  friends: Float
+  hosted: Float
+  posts: Float
+  discord_user_info: JSON
+  farcaster_user_info: FarcasterUserInfo
+  lemon_refresh_at: DateTimeISO
+  fcm_tokens: [String!]
+  matrix_localpart: String
+  payment_verification: UserPaymentVerification
+  url: String
+  url_go: String
+  daos: [UserDao!]
+  data: JSON
+  eventbrite_user_info: JSON
+  google_user_info: JSON
+  stripe_user_info: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+  razorpay_customer: String
+  shopify_user_info: JSON
+  twitch_user_info: JSON
+  twitter_user_info: JSON
+  twitter2_user_info: JSON
+  zoom_user_info: JSON
+  telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
+  farcaster_fid: Float
+  quest_points: Float
+  icebreakers: [UserIcebreaker!]
+  service_offers_expanded: [UserServiceOffer]
+  expertise_expanded: [UserExpertise]
+  cover_expanded: File
+  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
+  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
+  blocked_expanded: [User]
+}
+
+type NonloginUser {
+  _id: MongoID
+  active: Boolean
+  created_at: DateTimeISO
+  updated_at: DateTimeISO
+  name: String
+  verified: Boolean
+  phone: String
+  phone_verified: Boolean
+  email: String
+  email_marketing: Boolean
+  email_verified: Boolean
+  country: String
+  display_name: String
+  first_name: String
+  last_name: String
+  type: UserType
+  search_range: Float
+  lemon_amount: Float
+  lemon_cap: Float
+  discovery: UserDiscoverySettings
+  addresses: [Address!]
+  age: Float
+  blocked: [MongoID!]
+  calendly_url: String
+  currency: String
+  company_address: Address
+  company_name: String
+  cover: MongoID
+  date_of_birth: DateTimeISO
+  description: String
+  education_title: String
+  ethnicity: String
+  events: [MongoID!]
+  expertise: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  handle_facebook: String
+  handle_farcaster: String
+  handle_github: String
+  handle_instagram: String
+  handle_lens: String
+  handle_linkedin: String
+  handle_mirror: String
+  handle_twitter: String
+  image_avatar: String
+  industry: String
+  interests: [String!]
+  job_title: String
+  languages: [String!]
+  layout_sections: [LayoutSection!]
+  location_line: String
+  music: [String!]
+  offers: [UserOffer!]
+  preferred_network: String
+  pronoun: String
+  new_gender: String
+  new_photos: [MongoID!]
+  service_offers: [MongoID!]
+  tag_recommended: Boolean
+  tag_site: Boolean
+  tag_timeline: Boolean
+  tag_verified: Boolean
+  tagline: String
+  timezone: String
+  username: String
+  settings: JSON
+  wallets: [String!]
+  wallets_new: JSON
+  wallet_custodial: String
+  attended: Float
+  followers: Float
+  following: Float
+  friends: Float
+  hosted: Float
+  posts: Float
+  discord_user_info: JSON
+  farcaster_user_info: FarcasterUserInfo
+  lemon_refresh_at: DateTimeISO
+  fcm_tokens: [String!]
+  matrix_localpart: String
+  payment_verification: UserPaymentVerification
+  url: String
+  url_go: String
+  daos: [UserDao!]
+  data: JSON
+  eventbrite_user_info: JSON
+  google_user_info: JSON
+  stripe_user_info: JSON
+  terms_accepted_adult: Boolean
+  terms_accepted_conditions: Boolean
+  notification_filters: [JSON!]
+  razorpay_customer: String
+  shopify_user_info: JSON
+  twitch_user_info: JSON
+  twitter_user_info: JSON
+  twitter2_user_info: JSON
+  zoom_user_info: JSON
+  telegram_user_info: JSON
+  stripe_connected_account: StripeConnectedAccount
+  farcaster_fid: Float
+  quest_points: Float
+  icebreakers: [UserIcebreaker!]
+  service_offers_expanded: [UserServiceOffer!]
+  expertise_expanded: [UserExpertise!]
+  cover_expanded: File
+  events_expanded: [Event!]
+  new_photos_expanded: [File!]
+  blocked_expanded: [User!]
 }
 
 input GetEventCheckinsInput {
   event: MongoID!
   users: [MongoID!]
+  emails: [String!]
 }
 
 type EventCohostRequest {
@@ -1454,116 +1677,6 @@ type RequestedTicket {
   count: Float!
 }
 
-type UserWithEmail {
-  _id: MongoID
-  active: Boolean!
-  created_at: DateTimeISO!
-  updated_at: DateTimeISO!
-  name: String!
-  verified: Boolean
-  phone: String
-  phone_verified: Boolean
-  email: String
-  email_marketing: Boolean
-  email_verified: Boolean
-  country: String
-  display_name: String
-  first_name: String
-  last_name: String
-  type: UserType
-  search_range: Float
-  lemon_amount: Float!
-  lemon_cap: Float!
-  discovery: UserDiscoverySettings
-  addresses: [Address!]
-  age: Float
-  blocked: [MongoID!]
-  calendly_url: String
-  currency: String
-  company_address: Address
-  company_name: String
-  cover: MongoID
-  date_of_birth: DateTimeISO
-  description: String
-  education_title: String
-  ethnicity: String
-  events: [MongoID!]
-  expertise: [MongoID!]
-  frequent_questions: [FrequentQuestion!]
-  handle_facebook: String
-  handle_farcaster: String
-  handle_github: String
-  handle_instagram: String
-  handle_lens: String
-  handle_linkedin: String
-  handle_mirror: String
-  handle_twitter: String
-  image_avatar: String
-  industry: String
-  interests: [String!]
-  job_title: String
-  languages: [String!]
-  layout_sections: [LayoutSection!]
-  location_line: String
-  music: [String!]
-  offers: [UserOffer!]
-  preferred_network: String
-  pronoun: String
-  new_gender: String
-  new_photos: [MongoID!]
-  service_offers: [MongoID!]
-  tag_recommended: Boolean
-  tag_site: Boolean
-  tag_timeline: Boolean
-  tag_verified: Boolean
-  tagline: String
-  timezone: String
-  username: String
-  settings: JSON
-  wallets: [String!]
-  wallets_new: JSON
-  wallet_custodial: String
-  attended: Float
-  followers: Float
-  following: Float
-  friends: Float
-  hosted: Float
-  posts: Float
-  discord_user_info: JSON
-  farcaster_user_info: FarcasterUserInfo
-  lemon_refresh_at: DateTimeISO
-  fcm_tokens: [String!]
-  matrix_localpart: String
-  payment_verification: UserPaymentVerification
-  url: String
-  url_go: String
-  daos: [UserDao!]
-  data: JSON
-  eventbrite_user_info: JSON
-  google_user_info: JSON
-  stripe_user_info: JSON
-  terms_accepted_adult: Boolean
-  terms_accepted_conditions: Boolean
-  notification_filters: [JSON!]
-  razorpay_customer: String
-  shopify_user_info: JSON
-  twitch_user_info: JSON
-  twitter_user_info: JSON
-  twitter2_user_info: JSON
-  zoom_user_info: JSON
-  telegram_user_info: JSON
-  stripe_connected_account: StripeConnectedAccount
-  farcaster_fid: Float
-  quest_points: Float
-  icebreakers: [UserIcebreaker!]
-  service_offers_expanded: [UserServiceOffer]
-  expertise_expanded: [UserExpertise]
-  cover_expanded: File
-  events_expanded(skip: Int! = 0, limit: Int! = 25): [Event]
-  new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
-  blocked_expanded: [User]
-}
-
 type JoinRequestPayment {
   _id: MongoID!
   state: NewPaymentState!
@@ -1576,116 +1689,6 @@ enum NewPaymentState {
   await_capture
   succeeded
   refunded
-}
-
-type NonloginUser {
-  _id: MongoID
-  active: Boolean
-  created_at: DateTimeISO
-  updated_at: DateTimeISO
-  name: String
-  verified: Boolean
-  phone: String
-  phone_verified: Boolean
-  email: String
-  email_marketing: Boolean
-  email_verified: Boolean
-  country: String
-  display_name: String
-  first_name: String
-  last_name: String
-  type: UserType
-  search_range: Float
-  lemon_amount: Float
-  lemon_cap: Float
-  discovery: UserDiscoverySettings
-  addresses: [Address!]
-  age: Float
-  blocked: [MongoID!]
-  calendly_url: String
-  currency: String
-  company_address: Address
-  company_name: String
-  cover: MongoID
-  date_of_birth: DateTimeISO
-  description: String
-  education_title: String
-  ethnicity: String
-  events: [MongoID!]
-  expertise: [MongoID!]
-  frequent_questions: [FrequentQuestion!]
-  handle_facebook: String
-  handle_farcaster: String
-  handle_github: String
-  handle_instagram: String
-  handle_lens: String
-  handle_linkedin: String
-  handle_mirror: String
-  handle_twitter: String
-  image_avatar: String
-  industry: String
-  interests: [String!]
-  job_title: String
-  languages: [String!]
-  layout_sections: [LayoutSection!]
-  location_line: String
-  music: [String!]
-  offers: [UserOffer!]
-  preferred_network: String
-  pronoun: String
-  new_gender: String
-  new_photos: [MongoID!]
-  service_offers: [MongoID!]
-  tag_recommended: Boolean
-  tag_site: Boolean
-  tag_timeline: Boolean
-  tag_verified: Boolean
-  tagline: String
-  timezone: String
-  username: String
-  settings: JSON
-  wallets: [String!]
-  wallets_new: JSON
-  wallet_custodial: String
-  attended: Float
-  followers: Float
-  following: Float
-  friends: Float
-  hosted: Float
-  posts: Float
-  discord_user_info: JSON
-  farcaster_user_info: FarcasterUserInfo
-  lemon_refresh_at: DateTimeISO
-  fcm_tokens: [String!]
-  matrix_localpart: String
-  payment_verification: UserPaymentVerification
-  url: String
-  url_go: String
-  daos: [UserDao!]
-  data: JSON
-  eventbrite_user_info: JSON
-  google_user_info: JSON
-  stripe_user_info: JSON
-  terms_accepted_adult: Boolean
-  terms_accepted_conditions: Boolean
-  notification_filters: [JSON!]
-  razorpay_customer: String
-  shopify_user_info: JSON
-  twitch_user_info: JSON
-  twitter_user_info: JSON
-  twitter2_user_info: JSON
-  zoom_user_info: JSON
-  telegram_user_info: JSON
-  stripe_connected_account: StripeConnectedAccount
-  farcaster_fid: Float
-  quest_points: Float
-  icebreakers: [UserIcebreaker!]
-  service_offers_expanded: [UserServiceOffer!]
-  expertise_expanded: [UserExpertise!]
-  cover_expanded: File
-  events_expanded: [Event!]
-  new_photos_expanded: [File!]
-  blocked_expanded: [User!]
 }
 
 type GetEventPendingInvitesResponse {
@@ -2719,7 +2722,7 @@ type ExportedTickets {
 
 type TicketExport {
   _id: MongoID!
-  shortid: String
+  shortid: String!
   assigned_email: String
   assigned_to: MongoID
   buyer_name: String
@@ -2910,7 +2913,7 @@ input UserDaoInput {
 
 type Ticket {
   _id: MongoID!
-  shortid: String
+  shortid: String!
   event: MongoID!
   type: MongoID!
   accepted: Boolean

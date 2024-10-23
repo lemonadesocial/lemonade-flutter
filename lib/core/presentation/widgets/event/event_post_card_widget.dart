@@ -101,17 +101,19 @@ class EventPostCard extends StatelessWidget {
           ),
         ),
         SizedBox(width: 5.w),
-        Text.rich(
-          style: Typo.small.copyWith(
-            color: colorScheme.onSecondary,
-            height: 1.5,
-          ),
-          TextSpan(
-            text: hostName,
-            children: [
-              if (cohostsCount != null && cohostsCount != 0)
-                TextSpan(text: ' +$cohostsCount'),
-            ],
+        Flexible(
+          child: Text.rich(
+            style: Typo.small.copyWith(
+              color: colorScheme.onSecondary,
+              height: 1.5,
+            ),
+            TextSpan(
+              text: hostName,
+              children: [
+                if (cohostsCount != null && cohostsCount != 0)
+                  TextSpan(text: ' +$cohostsCount'),
+              ],
+            ),
           ),
         ),
         SizedBox(width: Spacing.superExtraSmall),
