@@ -1,3 +1,5 @@
+import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +14,26 @@ class TicketQRCodePopup extends StatelessWidget {
 
   final String data;
 
+  void _showErrorAndClose(BuildContext context, String message) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SnackBarUtils.showError(message: message);
+      Navigator.of(context).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+
+    if (data.isEmpty) {
+      _showErrorAndClose(
+        context,
+        t.event.invalidQRCode,
+      );
+      return const SizedBox.shrink();
+    }
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),

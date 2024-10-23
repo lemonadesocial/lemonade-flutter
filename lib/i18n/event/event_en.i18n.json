@@ -745,5 +745,6 @@
     "register": "Register",
     "visibility": "Visibility",
     "requireApproval": "Require approval",
-    "registration": "Registration"
+    "registration": "Registration",
+    "invalidQRCode": "Invalid QR code. Please refresh or contact support."
 }
