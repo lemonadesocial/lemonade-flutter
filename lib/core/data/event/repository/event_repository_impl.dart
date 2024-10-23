@@ -268,7 +268,7 @@ class EventRepositoryImpl implements EventRepository {
         variables: Variables$Mutation$UpdateEventCheckin(input: input),
       ),
     );
-    if (result.hasException) {
+    if (result.hasException || result.parsedData?.updateEventCheckin == null) {
       return Left(Failure.withGqlException(result.exception));
     }
     return Right(

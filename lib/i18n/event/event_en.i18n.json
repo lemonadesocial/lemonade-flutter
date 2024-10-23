@@ -361,7 +361,7 @@
         "checkedIn": "checked in",
         "pleaseScan": "Please scan QR Code",
         "checkin": "Check in",
-        "checkedinSuccessfully": "Checked in successfully",
+        "checkedinSuccessfully": "Successfully checked in",
         "rewards": "Rewards"
     },
     "rewardSetting": {
@@ -383,6 +383,7 @@
         "guests": "Guests",
         "tabs": {
             "reservations": "Reservations",
+            "guestList": "Guest list",
             "pending": "Pending",
             "confirmed": "Confirmed",
             "rejected": "Rejected",
@@ -425,7 +426,10 @@
             "inProcess": "In process",
             "refundComplete": "Refund complete",
             "paid": "paid"
-        }
+        },
+        "searchRegistrations": "Search registrations",
+        "searchPending": "Search pending",
+        "checkedinSuccessfully": "Successfully checked in"
     },
     "eventInvited": {
         "joined": "Registered",

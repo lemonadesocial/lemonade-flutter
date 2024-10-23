@@ -1,8 +1,9 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
-import 'package:app/core/domain/applicant/entities/applicant.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
@@ -15,63 +16,76 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:collection/collection.dart';
 
 class EventJoinRequestApplicationForm extends StatelessWidget {
-  final Applicant? applicant;
+  final User? userInfo;
   final Event? event;
+  final EventJoinRequest? eventJoinRequest;
+
   const EventJoinRequestApplicationForm({
     super.key,
-    this.applicant,
+    this.userInfo,
     this.event,
+    this.eventJoinRequest,
   });
+
+  bool get _isNonLoginUser => eventJoinRequest?.user == null;
 
   @override
   Widget build(BuildContext context) {
     List<String> profileRequiredFields = (event?.applicationProfileFields ?? [])
         .map((item) => item.field ?? '')
+        .map(StringUtils.snakeToCamel)
         .toList();
     return MultiSliver(
       children: [
-        SliverList.separated(
-          itemCount: profileRequiredFields.length,
-          itemBuilder: (context, index) {
-            final applicantJson = applicant?.toJson();
-            final value = applicantJson?.tryGet(profileRequiredFields[index]);
-            final isSocialFieldName = SocialUtils.isSocialFieldName(
-              fieldName: profileRequiredFields[index],
-            );
-            String? finalValue;
-            if (value is String) {
-              final isValidDate = date_utils.DateUtils.isValidDateTime(value);
-              if (isValidDate) {
-                finalValue =
-                    date_utils.DateUtils.formatDateTimeToDDMMYYYY(value);
-              } else {
-                // If it's a social field name, build social link, otherwise return the value itself
-                finalValue = isSocialFieldName
-                    ? SocialUtils.buildSocialLinkBySocialFieldName(
-                        socialFieldName: profileRequiredFields[index],
-                        socialUserName: value,
-                      )
-                    : value;
+        if (profileRequiredFields.isNotEmpty) ...[
+          SizedBox(height: Spacing.medium),
+          SliverList.separated(
+            itemCount: profileRequiredFields.length,
+            itemBuilder: (context, index) {
+              final userInfoJson = userInfo?.toJson();
+              final value = userInfoJson?.tryGet(profileRequiredFields[index]);
+              final isSocialFieldName = SocialUtils.isSocialFieldName(
+                fieldName: profileRequiredFields[index],
+              );
+              String? finalValue;
+              if (value is String) {
+                final isValidDate = date_utils.DateUtils.isValidDateTime(value);
+                if (isValidDate) {
+                  finalValue =
+                      date_utils.DateUtils.formatDateTimeToDDMMYYYY(value);
+                } else {
+                  // If it's a social field name, build social link, otherwise return the value itself
+                  finalValue = isSocialFieldName
+                      ? SocialUtils.buildSocialLinkBySocialFieldName(
+                          socialFieldName: profileRequiredFields[index],
+                          socialUserName: value,
+                        )
+                      : value;
+                }
               }
-            }
-            return _FormField(
-              label: ProfileFieldKey.getFieldLabel(
-                profileRequiredFields[index],
-              ),
-              value: finalValue,
-            );
-          },
-          separatorBuilder: (context, index) =>
-              SizedBox(height: Spacing.medium),
-        ),
+              return _FormField(
+                label: ProfileFieldKey.getFieldLabel(
+                  (event?.applicationProfileFields ?? [])[index].field ?? '',
+                ),
+                value: finalValue,
+              );
+            },
+            separatorBuilder: (context, index) =>
+                SizedBox(height: Spacing.medium),
+          ),
+        ],
         SizedBox(height: Spacing.medium),
         Query$GetEventApplicationAnswers$Widget(
           options: Options$Query$GetEventApplicationAnswers(
             variables: Variables$Query$GetEventApplicationAnswers(
               event: event?.id ?? '',
-              user: applicant?.id ?? '',
+              user: _isNonLoginUser ? null : eventJoinRequest?.user ?? '',
+              email: _isNonLoginUser
+                  ? eventJoinRequest?.nonLoginUser?.email ?? ''
+                  : null,
             ),
           ),
           builder: (
@@ -79,6 +93,7 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
             refetch,
             fetchMore,
           }) {
+            final eventApplicationQuestions = event?.applicationQuestions ?? [];
             final applicationAnswers =
                 (result.parsedData?.getEventApplicationAnswers ?? [])
                     .map(
@@ -89,13 +104,17 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
                       ),
                     )
                     .toList();
+
             return SliverList.separated(
-              itemCount: applicationAnswers.length,
+              itemCount: eventApplicationQuestions.length,
               itemBuilder: (context, index) {
+                final answer = applicationAnswers.firstWhereOrNull(
+                  (element) =>
+                      element.question == eventApplicationQuestions[index].id,
+                );
                 return _FormField(
-                  label: applicationAnswers[index].questionExpanded?.question ??
-                      '',
-                  value: applicationAnswers[index].answer ?? '',
+                  label: eventApplicationQuestions[index].question ?? '',
+                  value: answer?.answer ?? '',
                 );
               },
               separatorBuilder: (context, index) =>

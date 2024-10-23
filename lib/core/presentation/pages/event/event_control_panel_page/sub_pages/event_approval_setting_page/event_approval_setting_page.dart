@@ -81,7 +81,7 @@ class _EventApprovalSettingPageState extends State<EventApprovalSettingPage>
         );
     tabItems = [
       _TabItem(
-        title: t.event.eventApproval.tabs.reservations,
+        title: t.event.eventApproval.tabs.guestList,
         icon: Assets.icons.icDone,
         activeColor: LemonColor.paleViolet,
         inactiveColor: LemonColor.white54,

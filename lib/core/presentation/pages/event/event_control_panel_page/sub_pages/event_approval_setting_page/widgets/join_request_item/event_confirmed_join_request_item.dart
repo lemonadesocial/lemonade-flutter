@@ -38,7 +38,7 @@ class EventConfirmedJoinRequestItem extends StatelessWidget {
             child: Row(
               children: [
                 JoinRequestUserAvatar(
-                  user: eventJoinRequest.userExpanded,
+                  eventJoinRequest: eventJoinRequest,
                 ),
               ],
             ),

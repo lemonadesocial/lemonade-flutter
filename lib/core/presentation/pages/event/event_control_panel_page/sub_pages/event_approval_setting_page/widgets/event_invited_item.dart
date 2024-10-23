@@ -1,11 +1,11 @@
 import 'package:app/core/domain/event/entities/event_guest.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -89,15 +89,12 @@ class _GuestInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ClipRRect(
+        LemonNetworkImage(
           borderRadius: BorderRadius.circular(Sizing.medium),
-          child: CachedNetworkImage(
-            width: Sizing.medium,
-            height: Sizing.medium,
-            imageUrl: guest.userExpanded?.imageAvatar ?? '',
-            placeholder: (_, __) => ImagePlaceholder.defaultPlaceholder(),
-            errorWidget: (_, __, ___) => ImagePlaceholder.defaultPlaceholder(),
-          ),
+          width: Sizing.medium,
+          height: Sizing.medium,
+          imageUrl: guest.userExpanded?.imageAvatar ?? '',
+          placeholder: ImagePlaceholder.avatarPlaceholder(),
         ),
         SizedBox(width: Spacing.xSmall),
         ConstrainedBox(
@@ -114,9 +111,7 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                guest.userExpanded?.username != null
-                    ? '@${guest.userExpanded?.username}'
-                    : guest.email ?? '',
+                guest.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
