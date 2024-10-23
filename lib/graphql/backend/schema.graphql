@@ -49,6 +49,7 @@ type Query {
   getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
   getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
   getEventTags(all: Boolean): [String!]!
+  listEventHosts(skip: Int! = 0, limit: Int! = 25, name: String): ListEventHostsResponse!
   generateEventInvitationUrl(event: MongoID!): GenerateEventInvitationUrlResponse
   getEventInvitationUrl(shortid: String!, tk: String): EventInvitationUrl
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
@@ -551,6 +552,7 @@ type Event {
   sessions: [EventSession!]
   has_terms_accepted: Boolean
   checkedin: Boolean
+  ticket_count: Float
   data: JSON
   host_expanded: User
   subevent_parent_expanded: Event
@@ -992,6 +994,7 @@ enum PaymentAccountType {
   ethereum
   ethereum_escrow
   ethereum_relay
+  ethereum_stake
   digital
 }
 
@@ -1000,7 +1003,7 @@ enum NewPaymentProvider {
   safe
 }
 
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
 
 type EthereumAccount {
   currencies: [String!]!
@@ -1055,6 +1058,15 @@ type EthereumRelayAccount {
   payment_splitter_contract: String
 }
 
+type EthereumStakeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  config_id: String!
+  requirement_checkin_before: DateTimeISO
+}
+
 type EventPaymentTicketDiscount {
   active: Boolean!
   stamp: DateTimeISO!
@@ -1075,6 +1087,7 @@ type EventPaymentTicketDiscount {
 
 type TicketBase {
   _id: MongoID!
+  shortid: String
   event: MongoID!
   type: MongoID!
   accepted: Boolean
@@ -1345,6 +1358,7 @@ type EmailTracking {
 
 enum EmailTemplateType {
   invitation
+  invitation_cancelled
   join_request_approved
   join_request_approved_with_tickets
   join_request_declined
@@ -1720,8 +1734,11 @@ type GetEventInvitedStatisticsResponse {
 }
 
 type Guest {
+  invitation: MongoID!
   invited_by: MongoID!
   invited_by_expanded: User
+  cancelled_by: MongoID
+  cancelled_by_expanded: User
   joined: Boolean
   declined: Boolean
 
@@ -1731,6 +1748,18 @@ type Guest {
 
   """Exists only if invited via email but has not joined to be a user"""
   email: String
+}
+
+type ListEventHostsResponse {
+  hosts: [EventHost!]!
+  total: Float!
+}
+
+type EventHost {
+  _id: MongoID
+  name: String!
+  events_count: Float
+  image_avatar: String
 }
 
 type GenerateEventInvitationUrlResponse {
@@ -1905,19 +1934,30 @@ type Chain {
   active: Boolean
   chain_id: String!
   name: String!
+  code_name: String!
   rpc_url: String!
   block_explorer_url: String
+  block_explorer_name: String
+  block_explorer_for_tx: String
+  block_explorer_for_token: String
   block_time: Float!
   safe_confirmations: Float!
   logo_url: String
   tokens: [Token!]
   access_registry_contract: String
+  poap_contract: String
+  marketplace_contract: String
+  marketplace_version: Int
+  biconomy_api_key: String
+  ens_registry: String
   payment_config_registry_contract: String
   escrow_manager_contract: String
   relay_payment_contract: String
   stake_payment_contract: String
   eas_event_contract: String
   eas_graphql_url: String
+  aragon_network: String
+  axelar_chain_name: String
 }
 
 type Token {
@@ -2678,8 +2718,10 @@ type ExportedTickets {
 }
 
 type TicketExport {
-  """Ticket id"""
   _id: MongoID!
+  shortid: String
+  assigned_email: String
+  assigned_to: MongoID
   buyer_name: String
   buyer_first_name: String
   buyer_last_name: String
@@ -2868,6 +2910,7 @@ input UserDaoInput {
 
 type Ticket {
   _id: MongoID!
+  shortid: String
   event: MongoID!
   type: MongoID!
   accepted: Boolean
@@ -3055,6 +3098,7 @@ enum InvitationResponse {
   PENDING
   DECLINED
   ACCEPTED
+  CANCELLED
 }
 
 type Mutation {
@@ -3077,7 +3121,7 @@ type Mutation {
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
   updateEventBroadcast(input: UpdateEventBroadcastInput!, event: MongoID!, _id: MongoID!): Boolean!
   deleteEventBroadcast(event: MongoID!, _id: MongoID!): Boolean!
-  updateEventCheckin(input: UpdateEventCheckinInput!): Boolean!
+  updateEventCheckin(input: UpdateEventCheckinInput!): EventCheckin!
   manageEventCohostRequests(input: ManageEventCohostRequestsInput!): Boolean!
   decideEventCohostRequest(input: DecideEventCohostRequestInput!): Boolean!
   syncEventAttestation(chain_id: String!, event: MongoID!): Boolean!
@@ -3219,6 +3263,7 @@ type Mutation {
   reportUser(input: ReportUserInput!): Boolean!
   toggleBlockUser(input: ToggleBlockUserInput!): Boolean!
   setUserWallet(token: String!, signature: String!): Boolean!
+  cancelEventInvitations(input: CancelEventInvitationsInput!): Boolean!
 }
 
 input CreateBadgeListInput {
@@ -3292,9 +3337,9 @@ input UpdateEventBroadcastInput {
 
 input UpdateEventCheckinInput {
   active: Boolean!
-  event: MongoID!
-  user: MongoID
   shortid: String
+  event: MongoID
+  user: MongoID
 }
 
 input ManageEventCohostRequestsInput {
@@ -4290,6 +4335,11 @@ input ReportUserInput {
 input ToggleBlockUserInput {
   user: MongoID!
   block: Boolean!
+}
+
+input CancelEventInvitationsInput {
+  invitations: [MongoID!]!
+  event: MongoID!
 }
 
 type Subscription {

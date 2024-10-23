@@ -3,10 +3,12 @@ query GetEventCheckins($input: GetEventCheckinsInput!) {
     id: _id
     active
     event
+    email
     user
     userExpanded: user_expanded {
       userId: _id
       name
+      displayName: display_name
       username
       imageAvatar: image_avatar
       email

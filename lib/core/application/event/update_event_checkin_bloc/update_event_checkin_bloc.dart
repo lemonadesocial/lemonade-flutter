@@ -27,7 +27,7 @@ class UpdateEventCheckinBloc
     );
     result.fold(
       (failure) => emit(UpdateEventCheckinState.failure()),
-      (status) {
+      (eventCheckin) {
         emit(UpdateEventCheckinState.success());
       },
     );
