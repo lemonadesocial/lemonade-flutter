@@ -1,4 +1,3 @@
-import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
@@ -11,7 +10,6 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:collection/collection.dart';
