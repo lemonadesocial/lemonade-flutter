@@ -58,7 +58,6 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
               Options$Mutation$UpdateEventCheckin(
                 variables: Variables$Mutation$UpdateEventCheckin(
                   input: Input$UpdateEventCheckinInput(
-                    event: widget.event.id ?? '',
                     active: true,
                     shortid: shortId,
                   ),

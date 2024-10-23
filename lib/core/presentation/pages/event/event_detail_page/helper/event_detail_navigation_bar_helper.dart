@@ -1,5 +1,6 @@
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -42,7 +43,8 @@ class EventDetailNavigationBarHelper {
   static List<FeatureItem> getEventFeaturesForGuest({
     required BuildContext context,
     required Event event,
-    bool? isSmallIcon = true,
+    required bool isSmallIcon,
+    required List<EventTicket>? myTickets,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
@@ -61,16 +63,12 @@ class EventDetailNavigationBarHelper {
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
           final userId = AuthUtils.getUserId(context);
-          final assignedToMeTicket =
-              context.watch<GetMyTicketsBloc>().state.maybeWhen(
-                    orElse: () => null,
-                    success: (myTickets) => myTickets.firstWhereOrNull(
-                      (ticket) => EventTicketUtils.isTicketAssignedToMe(
-                        ticket,
-                        userId: userId,
-                      ),
-                    ),
-                  );
+          final assignedToMeTicket = (myTickets ?? []).firstWhereOrNull(
+            (ticket) => EventTicketUtils.isTicketAssignedToMe(
+              ticket,
+              userId: userId,
+            ),
+          );
           showDialog(
             context: context,
             builder: (context) => TicketQRCodePopup(
