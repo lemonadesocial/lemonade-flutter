@@ -22,32 +22,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 @RoutePage()
-class EventPhotosSettingPage extends StatefulWidget {
-  late FileUploadService _uploadService;
+class EventPhotosSettingPage extends StatelessWidget {
+  const EventPhotosSettingPage({super.key});
 
-  EventPhotosSettingPage({
+  @override
+  Widget build(BuildContext context) {
+    final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (event) => event,
+        );
+    return EventPhotosSettingPageView(
+      event: event,
+    );
+  }
+}
+
+class EventPhotosSettingPageView extends StatefulWidget {
+  late FileUploadService _uploadService;
+  final Event? event;
+
+  EventPhotosSettingPageView({
     super.key,
+    this.event,
   }) {
     final gqlClient = getIt<AppGQL>().client;
     _uploadService = FileUploadService(gqlClient);
   }
 
   @override
-  State<EventPhotosSettingPage> createState() => _EventPhotosSettingPageState();
+  State<EventPhotosSettingPageView> createState() =>
+      _EventPhotosSettingPageViewState();
 }
 
-class _EventPhotosSettingPageState extends State<EventPhotosSettingPage> {
+class _EventPhotosSettingPageViewState
+    extends State<EventPhotosSettingPageView> {
   final _imagePicker = ImagePicker();
 
-  Event? get event {
-    return context.read<GetEventDetailBloc>().state.maybeWhen(
-          orElse: () => null,
-          fetched: (event) => event,
-        );
-  }
-
   List<String> get eventPhotos {
-    return event?.newNewPhotos ?? [];
+    return widget.event?.newNewPhotos ?? [];
   }
 
   Future<String?> _pickAndUploadImage() async {
@@ -101,22 +113,18 @@ class _EventPhotosSettingPageState extends State<EventPhotosSettingPage> {
       input: Input$EventInput(
         new_new_photos: newPhotos,
       ),
-      id: event?.id ?? '',
+      id: widget.event?.id ?? '',
     );
     result.fold((l) => null, (r) {
       context.read<GetEventDetailBloc>().add(
-            GetEventDetailEvent.fetch(eventId: event?.id ?? ''),
+            GetEventDetailEvent.fetch(eventId: widget.event?.id ?? ''),
           );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    context.watch<GetEventDetailBloc>().state.maybeWhen(
-          orElse: () => null,
-          fetched: (event) => event,
-        );
-    final eventPhotos = (event?.newNewPhotosExpanded ?? [])
+    final eventPhotos = (widget.event?.newNewPhotosExpanded ?? [])
         .where((element) => element != null)
         .cast<DbFile>()
         .toList();
