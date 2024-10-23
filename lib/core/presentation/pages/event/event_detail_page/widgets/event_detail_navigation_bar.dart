@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/helper/event_detail_navigation_bar_helper.dart';
