@@ -84,6 +84,22 @@ final getTicketsQuery = gql('''
       assigned_email
       assigned_to
       invited_by
+      shortid
+    }
+  }
+''');
+
+final getTicketQuery = gql('''
+  query GetTicket(\$shortid: String!) {
+    getTicket(shortid: \$shortid) {
+      _id
+      event
+      type
+      accepted
+      assigned_email
+      assigned_to
+      invited_by
+      shortid
     }
   }
 ''');

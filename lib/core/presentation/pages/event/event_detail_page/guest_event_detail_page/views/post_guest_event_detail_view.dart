@@ -1,5 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
+import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about.dart';
@@ -50,7 +52,12 @@ class PostGuestEventDetailView extends StatelessWidget {
         ),
         fetched: (event) {
           final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
+          final getMyTicketsBloc = context.watch<GetMyTicketsBloc>();
           final subEvents = getSubEventsBloc.state.events;
+          List<EventTicket>? myTickets = getMyTicketsBloc.state.maybeWhen(
+            orElse: () => [],
+            success: (tickets) => tickets,
+          );
 
           final widgets = [
             Padding(
@@ -216,6 +223,7 @@ class PostGuestEventDetailView extends StatelessWidget {
                   builder: (context) {
                     return EventDetailNavigationBar(
                       event: event,
+                      myTickets: myTickets,
                     );
                   },
                 );

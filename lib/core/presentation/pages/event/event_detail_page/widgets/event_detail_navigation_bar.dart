@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/helper/event_detail_navigation_bar_helper.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/utils/animation_utils.dart';
@@ -16,10 +17,12 @@ final List<double> _snapSizes = [.16, .5];
 
 class EventDetailNavigationBar extends StatefulWidget {
   final Event event;
+  final List<EventTicket>? myTickets;
   // final EventUserRole? eventUserRole;
   const EventDetailNavigationBar({
     super.key,
     required this.event,
+    this.myTickets,
     // this.eventUserRole,
   });
 
@@ -95,7 +98,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
             Expanded(
               child: CustomScrollView(
                 slivers: [
-                  _buildGridList(),
+                  _buildGridList(myTickets: widget.myTickets),
                 ],
               ),
             ),
@@ -162,7 +165,9 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
   }
 
   // ignore: unused_element
-  SliverToBoxAdapter _buildHorizontalList() {
+  SliverToBoxAdapter _buildHorizontalList({
+    required List<EventTicket>? myTickets,
+  }) {
     late List features = [];
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
@@ -177,9 +182,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
         EventUtils.isAttending(event: widget.event, userId: userId);
     final isOwnEvent =
         EventUtils.isOwnEvent(event: widget.event, userId: userId);
-    if (isOwnEvent || isCohost
-        // || eventUserRole != null
-        ) {
+    if (isOwnEvent || isCohost) {
       features = EventDetailNavigationBarHelper.getEventFeaturesForHost(
         context: context,
         event: widget.event,
@@ -191,6 +194,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
         context: context,
         event: widget.event,
         isSmallIcon: true,
+        myTickets: myTickets,
       );
     }
     return SliverToBoxAdapter(
@@ -219,7 +223,9 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
   }
 
   // ignore: unused_element
-  SliverPadding _buildGridList() {
+  SliverPadding _buildGridList({
+    required List<EventTicket>? myTickets,
+  }) {
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
           authenticated: (session) => session.userId,
@@ -248,6 +254,7 @@ class _EventDetailNavigationBarState extends State<EventDetailNavigationBar>
         context: context,
         event: widget.event,
         isSmallIcon: false,
+        myTickets: myTickets,
       );
     }
     return SliverPadding(

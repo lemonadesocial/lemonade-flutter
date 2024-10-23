@@ -150,6 +150,24 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
   }
 
   @override
+  Future<Either<Failure, EventTicket>> getTicket({
+    required String shortId,
+  }) async {
+    final result = await _client.query(
+      QueryOptions(
+        document: getTicketQuery,
+        variables: {'shortid': shortId},
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) =>
+            EventTicket.fromDto(EventTicketDto.fromJson(data['getTicket'])),
+      ),
+    );
+
+    if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
   Future<Either<Failure, BuyTicketsResponse>> buyTickets({
     required BuyTicketsInput input,
   }) async {
