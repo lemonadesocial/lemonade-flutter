@@ -12,7 +12,8 @@ class EventCheckinDto with _$EventCheckinDto {
     String? event,
     String? user,
     String? email,
-    @JsonKey(name: 'user_expanded') UserDto? userExpanded,
+    @JsonKey(name: 'login_user') UserDto? loginUser,
+    @JsonKey(name: 'non_login_user') UserDto? nonLoginUser,
   }) = _EventCheckinDto;
 
   factory EventCheckinDto.fromJson(Map<String, dynamic> json) =>

@@ -68,7 +68,7 @@ class _GuestInfo extends StatelessWidget {
           borderRadius: BorderRadius.circular(Sizing.medium),
           width: Sizing.medium,
           height: Sizing.medium,
-          imageUrl: checkIn.userExpanded?.imageAvatar ?? '',
+          imageUrl: checkIn.loginUser?.imageAvatar ?? '',
           placeholder: ImagePlaceholder.avatarPlaceholder(),
         ),
         SizedBox(width: Spacing.xSmall),
@@ -78,12 +78,13 @@ class _GuestInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                checkIn.userExpanded != null
-                    ? checkIn.userExpanded?.name ??
-                        checkIn.userExpanded?.displayName ??
-                        checkIn.userExpanded?.email ??
+                checkIn.loginUser != null
+                    ? checkIn.loginUser?.name ??
+                        checkIn.loginUser?.displayName ??
                         t.common.anonymous
-                    : checkIn.email ?? '',
+                    : checkIn.nonLoginUser?.name ??
+                        checkIn.nonLoginUser?.displayName ??
+                        t.common.anonymous,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                 ),
@@ -91,7 +92,9 @@ class _GuestInfo extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                checkIn.userExpanded?.email ?? checkIn.email ?? '',
+                checkIn.loginUser != null
+                    ? checkIn.loginUser?.email ?? checkIn.email ?? ''
+                    : checkIn.nonLoginUser?.email ?? checkIn.email ?? '',
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),

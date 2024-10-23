@@ -5,12 +5,19 @@ query GetEventCheckins($input: GetEventCheckinsInput!) {
     event
     email
     user
-    userExpanded: user_expanded {
-      userId: _id
+    ticket
+    login_user {
+      _id
       name
-      displayName: display_name
+      display_name
       username
-      imageAvatar: image_avatar
+      image_avatar
+      email
+    }
+    non_login_user {
+      _id
+      name
+      display_name
       email
     }
   }

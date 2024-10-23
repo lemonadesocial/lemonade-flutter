@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_checkin_dto/event_checkin_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_checkin_item.dart';
@@ -48,8 +49,8 @@ class EventCheckInsList extends StatelessWidget {
 
         final eventCheckinsList =
             (result.parsedData?.getEventCheckins ?? []).map((item) {
-          return EventCheckin.fromJson(
-            item.toJson(),
+          return EventCheckin.fromDto(
+            EventCheckinDto.fromJson(item.toJson()),
           );
         }).toList();
 
