@@ -72,19 +72,20 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         );
         await AutoRouter.of(context).pop();
       }
-    }
-    else if (widget.selectedScannerTabIndex == SelectedScannerTab.rewards.index) {
+    } else if (widget.selectedScannerTabIndex ==
+        SelectedScannerTab.rewards.index) {
       final response = await showFutureLoadingDialog(
         context: context,
-        future: () => getIt<EventTicketRepository>().getTicket(shortId: shortId),
+        future: () =>
+            getIt<EventTicketRepository>().getTicket(shortId: shortId),
       );
-      
       response.result?.fold(
         (failure) => null,
         (ticket) async {
           final assignedTo = ticket.assignedTo;
           if (assignedTo != null) {
-            await AutoRouter.of(context).popAndPush(ClaimRewardsRoute(userId: assignedTo));
+            await AutoRouter.of(context)
+                .popAndPush(ClaimRewardsRoute(userId: assignedTo));
           }
         },
       );

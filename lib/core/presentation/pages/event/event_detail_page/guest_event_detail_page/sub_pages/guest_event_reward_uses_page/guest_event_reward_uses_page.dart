@@ -79,9 +79,8 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
         context.watch<GetMyTicketsBloc>().state.maybeWhen(
               orElse: () => null,
               success: (myTickets) => myTickets.firstWhereOrNull(
-                (ticket) =>
-                  EventTicketUtils.isTicketAssignedToMe(
-                ticket,
+                (ticket) => EventTicketUtils.isTicketAssignedToMe(
+                  ticket,
                   userId: userId,
                 ),
               ),

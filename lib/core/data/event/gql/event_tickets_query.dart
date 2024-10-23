@@ -89,7 +89,6 @@ final getTicketsQuery = gql('''
   }
 ''');
 
-
 final getTicketQuery = gql('''
   query GetTicket(\$shortid: String!) {
     getTicket(shortid: \$shortid) {

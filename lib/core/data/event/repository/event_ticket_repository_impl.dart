@@ -158,13 +158,14 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
         document: getTicketQuery,
         variables: {'shortid': shortId},
         fetchPolicy: FetchPolicy.networkOnly,
-        parserFn: (data) => EventTicket.fromDto(EventTicketDto.fromJson(data['getTicket'])),
+        parserFn: (data) =>
+            EventTicket.fromDto(EventTicketDto.fromJson(data['getTicket'])),
       ),
     );
 
     if (result.hasException) return Left(Failure());
     return Right(result.parsedData!);
-  }  
+  }
 
   @override
   Future<Either<Failure, BuyTicketsResponse>> buyTickets({
