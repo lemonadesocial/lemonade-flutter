@@ -36,6 +36,7 @@ class HostEventDetailView extends StatelessWidget {
     //       fetched: (eventUserRole) => eventUserRole,
     //       orElse: () => null,
     //     );
+
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, state) => state.when(
         failure: () => Scaffold(
