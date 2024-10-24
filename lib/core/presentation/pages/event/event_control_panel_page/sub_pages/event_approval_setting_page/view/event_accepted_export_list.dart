@@ -18,6 +18,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class EventAcceptedExportList extends StatefulWidget {
   final Event? event;
@@ -34,6 +35,7 @@ class EventAcceptedExportList extends StatefulWidget {
 class _EventAcceptedExportListState extends State<EventAcceptedExportList> {
   final debouncer = Debouncer(milliseconds: 300);
   final searchController = TextEditingController();
+  final refreshController = RefreshController();
   bool hasNextPage = true;
   int limit = 25;
 
@@ -143,116 +145,128 @@ class _EventAcceptedExportListState extends State<EventAcceptedExportList> {
               }
               return true;
             },
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.medium),
-                ),
-                SliverToBoxAdapter(
-                  child: LemonTextField(
-                    onChange: (value) {
-                      debouncer.run(() {
-                        _search(
-                          value,
-                          fetchMore: fetchMore,
-                          refetch: refetch,
-                        );
-                        if (value.isEmpty) {
-                          setState(() {
-                            hasNextPage = true;
-                          });
-                        }
-                      });
-                    },
-                    controller: searchController,
-                    radius: LemonRadius.medium,
-                    hintText: t.event.eventApproval.searchRegistrations,
-                    placeholderStyle: Typo.medium.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    leadingIcon: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
-                          builder: (filter) => Assets.icons.icSearch.svg(
-                            width: Sizing.mSmall,
-                            height: Sizing.mSmall,
-                            colorFilter: filter,
+            child: SmartRefresher(
+              controller: refreshController,
+              onRefresh: () async {
+                _search(
+                  searchController.text,
+                  fetchMore: fetchMore,
+                  refetch: refetch,
+                );
+                refreshController.refreshCompleted();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.medium),
+                  ),
+                  SliverToBoxAdapter(
+                    child: LemonTextField(
+                      onChange: (value) {
+                        debouncer.run(() {
+                          _search(
+                            value,
+                            fetchMore: fetchMore,
+                            refetch: refetch,
+                          );
+                          if (value.isEmpty) {
+                            setState(() {
+                              hasNextPage = true;
+                            });
+                          }
+                        });
+                      },
+                      controller: searchController,
+                      radius: LemonRadius.medium,
+                      hintText: t.event.eventApproval.searchRegistrations,
+                      placeholderStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      leadingIcon: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (filter) => Assets.icons.icSearch.svg(
+                              width: Sizing.mSmall,
+                              height: Sizing.mSmall,
+                              colorFilter: filter,
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.medium),
+                  ),
+                  if (result.hasException)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: EmptyList(
+                          emptyText: t.common.somethingWrong,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.medium),
-                ),
-                if (result.hasException)
-                  SliverFillRemaining(
-                    child: Center(
-                      child: EmptyList(
-                        emptyText: t.common.somethingWrong,
                       ),
                     ),
-                  ),
-                if (eventTicketExportsList.isEmpty && result.isLoading)
-                  SliverFillRemaining(
-                    child: Center(
-                      child: Loading.defaultLoading(context),
-                    ),
-                  ),
-                if (eventTicketExportsList.isEmpty && !result.isLoading)
-                  SliverFillRemaining(
-                    child: Center(
-                      child: EmptyList(
-                        emptyText: t.event.eventApproval.noGuestFound,
+                  if (eventTicketExportsList.isEmpty && result.isLoading)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: Loading.defaultLoading(context),
                       ),
                     ),
+                  if (eventTicketExportsList.isEmpty && !result.isLoading)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: EmptyList(
+                          emptyText: t.event.eventApproval.noGuestFound,
+                        ),
+                      ),
+                    ),
+                  SliverList.separated(
+                    itemCount: eventTicketExportsList.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == eventTicketExportsList.length) {
+                        return hasNextPage
+                            ? Loading.defaultLoading(context)
+                            : const SizedBox.shrink();
+                      }
+                      final eventAccepted = eventTicketExportsList[index];
+                      return EventAcceptedExportItem(
+                        event: widget.event,
+                        eventAccepted: eventAccepted,
+                        refetch: () {
+                          _search(
+                            searchController.text,
+                            fetchMore: fetchMore,
+                            refetch: refetch,
+                          );
+                        },
+                        onTapCancelTicket: (ticketId) async {
+                          await showFutureLoadingDialog(
+                            context: context,
+                            future: () {
+                              return getIt<EventTicketRepository>()
+                                  .cancelTickets(
+                                eventId: widget.event?.id ?? '',
+                                ticketIds: [ticketId],
+                              );
+                            },
+                          );
+                          _search(
+                            searchController.text,
+                            fetchMore: fetchMore,
+                            refetch: refetch,
+                          );
+                        },
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: Spacing.xSmall,
+                    ),
                   ),
-                SliverList.separated(
-                  itemCount: eventTicketExportsList.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == eventTicketExportsList.length) {
-                      return hasNextPage
-                          ? Loading.defaultLoading(context)
-                          : const SizedBox.shrink();
-                    }
-                    final eventAccepted = eventTicketExportsList[index];
-                    return EventAcceptedExportItem(
-                      event: widget.event,
-                      eventAccepted: eventAccepted,
-                      refetch: () {
-                        _search(
-                          searchController.text,
-                          fetchMore: fetchMore,
-                          refetch: refetch,
-                        );
-                      },
-                      onTapCancelTicket: (ticketId) async {
-                        await showFutureLoadingDialog(
-                          context: context,
-                          future: () {
-                            return getIt<EventTicketRepository>().cancelTickets(
-                              eventId: widget.event?.id ?? '',
-                              ticketIds: [ticketId],
-                            );
-                          },
-                        );
-                        _search(
-                          searchController.text,
-                          fetchMore: fetchMore,
-                          refetch: refetch,
-                        );
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: Spacing.xSmall,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
