@@ -57,6 +57,9 @@ class _SettingDeleteAccountDialogState
             SizedBox(height: Spacing.superExtraSmall),
             LemonTextField(
               hintText: t.setting.deleteAccountDialogHint,
+              placeholderStyle: Typo.medium.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
               onChange: (value) => setState(() {
                 confirmText = value;
               }),
