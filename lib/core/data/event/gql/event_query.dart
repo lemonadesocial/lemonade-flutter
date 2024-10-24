@@ -143,73 +143,74 @@ const eventFragment = '''
   $eventMatrixFragment
 
   fragment eventFields on Event {
-  _id
-  title
-  slug
-  host
-  approval_required
-  host_expanded {
-    ...eventHostExpandedFragment
-  }
-  cohosts_expanded(limit: 25) {
-    ...eventHostExpandedFragment
-  }
-  new_new_photos
-  new_new_photos_expanded(limit: 25) {
     _id
-    key
-    bucket
-  }
-  start
-  end
-  timezone
-  cost
-  currency
-  description
-  broadcasts {
-    provider_id
-  }
-  address {
-    street_1
-    city
     title
-    region
-  }
-  latitude
-  longitude
-  guest_limit
-  guest_limit_per
-  virtual
-  virtual_url
-  private
-  invited_count
-  checkin_count
-  attending_count
-  pending_request_count
-  guest_directory_enabled
-  published
-  rewards {
-    _id
-    active
-    title
-    icon_url
-    icon_color
-    limit
-    limit_per
-    payment_ticket_types
-  }
-  event_ticket_types {
-    _id
-    prices {
-      currency
-      network
-      cost
+    slug
+    host
+    approval_required
+    host_expanded {
+      ...eventHostExpandedFragment
     }
+    cohosts_expanded(limit: 25) {
+      ...eventHostExpandedFragment
+    }
+    new_new_photos
+    new_new_photos_expanded(limit: 25) {
+      _id
+      key
+      bucket
+    }
+    start
+    end
+    timezone
+    cost
+    currency
+    description
+    broadcasts {
+      provider_id
+    }
+    address {
+      street_1
+      city
+      title
+      region
+    }
+    latitude
+    longitude
+    guest_limit
+    guest_limit_per
+    virtual
+    virtual_url
+    private
+    invited_count
+    checkin_count
+    attending_count
+    pending_request_count
+    ticket_count
+    guest_directory_enabled
+    published
+    rewards {
+      _id
+      active
+      title
+      icon_url
+      icon_color
+      limit
+      limit_per
+      payment_ticket_types
+    }
+    event_ticket_types {
+      _id
+      prices {
+        currency
+        network
+        cost
+      }
+    }
+    tags
+    ...eventPeopleFragment
+    ...eventMatrixFragment
   }
-  tags
-  ...eventPeopleFragment
-  ...eventMatrixFragment
-}
 ''';
 
 const eventApplicationFormFragment = '''
