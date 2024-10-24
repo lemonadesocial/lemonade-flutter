@@ -2,7 +2,6 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -183,96 +182,100 @@ class HostEventBasicInfoCard extends StatelessWidget {
           height: Spacing.extraSmall,
         ),
         // if (canShowGuestList)
-        Query$ExportEventTickets$Widget(
-          options: Options$Query$ExportEventTickets(
-            fetchPolicy: FetchPolicy.networkOnly,
-            variables: Variables$Query$ExportEventTickets(
-              id: event.id ?? '',
-              pagination: Input$PaginationInput(
-                limit: 1,
-                skip: 0,
-              ),
-            ),
-          ),
-          builder: (result, {refetch, fetchMore}) {
-            if (result.isLoading) {
-              return Padding(
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: Loading.defaultLoading(context),
-              );
-            }
-            final registrationCount =
-                result.parsedData?.exportEventTickets.count;
-            return Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.checkins,
-                      ),
+        Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () => AutoRouter.of(context).push(
+                  EventApprovalSettingRoute(
+                    initialTab: EventGuestsTabs.checkins,
+                  ),
+                ),
+                child: Container(
+                  height: 73.w,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(LemonRadius.extraSmall),
                     ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Spacing.smMedium),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.checkInCount?.toString() ?? '',
+                          style: Typo.mediumPlus.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.checkInCount?.toString() ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.checkedIn.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                        SizedBox(
+                          height: 2.h,
                         ),
-                      ),
+                        Text(
+                          t.event.checkedIn.capitalize(),
+                          style: Typo.small
+                              .copyWith(color: colorScheme.onSecondary),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: Spacing.extraSmall,
+              ),
+            ),
+            SizedBox(
+              width: Spacing.extraSmall,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () => AutoRouter.of(context).push(
+                  EventApprovalSettingRoute(
+                    initialTab: EventGuestsTabs.reservations,
+                  ),
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.reservations,
-                      ),
+                child: Container(
+                  height: 73.w,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(LemonRadius.extraSmall),
                     ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Spacing.smMedium),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Query$ExportEventTickets$Widget(
+                          options: Options$Query$ExportEventTickets(
+                            fetchPolicy: FetchPolicy.networkOnly,
+                            variables: Variables$Query$ExportEventTickets(
+                              id: event.id ?? '',
+                              pagination: Input$PaginationInput(
+                                limit: 1,
+                                skip: 0,
+                              ),
+                            ),
+                          ),
+                          builder: (result, {refetch, fetchMore}) {
+                            if (result.isLoading) {
+                              return Text(
+                                '--',
+                                style: Typo.mediumPlus.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontFamily: FontFamily.nohemiVariable,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                            final registrationCount =
+                                result.parsedData?.exportEventTickets.count;
+                            return Text(
                               registrationCount?.toStringAsFixed(0) ??
                                   event.attendingCount
                                       ?.toString() ?? // fallback for old events data
@@ -282,70 +285,70 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                 fontFamily: FontFamily.nohemiVariable,
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.registration.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                            );
+                          },
                         ),
-                      ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Text(
+                          t.event.registration.capitalize(),
+                          style: Typo.small
+                              .copyWith(color: colorScheme.onSecondary),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: Spacing.extraSmall,
+              ),
+            ),
+            SizedBox(
+              width: Spacing.extraSmall,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () => AutoRouter.of(context).push(
+                  EventApprovalSettingRoute(
+                    initialTab: EventGuestsTabs.invited,
+                  ),
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () => AutoRouter.of(context).push(
-                      EventApprovalSettingRoute(
-                        initialTab: EventGuestsTabs.invited,
-                      ),
+                child: Container(
+                  height: 73.w,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(LemonRadius.extraSmall),
                     ),
-                    child: Container(
-                      height: 73.w,
-                      decoration: BoxDecoration(
-                        color: colorScheme.onPrimary.withOpacity(0.06),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(LemonRadius.extraSmall),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: Spacing.smMedium),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.invitedCount?.toString() ?? '',
+                          style: Typo.mediumPlus.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontFamily: FontFamily.nohemiVariable,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: Spacing.smMedium),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.invitedCount?.toString() ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Text(
-                              t.event.invited.capitalize(),
-                              style: Typo.small
-                                  .copyWith(color: colorScheme.onSecondary),
-                            ),
-                          ],
+                        SizedBox(
+                          height: 2.h,
                         ),
-                      ),
+                        Text(
+                          t.event.invited.capitalize(),
+                          style: Typo.small
+                              .copyWith(color: colorScheme.onSecondary),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            );
-          },
+              ),
+            ),
+          ],
         ),
         // if (canShowGuestList)
         SizedBox(
