@@ -8,10 +8,12 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class EventInvitedList extends StatelessWidget {
   final Event? event;
-  const EventInvitedList({
+  final RefreshController refreshController = RefreshController();
+  EventInvitedList({
     super.key,
     this.event,
   });
@@ -31,18 +33,6 @@ class EventInvitedList extends StatelessWidget {
         refetch,
         fetchMore,
       }) {
-        if (result.isLoading) {
-          return Loading.defaultLoading(context);
-        }
-
-        if (result.hasException) {
-          return Center(
-            child: EmptyList(
-              emptyText: t.common.somethingWrong,
-            ),
-          );
-        }
-
         final eventInvitedList =
             (result.parsedData?.getEventInvitedStatistics.guests ?? [])
                 .map((item) {
@@ -51,37 +41,60 @@ class EventInvitedList extends StatelessWidget {
           );
         }).toList();
 
-        if (eventInvitedList.isEmpty) {
-          return Center(
-            child: EmptyList(
-              emptyText: t.event.eventApproval.noGuestFound,
-            ),
-          );
-        }
-
         return NotificationListener(
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: Spacing.xSmall,
             ),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.smMedium),
-                ),
-                SliverList.separated(
-                  itemCount: eventInvitedList.length,
-                  itemBuilder: (context, index) {
-                    final invitedGuest = eventInvitedList[index];
-                    return EventInvitedItem(
-                      guest: invitedGuest,
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: Spacing.superExtraSmall,
+            child: SmartRefresher(
+              controller: refreshController,
+              onRefresh: () async {
+                refetch?.call();
+                refreshController.refreshCompleted();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.smMedium),
                   ),
-                ),
-              ],
+                  if (result.isLoading && eventInvitedList.isEmpty)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: Loading.defaultLoading(
+                          context,
+                        ),
+                      ),
+                    ),
+                  if (result.hasException)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: EmptyList(
+                          emptyText: t.common.somethingWrong,
+                        ),
+                      ),
+                    ),
+                  if (!result.isLoading && eventInvitedList.isEmpty)
+                    SliverFillRemaining(
+                      child: Center(
+                        child: EmptyList(
+                          emptyText: t.event.eventApproval.noGuestFound,
+                        ),
+                      ),
+                    ),
+                  SliverList.separated(
+                    itemCount: eventInvitedList.length,
+                    itemBuilder: (context, index) {
+                      final invitedGuest = eventInvitedList[index];
+                      return EventInvitedItem(
+                        guest: invitedGuest,
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: Spacing.superExtraSmall,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

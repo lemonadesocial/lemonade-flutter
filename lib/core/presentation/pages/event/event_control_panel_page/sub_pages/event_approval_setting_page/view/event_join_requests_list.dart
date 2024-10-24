@@ -10,6 +10,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 enum ModifyJoinRequestAction {
   approve,
@@ -35,6 +36,8 @@ class EventJoinRequestList extends StatefulWidget {
 }
 
 class _EventJoinRequestListState extends State<EventJoinRequestList> {
+  final refreshController = RefreshController();
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -55,18 +58,6 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
           refetch,
           fetchMore,
         }) {
-          if (result.isLoading) {
-            return Loading.defaultLoading(context);
-          }
-
-          if (result.hasException) {
-            return Center(
-              child: EmptyList(
-                emptyText: t.common.somethingWrong,
-              ),
-            );
-          }
-
           final joinRequests =
               (result.parsedData?.getEventJoinRequests.records ?? [])
                   .map((item) {
@@ -75,43 +66,66 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
             );
           }).toList();
 
-          if (joinRequests.isEmpty) {
-            return Center(
-              child: EmptyList(
-                emptyText: t.event.eventApproval.noRequestFound,
-              ),
-            );
-          }
-
           return NotificationListener(
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Spacing.xSmall,
               ),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: Spacing.smMedium),
-                  ),
-                  SliverList.separated(
-                    itemCount: joinRequests.length,
-                    itemBuilder: (context, index) {
-                      if (widget.itemBuilder != null) {
-                        return widget.itemBuilder!(
-                          eventJoinRequest: joinRequests[index],
-                          refresh: () => refetch?.call(),
-                        );
-                      }
-
-                      return EventJoinRequestItem(
-                        eventJoinRequest: joinRequests[index],
-                      );
-                    },
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: Spacing.small,
+              child: SmartRefresher(
+                controller: refreshController,
+                onRefresh: () async {
+                  refetch?.call();
+                  refreshController.refreshCompleted();
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.smMedium),
                     ),
-                  ),
-                ],
+                    if (result.isLoading && joinRequests.isEmpty)
+                      SliverFillRemaining(
+                        child: Center(
+                          child: Loading.defaultLoading(
+                            context,
+                          ),
+                        ),
+                      ),
+                    if (result.hasException)
+                      SliverFillRemaining(
+                        child: Center(
+                          child: EmptyList(
+                            emptyText: t.common.somethingWrong,
+                          ),
+                        ),
+                      ),
+                    if (!result.isLoading && joinRequests.isEmpty)
+                      SliverFillRemaining(
+                        child: Center(
+                          child: EmptyList(
+                            emptyText: t.event.eventApproval.noRequestFound,
+                          ),
+                        ),
+                      ),
+                    SliverList.separated(
+                      itemCount: joinRequests.length,
+                      itemBuilder: (context, index) {
+                        if (widget.itemBuilder != null) {
+                          return widget.itemBuilder!(
+                            eventJoinRequest: joinRequests[index],
+                            refresh: () => refetch?.call(),
+                          );
+                        }
+
+                        return EventJoinRequestItem(
+                          eventJoinRequest: joinRequests[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: Spacing.small,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
