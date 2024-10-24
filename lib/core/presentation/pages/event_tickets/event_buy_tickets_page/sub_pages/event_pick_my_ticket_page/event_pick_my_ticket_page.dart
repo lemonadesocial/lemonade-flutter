@@ -72,6 +72,25 @@ class EventPickMyTicketView extends StatelessWidget {
     required this.event,
   });
 
+  void popToEventDetail(BuildContext context) {
+    final hasEventsList = AutoRouter.of(context).root.stack.any(
+          (route) => route.routeData.name == EventsListingRoute.name,
+        );
+    if (!hasEventsList) {
+      AutoRouter.of(context).root.popUntilRoot();
+    } else {
+      AutoRouter.of(context).root.popUntilRouteWithPath(
+            '/events',
+          );
+    }
+    AutoRouter.of(context).root.push(
+          EventDetailRoute(
+            key: UniqueKey(),
+            eventId: event.id ?? '',
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -118,8 +137,17 @@ class EventPickMyTicketView extends StatelessWidget {
             state.maybeWhen(
               orElse: () => null,
               success: (eventRsvp) {
-                AutoRouter.of(context)
-                    .replaceAll([const EventTicketManagementRoute()]);
+                final myTickets =
+                    context.read<GetMyTicketsBloc>().state.maybeWhen(
+                          orElse: () => [],
+                          success: (myTickets) => myTickets,
+                        );
+                if (myTickets.length > 1) {
+                  AutoRouter.of(context)
+                      .replaceAll([const EventTicketManagementRoute()]);
+                } else {
+                  popToEventDetail(context);
+                }
               },
             );
           },
