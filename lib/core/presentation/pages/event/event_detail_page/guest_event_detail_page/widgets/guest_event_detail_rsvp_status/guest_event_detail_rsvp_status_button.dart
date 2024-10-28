@@ -3,8 +3,10 @@ import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_reque
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_buy_button.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_one_click_redeem_button.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -67,6 +69,13 @@ class GuestEventDetailRSVPStatusButton extends StatelessWidget {
                 : null;
 
         if (eventJoinRequest == null) {
+          if (EventUtils.isOneClickRegister(event: event)) {
+            return GuestEventDetailOneClickRedeemButton(
+              event: event,
+              refetch: refetch,
+            );
+          }
+
           return GuestEventDetailBuyButton(event: event, refetch: refetch);
         }
 

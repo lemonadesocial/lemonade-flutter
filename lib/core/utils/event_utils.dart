@@ -193,4 +193,37 @@ class EventUtils {
       );
     }
   }
+
+  static bool isRegisterFormRequired({
+    required Event event,
+  }) {
+    final isFormRequired = (event.applicationProfileFields ?? []).isNotEmpty ||
+        (event.applicationQuestions ?? []).isNotEmpty;
+    return isFormRequired;
+  }
+
+  static bool isOnlyOneTicketTypeAndFreeAndLimited({
+    required Event event,
+  }) {
+    final isOnlyOneTicket = event.eventTicketTypes?.length == 1;
+    if (!isOnlyOneTicket) {
+      return false;
+    }
+    final ticketType = event.eventTicketTypes?.first;
+    final isOnlyFreeAndLimited = ticketType?.ticketLimitPer == 1 &&
+        (ticketType?.prices ?? []).any(
+          (element) => element.cost == '0',
+        );
+    return isOnlyFreeAndLimited;
+  }
+
+  static bool isOneClickRegister({
+    required Event event,
+  }) {
+    if (isRegisterFormRequired(event: event)) {
+      return false;
+    }
+
+    return isOnlyOneTicketTypeAndFreeAndLimited(event: event);
+  }
 }

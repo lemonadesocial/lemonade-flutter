@@ -520,7 +520,9 @@
         "claimRefund": "Claim refund",
         "refundedDescription": "Your ticket deposit of $amount has been refunded. This may take some time to reflect in your wallet",
         "registrationClosed": "Registration closed",
-        "registrationClosedDescription": "This event is not longer taking registrations"
+        "registrationClosedDescription": "This event is not longer taking registrations",
+        "oneClickRegister": "One-click register",
+        "requestToJoin": "Request to join"
     },
     "cancelReservation": {
         "cancelReservationTitle": "Cancel Reservation?",
