@@ -9,6 +9,7 @@ import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:collection/collection.dart';
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -210,10 +211,14 @@ class EventUtils {
       return false;
     }
     final ticketType = event.eventTicketTypes?.first;
+    final isOnlyOnePrice = ticketType?.prices?.length == 1;
+
+    if (!isOnlyOnePrice) {
+      return false;
+    }
+
     final isOnlyFreeAndLimited = ticketType?.ticketLimitPer == 1 &&
-        (ticketType?.prices ?? []).any(
-          (element) => element.cost == '0',
-        );
+        ticketType?.prices?.firstOrNull?.cost == '0';
     return isOnlyFreeAndLimited;
   }
 

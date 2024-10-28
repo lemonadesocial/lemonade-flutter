@@ -5,6 +5,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/input/get_event_ticket_types_input/get_event_ticket_types_input.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
@@ -13,6 +14,7 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:collection/collection.dart';
 
 @RoutePage()
 class EventBuyTicketsInitialPage extends StatelessWidget {
@@ -81,7 +83,7 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
               AutoRouter.of(context).replace(
                 const EventBuyTicketsSelectTicketCategoryRoute(),
               );
-            }, (response) {
+            }, (response) async {
               final allTickets = response.ticketTypes ?? [];
               final allCategories = allTickets
                   .where((element) => element.categoryExpanded != null)
@@ -95,9 +97,30 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
                             allCategories.isEmpty ? null : allCategories.first,
                       ),
                     );
-                context.router.replace(
-                  const SelectTicketsRoute(),
-                );
+                if (EventUtils.isOnlyOneTicketTypeAndFreeAndLimited(
+                  event: event,
+                )) {
+                  final ticketType = allTickets.firstOrNull;
+                  context.read<SelectEventTicketsBloc>().add(
+                        SelectEventTicketsEvent.select(
+                          ticket: PurchasableItem(
+                            id: ticketType?.id ?? '',
+                            count: 1,
+                          ),
+                          currency: (ticketType?.prices ?? [])
+                                  .firstOrNull
+                                  ?.currency ??
+                              '',
+                        ),
+                      );
+                  AutoRouter.of(context).replace(
+                    const EventTicketsSummaryRoute(),
+                  );
+                } else {
+                  AutoRouter.of(context).replace(
+                    const SelectTicketsRoute(),
+                  );
+                }
               } else {
                 AutoRouter.of(context).replace(
                   const EventBuyTicketsSelectTicketCategoryRoute(),

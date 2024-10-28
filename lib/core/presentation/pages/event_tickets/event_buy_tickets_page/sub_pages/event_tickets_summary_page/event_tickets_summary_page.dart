@@ -77,11 +77,6 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final selectedTickets = selectTicketsBlocState.selectedTickets;
     final selectedCurrency = selectTicketsBlocState.selectedCurrency!;
     final selectedNetwork = selectTicketsBlocState.selectedNetwork;
-    final ticketTypes =
-        context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
-              orElse: () => [] as List<PurchasableTicketType>,
-              success: (response, _) => response.ticketTypes ?? [],
-            );
     final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
     final isApplicationFormRequired =
         event.applicationProfileFields?.isNotEmpty == true ||
@@ -130,140 +125,176 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           },
         ),
       ],
-      child: WillPopScope(
-        // prevent accidentally swipe back
-        onWillPop: () async => true,
-        child: Stack(
-          children: [
-            Scaffold(
+      child: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+        builder: (context, state) {
+          return state.when(
+            failure: () => Scaffold(
               backgroundColor: colorScheme.background,
               appBar: LemonAppBar(
                 title: t.event.eventBuyTickets.registration,
               ),
-              body: SafeArea(
+              body: Center(
+                child: EmptyList(
+                  emptyText: t.common.somethingWrong,
+                ),
+              ),
+            ),
+            loading: () => Scaffold(
+              backgroundColor: colorScheme.background,
+              appBar: LemonAppBar(
+                title: t.event.eventBuyTickets.registration,
+              ),
+              body: Center(
+                child: Loading.defaultLoading(context),
+              ),
+            ),
+            success: (ticketTypesResponse, supportedCurrencies) {
+              final ticketTypes = ticketTypesResponse.ticketTypes ?? [];
+              return WillPopScope(
+                // prevent accidentally swipe back
+                onWillPop: () async => true,
                 child: Stack(
                   children: [
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: Spacing.xSmall,
+                    Scaffold(
+                      backgroundColor: colorScheme.background,
+                      appBar: LemonAppBar(
+                        title: t.event.eventBuyTickets.registration,
+                      ),
+                      body: SafeArea(
+                        child: Stack(
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Spacing.xSmall,
+                                    ),
+                                    child: EventInfoSummary(
+                                      event: event,
+                                    ),
+                                  ),
+                                  SizedBox(height: Spacing.medium),
+                                  BlocBuilder<CalculateEventTicketPricingBloc,
+                                      CalculateEventTicketPricingState>(
+                                    builder: (context, state) {
+                                      return state.when(
+                                        idle: () => const SizedBox.shrink(),
+                                        loading: () =>
+                                            Loading.defaultLoading(context),
+                                        failure: (pricingInfo, isFree) {
+                                          if (pricingInfo != null) {
+                                            return _TicketsAndTotalPricingSummary(
+                                              ticketTypes: ticketTypes,
+                                              selectedTickets: selectedTickets,
+                                              selectedCurrency:
+                                                  selectedCurrency,
+                                              selectedNetwork: selectedNetwork,
+                                              pricingInfo: pricingInfo,
+                                            );
+                                          }
+                                          return EmptyList(
+                                            emptyText: t.common.somethingWrong,
+                                          );
+                                        },
+                                        success: (pricingInfo, isFree) =>
+                                            _TicketsAndTotalPricingSummary(
+                                          ticketTypes: ticketTypes,
+                                          selectedTickets: selectedTickets,
+                                          selectedCurrency: selectedCurrency,
+                                          selectedNetwork: selectedNetwork,
+                                          pricingInfo: pricingInfo,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: Spacing.medium),
+                                  if (event.applicationFormSubmission ==
+                                      null) ...[
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: Spacing.xSmall,
+                                      ),
+                                      child: const RSVPApplicationForm(),
+                                    ),
+                                    SizedBox(height: 150.w),
+                                  ],
+                                ],
+                              ),
                             ),
-                            child: EventInfoSummary(
-                              event: event,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.medium),
-                          BlocBuilder<CalculateEventTicketPricingBloc,
-                              CalculateEventTicketPricingState>(
-                            builder: (context, state) {
-                              return state.when(
-                                idle: () => const SizedBox.shrink(),
-                                loading: () => Loading.defaultLoading(context),
-                                failure: (pricingInfo, isFree) {
-                                  if (pricingInfo != null) {
-                                    return _TicketsAndTotalPricingSummary(
-                                      ticketTypes: ticketTypes,
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: BlocBuilder<
+                                  CalculateEventTicketPricingBloc,
+                                  CalculateEventTicketPricingState>(
+                                builder: (context, state) {
+                                  final pricingInfo = state.maybeWhen(
+                                    orElse: () => null,
+                                    failure: ((pricingInfo, isFree) =>
+                                        pricingInfo),
+                                    success: (pricingInfo, isFree) =>
+                                        pricingInfo,
+                                  );
+                                  final isFree = state.maybeWhen(
+                                    orElse: () => false,
+                                    failure: (pricingInfo, isFree) => isFree,
+                                    success: (pricingInfo, isFree) => isFree,
+                                  );
+
+                                  if (pricingInfo == null) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  if (isCryptoCurrency) {
+                                    return PayByCryptoFooter(
                                       selectedTickets: selectedTickets,
                                       selectedCurrency: selectedCurrency,
                                       selectedNetwork: selectedNetwork,
                                       pricingInfo: pricingInfo,
+                                      isFree: isFree,
+                                      disabled: !isApplicationFormValid,
                                     );
                                   }
-                                  return EmptyList(
-                                    emptyText: t.common.somethingWrong,
+
+                                  return PayByStripeFooter(
+                                    disabled: !isApplicationFormValid,
+                                    isFree: isFree,
+                                    selectedCurrency: selectedCurrency,
+                                    pricingInfo: pricingInfo,
+                                    onCardAdded: (newCard) {
+                                      context.read<GetPaymentCardsBloc>().add(
+                                            GetPaymentCardsEvent
+                                                .manuallyAddMoreCard(
+                                              paymentCard: newCard,
+                                            ),
+                                          );
+                                      context
+                                          .read<SelectPaymentCardCubit>()
+                                          .selectPaymentCard(
+                                            paymentCard: newCard,
+                                          );
+                                    },
+                                    onSelectCard: (selectedCard) {
+                                      context
+                                          .read<SelectPaymentCardCubit>()
+                                          .selectPaymentCard(
+                                            paymentCard: selectedCard,
+                                          );
+                                    },
                                   );
                                 },
-                                success: (pricingInfo, isFree) =>
-                                    _TicketsAndTotalPricingSummary(
-                                  ticketTypes: ticketTypes,
-                                  selectedTickets: selectedTickets,
-                                  selectedCurrency: selectedCurrency,
-                                  selectedNetwork: selectedNetwork,
-                                  pricingInfo: pricingInfo,
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(height: Spacing.medium),
-                          if (event.applicationFormSubmission == null) ...[
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Spacing.xSmall,
                               ),
-                              child: const RSVPApplicationForm(),
                             ),
-                            SizedBox(height: 150.w),
                           ],
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: BlocBuilder<CalculateEventTicketPricingBloc,
-                          CalculateEventTicketPricingState>(
-                        builder: (context, state) {
-                          final pricingInfo = state.maybeWhen(
-                            orElse: () => null,
-                            failure: ((pricingInfo, isFree) => pricingInfo),
-                            success: (pricingInfo, isFree) => pricingInfo,
-                          );
-                          final isFree = state.maybeWhen(
-                            orElse: () => false,
-                            failure: (pricingInfo, isFree) => isFree,
-                            success: (pricingInfo, isFree) => isFree,
-                          );
-
-                          if (pricingInfo == null) {
-                            return const SizedBox.shrink();
-                          }
-                          if (isCryptoCurrency) {
-                            return PayByCryptoFooter(
-                              selectedTickets: selectedTickets,
-                              selectedCurrency: selectedCurrency,
-                              selectedNetwork: selectedNetwork,
-                              pricingInfo: pricingInfo,
-                              isFree: isFree,
-                              disabled: !isApplicationFormValid,
-                            );
-                          }
-
-                          return PayByStripeFooter(
-                            disabled: !isApplicationFormValid,
-                            isFree: isFree,
-                            selectedCurrency: selectedCurrency,
-                            pricingInfo: pricingInfo,
-                            onCardAdded: (newCard) {
-                              context.read<GetPaymentCardsBloc>().add(
-                                    GetPaymentCardsEvent.manuallyAddMoreCard(
-                                      paymentCard: newCard,
-                                    ),
-                                  );
-                              context
-                                  .read<SelectPaymentCardCubit>()
-                                  .selectPaymentCard(
-                                    paymentCard: newCard,
-                                  );
-                            },
-                            onSelectCard: (selectedCard) {
-                              context
-                                  .read<SelectPaymentCardCubit>()
-                                  .selectPaymentCard(
-                                    paymentCard: selectedCard,
-                                  );
-                            },
-                          );
-                        },
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }
