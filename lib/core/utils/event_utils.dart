@@ -167,12 +167,13 @@ class EventUtils {
       return ('', '');
     }
     final location = tz.getLocation(event.timezone!);
-    final isSameDay = event.start!.year == event.end!.year &&
-        event.start!.month == event.end!.month &&
-        event.start!.day == event.end!.day;
-
     final timezoneStartDate = tz.TZDateTime.from(event.start!, location);
     final timezoneEndDate = tz.TZDateTime.from(event.end!, location);
+
+    final isSameDay = timezoneStartDate.year == timezoneEndDate.year &&
+        timezoneStartDate.month == timezoneEndDate.month &&
+        timezoneStartDate.day == timezoneEndDate.day;
+
     final dateFormatter = DateFormat('EEEE, MMMM d');
     final timeFormatter = DateFormat('h:mm a');
     final endDateFormatter = DateFormat('MMMM d');
