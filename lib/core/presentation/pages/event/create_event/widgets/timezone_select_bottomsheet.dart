@@ -103,7 +103,9 @@ class _TimezoneSelectBottomSheetState extends State<TimezoneSelectBottomSheet> {
                   hintText: t.common.search.capitalize(),
                   leadingIcon: Padding(
                     padding: EdgeInsets.only(
-                        left: Spacing.small, right: Spacing.xSmall),
+                      left: Spacing.small,
+                      right: Spacing.xSmall,
+                    ),
                     child: ThemeSvgIcon(
                       color: colorScheme.onSecondary,
                       builder: (filter) => Assets.icons.icSearch.svg(
