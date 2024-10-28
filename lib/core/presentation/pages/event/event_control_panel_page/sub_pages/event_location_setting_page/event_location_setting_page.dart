@@ -123,6 +123,9 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                   controller: _searchController,
                   onChange: _onSearchChanged,
                   hintText: t.event.locationSetting.searchLocation,
+                  placeholderStyle: Typo.medium.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
                 ),
                 SizedBox(height: Spacing.smMedium),
                 if (_isLoading)
