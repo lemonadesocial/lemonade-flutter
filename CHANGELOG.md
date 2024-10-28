@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.37.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.36.0...v1.37.0) (2024-10-28)
+
+
+### Features
+
+* add pull to refresh for guest list ([#761](https://github.com/lemonadesocial/lemonade-flutter/issues/761)) ([cb021dc](https://github.com/lemonadesocial/lemonade-flutter/commit/cb021dc1b315e23589f191ce877f6a5debccfebc))
+* scan QR code & show QR code for non-login ([#754](https://github.com/lemonadesocial/lemonade-flutter/issues/754)) ([f6ea548](https://github.com/lemonadesocial/lemonade-flutter/commit/f6ea5489ebd291f8f89f643dd962fe9f56e03a40))
+* search guest list  ([#755](https://github.com/lemonadesocial/lemonade-flutter/issues/755)) ([d42f4a4](https://github.com/lemonadesocial/lemonade-flutter/commit/d42f4a487dad9b347ce857a697db249c6b4fe5ea))
+
+
+### Bug Fixes
+
+* adjust timezone data and update logic timezone ([#764](https://github.com/lemonadesocial/lemonade-flutter/issues/764)) ([fd064a1](https://github.com/lemonadesocial/lemonade-flutter/commit/fd064a1981dab6e21c653932da082c07149c5f03))
+* display event ticket export data ([#759](https://github.com/lemonadesocial/lemonade-flutter/issues/759)) ([cfd7af1](https://github.com/lemonadesocial/lemonade-flutter/commit/cfd7af17e33268c7e3e5f71af1edf9affdf12c03))
+* fix placeholder text color to unblock delete account flow ([#762](https://github.com/lemonadesocial/lemonade-flutter/issues/762)) ([a9582ee](https://github.com/lemonadesocial/lemonade-flutter/commit/a9582ee57f1ea529da41f095c9659fb1cbe2c858))
+* handle non login user for event checkin ([c77295a](https://github.com/lemonadesocial/lemonade-flutter/commit/c77295aa90fb010fc9fc3977767b7a1690e70855))
+* handle non login user for event checkin ([#757](https://github.com/lemonadesocial/lemonade-flutter/issues/757)) ([c77295a](https://github.com/lemonadesocial/lemonade-flutter/commit/c77295aa90fb010fc9fc3977767b7a1690e70855))
+* handle non login user join request with applications form ([#752](https://github.com/lemonadesocial/lemonade-flutter/issues/752)) ([f87fa40](https://github.com/lemonadesocial/lemonade-flutter/commit/f87fa40d5edec5c2f57ab8bf0c90f044041e87b3))
+* update event photos ([#756](https://github.com/lemonadesocial/lemonade-flutter/issues/756)) ([e678df7](https://github.com/lemonadesocial/lemonade-flutter/commit/e678df7ecb076c7ab4a53ea6e98075fe36268650))
+
 ## [1.36.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.35.0...v1.36.0) (2024-10-18)
 
 
