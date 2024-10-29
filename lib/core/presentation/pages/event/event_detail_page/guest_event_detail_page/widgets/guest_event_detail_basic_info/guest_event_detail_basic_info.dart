@@ -79,10 +79,6 @@ class _EventCountDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final durationToEvent = EventUtils.getDurationToEventText(
-      event,
-      durationOnly: true,
-    );
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
     return InkWell(
@@ -154,7 +150,7 @@ class _EventCountDown extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildEventStatusText(context, durationToEvent),
+                  _buildEventStatusText(context, event),
                   SizedBox(height: 2.w),
                   Text(
                     formattedDate,
@@ -180,10 +176,14 @@ class _EventCountDown extends StatelessWidget {
     );
   }
 
-  Widget _buildEventStatusText(BuildContext context, String? durationToEvent) {
+  Widget _buildEventStatusText(BuildContext context, Event event) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final now = DateTime.now();
+    final durationOnlyText = EventUtils.getDurationToEventText(
+      event,
+      durationOnly: true,
+    );
     final start = event.start ?? now;
     final end = event.end ?? now;
 
@@ -210,7 +210,7 @@ class _EventCountDown extends StatelessWidget {
         ),
         children: [
           TextSpan(
-            text: '$durationToEvent ',
+            text: '$durationOnlyText ',
             style: Typo.medium.copyWith(
               color: LemonColor.rajah,
               fontWeight: FontWeight.w600,
