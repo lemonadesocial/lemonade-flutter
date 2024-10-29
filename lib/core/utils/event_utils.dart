@@ -174,20 +174,19 @@ class EventUtils {
         timezoneStartDate.month == timezoneEndDate.month &&
         timezoneStartDate.day == timezoneEndDate.day;
 
-    final dateFormatter = DateFormat('EEEE, MMMM d');
-    final timeFormatter = DateFormat('h:mm a');
-    final endDateFormatter = DateFormat('MMMM d');
+    final dateFormatter = DateFormat('EEE, MMM d');
+    final timeFormatter = DateFormat('h:mma');
+    final endDateFormatter = DateFormat('MMM d');
 
     final startDateStr = dateFormatter.format(timezoneStartDate);
-    final startTimeStr = timeFormatter.format(timezoneStartDate);
-    final endTimeStr = timeFormatter.format(timezoneEndDate);
+    final startTimeStr = timeFormatter.format(timezoneStartDate).toLowerCase();
+    final endTimeStr = timeFormatter.format(timezoneEndDate).toLowerCase();
     final gmtOffset = DateUtils.getGMTOffsetText(event.timezone!);
 
-    // Format output based on whether it's a single-day or multi-day event
     if (isSameDay) {
       return (startDateStr, '$startTimeStr - $endTimeStr $gmtOffset');
     } else {
-      final endDateStr = endDateFormatter.format(event.end!);
+      final endDateStr = endDateFormatter.format(timezoneEndDate);
       return (
         startDateStr,
         '$startTimeStr - $endDateStr, $endTimeStr $gmtOffset'
