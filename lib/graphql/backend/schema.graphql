@@ -120,7 +120,8 @@ type Query {
     ticket_types: [MongoID!]
   ): [Ticket!]!
   getTicket(shortid: String!): Ticket
-  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
+  getTicketStatistics(id: MongoID!): TicketStatistics!
+  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, checked_in: Boolean, pagination: PaginationInput): ExportedTickets!
   getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
   getMe: User!
   getUser(_id: MongoID, username: String, email: String, matrix_localpart: String): User
@@ -2970,6 +2971,19 @@ type Ticket {
   type_expanded: EventTicketType
 }
 
+type TicketStatistics {
+  all: Float!
+  checked_in: Float!
+  not_checked_in: Float!
+  ticket_types: [TicketStatisticPerTier!]!
+}
+
+type TicketStatisticPerTier {
+  ticket_type: MongoID!
+  ticket_type_title: String!
+  count: Float!
+}
+
 type ExportedTickets {
   tickets: [TicketExport!]!
   count: Float!
@@ -3195,7 +3209,7 @@ type Mutation {
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
-  # cloneEvent(input: CloneEventInput!): [MongoID!]!
+  cloneEvent(input: CloneEventInput!): [MongoID!]!
   updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
   acceptEvent(email: String, _id: MongoID!): EventRsvp!
   declineEvent(message: String, _id: MongoID!): EventRsvp!
@@ -3679,11 +3693,11 @@ input CreateEventQuestionsInput {
   session: MongoID
 }
 
-# input CloneEventInput {
-#   event: MongoID!
-#   dates: [DateTimeISO!]!
-#   override: EventInput
-# }
+input CloneEventInput {
+  event: MongoID!
+  dates: [DateTimeISO!]!
+  overrides: EventInput
+}
 
 input UpdateEventRewardUseInput {
   event: MongoID!
