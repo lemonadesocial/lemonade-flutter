@@ -67,6 +67,7 @@ const eventTicketTypesFragment = '''
         network
         default
       }
+      ticket_limit_per
       ticket_limit
       ticket_count
       default

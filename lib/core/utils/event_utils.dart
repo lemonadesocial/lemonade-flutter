@@ -9,6 +9,7 @@ import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:collection/collection.dart';
 
 class EventUtils {
   static bool isAttending({required Event event, required String userId}) {
@@ -192,5 +193,42 @@ class EventUtils {
         '$startTimeStr - $endDateStr, $endTimeStr $gmtOffset'
       );
     }
+  }
+
+  static bool isRegisterFormRequired({
+    required Event event,
+  }) {
+    final isFormRequired = (event.applicationProfileFields ?? []).isNotEmpty ||
+        (event.applicationQuestions ?? []).isNotEmpty;
+    return isFormRequired;
+  }
+
+  static bool isOnlyOneTicketTypeAndFreeAndLimited({
+    required Event event,
+  }) {
+    final isOnlyOneTicket = event.eventTicketTypes?.length == 1;
+    if (!isOnlyOneTicket) {
+      return false;
+    }
+    final ticketType = event.eventTicketTypes?.first;
+    final isOnlyOnePrice = ticketType?.prices?.length == 1;
+
+    if (!isOnlyOnePrice) {
+      return false;
+    }
+
+    final isOnlyFreeAndLimited = ticketType?.ticketLimitPer == 1 &&
+        ticketType?.prices?.firstOrNull?.cost == '0';
+    return isOnlyFreeAndLimited;
+  }
+
+  static bool isOneClickRegister({
+    required Event event,
+  }) {
+    if (isRegisterFormRequired(event: event)) {
+      return false;
+    }
+
+    return isOnlyOneTicketTypeAndFreeAndLimited(event: event);
   }
 }
