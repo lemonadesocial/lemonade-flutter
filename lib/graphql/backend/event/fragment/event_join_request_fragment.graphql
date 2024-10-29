@@ -16,6 +16,7 @@ fragment EventJoinRequest on EventJoinRequest {
     _id
     display_name
     image_avatar
+    name
     username
     wallets
     email
@@ -23,7 +24,9 @@ fragment EventJoinRequest on EventJoinRequest {
   non_login_user {
     _id
     name
+    username
     display_name
+    name
     email
     image_avatar
   }

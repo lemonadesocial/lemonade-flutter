@@ -81,10 +81,6 @@ class _EventPendingJoinRequestItemState
     final eventId = event?.id ?? '';
     return InkWell(
       onTap: () {
-        if (isPending) {
-          openApplication(context, event);
-          return;
-        }
         goToJoinRequestDetail(context, event);
       },
       child: Column(

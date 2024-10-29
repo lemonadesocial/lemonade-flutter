@@ -21,19 +21,36 @@ class JoinRequestUserAvatar extends StatelessWidget {
 
   double get _size => avatarSize ?? Sizing.medium;
 
-  bool get _isNonLoginUser => eventJoinRequest.user == null;
+  // bool get _isNonLoginUser => eventJoinRequest.user == null;
 
-  String get _name => _isNonLoginUser
-      ? eventJoinRequest.nonLoginUser?.displayName ?? ''
-      : eventJoinRequest.userExpanded?.displayName ?? '';
+  /// Tricky fix for get display name
+  String get _name =>
+      eventJoinRequest.userExpanded?.displayName ??
+      eventJoinRequest.userExpanded?.username ??
+      eventJoinRequest.userExpanded?.name ??
+      eventJoinRequest.nonLoginUser?.displayName ??
+      eventJoinRequest.nonLoginUser?.username ??
+      eventJoinRequest.nonLoginUser?.name ??
+      '';
+  // _isNonLoginUser
+  //     ? eventJoinRequest.nonLoginUser?.displayName ?? ''
+  //     : eventJoinRequest.userExpanded?.displayName ?? '';
 
-  String get _email => _isNonLoginUser
-      ? eventJoinRequest.nonLoginUser?.email ?? ''
-      : eventJoinRequest.userExpanded?.email ?? '';
+  /// Tricky fix for get email
+  String get _email =>
+      eventJoinRequest.userExpanded?.email ??
+      eventJoinRequest.nonLoginUser?.email ??
+      '';
+  // _isNonLoginUser ? eventJoinRequest.nonLoginUser?.email ?? '' : eventJoinRequest.userExpanded?.email ?? '';
 
-  String get _imageUrl => _isNonLoginUser
-      ? eventJoinRequest.nonLoginUser?.imageAvatar ?? ''
-      : eventJoinRequest.userExpanded?.imageAvatar ?? '';
+  /// Tricky fix for get avatar
+  String get _imageUrl =>
+      eventJoinRequest.userExpanded?.imageAvatar ??
+      eventJoinRequest.nonLoginUser?.imageAvatar ??
+      '';
+  // _isNonLoginUser
+  //     ? eventJoinRequest.nonLoginUser?.imageAvatar ?? ''
+  //     : eventJoinRequest.userExpanded?.imageAvatar ?? '';
 
   @override
   Widget build(BuildContext context) {
