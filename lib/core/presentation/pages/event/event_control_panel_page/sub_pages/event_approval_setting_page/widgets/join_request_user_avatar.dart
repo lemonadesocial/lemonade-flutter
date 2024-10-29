@@ -26,11 +26,11 @@ class JoinRequestUserAvatar extends StatelessWidget {
   /// Tricky fix for get display name
   String get _name =>
       eventJoinRequest.userExpanded?.displayName ??
-      eventJoinRequest.userExpanded?.username ??
       eventJoinRequest.userExpanded?.name ??
+      eventJoinRequest.userExpanded?.username ??
       eventJoinRequest.nonLoginUser?.displayName ??
-      eventJoinRequest.nonLoginUser?.username ??
       eventJoinRequest.nonLoginUser?.name ??
+      eventJoinRequest.nonLoginUser?.username ??
       '';
   // _isNonLoginUser
   //     ? eventJoinRequest.nonLoginUser?.displayName ?? ''
