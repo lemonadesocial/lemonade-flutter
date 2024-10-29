@@ -114,6 +114,18 @@ class EventPickMyTicketView extends StatelessWidget {
                         myTickets: myTickets,
                       ),
                     );
+                if (myTickets.length == 1) {
+                  context.read<AssignTicketsBloc>().add(
+                        AssignTicketsEvent.assign(
+                          assignees: [
+                            TicketAssignee(
+                              ticket: myTickets.firstOrNull?.id ?? '',
+                              user: userId,
+                            ),
+                          ],
+                        ),
+                      );
+                }
               },
             );
           },
@@ -153,59 +165,78 @@ class EventPickMyTicketView extends StatelessWidget {
           },
         ),
       ],
-      child: Stack(
-        children: [
-          Scaffold(
-            backgroundColor: colorScheme.background,
-            appBar: const LemonAppBar(
-              leading: SizedBox.shrink(),
+      child: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
+        builder: (context, state) {
+          return state.when(
+            loading: () => Expanded(child: Loading.defaultLoading(context)),
+            failure: () => EmptyList(
+              emptyText: t.common.somethingWrong,
             ),
-            body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.event.eventPickMyTickets.pickYourTicket,
-                          style: Typo.extraLarge.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          t.event.eventPickMyTickets.pickYourTicketDescription,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        ),
-                      ],
+            success: (eventTicketTypesResponse, supportedCurrencies) {
+              return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
+                builder: (context, state) => state.when(
+                  loading: () => Scaffold(
+                    body: Center(
+                      child: Loading.defaultLoading(context),
                     ),
                   ),
-                  SizedBox(height: Spacing.smMedium),
-                  BlocBuilder<GetEventTicketTypesBloc,
-                      GetEventTicketTypesState>(
-                    builder: (context, state) {
-                      return state.when(
-                        loading: () =>
-                            Expanded(child: Loading.defaultLoading(context)),
-                        failure: () => EmptyList(
-                          emptyText: t.common.somethingWrong,
+                  failure: () => Scaffold(
+                    backgroundColor: colorScheme.background,
+                    body: Center(
+                      child: EmptyList(
+                        emptyText: t.common.somethingWrong,
+                      ),
+                    ),
+                  ),
+                  success: (myTickets) {
+                    if (myTickets.length == 1) {
+                      return Scaffold(
+                        backgroundColor: colorScheme.background,
+                        body: Center(
+                          child: Loading.defaultLoading(context),
                         ),
-                        success:
-                            (eventTicketTypesResponse, supportedCurrencies) {
-                          return BlocBuilder<GetMyTicketsBloc,
-                              GetMyTicketsState>(
-                            builder: (context, state) => state.when(
-                              loading: () => Loading.defaultLoading(context),
-                              failure: () => EmptyList(
-                                emptyText: t.common.somethingWrong,
-                              ),
-                              success: (myTickets) {
-                                return PickMyTicketsList(
+                      );
+                    }
+
+                    return Stack(
+                      children: [
+                        Scaffold(
+                          backgroundColor: colorScheme.background,
+                          appBar: const LemonAppBar(
+                            leading: SizedBox.shrink(),
+                          ),
+                          body: SafeArea(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: Spacing.smMedium,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        t.event.eventPickMyTickets
+                                            .pickYourTicket,
+                                        style: Typo.extraLarge.copyWith(
+                                          color: colorScheme.onPrimary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        t.event.eventPickMyTickets
+                                            .pickYourTicketDescription,
+                                        style: Typo.medium.copyWith(
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                PickMyTicketsList(
                                   event: event,
                                   ticketGroupsMap:
                                       EventTicketUtils.groupTicketsByTicketType(
@@ -216,71 +247,76 @@ class EventPickMyTicketView extends StatelessWidget {
                                   ticketTypes:
                                       eventTicketTypesResponse.ticketTypes ??
                                           [],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SafeArea(
+                            child: BlocBuilder<SelectSelfAssignTicketBloc,
+                                SelectSelfAssignTicketState>(
+                              builder: (context, state) {
+                                final isButtonLoading = assignTicketsState
+                                        is AssignTicketsStateLoading ||
+                                    acceptEventState is AcceptEventStateLoading;
+                                final isInvalid =
+                                    state.selectedTicketType == null;
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: Spacing.smMedium,
+                                    vertical: Spacing.smMedium,
+                                  ),
+                                  child: Opacity(
+                                    opacity:
+                                        isButtonLoading || isInvalid ? 0.5 : 1,
+                                    child: LinearGradientButton.primaryButton(
+                                      onTap: () {
+                                        if (isButtonLoading || isInvalid) {
+                                          return;
+                                        }
+                                        final ticketToAssign = context
+                                            .read<SelectSelfAssignTicketBloc>()
+                                            .getTicketToAssign();
+                                        if (ticketToAssign == null) return;
+
+                                        context.read<AssignTicketsBloc>().add(
+                                              AssignTicketsEvent.assign(
+                                                assignees: [
+                                                  TicketAssignee(
+                                                    ticket:
+                                                        ticketToAssign.id ?? '',
+                                                    user: userId,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                      },
+                                      label: t.common.confirm,
+                                      loadingWhen: isButtonLoading,
+                                    ),
+                                  ),
                                 );
                               },
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SafeArea(
-              child: BlocBuilder<SelectSelfAssignTicketBloc,
-                  SelectSelfAssignTicketState>(
-                builder: (context, state) {
-                  final isButtonLoading =
-                      assignTicketsState is AssignTicketsStateLoading ||
-                          acceptEventState is AcceptEventStateLoading;
-                  final isInvalid = state.selectedTicketType == null;
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: colorScheme.outline,
+                          ),
                         ),
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Spacing.smMedium,
-                      vertical: Spacing.smMedium,
-                    ),
-                    child: Opacity(
-                      opacity: isButtonLoading || isInvalid ? 0.5 : 1,
-                      child: LinearGradientButton.primaryButton(
-                        onTap: () {
-                          if (isButtonLoading || isInvalid) return;
-                          final ticketToAssign = context
-                              .read<SelectSelfAssignTicketBloc>()
-                              .getTicketToAssign();
-                          if (ticketToAssign == null) return;
-
-                          context.read<AssignTicketsBloc>().add(
-                                AssignTicketsEvent.assign(
-                                  assignees: [
-                                    TicketAssignee(
-                                      ticket: ticketToAssign.id ?? '',
-                                      user: userId,
-                                    ),
-                                  ],
-                                ),
-                              );
-                        },
-                        label: t.common.confirm,
-                        loadingWhen: isButtonLoading,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
