@@ -289,7 +289,12 @@ class _SelectTicketViewState extends State<SelectTicketView> {
               orElse: () => null,
               success: (redeemTicketsResponse) async {
                 final tickets = redeemTicketsResponse.tickets ?? [];
-
+                if (redeemTicketsResponse.joinRequest != null) {
+                  AutoRouter.of(context).root.popUntil(
+                        (route) => route.data?.name == EventDetailRoute.name,
+                      );
+                  return;
+                }
                 // if guest already joined the event but
                 // buy additional tickets then go to pick tickets page
                 if (isAttending) {

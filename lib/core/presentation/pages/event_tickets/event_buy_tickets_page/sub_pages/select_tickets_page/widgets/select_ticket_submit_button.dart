@@ -4,6 +4,7 @@ import 'package:app/core/application/event_tickets/redeem_tickets_bloc/redeem_ti
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -46,6 +47,15 @@ class SelectTicketSubmitButton extends StatelessWidget {
           child: LinearGradientButton.primaryButton(
             onTap: () {
               if (!state.isSelectionValid || isLoading) return;
+              if (!state.isPaymentRequired &&
+                  !EventUtils.isRegisterFormRequired(event: event)) {
+                context.read<RedeemTicketsBloc>().add(
+                      RedeemTicketsEvent.redeem(
+                        ticketItems: state.selectedTickets,
+                      ),
+                    );
+                return;
+              }
               context.router.push(
                 const EventTicketsSummaryRoute(),
               );
