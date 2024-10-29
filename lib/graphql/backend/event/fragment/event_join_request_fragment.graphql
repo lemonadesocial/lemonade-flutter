@@ -14,9 +14,10 @@ fragment EventJoinRequest on EventJoinRequest {
   }
   user_expanded {
     _id
+    name
     display_name
-    image_avatar
     username
+    image_avatar
     wallets
     email
   }
@@ -24,6 +25,7 @@ fragment EventJoinRequest on EventJoinRequest {
     _id
     name
     display_name
+    username
     email
     image_avatar
   }

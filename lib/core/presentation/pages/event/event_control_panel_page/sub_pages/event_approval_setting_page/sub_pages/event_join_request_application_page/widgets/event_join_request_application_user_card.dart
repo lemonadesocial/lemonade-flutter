@@ -90,7 +90,12 @@ class _Social extends StatelessWidget {
           userInfo?.handleLinkedin,
           userInfo?.handleInstagram,
           userInfo?.handleTwitter,
-        ].asMap().entries.map((entry) {
+        ]
+            .where((element) => element?.isNotEmpty == true)
+            .toList()
+            .asMap()
+            .entries
+            .map((entry) {
           return GestureDetector(
             onTap: () async {
               launchUrl(
