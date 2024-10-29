@@ -96,7 +96,7 @@ class HomeEventCardFooterLeft extends StatelessWidget {
     final formattedTime = _formatTimeUntilEvent(difference);
     return _buildLabel(
       context,
-      t.event.startingIn(time: formattedTime),
+      t.event.startingInTime(time: formattedTime),
       colorScheme.onSecondary,
     );
   }
