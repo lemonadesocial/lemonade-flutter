@@ -22,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:collection/collection.dart';
+import 'package:slang/builder/utils/string_extensions.dart';
 
 class GuestEventDetailBasicInfo extends StatelessWidget {
   const GuestEventDetailBasicInfo({
@@ -78,9 +79,10 @@ class _EventCountDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-    final durationToEvent =
-        EventUtils.getDurationToEventText(event, durationOnly: true);
+    final durationToEvent = EventUtils.getDurationToEventText(
+      event,
+      durationOnly: true,
+    );
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
     return InkWell(
@@ -152,34 +154,7 @@ class _EventCountDown extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  durationToEvent != null
-                      ? Text.rich(
-                          TextSpan(
-                            text: t.event.eventStartIn(
-                              time: "",
-                            ),
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: durationToEvent,
-                                style: Typo.medium.copyWith(
-                                  color: LemonColor.rajah,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Text(
-                          t.event.eventEnded,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                  _buildEventStatusText(context, durationToEvent),
                   SizedBox(height: 2.w),
                   Text(
                     formattedDate,
@@ -201,6 +176,47 @@ class _EventCountDown extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildEventStatusText(BuildContext context, String? durationToEvent) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    final now = DateTime.now();
+    final start = event.start ?? now;
+    final end = event.end ?? now;
+
+    if (now.isAfter(end)) {
+      return Text(
+        t.event.eventEnded,
+        style: Typo.medium.copyWith(
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    }
+
+    final statusText = now.isAfter(start)
+        ? t.common.started.capitalize()
+        : t.event.startingIn.capitalize();
+
+    return Text.rich(
+      TextSpan(
+        text: '$statusText ',
+        style: Typo.medium.copyWith(
+          color: colorScheme.onPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+        children: [
+          TextSpan(
+            text: '$durationToEvent ',
+            style: Typo.medium.copyWith(
+              color: LemonColor.rajah,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

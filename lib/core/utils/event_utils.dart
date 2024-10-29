@@ -140,7 +140,7 @@ class EventUtils {
       if (durationOnly) {
         return prettyDurationString;
       }
-      return t.event.eventStartIn(time: prettyDurationString);
+      return t.event.startingInTime(time: prettyDurationString);
     }
     return durationOnly ? null : t.event.eventEnded;
   }

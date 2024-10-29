@@ -234,5 +234,8 @@
         "sat": "Sat",
         "sun": "Sun"
     },
-    "allDay": "All day"
+    "allDay": "All day",
+    "started": "started",
+    "starting": "starting",
+    "ago": "ago"
 }
