@@ -428,6 +428,8 @@
         },
         "searchRegistrations": "Search registrations",
         "searchPending": "Search pending",
+        "searchConfirmed": "Search confirmed",
+        "searchRejected": "Search rejected",
         "checkedinSuccessfully": "Successfully checked in"
     },
     "eventInvited": {
