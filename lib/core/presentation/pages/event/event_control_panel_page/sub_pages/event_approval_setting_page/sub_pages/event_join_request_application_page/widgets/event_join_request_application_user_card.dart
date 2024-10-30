@@ -90,12 +90,10 @@ class _Social extends StatelessWidget {
           userInfo?.handleLinkedin,
           userInfo?.handleInstagram,
           userInfo?.handleTwitter,
-        ]
-            .where((element) => element?.isNotEmpty == true)
-            .toList()
-            .asMap()
-            .entries
-            .map((entry) {
+        ].toList().asMap().entries.map((entry) {
+          if (entry.value == null || entry.value?.isEmpty == true) {
+            return const SizedBox.shrink();
+          }
           return GestureDetector(
             onTap: () async {
               launchUrl(
