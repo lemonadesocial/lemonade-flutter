@@ -230,7 +230,6 @@ class DateUtils {
       );
       final text = option['text'] ?? '';
       final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
-
       return match?.group(1) ?? '';
     } catch (e) {
       return '';

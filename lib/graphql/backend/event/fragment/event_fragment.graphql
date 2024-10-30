@@ -130,6 +130,7 @@ fragment EventFields on Event {
   pending_request_count
   guest_directory_enabled
   tags
+  timezone
 }
 
 fragment EventCohostRequestFragment on EventCohostRequest {

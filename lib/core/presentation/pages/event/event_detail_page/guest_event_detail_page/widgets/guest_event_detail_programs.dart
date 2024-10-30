@@ -81,6 +81,7 @@ class GuestEventDetailPrograms extends StatelessWidget {
                 dateTime: dateToDisplay ?? DateTime.now(),
                 timezone: event.timezone ?? '',
                 pattern: DateFormatUtils.fullDateFormat,
+                withTimezoneOffset: true,
               ),
               style: Typo.medium.copyWith(
                 color: colorScheme.onSecondary,

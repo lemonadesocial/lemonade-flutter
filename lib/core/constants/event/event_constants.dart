@@ -249,9 +249,11 @@ class EventConstants {
       final location = tz.getLocation(value);
       final now = tz.TZDateTime.now(location);
       final offset = now.timeZoneOffset;
+      final int minutes = offset.inMinutes % 60;
       final String zz = offset.isNegative
-          ? '-${offset.abs().inHours.toString().padLeft(2, '0')}:${(offset.abs().inMinutes % 60).toString().padLeft(2, '0')}'
-          : '+${offset.inHours.toString().padLeft(2, '0')}:${(offset.inMinutes % 60).toString().padLeft(2, '0')}';
+          ? '-${offset.abs().inHours}${minutes != 0 ? ':30' : ''}'
+          : '+${offset.inHours}${minutes != 0 ? ':30' : ''}';
+
       return {
         'value': value,
         'text': '(GMT$zz) $key',
