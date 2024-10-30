@@ -61,7 +61,7 @@ class SubEventListViewItem extends StatelessWidget {
                       placeholder: ImagePlaceholder.avatarPlaceholder(),
                     ),
                     title:
-                        '${t.event.hostedBy} ${event.hostExpanded?.name ?? ""}',
+                        '${t.event.presentedBy} ${event.hostExpanded?.name ?? ""}',
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
                   _Tile(
@@ -74,13 +74,13 @@ class SubEventListViewItem extends StatelessWidget {
                       event.start ?? DateTime.now(),
                     ),
                   ),
-                  if (event.address != null) ...[
+                  if (event.address?.title?.isNotEmpty == true) ...[
                     SizedBox(height: Spacing.superExtraSmall),
                     _Tile(
                       icon: Assets.icons.icLocationPin.svg(
                         color: colorScheme.onSecondary,
                       ),
-                      title: event.address?.city ?? '',
+                      title: event.address?.title ?? '',
                     ),
                   ],
                 ],
