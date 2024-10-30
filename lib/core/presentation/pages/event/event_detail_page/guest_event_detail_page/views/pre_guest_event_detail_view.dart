@@ -48,7 +48,18 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           orElse: () => '',
         );
     final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
-    final subEvents = getSubEventsBloc.state.events;
+    final subEvents = [...getSubEventsBloc.state.events]
+        .where(
+          (e) => e.start != null
+              ? e.start!.isAfter(
+                  DateTime.now(),
+                )
+              : true,
+        )
+        .toList();
+    subEvents.sort(
+      (a, b) => a.start!.compareTo(b.start!),
+    );
 
     return Scaffold(
       backgroundColor: colorScheme.primary,

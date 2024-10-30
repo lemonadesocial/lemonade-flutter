@@ -53,7 +53,18 @@ class PostGuestEventDetailView extends StatelessWidget {
         fetched: (event) {
           final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
           final getMyTicketsBloc = context.watch<GetMyTicketsBloc>();
-          final subEvents = getSubEventsBloc.state.events;
+          final subEvents = [...getSubEventsBloc.state.events]
+              .where(
+                (e) => e.start != null
+                    ? e.start!.isAfter(
+                        DateTime.now(),
+                      )
+                    : true,
+              )
+              .toList();
+          subEvents.sort(
+            (a, b) => a.start!.compareTo(b.start!),
+          );
           List<EventTicket>? myTickets = getMyTicketsBloc.state.maybeWhen(
             orElse: () => [],
             success: (tickets) => tickets,

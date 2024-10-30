@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -118,9 +118,13 @@ class HomeEventCard extends StatelessWidget {
                           ),
                         Row(
                           children: [
-                            LemonCircleAvatar(
-                              url: event.hostExpanded?.imageAvatar ?? '',
-                              size: Sizing.mSmall,
+                            LemonNetworkImage(
+                              imageUrl: event.hostExpanded?.imageAvatar ?? '',
+                              width: Sizing.mSmall,
+                              height: Sizing.mSmall,
+                              borderRadius:
+                                  BorderRadius.circular(Sizing.mSmall),
+                              placeholder: ImagePlaceholder.avatarPlaceholder(),
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             Text(
