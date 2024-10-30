@@ -251,9 +251,13 @@ class EventConstants {
       final offset = now.timeZoneOffset;
       final int hours = offset.inHours;
       final int minutes = offset.inMinutes.abs() % 60;
-      final String minutesPadded = minutes > 0 ? ':${minutes.toString().padLeft(2, '0')}' : '';
-      final String hoursFormatted = offset.isNegative ? '-${hours.abs()}' : '+$hours';
+
+      final String minutesPadded =
+          minutes > 0 ? ':${minutes.toString().padLeft(2, '0')}' : '';
+      final String hoursFormatted =
+          offset.isNegative ? '-${hours.abs()}' : '+$hours';
       final String zz = '$hoursFormatted$minutesPadded';
+
       return {
         'value': value,
         'text': '(GMT$zz) $key',
