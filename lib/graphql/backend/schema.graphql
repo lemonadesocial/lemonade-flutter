@@ -3,7 +3,6 @@ directive @expanded(from: String!, to: String!, resolve: Boolean, return_type: S
 directive @secure(paths: [String!]!) on FIELD_DEFINITION
 
 type Query {
-  getBadgeLists(skip: Int! = 0, limit: Int! = 25, user: MongoID, title: String): [BadgeList!]!
   getBadges(
     skip: Int! = 0
     limit: Int! = 25
@@ -16,12 +15,26 @@ type Query {
     distance: Float
   ): [Badge!]!
   getBadgeCities(skip: Int! = 0, limit: Int! = 25): [BadgeCity!]!
+  getBadgeLists(skip: Int! = 0, limit: Int! = 25, user: MongoID, title: String): [BadgeList!]!
   getBroadcasts(provider: BroadcastProvider!): [Broadcast!]!
   getComments(input: GetCommentsArgs!, skip: Int! = 0, limit: Int! = 25): [Comment!]!
   getConfigs(keys: [String!]!): JSON!
+  getEventPendingInvites: GetEventPendingInvitesResponse!
+  getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
+  getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
+  getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
+  getEvent(_id: MongoID, shortid: String): Event
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, host_filter: HostFilter): [Event!]!
+  getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
+  getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
+  getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
+  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
+  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
+  getEventTags(all: Boolean): [String!]!
+  listEventHosts(skip: Int! = 0, limit: Int! = 25, name: String): ListEventHostsResponse!
   getEventApplicationAnswers(event: MongoID!, user: MongoID, email: String): [EventApplicationAnswer!]!
   getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
-  getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
+  exportEventApplications(event: MongoID!): [EventApplicationExport!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostInvites(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
   getEventCohostRequests(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -34,26 +47,15 @@ type Query {
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
-  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState): GetEventJoinRequestsResponse!
-  getMyEventJoinRequest(event: MongoID!): EventJoinRequest
-  getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
-  getEventPendingInvites: GetEventPendingInvitesResponse!
-  getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
-  getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
-  getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
-  getEvent(_id: MongoID, shortid: String): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO): [Event!]!
-  getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
-  getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
-  getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
-  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
-  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
-  getEventTags(all: Boolean): [String!]!
-  listEventHosts(skip: Int! = 0, limit: Int! = 25, name: String): ListEventHostsResponse!
+  getEventInvitation(event: MongoID!): EventInvitation
   generateEventInvitationUrl(event: MongoID!): GenerateEventInvitationUrlResponse
   getEventInvitationUrl(shortid: String!, tk: String): EventInvitationUrl
+  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState, search: String): GetEventJoinRequestsResponse!
+  getMyEventJoinRequest(event: MongoID!): EventJoinRequest
+  getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
+  generateRecurringDates(input: GenerateRecurringDatesInput!): [DateTimeISO!]!
   getEventRewardUses(input: GetEventRewardUsesInput!): [EventRewardUse!]!
   getEventSessionReservations(input: GetEventSessionReservationsInput): [EventSessionReservation!]!
   getEventSessionReservationSummary(input: GetEventSessionReservationSummaryInput!): [EventSessionReservationSummary!]!
@@ -61,20 +63,22 @@ type Query {
   getEventTicketSales(event: MongoID!): EventTicketSaleResponse!
   listEventTicketTypes(event: MongoID!): [EventTicketType!]!
   getEventTicketTypes(input: GetEventTicketTypesInput!): GetEventTicketTypesResponse!
+  getEventbriteEvents(input: GetEventbriteEventsInput, skip: Int! = 0, limit: Int! = 25): [EventbriteEvent!]!
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
   getGuildRooms: [GuildRoom!]!
-  listFiatCurrencies: [FiatCurrency!]!
-  listAllCurrencies: [Currency!]!
-  listChains: [Chain!]!
-  listNewPaymentAccounts(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], type: PaymentAccountType, provider: NewPaymentProvider): [NewPaymentAccount!]!
   getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(payment_secret: String, _id: MongoID!): NewPayment
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, ids: [MongoID!], users: [MongoID!]): [NewPayment!]!
   getPaymentRefundSignature(_id: MongoID!): PaymentRefundSignature!
+  listFiatCurrencies: [FiatCurrency!]!
+  listAllCurrencies: [Currency!]!
+  listChains: [Chain!]!
+  listNewPaymentAccounts(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], type: PaymentAccountType, provider: NewPaymentProvider): [NewPaymentAccount!]!
   getPosts(input: GetPostsInput, skip: Int! = 0, limit: Int! = 25): [Post!]!
   getNewsfeed(offset: Float): Newsfeed
   getNotifications(skip: Int! = 0, limit: Int! = 25, type: NotificationTypeFilterInput): [Notification!]!
+  listOauth2Clients(ids: [String!]): [OAuth2Client!]!
   getOffers(type: OfferType!): [Offer!]!
   getPointGroups(with_count: Boolean): [PointGroup!]!
   getMyPoints(first_level_group: MongoID, second_level_group: MongoID): [PointConfigInfo!]!
@@ -86,6 +90,10 @@ type Query {
   getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
   listSpaceMembers(space: MongoID!, role: SpaceRole, state: SpaceMembershipState, visible: Boolean): [SpaceMember!]!
   listSpaceRoleFeatures(space: MongoID!, role: SpaceRole!): ListSpaceRoleFeaturesResponse!
+  getStore(promotion: MongoID, _id: MongoID): Store
+  getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
+  getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
+  getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
   getStoreBucketItems(skip: Int! = 0, limit: Int! = 25): [StoreBucketItem!]!
   getStoreCategory(_id: MongoID!): StoreCategory
   getStoreCategories(skip: Int! = 0, limit: Int! = 25, store: MongoID, parents: MongoID): [StoreCategory!]!
@@ -93,16 +101,11 @@ type Query {
   getStoreOrders(skip: Int! = 0, limit: Int! = 25, store: MongoID, place_reservation: MongoID, state: StoreOrderStateFilterInput): [StoreOrder!]!
   getStoreProduct(_id: MongoID!): StoreProduct!
   getStoreProducts(skip: Int! = 0, limit: Int! = 25, store: MongoID, categories: MongoID): [StoreProduct!]!
-  getStore(promotion: MongoID, _id: MongoID): Store
-  getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
-  getStoreDeliveryOptions(store: MongoID!, address: AddressInput!): [DeliveryOption!]!
-  getStoreSalesTax(store: MongoID!, address: AddressInput!): SalesTax!
   getStripeTransferDetail(_id: MongoID!): JSON!
   getStripeCards(skip: Int! = 0, limit: Int! = 25): [StripeCard!]!
   getStripeConnectedAccountCapability: StripeAccountCapability
   tgGetMyChannels(input: ScanChannelsInput!): ScanChannelsResult!
   joinChannel(event_ids: MongoID!): Boolean!
-  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, pagination: PaginationInput): ExportedTickets!
   calculateTicketsPricing(input: CalculateTicketsPricingInput!): PricingInfo!
   getTickets(
     skip: Int! = 0
@@ -117,25 +120,41 @@ type Query {
     ticket_types: [MongoID!]
   ): [Ticket!]!
   getTicket(shortid: String!): Ticket
+  getTicketStatistics(id: MongoID!): TicketStatistics!
+  exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, checked_in: Boolean, pagination: PaginationInput): ExportedTickets!
+  getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
+  getMe: User!
+  getUser(_id: MongoID, username: String, email: String, matrix_localpart: String): User
+  getUsers(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], tag_recommended: Boolean, wallets: [String!], search: String): [User!]!
+  getUsersSpotlight: [User!]!
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID, offerings: [MongoID!]): UserDiscovery!
   getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, incoming: Boolean, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
   getUserFollows(skip: Int! = 0, limit: Int! = 25, input: GetUserFollowsInput!): [UserFollow!]!
   getUserFriendships(skip: Int! = 0, limit: Int! = 25, input: GetUserFriendshipsInput): GetUserFriendshipsResponse!
   getUserIcebreakerQuestions: [UserIcebreakerQuestion!]!
+  getUserFromUserMigration(username: String, email: String): NonloginUser
   getUserPaymentVerification: UserPaymentVerificationInfo!
   listUserServices: [UserServiceOffer!]!
   listUserExpertises: [UserExpertise!]!
-  getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
-  getMe: User!
-  getUser(_id: MongoID, username: String, email: String, matrix_localpart: String): User
-  getUsers(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], tag_recommended: Boolean, wallets: [String!], search: String): [User!]!
-  getUsersSpotlight: [User!]!
   getUserWalletRequest(wallet: String!): UserWalletRequest!
-  exportEventApplications(event: MongoID!): [EventApplicationExport!]!
-  getUserFromUserMigration(username: String, email: String): NonloginUser
-  getEventInvitation(event: MongoID!): EventInvitation
 }
+
+type Badge {
+  _id: MongoID!
+  list: MongoID!
+  network: String!
+  contract: String!
+  city: String
+  country: String
+
+  """Distance in meters"""
+  distance: Float
+  claimable: Boolean
+  list_expanded: BadgeList
+}
+
+scalar MongoID
 
 type BadgeList {
   _id: MongoID!
@@ -144,8 +163,6 @@ type BadgeList {
   user: MongoID!
   user_expanded: User
 }
-
-scalar MongoID
 
 type User {
   _id: MongoID
@@ -1125,20 +1142,6 @@ enum SelectType {
   multi
 }
 
-type Badge {
-  _id: MongoID!
-  list: MongoID!
-  network: String!
-  contract: String!
-  city: String
-  country: String
-
-  """Distance in meters"""
-  distance: Float
-  claimable: Boolean
-  list_expanded: BadgeList
-}
-
 type BadgeCity {
   city: String!
   country: String!
@@ -1157,6 +1160,86 @@ type Comment {
 input GetCommentsArgs {
   post: MongoID!
   comment: MongoID
+}
+
+type GetEventPendingInvitesResponse {
+  event_invites: [EventInvite!]
+  cohost_requests: [EventInvite!]
+}
+
+type EventInvite {
+  event: MongoID!
+  inviter: MongoID!
+  event_expanded: Event
+  inviter_expanded: User
+}
+
+type EventCurrency {
+  currency: String!
+  decimals: Float!
+  network: String
+}
+
+enum GetEventsState {
+  ACCEPTED
+  DECLINED
+  INVITED
+  PENDING
+}
+
+input FilterEventInput {
+  eq: EventState
+  in: [EventState!]
+  nin: [EventState!]
+}
+
+input HostFilter {
+  host: MongoID!
+  include_owned_events: Boolean
+  include_subevents: Boolean
+}
+
+enum EventTense {
+  Current
+  Future
+  Past
+}
+
+type GetEventInvitedStatisticsResponse {
+  total: Int!
+  total_joined: Int!
+  guests: [Guest!]!
+  top_inviter: MongoID
+  top_inviter_expanded: User
+}
+
+type Guest {
+  invitation: MongoID!
+  invited_by: MongoID!
+  invited_by_expanded: User
+  cancelled_by: MongoID
+  cancelled_by_expanded: User
+  joined: Boolean
+  declined: Boolean
+
+  """Exists only if joined from email"""
+  user: MongoID
+  user_expanded: User
+
+  """Exists only if invited via email but has not joined to be a user"""
+  email: String
+}
+
+type ListEventHostsResponse {
+  hosts: [EventHost!]!
+  total: Float!
+}
+
+type EventHost {
+  _id: MongoID
+  name: String!
+  events_count: Float
+  image_avatar: String
 }
 
 type EventApplicationAnswer {
@@ -1195,33 +1278,22 @@ type Applicant {
   username: String
 }
 
-type EventbriteEvent {
-  id: String!
-  title: String!
-  status: String!
-  logo_url: String
-  description: String
-  start: DateTimeISO!
-  end: DateTimeISO!
-  stamp: DateTimeISO!
+type EventApplicationExport {
+  user: EventApplicationUserExport
+  non_login_user: EventApplicationUserExport
+  questions: [String!]!
+  answers: [EventApplicationAnswerExport!]!
 }
 
-input GetEventbriteEventsInput {
-  status: EventbriteEventStatus
-  order: EventbriteEventOrder
+type EventApplicationUserExport {
+  _id: MongoID!
+  email: String!
+  name: String
 }
 
-enum EventbriteEventStatus {
-  DRAFT
-  LIVE
-  CANCELED
-  STARTED
-  ENDED
-}
-
-enum EventbriteEventOrder {
-  CREATED_ASC
-  CREATED_DESC
+type EventApplicationAnswerExport {
+  _id: MongoID!
+  answer: String
 }
 
 type EventCheckin {
@@ -1643,6 +1715,34 @@ type BasicUserInfo {
   matrix_localpart: String
 }
 
+type EventInvitation {
+  _id: MongoID!
+  event: MongoID!
+  inviters: [MongoID!]!
+  user: MongoID
+  email: String
+  phone: String
+  created_at: DateTimeISO!
+  status: InvitationResponse!
+}
+
+enum InvitationResponse {
+  PENDING
+  DECLINED
+  ACCEPTED
+  CANCELLED
+}
+
+type GenerateEventInvitationUrlResponse {
+  shortid: String!
+  tk: String
+}
+
+type EventInvitationUrl {
+  event: MongoID!
+  user: MongoID!
+}
+
 type GetEventJoinRequestsResponse {
   total: Int!
   records: [EventJoinRequest!]!
@@ -1691,90 +1791,6 @@ enum NewPaymentState {
   refunded
 }
 
-type GetEventPendingInvitesResponse {
-  event_invites: [EventInvite!]
-  cohost_requests: [EventInvite!]
-}
-
-type EventInvite {
-  event: MongoID!
-  inviter: MongoID!
-  event_expanded: Event
-  inviter_expanded: User
-}
-
-type EventCurrency {
-  currency: String!
-  decimals: Float!
-  network: String
-}
-
-enum GetEventsState {
-  ACCEPTED
-  DECLINED
-  INVITED
-  PENDING
-}
-
-input FilterEventInput {
-  eq: EventState
-  in: [EventState!]
-  nin: [EventState!]
-}
-
-enum EventTense {
-  Current
-  Future
-  Past
-}
-
-type GetEventInvitedStatisticsResponse {
-  total: Int!
-  total_joined: Int!
-  guests: [Guest!]!
-  top_inviter: MongoID
-  top_inviter_expanded: User
-}
-
-type Guest {
-  invitation: MongoID!
-  invited_by: MongoID!
-  invited_by_expanded: User
-  cancelled_by: MongoID
-  cancelled_by_expanded: User
-  joined: Boolean
-  declined: Boolean
-
-  """Exists only if joined from email"""
-  user: MongoID
-  user_expanded: User
-
-  """Exists only if invited via email but has not joined to be a user"""
-  email: String
-}
-
-type ListEventHostsResponse {
-  hosts: [EventHost!]!
-  total: Float!
-}
-
-type EventHost {
-  _id: MongoID
-  name: String!
-  events_count: Float
-  image_avatar: String
-}
-
-type GenerateEventInvitationUrlResponse {
-  shortid: String!
-  tk: String
-}
-
-type EventInvitationUrl {
-  event: MongoID!
-  user: MongoID!
-}
-
 type EventPaymentSummary {
   currency: String!
   decimals: Float!
@@ -1805,6 +1821,21 @@ input GetEventQuestionsInput {
 enum GetEventQuestionInputSort {
   _id
   likes
+}
+
+input GenerateRecurringDatesInput {
+  start: DateTimeISO!
+  utcOffsetMinutes: Float!
+  repeat: RecurringRepeat!
+  dayOfWeeks: [Int!]
+  end: DateTimeISO
+  count: Float
+}
+
+enum RecurringRepeat {
+  daily
+  weekly
+  monthly
 }
 
 type EventRewardUse {
@@ -1899,6 +1930,35 @@ input GetEventTicketTypesInput {
   discount: String
 }
 
+type EventbriteEvent {
+  id: String!
+  title: String!
+  status: String!
+  logo_url: String
+  description: String
+  start: DateTimeISO!
+  end: DateTimeISO!
+  stamp: DateTimeISO!
+}
+
+input GetEventbriteEventsInput {
+  status: EventbriteEventStatus
+  order: EventbriteEventOrder
+}
+
+enum EventbriteEventStatus {
+  DRAFT
+  LIVE
+  CANCELED
+  STARTED
+  ENDED
+}
+
+enum EventbriteEventOrder {
+  CREATED_ASC
+  CREATED_DESC
+}
+
 input FileLinkInput {
   model: String!
   id: MongoID!
@@ -1921,55 +1981,6 @@ type GuildRoom {
   joins: Float
   matrix_room_id: String!
   created_by_expanded: User
-}
-
-type FiatCurrency {
-  code: String!
-  decimals: Float!
-}
-
-type Currency {
-  code: String!
-  decimals: Float!
-}
-
-type Chain {
-  active: Boolean
-  chain_id: String!
-  name: String!
-  code_name: String!
-  rpc_url: String!
-  block_explorer_url: String
-  block_explorer_name: String
-  block_explorer_for_tx: String
-  block_explorer_for_token: String
-  block_time: Float!
-  safe_confirmations: Float!
-  logo_url: String
-  tokens: [Token!]
-  access_registry_contract: String
-  poap_contract: String
-  marketplace_contract: String
-  marketplace_version: Int
-  biconomy_api_key: String
-  ens_registry: String
-  payment_config_registry_contract: String
-  escrow_manager_contract: String
-  relay_payment_contract: String
-  stake_payment_contract: String
-  eas_event_contract: String
-  eas_graphql_url: String
-  aragon_network: String
-  axelar_chain_name: String
-}
-
-type Token {
-  active: Boolean
-  name: String!
-  symbol: String!
-  decimals: Float!
-  contract: String!
-  logo_url: String
 }
 
 type NewPayment {
@@ -2027,6 +2038,55 @@ type PaymentRefundSignature {
 
   """The args that will be supplied to the contract refund function"""
   args: [String!]!
+}
+
+type FiatCurrency {
+  code: String!
+  decimals: Float!
+}
+
+type Currency {
+  code: String!
+  decimals: Float!
+}
+
+type Chain {
+  active: Boolean
+  chain_id: String!
+  name: String!
+  code_name: String!
+  rpc_url: String!
+  block_explorer_url: String
+  block_explorer_name: String
+  block_explorer_for_tx: String
+  block_explorer_for_token: String
+  block_time: Float!
+  safe_confirmations: Float!
+  logo_url: String
+  tokens: [Token!]
+  access_registry_contract: String
+  poap_contract: String
+  marketplace_contract: String
+  marketplace_version: Int
+  biconomy_api_key: String
+  ens_registry: String
+  payment_config_registry_contract: String
+  escrow_manager_contract: String
+  relay_payment_contract: String
+  stake_payment_contract: String
+  eas_event_contract: String
+  eas_graphql_url: String
+  aragon_network: String
+  axelar_chain_name: String
+}
+
+type Token {
+  active: Boolean
+  name: String!
+  symbol: String!
+  decimals: Float!
+  contract: String!
+  logo_url: String
 }
 
 type Post {
@@ -2316,6 +2376,35 @@ input NotificationTypeFilterInput {
   nin: [NotificationType!]
 }
 
+type OAuth2Client {
+  client_id: String!
+  client_secret: String
+  client_name: String!
+  skip_consent: Boolean
+  logo_uri: String
+  token_endpoint_auth_method: String
+  redirect_uris: [String!]
+  grant_types: [String!]!
+  response_types: [String!]
+  scope: String!
+  audience: [String!]!
+  allowed_cors_origins: [String!]!
+  created_at: DateTimeISO!
+  updated_at: DateTimeISO!
+  metadata: JSON
+  post_logout_redirect_uris: [String!]
+  authorization_code_grant_access_token_lifespan: String
+  authorization_code_grant_id_token_lifespan: String
+  authorization_code_grant_refresh_token_lifespan: String
+  client_credentials_grant_access_token_lifespan: String
+  implicit_grant_access_token_lifespan: String
+  implicit_grant_id_token_lifespan: String
+  jwt_bearer_grant_access_token_lifespan: String
+  refresh_token_grant_id_token_lifespan: String
+  refresh_token_grant_access_token_lifespan: String
+  refresh_token_grant_refresh_token_lifespan: String
+}
+
 type Offer {
   _id: MongoID
   provider: OfferProvider!
@@ -2586,6 +2675,22 @@ enum FeatureCode {
   SpaceMembership
 }
 
+input AddressInput {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+  additional_directions: String
+}
+
 type StoreBucketItem {
   _id: MongoID!
   active: Boolean!
@@ -2614,22 +2719,6 @@ input StoreOrderStateFilterInput {
   eq: StoreOrderState
   in: [StoreOrderState!]
   nin: [StoreOrderState!]
-}
-
-input AddressInput {
-  _id: MongoID
-  recipient_name: String
-  street_1: String
-  street_2: String
-  city: String
-  region: String
-  postal: String
-  country: String
-  title: String
-  phone: String
-  longitude: Float
-  latitude: Float
-  additional_directions: String
 }
 
 type StripeCard {
@@ -2713,50 +2802,6 @@ type TgUser {
 input ScanChannelsInput {
   offset_date: Float!
   offset_id: Float!
-}
-
-type ExportedTickets {
-  tickets: [TicketExport!]!
-  count: Float!
-}
-
-type TicketExport {
-  _id: MongoID!
-  shortid: String!
-  assigned_email: String
-  assigned_to: MongoID
-  buyer_name: String
-  buyer_first_name: String
-  buyer_last_name: String
-  buyer_email: String
-  ticket_category: String
-  ticket_type: String
-  quantity: Float!
-  payment_amount: String
-  discount_amount: String
-  currency: String
-  discount_code: String
-  purchase_date: DateTimeISO!
-  payment_provider: String
-  payment_id: MongoID
-  checkin_date: DateTimeISO
-  is_assigned: Boolean
-  assignee_email: String
-  is_issued: Boolean
-  issued_by: String
-  is_claimed: Boolean
-  active: Boolean
-  cancelled_by: String
-  buyer_wallet: String
-  buyer_id: MongoID
-  buyer_avatar: String
-  buyer_username: String
-  ticket_type_id: MongoID
-}
-
-input PaginationInput {
-  skip: Int! = 0
-  limit: Int! = 25
 }
 
 type PricingInfo {
@@ -2926,6 +2971,63 @@ type Ticket {
   type_expanded: EventTicketType
 }
 
+type TicketStatistics {
+  all: Float!
+  checked_in: Float!
+  not_checked_in: Float!
+  ticket_types: [TicketStatisticPerTier!]!
+}
+
+type TicketStatisticPerTier {
+  ticket_type: MongoID!
+  ticket_type_title: String!
+  count: Float!
+}
+
+type ExportedTickets {
+  tickets: [TicketExport!]!
+  count: Float!
+}
+
+type TicketExport {
+  _id: MongoID!
+  shortid: String!
+  assigned_email: String
+  assigned_to: MongoID
+  buyer_name: String
+  buyer_first_name: String
+  buyer_last_name: String
+  buyer_email: String
+  ticket_category: String
+  ticket_type: String
+  quantity: Float!
+  payment_amount: String
+  discount_amount: String
+  currency: String
+  discount_code: String
+  purchase_date: DateTimeISO!
+  payment_provider: String
+  payment_id: MongoID
+  checkin_date: DateTimeISO
+  is_assigned: Boolean
+  assignee_email: String
+  is_issued: Boolean
+  issued_by: String
+  is_claimed: Boolean
+  active: Boolean
+  cancelled_by: String
+  buyer_wallet: String
+  buyer_id: MongoID
+  buyer_avatar: String
+  buyer_username: String
+  ticket_type_id: MongoID
+}
+
+input PaginationInput {
+  skip: Int! = 0
+  limit: Int! = 25
+}
+
 type GetUserContactsResponse {
   items: [UserContact!]!
   total: Int!
@@ -3068,59 +3170,27 @@ type UserWalletRequest {
   token: String!
 }
 
-type EventApplicationExport {
-  user: EventApplicationUserExport
-  non_login_user: EventApplicationUserExport
-  questions: [String!]!
-  answers: [EventApplicationAnswerExport!]!
-}
-
-type EventApplicationUserExport {
-  _id: MongoID!
-  email: String!
-  name: String
-}
-
-type EventApplicationAnswerExport {
-  _id: MongoID!
-  answer: String
-}
-
-type EventInvitation {
-  _id: MongoID!
-  event: MongoID!
-  inviters: [MongoID!]!
-  user: MongoID
-  email: String
-  phone: String
-  created_at: DateTimeISO!
-  status: InvitationResponse!
-}
-
-enum InvitationResponse {
-  PENDING
-  DECLINED
-  ACCEPTED
-  CANCELLED
-}
-
 type Mutation {
-  createBadgeList(input: CreateBadgeListInput!): BadgeList!
-  updateBadgeList(input: UpdateBadgeListInput!, _id: MongoID!): BadgeList!
-  deleteBadgeList(_id: MongoID!): Boolean!
   createBadge(input: CreateBadgeInput!): Badge!
   updateBadge(input: UpdateBadgeInput!, _id: MongoID!): Badge!
   deleteBadge(_id: MongoID!): Boolean!
+  createBadgeList(input: CreateBadgeListInput!): BadgeList!
+  updateBadgeList(input: UpdateBadgeListInput!, _id: MongoID!): BadgeList!
+  deleteBadgeList(_id: MongoID!): Boolean!
   createComment(input: CommentInput!): Comment!
   deleteComment(_id: MongoID!): Boolean!
   generateCubejsToken(events: [MongoID!], site: MongoID, user: MongoID): String!
   mailTicketPaymentReceipt(ticket: MongoID!): Boolean!
   mailEventTicket(event: MongoID!, payment: MongoID, emails: [String!]!): Boolean!
+  createEvent(input: EventInput!): Event!
+  updateEvent(input: EventInput!, _id: MongoID!): Event!
+  cancelEvent(_id: MongoID!): Event!
+  acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
+  inviteEvent(input: InviteEventInput!): Event!
+  responseInvitation(input: ResponseInvitationInput!): Boolean!
   submitEventApplicationQuestions(event: MongoID!, questions: [QuestionInput!]!): [EventApplicationQuestion!]!
   deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
   submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!, email: String): Boolean!
-  createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
-  createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
   updateEventBroadcast(input: UpdateEventBroadcastInput!, event: MongoID!, _id: MongoID!): Boolean!
   deleteEventBroadcast(event: MongoID!, _id: MongoID!): Boolean!
@@ -3133,17 +3203,13 @@ type Mutation {
   updateEventEmailSetting(input: UpdateEventEmailSettingInput!): EmailSetting!
   deleteEventEmailSetting(_id: MongoID!): Boolean!
   submitEventFeedback(input: SubmitEventFeedbackInput!): Boolean!
+  cancelEventInvitations(input: CancelEventInvitationsInput!): Boolean!
   createEventJoinRequest(input: CreateEventJoinRequestInput!): EventJoinRequest!
   decideUserJoinRequests(input: DecideUserJoinRequestsInput!): [DecidedJoinRequest!]!
-  createEvent(input: EventInput!): Event!
-  updateEvent(input: EventInput!, _id: MongoID!): Event!
-  cancelEvent(_id: MongoID!): Event!
-  acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
-  inviteEvent(input: InviteEventInput!): Event!
-  responseInvitation(input: ResponseInvitationInput!): Boolean!
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
   toggleEventQuestionLike(_id: MongoID!): Boolean!
+  cloneEvent(input: CloneEventInput!): [MongoID!]!
   updateEventRewardUse(input: UpdateEventRewardUseInput!): Boolean!
   acceptEvent(email: String, _id: MongoID!): EventRsvp!
   declineEvent(message: String, _id: MongoID!): EventRsvp!
@@ -3162,6 +3228,8 @@ type Mutation {
   createEventTicketType(input: EventTicketTypeInput!): EventTicketType!
   updateEventTicketType(input: EventTicketTypeInput!, _id: MongoID!): EventTicketType!
   deleteEventTicketType(event: MongoID!, _id: MongoID!): Boolean!
+  createEventFromEventbrite(input: CreateEventFromEventbriteInput!, id: String!): Event!
+  createEventbriteWebhookForEvent(eventbrite_event: String!, _id: MongoID!): Boolean!
   createFarcasterAccountKey: CreateFarcasterAccountKeyResponse!
   revokeFarcasterAccountKey: Boolean!
   syncFarcasterConnectionStatus: SyncFarcasterConnectionStatusResponse!
@@ -3181,9 +3249,9 @@ type Mutation {
   deleteGuildRoom(_id: MongoID!): Boolean!
   joinGuildRoom(_id: MongoID!): Boolean!
   generateMatrixToken: String!
+  updatePayment(input: UpdatePaymentInput!): NewPayment!
   createNewPaymentAccount(input: CreateNewPaymentAccountInput!): NewPaymentAccount!
   updateNewPaymentAccount(input: UpdateNewPaymentAccountInput!): NewPaymentAccount!
-  updatePayment(input: UpdatePaymentInput!): NewPayment!
   createPost(input: PostInput!): Post!
   deletePost(_id: MongoID!): Boolean!
   updatePost(input: UpdatePostInput!, _id: MongoID!): Post!
@@ -3191,6 +3259,9 @@ type Mutation {
   deleteNotifications(_id: [MongoID!], type: NotificationTypeFilterInput): Boolean!
   readNotifications(_id: [MongoID!], type: NotificationTypeFilterInput): Boolean!
   revokeOauth2(name: String!): String!
+  createOauth2Client(input: Oauth2ClientInput!): OAuth2Client!
+  deleteOauth2Client(id: String!): Boolean!
+  updateOauth2Client(input: Oauth2ClientInput!, id: String!): OAuth2Client!
   createRegistration(input: Registration!): Boolean!
   sendRoomInvite(input: SendRoomInviteInput!): Boolean!
   createRoom(input: RoomInput!): Room!
@@ -3203,18 +3274,21 @@ type Mutation {
   createSite(input: CreateSiteInput!): Site!
   updateSite(input: UpdateSiteInput!, _id: MongoID!): Site
   deleteSite(_id: MongoID!): Boolean!
-  addSpaceMembers(input: AddSpaceMemberInput!): [SpaceMember!]!
-  deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
-  updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
-  requestSpaceMembership(space: MongoID!): SpaceMember!
-  decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   createSpace(input: SpaceInput!): Space!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
   pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   followSpace(space: MongoID!): Boolean!
   unfollowSpace(space: MongoID!): Boolean!
+  addSpaceMembers(input: AddSpaceMemberInput!): [SpaceMember!]!
+  deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
+  updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
+  requestSpaceMembership(space: MongoID!): SpaceMember!
+  decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   updateSpaceRoleFeatures(input: UpdateSpaceRoleFeaturesInput!): Boolean!
+  createStore(input: StoreInput!): Store!
+  updateStore(_id: MongoID!, input: StoreInput!): Store!
+  deleteStore(_id: MongoID!): Boolean!
   createStoreBucketItem(input: StoreBucketItemInput!): StoreBucketItem!
   updateStoreBucketItem(input: UpdateStoreBucketItemInput!, _id: MongoID!): StoreBucketItem
   deleteStoreBucketItem(_id: MongoID!): Boolean!
@@ -3231,9 +3305,6 @@ type Mutation {
   deleteStoreProductVariant(store: MongoID!, product: MongoID!, _id: MongoID!): Boolean!
   createStorePromotion(store: MongoID!, input: StorePromotionInput!): StorePromotion!
   deleteStorePromotion(_id: MongoID!, store: MongoID!): Boolean!
-  createStore(input: StoreInput!): Store!
-  updateStore(_id: MongoID!, input: StoreInput!): Store!
-  deleteStore(_id: MongoID!): Boolean!
   createStripeCard(payment_method: String!): StripeCard!
   deleteStripeCard(_id: MongoID!): StripeCard!
   disconnectStripeAccount: Boolean!
@@ -3248,6 +3319,12 @@ type Mutation {
   createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
   buyTickets(input: BuyTicketsInput!): BuyTicketsResponse!
   revokeTwitter: String!
+  deleteUser: Boolean!
+  updateUser(input: UserInput!): User!
+  addUserFcmToken(token: String!): Boolean!
+  removeUserFcmToken(token: String!): Boolean!
+  reportUser(input: ReportUserInput!): Boolean!
+  toggleBlockUser(input: ToggleBlockUserInput!): Boolean!
   inviteUserContacts(_id: MongoID): Boolean!
   acceptUserDiscovery(swipee: MongoID!, message: String, event: MongoID): AcceptUserDiscoveryResponse!
   declineUserDiscovery(swipee: MongoID!, message: String, event: MongoID): Boolean!
@@ -3259,24 +3336,7 @@ type Mutation {
   deleteUserFriendship(input: DeleteUserFriendshipInput!): Boolean!
   createUserService(title: String!): UserServiceOffer!
   createUserExpertise(title: String!): UserExpertise!
-  deleteUser: Boolean!
-  updateUser(input: UserInput!): User!
-  addUserFcmToken(token: String!): Boolean!
-  removeUserFcmToken(token: String!): Boolean!
-  reportUser(input: ReportUserInput!): Boolean!
-  toggleBlockUser(input: ToggleBlockUserInput!): Boolean!
   setUserWallet(token: String!, signature: String!): Boolean!
-  cancelEventInvitations(input: CancelEventInvitationsInput!): Boolean!
-}
-
-input CreateBadgeListInput {
-  title: String!
-  image_url: String
-}
-
-input UpdateBadgeListInput {
-  title: String
-  image_url: String
 }
 
 input CreateBadgeInput {
@@ -3290,127 +3350,20 @@ input UpdateBadgeInput {
   contract: String
 }
 
+input CreateBadgeListInput {
+  title: String!
+  image_url: String
+}
+
+input UpdateBadgeListInput {
+  title: String
+  image_url: String
+}
+
 input CommentInput {
   text: String!
   post: MongoID!
   comment: MongoID
-}
-
-input QuestionInput {
-  _id: MongoID
-  question: String
-  required: Boolean
-  position: Int
-  type: QuestionType!
-  options: [String!]
-  select_type: SelectType
-  questions: [String!]
-}
-
-input EventApplicationAnswerInput {
-  question: MongoID!
-  answer: String
-}
-
-input CreateEventFromEventbriteInput {
-  title: String
-  description: String
-  start: DateTimeISO
-  end: DateTimeISO
-}
-
-input CreateEventBroadcastInput {
-  provider: BroadcastProvider!
-  provider_id: String!
-  title: String!
-  description: String
-  position: Float
-  rooms: [MongoID!]
-  thumbnail: String
-  scheduled_start_time: DateTimeISO
-  scheduled_end_time: DateTimeISO
-}
-
-input UpdateEventBroadcastInput {
-  description: String
-  position: Float
-  rooms: [MongoID!]
-  thumbnail: String
-}
-
-input UpdateEventCheckinInput {
-  active: Boolean!
-  shortid: String
-  event: MongoID
-  user: MongoID
-}
-
-input ManageEventCohostRequestsInput {
-  event: MongoID!
-  decision: Boolean!
-  users: [MongoID!]!
-}
-
-input DecideEventCohostRequestInput {
-  event: MongoID!
-  decision: Boolean!
-}
-
-input SendEventEmailSettingTestEmailsInput {
-  custom_subject_html: String
-  custom_body_html: String
-  event: MongoID
-  type: EmailTemplateType
-  _id: MongoID
-  test_recipients: [String!]!
-}
-
-input CreateEventEmailSettingInput {
-  custom_subject_html: String
-  custom_body_html: String
-  cc: [String!]
-  disabled: Boolean
-  scheduled_at: DateTimeISO
-  recipient_types: [EmailRecipientType!]
-  event: MongoID!
-  type: EmailTemplateType!
-}
-
-input UpdateEventEmailSettingInput {
-  custom_subject_html: String
-  custom_body_html: String
-  cc: [String!]
-  disabled: Boolean
-  scheduled_at: DateTimeISO
-  recipient_types: [EmailRecipientType!]
-  _id: MongoID!
-}
-
-input SubmitEventFeedbackInput {
-  rate_value: Float!
-  comment: String
-  token: String!
-}
-
-input CreateEventJoinRequestInput {
-  event: MongoID!
-  requested_tickets: [RequestedTicketInput!]
-}
-
-input RequestedTicketInput {
-  ticket_type: MongoID!
-  count: Float!
-}
-
-type DecidedJoinRequest {
-  _id: MongoID!
-  processed: Boolean!
-}
-
-input DecideUserJoinRequestsInput {
-  event: MongoID!
-  requests: [MongoID!]!
-  decision: EventJoinRequestState!
 }
 
 input EventInput {
@@ -3619,10 +3572,131 @@ enum InvitationState {
   DECLINED
 }
 
+input QuestionInput {
+  _id: MongoID
+  question: String
+  required: Boolean
+  position: Int
+  type: QuestionType!
+  options: [String!]
+  select_type: SelectType
+  questions: [String!]
+}
+
+input EventApplicationAnswerInput {
+  question: MongoID!
+  answer: String
+}
+
+input CreateEventBroadcastInput {
+  provider: BroadcastProvider!
+  provider_id: String!
+  title: String!
+  description: String
+  position: Float
+  rooms: [MongoID!]
+  thumbnail: String
+  scheduled_start_time: DateTimeISO
+  scheduled_end_time: DateTimeISO
+}
+
+input UpdateEventBroadcastInput {
+  description: String
+  position: Float
+  rooms: [MongoID!]
+  thumbnail: String
+}
+
+input UpdateEventCheckinInput {
+  active: Boolean!
+  shortid: String
+  event: MongoID
+  user: MongoID
+}
+
+input ManageEventCohostRequestsInput {
+  event: MongoID!
+  decision: Boolean!
+  users: [MongoID!]!
+}
+
+input DecideEventCohostRequestInput {
+  event: MongoID!
+  decision: Boolean!
+}
+
+input SendEventEmailSettingTestEmailsInput {
+  custom_subject_html: String
+  custom_body_html: String
+  event: MongoID
+  type: EmailTemplateType
+  _id: MongoID
+  test_recipients: [String!]!
+}
+
+input CreateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  event: MongoID!
+  type: EmailTemplateType!
+}
+
+input UpdateEventEmailSettingInput {
+  custom_subject_html: String
+  custom_body_html: String
+  cc: [String!]
+  disabled: Boolean
+  scheduled_at: DateTimeISO
+  recipient_types: [EmailRecipientType!]
+  _id: MongoID!
+}
+
+input SubmitEventFeedbackInput {
+  rate_value: Float!
+  comment: String
+  token: String!
+}
+
+input CancelEventInvitationsInput {
+  invitations: [MongoID!]!
+  event: MongoID!
+}
+
+input CreateEventJoinRequestInput {
+  event: MongoID!
+  requested_tickets: [RequestedTicketInput!]
+}
+
+input RequestedTicketInput {
+  ticket_type: MongoID!
+  count: Float!
+}
+
+type DecidedJoinRequest {
+  _id: MongoID!
+  processed: Boolean!
+}
+
+input DecideUserJoinRequestsInput {
+  event: MongoID!
+  requests: [MongoID!]!
+  decision: EventJoinRequestState!
+}
+
 input CreateEventQuestionsInput {
   event: MongoID!
   question: String!
   session: MongoID
+}
+
+input CloneEventInput {
+  event: MongoID!
+  dates: [DateTimeISO!]!
+  overrides: EventInput
 }
 
 input UpdateEventRewardUseInput {
@@ -3746,6 +3820,13 @@ input EventTicketTypeOffersInput {
   broadcast_rooms: [MongoID!]
 }
 
+input CreateEventFromEventbriteInput {
+  title: String
+  description: String
+  start: DateTimeISO
+  end: DateTimeISO
+}
+
 type CreateFarcasterAccountKeyResponse {
   account_key_request: AccountKeyRequest!
 }
@@ -3808,6 +3889,12 @@ input GuildRoomInput {
   matrix_room_id: String!
 }
 
+input UpdatePaymentInput {
+  _id: MongoID!
+  transfer_params: JSON
+  payment_secret: String
+}
+
 input CreateNewPaymentAccountInput {
   type: PaymentAccountType!
   title: String
@@ -3819,12 +3906,6 @@ input UpdateNewPaymentAccountInput {
   _id: MongoID!
   title: String
   account_info: JSON!
-}
-
-input UpdatePaymentInput {
-  _id: MongoID!
-  transfer_params: JSON
-  payment_secret: String
 }
 
 input PostInput {
@@ -3842,6 +3923,26 @@ input UpdatePostInput {
 input ReactionInput {
   active: Boolean!
   post: MongoID!
+}
+
+input Oauth2ClientInput {
+  client_name: String
+  skip_consent: Boolean
+  logo_uri: String
+  redirect_uris: [String!]
+  allowed_cors_origins: [String!]
+  metadata: JSON
+  post_logout_redirect_uris: [String!]
+  authorization_code_grant_access_token_lifespan: String
+  authorization_code_grant_id_token_lifespan: String
+  authorization_code_grant_refresh_token_lifespan: String
+  client_credentials_grant_access_token_lifespan: String
+  implicit_grant_access_token_lifespan: String
+  implicit_grant_id_token_lifespan: String
+  jwt_bearer_grant_access_token_lifespan: String
+  refresh_token_grant_id_token_lifespan: String
+  refresh_token_grant_access_token_lifespan: String
+  refresh_token_grant_refresh_token_lifespan: String
 }
 
 input Registration {
@@ -4022,24 +4123,6 @@ input UpdateSiteInput {
   active: Boolean
 }
 
-input AddSpaceMemberInput {
-  space: MongoID!
-  role: SpaceRole!
-  visible: Boolean
-  users: [MongoID!]!
-}
-
-input DeleteSpaceMemberInput {
-  space: MongoID!
-  users: [MongoID!]!
-}
-
-input UpdateSpaceMemberInput {
-  _id: MongoID
-  role: SpaceRole
-  visible: Boolean
-}
-
 type Space {
   _id: MongoID!
   title: String!
@@ -4074,10 +4157,86 @@ input SpaceInput {
   handle_instagram: String
 }
 
+input AddSpaceMemberInput {
+  space: MongoID!
+  role: SpaceRole!
+  visible: Boolean
+  users: [MongoID!]!
+}
+
+input DeleteSpaceMemberInput {
+  space: MongoID!
+  users: [MongoID!]!
+}
+
+input UpdateSpaceMemberInput {
+  _id: MongoID
+  role: SpaceRole
+  visible: Boolean
+}
+
 input UpdateSpaceRoleFeaturesInput {
   space: MongoID!
   role: String!
   codes: [FeatureCode!]!
+}
+
+input StoreInput {
+  _id: MongoID
+  managers: [MongoID!]
+  title: String
+  currency: String
+  api_secret: String
+  easyship_enabled: Boolean
+  easyship_company_id: String
+  easyship_token: String
+  easyship_secret_key: String
+  delivery_options: [DeliveryOptionInput!]
+  sales_taxes: [SalesTaxInput!]
+  photos: [FileInlineInput!]
+  new_photos: [MongoID!]
+  tags: [String!]
+  age_restriction_min: Float
+  age_restriction_reason: String
+}
+
+input DeliveryOptionInput {
+  _id: MongoID!
+  type: DeliveryOptionType!
+  title: String!
+  cost: Float!
+  fulfillment_address: MongoID
+  pickup_addresses: [MongoID!]
+  waive_type: DeliveryOptionWaiveType
+  waive_value_threshold: Float
+  group: String
+  description: String
+  longitude: Float
+  latitude: Float
+  search_range: Float
+  polygon: JSON
+  countries: [String!]
+  regions: [String!]
+  cities: [String!]
+  postals: [String!]
+  postal_ranges: [DeliveryOptionPostalRangeInput!]
+}
+
+input DeliveryOptionPostalRangeInput {
+  _id: MongoID!
+  pattern: String!
+  min: Float!
+  max: Float!
+}
+
+input SalesTaxInput {
+  _id: MongoID!
+  type: SalesTaxType!
+  name: String
+  flat_map: JSON
+  ratio_map: JSON
+  countries: [String!]
+  regions: [String!]
 }
 
 input StoreBucketItemInput {
@@ -4112,35 +4271,6 @@ input StoreOrderItemInput {
   inventory: Float
   tax: Float
   tracking_url: String
-}
-
-input DeliveryOptionInput {
-  _id: MongoID!
-  type: DeliveryOptionType!
-  title: String!
-  cost: Float!
-  fulfillment_address: MongoID
-  pickup_addresses: [MongoID!]
-  waive_type: DeliveryOptionWaiveType
-  waive_value_threshold: Float
-  group: String
-  description: String
-  longitude: Float
-  latitude: Float
-  search_range: Float
-  polygon: JSON
-  countries: [String!]
-  regions: [String!]
-  cities: [String!]
-  postals: [String!]
-  postal_ranges: [DeliveryOptionPostalRangeInput!]
-}
-
-input DeliveryOptionPostalRangeInput {
-  _id: MongoID!
-  pattern: String!
-  min: Float!
-  max: Float!
 }
 
 input StoreProductInput {
@@ -4178,35 +4308,6 @@ input StorePromotionInput {
   use_limit_per: Float
   event: MongoID
   products: [MongoID!]
-}
-
-input StoreInput {
-  _id: MongoID
-  managers: [MongoID!]
-  title: String
-  currency: String
-  api_secret: String
-  easyship_enabled: Boolean
-  easyship_company_id: String
-  easyship_token: String
-  easyship_secret_key: String
-  delivery_options: [DeliveryOptionInput!]
-  sales_taxes: [SalesTaxInput!]
-  photos: [FileInlineInput!]
-  new_photos: [MongoID!]
-  tags: [String!]
-  age_restriction_min: Float
-  age_restriction_reason: String
-}
-
-input SalesTaxInput {
-  _id: MongoID!
-  type: SalesTaxType!
-  name: String
-  flat_map: JSON
-  ratio_map: JSON
-  countries: [String!]
-  regions: [String!]
 }
 
 type GenerateStripeAccountLinkResponse {
@@ -4310,6 +4411,17 @@ input BillingInfoInput {
   lastname: String
 }
 
+input ReportUserInput {
+  user: MongoID!
+  reason: String
+  block: Boolean
+}
+
+input ToggleBlockUserInput {
+  user: MongoID!
+  block: Boolean!
+}
+
 type AcceptUserDiscoveryResponse {
   state: UserDiscoverySwipeState
   user: User
@@ -4327,22 +4439,6 @@ input CreateUserFriendshipInput {
 
 input DeleteUserFriendshipInput {
   user: MongoID!
-}
-
-input ReportUserInput {
-  user: MongoID!
-  reason: String
-  block: Boolean
-}
-
-input ToggleBlockUserInput {
-  user: MongoID!
-  block: Boolean!
-}
-
-input CancelEventInvitationsInput {
-  invitations: [MongoID!]!
-  event: MongoID!
 }
 
 type Subscription {

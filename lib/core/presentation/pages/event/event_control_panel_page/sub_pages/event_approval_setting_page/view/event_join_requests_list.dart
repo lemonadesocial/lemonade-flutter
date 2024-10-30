@@ -3,14 +3,20 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:web3modal_flutter/utils/debouncer.dart';
 
 enum ModifyJoinRequestAction {
   approve,
@@ -37,11 +43,40 @@ class EventJoinRequestList extends StatefulWidget {
 
 class _EventJoinRequestListState extends State<EventJoinRequestList> {
   final refreshController = RefreshController();
+  final debouncer = Debouncer(milliseconds: 300);
+  final searchController = TextEditingController();
+
+  void _search(
+    String searchValue, {
+    Future<QueryResult<Query$GetEventJoinRequests>> Function(FetchMoreOptions)?
+        fetchMore,
+    Future<QueryResult<Query$GetEventJoinRequests>?> Function()? refetch,
+  }) {
+    if (searchValue.isEmpty) {
+      refetch?.call();
+      return;
+    }
+    fetchMore?.call(
+      FetchMoreOptions$Query$GetEventJoinRequests(
+        updateQuery: (previousResult, fetchMoreResult) {
+          return fetchMoreResult;
+        },
+        variables: Variables$Query$GetEventJoinRequests(
+          event: widget.event?.id ?? '',
+          skip: 0,
+          limit: 100,
+          state: widget.state,
+          search: searchValue,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final eventId = widget.event?.id ?? '';
+    final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       child: Query$GetEventJoinRequests$Widget(
         options: Options$Query$GetEventJoinRequests(
@@ -73,14 +108,63 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
               ),
               child: SmartRefresher(
                 controller: refreshController,
-                onRefresh: () async {
-                  refetch?.call();
+                onRefresh: () {
+                  _search(
+                    searchController.text,
+                    fetchMore: fetchMore,
+                    refetch: refetch,
+                  );
                   refreshController.refreshCompleted();
                 },
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
                       child: SizedBox(height: Spacing.smMedium),
+                    ),
+                    SliverToBoxAdapter(
+                      child: LemonTextField(
+                        onChange: (value) {
+                          debouncer.run(() {
+                            _search(
+                              value,
+                              fetchMore: fetchMore,
+                              refetch: refetch,
+                            );
+                          });
+                        },
+                        controller: searchController,
+                        radius: LemonRadius.medium,
+                        hintText:
+                            widget.state == Enum$EventJoinRequestState.pending
+                                ? t.event.eventApproval.searchPending
+                                : widget.state ==
+                                        Enum$EventJoinRequestState.approved
+                                    ? t.event.eventApproval.searchConfirmed
+                                    : widget.state ==
+                                            Enum$EventJoinRequestState.declined
+                                        ? t.event.eventApproval.searchRejected
+                                        : null,
+                        placeholderStyle: Typo.medium.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                        leadingIcon: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (filter) => Assets.icons.icSearch.svg(
+                                width: Sizing.mSmall,
+                                height: Sizing.mSmall,
+                                colorFilter: filter,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.medium),
                     ),
                     if (result.isLoading && joinRequests.isEmpty)
                       SliverFillRemaining(
@@ -112,7 +196,13 @@ class _EventJoinRequestListState extends State<EventJoinRequestList> {
                         if (widget.itemBuilder != null) {
                           return widget.itemBuilder!(
                             eventJoinRequest: joinRequests[index],
-                            refresh: () => refetch?.call(),
+                            refresh: () {
+                              _search(
+                                searchController.text,
+                                fetchMore: fetchMore,
+                                refetch: refetch,
+                              );
+                            },
                           );
                         }
 

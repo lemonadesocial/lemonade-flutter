@@ -5,12 +5,14 @@ query GetEventJoinRequests(
   $skip: Int!
   $limit: Int!
   $state: EventJoinRequestState
+  $search: String
 ) {
   getEventJoinRequests(
     event: $event
     skip: $skip
     limit: $limit
     state: $state
+    search: $search
   ) {
     total
     records {
