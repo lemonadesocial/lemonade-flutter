@@ -70,8 +70,10 @@ class SubEventListViewItem extends StatelessWidget {
                       size: 15.w,
                       color: colorScheme.onSecondary,
                     ),
-                    title: DateFormatUtils.fullDateWithTime(
-                      event.start ?? DateTime.now(),
+                    title: DateFormatUtils.dateWithTimezone(
+                      dateTime: event.start ?? DateTime.now(),
+                      timezone: event.timezone ?? '',
+                      withTimezoneOffset: true,
                     ),
                   ),
                   if (event.address?.title?.isNotEmpty == true) ...[

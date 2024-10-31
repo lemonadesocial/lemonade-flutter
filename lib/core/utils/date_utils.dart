@@ -229,9 +229,14 @@ class DateUtils {
         orElse: () => {'text': '', 'value': value},
       );
       final text = option['text'] ?? '';
-      final match = RegExp(r'\(([^)]+)\)').firstMatch(text);
-
-      return match?.group(1) ?? '';
+      final match = RegExp(r'GMT([+-])(\d{2}):(\d{2})').firstMatch(text);
+      if (match != null) {
+        final sign = match.group(1)!;
+        final hours = int.parse(match.group(2)!);
+        final minutes = match.group(3)!;
+        return 'GMT$sign$hours${minutes != '00' ? ':$minutes' : ''}';
+      }
+      return '';
     } catch (e) {
       return '';
     }
