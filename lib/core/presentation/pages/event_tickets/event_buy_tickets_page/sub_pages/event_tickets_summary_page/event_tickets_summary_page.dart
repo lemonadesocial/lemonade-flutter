@@ -320,6 +320,9 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
+    final isPaymentRequired =
+        context.read<SelectEventTicketsBloc>().state.isPaymentRequired;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
       child: Column(
@@ -359,23 +362,25 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                         selectedNetwork: selectedNetwork,
                         pricingInfo: pricingInfo,
                       ),
-                      SizedBox(height: Spacing.xSmall),
-                      PromoCodeSummary(
-                        pricingInfo: pricingInfo,
-                        onPressApply: ({promoCode}) {
-                          context.read<CalculateEventTicketPricingBloc>().add(
-                                CalculateEventTicketPricingEvent.calculate(
-                                  input: CalculateTicketsPricingInput(
-                                    discount: promoCode,
-                                    eventId: event.id ?? '',
-                                    items: selectedTickets,
-                                    currency: selectedCurrency,
-                                    network: selectedNetwork,
+                      if (isPaymentRequired) ...[
+                        SizedBox(height: Spacing.xSmall),
+                        PromoCodeSummary(
+                          pricingInfo: pricingInfo,
+                          onPressApply: ({promoCode}) {
+                            context.read<CalculateEventTicketPricingBloc>().add(
+                                  CalculateEventTicketPricingEvent.calculate(
+                                    input: CalculateTicketsPricingInput(
+                                      discount: promoCode,
+                                      eventId: event.id ?? '',
+                                      items: selectedTickets,
+                                      currency: selectedCurrency,
+                                      network: selectedNetwork,
+                                    ),
                                   ),
-                                ),
-                              );
-                        },
-                      ),
+                                );
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),
