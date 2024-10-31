@@ -86,6 +86,7 @@ fragment EventPaymentAccountFragment on Event {
 
 fragment EventFields on Event {
   _id
+  shortid
   title
   slug
   host
