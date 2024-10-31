@@ -145,6 +145,7 @@ const eventFragment = '''
 
   fragment eventFields on Event {
     _id
+    shortid
     title
     slug
     host

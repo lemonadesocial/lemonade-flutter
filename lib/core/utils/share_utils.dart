@@ -5,7 +5,7 @@ import 'package:share_plus/share_plus.dart';
 class ShareUtils {
   static shareEvent(Event event) {
     Share.shareUri(
-      Uri.parse('${AppConfig.webUrl}/event/${event.id}'),
+      Uri.parse('${AppConfig.webUrl}/e/${event.shortId}'),
     );
   }
 }
