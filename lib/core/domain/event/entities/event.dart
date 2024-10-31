@@ -82,6 +82,7 @@ class Event with _$Event {
     List<String>? tags,
     bool? applicationRequired,
     bool? registrationDisabled,
+    String? shortId,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -185,6 +186,7 @@ class Event with _$Event {
       tags: dto.tags,
       applicationRequired: dto.applicationRequired,
       registrationDisabled: dto.registrationDisabled,
+      shortId: dto.shortId,
     );
   }
 
