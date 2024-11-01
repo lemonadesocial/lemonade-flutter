@@ -28,7 +28,8 @@ class UpcomingHostingEventsBloc
         skip: 0,
         limit: 50,
         state: const FilterEventInput(
-            include: [EventState.started, EventState.created]),
+          include: [EventState.started, EventState.created],
+        ),
       ),
     );
     result.fold(
