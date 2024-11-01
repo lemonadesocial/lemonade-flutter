@@ -388,6 +388,7 @@ final getUpcomingEventsQuery = gql('''
     slug
     host
     cohosts
+    timezone
     host_expanded {
       _id
       name

@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/injection/register_module.dart';
@@ -25,7 +26,10 @@ class UpcomingHostingEventsBloc
       input: GetHostingEventsInput(
         id: userId,
         skip: 0,
-        limit: 100,
+        limit: 50,
+        state: const FilterEventInput(
+          include: [EventState.started, EventState.created],
+        ),
       ),
     );
     result.fold(
