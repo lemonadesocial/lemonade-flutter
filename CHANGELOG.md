@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.38.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.37.0...v1.38.0) (2024-10-31)
+## [1.39.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.37.0...v1.39.0) (2024-11-01)
 
 
 ### Features
@@ -18,6 +18,7 @@
 * fix handle social link in application detail ([#775](https://github.com/lemonadesocial/lemonade-flutter/issues/775)) ([2b5169a](https://github.com/lemonadesocial/lemonade-flutter/commit/2b5169aa984fd7a7f6a6c30c152f57fe64d8508e))
 * fix join request item display name, hide social button if N/A, open application page when tap in pending item ([#770](https://github.com/lemonadesocial/lemonade-flutter/issues/770)) ([aa685c9](https://github.com/lemonadesocial/lemonade-flutter/commit/aa685c922783ec1c02e33df62cf079e273ec3ea5))
 * hide discount code input when payment is not required ([#778](https://github.com/lemonadesocial/lemonade-flutter/issues/778)) ([fa08ddc](https://github.com/lemonadesocial/lemonade-flutter/commit/fa08ddc79e27f583b7d0db026a03252895025eb0))
+* improve home screen loading ([#779](https://github.com/lemonadesocial/lemonade-flutter/issues/779)) ([e3a0e60](https://github.com/lemonadesocial/lemonade-flutter/commit/e3a0e60b46f31306151432a6cee52996ed167dd0))
 * re-order sessions list in event home detail ([#774](https://github.com/lemonadesocial/lemonade-flutter/issues/774)) ([e70c4e4](https://github.com/lemonadesocial/lemonade-flutter/commit/e70c4e45e3fe51310096f7b25408ee8757ff29df))
 * skip assign ticket for single purchase ([4e64e22](https://github.com/lemonadesocial/lemonade-flutter/commit/4e64e22dfa6af6af5af306f9b90e816b78617192))
 * skip assign ticket for single purchase ([#760](https://github.com/lemonadesocial/lemonade-flutter/issues/760)) ([4e64e22](https://github.com/lemonadesocial/lemonade-flutter/commit/4e64e22dfa6af6af5af306f9b90e816b78617192))

@@ -110,6 +110,18 @@ class _HomeViewState extends State<_HomeView> {
           authenticated: (authSession) => authSession.userId,
           orElse: () => '',
         );
+    final isLoadingHomeEventListing = context
+        .watch<HomeEventListingBloc>()
+        .state
+        .maybeWhen(loading: () => true, orElse: () => false);
+    final isLoadingUpcomingAttendingEvents = context
+        .watch<UpcomingAttendingEventsBloc>()
+        .state
+        .maybeWhen(loading: () => true, orElse: () => false);
+    final isLoadingUpcomingHostingEvents = context
+        .watch<UpcomingHostingEventsBloc>()
+        .state
+        .maybeWhen(loading: () => true, orElse: () => false);
     return RefreshIndicator(
       color: colorScheme.onPrimary,
       backgroundColor: LemonColor.chineseBlack,
@@ -147,9 +159,7 @@ class _HomeViewState extends State<_HomeView> {
                 if (result.hasException ||
                     result.isLoading ||
                     result.data == null) {
-                  return SliverToBoxAdapter(
-                    child: Loading.defaultLoading(context),
-                  );
+                  return const SliverToBoxAdapter();
                 }
                 final notifications = result.parsedData?.getNotifications ?? [];
                 if (notifications.isEmpty) {
@@ -169,6 +179,15 @@ class _HomeViewState extends State<_HomeView> {
                   ),
                 );
               },
+            ),
+          if (isLoadingUpcomingHostingEvents ||
+              isLoadingUpcomingAttendingEvents ||
+              isLoadingHomeEventListing)
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+              sliver: SliverToBoxAdapter(
+                child: Loading.defaultLoading(context),
+              ),
             ),
           if (userId.isNotEmpty)
             SliverPadding(

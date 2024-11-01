@@ -23,11 +23,11 @@ class UpcomingAttendingEventsBloc
     if (userId.isEmpty) {
       return emit(UpcomingAttendingEventsState.fetched(events: []));
     }
-    final result = await _eventRepository.getEvents(
-      input: GetEventsInput(
+    final result = await _eventRepository.getUpcomingEvents(
+      input: GetUpcomingEventsInput(
         skip: 0,
-        limit: 100,
-        accepted: userId,
+        limit: 50,
+        id: userId,
       ),
     );
     result.fold(
