@@ -1,7 +1,6 @@
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -48,7 +47,7 @@ class HomeHostingEventsList extends StatelessWidget {
           ],
         );
       },
-      loading: () => Loading.defaultLoading(context),
+      loading: () => const SizedBox.shrink(),
       failure: () => const EmptyList(),
       orElse: () => const SizedBox.shrink(),
     );

@@ -1,7 +1,6 @@
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,9 @@ class HomeDiscoverEventsList extends StatelessWidget {
     final state = context.watch<HomeEventListingBloc>().state;
 
     return state.when(
-      loading: () => SliverToBoxAdapter(child: Loading.defaultLoading(context)),
+      loading: () => const SliverToBoxAdapter(
+        child: SizedBox(),
+      ),
       fetched: (_, filteredEvents) {
         if (filteredEvents.isEmpty) {
           return SliverToBoxAdapter(child: _buildEmptyEvents(context));
