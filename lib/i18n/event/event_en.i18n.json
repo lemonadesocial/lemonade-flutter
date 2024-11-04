@@ -751,5 +751,20 @@
     "visibility": "Visibility",
     "requireApproval": "Require approval",
     "registration": "Registration",
-    "invalidQRCode": "Invalid QR code. Please refresh or contact support."
+    "invalidQRCode": "Invalid QR code. Please refresh or contact support.",
+    "sessionDuplication": {
+        "repeat": "Repeat",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "addTimes": "Add $n times",
+        "untilMode": "Until",
+        "countMode": "For",
+        "days": "days",
+        "weeks": "weeks",
+        "months": "months",
+        "startingOn": "Starting on",
+        "daysOfWeek": "Days of week",
+        "chooseTime": "Choose time"
+    }
 }

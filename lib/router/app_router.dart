@@ -118,6 +118,7 @@ class AppRouter extends $AppRouter {
         collaboratorRoutes,
         ...farcasterRoutes,
         questRoutes,
+        createDuplicatedSubEventsRoutes,
       ];
 }
 
@@ -554,4 +555,8 @@ final questRoutes = AutoRoute(
       page: CompletedQuestsListingRoute.page,
     ),
   ],
+);
+
+final createDuplicatedSubEventsRoutes = AutoRoute(
+  page: CreateDuplicatedSubEventsRoute.page,
 );
