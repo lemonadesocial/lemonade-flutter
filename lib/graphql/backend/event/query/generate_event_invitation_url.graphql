@@ -1,0 +1,6 @@
+query GenerateEventInvitationUrl($event: MongoID!) {
+  generateEventInvitationUrl(event: $event) {
+    shortid
+    tk
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/generate_event_invitation_url_bloc/generate_event_invitation_url_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
@@ -27,6 +28,10 @@ class GuestEventDetailDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final invitationUrl =
+        context.watch<GenerateEventInvitationUrlBloc>().state.whenOrNull(
+              success: (invitationUrl) => invitationUrl,
+            );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -99,11 +104,12 @@ class GuestEventDetailDashboard extends StatelessWidget {
         ),
         SizedBox(width: 10.w),
         EventDashboardItem(
+          loading: invitationUrl == null,
           icon: Assets.icons.icShareGradient
               .svg(width: Sizing.small, height: Sizing.small),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            ShareUtils.shareEvent(event);
+            ShareUtils.shareEvent(context, event);
           },
         ),
       ],
