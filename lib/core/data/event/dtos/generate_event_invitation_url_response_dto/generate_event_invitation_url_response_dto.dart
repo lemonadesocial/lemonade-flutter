@@ -13,6 +13,7 @@ class GenerateEventInvitationUrlResponseDto
   }) = _GenerateEventInvitationUrlResponseDto;
 
   factory GenerateEventInvitationUrlResponseDto.fromJson(
-          Map<String, dynamic> json) =>
+    Map<String, dynamic> json,
+  ) =>
       _$GenerateEventInvitationUrlResponseDtoFromJson(json);
 }

@@ -20,6 +20,7 @@ class GenerateEventInvitationUrlResponse
         tk: dto.tk,
       );
   factory GenerateEventInvitationUrlResponse.fromJson(
-          Map<String, dynamic> json) =>
+    Map<String, dynamic> json,
+  ) =>
       _$GenerateEventInvitationUrlResponseFromJson(json);
 }
