@@ -1,14 +1,20 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/sub_pages/create_duplicated_sub_events_success_page/create_duplicated_sub_events_success_page.dart';
 import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/widgets/add_recurring_dates_list_widget.dart';
 import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/widgets/select_subevent_timezone_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/scaffold/loader_scaffold_page/loader_scaffold_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/mutation/clone_event.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -36,6 +42,9 @@ class _CreateDuplicatedSubEventsPageState
   List<DateTime> dates = [];
   late String timezone;
   bool private = false;
+  bool loading = false;
+  bool success = false;
+  List<String> eventIds = [];
 
   @override
   void initState() {
@@ -76,105 +85,164 @@ class _CreateDuplicatedSubEventsPageState
     });
   }
 
+  Future<void> _cloneSubEvent() async {
+    setState(() {
+      loading = true;
+    });
+    final result = await getIt<AppGQL>().client.mutate$CloneEvent(
+          Options$Mutation$CloneEvent(
+            variables: Variables$Mutation$CloneEvent(
+              input: Input$CloneEventInput(
+                event: widget.subEvent.id ?? '',
+                dates: dates.map(
+                  (date) {
+                    return tz.TZDateTime.from(date, tz.UTC);
+                  },
+                ).toList(),
+                overrides: Input$EventInput(
+                  private: private,
+                  timezone: timezone,
+                ),
+              ),
+            ),
+          ),
+        );
+    if (result.hasException || result.parsedData?.cloneEvent == null) {
+      setState(() {
+        loading = false;
+      });
+      return;
+    }
+    setState(() {
+      success = true;
+      loading = false;
+      eventIds = result.parsedData?.cloneEvent.map((id) => id).toList() ?? [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
+    return Stack(
+      children: [
+        Scaffold(
+          body: Stack(
             children: [
-              const LemonAppBar(
-                title: '',
+              Column(
+                children: [
+                  const LemonAppBar(
+                    title: '',
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${t.event.sessionDuplication.duplicate} ${widget.subEvent.title ?? ''}',
+                              style: Typo.extraLarge.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                            SizedBox(height: 4.w),
+                            Text(
+                              t.event.sessionDuplication
+                                  .duplicateSessionDescription,
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            ),
+                            SizedBox(height: Spacing.medium),
+                            _GeneralInfoAndPrivacySettingWidget(
+                              subEvent: widget.subEvent,
+                              private: private,
+                              onPrivacyChanged: (value) {
+                                setState(() {
+                                  private = value;
+                                });
+                              },
+                            ),
+                            SizedBox(height: Spacing.medium),
+                            AddRecurringDatesListWidget(
+                              timezone: timezone,
+                              subEvent: widget.subEvent,
+                              dates: dates,
+                              onDatesChanged: (mDates) {
+                                setState(() {
+                                  dates = mDates;
+                                });
+                              },
+                            ),
+                            SizedBox(height: Spacing.medium),
+                            SelectSubEventTimezoneWidget(
+                              timezone: timezone,
+                              onTimezoneChanged: (timezoneValue) {
+                                setState(() {
+                                  timezone = timezoneValue;
+                                });
+                                _updateDatesByTimezone();
+                              },
+                            ),
+                            SizedBox(height: 124.w),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${t.event.sessionDuplication.duplicate} ${widget.subEvent.title ?? ''}',
-                          style: Typo.extraLarge.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                        ),
-                        SizedBox(height: 4.w),
-                        Text(
-                          t.event.sessionDuplication
-                              .duplicateSessionDescription,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        ),
-                        SizedBox(height: Spacing.medium),
-                        _GeneralInfoAndPrivacySettingWidget(
-                          subEvent: widget.subEvent,
-                          private: private,
-                          onPrivacyChanged: (value) {
-                            setState(() {
-                              private = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: Spacing.medium),
-                        AddRecurringDatesListWidget(
-                          timezone: timezone,
-                          subEvent: widget.subEvent,
-                          dates: dates,
-                          onDatesChanged: (mDates) {
-                            setState(() {
-                              dates = mDates;
-                            });
-                          },
-                        ),
-                        SizedBox(height: Spacing.medium),
-                        SelectSubEventTimezoneWidget(
-                          timezone: timezone,
-                          onTimezoneChanged: (timezoneValue) {
-                            setState(() {
-                              timezone = timezoneValue;
-                            });
-                            _updateDatesByTimezone();
-                          },
-                        ),
-                        SizedBox(height: 124.w),
-                      ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: Spacing.small,
+                    right: Spacing.small,
+                    top: Spacing.smMedium,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.background,
+                    border: Border(
+                      top: BorderSide(
+                        color: colorScheme.outline,
+                      ),
+                    ),
+                  ),
+                  child: SafeArea(
+                    top: false,
+                    child: Opacity(
+                      opacity: dates.isEmpty ? 0.5 : 1,
+                      child: LinearGradientButton.primaryButton(
+                        label: t.event.sessionDuplication.duplicateSession,
+                        onTap: () {
+                          if (dates.isEmpty) return;
+                          _cloneSubEvent();
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              padding: EdgeInsets.only(
-                left: Spacing.small,
-                right: Spacing.small,
-                top: Spacing.smMedium,
-              ),
-              decoration: BoxDecoration(
-                color: colorScheme.background,
-                border: Border(
-                  top: BorderSide(
-                    color: colorScheme.outline,
-                  ),
-                ),
-              ),
-              child: SafeArea(
-                top: false,
-                child: LinearGradientButton.primaryButton(
-                  label: t.event.sessionDuplication.duplicateSession,
-                  onTap: () {},
-                ),
-              ),
+        ),
+        if (loading)
+          LoaderScaffoldPage(
+            title: t.event.sessionDuplication.duplicatingSessions,
+            description:
+                t.event.sessionDuplication.duplicatingSessionsDescription(
+              n: dates.length,
             ),
           ),
-        ],
-      ),
+        if (success)
+          CreateDuplicatedSubEventsSuccessPage(
+            dates: dates,
+            eventIds: eventIds,
+            originalSubEvent: widget.subEvent,
+          ),
+      ],
     );
   }
 }

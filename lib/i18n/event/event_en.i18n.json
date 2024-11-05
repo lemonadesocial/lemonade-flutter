@@ -33,6 +33,7 @@
     "hosts": "hosts",
     "about": "About",
     "virtualLink": "Virtual Link",
+    "virtual": "Virtual",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -766,6 +767,10 @@
         "duplicateSessionDescription": "Duplicating a session will copy over name, location, virtual link, duration, and guest settings.",
         "sessionOf": "Session of",
         "newTime": "New time",
+        "newTimes": {
+            "one": "$n new time",
+            "other": "$n new times"
+        },
         "addTime": "Add time",
         "recurrence": "Recurrence",
         "duplicateSession": "Duplicate session",
@@ -785,6 +790,10 @@
         "public": "Public",
         "private": "Private",
         "publicDescription": "Shown on your Space and featured on Lemonade",
-        "privateDescription": "Unlisted. Only people with the link can register"
+        "privateDescription": "Unlisted. Only people with the link can register",
+        "duplicatingSessions": "Duplicating sessions",
+        "duplicatingSessionsDescription": "Please wait while we set up your $n duplicate sessions. This should only take a few seconds.",
+        "duplicateSuccess": "Successfully duplicated!",
+        "duplicateSuccessDescription": "We have set up $n deplicated events for you. You can access each one them below."
     }
 }
