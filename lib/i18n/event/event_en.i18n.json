@@ -591,7 +591,15 @@
             "good": "Good",
             "great": "Great",
             "awesome": "Awesome"
-        }
+        },
+        "publishSession": "Publish session",
+        "publishingSession": "Publishing session",
+        "publishingEvent": "Publishing event",
+        "publishingDescription": "Hold tight! We’re finalizing all the details and preparing your session for a smooth launch.",
+        "sessionPublishedTitle": "Session published!",
+        "sessionPublishedDescription": "Set up recurring sessions with the same details as this one. Each duplicate will copy the name, location, virtual link, duration and guest settings",
+        "eventPublishedTitle": "Event published!",
+        "eventPublishedDescription": "Your event is now live! Share it with your guests to start inviting them."
     },
     "eventBuyAdditionalTickets": {
         "assignTickets": "Assign tickets"
@@ -753,6 +761,7 @@
     "registration": "Registration",
     "invalidQRCode": "Invalid QR code. Please refresh or contact support.",
     "sessionDuplication": {
+        "createRecurringSession": "Create recurring session",
         "duplicate": "Duplicate",
         "duplicateSessionDescription": "Duplicating a session will copy over name, location, virtual link, duration, and guest settings.",
         "sessionOf": "Session of",

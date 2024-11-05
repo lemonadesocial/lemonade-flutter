@@ -107,6 +107,12 @@ class AppRouter extends $AppRouter {
           path: '/pending-invites',
           page: HomePendingInvitesRoute.page,
         ),
+        AutoRoute(
+          page: EventPreviewRoute.page,
+        ),
+        AutoRoute(
+          page: EventPublishingRoute.page,
+        ),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
