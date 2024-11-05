@@ -78,7 +78,8 @@
         "viewAll": "View all",
         "setLimit": "Set limit",
         "apply": "Apply",
-        "skip": "Skip"
+        "skip": "Skip",
+        "confirm": "Confirm"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

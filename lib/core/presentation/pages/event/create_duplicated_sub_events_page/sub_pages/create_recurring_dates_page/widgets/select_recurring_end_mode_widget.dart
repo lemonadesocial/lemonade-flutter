@@ -2,6 +2,7 @@ import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_p
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -79,7 +80,6 @@ class SelectRecurringEndMode extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                     selectedDayHighlightColor: LemonColor.paleViolet18,
-                    // customModePickerIcon: const SizedBox(),
                     todayTextStyle:
                         Typo.medium.copyWith(color: colorScheme.onPrimary),
                     okButtonTextStyle: Typo.medium.copyWith(
@@ -239,6 +239,16 @@ class _DurationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String durationUnit = '';
+    final t = Translations.of(context);
+    if (repeatMode == Enum$RecurringRepeat.daily) {
+      durationUnit = t.event.sessionDuplication.days;
+    } else if (repeatMode == Enum$RecurringRepeat.weekly) {
+      durationUnit = t.event.sessionDuplication.weeks;
+    } else {
+      durationUnit = t.event.sessionDuplication.months;
+    }
+
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
@@ -276,7 +286,10 @@ class _DurationInput extends StatelessWidget {
               height: 50.w,
               child: Center(
                 child: Text(
-                  repeatMode.name,
+                  StringUtils.capitalize(durationUnit),
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
               ),
             ),

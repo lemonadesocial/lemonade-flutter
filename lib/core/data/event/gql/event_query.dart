@@ -280,7 +280,13 @@ const eventSubEventFragment = '''
     subevent_enabled
     subevent_parent
     subevent_parent_expanded {
-      _id  
+      _id
+      title
+      new_new_photos_expanded(limit: 1) {
+        _id
+        key
+        bucket
+      }
     }
     subevent_settings {
       ticket_required_for_creation

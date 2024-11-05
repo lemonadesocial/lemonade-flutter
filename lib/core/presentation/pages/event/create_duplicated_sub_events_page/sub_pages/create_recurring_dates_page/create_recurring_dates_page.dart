@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_p
 import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/sub_pages/create_recurring_dates_page/widgets/select_days_of_week_widget.dart';
 import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/sub_pages/create_recurring_dates_page/widgets/select_recurring_end_mode_widget.dart';
 import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/sub_pages/create_recurring_dates_page/widgets/select_repeat_mode_dropdown.dart';
+import 'package:app/core/presentation/pages/event/create_duplicated_sub_events_page/widgets/select_time_of_day_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -17,10 +18,12 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:web3modal_flutter/utils/debouncer.dart';
 
@@ -29,15 +32,18 @@ enum RecurringEndMode {
   count,
 }
 
-@RoutePage()
 class CreateRecurringDatesPage extends StatefulWidget {
   final Event subEvent;
+  final String timezone;
+  final DateTime? initialStartDate;
   final Function(List<DateTime> dates)? onConfirm;
 
   const CreateRecurringDatesPage({
     super.key,
     required this.subEvent,
+    required this.timezone,
     this.onConfirm,
+    this.initialStartDate,
   });
 
   @override
@@ -59,7 +65,12 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
   @override
   void initState() {
     super.initState();
-    startDate = tz.TZDateTime.from(widget.subEvent.start!, location);
+    final utcNow = DateTime.now().toUtc();
+    startDate = widget.initialStartDate ??
+        tz.TZDateTime.from(
+          utcNow,
+          location,
+        );
     endDate = startDate.add(
       widget.subEvent.end!.difference(widget.subEvent.start!),
     );
@@ -67,7 +78,7 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
     generateRecurringDates();
   }
 
-  String get timezone => widget.subEvent.timezone ?? '';
+  String get timezone => widget.timezone;
 
   tz.Location get location => tz.getLocation(timezone);
 
@@ -136,7 +147,14 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
                       title: t.event.sessionDuplication.chooseTime,
                     ),
                     _StartingDateWidget(
+                      timezone: timezone,
                       date: startDate,
+                      onChangeStartDate: (date) {
+                        setState(() {
+                          startDate = date;
+                        });
+                        generateRecurringDates();
+                      },
                     ),
                     SizedBox(height: Spacing.xSmall),
                     SelectRepeatModeDropdown(
@@ -236,7 +254,7 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
                     if (isLoading) {
                       return;
                     }
-                    widget.onConfirm?.call(dates);
+                    Navigator.pop(context, dates);
                   },
                 ),
               ),
@@ -250,8 +268,12 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
 
 class _StartingDateWidget extends StatelessWidget {
   final DateTime date;
+  final String timezone;
+  final void Function(DateTime) onChangeStartDate;
   const _StartingDateWidget({
     required this.date,
+    required this.timezone,
+    required this.onChangeStartDate,
   });
 
   @override
@@ -270,34 +292,103 @@ class _StartingDateWidget extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: Container(
-                padding: EdgeInsets.all(Spacing.small),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(LemonRadius.medium),
-                  border: Border.all(color: colorScheme.outline),
-                ),
-                child: Text(
-                  DateFormat('EE, MMMM d').format(
-                    date,
+              child: InkWell(
+                onTap: () async {
+                  final results = await showCalendarDatePicker2Dialog(
+                    dialogBackgroundColor: LemonColor.atomicBlack,
+                    context: context,
+                    config: CalendarDatePicker2WithActionButtonsConfig(
+                      firstDayOfWeek: 1,
+                      calendarType: CalendarDatePicker2Type.single,
+                      selectedDayTextStyle: Typo.medium.copyWith(
+                        color: LemonColor.paleViolet,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      selectedDayHighlightColor: LemonColor.paleViolet18,
+                      todayTextStyle:
+                          Typo.medium.copyWith(color: colorScheme.onPrimary),
+                      okButtonTextStyle: Typo.medium.copyWith(
+                        color: LemonColor.paleViolet,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      cancelButtonTextStyle: Typo.medium.copyWith(
+                        color: LemonColor.paleViolet,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      dayTextStyle:
+                          Typo.small.copyWith(color: colorScheme.onPrimary),
+                    ),
+                    dialogSize: Size(1.sw, 0.5.sw),
+                    value: [
+                      date,
+                    ],
+                  );
+                  if (results?.isNotEmpty == true) {
+                    if (results?.firstOrNull != null) {
+                      final selectedDate = results!.firstOrNull!;
+                      final newStartDate = tz.TZDateTime(
+                        tz.getLocation(timezone),
+                        selectedDate.year,
+                        selectedDate.month,
+                        selectedDate.day,
+                        date.hour,
+                        date.minute,
+                      );
+                      onChangeStartDate(newStartDate);
+                    }
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(Spacing.small),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    border: Border.all(color: colorScheme.outline),
                   ),
-                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  child: Text(
+                    DateFormat('EE, MMMM d').format(
+                      date,
+                    ),
+                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  ),
                 ),
               ),
             ),
             SizedBox(width: Spacing.xSmall),
             Expanded(
               flex: 1,
-              child: Container(
-                padding: EdgeInsets.all(Spacing.small),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(LemonRadius.medium),
-                  border: Border.all(color: colorScheme.outline),
-                ),
-                child: Text(
-                  DateFormat(DateFormatUtils.timeOnlyFormat).format(
-                    date,
+              child: InkWell(
+                onTap: () async {
+                  final timeOfDay =
+                      await showCupertinoModalBottomSheet<TimeOfDay?>(
+                    context: context,
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    builder: (context) =>
+                        SelectTimeOfDayBottomSheet(date: date),
+                  );
+                  if (timeOfDay != null) {
+                    final newDate = tz.TZDateTime(
+                      tz.getLocation(timezone),
+                      date.year,
+                      date.month,
+                      date.day,
+                      timeOfDay.hour,
+                      timeOfDay.minute,
+                    );
+                    onChangeStartDate(newDate);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(Spacing.small),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    border: Border.all(color: colorScheme.outline),
                   ),
-                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  child: Text(
+                    DateFormat(DateFormatUtils.timeOnlyFormat).format(
+                      date,
+                    ),
+                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  ),
                 ),
               ),
             ),

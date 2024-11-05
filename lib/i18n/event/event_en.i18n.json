@@ -753,6 +753,13 @@
     "registration": "Registration",
     "invalidQRCode": "Invalid QR code. Please refresh or contact support.",
     "sessionDuplication": {
+        "duplicate": "Duplicate",
+        "duplicateSessionDescription": "Duplicating a session will copy over name, location, virtual link, duration, and guest settings.",
+        "sessionOf": "Session of",
+        "newTime": "New time",
+        "addTime": "Add time",
+        "recurrence": "Recurrence",
+        "duplicateSession": "Duplicate session",
         "repeat": "Repeat",
         "daily": "Daily",
         "weekly": "Weekly",
@@ -765,6 +772,10 @@
         "months": "months",
         "startingOn": "Starting on",
         "daysOfWeek": "Days of week",
-        "chooseTime": "Choose time"
+        "chooseTime": "Choose time",
+        "public": "Public",
+        "private": "Private",
+        "publicDescription": "Shown on your Space and featured on Lemonade",
+        "privateDescription": "Unlisted. Only people with the link can register"
     }
 }
