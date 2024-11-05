@@ -24,7 +24,7 @@ class ShareUtils {
       );
     }
     // Special case for attending, use invitation url instead of shortid
-    if (isAttending) {
+    else if (isAttending) {
       final invitationUrl =
           context.read<GenerateEventInvitationUrlBloc>().state.whenOrNull(
                 success: (invitationUrl) => invitationUrl,
