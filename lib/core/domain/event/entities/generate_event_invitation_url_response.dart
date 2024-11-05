@@ -13,7 +13,8 @@ class GenerateEventInvitationUrlResponse
   }) = _GenerateEventInvitationUrlResponse;
 
   factory GenerateEventInvitationUrlResponse.fromDto(
-          GenerateEventInvitationUrlResponseDto dto) =>
+    GenerateEventInvitationUrlResponseDto dto,
+  ) =>
       GenerateEventInvitationUrlResponse(
         shortid: dto.shortid,
         tk: dto.tk,
