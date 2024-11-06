@@ -28,10 +28,6 @@ class GuestEventDetailDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final invitationUrl =
-        context.watch<GenerateEventInvitationUrlBloc>().state.whenOrNull(
-              success: (invitationUrl) => invitationUrl,
-            );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -103,13 +99,21 @@ class GuestEventDetailDashboard extends StatelessWidget {
           },
         ),
         SizedBox(width: 10.w),
-        EventDashboardItem(
-          loading: invitationUrl == null,
-          icon: Assets.icons.icShareGradient
-              .svg(width: Sizing.small, height: Sizing.small),
-          onTap: () {
-            Vibrate.feedback(FeedbackType.light);
-            ShareUtils.shareEvent(context, event);
+        BlocBuilder<GenerateEventInvitationUrlBloc,
+            GenerateEventInvitationUrlState>(
+          builder: (context, state) {
+            final invitationUrl = state.whenOrNull(
+              success: (invitationUrl) => invitationUrl,
+            );
+            return EventDashboardItem(
+              loading: invitationUrl == null,
+              icon: Assets.icons.icShareGradient
+                  .svg(width: Sizing.small, height: Sizing.small),
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                ShareUtils.shareEvent(context, event);
+              },
+            );
           },
         ),
       ],
