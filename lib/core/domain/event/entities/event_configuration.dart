@@ -28,6 +28,7 @@ enum EventConfigurationType {
   applicationForm,
   photos,
   team,
+  subEvents,
 }
 
 class EventConfiguration {
@@ -286,6 +287,35 @@ class EventConfiguration {
           child: ThemeSvgIcon(
             color: colorScheme.onSecondary,
             builder: (colorFilter) => Assets.icons.icAddPhoto.svg(
+              colorFilter: colorFilter,
+              width: 18.w,
+              height: 18.w,
+            ),
+          ),
+        ),
+      ),
+    ];
+    return configs;
+  }
+
+  static List<EventConfiguration> subEventsConfigurations(
+    BuildContext context, {
+    Event? event,
+  }) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    if (event?.subeventParent != null) {
+      return [];
+    }
+    final configs = [
+      EventConfiguration(
+        type: EventConfigurationType.subEvents,
+        title: t.event.subEvent.subEvents,
+        description: '',
+        icon: Center(
+          child: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (colorFilter) => Assets.icons.icSessions.svg(
               colorFilter: colorFilter,
               width: 18.w,
               height: 18.w,

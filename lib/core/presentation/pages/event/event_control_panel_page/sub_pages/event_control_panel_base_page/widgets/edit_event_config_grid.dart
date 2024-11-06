@@ -9,7 +9,9 @@ import 'package:app/core/presentation/pages/event/create_event/widgets/event_con
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/event_guest_settings_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_subevents_setting_page/event_subevents_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -69,6 +71,10 @@ class EditEventConfigGrid extends StatelessWidget {
             .navigate(EventApplicationFormSettingRoute());
       case EventConfigurationType.photos:
         return AutoRouter.of(context).push(const EventPhotosSettingRoute());
+      case EventConfigurationType.subEvents:
+        page = EventSubEventsSettingPage(
+          event: event,
+        );
       default:
         page = null;
         break;
@@ -77,7 +83,6 @@ class EditEventConfigGrid extends StatelessWidget {
       return SnackBarUtils.showComingSoon();
     }
     showCupertinoModalBottomSheet(
-      enableDrag: false,
       barrierColor: LemonColor.black50,
       bounce: true,
       expand: true,
@@ -91,18 +96,10 @@ class EditEventConfigGrid extends StatelessWidget {
           ),
           clipBehavior: Clip.hardEdge,
           child: FractionallySizedBox(
-            heightFactor: 0.95,
+            heightFactor: 1,
             child: Column(
               children: [
-                const SizedBox(height: 10),
-                Container(
-                  width: 35,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                const BottomSheetGrabber(),
                 Expanded(
                   child: page ?? const SizedBox(),
                 ),
@@ -120,6 +117,7 @@ class EditEventConfigGrid extends StatelessWidget {
       final eventConfigs = [
         ...EventConfiguration.createEventConfigurations(event: event),
         ...EventConfiguration.photosConfigurations(context, event: event),
+        ...EventConfiguration.subEventsConfigurations(context, event: event),
       ];
       return SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
