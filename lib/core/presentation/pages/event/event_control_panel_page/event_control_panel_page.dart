@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/application/event/event_subevents_setting_bloc/event_subevents_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/manage_event_cohost_requests_bloc/manage_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/user/get_users_bloc/get_users_bloc.dart';
@@ -49,6 +50,9 @@ class EventControlPanelPage extends StatelessWidget
         ),
         BlocProvider(
           create: (context) => ManageEventCohostRequestsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => EventSubEventsSettingBloc(),
         ),
       ],
       child: this,

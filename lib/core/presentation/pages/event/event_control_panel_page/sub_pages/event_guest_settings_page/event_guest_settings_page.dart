@@ -2,7 +2,6 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/sub_event_general_settings_section_widget.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -50,16 +49,6 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
       final eventApprovalRequired = widget.event?.approvalRequired ?? true;
       context.read<EventGuestSettingsBloc>().add(
             RequireApprovalChanged(approvalRequired: eventApprovalRequired),
-          );
-      context.read<EventGuestSettingsBloc>().add(
-            SubEventEnabledChanged(
-              subEventEnabled: widget.event?.subeventEnabled ?? false,
-            ),
-          );
-      context.read<EventGuestSettingsBloc>().add(
-            SubEventSettingsChanged(
-              subEventSettings: widget.event?.subeventSettings,
-            ),
           );
     } else {
       final eventGuestSettingBloc =
@@ -199,38 +188,6 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                         subTitle: '',
                       ),
                     ),
-                    SizedBox(
-                      height: Spacing.medium,
-                    ),
-                    // Root event wont have parent event
-                    if (
-                        // This is for edit case where event is root event
-                        (widget.event != null &&
-                                widget.event?.subeventParent == null) ||
-                            // This is for create case where event is root event
-                            (guestSettingsState.parentEventId == null ||
-                                guestSettingsState.parentEventId?.isEmpty ==
-                                    true)) ...[
-                      SubEventGeneralSettingsSectionWidget(
-                        event: widget.event,
-                        subEventEnabled: guestSettingsState.subEventEnabled,
-                        subEventSettings: guestSettingsState.subEventSettings,
-                        onSubEventEnabledChanged: (enabled) {
-                          context.read<EventGuestSettingsBloc>().add(
-                                SubEventEnabledChanged(
-                                  subEventEnabled: enabled,
-                                ),
-                              );
-                        },
-                        onSubEventSettingsChanged: (subEventSettings) {
-                          context.read<EventGuestSettingsBloc>().add(
-                                SubEventSettingsChanged(
-                                  subEventSettings: subEventSettings,
-                                ),
-                              );
-                        },
-                      ),
-                    ],
                     const SizedBox(
                       height: 150,
                     ),
@@ -270,10 +227,6 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
                                         private: guestSettingsState.private,
                                         approvalRequired:
                                             guestSettingsState.approvalRequired,
-                                        subEventEnabled:
-                                            guestSettingsState.subEventEnabled,
-                                        subEventSettings:
-                                            guestSettingsState.subEventSettings,
                                       ),
                                     );
                               },
