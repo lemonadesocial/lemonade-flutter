@@ -33,6 +33,7 @@
     "hosts": "hosts",
     "about": "About",
     "virtualLink": "Virtual Link",
+    "virtual": "Virtual",
     "dashboard": {
         "liveChat": "Live chat",
         "invite": "Invite",
@@ -591,7 +592,15 @@
             "good": "Good",
             "great": "Great",
             "awesome": "Awesome"
-        }
+        },
+        "publishSession": "Publish session",
+        "publishingSession": "Publishing session",
+        "publishingEvent": "Publishing event",
+        "publishingDescription": "Hold tight! We’re finalizing all the details and preparing your session for a smooth launch.",
+        "sessionPublishedTitle": "Session published!",
+        "sessionPublishedDescription": "Set up recurring sessions with the same details as this one. Each duplicate will copy the name, location, virtual link, duration and guest settings",
+        "eventPublishedTitle": "Event published!",
+        "eventPublishedDescription": "Your event is now live! Share it with your guests to start inviting them."
     },
     "eventBuyAdditionalTickets": {
         "assignTickets": "Assign tickets"
@@ -751,5 +760,40 @@
     "visibility": "Visibility",
     "requireApproval": "Require approval",
     "registration": "Registration",
-    "invalidQRCode": "Invalid QR code. Please refresh or contact support."
+    "invalidQRCode": "Invalid QR code. Please refresh or contact support.",
+    "sessionDuplication": {
+        "createRecurringSession": "Create recurring session",
+        "duplicate": "Duplicate",
+        "duplicateSessionDescription": "Duplicating a session will copy over name, location, virtual link, duration, and guest settings.",
+        "sessionOf": "Session of",
+        "newTime": "New time",
+        "newTimes": {
+            "one": "$n new time",
+            "other": "$n new times"
+        },
+        "addTime": "Add time",
+        "recurrence": "Recurrence",
+        "duplicateSession": "Duplicate session",
+        "repeat": "Repeat",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "addTimes": "Add $n times",
+        "untilMode": "Until",
+        "countMode": "For",
+        "days": "days",
+        "weeks": "weeks",
+        "months": "months",
+        "startingOn": "Starting on",
+        "daysOfWeek": "Days of week",
+        "chooseTime": "Choose time",
+        "public": "Public",
+        "private": "Private",
+        "publicDescription": "Shown on your Space and featured on Lemonade",
+        "privateDescription": "Unlisted. Only people with the link can register",
+        "duplicatingSessions": "Duplicating sessions",
+        "duplicatingSessionsDescription": "Please wait while we set up your $n duplicate sessions. This should only take a few seconds.",
+        "duplicateSuccess": "Successfully duplicated!",
+        "duplicateSuccessDescription": "We have set up $n deplicated events for you. You can access each one them below."
+    }
 }

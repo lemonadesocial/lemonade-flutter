@@ -1,0 +1,3 @@
+query GenerateRecurringDates($input: GenerateRecurringDatesInput!) {
+  generateRecurringDates(input: $input)
+}
