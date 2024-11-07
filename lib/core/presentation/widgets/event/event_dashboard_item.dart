@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ class EventDashboardItem extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onTap,
+    this.loading = false,
   });
 
   final Widget icon;
   final Function() onTap;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +58,15 @@ class EventDashboardItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      icon,
-                    ],
-                  ),
+                  child: loading
+                      ? Loading.defaultLoading(context)
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            icon,
+                          ],
+                        ),
                 ),
               ),
             ],
