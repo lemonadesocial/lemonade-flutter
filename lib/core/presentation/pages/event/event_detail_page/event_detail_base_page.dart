@@ -124,14 +124,6 @@ class _EventDetailBasePageView extends StatelessWidget {
                           GetMyTicketsEvent.fetch(),
                         ),
                     ),
-                    BlocProvider(
-                      create: (context) => GenerateEventInvitationUrlBloc()
-                        ..add(
-                          GenerateEventInvitationUrlEvent.generate(
-                            eventId: event.id ?? '',
-                          ),
-                        ),
-                    ),
                   ],
                   child: const PostGuestEventDetailView(),
                 )

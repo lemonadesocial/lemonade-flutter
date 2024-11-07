@@ -214,11 +214,11 @@ final eventDetailRoutes = AutoRoute(
       ],
     ),
     AutoRoute(
-      page: EventControlPanelRoute.page,
+      page: EventSettingsRoute.page,
       children: [
         AutoRoute(
           initial: true,
-          page: EventControlPanelBaseRoute.page,
+          page: EventSettingsBaseRoute.page,
         ),
         AutoRoute(
           page: EventTitleDescriptionSettingRoute.page,

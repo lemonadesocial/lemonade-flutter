@@ -691,7 +691,8 @@
         "sessionsEmptyTitle": "No sessions yet",
         "sessionEmptyDescription": "Sessions added to this event will appear\nhere. Let’s create a session now!",
         "createSession": "Create session",
-        "emptySessions": "No sessions planned. Tap to create"
+        "emptySessions": "No sessions planned. Tap to create",
+        "sessionsSettings": "Sessions's settings"
     },
     "subEventSettings": {
         "allowSubEvent": "Allow sessions",
