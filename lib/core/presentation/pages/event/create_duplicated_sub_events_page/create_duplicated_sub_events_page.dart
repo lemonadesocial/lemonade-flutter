@@ -51,7 +51,10 @@ class _CreateDuplicatedSubEventsPageState
     super.initState();
     timezone = widget.subEvent.timezone ?? '';
     final now = DateTime.now().toUtc();
-    DateTime startDate = tz.TZDateTime.from(now, tz.getLocation(timezone)).add(
+    DateTime startDate = tz.TZDateTime.from(
+      widget.subEvent.start ?? now,
+      tz.getLocation(timezone),
+    ).add(
       const Duration(days: 1),
     );
 
@@ -61,7 +64,7 @@ class _CreateDuplicatedSubEventsPageState
       startDate.month,
       startDate.day,
       startDate.hour,
-      startDate.hour,
+      startDate.minute,
     );
     dates = [startDate];
   }
