@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
+import 'package:app/core/domain/event/entities/generate_event_invitation_url_response.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
@@ -125,6 +126,11 @@ abstract class EventRepository {
   });
 
   Future<Either<Failure, Event>> cancelEvent({
+    required String eventId,
+  });
+
+  Future<Either<Failure, GenerateEventInvitationUrlResponse>>
+      generateEventInvitationUrl({
     required String eventId,
   });
 

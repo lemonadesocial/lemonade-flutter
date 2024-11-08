@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/generate_event_invitation_url_bloc/generate_event_invitation_url_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/report/input/report_input.dart';
@@ -5,6 +6,7 @@ import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_animated_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/report/report_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -39,8 +41,8 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
     super.actions,
   });
 
-  void _share() {
-    ShareUtils.shareEvent(event);
+  void _share(BuildContext context) {
+    ShareUtils.shareEvent(context, event);
   }
 
   void _edit(BuildContext context) {
@@ -111,72 +113,86 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
               ),
       actions: actions ??
           [
-            Padding(
-              padding: EdgeInsets.only(right: Spacing.smMedium),
-              child: FloatingFrostedGlassDropdown(
-                containerWidth: 170.w,
-                items: [
-                  DropdownItemDpo(
-                    value: _EventAction.share,
-                    label: t.common.actions.share,
-                    leadingIcon: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (colorFilter) => Assets.icons.icShare.svg(
-                        colorFilter: colorFilter,
-                      ),
-                    ),
+            BlocBuilder<GenerateEventInvitationUrlBloc,
+                GenerateEventInvitationUrlState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  loading: () => Padding(
+                    padding: EdgeInsets.only(right: Spacing.smMedium),
+                    child: Loading.defaultLoading(context),
                   ),
-                  if (isOwnEventOrCohost)
-                    DropdownItemDpo(
-                      value: _EventAction.edit,
-                      label: StringUtils.capitalize(t.common.actions.edit),
-                      leadingIcon: ThemeSvgIcon(
+                  success: (invitationUrl) => Padding(
+                    padding: EdgeInsets.only(right: Spacing.smMedium),
+                    child: FloatingFrostedGlassDropdown(
+                      containerWidth: 170.w,
+                      items: [
+                        DropdownItemDpo(
+                          value: _EventAction.share,
+                          label: t.common.actions.share,
+                          leadingIcon: ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (colorFilter) => Assets.icons.icShare.svg(
+                              colorFilter: colorFilter,
+                            ),
+                          ),
+                        ),
+                        if (isOwnEventOrCohost)
+                          DropdownItemDpo(
+                            value: _EventAction.edit,
+                            label:
+                                StringUtils.capitalize(t.common.actions.edit),
+                            leadingIcon: ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (colorFilter) => Assets.icons.icEdit.svg(
+                                width: 18.w,
+                                height: 18.w,
+                                colorFilter: colorFilter,
+                              ),
+                            ),
+                          ),
+                        if (!isOwnEventOrCohost)
+                          DropdownItemDpo(
+                            value: _EventAction.report,
+                            label: t.common.actions.report,
+                            leadingIcon: ThemeSvgIcon(
+                              color: LemonColor.coralReef,
+                              builder: (colorFilter) =>
+                                  Assets.icons.icReport.svg(
+                                colorFilter: colorFilter,
+                              ),
+                            ),
+                            textStyle: Typo.medium.copyWith(
+                              color: LemonColor.coralReef,
+                            ),
+                          ),
+                      ],
+                      onItemPressed: (item) {
+                        Vibrate.feedback(FeedbackType.light);
+                        if (item?.value == _EventAction.share) {
+                          _share(context);
+                        }
+
+                        if (item?.value == _EventAction.edit) {
+                          _edit(context);
+                        }
+
+                        if (item?.value == _EventAction.report) {
+                          _report(context);
+                        }
+                      },
+                      child: ThemeSvgIcon(
                         color: colorScheme.onSecondary,
-                        builder: (colorFilter) => Assets.icons.icEdit.svg(
-                          width: 18.w,
-                          height: 18.w,
-                          colorFilter: colorFilter,
+                        builder: (filter) => Assets.icons.icMoreVertical.svg(
+                          colorFilter: filter,
+                          width: 25.w,
+                          height: 25.w,
                         ),
                       ),
                     ),
-                  if (!isOwnEventOrCohost)
-                    DropdownItemDpo(
-                      value: _EventAction.report,
-                      label: t.common.actions.report,
-                      leadingIcon: ThemeSvgIcon(
-                        color: LemonColor.coralReef,
-                        builder: (colorFilter) => Assets.icons.icReport.svg(
-                          colorFilter: colorFilter,
-                        ),
-                      ),
-                      textStyle: Typo.medium.copyWith(
-                        color: LemonColor.coralReef,
-                      ),
-                    ),
-                ],
-                onItemPressed: (item) {
-                  Vibrate.feedback(FeedbackType.light);
-                  if (item?.value == _EventAction.share) {
-                    _share();
-                  }
-
-                  if (item?.value == _EventAction.edit) {
-                    _edit(context);
-                  }
-
-                  if (item?.value == _EventAction.report) {
-                    _report(context);
-                  }
-                },
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icMoreVertical.svg(
-                    colorFilter: filter,
-                    width: 25.w,
-                    height: 25.w,
                   ),
-                ),
-              ),
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
             ),
           ],
       title: Text(

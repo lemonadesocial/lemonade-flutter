@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.41.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.39.0...v1.41.0) (2024-11-07)
+
+
+### Features
+
+* duplicate sessions ([#782](https://github.com/lemonadesocial/lemonade-flutter/issues/782)) ([a78861c](https://github.com/lemonadesocial/lemonade-flutter/commit/a78861c3b1471b3c741a30a6e17950733b7d4629))
+* move subevent setting out of guest setting ([#783](https://github.com/lemonadesocial/lemonade-flutter/issues/783)) ([1160ed4](https://github.com/lemonadesocial/lemonade-flutter/commit/1160ed4aeabd5e60077ff9c437b6e6e6c4abe401))
+* special invitation url for attending guest ([#781](https://github.com/lemonadesocial/lemonade-flutter/issues/781)) ([711986e](https://github.com/lemonadesocial/lemonade-flutter/commit/711986e59068b130ad16c892c63fda6a60ec9add))
+
+
+### Bug Fixes
+
+* move generate invitation link bloc ([#785](https://github.com/lemonadesocial/lemonade-flutter/issues/785)) ([d3be16b](https://github.com/lemonadesocial/lemonade-flutter/commit/d3be16bda29e68039309c089e4ae858cad548f49))
+* sort sessions list ([#786](https://github.com/lemonadesocial/lemonade-flutter/issues/786)) ([7c0fe2d](https://github.com/lemonadesocial/lemonade-flutter/commit/7c0fe2d6612a6bba4cb81a950ee883414abd0475))
+
 ## [1.39.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.37.0...v1.39.0) (2024-11-01)
 
 

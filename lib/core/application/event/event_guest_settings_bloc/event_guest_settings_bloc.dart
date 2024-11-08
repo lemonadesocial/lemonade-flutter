@@ -1,4 +1,3 @@
-import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -21,8 +20,6 @@ class EventGuestSettingsBloc
     on<GuestLimitChanged>(_onGuestLimitChanged);
     on<GuestLimitPerChanged>(_onGuestLimitPerChanged);
     on<PrivateChanged>(_onPrivateChanged);
-    on<SubEventEnabledChanged>(_onSubEventEnabledChanged);
-    on<SubEventSettingsChanged>(_onSubEventSettingsChange);
   }
 
   Future<void> _onRequiredApprovalChanged(
@@ -68,28 +65,6 @@ class EventGuestSettingsBloc
       ),
     );
   }
-
-  void _onSubEventEnabledChanged(
-    SubEventEnabledChanged event,
-    Emitter<EventGuestSettingState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        subEventEnabled: event.subEventEnabled,
-      ),
-    );
-  }
-
-  void _onSubEventSettingsChange(
-    SubEventSettingsChanged event,
-    Emitter<EventGuestSettingState> emit,
-  ) async {
-    emit(
-      state.copyWith(
-        subEventSettings: event.subEventSettings,
-      ),
-    );
-  }
 }
 
 @freezed
@@ -108,14 +83,6 @@ class EventGuestSettingEvent with _$EventGuestSettingEvent {
   const factory EventGuestSettingEvent.requireApprovalChanged({
     required bool approvalRequired,
   }) = RequireApprovalChanged;
-
-  const factory EventGuestSettingEvent.subEventEnabledChanged({
-    required bool subEventEnabled,
-  }) = SubEventEnabledChanged;
-
-  const factory EventGuestSettingEvent.subEventSettingsChanged({
-    SubEventSettings? subEventSettings,
-  }) = SubEventSettingsChanged;
 }
 
 @freezed
@@ -127,8 +94,6 @@ class EventGuestSettingState with _$EventGuestSettingState {
     @Default(false) bool private,
     @Default(false) bool approvalRequired,
     @Default(true) bool virtual,
-    @Default(false) bool subEventEnabled,
-    SubEventSettings? subEventSettings,
     @Default(false) bool isValid,
   }) = _EventGuestSettingState;
 }

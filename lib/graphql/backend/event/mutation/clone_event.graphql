@@ -1,0 +1,3 @@
+mutation CloneEvent($input: CloneEventInput!) {
+  cloneEvent(input: $input)
+}
