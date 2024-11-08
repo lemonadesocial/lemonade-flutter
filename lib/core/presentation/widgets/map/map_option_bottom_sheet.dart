@@ -32,6 +32,7 @@ class MapOptionBottomSheet extends StatelessWidget {
                   lng,
                   option: option,
                 ),
+                mode: LaunchMode.externalApplication,
               );
             },
             title: Text(StringUtils.capitalize(option.name)),

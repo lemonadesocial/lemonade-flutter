@@ -46,17 +46,20 @@ class EventApplicationFormBloc
       }
     }
     emit(
-      state.copyWith(
-        fieldsState: initialFieldState,
-        answers: applicationQuestions
-            .map(
-              (item) => Input$EventApplicationAnswerInput(
-                answer: "",
-                question: item.id ?? '',
-              ),
-            )
-            .toList(),
-        isInitialized: false,
+      _validate(
+        state: state.copyWith(
+          fieldsState: initialFieldState,
+          answers: applicationQuestions
+              .map(
+                (item) => Input$EventApplicationAnswerInput(
+                  answer: "",
+                  question: item.id ?? '',
+                ),
+              )
+              .toList(),
+          isInitialized: false,
+        ),
+        event: event.event,
       ),
     );
   }
