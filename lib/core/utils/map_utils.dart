@@ -6,7 +6,6 @@ import 'package:app/theme/color.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum GeoAppOption {
   google,
@@ -81,17 +80,6 @@ class MapUtils {
       '/maps/search/',
       {'api': '1', 'query': '$latitude,$longitude'},
     );
-  }
-
-  /// Launches the maps application for this platform.
-  /// The maps application will show the specified coordinates.
-  /// Returns a Future that resolves to true if the maps application
-  /// was launched successfully, false otherwise.
-  static Future<bool> launchCoordinates(
-    double latitude,
-    double longitude,
-  ) {
-    return launchUrl(createCoordinatesUri(latitude, longitude));
   }
 
   static showMapOptionBottomSheet(
