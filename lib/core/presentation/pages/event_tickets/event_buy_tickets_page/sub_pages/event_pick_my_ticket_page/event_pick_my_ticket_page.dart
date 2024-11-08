@@ -168,9 +168,18 @@ class EventPickMyTicketView extends StatelessWidget {
       child: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
         builder: (context, state) {
           return state.when(
-            loading: () => Expanded(child: Loading.defaultLoading(context)),
-            failure: () => EmptyList(
-              emptyText: t.common.somethingWrong,
+            loading: () => Scaffold(
+              body: Center(
+                child: Loading.defaultLoading(context),
+              ),
+            ),
+            failure: () => Scaffold(
+              backgroundColor: colorScheme.background,
+              body: Center(
+                child: EmptyList(
+                  emptyText: t.common.somethingWrong,
+                ),
+              ),
             ),
             success: (eventTicketTypesResponse, supportedCurrencies) {
               return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
