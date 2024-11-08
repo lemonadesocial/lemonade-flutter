@@ -54,8 +54,8 @@ class CreateRecurringDatesPage extends StatefulWidget {
 class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
   final debouncer = Debouncer(milliseconds: 500);
   List<DateTime> dates = [];
-  Enum$RecurringRepeat repeatMode = Enum$RecurringRepeat.daily;
-  RecurringEndMode endMode = RecurringEndMode.until;
+  Enum$RecurringRepeat repeatMode = Enum$RecurringRepeat.weekly;
+  RecurringEndMode endMode = RecurringEndMode.count;
   int count = 5;
   List<int> dayOfWeeks = [];
   late DateTime startDate;
@@ -167,8 +167,7 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
                       },
                     ),
                     SizedBox(height: Spacing.medium),
-                    if (endMode == RecurringEndMode.count &&
-                        repeatMode == Enum$RecurringRepeat.weekly) ...[
+                    if (repeatMode == Enum$RecurringRepeat.weekly) ...[
                       SelectDaysOfWeekWidget(
                         selectedDays: dayOfWeeks,
                         onChangeSelectedDays: (days) {
@@ -188,8 +187,14 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
                       timezone: timezone,
                       selectedDays: dayOfWeeks,
                       onChangeEndMode: (mode) {
+                        DateTime? newEndDate;
+                        if (mode == RecurringEndMode.until &&
+                            dates.isNotEmpty) {
+                          newEndDate = dates.last;
+                        }
                         setState(() {
                           endMode = mode;
+                          endDate = newEndDate ?? endDate;
                         });
                         generateRecurringDates();
                       },

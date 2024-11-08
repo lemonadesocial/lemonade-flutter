@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.41.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.39.0...v1.41.0) (2024-11-07)
+## [1.41.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.39.0...v1.41.0) (2024-11-08)
 
 
 ### Features
@@ -12,8 +12,11 @@
 
 ### Bug Fixes
 
+* duplicate sessions bugs ([#788](https://github.com/lemonadesocial/lemonade-flutter/issues/788)) ([64efc5b](https://github.com/lemonadesocial/lemonade-flutter/commit/64efc5b28f9af3ad9e467c74b9f1f3d07348e6e0))
 * move generate invitation link bloc ([#785](https://github.com/lemonadesocial/lemonade-flutter/issues/785)) ([d3be16b](https://github.com/lemonadesocial/lemonade-flutter/commit/d3be16bda29e68039309c089e4ae858cad548f49))
+* open google maps & fix validate application form ([#787](https://github.com/lemonadesocial/lemonade-flutter/issues/787)) ([43c39a7](https://github.com/lemonadesocial/lemonade-flutter/commit/43c39a711e1f70cc8e940b93f3fed1e95a95fbda))
 * sort sessions list ([#786](https://github.com/lemonadesocial/lemonade-flutter/issues/786)) ([7c0fe2d](https://github.com/lemonadesocial/lemonade-flutter/commit/7c0fe2d6612a6bba4cb81a950ee883414abd0475))
+* update ios deployment target ([#758](https://github.com/lemonadesocial/lemonade-flutter/issues/758)) ([1f2e928](https://github.com/lemonadesocial/lemonade-flutter/commit/1f2e928dc6ed67675fffdad1620e59aef71c1fd5))
 
 ## [1.39.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.37.0...v1.39.0) (2024-11-01)
 
