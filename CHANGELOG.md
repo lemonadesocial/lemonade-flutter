@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.40.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.39.0...v1.40.0) (2024-11-09)
+
+
+### Features
+
+* duplicate sessions ([#782](https://github.com/lemonadesocial/lemonade-flutter/issues/782)) ([a78861c](https://github.com/lemonadesocial/lemonade-flutter/commit/a78861c3b1471b3c741a30a6e17950733b7d4629))
+* move subevent setting out of guest setting ([#783](https://github.com/lemonadesocial/lemonade-flutter/issues/783)) ([1160ed4](https://github.com/lemonadesocial/lemonade-flutter/commit/1160ed4aeabd5e60077ff9c437b6e6e6c4abe401))
+* special invitation url for attending guest ([#781](https://github.com/lemonadesocial/lemonade-flutter/issues/781)) ([711986e](https://github.com/lemonadesocial/lemonade-flutter/commit/711986e59068b130ad16c892c63fda6a60ec9add))
+
+
+### Bug Fixes
+
+* duplicate sessions bugs ([#788](https://github.com/lemonadesocial/lemonade-flutter/issues/788)) ([64efc5b](https://github.com/lemonadesocial/lemonade-flutter/commit/64efc5b28f9af3ad9e467c74b9f1f3d07348e6e0))
+* layout break in pick my ticket page cause app freezed ([#789](https://github.com/lemonadesocial/lemonade-flutter/issues/789)) ([7d05fa7](https://github.com/lemonadesocial/lemonade-flutter/commit/7d05fa769a0f4ab437c96b6a07fb502c7bd82188))
+* move generate invitation link bloc ([#785](https://github.com/lemonadesocial/lemonade-flutter/issues/785)) ([d3be16b](https://github.com/lemonadesocial/lemonade-flutter/commit/d3be16bda29e68039309c089e4ae858cad548f49))
+* open google maps & fix validate application form ([#787](https://github.com/lemonadesocial/lemonade-flutter/issues/787)) ([43c39a7](https://github.com/lemonadesocial/lemonade-flutter/commit/43c39a711e1f70cc8e940b93f3fed1e95a95fbda))
+* reward pages ([#790](https://github.com/lemonadesocial/lemonade-flutter/issues/790)) ([f2a1301](https://github.com/lemonadesocial/lemonade-flutter/commit/f2a1301322d13de691e3aa5ee3c925efe06eb91e))
+* sort sessions list ([#786](https://github.com/lemonadesocial/lemonade-flutter/issues/786)) ([7c0fe2d](https://github.com/lemonadesocial/lemonade-flutter/commit/7c0fe2d6612a6bba4cb81a950ee883414abd0475))
+* update ios deployment target ([#758](https://github.com/lemonadesocial/lemonade-flutter/issues/758)) ([1f2e928](https://github.com/lemonadesocial/lemonade-flutter/commit/1f2e928dc6ed67675fffdad1620e59aef71c1fd5))
+
 ## [1.39.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.37.0...v1.39.0) (2024-11-01)
 
 
