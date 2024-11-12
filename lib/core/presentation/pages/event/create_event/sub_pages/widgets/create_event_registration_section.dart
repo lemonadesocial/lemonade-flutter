@@ -256,16 +256,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildSettingRow(
-                        context,
-                        icon: Assets.icons.icTicket,
-                        title: t.event.ticketTierSetting.ticketTierSettingTitle,
-                        trailingIcon: Assets.icons.icArrowRight,
-                        onTap: () {
-                          // TODO: Handle tickets & payments navigation
-                        },
-                        value: "2"
-                      ),
+                      _buildSettingRow(context,
+                          icon: Assets.icons.icTicket,
+                          title:
+                              t.event.ticketTierSetting.ticketTierSettingTitle,
+                          trailingIcon: Assets.icons.icArrowRight, onTap: () {
+                        // TODO: Handle tickets & payments navigation
+                      }, value: "2"),
                     ],
                   ),
                 ),
@@ -289,7 +286,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                     children: [
                       _buildSettingRow(
                         context,
-                        icon: Assets.icons.icAccountGradient,
+                        icon: Assets.icons.icGift,
                         title: t.event.eventPromotions.eventPromotionsTitle,
                         trailingIcon: Assets.icons.icArrowRight,
                         onTap: () {
@@ -314,16 +311,17 @@ class CreateEventRegistrationSection extends StatelessWidget {
               children: [
                 _buildSettingRow(
                   context,
-                  icon: Assets.icons.icAccountGradient,
+                  icon: Assets.icons.icApplicationForm,
                   title: t.event.configuration.applicationForm,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
+                    // TODO: Handle promotions navigation
                   },
+                  value: "5",
                 ),
               ],
             ),
           ),
-
           SizedBox(height: Spacing.small),
           Container(
             width: double.infinity,
@@ -335,11 +333,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
               children: [
                 _buildSettingRow(
                   context,
-                  icon: Assets.icons.icAccountGradient,
+                  icon: Assets.icons.icGift,
                   title: t.event.configuration.rewards,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
+                    // TODO: Handle promotions navigation
                   },
+                  value: "5",
                 ),
               ],
             ),
@@ -355,11 +355,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
               children: [
                 _buildSettingRow(
                   context,
-                  icon: Assets.icons.icAccountGradient,
+                  icon: Assets.icons.icSessions,
                   title: t.event.subEvent.sessionsSettings,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
+                    // TODO: Handle promotions navigation
                   },
+                  value: "5",
                 ),
               ],
             ),

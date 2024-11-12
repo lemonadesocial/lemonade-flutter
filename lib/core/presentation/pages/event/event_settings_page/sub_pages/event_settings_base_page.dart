@@ -1,12 +1,17 @@
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_content_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +29,51 @@ import 'package:app/router/app_router.gr.dart';
 @RoutePage()
 class EventSettingsBasePage extends StatelessWidget {
   const EventSettingsBasePage({super.key});
+
+  Widget _buildDeleteEventButton(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+      sliver: SliverToBoxAdapter(
+        child: InkWell(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+              color: LemonColor.coralReef.withOpacity(0.18),
+            ),
+            padding: EdgeInsets.all(Spacing.small),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                    child: ThemeSvgIcon(
+                      color: LemonColor.coralReef,
+                      builder: (filter) => Assets.icons.icDelete.svg(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        colorFilter: filter,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: Spacing.small),
+                Text(
+                  t.event.deleteEvent,
+                  style: Typo.medium.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +116,11 @@ class EventSettingsBasePage extends StatelessWidget {
                         horizontal: Spacing.smMedium,
                       ),
                       sliver: SliverToBoxAdapter(
-                        child: CreateEventBannerPhotoCard(),
+                        child: CreateEventBannerPhotoCard(
+                          thumbnailUrl: EventUtils.getEventThumbnailUrl(
+                            event: event,
+                          ),
+                        ),
                       ),
                     ),
                     SliverPadding(
@@ -78,8 +132,16 @@ class EventSettingsBasePage extends StatelessWidget {
                       ),
                       sliver: SliverToBoxAdapter(
                         child: LemonTextField(
+                          initialText: event.title,
                           hintText: t.event.eventCreation.titleHint,
-                          onChange: (value) {},
+                          onFieldSubmitted: (value) {
+                            context.read<EditEventDetailBloc>().add(
+                                  EditEventDetailEventUpdateTitle(
+                                    eventId: event.id ?? '',
+                                    title: value,
+                                  ),
+                                );
+                          },
                           style: Typo.mediumPlus.copyWith(
                             color: colorScheme.onSecondary,
                             fontWeight: FontWeight.w500,
@@ -112,6 +174,7 @@ class EventSettingsBasePage extends StatelessWidget {
                       sliver: SliverToBoxAdapter(
                         child: SettingTileWidget(
                           title: t.event.virtualLinkSetting.virtualLink,
+                          subTitle: event.virtualUrl,
                           leading: Icon(
                             Icons.videocam_rounded,
                             size: 18.w,
@@ -133,7 +196,15 @@ class EventSettingsBasePage extends StatelessWidget {
                               useRootNavigator: true,
                               builder: (mContext) {
                                 return EventVirtualLinkSettingPage(
-                                  onConfirm: (virtualUrl) {},
+                                  defaultUrl: event.virtualUrl,
+                                  onConfirm: (virtualUrl) {
+                                    context.read<EditEventDetailBloc>().add(
+                                          EditEventDetailEventUpdateVirtualUrl(
+                                            eventId: event.id ?? '',
+                                            virtualUrl: virtualUrl,
+                                          ),
+                                        );
+                                  },
                                 );
                               },
                             );
@@ -167,7 +238,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           radius: LemonRadius.small,
                           onTap: () {
                             showCupertinoModalBottomSheet(
-                              useRootNavigator: true,
+                              // useRootNavigator: true,
                               context: context,
                               backgroundColor: LemonColor.atomicBlack,
                               topRadius: Radius.circular(LemonRadius.small),
@@ -203,9 +274,14 @@ class EventSettingsBasePage extends StatelessWidget {
                           onTap: () {
                             AutoRouter.of(context).navigate(
                               EventDescriptionFieldRoute(
-                                description: '',
+                                description: event.description ?? '',
                                 onDescriptionChanged: (value) {
-                                  // Add description change handler
+                                  context.read<EditEventDetailBloc>().add(
+                                        EditEventDetailEventUpdateDescription(
+                                          eventId: event.id ?? '',
+                                          description: value,
+                                        ),
+                                      );
                                 },
                               ),
                             );
@@ -223,9 +299,14 @@ class EventSettingsBasePage extends StatelessWidget {
                       sliver: SliverToBoxAdapter(
                         child: SelectEventTagsDropdown(
                           onChange: (tags) {
-                            // Add tags change handler
+                            context.read<EditEventDetailBloc>().add(
+                                  EditEventDetailEventUpdateTags(
+                                    eventId: event.id ?? '',
+                                    tags: tags,
+                                  ),
+                                );
                           },
-                          initialSelectedTags: const [],
+                          initialSelectedTags: event.tags ?? [],
                         ),
                       ),
                     ),
@@ -254,6 +335,28 @@ class EventSettingsBasePage extends StatelessWidget {
                         initialEvent: event,
                       ),
                     ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Spacing.medium,
+                        ),
+                        child: Container(
+                          height: 1.h,
+                          decoration: BoxDecoration(
+                            color: colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CreateEventContentSection(
+                        initialEvent: event,
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.medium),
+                    ),
+                    _buildDeleteEventButton(context),
                   ],
                 ),
               ),

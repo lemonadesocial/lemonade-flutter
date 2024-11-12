@@ -21,6 +21,10 @@ class EditEventDetailBloc
         ) {
     on<EditEventDetailEventUpdateEvent>(_onUpdate);
     on<EditEventDetailEventUpdateParentEvent>(_onUpdateParentEventId);
+    on<EditEventDetailEventUpdateTitle>(_onUpdateTitle);
+    on<EditEventDetailEventUpdateDescription>(_onUpdateDescription);
+    on<EditEventDetailEventUpdateVirtualUrl>(_onUpdateVirtualUrl);
+    on<EditEventDetailEventUpdateTags>(_onUpdateTags);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
@@ -31,6 +35,68 @@ class EditEventDetailBloc
   ) {
     emit(
       state.copyWith(parentEventId: event.parentEventId),
+    );
+  }
+
+  Future<void> _updateEventAndEmitStatus({
+    required Input$EventInput input,
+    required String eventId,
+    required Emitter emit,
+  }) async {
+    emit(state.copyWith(status: EditEventDetailBlocStatus.loading));
+    final result = await eventRepository.updateEvent(
+      input: input,
+      id: eventId,
+    );
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(status: EditEventDetailBlocStatus.failure)),
+      (eventDetail) =>
+          emit(state.copyWith(status: EditEventDetailBlocStatus.success)),
+    );
+  }
+
+  Future<void> _onUpdateTitle(
+    EditEventDetailEventUpdateTitle event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(title: event.title),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateDescription(
+    EditEventDetailEventUpdateDescription event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(description: event.description),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateVirtualUrl(
+    EditEventDetailEventUpdateVirtualUrl event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(virtual_url: event.virtualUrl),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateTags(
+    EditEventDetailEventUpdateTags event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(tags: event.tags),
+      eventId: event.eventId,
+      emit: emit,
     );
   }
 
@@ -101,6 +167,26 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
   const factory EditEventDetailEvent.updateParentEvent({
     String? parentEventId,
   }) = EditEventDetailEventUpdateParentEvent;
+
+  const factory EditEventDetailEvent.updateTitle({
+    required String eventId,
+    required String title,
+  }) = EditEventDetailEventUpdateTitle;
+
+  const factory EditEventDetailEvent.updateDescription({
+    required String eventId,
+    required String description,
+  }) = EditEventDetailEventUpdateDescription;
+
+  const factory EditEventDetailEvent.updateVirtualUrl({
+    required String eventId,
+    required String virtualUrl,
+  }) = EditEventDetailEventUpdateVirtualUrl;
+
+  const factory EditEventDetailEvent.updateTags({
+    required String eventId,
+    required List<String> tags,
+  }) = EditEventDetailEventUpdateTags;
 
   const factory EditEventDetailEvent.update({
     required String eventId,

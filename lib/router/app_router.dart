@@ -283,6 +283,9 @@ final eventDetailRoutes = AutoRoute(
         AutoRoute(
           page: EventSubEventsSettingRoute.page,
         ),
+        AutoRoute(
+          page: EventDescriptionFieldRoute.page,
+        ),
         // AutoRoute(
         //   page: EventTeamMembersSettingRoute.page,
         //   children: [

@@ -132,7 +132,7 @@ class LemonTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: placeholderStyle ??
                 theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.outlineVariant,
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
             errorText: errorText,
             enabledBorder: border,
