@@ -131,6 +131,11 @@ class EventSettingsBasePage extends StatelessWidget {
                               thumbnailUrl: EventUtils.getEventThumbnailUrl(
                                 event: event,
                               ),
+                              onTapAddPhoto: () {
+                                AutoRouter.of(context).navigate(
+                                  const EventPhotosSettingRoute(),
+                                );
+                              },
                             ),
                           ),
                         ),

@@ -24,8 +24,10 @@ class CreateEventContentSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isEditMode = initialEvent != null;
-    final speakerCount =
+    final speakersCount =
         isEditMode ? initialEvent?.speakerUsersExpanded?.length ?? 0 : 0;
+    final photosCount =
+        isEditMode ? initialEvent?.newNewPhotos?.length ?? 0 : 0;
 
     return Container(
       width: double.infinity,
@@ -51,6 +53,30 @@ class CreateEventContentSection extends StatelessWidget {
               children: [
                 _buildSettingRow(
                   context,
+                  icon: Assets.icons.icPhotos,
+                  title: t.event.eventPhotos.photos,
+                  trailingIcon: Assets.icons.icArrowRight,
+                  onTap: () {
+                    AutoRouter.of(context).navigate(
+                      const EventPhotosSettingRoute(),
+                    );
+                  },
+                  value: photosCount > 0 ? photosCount.toString() : null,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: Spacing.xSmall),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: LemonColor.chineseBlack,
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+            ),
+            child: Column(
+              children: [
+                _buildSettingRow(
+                  context,
                   icon: Assets.icons.icMic,
                   title: t.event.configuration.speakers,
                   trailingIcon: Assets.icons.icArrowRight,
@@ -59,7 +85,7 @@ class CreateEventContentSection extends StatelessWidget {
                       const EventSpeakersRoute(),
                     );
                   },
-                  value: speakerCount > 0 ? speakerCount.toString() : null,
+                  value: speakersCount > 0 ? speakersCount.toString() : null,
                 ),
               ],
             ),
