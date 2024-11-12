@@ -2,7 +2,9 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
@@ -22,6 +24,8 @@ class CreateEventContentSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isEditMode = initialEvent != null;
+    final speakerCount =
+        isEditMode ? initialEvent?.speakerUsersExpanded?.length ?? 0 : 0;
 
     return Container(
       width: double.infinity,
@@ -51,9 +55,11 @@ class CreateEventContentSection extends StatelessWidget {
                   title: t.event.configuration.speakers,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
-                    // TODO: Handle promotions navigation
+                    AutoRouter.of(context).navigate(
+                      const EventSpeakersRoute(),
+                    );
                   },
-                  value: "5",
+                  value: speakerCount > 0 ? speakerCount.toString() : null,
                 ),
               ],
             ),

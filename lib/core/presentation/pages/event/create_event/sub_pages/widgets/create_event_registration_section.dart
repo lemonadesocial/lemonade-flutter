@@ -2,9 +2,12 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/guest_limit_select_bottomsheet.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_subevents_setting_page/event_subevents_setting_page.dart';
+import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -110,6 +113,14 @@ class CreateEventRegistrationSection extends StatelessWidget {
     final guestLimitPer = isEditMode
         ? initialEvent!.guestLimitPer?.toStringAsFixed(0)
         : state?.guestLimitPer;
+
+    final ticketsCount =
+        isEditMode ? initialEvent?.eventTicketTypes?.length ?? 0 : 0;
+    final discountCount =
+        isEditMode ? initialEvent?.paymentTicketDiscounts?.length ?? 0 : 0;
+    final applicationFormCount =
+        isEditMode ? initialEvent?.applicationQuestions?.length ?? 0 : 0;
+    final rewardCount = isEditMode ? initialEvent?.rewards?.length ?? 0 : 0;
 
     return Container(
       width: double.infinity,
@@ -288,13 +299,19 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      _buildSettingRow(context,
-                          icon: Assets.icons.icTicket,
-                          title:
-                              t.event.ticketTierSetting.ticketTierSettingTitle,
-                          trailingIcon: Assets.icons.icArrowRight, onTap: () {
-                        // TODO: Handle tickets & payments navigation
-                      }, value: "2"),
+                      _buildSettingRow(
+                        context,
+                        icon: Assets.icons.icTicket,
+                        title: t.event.ticketTierSetting.ticketTierSettingTitle,
+                        trailingIcon: Assets.icons.icArrowRight,
+                        onTap: () {
+                          AutoRouter.of(context).navigate(
+                            const EventTicketTierSettingRoute(),
+                          );
+                        },
+                        value:
+                            ticketsCount > 0 ? ticketsCount.toString() : null,
+                      ),
                     ],
                   ),
                 ),
@@ -318,13 +335,16 @@ class CreateEventRegistrationSection extends StatelessWidget {
                     children: [
                       _buildSettingRow(
                         context,
-                        icon: Assets.icons.icGift,
+                        icon: Assets.icons.icDiscount,
                         title: t.event.eventPromotions.eventPromotionsTitle,
                         trailingIcon: Assets.icons.icArrowRight,
                         onTap: () {
-                          // TODO: Handle promotions navigation
+                          AutoRouter.of(context).navigate(
+                            const EventDiscountSettingRoute(),
+                          );
                         },
-                        value: "5",
+                        value:
+                            discountCount > 0 ? discountCount.toString() : null,
                       ),
                     ],
                   ),
@@ -347,9 +367,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   title: t.event.configuration.applicationForm,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
-                    // TODO: Handle promotions navigation
+                    AutoRouter.of(context).navigate(
+                      EventApplicationFormSettingRoute(),
+                    );
                   },
-                  value: "5",
+                  value: applicationFormCount > 0
+                      ? applicationFormCount.toString()
+                      : null,
                 ),
               ],
             ),
@@ -369,9 +393,11 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   title: t.event.configuration.rewards,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
-                    // TODO: Handle promotions navigation
+                    AutoRouter.of(context).navigate(
+                      const EventRewardSettingRoute(),
+                    );
                   },
-                  value: "5",
+                  value: rewardCount > 0 ? rewardCount.toString() : null,
                 ),
               ],
             ),
@@ -391,9 +417,37 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   title: t.event.subEvent.sessionsSettings,
                   trailingIcon: Assets.icons.icArrowRight,
                   onTap: () {
-                    // TODO: Handle promotions navigation
+                    showCupertinoModalBottomSheet(
+                      barrierColor: LemonColor.black50,
+                      bounce: true,
+                      expand: true,
+                      backgroundColor: LemonColor.atomicBlack,
+                      context: context,
+                      builder: (newContext) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(18)),
+                            color: LemonColor.atomicBlack,
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                          child: FractionallySizedBox(
+                            heightFactor: 1,
+                            child: Column(
+                              children: [
+                                const BottomSheetGrabber(),
+                                Expanded(
+                                  child: EventSubEventsSettingPage(
+                                    event: initialEvent,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
-                  value: "5",
                 ),
               ],
             ),
@@ -457,21 +511,21 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   }
                 },
               )
-            else if (value != null) ...[
-              Text(
-                value,
-                style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-              ),
-              SizedBox(width: Spacing.xSmall),
-              if (trailingIcon != null)
-                ThemeSvgIcon(
-                  color: colorScheme.onSurfaceVariant,
-                  builder: (filter) => trailingIcon.svg(
-                    width: Sizing.xSmall,
-                    height: Sizing.xSmall,
-                    colorFilter: filter,
-                  ),
+            else ...[
+              if (value != null)
+                Text(
+                  value,
+                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
                 ),
+              SizedBox(width: Spacing.xSmall),
+              ThemeSvgIcon(
+                color: colorScheme.onSurfaceVariant,
+                builder: (filter) => trailingIcon!.svg(
+                  width: Sizing.xSmall,
+                  height: Sizing.xSmall,
+                  colorFilter: filter,
+                ),
+              ),
             ],
           ],
         ),
