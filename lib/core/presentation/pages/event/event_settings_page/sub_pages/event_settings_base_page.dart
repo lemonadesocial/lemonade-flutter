@@ -1,9 +1,12 @@
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_content_section.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -29,51 +32,6 @@ import 'package:app/router/app_router.gr.dart';
 @RoutePage()
 class EventSettingsBasePage extends StatelessWidget {
   const EventSettingsBasePage({super.key});
-
-  Widget _buildDeleteEventButton(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-      sliver: SliverToBoxAdapter(
-        child: InkWell(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-              color: LemonColor.coralReef.withOpacity(0.18),
-            ),
-            padding: EdgeInsets.all(Spacing.small),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: Sizing.mSmall,
-                    height: Sizing.mSmall,
-                    child: ThemeSvgIcon(
-                      color: LemonColor.coralReef,
-                      builder: (filter) => Assets.icons.icDelete.svg(
-                        width: Sizing.mSmall,
-                        height: Sizing.mSmall,
-                        colorFilter: filter,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: Spacing.small),
-                Text(
-                  t.event.deleteEvent,
-                  style: Typo.medium.copyWith(
-                    color: LemonColor.coralReef,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +195,10 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              title: t.event.locationSetting.chooseLocation,
+                              title: event.address != null
+                                  ? event.address?.title ?? ''
+                                  : t.event.locationSetting.chooseLocation,
+                              subTitle: event.address?.street1,
                               leading: Icon(
                                 Icons.location_on_outlined,
                                 size: 18.w,
@@ -254,7 +215,6 @@ class EventSettingsBasePage extends StatelessWidget {
                               radius: LemonRadius.small,
                               onTap: () {
                                 showCupertinoModalBottomSheet(
-                                  // useRootNavigator: true,
                                   context: context,
                                   backgroundColor: LemonColor.atomicBlack,
                                   topRadius: Radius.circular(LemonRadius.small),
@@ -267,6 +227,25 @@ class EventSettingsBasePage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (event.address != null) ...[
+                          SliverPadding(
+                            padding: EdgeInsets.only(
+                              top: Spacing.xSmall,
+                              left: Spacing.smMedium,
+                              right: Spacing.smMedium,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(LemonRadius.small),
+                                child: CreateEventMapLocationCard(
+                                  latitude: event.address?.latitude ?? 0,
+                                  longitude: event.address?.longitude ?? 0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.xSmall),
                         ),
@@ -372,7 +351,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.medium),
                         ),
-                        _buildDeleteEventButton(context),
+                        _buildDeleteEventButton(context, event),
                       ],
                     ),
                   ),
@@ -382,6 +361,62 @@ class EventSettingsBasePage extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  Widget _buildDeleteEventButton(BuildContext context, Event event) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+      sliver: SliverToBoxAdapter(
+        child: InkWell(
+          onTap: () {
+            showCupertinoModalBottomSheet(
+              context: context,
+              barrierColor: Colors.black.withOpacity(0.8),
+              topRadius: Radius.circular(30.r),
+              builder: (mContext) {
+                return DeleteEventConfirmationBottomSheet(
+                  event: event,
+                );
+              },
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+              color: LemonColor.coralReef.withOpacity(0.18),
+            ),
+            padding: EdgeInsets.all(Spacing.small),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                    child: ThemeSvgIcon(
+                      color: LemonColor.coralReef,
+                      builder: (filter) => Assets.icons.icDelete.svg(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        colorFilter: filter,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: Spacing.small),
+                Text(
+                  t.event.deleteEvent,
+                  style: Typo.medium.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
