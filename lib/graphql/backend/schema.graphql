@@ -1,4 +1,4 @@
-directive @expanded(from: String!, to: String!, resolve: Boolean, return_type: String) on FIELD_DEFINITION
+directive @expanded(from: String!, to: String!, resolve: Boolean, return_type: String, include_inactive: Boolean) on FIELD_DEFINITION
 
 directive @secure(paths: [String!]!) on FIELD_DEFINITION
 
@@ -24,7 +24,7 @@ type Query {
   getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
   getEvent(_id: MongoID, shortid: String): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, host_filter: HostFilter): [Event!]!
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
@@ -138,6 +138,7 @@ type Query {
   listUserServices: [UserServiceOffer!]!
   listUserExpertises: [UserExpertise!]!
   getUserWalletRequest(wallet: String!): UserWalletRequest!
+  listEventVotings(event: MongoID!, votings: [MongoID!], hidden: Boolean): [EventVoting!]!
 }
 
 type Badge {
@@ -821,6 +822,7 @@ type EventSession {
   description: String
   photos: [MongoID!]
   speaker_users: [MongoID!]
+  votings: [MongoID!]
   photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
   speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
 }
@@ -1196,7 +1198,18 @@ input FilterEventInput {
 input HostFilter {
   host: MongoID!
   include_owned_events: Boolean
+  include_cohost_events: Boolean
   include_subevents: Boolean
+}
+
+input EventSortInput {
+  start: SortOrder
+  end: SortOrder
+}
+
+enum SortOrder {
+  asc
+  desc
 }
 
 enum EventTense {
@@ -1627,6 +1640,7 @@ type EmailSetting {
   disabled: Boolean
   scheduled_at: DateTimeISO
   recipient_types: [EmailRecipientType!]
+  recipient_filters: EmailRecipientFilters
   sent_at: DateTimeISO
   recipients: [String!]
   opened: [EmailTracking!]
@@ -1640,10 +1654,23 @@ type EmailSetting {
 enum EmailRecipientType {
   assigned
   attending
+  registration
   invited
   ticket_type_whitelisted
   join_requester
   event_hosts
+  ticket_cancelled
+}
+
+type EmailRecipientFilters {
+  ticket_types: [MongoID!]
+  join_request_states: [EventJoinRequestState!]
+}
+
+enum EventJoinRequestState {
+  pending
+  approved
+  declined
 }
 
 type EmailTracking {
@@ -1654,6 +1681,7 @@ type EmailTracking {
 enum EmailTemplateType {
   invitation
   invitation_cancelled
+  event_cancelled
   join_request_approved
   join_request_approved_with_tickets
   join_request_declined
@@ -1764,12 +1792,6 @@ type EventJoinRequest {
   event_expanded: Event
   decided_by_expanded: User
   non_login_user: NonloginUser
-}
-
-enum EventJoinRequestState {
-  pending
-  approved
-  declined
 }
 
 type RequestedTicket {
@@ -2974,8 +2996,17 @@ type Ticket {
 type TicketStatistics {
   all: Float!
   checked_in: Float!
+  invited: Float!
+  issued: Float!
+  cancelled: Float!
+  applicants: [JoinRequestStatistic!]!
   not_checked_in: Float!
   ticket_types: [TicketStatisticPerTier!]!
+}
+
+type JoinRequestStatistic {
+  state: EventJoinRequestState!
+  count: Float!
 }
 
 type TicketStatisticPerTier {
@@ -3170,6 +3201,33 @@ type UserWalletRequest {
   token: String!
 }
 
+type EventVoting {
+  _id: MongoID!
+  hidden: Boolean
+  state: EventVotingState!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  title: String!
+  description: String
+  stage: String
+  timezone: String
+  speakers: [User!]!
+  voting_options: [VotingOption!]!
+  selected_option: String
+}
+
+enum EventVotingState {
+  not_started
+  starting
+  paused
+  closed
+}
+
+type VotingOption {
+  option_id: String!
+  voters: [User!]!
+}
+
 type Mutation {
   createBadge(input: CreateBadgeInput!): Badge!
   updateBadge(input: UpdateBadgeInput!, _id: MongoID!): Badge!
@@ -3337,6 +3395,7 @@ type Mutation {
   createUserService(title: String!): UserServiceOffer!
   createUserExpertise(title: String!): UserExpertise!
   setUserWallet(token: String!, signature: String!): Boolean!
+  castVote(input: CastVoteInput!): Boolean!
 }
 
 input CreateBadgeInput {
@@ -3527,6 +3586,7 @@ input EventSessionInput {
   description: String
   photos: [MongoID!]
   speaker_users: [MongoID!]
+  votings: [MongoID!]
 }
 
 input VideoInput {
@@ -3628,10 +3688,16 @@ input DecideEventCohostRequestInput {
 input SendEventEmailSettingTestEmailsInput {
   custom_subject_html: String
   custom_body_html: String
+  recipient_filters: EmailRecipientFiltersInput
   event: MongoID
   type: EmailTemplateType
   _id: MongoID
   test_recipients: [String!]!
+}
+
+input EmailRecipientFiltersInput {
+  ticket_types: [MongoID!]
+  join_request_states: [EventJoinRequestState!]
 }
 
 input CreateEventEmailSettingInput {
@@ -3641,6 +3707,7 @@ input CreateEventEmailSettingInput {
   disabled: Boolean
   scheduled_at: DateTimeISO
   recipient_types: [EmailRecipientType!]
+  recipient_filters: EmailRecipientFiltersInput
   event: MongoID!
   type: EmailTemplateType!
 }
@@ -3652,6 +3719,7 @@ input UpdateEventEmailSettingInput {
   disabled: Boolean
   scheduled_at: DateTimeISO
   recipient_types: [EmailRecipientType!]
+  recipient_filters: EmailRecipientFiltersInput
   _id: MongoID!
 }
 
@@ -4441,6 +4509,11 @@ input DeleteUserFriendshipInput {
   user: MongoID!
 }
 
+input CastVoteInput {
+  voting_id: MongoID!
+  option_id: String
+}
+
 type Subscription {
   postCreated: Post!
   notificationCreated: Notification!
@@ -4448,6 +4521,7 @@ type Subscription {
   roomUpdated(_id: MongoID!): Room!
   roomAccess(_id: MongoID!): Boolean!
   roomAction(_id: MongoID!): RoomActionPayload!
+  votingUpdated(_id: MongoID!): MongoID!
 }
 
 union RoomActionPayload = RoomActionPayload_Notify | RoomActionPayload_Renew | RoomActionPayload_AccessRequested | RoomActionPayload_AccessRequestDecided | RoomActionPayload_StageInvited | RoomActionPayload_StageModified | RoomActionPayload_StageRequestDecided | RoomActionPayload_StageRequested | RoomActionPayload_AttendingUsersModified

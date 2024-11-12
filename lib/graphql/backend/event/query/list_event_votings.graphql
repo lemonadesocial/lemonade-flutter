@@ -1,0 +1,11 @@
+# import '../fragment/event_voting.graphql';
+
+query ListEventVotings(
+  $event: MongoID!
+  $votings: [MongoID!]
+  $hidden: Boolean
+) {
+  listEventVotings(event: $event, votings: $votings, hidden: $hidden) {
+    ...EventVoting
+  }
+}

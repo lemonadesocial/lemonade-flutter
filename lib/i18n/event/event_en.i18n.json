@@ -795,5 +795,11 @@
         "duplicatingSessionsDescription": "Please wait while we set up your $n duplicate sessions. This should only take a few seconds.",
         "duplicateSuccess": "Successfully duplicated!",
         "duplicateSuccessDescription": "We have set up $n deplicated events for you. You can access each one them below."
+    },
+    "eventVoting": {
+        "debates": "Debates",
+        "debateStarting": "Live",
+        "debatePaused": "Debate paused",
+        "debateEnded": "Debate ended"
     }
 }
