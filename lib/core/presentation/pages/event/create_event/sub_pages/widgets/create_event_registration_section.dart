@@ -282,176 +282,180 @@ class CreateEventRegistrationSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: Spacing.small),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: LemonColor.chineseBlack,
-                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+          if (isEditMode) ...[
+            SizedBox(height: Spacing.small),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: LemonColor.chineseBlack,
+                      borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingRow(
+                          context,
+                          icon: Assets.icons.icTicket,
+                          title:
+                              t.event.ticketTierSetting.ticketTierSettingTitle,
+                          trailingIcon: Assets.icons.icArrowRight,
+                          onTap: () {
+                            AutoRouter.of(context).navigate(
+                              const EventTicketTierSettingRoute(),
+                            );
+                          },
+                          value:
+                              ticketsCount > 0 ? ticketsCount.toString() : null,
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      _buildSettingRow(
-                        context,
-                        icon: Assets.icons.icTicket,
-                        title: t.event.ticketTierSetting.ticketTierSettingTitle,
-                        trailingIcon: Assets.icons.icArrowRight,
-                        onTap: () {
-                          AutoRouter.of(context).navigate(
-                            const EventTicketTierSettingRoute(),
-                          );
-                        },
-                        value:
-                            ticketsCount > 0 ? ticketsCount.toString() : null,
-                      ),
-                    ],
+                  Container(
+                    height: 1.h,
+                    decoration: BoxDecoration(
+                      color: LemonColor.white06,
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    margin: EdgeInsets.only(
+                      left: Spacing.xLarge + Spacing.superExtraSmall,
+                    ),
                   ),
-                ),
-                Container(
-                  height: 1.h,
-                  decoration: BoxDecoration(
-                    color: LemonColor.white06,
-                    borderRadius: BorderRadius.circular(30.r),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: LemonColor.chineseBlack,
+                      borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    ),
+                    child: Column(
+                      children: [
+                        _buildSettingRow(
+                          context,
+                          icon: Assets.icons.icDiscount,
+                          title: t.event.eventPromotions.eventPromotionsTitle,
+                          trailingIcon: Assets.icons.icArrowRight,
+                          onTap: () {
+                            AutoRouter.of(context).navigate(
+                              const EventDiscountSettingRoute(),
+                            );
+                          },
+                          value: discountCount > 0
+                              ? discountCount.toString()
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
-                  margin: EdgeInsets.only(
-                    left: Spacing.xLarge + Spacing.superExtraSmall,
+                ],
+              ),
+            ),
+            SizedBox(height: Spacing.small),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
+              ),
+              child: Column(
+                children: [
+                  _buildSettingRow(
+                    context,
+                    icon: Assets.icons.icApplicationForm,
+                    title: t.event.configuration.applicationForm,
+                    trailingIcon: Assets.icons.icArrowRight,
+                    onTap: () {
+                      AutoRouter.of(context).navigate(
+                        EventApplicationFormSettingRoute(),
+                      );
+                    },
+                    value: applicationFormCount > 0
+                        ? applicationFormCount.toString()
+                        : null,
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: LemonColor.chineseBlack,
-                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+                ],
+              ),
+            ),
+            SizedBox(height: Spacing.small),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
+              ),
+              child: Column(
+                children: [
+                  _buildSettingRow(
+                    context,
+                    icon: Assets.icons.icGift,
+                    title: t.event.configuration.rewards,
+                    trailingIcon: Assets.icons.icArrowRight,
+                    onTap: () {
+                      AutoRouter.of(context).navigate(
+                        const EventRewardSettingRoute(),
+                      );
+                    },
+                    value: rewardCount > 0 ? rewardCount.toString() : null,
                   ),
-                  child: Column(
-                    children: [
-                      _buildSettingRow(
-                        context,
-                        icon: Assets.icons.icDiscount,
-                        title: t.event.eventPromotions.eventPromotionsTitle,
-                        trailingIcon: Assets.icons.icArrowRight,
-                        onTap: () {
-                          AutoRouter.of(context).navigate(
-                            const EventDiscountSettingRoute(),
-                          );
-                        },
-                        value:
-                            discountCount > 0 ? discountCount.toString() : null,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: Spacing.small),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-            child: Column(
-              children: [
-                _buildSettingRow(
-                  context,
-                  icon: Assets.icons.icApplicationForm,
-                  title: t.event.configuration.applicationForm,
-                  trailingIcon: Assets.icons.icArrowRight,
-                  onTap: () {
-                    AutoRouter.of(context).navigate(
-                      EventApplicationFormSettingRoute(),
-                    );
-                  },
-                  value: applicationFormCount > 0
-                      ? applicationFormCount.toString()
-                      : null,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: Spacing.small),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-            child: Column(
-              children: [
-                _buildSettingRow(
-                  context,
-                  icon: Assets.icons.icGift,
-                  title: t.event.configuration.rewards,
-                  trailingIcon: Assets.icons.icArrowRight,
-                  onTap: () {
-                    AutoRouter.of(context).navigate(
-                      const EventRewardSettingRoute(),
-                    );
-                  },
-                  value: rewardCount > 0 ? rewardCount.toString() : null,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: Spacing.small),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-            child: Column(
-              children: [
-                _buildSettingRow(
-                  context,
-                  icon: Assets.icons.icSessions,
-                  title: t.event.subEvent.sessionsSettings,
-                  trailingIcon: Assets.icons.icArrowRight,
-                  onTap: () {
-                    showCupertinoModalBottomSheet(
-                      barrierColor: LemonColor.black50,
-                      bounce: true,
-                      expand: true,
-                      backgroundColor: LemonColor.atomicBlack,
-                      context: context,
-                      builder: (newContext) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(18)),
-                            color: LemonColor.atomicBlack,
-                          ),
-                          clipBehavior: Clip.hardEdge,
-                          child: FractionallySizedBox(
-                            heightFactor: 1,
-                            child: Column(
-                              children: [
-                                const BottomSheetGrabber(),
-                                Expanded(
-                                  child: EventSubEventsSettingPage(
-                                    event: initialEvent,
-                                  ),
-                                ),
-                              ],
+            SizedBox(height: Spacing.small),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
+              ),
+              child: Column(
+                children: [
+                  _buildSettingRow(
+                    context,
+                    icon: Assets.icons.icSessions,
+                    title: t.event.subEvent.sessionsSettings,
+                    trailingIcon: Assets.icons.icArrowRight,
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        barrierColor: LemonColor.black50,
+                        bounce: true,
+                        expand: true,
+                        backgroundColor: LemonColor.atomicBlack,
+                        context: context,
+                        builder: (newContext) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(18)),
+                              color: LemonColor.atomicBlack,
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+                            clipBehavior: Clip.hardEdge,
+                            child: FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  const BottomSheetGrabber(),
+                                  Expanded(
+                                    child: EventSubEventsSettingPage(
+                                      event: initialEvent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
