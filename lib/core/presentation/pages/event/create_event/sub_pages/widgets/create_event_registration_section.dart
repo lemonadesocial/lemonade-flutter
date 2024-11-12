@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/guest_limit_select_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -31,15 +32,31 @@ class CreateEventRegistrationSection extends StatelessWidget {
     final state = isEditMode ? null : context.watch<CreateEventBloc>().state;
 
     void handlePrivacyChange(bool? isPrivate) {
-      if (!isEditMode && isPrivate != null) {
+      if (isEditMode) {
+        context.read<EditEventDetailBloc>().add(
+              EditEventDetailEventUpdatePrivate(
+                eventId: initialEvent!.id ?? '',
+                private: isPrivate ?? false,
+              ),
+            );
+      } else {
         context.read<CreateEventBloc>().add(
-              CreateEventEvent.createEventPrivateChanged(private: isPrivate),
+              CreateEventEvent.createEventPrivateChanged(
+                private: isPrivate ?? false,
+              ),
             );
       }
     }
 
     void handleApprovalRequiredChange(bool isRequired) {
-      if (!isEditMode) {
+      if (isEditMode) {
+        context.read<EditEventDetailBloc>().add(
+              EditEventDetailEventUpdateApprovalRequired(
+                eventId: initialEvent!.id ?? '',
+                approvalRequired: isRequired,
+              ),
+            );
+      } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventApprovalRequiredChanged(
                 approvalRequired: isRequired,
@@ -49,7 +66,14 @@ class CreateEventRegistrationSection extends StatelessWidget {
     }
 
     void handleGuestLimitChange(String? limit) {
-      if (!isEditMode) {
+      if (isEditMode) {
+        context.read<EditEventDetailBloc>().add(
+              EditEventDetailEventUpdateGuestLimit(
+                eventId: initialEvent!.id ?? '',
+                guestLimit: limit ?? '',
+              ),
+            );
+      } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventGuestLimitChanged(
                 guestLimit: limit,
@@ -59,7 +83,14 @@ class CreateEventRegistrationSection extends StatelessWidget {
     }
 
     void handleGuestLimitPerChange(String? limitPer) {
-      if (!isEditMode) {
+      if (isEditMode) {
+        context.read<EditEventDetailBloc>().add(
+              EditEventDetailEventUpdateGuestLimitPer(
+                eventId: initialEvent!.id ?? '',
+                guestLimitPer: limitPer ?? '',
+              ),
+            );
+      } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventGuestLimitPerChanged(
                 guestLimitPer: limitPer,
@@ -73,10 +104,11 @@ class CreateEventRegistrationSection extends StatelessWidget {
     final approvalRequired = isEditMode
         ? initialEvent!.approvalRequired
         : (state?.approvalRequired ?? false);
-    final guestLimit =
-        isEditMode ? initialEvent!.guestLimit?.toString() : state?.guestLimit;
+    final guestLimit = isEditMode
+        ? initialEvent!.guestLimit?.toStringAsFixed(0)
+        : state?.guestLimit;
     final guestLimitPer = isEditMode
-        ? initialEvent!.guestLimitPer?.toString()
+        ? initialEvent!.guestLimitPer?.toStringAsFixed(0)
         : state?.guestLimitPer;
 
     return Container(

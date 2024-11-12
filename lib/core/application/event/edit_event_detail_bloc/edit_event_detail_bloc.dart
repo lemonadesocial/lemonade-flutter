@@ -25,6 +25,10 @@ class EditEventDetailBloc
     on<EditEventDetailEventUpdateDescription>(_onUpdateDescription);
     on<EditEventDetailEventUpdateVirtualUrl>(_onUpdateVirtualUrl);
     on<EditEventDetailEventUpdateTags>(_onUpdateTags);
+    on<EditEventDetailEventUpdatePrivate>(_onUpdatePrivate);
+    on<EditEventDetailEventUpdateApprovalRequired>(_onUpdateApprovalRequired);
+    on<EditEventDetailEventUpdateGuestLimit>(_onUpdateGuestLimit);
+    on<EditEventDetailEventUpdateGuestLimitPer>(_onUpdateGuestLimitPer);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
@@ -95,6 +99,52 @@ class EditEventDetailBloc
   ) async {
     await _updateEventAndEmitStatus(
       input: Input$EventInput(tags: event.tags),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdatePrivate(
+    EditEventDetailEventUpdatePrivate event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(private: event.private),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateApprovalRequired(
+    EditEventDetailEventUpdateApprovalRequired event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(approval_required: event.approvalRequired),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateGuestLimit(
+    EditEventDetailEventUpdateGuestLimit event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(guest_limit: double.parse(event.guestLimit)),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
+  Future<void> _onUpdateGuestLimitPer(
+    EditEventDetailEventUpdateGuestLimitPer event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(
+        guest_limit_per: double.parse(event.guestLimitPer),
+      ),
       eventId: event.eventId,
       emit: emit,
     );
@@ -187,6 +237,26 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     required String eventId,
     required List<String> tags,
   }) = EditEventDetailEventUpdateTags;
+
+  const factory EditEventDetailEvent.updatePrivate({
+    required String eventId,
+    required bool private,
+  }) = EditEventDetailEventUpdatePrivate;
+
+  const factory EditEventDetailEvent.updateApprovalRequired({
+    required String eventId,
+    required bool approvalRequired,
+  }) = EditEventDetailEventUpdateApprovalRequired;
+
+  const factory EditEventDetailEvent.updateGuestLimit({
+    required String eventId,
+    required String guestLimit,
+  }) = EditEventDetailEventUpdateGuestLimit;
+
+  const factory EditEventDetailEvent.updateGuestLimitPer({
+    required String eventId,
+    required String guestLimitPer,
+  }) = EditEventDetailEventUpdateGuestLimitPer;
 
   const factory EditEventDetailEvent.update({
     required String eventId,
