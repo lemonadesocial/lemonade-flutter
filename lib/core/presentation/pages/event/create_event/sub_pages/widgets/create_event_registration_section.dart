@@ -2,7 +2,7 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/guest_limit_select_bottomsheet.dart';
-import 'package:app/core/presentation/pages/event/event_settings_page/sub_pages/event_subevents_setting_page/event_subevents_setting_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_subevents_setting_page/event_subevents_setting_page.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';

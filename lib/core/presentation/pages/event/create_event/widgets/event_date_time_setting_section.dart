@@ -2,7 +2,7 @@ import 'package:app/core/application/event/event_datetime_settings_bloc/event_da
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/timezone_select_bottomsheet.dart';
-import 'package:app/core/presentation/pages/event/event_settings_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_datetime_settings_page/event_datetime_settings_page.dart';
 import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
