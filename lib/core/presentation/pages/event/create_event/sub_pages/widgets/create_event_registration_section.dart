@@ -430,7 +430,8 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           return Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(18)),
+                                top: Radius.circular(18),
+                              ),
                               color: LemonColor.atomicBlack,
                             ),
                             clipBehavior: Clip.hardEdge,
