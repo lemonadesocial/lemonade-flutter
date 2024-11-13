@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_content_section.dart';
@@ -51,7 +50,6 @@ class EventSettingsBasePage extends StatelessWidget {
         return eventDetailState.maybeWhen(
           orElse: () => const SizedBox.shrink(),
           fetched: (event) {
-            print("event.subeventParent : ${event.subeventParent}");
             return BlocListener<EditEventDetailBloc, EditEventDetailState>(
               listener: (context, state) {
                 if (state.status == EditEventDetailBlocStatus.success) {
