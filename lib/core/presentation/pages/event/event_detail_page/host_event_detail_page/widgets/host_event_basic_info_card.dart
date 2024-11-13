@@ -1,6 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
+import 'package:app/core/presentation/pages/event/event_settings_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
@@ -524,7 +524,7 @@ class _EditEventButton extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                AutoRouter.of(context).navigate(const EventControlPanelRoute());
+                AutoRouter.of(context).navigate(const EventSettingsRoute());
               },
               child: Center(
                 child: ThemeSvgIcon(

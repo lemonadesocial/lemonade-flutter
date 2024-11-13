@@ -358,7 +358,7 @@ class EventDetailNavigationBarHelper {
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
           AutoRouter.of(context).push(
-            const EventControlPanelRoute(),
+            const EventSettingsRoute(),
           );
         },
       ),

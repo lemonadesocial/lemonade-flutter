@@ -2,7 +2,7 @@ import 'package:app/core/domain/cubejs/cubejs_enums.dart';
 import 'package:app/core/domain/cubejs/entities/cube_payment/cube_payment.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_discount_setting_page/widgets/discount_item/discount_item.dart';
+import 'package:app/core/presentation/pages/event/event_settings_page/sub_pages/event_discount_setting_page/widgets/discount_item/discount_item.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_insight_page/widgets/insight_ticket_sales/insight_ticket_sales.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/widgets/dashboard_revenue_by_payment_kind.dart';
 import 'package:app/core/presentation/pages/event/event_dashboard/sub_pages/event_dashboard_revenue_page/widgets/dashboard_revenue_by_ticket_type.dart';
