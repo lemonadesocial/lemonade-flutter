@@ -107,6 +107,12 @@ class AppRouter extends $AppRouter {
           path: '/pending-invites',
           page: HomePendingInvitesRoute.page,
         ),
+        AutoRoute(
+          page: EventPreviewRoute.page,
+        ),
+        AutoRoute(
+          page: EventPublishingRoute.page,
+        ),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
@@ -118,6 +124,7 @@ class AppRouter extends $AppRouter {
         collaboratorRoutes,
         ...farcasterRoutes,
         questRoutes,
+        createDuplicatedSubEventsRoutes,
       ];
 }
 
@@ -560,4 +567,8 @@ final questRoutes = AutoRoute(
       page: CompletedQuestsListingRoute.page,
     ),
   ],
+);
+
+final createDuplicatedSubEventsRoutes = AutoRoute(
+  page: CreateDuplicatedSubEventsRoute.page,
 );

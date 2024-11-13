@@ -137,7 +137,10 @@ class GetSubEventsByCalendarBloc
   }
 
   Map<DateTime, List<Event>> _groupEventsByDate(List<Event> events) {
-    return events.where((element) => element.start != null).groupListsBy(
+    final newEvents =
+        [...events].where((element) => element.start != null).toList();
+    newEvents.sort((a, b) => a.start!.compareTo(b.start!));
+    return newEvents.where((element) => element.start != null).groupListsBy(
           (element) => DateTime(
             element.start!.toLocal().year,
             element.start!.toLocal().month,

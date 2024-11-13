@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_datetime_settings_bloc/event_da
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
@@ -36,6 +37,92 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class CreateEventBasePage extends StatelessWidget {
   const CreateEventBasePage({super.key});
 
+  void _onCreateEventSuccess(
+    BuildContext context,
+    CreateEventState state,
+  ) {
+    AutoRouter.of(context).root.popUntilRoot();
+    AutoRouter.of(context).root.push(
+          EventDetailRoute(
+            eventId: state.eventId ?? '',
+            children: [
+              const EventDetailBaseRoute(),
+              EventTicketTierSettingRoute(
+                children: [
+                  EventTicketTiersListingRoute(
+                    onNext: (mContext) => AutoRouter.of(mContext).replace(
+                      const HostEventPublishFlowRoute(),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+  }
+
+  void _onCreateSubEventSuccess(
+    BuildContext context,
+    CreateEventState state,
+  ) async {
+    final t = Translations.of(context);
+    final router = AutoRouter.of(context);
+    router.root.popUntilRoot();
+    final result = await router.root.push<(EventActionType?, Event?)>(
+      EventPreviewRoute(
+        eventId: state.eventId ?? '',
+        buttonBuilder: (mContext, event) => LinearGradientButton.primaryButton(
+          label: t.event.eventPublish.publishSession,
+          onTap: () => AutoRouter.of(mContext)
+              .pop((EventActionType.publishSubEvent, event)),
+        ),
+      ),
+    );
+    final eventAction = result?.$1;
+    final eventData = result?.$2;
+    if (eventAction != EventActionType.publishSubEvent) {
+      router.root.push(EventDetailRoute(eventId: eventData?.id ?? ''));
+      return;
+    }
+    final eventAction2 = await router.root.push<EventActionType?>(
+      EventPublishingRoute(
+        event: eventData!,
+        successButtonBuilder: (mContext) => Padding(
+          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+          child: Column(
+            children: [
+              LinearGradientButton.primaryButton(
+                label: t.event.sessionDuplication.createRecurringSession,
+                onTap: () => AutoRouter.of(mContext)
+                    .pop((EventActionType.duplicateSubEvent)),
+              ),
+              SizedBox(height: Spacing.xSmall),
+              LinearGradientButton.secondaryButton(
+                label: t.event.subEventSettings.viewSubEvents,
+                onTap: () =>
+                    AutoRouter.of(mContext).pop((EventActionType.viewSubEvent)),
+                mode: GradientButtonMode.light,
+                textColor: Colors.black,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (eventAction2 == EventActionType.duplicateSubEvent) {
+      router.root.push(
+        CreateDuplicatedSubEventsRoute(
+          subEvent: eventData,
+        ),
+      );
+      return;
+    }
+    if (eventAction2 == EventActionType.viewSubEvent) {
+      router.root.push(EventDetailRoute(eventId: eventData.id ?? ''));
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -47,24 +134,11 @@ class CreateEventBasePage extends StatelessWidget {
           SnackBarUtils.showSuccess(
             message: t.event.eventCreation.createEventSuccessfully,
           );
-          AutoRouter.of(context).root.popUntilRoot();
-          AutoRouter.of(context).root.push(
-                EventDetailRoute(
-                  eventId: state.eventId ?? '',
-                  children: [
-                    const EventDetailBaseRoute(),
-                    EventTicketTierSettingRoute(
-                      children: [
-                        EventTicketTiersListingRoute(
-                          onNext: (mContext) => AutoRouter.of(mContext).replace(
-                            const HostEventPublishFlowRoute(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+          if (state.parentEventId != null) {
+            _onCreateSubEventSuccess(context, state);
+          } else {
+            _onCreateEventSuccess(context, state);
+          }
         }
       },
       builder: (context, state) => GestureDetector(

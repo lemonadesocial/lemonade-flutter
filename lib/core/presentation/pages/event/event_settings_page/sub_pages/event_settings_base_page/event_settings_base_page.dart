@@ -365,7 +365,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              title: t.event.duplicateSession,
+                              title: t.event.sessionDuplication.duplicateSession,
                               leading: Assets.icons.icCopy.svg(
                                 width: 18.w,
                                 height: 18.w,

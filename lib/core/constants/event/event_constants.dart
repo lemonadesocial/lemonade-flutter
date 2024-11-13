@@ -284,3 +284,13 @@ class EventDateTimeConstants {
     );
   }
 }
+
+enum EventActionType {
+  viewEvent,
+  viewSubEvent,
+  editEvent,
+  editSubEvent,
+  publishEvent,
+  publishSubEvent,
+  duplicateSubEvent,
+}

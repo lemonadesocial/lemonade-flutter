@@ -1,5 +1,4 @@
 import 'package:app/core/presentation/widgets/lemon_inner_shadow.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -158,8 +157,8 @@ class LinearGradientButton extends StatelessWidget {
         label: label,
         loadingWhen: loadingWhen ?? false,
         textStyle: textStyle ??
-            Typo.medium.copyWith(
-              fontWeight: FontWeight.w600,
+            Typo.mediumPlus.copyWith(
+              fontWeight: FontWeight.w500,
               color: textColor ?? Colors.white,
             ),
         mode: GradientButtonMode.lavenderMode,
@@ -185,10 +184,12 @@ class LinearGradientButton extends StatelessWidget {
         label: label,
         loadingWhen: loadingWhen ?? false,
         textStyle: textStyle ??
-            Typo.medium.copyWith(
-              fontFamily: FontFamily.nohemiVariable,
-              fontWeight: FontWeight.w600,
-              color: textColor ?? LemonColor.white,
+            Typo.mediumPlus.copyWith(
+              fontWeight: FontWeight.w500,
+              color: textColor ??
+                  (mode == GradientButtonMode.light
+                      ? Colors.black
+                      : LemonColor.white),
             ),
         mode: mode ?? GradientButtonMode.defaultMode,
         height: height ?? Sizing.large,
