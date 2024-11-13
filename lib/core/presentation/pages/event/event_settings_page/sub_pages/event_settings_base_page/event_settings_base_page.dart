@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_content_section.dart';
@@ -365,7 +366,8 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              title: t.event.sessionDuplication.duplicateSession,
+                              title:
+                                  t.event.sessionDuplication.duplicateSession,
                               leading: Assets.icons.icCopy.svg(
                                 width: 18.w,
                                 height: 18.w,
@@ -379,7 +381,11 @@ class EventSettingsBasePage extends StatelessWidget {
                                 color: colorScheme.onSecondary,
                               ),
                               radius: LemonRadius.small,
-                              onTap: () {},
+                              onTap: () {
+                                AutoRouter.of(context).pop(
+                                  (EventActionType.duplicateSubEvent),
+                                );
+                              },
                             ),
                           ),
                         ),
