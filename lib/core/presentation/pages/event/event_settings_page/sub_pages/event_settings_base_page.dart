@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -10,8 +11,12 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -37,6 +42,10 @@ class EventSettingsBasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final authUser = context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
 
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, eventDetailState) {
@@ -59,7 +68,50 @@ class EventSettingsBasePage extends StatelessWidget {
                   backgroundColor: colorScheme.primary,
                   appBar: LemonAppBar(
                     title: t.common.settings,
-                    hideLeading: true,
+                    leading: Container(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: Sizing.medium,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.superExtraSmall,
+                          vertical: Spacing.superExtraSmall,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: LemonColor.white09,
+                            width: 1,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            LemonNetworkImage(
+                              imageUrl:
+                                  AvatarUtils.getAvatarUrl(user: authUser),
+                              placeholder: Assets.icons.icPerson.svg(
+                                width: Sizing.mSmall,
+                                height: Sizing.mSmall,
+                              ),
+                              width: Sizing.mSmall,
+                              height: Sizing.mSmall,
+                              borderRadius:
+                                  BorderRadius.circular(Sizing.mSmall),
+                            ),
+                            SizedBox(width: Spacing.superExtraSmall),
+                            ThemeSvgIcon(
+                              color: colorScheme.onSecondary,
+                              builder: (filter) => Assets.icons.icArrowDown.svg(
+                                width: Sizing.xSmall,
+                                height: Sizing.xSmall,
+                                colorFilter: filter,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     actions: [
                       Padding(
                         padding: EdgeInsets.only(right: Spacing.smMedium),
@@ -82,7 +134,7 @@ class EventSettingsBasePage extends StatelessWidget {
                       slivers: [
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: CreateEventBannerPhotoCard(
@@ -102,7 +154,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: LemonTextField(
@@ -132,7 +184,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: const SliverToBoxAdapter(
                             child: EventDateTimeSettingSection(),
@@ -143,7 +195,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
@@ -191,7 +243,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
@@ -261,7 +313,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
@@ -299,7 +351,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
+                            horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SelectEventTagsDropdown(
