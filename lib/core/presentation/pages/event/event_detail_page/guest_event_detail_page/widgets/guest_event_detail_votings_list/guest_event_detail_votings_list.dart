@@ -2,8 +2,10 @@ import 'package:app/core/domain/event/entities/event_voting.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_votings_list/widgets/guest_event_detail_voting_item.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class GuestEventDetailVotingsList extends StatelessWidget {
@@ -53,6 +55,14 @@ class GuestEventDetailVotingsList extends StatelessWidget {
               return GuestEventDetailVotingItem(
                 voting: votings[index],
                 onRefetch: onRefetch,
+                onTap: () {
+                  AutoRouter.of(context).push(
+                    EventVotingDetailRoute(
+                      event: event,
+                      voting: votings[index],
+                    ),
+                  );
+                },
               );
             },
           ),

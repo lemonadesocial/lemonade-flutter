@@ -113,6 +113,9 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           page: EventPublishingRoute.page,
         ),
+        AutoRoute(
+          page: EventVotingDetailRoute.page,
+        ),
         ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app/core/domain/event/entities/event_voting.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/event/event_votings/widgets/voting_bar_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -21,10 +22,12 @@ import 'package:collection/collection.dart';
 class GuestEventDetailVotingItem extends StatefulWidget {
   final EventVoting voting;
   final VoidCallback? onRefetch;
+  final VoidCallback? onTap;
   const GuestEventDetailVotingItem({
     super.key,
     required this.voting,
     this.onRefetch,
+    this.onTap,
   });
 
   @override
@@ -70,73 +73,76 @@ class _GuestEventDetailVotingItemState
     final option1Score = option1?.voters?.length ?? 0;
     final option2Score = option2?.voters?.length ?? 0;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        border: Border.all(
-          color: colorScheme.outlineVariant,
-          width: 1.w,
+    return InkWell(
+      onTap: widget.onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: LemonColor.atomicBlack,
+          border: Border.all(
+            color: colorScheme.outlineVariant,
+            width: 1.w,
+          ),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
         ),
-        borderRadius: BorderRadius.circular(LemonRadius.medium),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _VotingTitle(voting: widget.voting),
-          Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: Spacing.small,
-                  right: Spacing.small,
-                  top: Spacing.small,
-                ),
-                child: Row(
-                  children: widget.voting.speakers?.asMap().entries.map(
-                        (entry) {
-                          final index = entry.key;
-                          final isWinner = index == 0
-                              ? option1Score > option2Score
-                              : option2Score > option1Score;
-                          return Expanded(
-                            flex: 1,
-                            child: _VotingOptionInfo(
-                              user: entry.value,
-                              alignment: index == 0
-                                  ? CrossAxisAlignment.start
-                                  : CrossAxisAlignment.end,
-                              hasWinnerBadge: isWinner &&
-                                  widget.voting.state ==
-                                      Enum$EventVotingState.closed,
-                            ),
-                          );
-                        },
-                      ).toList() ??
-                      [],
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: EdgeInsets.only(top: Spacing.small * 2),
-                  child: _VotingScores(
-                    voting: widget.voting,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _VotingTitle(voting: widget.voting),
+            Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: Spacing.small,
+                    right: Spacing.small,
+                    top: Spacing.small,
+                  ),
+                  child: Row(
+                    children: widget.voting.speakers?.asMap().entries.map(
+                          (entry) {
+                            final index = entry.key;
+                            final isWinner = index == 0
+                                ? option1Score > option2Score
+                                : option2Score > option1Score;
+                            return Expanded(
+                              flex: 1,
+                              child: _VotingOptionInfo(
+                                user: entry.value,
+                                alignment: index == 0
+                                    ? CrossAxisAlignment.start
+                                    : CrossAxisAlignment.end,
+                                hasWinnerBadge: isWinner &&
+                                    widget.voting.state ==
+                                        Enum$EventVotingState.closed,
+                              ),
+                            );
+                          },
+                        ).toList() ??
+                        [],
                   ),
                 ),
-              ),
-            ],
-          ),
-          if (widget.voting.state == Enum$EventVotingState.starting)
-            Padding(
-              padding: EdgeInsets.all(Spacing.small),
-              child: _VotingBar(
-                voting: widget.voting,
-              ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: Spacing.small * 2),
+                    child: _VotingScores(
+                      voting: widget.voting,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          if (widget.voting.state != Enum$EventVotingState.starting) ...[
-            SizedBox(height: Spacing.small),
+            if (widget.voting.state == Enum$EventVotingState.starting)
+              Padding(
+                padding: EdgeInsets.all(Spacing.small),
+                child: VotingBar(
+                  voting: widget.voting,
+                ),
+              ),
+            if (widget.voting.state != Enum$EventVotingState.starting) ...[
+              SizedBox(height: Spacing.small),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -327,59 +333,6 @@ class _VotingScores extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _VotingBar extends StatelessWidget {
-  final EventVoting voting;
-  const _VotingBar({
-    required this.voting,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final option1 = voting.votingOptions?.firstWhereOrNull(
-      (option) => option.optionId == voting.speakers?[0].userId,
-    );
-    final option2 = voting.votingOptions?.firstWhereOrNull(
-      (option) => option.optionId == voting.speakers?[1].userId,
-    );
-
-    return Row(
-      children: [
-        Expanded(
-          flex: option1?.voters?.length ?? 1,
-          child: Container(
-            height: 6.w,
-            decoration: BoxDecoration(
-              color: LemonColor.blueBerry,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4.w),
-          child: Container(
-            width: 6.w,
-            height: 6.w,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: option2?.voters?.length ?? 1,
-          child: Container(
-            height: 6.w,
-            decoration: BoxDecoration(
-              color: LemonColor.royalOrange,
-              borderRadius: BorderRadius.circular(LemonRadius.medium),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

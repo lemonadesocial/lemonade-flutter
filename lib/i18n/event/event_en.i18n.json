@@ -800,6 +800,22 @@
         "debates": "Debates",
         "debateStarting": "Live",
         "debatePaused": "Debate paused",
-        "debateEnded": "Debate ended"
+        "debateEnded": "Debate ended",
+        "forVoting": "FOR",
+        "againstVoting": "AGAINST",
+        "vote(ordinal)": {
+            "one": "vote",
+            "other": "votes"
+        },
+        "teamName": "Team $name",
+        "correctVoteDescription": "Congratulations! You backed the winning side!",
+        "wrongVoteDescription": "Thanks for participating! It was a close one!",
+        "won": "Won!",
+        "votingNotOpenYet": "Voting not open yet!",
+        "votingNotOpenYetDescription": "Be ready to make your choice when voting opens!",
+        "youAreFor": "You are",
+        "waitingResultDescription": "Stay tuned to see who comes out on top!",
+        "changeVote": "Change vote",
+        "castingVote": "Casting vote"
     }
 }

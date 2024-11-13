@@ -79,7 +79,8 @@
         "setLimit": "Set limit",
         "apply": "Apply",
         "skip": "Skip",
-        "confirm": "Confirm"
+        "confirm": "Confirm",
+        "vote": "Vote"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
