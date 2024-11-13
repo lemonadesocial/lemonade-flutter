@@ -45,11 +45,13 @@ class EventSettingsBasePage extends StatelessWidget {
           orElse: () => null,
           authenticated: (user) => user,
         );
+
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, eventDetailState) {
         return eventDetailState.maybeWhen(
           orElse: () => const SizedBox.shrink(),
           fetched: (event) {
+            print("event.subeventParent : ${event.subeventParent}");
             return BlocListener<EditEventDetailBloc, EditEventDetailState>(
               listener: (context, state) {
                 if (state.status == EditEventDetailBlocStatus.success) {
@@ -360,35 +362,40 @@ class EventSettingsBasePage extends StatelessWidget {
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.xSmall),
                         ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.small,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: SettingTileWidget(
-                              title:
-                                  t.event.sessionDuplication.duplicateSession,
-                              leading: Assets.icons.icCopy.svg(
-                                width: 18.w,
-                                height: 18.w,
+                        if (event.subeventParent != null &&
+                            event.subeventParent?.isEmpty == false) ...[
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.small,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: SettingTileWidget(
+                                title:
+                                    t.event.sessionDuplication.duplicateSession,
+                                leading: Assets.icons.icCopy.svg(
+                                  width: 18.w,
+                                  height: 18.w,
+                                ),
+                                leadingCircle: false,
+                                trailing: Assets.icons.icArrowBack.svg(
+                                  width: 18.w,
+                                  height: 18.w,
+                                ),
+                                titleStyle: Typo.medium.copyWith(
+                                  color: colorScheme.onSecondary,
+                                ),
+                                radius: LemonRadius.small,
+                                onTap: () {
+                                  AutoRouter.of(context).push(
+                                    CreateDuplicatedSubEventsRoute(
+                                      subEvent: event,
+                                    ),
+                                  );
+                                },
                               ),
-                              leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
-                              ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
-                              ),
-                              radius: LemonRadius.small,
-                              onTap: () {
-                                AutoRouter.of(context).pop(
-                                  (EventActionType.duplicateSubEvent),
-                                );
-                              },
                             ),
                           ),
-                        ),
+                        ],
                         SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.only(

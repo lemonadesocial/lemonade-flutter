@@ -81,18 +81,6 @@ class _EventLocationSettingDetailPageState
     return BlocConsumer<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          // Edit event
-          // if (widget.event != null) {
-          //   SnackBarUtils.showSuccess(
-          //     title: t.common.success,
-          //     message: t.event.editEventSuccessfully,
-          //   );
-          // }
-          // Create event
-          // else if (widget.event == null) {
-          //   Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
-          //   Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
-          // }
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
         }
         if (state.placeDetailsText != '') {
