@@ -379,8 +379,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 color: colorScheme.onSecondary,
                               ),
                               radius: LemonRadius.small,
-                              onTap: () {
-                              },
+                              onTap: () {},
                             ),
                           ),
                         ),
