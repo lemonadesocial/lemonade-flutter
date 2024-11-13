@@ -753,5 +753,6 @@
     "visibility": "Visibility",
     "requireApproval": "Require approval",
     "registration": "Registration",
-    "invalidQRCode": "Invalid QR code. Please refresh or contact support."
+    "invalidQRCode": "Invalid QR code. Please refresh or contact support.",
+    "duplicateSession": "Duplicate session"
 }

@@ -44,7 +44,6 @@ class EventSettingsBasePage extends StatelessWidget {
           orElse: () => null,
           authenticated: (user) => user,
         );
-
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, eventDetailState) {
         return eventDetailState.maybeWhen(
@@ -67,6 +66,7 @@ class EventSettingsBasePage extends StatelessWidget {
                   appBar: LemonAppBar(
                     title: t.common.settings,
                     leading: Container(
+                      padding: EdgeInsets.only(left: Spacing.small),
                       alignment: Alignment.center,
                       child: Container(
                         height: Sizing.medium,
@@ -96,15 +96,6 @@ class EventSettingsBasePage extends StatelessWidget {
                               height: Sizing.mSmall,
                               borderRadius:
                                   BorderRadius.circular(Sizing.mSmall),
-                            ),
-                            SizedBox(width: Spacing.superExtraSmall),
-                            ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
-                              builder: (filter) => Assets.icons.icArrowDown.svg(
-                                width: Sizing.xSmall,
-                                height: Sizing.xSmall,
-                                colorFilter: filter,
-                              ),
                             ),
                           ],
                         ),
@@ -367,6 +358,31 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.xSmall),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.small,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: SettingTileWidget(
+                              title: t.event.duplicateSession,
+                              leading: Assets.icons.icCopy.svg(
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                              leadingCircle: false,
+                              trailing: Assets.icons.icArrowBack.svg(
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                              titleStyle: Typo.medium.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                              radius: LemonRadius.small,
+                              onTap: () {
+                              },
+                            ),
+                          ),
                         ),
                         SliverToBoxAdapter(
                           child: Padding(
