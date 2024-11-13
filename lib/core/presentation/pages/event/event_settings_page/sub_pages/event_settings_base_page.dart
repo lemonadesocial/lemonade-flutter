@@ -220,7 +220,17 @@ class EventSettingsBasePage extends StatelessWidget {
                                   topRadius: Radius.circular(LemonRadius.small),
                                   enableDrag: false,
                                   builder: (mContext) {
-                                    return const EventLocationSettingPage();
+                                    return EventLocationSettingPage(
+                                      onConfirmLocation: (address) {
+                                        context.read<EditEventDetailBloc>().add(
+                                              EditEventDetailEventUpdateAddress(
+                                                eventId: event.id ?? '',
+                                                address: address,
+                                              ),
+                                            );
+                                        AutoRouter.of(context).pop();
+                                      },
+                                    );
                                   },
                                 );
                               },

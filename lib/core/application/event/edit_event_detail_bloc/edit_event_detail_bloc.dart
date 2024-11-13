@@ -29,6 +29,7 @@ class EditEventDetailBloc
     on<EditEventDetailEventUpdateApprovalRequired>(_onUpdateApprovalRequired);
     on<EditEventDetailEventUpdateGuestLimit>(_onUpdateGuestLimit);
     on<EditEventDetailEventUpdateGuestLimitPer>(_onUpdateGuestLimitPer);
+    on<EditEventDetailEventUpdateAddress>(_onUpdateAddress);
   }
 
   final EventRepository eventRepository = getIt<EventRepository>();
@@ -150,6 +151,30 @@ class EditEventDetailBloc
     );
   }
 
+  Future<void> _onUpdateAddress(
+    EditEventDetailEventUpdateAddress event,
+    Emitter emit,
+  ) async {
+    await _updateEventAndEmitStatus(
+      input: Input$EventInput(
+        address: Input$AddressInput(
+          title: event.address.title,
+          street_1: event.address.street1,
+          street_2: event.address.street2,
+          region: event.address.region,
+          city: event.address.city,
+          country: event.address.country,
+          postal: event.address.postal,
+          recipient_name: event.address.recipientName,
+          latitude: event.address.latitude,
+          longitude: event.address.longitude,
+        ),
+      ),
+      eventId: event.eventId,
+      emit: emit,
+    );
+  }
+
   Future<void> _onUpdate(
     EditEventDetailEventUpdateEvent event,
     Emitter emit,
@@ -257,6 +282,11 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
     required String eventId,
     required String guestLimitPer,
   }) = EditEventDetailEventUpdateGuestLimitPer;
+
+  const factory EditEventDetailEvent.updateAddress({
+    required String eventId,
+    required Address address,
+  }) = EditEventDetailEventUpdateAddress;
 
   const factory EditEventDetailEvent.update({
     required String eventId,

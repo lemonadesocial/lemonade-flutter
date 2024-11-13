@@ -245,7 +245,11 @@ class CreateEventBasePage extends StatelessWidget {
                                 return BlocProvider.value(
                                   value:
                                       context.read<EventLocationSettingBloc>(),
-                                  child: const EventLocationSettingPage(),
+                                  child: EventLocationSettingPage(
+                                    onConfirmLocation: (address) {
+                                      AutoRouter.of(context).pop();
+                                    },
+                                  ),
                                 );
                               },
                             );
