@@ -228,6 +228,7 @@ class CreateEventBasePage extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
+                      color: LemonColor.chineseBlack,
                       title: t.event.virtualLinkSetting.virtualLink,
                       subTitle: state.virtualUrl,
                       leading: Icon(
@@ -241,7 +242,7 @@ class CreateEventBasePage extends StatelessWidget {
                         height: 18.w,
                       ),
                       titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: colorScheme.onPrimary,
                       ),
                       radius: LemonRadius.small,
                       onTap: () {
@@ -279,6 +280,7 @@ class CreateEventBasePage extends StatelessWidget {
                         EventLocationSettingState>(
                       builder: (context, locationState) {
                         return SettingTileWidget(
+                          color: LemonColor.chineseBlack,
                           title: locationState.selectedAddress != null
                               ? locationState.selectedAddress?.title ?? ''
                               : t.event.locationSetting.chooseLocation,
@@ -303,9 +305,7 @@ class CreateEventBasePage extends StatelessWidget {
                                   height: 18.w,
                                 ),
                           titleStyle: Typo.medium.copyWith(
-                            color: locationState.selectedAddress != null
-                                ? colorScheme.onPrimary
-                                : colorScheme.onSecondary,
+                            color: colorScheme.onPrimary,
                           ),
                           radius: LemonRadius.small,
                           onTap: () {
@@ -319,7 +319,11 @@ class CreateEventBasePage extends StatelessWidget {
                                 return BlocProvider.value(
                                   value:
                                       context.read<EventLocationSettingBloc>(),
-                                  child: const EventLocationSettingPage(),
+                                  child: EventLocationSettingPage(
+                                    onConfirmLocation: (address) {
+                                      AutoRouter.of(context).pop();
+                                    },
+                                  ),
                                 );
                               },
                             );
@@ -371,6 +375,7 @@ class CreateEventBasePage extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
+                      color: LemonColor.chineseBlack,
                       title: t.event.eventCreation.description,
                       subTitle: StringUtils.stripHtmlTags(
                         state.description ?? '',
@@ -382,7 +387,7 @@ class CreateEventBasePage extends StatelessWidget {
                         height: 18.w,
                       ),
                       titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: colorScheme.onPrimary,
                       ),
                       radius: LemonRadius.small,
                       onTap: () {

@@ -54,7 +54,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
               padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
-                color: LemonColor.atomicBlack,
+                color: LemonColor.chineseBlack,
               ),
               child: Row(
                 children: [
@@ -74,9 +74,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
                         Text(
                           t.event.eventTags.tags,
                           style: Typo.medium.copyWith(
-                            color: selectedItems.isNotEmpty
-                                ? colorScheme.onPrimary
-                                : colorScheme.onSecondary,
+                            color: colorScheme.onPrimary,
                           ),
                         ),
                         if (selectedItems.isNotEmpty)

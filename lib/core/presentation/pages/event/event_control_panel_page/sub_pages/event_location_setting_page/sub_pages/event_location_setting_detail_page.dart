@@ -1,5 +1,4 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -8,7 +7,6 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -21,10 +19,16 @@ import 'package:formz/formz.dart';
 
 @RoutePage()
 class EventLocationSettingDetailPage extends StatefulWidget {
-  const EventLocationSettingDetailPage({super.key, this.address, this.event});
+  const EventLocationSettingDetailPage({
+    super.key,
+    this.address,
+    this.event,
+    this.onConfirmLocation,
+  });
 
   final Address? address;
   final Event? event;
+  final Function(Address)? onConfirmLocation;
   @override
   State<EventLocationSettingDetailPage> createState() =>
       _EventLocationSettingDetailPageState();
@@ -77,19 +81,6 @@ class _EventLocationSettingDetailPageState
     return BlocConsumer<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
         if (state.status.isSuccess) {
-          // Edit event
-          if (widget.event != null) {
-            SnackBarUtils.showSuccess(
-              title: t.common.success,
-              message: t.event.editEventSuccessfully,
-            );
-            AutoRouter.of(context).pop();
-          }
-          // Create event
-          else if (widget.event == null) {
-            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
-            Navigator.of(context).canPop() ? Navigator.of(context).pop() : null;
-          }
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
         }
         if (state.placeDetailsText != '') {
@@ -200,6 +191,7 @@ class _EventLocationSettingDetailPageState
           radius: BorderRadius.circular(24),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
+            AutoRouter.of(context).pop();
             Vibrate.feedback(FeedbackType.light);
             final address = Address(
               id: state.id,
@@ -209,21 +201,14 @@ class _EventLocationSettingDetailPageState
               longitude: state.longitude,
               additionalDirections: state.additionalDirections,
             );
-            // Edit event
-            if (widget.event != null) {
-              context.read<EditEventDetailBloc>().add(
-                    EditEventDetailEvent.update(
-                      eventId: widget.event?.id ?? '',
-                      address: address,
-                    ),
-                  );
-            }
             context.read<EventLocationSettingBloc>().add(
                   SelectAddress(address: address),
                 );
             context
                 .read<EventLocationSettingBloc>()
                 .add(const SubmitAddLocation());
+            AutoRouter.of(context).pop();
+            widget.onConfirmLocation?.call(address);
           },
           loadingWhen: state.status.isInProgress,
         );

@@ -18,9 +18,13 @@ import 'package:image_picker/image_picker.dart';
 
 class CreateEventBannerPhotoCard extends StatefulWidget {
   final FileUploadService _uploadService;
+  final String? thumbnailUrl;
+  final Function()? onTapAddPhoto;
 
   CreateEventBannerPhotoCard({
     super.key,
+    this.thumbnailUrl,
+    this.onTapAddPhoto,
   }) : _uploadService = FileUploadService(getIt<AppGQL>().client);
 
   @override
@@ -50,6 +54,10 @@ class _CreateEventBannerPhotoCardState
   }
 
   Future<void> _addPhotoToEvent() async {
+    if (widget.onTapAddPhoto != null) {
+      widget.onTapAddPhoto?.call();
+      return;
+    }
     final imageId = await _pickAndUploadImage();
     if (imageId == null) {
       return;
@@ -86,14 +94,22 @@ class _CreateEventBannerPhotoCardState
           ),
           child: Stack(
             children: [
-              _localImagePath != null
-                  ? Image.file(
-                      File(_localImagePath!),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    )
-                  : ImagePlaceholder
-                      .eventCard(), // Show placeholder if no image is selected
+              if (_localImagePath != null)
+                Image.file(
+                  File(_localImagePath!),
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                )
+              else if (widget.thumbnailUrl != null)
+                Image.network(
+                  widget.thumbnailUrl!,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      ImagePlaceholder.eventCard(),
+                )
+              else
+                ImagePlaceholder.eventCard(),
               Positioned(
                 right: Spacing.small,
                 bottom: Spacing.small,

@@ -524,7 +524,7 @@ class _EditEventButton extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 Vibrate.feedback(FeedbackType.light);
-                AutoRouter.of(context).navigate(const EventControlPanelRoute());
+                AutoRouter.of(context).navigate(const EventSettingsRoute());
               },
               child: Center(
                 child: ThemeSvgIcon(

@@ -11,9 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class EventControlPanelPage extends StatelessWidget
-    implements AutoRouteWrapper {
-  const EventControlPanelPage({
+class EventSettingsPage extends StatelessWidget implements AutoRouteWrapper {
+  const EventSettingsPage({
     super.key,
   });
 

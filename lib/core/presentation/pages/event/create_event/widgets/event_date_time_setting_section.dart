@@ -32,7 +32,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
           padding: EdgeInsets.all(Spacing.small),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: LemonColor.atomicBlack,
+            color: LemonColor.chineseBlack,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(LemonRadius.normal),
             ),

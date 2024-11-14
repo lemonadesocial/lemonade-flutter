@@ -657,6 +657,7 @@
         }
     },
     "eventPhotos": {
+        "photos": "Photos",
         "uploadHint": "1920x1080 or 16:9",
         "addPhoto": "Add photo",
         "setAsCover": "Set as cover",
@@ -700,7 +701,8 @@
         "sessionsEmptyTitle": "No sessions yet",
         "sessionEmptyDescription": "Sessions added to this event will appear\nhere. Let’s create a session now!",
         "createSession": "Create session",
-        "emptySessions": "No sessions planned. Tap to create"
+        "emptySessions": "No sessions planned. Tap to create",
+        "sessionsSettings": "Sessions's settings"
     },
     "subEventSettings": {
         "allowSubEvent": "Allow sessions",

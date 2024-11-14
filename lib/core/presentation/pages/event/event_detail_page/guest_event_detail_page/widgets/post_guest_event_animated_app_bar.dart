@@ -46,7 +46,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
   }
 
   void _edit(BuildContext context) {
-    AutoRouter.of(context).push(const EventControlPanelRoute());
+    AutoRouter.of(context).push(const EventSettingsRoute());
   }
 
   void _report(BuildContext context) {

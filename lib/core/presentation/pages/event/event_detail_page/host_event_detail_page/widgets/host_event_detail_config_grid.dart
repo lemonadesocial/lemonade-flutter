@@ -67,7 +67,7 @@ class HostEventDetailConfigGrid extends StatelessWidget {
         ),
         onTap: () {
           Vibrate.feedback(FeedbackType.light);
-          AutoRouter.of(context).navigate(const EventControlPanelRoute());
+          AutoRouter.of(context).navigate(const EventSettingsRoute());
         },
       ),
       // if (canShowDashboard)

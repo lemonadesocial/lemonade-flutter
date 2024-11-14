@@ -29,8 +29,10 @@ class EventLocationSettingPage extends StatefulWidget {
   const EventLocationSettingPage({
     super.key,
     this.event,
+    this.onConfirmLocation,
   });
   final Event? event;
+  final Function(Address)? onConfirmLocation;
 
   @override
   State<EventLocationSettingPage> createState() =>
@@ -176,6 +178,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                                 child: AddressList(
                                   addresses: addresses,
                                   event: widget.event,
+                                  onConfirmLocation: widget.onConfirmLocation,
                                 ),
                               ),
                             ],
@@ -213,7 +216,12 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
         .read<EventLocationSettingBloc>()
         .add(PlaceDetailsChanged(placeDetails: detail.result));
 
-    showBottomSheetDetail(context, address, widget.event);
+    showBottomSheetDetail(
+      context,
+      address,
+      widget.event,
+      widget.onConfirmLocation,
+    );
 
     _searchController.clear();
     setState(() {
@@ -246,10 +254,12 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 
 class AddressList extends StatelessWidget {
   final Event? event;
+  final Function(Address)? onConfirmLocation;
   const AddressList({
     super.key,
     required this.addresses,
     this.event,
+    this.onConfirmLocation,
   });
 
   final List<Address> addresses;
@@ -275,7 +285,11 @@ class AddressList extends StatelessWidget {
               },
               onPressItem: () async {
                 Vibrate.feedback(FeedbackType.light);
-                _onTapEdit(addresses[index], context);
+                _onTapEdit(
+                  addresses[index],
+                  context,
+                  onConfirmLocation,
+                );
               },
             ),
           ),
@@ -285,9 +299,13 @@ class AddressList extends StatelessWidget {
     );
   }
 
-  _onTapEdit(Address address, BuildContext context) {
+  _onTapEdit(
+    Address address,
+    BuildContext context,
+    Function(Address)? onConfirmLocation,
+  ) {
     Vibrate.feedback(FeedbackType.light);
-    showBottomSheetDetail(context, address, event);
+    showBottomSheetDetail(context, address, event, onConfirmLocation);
   }
 }
 
@@ -295,6 +313,7 @@ void showBottomSheetDetail(
   BuildContext context,
   Address address,
   Event? event,
+  Function(Address)? onConfirmLocation,
 ) {
   showCupertinoModalBottomSheet(
     expand: true,
@@ -313,7 +332,11 @@ void showBottomSheetDetail(
               value: context.read<EditEventDetailBloc>(),
             ),
         ],
-        child: EventLocationSettingDetailPage(address: address, event: event),
+        child: EventLocationSettingDetailPage(
+          address: address,
+          event: event,
+          onConfirmLocation: onConfirmLocation,
+        ),
       );
     },
   );
