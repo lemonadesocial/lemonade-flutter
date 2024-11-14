@@ -38,8 +38,9 @@ class CreateEventContentSection extends StatelessWidget {
         children: [
           Text(
             t.common.content,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.54),
+            style: Typo.mediumPlus.copyWith(
+              color: colorScheme.onSecondary,
+              fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: Spacing.xSmall),

@@ -63,7 +63,7 @@ class EventSettingsBasePage extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Scaffold(
-                  backgroundColor: colorScheme.primary,
+                  backgroundColor: LemonColor.atomicBlack,
                   appBar: LemonAppBar(
                     title: t.common.settings,
                     leading: Container(
@@ -189,6 +189,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
+                              color: LemonColor.chineseBlack,
                               title: t.event.virtualLinkSetting.virtualLink,
                               subTitle: event.virtualUrl,
                               leading: Icon(
@@ -202,7 +203,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 height: 18.w,
                               ),
                               titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: colorScheme.onPrimary,
                               ),
                               radius: LemonRadius.small,
                               onTap: () {
@@ -237,6 +238,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
+                              color: LemonColor.chineseBlack,
                               title: event.address != null
                                   ? event.address?.title ?? ''
                                   : t.event.locationSetting.chooseLocation,
@@ -252,7 +254,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 height: 18.w,
                               ),
                               titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: colorScheme.onPrimary,
                               ),
                               radius: LemonRadius.small,
                               onTap: () {
@@ -307,6 +309,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
+                              color: LemonColor.chineseBlack,
                               title: t.event.eventCreation.description,
                               leading: Assets.icons.icDescription.svg(),
                               leadingCircle: false,
@@ -315,7 +318,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 height: 18.w,
                               ),
                               titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: colorScheme.onPrimary,
                               ),
                               radius: LemonRadius.small,
                               onTap: () {

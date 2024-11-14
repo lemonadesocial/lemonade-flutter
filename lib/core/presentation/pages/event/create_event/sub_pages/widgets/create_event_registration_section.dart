@@ -131,8 +131,9 @@ class CreateEventRegistrationSection extends StatelessWidget {
         children: [
           Text(
             t.event.registration,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.54),
+            style: Typo.mediumPlus.copyWith(
+              color: colorScheme.onSecondary,
+              fontWeight: FontWeight.w500,
             ),
           ),
           SizedBox(height: Spacing.xSmall),
@@ -283,7 +284,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
             ),
           ),
           if (isEditMode) ...[
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.xSmall),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -355,7 +356,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.xSmall),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -381,7 +382,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.xSmall),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -405,7 +406,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.xSmall),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
