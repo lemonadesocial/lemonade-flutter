@@ -68,7 +68,8 @@ class PostGuestEventDetailView extends StatelessWidget {
               )
               .toList();
           subEvents.sort(
-            (a, b) => a.start!.compareTo(b.start!),
+            (a, b) => (a.start ?? DateTime.now())
+                .compareTo(b.start ?? DateTime.now()),
           );
           List<EventTicket>? myTickets = getMyTicketsBloc.state.maybeWhen(
             orElse: () => [],
@@ -76,7 +77,8 @@ class PostGuestEventDetailView extends StatelessWidget {
           );
           final votings = [...getEventVotingsListBloc.state.eventVotings];
           votings.sort(
-            (a, b) => a.start!.compareTo(b.start!),
+            (a, b) => (a.start ?? DateTime.now())
+                .compareTo(b.start ?? DateTime.now()),
           );
           final widgets = [
             Padding(
