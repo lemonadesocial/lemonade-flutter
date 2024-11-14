@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
+import 'package:app/core/domain/event/entities/event_voting.dart';
 import 'package:app/core/domain/event/entities/generate_event_invitation_url_response.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
@@ -13,6 +14,7 @@ import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/event/mutation/create_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
+import 'package:app/graphql/backend/event/query/list_event_votings.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
@@ -132,6 +134,14 @@ abstract class EventRepository {
   Future<Either<Failure, GenerateEventInvitationUrlResponse>>
       generateEventInvitationUrl({
     required String eventId,
+  });
+
+  Future<Either<Failure, List<EventVoting>>> getEventVotings({
+    required Variables$Query$ListEventVotings input,
+  });
+
+  Stream<String> watchEventVotingUpdated({
+    required String votingId,
   });
 
   // Future<Either<Failure, List<EventRole>>> getEventRoles();

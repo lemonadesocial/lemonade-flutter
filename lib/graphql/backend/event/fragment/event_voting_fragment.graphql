@@ -1,0 +1,30 @@
+# import '../../schema.graphql';
+
+fragment EventVoting on EventVoting {
+  _id
+  description
+  end
+  hidden
+  selected_option
+  speakers {
+    _id
+    name
+    display_name
+    image_avatar
+    job_title
+  }
+  stage
+  start
+  state
+  timezone
+  title
+  voting_options {
+    option_id
+    voters {
+      _id
+      name
+      display_name
+      image_avatar
+    }
+  }
+}

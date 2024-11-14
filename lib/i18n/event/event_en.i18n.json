@@ -795,5 +795,27 @@
         "duplicatingSessionsDescription": "Please wait while we set up your $n duplicate sessions. This should only take a few seconds.",
         "duplicateSuccess": "Successfully duplicated!",
         "duplicateSuccessDescription": "We have set up $n deplicated events for you. You can access each one them below."
+    },
+    "eventVoting": {
+        "debates": "Debates",
+        "debateStarting": "Live",
+        "debatePaused": "Debate paused",
+        "debateEnded": "Debate ended",
+        "forVoting": "FOR",
+        "againstVoting": "AGAINST",
+        "vote(ordinal)": {
+            "one": "vote",
+            "other": "votes"
+        },
+        "teamName": "Team $name",
+        "correctVoteDescription": "Congratulations! You backed the winning side!",
+        "wrongVoteDescription": "Thanks for participating! It was a close one!",
+        "won": "Won!",
+        "votingNotOpenYet": "Voting not open yet!",
+        "votingNotOpenYetDescription": "Be ready to make your choice when voting opens!",
+        "youAreFor": "You are",
+        "waitingResultDescription": "Stay tuned to see who comes out on top!",
+        "changeVote": "Change vote",
+        "castingVote": "Casting vote"
     }
 }

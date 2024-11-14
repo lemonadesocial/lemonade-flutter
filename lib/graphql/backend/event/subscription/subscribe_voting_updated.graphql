@@ -1,0 +1,3 @@
+subscription VotingUpdated($id: MongoID!) {
+  votingUpdated(_id: $id)
+}

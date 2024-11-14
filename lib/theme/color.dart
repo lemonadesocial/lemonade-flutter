@@ -140,6 +140,10 @@ class LemonColor {
   static const aero = Color(0xff68A0F5);
 
   static const rajah = Color(0xffF5AC68);
+
+  // voting
+  static const blueBerry = Color(0xff4B84FF);
+  static const royalOrange = Color(0xffFF8E42);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

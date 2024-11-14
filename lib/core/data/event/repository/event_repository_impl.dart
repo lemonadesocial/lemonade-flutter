@@ -5,9 +5,11 @@ import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
+import 'package:app/core/data/event/dtos/event_voting_dto/event_voting_dto.dart';
 import 'package:app/core/data/event/dtos/generate_event_invitation_url_response_dto/generate_event_invitation_url_response_dto.dart';
 import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
+import 'package:app/core/data/event/gql/watch_event_voting_updated.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
@@ -16,6 +18,7 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/entities/event_story.dart';
+import 'package:app/core/domain/event/entities/event_voting.dart';
 import 'package:app/core/domain/event/entities/generate_event_invitation_url_response.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
@@ -39,6 +42,7 @@ import 'package:app/graphql/backend/event/query/generate_event_invitation_url.gr
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
+import 'package:app/graphql/backend/event/query/list_event_votings.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -46,6 +50,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/graphql/backend/event/query/get_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 @LazySingleton(as: EventRepository)
 class EventRepositoryImpl implements EventRepository {
@@ -620,6 +625,55 @@ class EventRepositoryImpl implements EventRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, List<EventVoting>>> getEventVotings({
+    required Variables$Query$ListEventVotings input,
+  }) async {
+    try {
+      final result = await client.query$ListEventVotings(
+        Options$Query$ListEventVotings(
+          variables: input,
+          fetchPolicy: FetchPolicy.networkOnly,
+        ),
+      );
+
+      if (result.hasException || result.parsedData == null) {
+        return Left(Failure.withGqlException(result.exception));
+      }
+
+      final votingsData = result.parsedData?.listEventVotings ?? [];
+
+      return Right(
+        votingsData
+            .map(
+              (dto) => EventVoting.fromDto(
+                EventVotingDto.fromJson(dto.toJson()),
+              ),
+            )
+            .toList(),
+      );
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Stream<String> watchEventVotingUpdated({
+    required String votingId,
+  }) {
+    return client
+        .subscribe(
+          SubscriptionOptions(
+            fetchPolicy: FetchPolicy.networkOnly,
+            document: watchVotingUpdatedSubscription,
+            variables: {
+              'id': votingId,
+            },
+          ),
+        )
+        .asyncMap((result) => result.data?.tryGet('votingUpdated') ?? '');
   }
 
   // @override

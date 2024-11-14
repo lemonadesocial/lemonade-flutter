@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_votings_bloc/get_event_votings_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
@@ -12,6 +13,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_poap_offers.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_animated_app_bar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_votings_list/guest_event_detail_votings_list.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_detail_virtual_link.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/post_guest_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
@@ -53,6 +55,9 @@ class PostGuestEventDetailView extends StatelessWidget {
         fetched: (event) {
           final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
           final getMyTicketsBloc = context.watch<GetMyTicketsBloc>();
+          final getEventVotingsListBloc =
+              context.watch<GetEventVotingsListBloc>();
+
           final subEvents = [...getSubEventsBloc.state.events]
               .where(
                 (e) => e.start != null
@@ -63,13 +68,18 @@ class PostGuestEventDetailView extends StatelessWidget {
               )
               .toList();
           subEvents.sort(
-            (a, b) => a.start!.compareTo(b.start!),
+            (a, b) => (a.start ?? DateTime.now())
+                .compareTo(b.start ?? DateTime.now()),
           );
           List<EventTicket>? myTickets = getMyTicketsBloc.state.maybeWhen(
             orElse: () => [],
             success: (tickets) => tickets,
           );
-
+          final votings = [...getEventVotingsListBloc.state.eventVotings];
+          votings.sort(
+            (a, b) => (a.start ?? DateTime.now())
+                .compareTo(b.start ?? DateTime.now()),
+          );
           final widgets = [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -102,6 +112,31 @@ class PostGuestEventDetailView extends StatelessWidget {
             if (EventUtils.hasPoapOffers(event))
               GuestEventPoapOffers(
                 event: event,
+              ),
+            if (votings.isNotEmpty)
+              Container(
+                padding: EdgeInsets.only(
+                  top: Spacing.medium,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: colorScheme.outline,
+                      width: 0.5.w,
+                    ),
+                  ),
+                ),
+                child: GuestEventDetailVotingsList(
+                  event: event,
+                  votings: votings,
+                  onRefetch: () {
+                    getEventVotingsListBloc.add(
+                      GetEventVotingsListEvent.fetch(
+                        eventId: event.id ?? '',
+                      ),
+                    );
+                  },
+                ),
               ),
             if (event.latitude != null && event.longitude != null)
               Container(

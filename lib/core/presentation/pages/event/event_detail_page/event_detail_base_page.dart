@@ -15,6 +15,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/core/application/event/get_event_votings_bloc/get_event_votings_bloc.dart';
 
 @RoutePage()
 class EventDetailBasePage extends StatelessWidget {
@@ -121,6 +122,14 @@ class _EventDetailBasePageView extends StatelessWidget {
                         ),
                       )..add(
                           GetMyTicketsEvent.fetch(),
+                        ),
+                    ),
+                    BlocProvider(
+                      create: (context) => GetEventVotingsListBloc()
+                        ..add(
+                          GetEventVotingsListEvent.fetch(
+                            eventId: event.id ?? '',
+                          ),
                         ),
                     ),
                   ],
