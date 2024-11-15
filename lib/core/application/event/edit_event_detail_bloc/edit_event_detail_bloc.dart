@@ -132,7 +132,11 @@ class EditEventDetailBloc
     Emitter emit,
   ) async {
     await _updateEventAndEmitStatus(
-      input: Input$EventInput(guest_limit: double.parse(event.guestLimit)),
+      input: Input$EventInput().copyWith(
+        guest_limit: event.guestLimit != null
+            ? double.parse(event.guestLimit ?? '')
+            : null,
+      ),
       eventId: event.eventId,
       emit: emit,
     );
@@ -143,8 +147,10 @@ class EditEventDetailBloc
     Emitter emit,
   ) async {
     await _updateEventAndEmitStatus(
-      input: Input$EventInput(
-        guest_limit_per: double.parse(event.guestLimitPer),
+      input: Input$EventInput().copyWith(
+        guest_limit_per: event.guestLimitPer != null
+            ? double.parse(event.guestLimitPer ?? '')
+            : null,
       ),
       eventId: event.eventId,
       emit: emit,
@@ -275,12 +281,12 @@ class EditEventDetailEvent with _$EditEventDetailEvent {
 
   const factory EditEventDetailEvent.updateGuestLimit({
     required String eventId,
-    required String guestLimit,
+    required String? guestLimit,
   }) = EditEventDetailEventUpdateGuestLimit;
 
   const factory EditEventDetailEvent.updateGuestLimitPer({
     required String eventId,
-    required String guestLimitPer,
+    required String? guestLimitPer,
   }) = EditEventDetailEventUpdateGuestLimitPer;
 
   const factory EditEventDetailEvent.updateAddress({
