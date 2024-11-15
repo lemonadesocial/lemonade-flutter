@@ -159,7 +159,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                     );
                               },
                               style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: colorScheme.onPrimary,
                                 fontWeight: FontWeight.w500,
                               ),
                               placeholderStyle: Typo.mediumPlus.copyWith(
