@@ -68,35 +68,35 @@ class CreateEventRegistrationSection extends StatelessWidget {
       }
     }
 
-    void handleGuestLimitChange(String? limit) {
+    void handleGuestLimitChange(int? limit) {
       if (isEditMode) {
         context.read<EditEventDetailBloc>().add(
               EditEventDetailEventUpdateGuestLimit(
                 eventId: initialEvent!.id ?? '',
-                guestLimit: limit ?? '',
+                guestLimit: limit?.toString(),
               ),
             );
       } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventGuestLimitChanged(
-                guestLimit: limit,
+                guestLimit: limit?.toString(),
               ),
             );
       }
     }
 
-    void handleGuestLimitPerChange(String? limitPer) {
+    void handleGuestLimitPerChange(int? limitPer) {
       if (isEditMode) {
         context.read<EditEventDetailBloc>().add(
               EditEventDetailEventUpdateGuestLimitPer(
                 eventId: initialEvent!.id ?? '',
-                guestLimitPer: limitPer ?? '',
+                guestLimitPer: limitPer?.toString(),
               ),
             );
       } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventGuestLimitPerChanged(
-                guestLimitPer: limitPer,
+                guestLimitPer: limitPer?.toString(),
               ),
             );
       }
@@ -232,7 +232,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           },
                           onSetLimit: (value) {
                             AutoRouter.of(context).pop();
-                            handleGuestLimitChange(value.toString());
+                            handleGuestLimitChange(value);
                           },
                         );
                       },
@@ -273,7 +273,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                           },
                           onSetLimit: (value) {
                             AutoRouter.of(context).pop();
-                            handleGuestLimitPerChange(value.toString());
+                            handleGuestLimitPerChange(value);
                           },
                         );
                       },
