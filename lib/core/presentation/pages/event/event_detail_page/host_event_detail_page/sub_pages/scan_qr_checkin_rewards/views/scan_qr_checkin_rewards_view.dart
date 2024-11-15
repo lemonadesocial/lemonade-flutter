@@ -2,7 +2,6 @@ import 'package:app/core/application/event/update_event_checkin_bloc/update_even
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -23,11 +22,11 @@ class ScanQRCheckinRewardsView extends StatefulWidget {
   const ScanQRCheckinRewardsView({
     super.key,
     required this.event,
-    required this.selectedScannerTabIndex,
+    required this.selectedScanTarget,
     required this.controller,
   });
   final Event event;
-  final int selectedScannerTabIndex;
+  final ScanTarget selectedScanTarget;
   final MobileScannerController controller;
 
   @override
@@ -41,45 +40,48 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
     final shortId = barcodeCapture.barcodes.isNotEmpty
         ? barcodeCapture.barcodes.last.displayValue?.toString() ?? ''
         : '';
-    if (widget.selectedScannerTabIndex == SelectedScannerTab.checkIn.index) {
-      final response = await showFutureLoadingDialog(
-        context: context,
-        future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckin(
-              Options$Mutation$UpdateEventCheckin(
-                variables: Variables$Mutation$UpdateEventCheckin(
-                  input: Input$UpdateEventCheckinInput(
-                    active: true,
-                    shortid: shortId,
+
+    switch (widget.selectedScanTarget) {
+      case ScanTarget.tickets:
+        final response = await showFutureLoadingDialog(
+          context: context,
+          future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckin(
+                Options$Mutation$UpdateEventCheckin(
+                  variables: Variables$Mutation$UpdateEventCheckin(
+                    input: Input$UpdateEventCheckinInput(
+                      active: true,
+                      shortid: shortId,
+                    ),
                   ),
                 ),
               ),
-            ),
-      );
-      if (response.result?.parsedData?.updateEventCheckin != null) {
-        SnackBarUtils.showSuccess(
-          message: t.event.scanQR.checkedinSuccessfully,
         );
-        await AutoRouter.of(context).pop();
-      }
-    } else if (widget.selectedScannerTabIndex ==
-        SelectedScannerTab.rewards.index) {
-      final response = await showFutureLoadingDialog(
-        context: context,
-        future: () =>
-            getIt<EventTicketRepository>().getTicket(shortId: shortId),
-      );
-      response.result?.fold(
-        (failure) => null,
-        (ticket) async {
-          final assignedTo = ticket.assignedTo;
-          if (assignedTo != null) {
-            await AutoRouter.of(context)
-                .popAndPush(ClaimRewardsRoute(userId: assignedTo));
-          }
-        },
-      );
+        if (response.result?.parsedData?.updateEventCheckin != null) {
+          SnackBarUtils.showSuccess(
+            message: t.event.scanQR.checkedinSuccessfully,
+          );
+          await AutoRouter.of(context).pop();
+        }
+      case ScanTarget.rewards:
+        final response = await showFutureLoadingDialog(
+          context: context,
+          future: () =>
+              getIt<EventTicketRepository>().getTicket(shortId: shortId),
+        );
+        response.result?.fold(
+          (failure) => null,
+          (ticket) async {
+            final assignedTo = ticket.assignedTo;
+            if (assignedTo != null) {
+              await AutoRouter.of(context)
+                  .popAndPush(ClaimRewardsRoute(userId: assignedTo));
+            }
+          },
+        );
     }
-    widget.controller.start();
+    if (!widget.controller.isStarting) {
+      widget.controller.start();
+    }
   }
 
   @override
@@ -112,14 +114,18 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         state.maybeWhen(
           orElse: () async {
             await AutoRouter.of(context).pop();
-            widget.controller.start();
+            if (!widget.controller.isStarting) {
+              widget.controller.start();
+            }
           },
           success: () async {
             SnackBarUtils.showSuccess(
               message: t.event.scanQR.checkedinSuccessfully,
             );
             await AutoRouter.of(context).pop();
-            widget.controller.start();
+            if (!widget.controller.isStarting) {
+              widget.controller.start();
+            }
           },
         );
       },
@@ -145,9 +151,6 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
                 ),
               ],
             ),
-          ),
-          SafeArea(
-            child: ScannerActions(controller: widget.controller),
           ),
         ],
       ),
