@@ -198,7 +198,7 @@ class CreateEventBasePage extends StatelessWidget {
                         t.event.eventCreation.title,
                       ),
                       style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w500,
                       ),
                       placeholderStyle: Typo.mediumPlus.copyWith(
