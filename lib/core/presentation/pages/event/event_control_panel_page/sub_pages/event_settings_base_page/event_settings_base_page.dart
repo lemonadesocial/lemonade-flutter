@@ -363,8 +363,8 @@ class EventSettingsBasePage extends StatelessWidget {
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.xSmall),
                         ),
-                        if (event.subeventParent == null ||
-                            event.subeventParent?.isEmpty == true) ...[
+                        if (event.subeventParent != null &&
+                            event.subeventParent?.isEmpty == false) ...[
                           SliverPadding(
                             padding: EdgeInsets.symmetric(
                               horizontal: Spacing.small,
