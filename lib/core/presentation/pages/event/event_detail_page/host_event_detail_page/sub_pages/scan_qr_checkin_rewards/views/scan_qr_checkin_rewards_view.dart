@@ -94,7 +94,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
 
   @override
   Widget build(BuildContext context) {
-    final scanWindowSize = 200.w;
+    final scanWindowSize = MediaQuery.of(context).size.width * 0.75;
 
     // Get the actual visible area of the screen
     final screenSize = MediaQuery.of(context).size;
