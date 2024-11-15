@@ -79,7 +79,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
       } else {
         context.read<CreateEventBloc>().add(
               CreateEventEvent.createEventGuestLimitChanged(
-                guestLimit: limit?.toString() ?? '',
+                guestLimit: limit?.toString(),
               ),
             );
       }

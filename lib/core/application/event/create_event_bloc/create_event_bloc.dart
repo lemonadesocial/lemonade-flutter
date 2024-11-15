@@ -160,11 +160,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         start: event.start.toUtc(),
         end: event.end.toUtc(),
         timezone: event.timezone,
-        guest_limit:
-            state.guestLimit != null ? double.parse(state.guestLimit!) : null,
-        guest_limit_per: state.guestLimitPer != null
-            ? double.parse(state.guestLimitPer!)
-            : null,
         virtual: true,
         virtual_url: state.virtualUrl,
         address: event.address != null
@@ -192,6 +187,13 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         ),
         tags: state.tags,
         new_new_photos: state.photoImageId != null ? [state.photoImageId!] : [],
+      ).copyWith(
+        guest_limit: state.guestLimit != null
+            ? double.parse(state.guestLimit ?? '')
+            : null,
+        guest_limit_per: state.guestLimitPer != null
+            ? double.parse(state.guestLimitPer ?? '')
+            : null,
       );
       final result = await _eventRepository.createEvent(input: input);
       result.fold(
