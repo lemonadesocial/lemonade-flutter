@@ -24,9 +24,11 @@ class ScanQRCheckinRewardsView extends StatefulWidget {
     super.key,
     required this.event,
     required this.selectedScannerTabIndex,
+    required this.controller,
   });
   final Event event;
   final int selectedScannerTabIndex;
+  final MobileScannerController controller;
 
   @override
   State<ScanQRCheckinRewardsView> createState() =>
@@ -34,20 +36,8 @@ class ScanQRCheckinRewardsView extends StatefulWidget {
 }
 
 class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
-  final MobileScannerController controller = MobileScannerController(
-    formats: const [BarcodeFormat.qrCode],
-    autoStart: true,
-    detectionSpeed: DetectionSpeed.normal,
-  );
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   Future<void> onBarcodeDetect(BarcodeCapture barcodeCapture) async {
-    await controller.stop();
+    await widget.controller.stop();
     final shortId = barcodeCapture.barcodes.isNotEmpty
         ? barcodeCapture.barcodes.last.displayValue?.toString() ?? ''
         : '';
@@ -89,7 +79,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         },
       );
     }
-    controller.start();
+    widget.controller.start();
   }
 
   @override
@@ -122,36 +112,42 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         state.maybeWhen(
           orElse: () async {
             await AutoRouter.of(context).pop();
-            controller.start();
+            widget.controller.start();
           },
           success: () async {
             SnackBarUtils.showSuccess(
               message: t.event.scanQR.checkedinSuccessfully,
             );
             await AutoRouter.of(context).pop();
-            controller.start();
+            widget.controller.start();
           },
         );
       },
-      child: Stack(
-        fit: StackFit.expand,
+      child: Column(
         children: [
-          Center(
-            child: MobileScanner(
-              fit: BoxFit.cover,
-              onDetect: onBarcodeDetect,
-              controller: controller,
-              scanWindow: scanWindow,
-              errorBuilder: (context, error, child) {
-                return ScannerErrorWidget(error: error);
-              },
+          Expanded(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Center(
+                  child: MobileScanner(
+                    fit: BoxFit.cover,
+                    onDetect: onBarcodeDetect,
+                    controller: widget.controller,
+                    scanWindow: scanWindow,
+                    errorBuilder: (context, error, child) {
+                      return ScannerErrorWidget(error: error);
+                    },
+                  ),
+                ),
+                CustomPaint(
+                  painter: ScannerOverlay(scanWindow: scanWindow),
+                ),
+              ],
             ),
           ),
-          CustomPaint(
-            painter: ScannerOverlay(scanWindow: scanWindow),
-          ),
           SafeArea(
-            child: ScannerActions(controller: controller),
+            child: ScannerActions(controller: widget.controller),
           ),
         ],
       ),
