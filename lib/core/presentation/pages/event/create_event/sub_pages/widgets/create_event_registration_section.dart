@@ -406,57 +406,60 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: Spacing.xSmall),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
-                borderRadius: BorderRadius.circular(LemonRadius.medium),
-              ),
-              child: Column(
-                children: [
-                  _buildSettingRow(
-                    context,
-                    icon: Assets.icons.icSessions,
-                    title: t.event.subEvent.sessionsSettings,
-                    trailingIcon: Assets.icons.icArrowRight,
-                    onTap: () {
-                      showCupertinoModalBottomSheet(
-                        barrierColor: LemonColor.black50,
-                        bounce: true,
-                        expand: true,
-                        backgroundColor: LemonColor.atomicBlack,
-                        context: context,
-                        builder: (newContext) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(18),
+            if (initialEvent?.subeventParent == null ||
+                initialEvent?.subeventParent?.isEmpty == true) ...[
+              SizedBox(height: Spacing.xSmall),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: LemonColor.chineseBlack,
+                  borderRadius: BorderRadius.circular(LemonRadius.medium),
+                ),
+                child: Column(
+                  children: [
+                    _buildSettingRow(
+                      context,
+                      icon: Assets.icons.icSessions,
+                      title: t.event.subEvent.sessionsSettings,
+                      trailingIcon: Assets.icons.icArrowRight,
+                      onTap: () {
+                        showCupertinoModalBottomSheet(
+                          barrierColor: LemonColor.black50,
+                          bounce: true,
+                          expand: true,
+                          backgroundColor: LemonColor.atomicBlack,
+                          context: context,
+                          builder: (newContext) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(18),
+                                ),
+                                color: LemonColor.atomicBlack,
                               ),
-                              color: LemonColor.atomicBlack,
-                            ),
-                            clipBehavior: Clip.hardEdge,
-                            child: FractionallySizedBox(
-                              heightFactor: 1,
-                              child: Column(
-                                children: [
-                                  const BottomSheetGrabber(),
-                                  Expanded(
-                                    child: EventSubEventsSettingPage(
-                                      event: initialEvent,
+                              clipBehavior: Clip.hardEdge,
+                              child: FractionallySizedBox(
+                                heightFactor: 1,
+                                child: Column(
+                                  children: [
+                                    const BottomSheetGrabber(),
+                                    Expanded(
+                                      child: EventSubEventsSettingPage(
+                                        event: initialEvent,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ],
         ],
       ),

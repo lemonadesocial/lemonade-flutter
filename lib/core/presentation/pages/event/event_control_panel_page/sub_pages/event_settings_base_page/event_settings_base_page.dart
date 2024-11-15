@@ -363,27 +363,31 @@ class EventSettingsBasePage extends StatelessWidget {
                         SliverToBoxAdapter(
                           child: SizedBox(height: Spacing.xSmall),
                         ),
-                        if (event.subeventParent != null &&
-                            event.subeventParent?.isEmpty == false) ...[
+                        if (event.subeventParent == null ||
+                            event.subeventParent?.isEmpty == true) ...[
                           SliverPadding(
                             padding: EdgeInsets.symmetric(
                               horizontal: Spacing.small,
                             ),
                             sliver: SliverToBoxAdapter(
                               child: SettingTileWidget(
+                                color: LemonColor.chineseBlack,
                                 title:
                                     t.event.sessionDuplication.duplicateSession,
-                                leading: Assets.icons.icCopy.svg(
-                                  width: 18.w,
-                                  height: 18.w,
+                                leading: ThemeSvgIcon(
+                                  builder: (filter) => Assets.icons.icCopy.svg(
+                                    width: Sizing.mSmall,
+                                    height: Sizing.mSmall,
+                                    colorFilter: filter,
+                                  ),
                                 ),
                                 leadingCircle: false,
                                 trailing: Assets.icons.icArrowBack.svg(
-                                  width: 18.w,
-                                  height: 18.w,
+                                  width: Sizing.mSmall,
+                                  height: Sizing.mSmall,
                                 ),
                                 titleStyle: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
+                                  color: colorScheme.onPrimary,
                                 ),
                                 radius: LemonRadius.small,
                                 onTap: () {
