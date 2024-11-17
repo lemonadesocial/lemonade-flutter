@@ -1,4 +1,5 @@
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,6 +19,7 @@ class EventTicket with _$EventTicket {
     String? event,
     String? invitedBy,
     String? type,
+    EventTicketType? typeExpanded,
     User? assignedToExpanded,
     String? shortId,
   }) = _EventTicket;
@@ -30,6 +32,9 @@ class EventTicket with _$EventTicket {
         event: dto.event,
         invitedBy: dto.invitedBy,
         type: dto.type,
+        typeExpanded: dto.typeExpanded != null
+            ? EventTicketType.fromDto(dto.typeExpanded!)
+            : null,
         assignedToExpanded: dto.assignedToExpanded != null
             ? User.fromDto(dto.assignedToExpanded!)
             : null,

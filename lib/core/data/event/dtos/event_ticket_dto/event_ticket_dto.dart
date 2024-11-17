@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -15,6 +16,7 @@ class EventTicketDto with _$EventTicketDto {
     @JsonKey(name: 'invited_by') String? invitedBy,
     @JsonKey(name: 'assigned_to_expanded') UserDto? assignedToExpanded,
     String? type,
+    @JsonKey(name: 'type_expanded') EventTicketTypeDto? typeExpanded,
     @JsonKey(name: 'shortid') String? shortId,
   }) = _EventTicketDto;
 

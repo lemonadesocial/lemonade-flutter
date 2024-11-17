@@ -363,7 +363,8 @@
         "pleaseScan": "Please scan QR Code",
         "checkin": "Check in",
         "checkedinSuccessfully": "Successfully checked in",
-        "rewards": "Rewards"
+        "rewards": "Rewards",
+        "checkInAll": "Check in All"
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",
