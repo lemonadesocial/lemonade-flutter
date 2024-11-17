@@ -82,7 +82,7 @@ class _ScanQRCheckinRewardsViewState extends State<_ScanQRCheckinRewardsView> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
       body: Column(

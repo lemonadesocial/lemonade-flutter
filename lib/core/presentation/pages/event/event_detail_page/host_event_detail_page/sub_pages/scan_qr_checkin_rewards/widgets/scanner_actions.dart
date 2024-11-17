@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -28,31 +29,68 @@ class ScannerActions extends StatelessWidget {
     required this.selectedScanTarget,
     required this.onScanTargetChanged,
   });
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ScanTargetDropdown(
-              selectedValue: selectedScanTarget,
-              onItemPressed: onScanTargetChanged,
+            Row(
+              children: [
+                InkWell(
+                  onTap: () => {print("onTap Guest List")},
+                  child: Container(
+                    height: Sizing.large,
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+                    decoration: BoxDecoration(
+                      color: colorScheme.outline,
+                      borderRadius: BorderRadius.circular(24.w),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: Sizing.mSmall,
+                          height: Sizing.mSmall,
+                          child: Center(
+                            child: Assets.icons.icGuestList.svg(
+                              width: Sizing.mSmall,
+                              height: Sizing.mSmall,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: Spacing.smMedium / 2),
+                        Text(
+                          t.event.eventApproval.tabs.guestList,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: Spacing.superExtraSmall),
+                ScanTargetDropdown(
+                  selectedValue: selectedScanTarget,
+                  onItemPressed: onScanTargetChanged,
+                ),
+              ],
             ),
-            Container(
-              width: Sizing.large,
-              height: Sizing.large,
-              decoration: BoxDecoration(
-                color: colorScheme.outline,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                onPressed: () => controller.switchCamera(),
-                icon: const Icon(
+            InkWell(
+              onTap: controller.switchCamera,
+              child: Container(
+                width: Sizing.large,
+                height: Sizing.large,
+                decoration: BoxDecoration(
+                  color: colorScheme.outline,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
                   Icons.flip_camera_android,
                   color: Colors.white,
                 ),
