@@ -43,7 +43,7 @@ class ScannerActions extends StatelessWidget {
             Row(
               children: [
                 InkWell(
-                  onTap: () => {print("onTap Guest List")},
+                  onTap: () => debugPrint("onTap Guest List"),
                   child: Container(
                     height: Sizing.large,
                     padding: EdgeInsets.symmetric(horizontal: Spacing.small),
