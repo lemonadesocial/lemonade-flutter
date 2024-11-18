@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.43.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.42.0...v1.43.0) (2024-11-18)
+
+
+### Features
+
+* event setting remake ([#792](https://github.com/lemonadesocial/lemonade-flutter/issues/792)) ([847683b](https://github.com/lemonadesocial/lemonade-flutter/commit/847683ba29591ce8188f64a3b1781122b7d17a75))
+* event votings list ([#793](https://github.com/lemonadesocial/lemonade-flutter/issues/793)) ([ac3fe10](https://github.com/lemonadesocial/lemonade-flutter/commit/ac3fe10b5f35c30b77d90e282c135824d2edd551))
+* increase scan qr code size ([#795](https://github.com/lemonadesocial/lemonade-flutter/issues/795)) ([7470ca2](https://github.com/lemonadesocial/lemonade-flutter/commit/7470ca28090f3c7f969cf2d4777f76cdc78a35ef))
+
+
+### Bug Fixes
+
+* minor bugs event setting ([#796](https://github.com/lemonadesocial/lemonade-flutter/issues/796)) ([c49ede7](https://github.com/lemonadesocial/lemonade-flutter/commit/c49ede7f085cd74df52233d954bd93d77e73dd4a))
+* minor bugs event settings ([#797](https://github.com/lemonadesocial/lemonade-flutter/issues/797)) ([bec73c9](https://github.com/lemonadesocial/lemonade-flutter/commit/bec73c966c0c64aff2b2336dcfe07dbcc3297ce7))
+
 ## [1.42.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.39.0...v1.42.0) (2024-11-09)
 
 ### Features
