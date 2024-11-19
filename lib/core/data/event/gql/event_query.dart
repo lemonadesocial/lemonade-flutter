@@ -176,6 +176,7 @@ const eventFragment = '''
       city
       title
       region
+      additional_directions
     }
     latitude
     longitude
@@ -417,6 +418,7 @@ final getUpcomingEventsQuery = gql('''
       city
       title
       region
+      additional_directions
     }
     guests
     checkin_count
@@ -453,6 +455,7 @@ final getPastEventsQuery = gql('''
       city
       title
       region
+      additional_directions
     }
   }
 }

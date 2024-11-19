@@ -105,6 +105,14 @@ class LocationItem extends StatelessWidget {
                             height: 0,
                           ),
                         ),
+                        SizedBox(height: 2.w),
+                        Text(
+                          location.additionalDirections ?? '',
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                            height: 0,
+                          ),
+                        ),
                       ],
                     ),
                   ),

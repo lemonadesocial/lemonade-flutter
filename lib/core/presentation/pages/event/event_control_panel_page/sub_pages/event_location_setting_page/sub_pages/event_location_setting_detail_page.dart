@@ -191,7 +191,6 @@ class _EventLocationSettingDetailPageState
           radius: BorderRadius.circular(24),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
-            AutoRouter.of(context).pop();
             Vibrate.feedback(FeedbackType.light);
             final address = Address(
               id: state.id,
@@ -207,7 +206,6 @@ class _EventLocationSettingDetailPageState
             context
                 .read<EventLocationSettingBloc>()
                 .add(const SubmitAddLocation());
-            AutoRouter.of(context).pop();
             widget.onConfirmLocation?.call(address);
           },
           loadingWhen: state.status.isInProgress,

@@ -312,7 +312,7 @@ class EventLocationSettingBloc
           region: state.region.value,
           latitude: state.latitude,
           longitude: state.longitude,
-          additional_directions: state.additionalDirections ?? '',
+          additional_directions: state.additionalDirections,
         ),
       );
     }

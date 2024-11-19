@@ -95,14 +95,11 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   Widget _buildContent() {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    List<Address> addresses = context.watch<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession.addresses ?? [],
-          orElse: () => [],
-        );
 
     return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
-        if (state.deleteStatus == FormzSubmissionStatus.success) {
+        if (state.status == FormzSubmissionStatus.success ||
+            state.deleteStatus == FormzSubmissionStatus.success) {
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
           _searchController.clear();
           setState(() {
@@ -175,10 +172,20 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                                 ),
                               ),
                               Expanded(
-                                child: AddressList(
-                                  addresses: addresses,
-                                  event: widget.event,
-                                  onConfirmLocation: widget.onConfirmLocation,
+                                child: BlocBuilder<AuthBloc, AuthState>(
+                                  builder: (context, state) {
+                                    final addresses = state.maybeWhen(
+                                      authenticated: (authSession) =>
+                                          authSession.addresses ?? [],
+                                      orElse: () => <Address>[],
+                                    );
+                                    return AddressList(
+                                      addresses: addresses,
+                                      event: widget.event,
+                                      onConfirmLocation:
+                                          widget.onConfirmLocation,
+                                    );
+                                  },
                                 ),
                               ),
                             ],

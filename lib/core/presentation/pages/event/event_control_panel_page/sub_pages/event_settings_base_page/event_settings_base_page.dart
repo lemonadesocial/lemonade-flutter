@@ -242,7 +242,9 @@ class EventSettingsBasePage extends StatelessWidget {
                               title: event.address != null
                                   ? event.address?.title ?? ''
                                   : t.event.locationSetting.chooseLocation,
-                              subTitle: event.address?.street1,
+                              subTitle: event.address?.street1 ?? '',
+                              description: event.address?.additionalDirections ??
+                                  '',
                               leading: Icon(
                                 Icons.location_on_outlined,
                                 size: 18.w,
@@ -272,7 +274,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                                 address: address,
                                               ),
                                             );
-                                        AutoRouter.of(context).pop();
+                                        AutoRouter.of(mContext).pop();
                                       },
                                     );
                                   },
