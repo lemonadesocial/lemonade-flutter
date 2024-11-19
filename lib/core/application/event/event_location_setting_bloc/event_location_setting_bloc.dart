@@ -389,20 +389,11 @@ class EventLocationSettingBloc
     SelectAddress event,
     Emitter<EventLocationSettingState> emit,
   ) async {
-    // Uncheck when tap again
-    if (event.address.id == state.selectedAddress?.id) {
-      emit(
-        state.copyWith(
-          selectedAddress: null,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          selectedAddress: event.address,
-        ),
-      );
-    }
+    return emit(
+      state.copyWith(
+        selectedAddress: event.address,
+      ),
+    );
   }
 
   Future<void> _onAdditionalDirectionsChanged(
