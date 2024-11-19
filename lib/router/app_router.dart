@@ -199,6 +199,9 @@ final eventDetailRoutes = AutoRoute(
       page: ScanQRCheckinRewardsRoute.page,
     ),
     AutoRoute(
+      page: CheckInGuestListRoute.page,
+    ),
+    AutoRoute(
       page: ClaimSplitRelayPaymentRoute.page,
     ),
     AutoRoute(

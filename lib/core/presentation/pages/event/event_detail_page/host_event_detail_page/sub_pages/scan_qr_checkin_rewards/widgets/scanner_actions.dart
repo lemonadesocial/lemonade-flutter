@@ -1,15 +1,19 @@
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/checkin_guest_list_page.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 extension ScanTargetIcon on ScanTarget {
   SvgGenImage get icon => switch (this) {
@@ -43,7 +47,15 @@ class ScannerActions extends StatelessWidget {
             Row(
               children: [
                 InkWell(
-                  onTap: () => debugPrint("onTap Guest List"),
+                  onTap: () {
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      topRadius: Radius.circular(30.r),
+                      builder: (context) => const CheckInGuestListPage(
+                        initialTab: EventGuestsTabs.reservations,
+                      ),
+                    );
+                  },
                   child: Container(
                     height: Sizing.large,
                     padding: EdgeInsets.symmetric(horizontal: Spacing.small),
