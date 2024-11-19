@@ -81,7 +81,7 @@ class MyEventTicketAssignmentView extends StatelessWidget {
     final userId = AuthUtils.getUserId(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(),
       body: BlocBuilder<GetEventTicketTypesBloc, GetEventTicketTypesState>(
@@ -123,96 +123,106 @@ class MyEventTicketAssignmentView extends StatelessWidget {
                           ),
                         );
 
-                    return SafeArea(
-                      child: Stack(
-                        children: [
-                          CustomScrollView(
-                            slivers: [
-                              MyEventTicketAssignmentList(
-                                controller: this,
-                                ticketTypes:
-                                    eventTicketTypesResponse.ticketTypes ?? [],
-                                eventTickets: otherTickets,
-                                event: event,
-                              ),
-                              SliverPadding(
-                                padding:
-                                    EdgeInsets.only(bottom: Spacing.medium * 4),
-                              ),
-                            ],
-                          ),
-                          BlocBuilder<AssignMultipleTicketsFormBloc,
-                              AssignMultipleTicketsFormState>(
-                            builder: (context, state) {
-                              return Align(
-                                alignment: Alignment.bottomCenter,
-                                child: SafeArea(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: colorScheme.background,
-                                      border: Border(
-                                        top: BorderSide(
-                                          color: colorScheme.outline,
+                    return GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: SafeArea(
+                        child: Stack(
+                          children: [
+                            CustomScrollView(
+                              slivers: [
+                                MyEventTicketAssignmentList(
+                                  controller: this,
+                                  ticketTypes:
+                                      eventTicketTypesResponse.ticketTypes ??
+                                          [],
+                                  eventTickets: otherTickets,
+                                  event: event,
+                                ),
+                                SliverPadding(
+                                  padding: EdgeInsets.only(
+                                    bottom: Spacing.medium * 4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            BlocBuilder<AssignMultipleTicketsFormBloc,
+                                AssignMultipleTicketsFormState>(
+                              builder: (context, state) {
+                                return Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: SafeArea(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.background,
+                                        border: Border(
+                                          top: BorderSide(
+                                            color: colorScheme.outline,
+                                          ),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(Spacing.small),
+                                      child: Opacity(
+                                        opacity: state.isValid ? 1 : 0.5,
+                                        child: BlocConsumer<AssignTicketsBloc,
+                                            AssignTicketsState>(
+                                          listener: (context, assignState) {
+                                            if (assignState
+                                                is AssignTicketsStateSuccess) {
+                                              context
+                                                  .read<GetMyTicketsBloc>()
+                                                  .add(
+                                                    GetMyTicketsEvent.fetch(),
+                                                  );
+                                              onAssignSuccess?.call();
+                                            }
+                                          },
+                                          builder: (context, assignState) {
+                                            return LinearGradientButton
+                                                .primaryButton(
+                                              loadingWhen: assignState
+                                                  is AssignTicketsStateLoading,
+                                              onTap: () {
+                                                if (!state.isValid) return;
+                                                if (assignState
+                                                    is AssignTicketsStateLoading) {
+                                                  return;
+                                                }
+                                                context
+                                                    .read<AssignTicketsBloc>()
+                                                    .add(
+                                                      AssignTicketsEvent.assign(
+                                                        assignees:
+                                                            state.assignees
+                                                                .where(
+                                                                  (element) =>
+                                                                      element.email
+                                                                              ?.isNotEmpty ==
+                                                                          true ||
+                                                                      element.user
+                                                                              ?.isNotEmpty ==
+                                                                          true,
+                                                                )
+                                                                .toList(),
+                                                      ),
+                                                    );
+                                              },
+                                              label: t
+                                                  .event
+                                                  .eventTicketManagement
+                                                  .assignTicket,
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),
-                                    padding: EdgeInsets.all(Spacing.small),
-                                    child: Opacity(
-                                      opacity: state.isValid ? 1 : 0.5,
-                                      child: BlocConsumer<AssignTicketsBloc,
-                                          AssignTicketsState>(
-                                        listener: (context, assignState) {
-                                          if (assignState
-                                              is AssignTicketsStateSuccess) {
-                                            context
-                                                .read<GetMyTicketsBloc>()
-                                                .add(
-                                                  GetMyTicketsEvent.fetch(),
-                                                );
-                                            onAssignSuccess?.call();
-                                          }
-                                        },
-                                        builder: (context, assignState) {
-                                          return LinearGradientButton
-                                              .primaryButton(
-                                            loadingWhen: assignState
-                                                is AssignTicketsStateLoading,
-                                            onTap: () {
-                                              if (!state.isValid) return;
-                                              if (assignState
-                                                  is AssignTicketsStateLoading) {
-                                                return;
-                                              }
-                                              context
-                                                  .read<AssignTicketsBloc>()
-                                                  .add(
-                                                    AssignTicketsEvent.assign(
-                                                      assignees: state.assignees
-                                                          .where(
-                                                            (element) =>
-                                                                element.email
-                                                                        ?.isNotEmpty ==
-                                                                    true ||
-                                                                element.user
-                                                                        ?.isNotEmpty ==
-                                                                    true,
-                                                          )
-                                                          .toList(),
-                                                    ),
-                                                  );
-                                            },
-                                            label: t.event.eventTicketManagement
-                                                .assignTicket,
-                                          );
-                                        },
-                                      ),
-                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

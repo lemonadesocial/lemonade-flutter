@@ -172,11 +172,18 @@ const eventFragment = '''
       provider_id
     }
     address {
+      _id
       street_1
+      street_2
       city
       title
       region
+      country
       additional_directions
+      latitude
+      longitude
+      postal
+      recipient_name
     }
     latitude
     longitude
