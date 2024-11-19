@@ -4,12 +4,16 @@ import 'package:app/core/application/event/event_datetime_settings_bloc/event_da
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
+import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_event_detail_input.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
-class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
+class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
   final String? parentEventId;
   const CreateEventPage({
     super.key,
@@ -50,6 +54,48 @@ class CreateEventPage extends StatelessWidget implements AutoRouteWrapper {
       ],
       child: this,
     );
+  }
+
+  @override
+  State<CreateEventPage> createState() => _CreateEventPageState();
+}
+
+class _CreateEventPageState extends State<CreateEventPage> {
+  @override
+  void initState() {
+    super.initState();
+    _prefillParentEventData();
+  }
+
+  Future<void> _prefillParentEventData() async {
+    if (widget.parentEventId != null) {
+      final result = await getIt<EventRepository>().getEventDetail(
+        input: GetEventDetailInput(id: widget.parentEventId!),
+      );
+      final parentEvent = result.fold(
+        (l) => null,
+        (r) => r,
+      );
+      context.read<EventLocationSettingBloc>().add(
+            EventLocationSettingEvent.selectAddress(
+              address: Address(
+                id: parentEvent?.address?.id,
+                title: parentEvent?.address?.title ?? '',
+                street1: parentEvent?.address?.street1 ?? '',
+                street2: parentEvent?.address?.street2 ?? '',
+                city: parentEvent?.address?.city ?? '',
+                region: parentEvent?.address?.region ?? '',
+                postal: parentEvent?.address?.postal ?? '',
+                country: parentEvent?.address?.country ?? '',
+                latitude: parentEvent?.address?.latitude,
+                longitude: parentEvent?.address?.longitude,
+                additionalDirections:
+                    parentEvent?.address?.additionalDirections ?? '',
+                recipientName: parentEvent?.address?.recipientName ?? '',
+              ),
+            ),
+          );
+    }
   }
 
   @override
