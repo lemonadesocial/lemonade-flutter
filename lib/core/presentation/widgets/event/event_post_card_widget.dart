@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/device_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
@@ -122,14 +123,14 @@ class EventPostCard extends StatelessWidget {
   }
 
   Widget _buildHostsAvatars(ColorScheme colorScheme) {
-    final hosts = [...(event.visibleCohostsExpanded ?? [])].reversed.toList();
+    final hosts = EventUtils.getVisibleCohosts(event).reversed.toList();
     return SizedBox(
       width: (1 + 1 / 2 * (hosts.length - 1)) * Sizing.small,
       height: Sizing.small,
       child: Stack(
         children: hosts.asMap().entries.map((entry) {
-          final file = (entry.value?.newPhotosExpanded?.isNotEmpty == true)
-              ? entry.value?.newPhotosExpanded!.first
+          final file = (entry.value.newPhotosExpanded?.isNotEmpty == true)
+              ? entry.value.newPhotosExpanded!.first
               : null;
           return Positioned(
             right: entry.key * 12,

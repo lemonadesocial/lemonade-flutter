@@ -17,6 +17,7 @@ fragment EventHostExpandedFragment on User {
 
 fragment EventPeopleFragment on Event {
   cohosts
+  visible_cohosts
   speaker_users
   accepted
   invited
@@ -91,6 +92,10 @@ fragment EventFields on Event {
   slug
   host
   approval_required
+  hide_cohosts
+  visible_cohosts_expanded(limit: 25) {
+    ...EventHostExpandedFragment
+  }
   host_expanded {
     ...EventHostExpandedFragment
   }

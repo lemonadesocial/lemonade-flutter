@@ -31,6 +31,7 @@ class Event with _$Event {
     String? slug,
     List<String>? speakerUsers,
     List<User?>? speakerUsersExpanded,
+    bool? hideCohosts,
     List<String>? cohosts,
     List<User?>? cohostsExpanded,
     List<String>? visibleCohosts,
@@ -107,6 +108,7 @@ class Event with _$Event {
       speakerUsersExpanded: List.from(dto.speakerUsersExpanded ?? [])
           .map((item) => item != null ? User.fromDto(item) : null)
           .toList(),
+      hideCohosts: dto.hideCohosts,
       cohosts:
           List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
       visibleCohosts: dto.visibleCohosts?.isNotEmpty == true

@@ -151,6 +151,7 @@ const eventFragment = '''
     slug
     host
     approval_required
+    hide_cohosts
     host_expanded {
       ...eventHostExpandedFragment
     }
