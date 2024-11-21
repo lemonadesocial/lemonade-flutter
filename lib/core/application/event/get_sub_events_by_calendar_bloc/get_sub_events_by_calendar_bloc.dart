@@ -52,7 +52,25 @@ class GetSubEventsByCalendarBloc
   ) {
     DateTime selectedDate = event.selectedDate;
     emit(state.copyWith(selectedDate: selectedDate));
-    add(GetSubEventsByCalendarEvent.fetch());
+    int dayInMonth = DateUtils.getDaysInMonth(
+      state.selectedDate.year,
+      state.selectedDate.month,
+    );
+    DateTime startFrom =
+        DateTime(state.selectedDate.year, state.selectedDate.month, 1).toUtc();
+    DateTime startTo = DateTime(
+      state.selectedDate.year,
+      state.selectedDate.month,
+      dayInMonth,
+      23,
+      59,
+    ).toUtc();
+    add(
+      GetSubEventsByCalendarEvent.fetch(
+        from: startFrom,
+        to: startTo,
+      ),
+    );
   }
 
   void _onFilterUpdate(
@@ -72,20 +90,6 @@ class GetSubEventsByCalendarBloc
     Emitter emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    int dayInMonth = DateUtils.getDaysInMonth(
-      state.selectedDate.year,
-      state.selectedDate.month,
-    );
-    DateTime startFrom = event.from ??
-        DateTime(state.selectedDate.year, state.selectedDate.month, 1).toUtc();
-    DateTime startTo = event.to ??
-        DateTime(
-          state.selectedDate.year,
-          state.selectedDate.month,
-          dayInMonth,
-          23,
-          59,
-        ).toUtc();
     final result = await _client.query$GetEvents(
       Options$Query$GetEvents(
         fetchPolicy: FetchPolicy.networkOnly,
@@ -94,8 +98,8 @@ class GetSubEventsByCalendarBloc
           subevent_parent: parentEventId,
           // TODO: to be confirmed with PO
           // unpublished: true,
-          startFrom: startFrom,
-          startTo: startTo,
+          startFrom: event.from,
+          startTo: event.to,
         ),
       ),
     );
