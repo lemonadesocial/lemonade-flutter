@@ -458,6 +458,7 @@ type Event {
   end: DateTimeISO!
   host: MongoID!
   cohosts: [MongoID!]
+  visible_cohosts: [MongoID!]
   invited: [MongoID!]
   inviters: [MongoID!]
   pending: [MongoID!]
@@ -472,6 +473,7 @@ type Event {
   accepted_user_fields_required: [String!]
   access_pass: AccessPass
   address: Address
+  address_directions: [String!]
   approved: Boolean
   broadcast_rooms: [BroadcastRoom!]
   button_icon: String
@@ -575,6 +577,7 @@ type Event {
   host_expanded: User
   subevent_parent_expanded: Event
   cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
+  visible_cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   invited_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   pending_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   accepted_expanded(skip: Int! = 0, limit: Int! = 25): [User]
@@ -3429,6 +3432,7 @@ input EventInput {
   title: String
   start: DateTimeISO
   end: DateTimeISO
+  visible_cohosts: [MongoID!]
   application_required: Boolean
   rsvp_wallet_platforms: [ApplicationBlokchainPlatformInput!]
   application_form_url: String
@@ -3437,6 +3441,7 @@ input EventInput {
   accepted_user_fields_required: [String!]
   access_pass: AccessPassInput
   address: AddressInput
+  address_directions: [String!]
   broadcast_rooms: [BroadcastRoomInput!]
   comments: String
   cost: Float

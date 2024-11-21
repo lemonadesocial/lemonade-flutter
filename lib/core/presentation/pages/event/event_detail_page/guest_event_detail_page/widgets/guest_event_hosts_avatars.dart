@@ -14,10 +14,7 @@ class GuestEventHostsAvatars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final hosts = [
-      ...event.cohostsExpanded ?? [],
-      event.hostExpanded,
-    ];
+    final hosts = [...(event.visibleCohostsExpanded ?? [])].reversed.toList();
     return SizedBox(
       width: (1 + 1 / 2 * (hosts.length - 1)) * Sizing.small,
       height: Sizing.small,

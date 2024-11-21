@@ -120,6 +120,13 @@ class _InfoCard extends StatelessWidget {
     required this.event,
   });
 
+  String get hostNames {
+    final firstHost = (event.visibleCohostsExpanded ?? []).firstOrNull;
+    final remainingHosts =
+        (event.visibleCohostsExpanded ?? []).skip(1).toList();
+    return '${(firstHost?.name ?? '')} ${remainingHosts.isNotEmpty ? ' +${remainingHosts.length}' : ''}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -188,7 +195,7 @@ class _InfoCard extends StatelessWidget {
             SizedBox(width: Spacing.small),
             Expanded(
               child: Text(
-                '${(event.hostExpanded?.name ?? '')} ${event.cohostsExpanded?.isNotEmpty == true ? ' +${event.cohostsExpanded?.length}' : ''}',
+                hostNames,
                 style: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,

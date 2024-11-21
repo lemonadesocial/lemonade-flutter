@@ -27,10 +27,11 @@ class EventPublishCohostsChecklistItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final hosts = [
-      event.hostExpanded,
-      ...(event.cohostsExpanded ?? []),
-    ].where((element) => element != null).cast<User>().toList().asMap().entries;
+    final hosts = (event.visibleCohostsExpanded ?? [])
+        .whereType<User>()
+        .toList()
+        .asMap()
+        .entries;
 
     return CheckListItemBaseWidget(
       onTap: () => AutoRouter.of(context).push(

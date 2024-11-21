@@ -34,12 +34,9 @@ class GuestEventDetailHosts extends StatelessWidget {
 
   final Event event;
 
-  List<User?> get hosts {
-    final coHosts = event.cohostsExpanded ?? [];
-    return [event.hostExpanded, ...coHosts]
-        .where((item) => item != null)
-        .toList();
-  }
+  List<User?> get hosts => [
+        ...(event.visibleCohostsExpanded ?? []),
+      ];
 
   @override
   Widget build(BuildContext context) {
