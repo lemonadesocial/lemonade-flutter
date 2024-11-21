@@ -160,12 +160,8 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
         if (!_hasMovedToFirstEventDate) {
           DateTime? targetDate;
           final now = DateTime.now().withoutTime;
-          final sameDayWithCurrentDay =
-              state.eventsGroupByDate.keys.firstWhereOrNull(
-            (mDate) =>
-                now.month == mDate.month &&
-                now.year == mDate.year &&
-                now.day == mDate.day,
+          final sameDayWithCurrentDay = state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) => now.month == mDate.month && now.year == mDate.year && mDate.day >= now.day,
           );
           final sameMonthWithCurrentMonth =
               state.eventsGroupByDate.keys.firstWhereOrNull(
