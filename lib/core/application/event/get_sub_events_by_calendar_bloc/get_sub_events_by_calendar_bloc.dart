@@ -24,7 +24,7 @@ class GetSubEventsByCalendarBloc
     required this.parentEventId,
   }) : super(
           GetSubEventsByCalendarState(
-            selectedDate: DateTime.now().toLocal().withoutTime,
+            selectedDate: DateTime.now().withoutTime,
             events: [],
             eventsGroupByDate: <DateTime, List<Event>>{},
             selectedHosts: [],
@@ -51,11 +51,6 @@ class GetSubEventsByCalendarBloc
     Emitter emit,
   ) {
     DateTime selectedDate = event.selectedDate;
-    final lastSelectedDate = state.selectedDate;
-    if (DateUtils.isSameMonth(lastSelectedDate, selectedDate)) {
-      emit(state.copyWith(selectedDate: selectedDate));
-      return;
-    }
     emit(state.copyWith(selectedDate: selectedDate));
     add(GetSubEventsByCalendarEvent.fetch());
   }
@@ -95,7 +90,7 @@ class GetSubEventsByCalendarBloc
       Options$Query$GetEvents(
         fetchPolicy: FetchPolicy.networkOnly,
         variables: Variables$Query$GetEvents(
-          limit: 100,
+          limit: 1000,
           subevent_parent: parentEventId,
           // TODO: to be confirmed with PO
           // unpublished: true,

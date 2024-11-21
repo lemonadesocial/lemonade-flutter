@@ -159,25 +159,23 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
 
         if (!_hasMovedToFirstEventDate) {
           DateTime? targetDate;
-          final now = DateTime.now().toLocal().withoutTime;
-          targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
-            (mDate) => mDate.isAfter(now) || mDate.isAtSameMomentAs(now),
+          final now = DateTime.now().withoutTime;
+          final sameDayWithCurrentDay =
+              state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) =>
+                now.month == mDate.month &&
+                now.year == mDate.year &&
+                now.day == mDate.day,
           );
-          targetDate = targetDate ?? state.eventsGroupByDate.keys.first;
+          final sameMonthWithCurrentMonth =
+              state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) => now.month == mDate.month && now.year == mDate.year,
+          );
+          targetDate = sameDayWithCurrentDay ??
+              sameMonthWithCurrentMonth ??
+              state.eventsGroupByDate.keys.first;
           _onCalendarChanged(targetDate);
           _hasMovedToFirstEventDate = true;
-        }
-
-        if (_hasMovedToFirstEventDate) {
-          final targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
-            (mDate) =>
-                state.selectedDate.month == mDate.month &&
-                state.selectedDate.year == mDate.year,
-          );
-          if (targetDate == null) {
-            return;
-          }
-          _onCalendarChanged(targetDate);
         }
       },
       builder: (context, state) {
