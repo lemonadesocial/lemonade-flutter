@@ -820,5 +820,9 @@
         "changeVote": "Change vote",
         "castingVote": "Casting vote"
     },
-    "addFurtherInstructions": "Add further instructions"
+    "instructions": {
+        "addInstructions": "Add instructions",
+        "addFurtherInstructions": "Add further instructions",
+        "addInstructionsDescription": "Tell guests how to reach you: parking spots, building entry codes, elevator location, or nearby landmarks."
+    }
 }

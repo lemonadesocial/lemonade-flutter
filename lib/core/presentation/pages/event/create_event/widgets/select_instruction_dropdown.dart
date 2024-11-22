@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_add_instructions_setting_page/event_add_instructions_setting_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -11,6 +12,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SelectInstructionDropdown extends StatefulWidget {
   final String initialInstruction;
@@ -57,14 +60,119 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
     );
   }
 
+  void _handleInstructionSelection(String instruction) {
+    setState(() => selectedItem = instruction);
+    widget.onChange?.call(instruction);
+  }
+
+  void _showInstructionModal([String? initialInstruction]) {
+    Vibrate.feedback(FeedbackType.light);
+    showCupertinoModalBottomSheet(
+      context: context,
+      useRootNavigator: true,
+      builder: (mContext) => EventAddInstructionsSettingPage(
+        instruction: initialInstruction,
+        onConfirm: _handleInstructionSelection,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isCustomInstruction =
+        selectedItem.isNotEmpty && !addressDirections.contains(selectedItem);
+
+    return isCustomInstruction
+        ? _CustomInstructionButton(
+            instruction: selectedItem,
+            onTap: () => _showInstructionModal(selectedItem),
+          )
+        : _InstructionDropdown(
+            selectedItem: selectedItem,
+            addressDirections: addressDirections,
+            onAddNewInstruction: _showInstructionModal,
+            onSelectInstruction: _handleInstructionSelection,
+          );
+  }
+}
+
+class _CustomInstructionButton extends StatelessWidget {
+  final String instruction;
+  final VoidCallback onTap;
+
+  const _CustomInstructionButton({
+    required this.instruction,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(LemonRadius.small),
+          color: LemonColor.chineseBlack,
+        ),
+        child: Row(
+          children: [
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icSymbolConversion.svg(
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+                colorFilter: filter,
+              ),
+            ),
+            SizedBox(width: Spacing.small),
+            Expanded(
+              child: Text(
+                instruction,
+                style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+              ),
+            ),
+            SizedBox(width: Spacing.xSmall),
+            ThemeSvgIcon(
+              color: LemonColor.white18,
+              builder: (filter) => Assets.icons.icEdit.svg(
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+                colorFilter: filter,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InstructionDropdown extends StatelessWidget {
+  final String selectedItem;
+  final List<String> addressDirections;
+  final VoidCallback onAddNewInstruction;
+  final Function(String) onSelectInstruction;
+
+  const _InstructionDropdown({
+    required this.selectedItem,
+    required this.addressDirections,
+    required this.onAddNewInstruction,
+    required this.onSelectInstruction,
+  });
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
         value: selectedItem.isEmpty ? null : selectedItem,
-        onChanged: (value) {},
+        onChanged: (value) => onSelectInstruction(value ?? ''),
         customButton: Container(
           width: double.infinity,
           padding: EdgeInsets.all(Spacing.small),
@@ -76,37 +184,38 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
             children: [
               ThemeSvgIcon(
                 color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icPlus.svg(
-                  width: Sizing.mSmall,
-                  height: Sizing.mSmall,
-                  colorFilter: filter,
-                ),
+                builder: (filter) => selectedItem.isNotEmpty
+                    ? Assets.icons.icSymbolConversion.svg(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        colorFilter: filter,
+                      )
+                    : Assets.icons.icPlus.svg(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        colorFilter: filter,
+                      ),
               ),
               SizedBox(width: Spacing.small),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      t.event.addFurtherInstructions,
-                      style: Typo.medium.copyWith(
-                        color: selectedItem.isEmpty
-                            ? colorScheme.onSecondary
-                            : colorScheme.onPrimary,
-                      ),
-                    ),
-                    if (selectedItem.isNotEmpty)
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: Spacing.superExtraSmall / 2,
-                        ),
-                        child: Text(
-                          selectedItem,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                    selectedItem.isNotEmpty
+                        ? Text(
+                            selectedItem,
+                            style: Typo.medium.copyWith(
+                              color: selectedItem.isEmpty
+                                  ? colorScheme.onSecondary
+                                  : colorScheme.onPrimary,
+                            ),
+                          )
+                        : Text(
+                            t.event.instructions.addInstructions,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -127,8 +236,18 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
               builder: (context, menuSetState) {
                 return InkWell(
                   onTap: () {
-                    debugPrint('Special add instruction item tapped');
                     Navigator.pop(context);
+                    Vibrate.feedback(FeedbackType.light);
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      useRootNavigator: true,
+                      builder: (mContext) => EventAddInstructionsSettingPage(
+                        onConfirm: (instruction) {
+                          onSelectInstruction(instruction);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
                   },
                   child: Container(
                     height: 50.w,
@@ -147,7 +266,7 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
                         ),
                         SizedBox(width: Spacing.small),
                         Text(
-                          t.event.addFurtherInstructions,
+                          t.event.instructions.addInstructions,
                           style: Typo.medium.copyWith(
                             color: LemonColor.paleViolet,
                             fontWeight: FontWeight.w500,
@@ -160,31 +279,26 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
               },
             ),
           ),
-          ...addressDirections
-              .map(
-                (addressDirection) => DropdownMenuItem<String>(
-                  value: addressDirection,
-                  child: StatefulBuilder(
-                    builder: (context, menuSetState) {
-                      final selected = selectedItem == addressDirection;
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            selectedItem = addressDirection;
-                          });
-                          widget.onChange?.call(selectedItem);
-                          Navigator.pop(context);
-                        },
-                        child: _SelectInstructionItem(
-                          addressDirection: addressDirection,
-                          selected: selected,
-                        ),
-                      );
+          ...addressDirections.map(
+            (addressDirection) => DropdownMenuItem<String>(
+              value: addressDirection,
+              child: StatefulBuilder(
+                builder: (context, menuSetState) {
+                  final selected = selectedItem == addressDirection;
+                  return InkWell(
+                    onTap: () {
+                      onSelectInstruction(addressDirection);
+                      Navigator.pop(context);
                     },
-                  ),
-                ),
-              )
-              .toList(),
+                    child: _SelectInstructionItem(
+                      addressDirection: addressDirection,
+                      selected: selected,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ],
         dropdownStyleData: DropdownStyleData(
           decoration: BoxDecoration(

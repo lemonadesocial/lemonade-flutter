@@ -335,10 +335,12 @@ class CreateEventBasePage extends StatelessWidget {
                           SelectInstructionDropdown(
                             parentEventId: state.parentEventId,
                             onChange: (String selectedInstruction) {
-                              print(
-                                  'Selected instruction: $selectedInstruction');
-                              // Do something with the selected instruction
-                              // If nothing is selected, selectedInstruction will be empty string ''
+                              context.read<EventLocationSettingBloc>().add(
+                                    EventLocationSettingEvent
+                                        .additionalDirectionsChanged(
+                                      additionalDirections: selectedInstruction,
+                                    ),
+                                  );
                             },
                           ),
                         ],
