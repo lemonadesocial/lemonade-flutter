@@ -822,6 +822,7 @@
     },
     "instructions": {
         "addInstructions": "Add instructions",
+        "editInstructions": "Edit instructions",
         "addFurtherInstructions": "Add further instructions",
         "addInstructionsDescription": "Tell guests how to reach you: parking spots, building entry codes, elevator location, or nearby landmarks."
     }
