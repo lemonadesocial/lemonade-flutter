@@ -118,7 +118,9 @@ class HomeEventCard extends StatelessWidget {
                                             color: colorScheme.onSecondary,
                                           ),
                                         ),
-                                        SizedBox(height: Spacing.superExtraSmall / 2),
+                                        SizedBox(
+                                            height:
+                                                Spacing.superExtraSmall / 2),
                                         Text(
                                           event.address?.additionalDirections ??
                                               '',

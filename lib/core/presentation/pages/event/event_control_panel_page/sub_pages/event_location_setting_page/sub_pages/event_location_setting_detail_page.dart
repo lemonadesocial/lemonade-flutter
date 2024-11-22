@@ -192,6 +192,7 @@ class _EventLocationSettingDetailPageState
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
+            AutoRouter.of(context).pop();
             final address = Address(
               id: state.id,
               title: state.title.value,

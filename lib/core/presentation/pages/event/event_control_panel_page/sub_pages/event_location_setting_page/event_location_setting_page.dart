@@ -49,6 +49,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   @override
   void initState() {
     super.initState();
+    context.read<AuthBloc>().add(const AuthEvent.refreshData());
     _placeAutocompleteService = GooglePlaceAutocompleteService();
   }
 
