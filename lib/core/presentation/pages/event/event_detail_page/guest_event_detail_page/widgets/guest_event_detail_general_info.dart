@@ -120,6 +120,14 @@ class _InfoCard extends StatelessWidget {
     required this.event,
   });
 
+  String get hostNames {
+    final hosts = EventUtils.getVisibleCohosts(event);
+    if (hosts.isEmpty) return '';
+    final firstHost = hosts.firstOrNull;
+    final remainingHosts = hosts.skip(1).toList();
+    return '${(firstHost?.name ?? '')} ${remainingHosts.isNotEmpty ? ' +${remainingHosts.length}' : ''}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -175,30 +183,31 @@ class _InfoCard extends StatelessWidget {
             ],
           ),
         ),
-      Padding(
-        padding: EdgeInsets.all(Spacing.small),
-        child: Row(
-          children: [
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icHostOutline.svg(
-                colorFilter: filter,
-              ),
-            ),
-            SizedBox(width: Spacing.small),
-            Expanded(
-              child: Text(
-                '${(event.hostExpanded?.name ?? '')} ${event.cohostsExpanded?.isNotEmpty == true ? ' +${event.cohostsExpanded?.length}' : ''}',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
+      if (EventUtils.getVisibleCohosts(event).isNotEmpty)
+        Padding(
+          padding: EdgeInsets.all(Spacing.small),
+          child: Row(
+            children: [
+              ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icHostOutline.svg(
+                  colorFilter: filter,
                 ),
               ),
-            ),
-            GuestEventHostsAvatars(event: event),
-          ],
+              SizedBox(width: Spacing.small),
+              Expanded(
+                child: Text(
+                  hostNames,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              GuestEventHostsAvatars(event: event),
+            ],
+          ),
         ),
-      ),
     ];
 
     return Container(

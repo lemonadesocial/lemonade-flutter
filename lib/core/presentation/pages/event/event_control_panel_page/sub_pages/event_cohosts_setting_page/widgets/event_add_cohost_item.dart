@@ -7,6 +7,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventAddCohostItem extends StatelessWidget {
   final User? user;
@@ -49,10 +50,22 @@ class EventAddCohostItem extends StatelessWidget {
                           children: [
                             Text(
                               user?.name ?? '',
-                              style: Typo.small.copyWith(
+                              style: Typo.medium.copyWith(
                                 fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary,
                               ),
                             ),
+                            if (user?.email?.isNotEmpty == true) ...[
+                              SizedBox(
+                                height: 2.w,
+                              ),
+                              Text(
+                                user?.email ?? '',
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onSecondary,
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -70,8 +83,8 @@ class EventAddCohostItem extends StatelessWidget {
                           ),
                         )
                       : ThemeSvgIcon(
-                          color: colorScheme.onPrimary,
-                          builder: (colorFilter) => Assets.icons.icAdd.svg(
+                          color: colorScheme.onSecondary,
+                          builder: (colorFilter) => Assets.icons.icUncheck.svg(
                             colorFilter: colorFilter,
                           ),
                         ),

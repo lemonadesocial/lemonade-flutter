@@ -25,8 +25,12 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'new_new_photos_expanded')
     List<DbFileDto?>? newNewPhotosExpanded,
     @JsonKey(name: 'new_new_photos') List<String>? newNewPhotos,
+    @JsonKey(name: 'hide_cohosts') bool? hideCohosts,
     List<String>? cohosts,
     @JsonKey(name: 'cohosts_expanded') List<UserDto?>? cohostsExpanded,
+    @JsonKey(name: 'visible_cohosts') List<String>? visibleCohosts,
+    @JsonKey(name: 'visible_cohosts_expanded')
+    List<UserDto?>? visibleCohostsExpanded,
     String? title,
     String? slug,
     @JsonKey(name: 'speaker_users') List<String>? speakerUsers,
