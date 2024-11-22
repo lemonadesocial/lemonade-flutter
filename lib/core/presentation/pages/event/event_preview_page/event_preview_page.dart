@@ -102,10 +102,7 @@ class _EventPreviewViewState extends State<_EventPreviewView> {
           orElse: () {},
           fetched: (event) {
             context.read<GetSubEventsByCalendarBloc>().add(
-                  GetSubEventsByCalendarEvent.fetch(
-                    from: event.start?.toUtc(),
-                    to: event.end?.toUtc(),
-                  ),
+                  GetSubEventsByCalendarEvent.fetch(),
                 );
           },
         );

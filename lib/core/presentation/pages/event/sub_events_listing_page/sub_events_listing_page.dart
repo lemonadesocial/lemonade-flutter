@@ -1,4 +1,3 @@
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
@@ -41,18 +40,11 @@ class SubEventsListingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parentEvent = context.read<GetEventDetailBloc>().state.maybeWhen(
-          orElse: () => null,
-          fetched: (event) => event,
-        );
     return BlocProvider(
       create: (context) =>
           GetSubEventsByCalendarBloc(parentEventId: parentEventId)
             ..add(
-              GetSubEventsByCalendarEvent.fetch(
-                from: parentEvent?.start?.toUtc(),
-                to: parentEvent?.end?.toUtc(),
-              ),
+              GetSubEventsByCalendarEvent.fetch(),
             ),
       child: SubEventsListingPageView(
         parentEventId: parentEventId,
@@ -159,25 +151,23 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
 
         if (!_hasMovedToFirstEventDate) {
           DateTime? targetDate;
-          final now = DateTime.now().toLocal().withoutTime;
-          targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
-            (mDate) => mDate.isAfter(now) || mDate.isAtSameMomentAs(now),
+          final now = DateTime.now().withoutTime;
+          final sameDayWithCurrentDay =
+              state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) =>
+                now.month == mDate.month &&
+                now.year == mDate.year &&
+                mDate.day >= now.day,
           );
-          targetDate = targetDate ?? state.eventsGroupByDate.keys.first;
+          final sameMonthWithCurrentMonth =
+              state.eventsGroupByDate.keys.firstWhereOrNull(
+            (mDate) => now.month == mDate.month && now.year == mDate.year,
+          );
+          targetDate = sameDayWithCurrentDay ??
+              sameMonthWithCurrentMonth ??
+              state.eventsGroupByDate.keys.first;
           _onCalendarChanged(targetDate);
           _hasMovedToFirstEventDate = true;
-        }
-
-        if (_hasMovedToFirstEventDate) {
-          final targetDate = state.eventsGroupByDate.keys.firstWhereOrNull(
-            (mDate) =>
-                state.selectedDate.month == mDate.month &&
-                state.selectedDate.year == mDate.year,
-          );
-          if (targetDate == null) {
-            return;
-          }
-          _onCalendarChanged(targetDate);
         }
       },
       builder: (context, state) {
