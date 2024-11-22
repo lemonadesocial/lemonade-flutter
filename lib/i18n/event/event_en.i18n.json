@@ -819,5 +819,6 @@
         "waitingResultDescription": "Stay tuned to see who comes out on top!",
         "changeVote": "Change vote",
         "castingVote": "Casting vote"
-    }
+    },
+    "addFurtherInstructions": "Add further instructions"
 }

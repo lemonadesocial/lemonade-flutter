@@ -199,6 +199,7 @@ const eventFragment = '''
     ticket_count
     guest_directory_enabled
     published
+    address_directions
     rewards {
       _id
       active

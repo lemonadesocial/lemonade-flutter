@@ -9,6 +9,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/select_instruction_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -276,66 +277,72 @@ class CreateEventBasePage extends StatelessWidget {
                     horizontal: Spacing.smMedium,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: BlocBuilder<EventLocationSettingBloc,
-                        EventLocationSettingState>(
-                      builder: (context, locationState) {
-                        return SettingTileWidget(
-                          color: LemonColor.chineseBlack,
-                          title: locationState.selectedAddress != null
-                              ? locationState.selectedAddress?.title ?? ''
-                              : t.event.locationSetting.chooseLocation,
-                          subTitle: locationState.selectedAddress?.street1,
-                          leading: Icon(
-                            Icons.location_on_outlined,
-                            size: 18.w,
-                            color: colorScheme.onSecondary,
-                          ),
-                          leadingCircle: false,
-                          trailing: locationState.selectedAddress != null
-                              ? ThemeSvgIcon(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: LemonColor.chineseBlack,
+                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                      ),
+                      child: Column(
+                        children: [
+                          BlocBuilder<EventLocationSettingBloc,
+                              EventLocationSettingState>(
+                            builder: (context, locationState) {
+                              return SettingTileWidget(
+                                color: Colors.transparent,
+                                title: locationState.selectedAddress != null
+                                    ? locationState.selectedAddress?.title ?? ''
+                                    : t.event.locationSetting.chooseLocation,
+                                subTitle:
+                                    locationState.selectedAddress?.street1,
+                                leading: Icon(
+                                  Icons.location_on_outlined,
+                                  size: 18.w,
                                   color: colorScheme.onSecondary,
-                                  builder: (filter) => Assets.icons.icClose.svg(
-                                    width: 18.w,
-                                    height: 18.w,
-                                    colorFilter: filter,
-                                  ),
-                                )
-                              : Assets.icons.icArrowBack.svg(
+                                ),
+                                leadingCircle: false,
+                                trailing: Assets.icons.icArrowBack.svg(
                                   width: 18.w,
                                   height: 18.w,
                                 ),
-                          titleStyle: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                          radius: LemonRadius.small,
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                              useRootNavigator: true,
-                              context: context,
-                              backgroundColor: LemonColor.atomicBlack,
-                              topRadius: Radius.circular(LemonRadius.small),
-                              enableDrag: false,
-                              builder: (mContext) {
-                                return BlocProvider.value(
-                                  value:
-                                      context.read<EventLocationSettingBloc>(),
-                                  child: EventLocationSettingPage(
-                                    onConfirmLocation: (address) {
-                                      AutoRouter.of(context).pop();
+                                titleStyle: Typo.medium.copyWith(
+                                  color: colorScheme.onPrimary,
+                                ),
+                                radius: LemonRadius.small,
+                                onTap: () {
+                                  showCupertinoModalBottomSheet(
+                                    useRootNavigator: true,
+                                    context: context,
+                                    backgroundColor: LemonColor.atomicBlack,
+                                    topRadius:
+                                        Radius.circular(LemonRadius.small),
+                                    enableDrag: false,
+                                    builder: (mContext) {
+                                      return BlocProvider.value(
+                                        value: context
+                                            .read<EventLocationSettingBloc>(),
+                                        child: EventLocationSettingPage(
+                                          onConfirmLocation: (address) {
+                                            AutoRouter.of(context).pop();
+                                          },
+                                        ),
+                                      );
                                     },
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          onTapTrailing: () {
-                            context.read<EventLocationSettingBloc>().add(
-                                  const EventLocationSettingEvent
-                                      .clearSelectedAddress(),
-                                );
-                          },
-                        );
-                      },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          SelectInstructionDropdown(
+                            parentEventId: state.parentEventId,
+                            onChange: (String selectedInstruction) {
+                              print(
+                                  'Selected instruction: $selectedInstruction');
+                              // Do something with the selected instruction
+                              // If nothing is selected, selectedInstruction will be empty string ''
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
