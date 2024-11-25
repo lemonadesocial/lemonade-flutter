@@ -15,12 +15,12 @@ import 'package:app/core/domain/event/input/get_event_detail_input.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class SelectInstructionDropdown extends StatefulWidget {
+class SubEventsAdditionalDirectionDropdown extends StatefulWidget {
   final String initialInstruction;
   final Function(String selectedInstruction)? onChange;
   final String? parentEventId;
 
-  const SelectInstructionDropdown({
+  const SubEventsAdditionalDirectionDropdown({
     super.key,
     this.initialInstruction = '',
     this.onChange,
@@ -28,13 +28,14 @@ class SelectInstructionDropdown extends StatefulWidget {
   });
 
   @override
-  State<SelectInstructionDropdown> createState() =>
-      _SelectInstructionDropdownState();
+  State<SubEventsAdditionalDirectionDropdown> createState() =>
+      _SubEventsAdditionalDirectionDropdownState();
 }
 
-class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
+class _SubEventsAdditionalDirectionDropdownState
+    extends State<SubEventsAdditionalDirectionDropdown> {
   String selectedItem = '';
-  List<String> addressDirections = [];
+  List<String> addressDirectionsRecommendations = [];
 
   @override
   void initState() {
@@ -54,7 +55,8 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
       },
       (event) {
         setState(() {
-          addressDirections = event.addressDirections ?? [];
+          addressDirectionsRecommendations =
+              event.addressDirectionsRecommendations ?? [];
         });
       },
     );
@@ -79,8 +81,8 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final isCustomInstruction =
-        selectedItem.isNotEmpty && !addressDirections.contains(selectedItem);
+    final isCustomInstruction = selectedItem.isNotEmpty &&
+        !addressDirectionsRecommendations.contains(selectedItem);
 
     return isCustomInstruction
         ? _CustomInstructionButton(
@@ -89,7 +91,7 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
           )
         : _InstructionDropdown(
             selectedItem: selectedItem,
-            addressDirections: addressDirections,
+            addressDirectionsRecommendations: addressDirectionsRecommendations,
             onAddNewInstruction: _showInstructionModal,
             onSelectInstruction: _handleInstructionSelection,
           );
@@ -153,13 +155,13 @@ class _CustomInstructionButton extends StatelessWidget {
 
 class _InstructionDropdown extends StatelessWidget {
   final String selectedItem;
-  final List<String> addressDirections;
+  final List<String> addressDirectionsRecommendations;
   final VoidCallback onAddNewInstruction;
   final Function(String) onSelectInstruction;
 
   const _InstructionDropdown({
     required this.selectedItem,
-    required this.addressDirections,
+    required this.addressDirectionsRecommendations,
     required this.onAddNewInstruction,
     required this.onSelectInstruction,
   });
@@ -279,7 +281,7 @@ class _InstructionDropdown extends StatelessWidget {
               },
             ),
           ),
-          ...addressDirections.map(
+          ...addressDirectionsRecommendations.map(
             (addressDirection) => DropdownMenuItem<String>(
               value: addressDirection,
               child: StatefulBuilder(

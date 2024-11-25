@@ -9,7 +9,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/select_instruction_dropdown.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/sub_events_additional_direction_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -325,8 +325,10 @@ class CreateEventBasePage extends StatelessWidget {
                                         value: context
                                             .read<EventLocationSettingBloc>(),
                                         child: EventLocationSettingPage(
+                                          isSubEvent:
+                                              state.parentEventId != null,
                                           onConfirmLocation: (address) {
-                                            AutoRouter.of(context).pop();
+                                            Navigator.pop(mContext);
                                           },
                                         ),
                                       );
@@ -336,8 +338,11 @@ class CreateEventBasePage extends StatelessWidget {
                               );
                             },
                           ),
+                          /**
+                           * Only show this additional_direction dropdown for subEvent
+                           */
                           state.parentEventId != null
-                              ? SelectInstructionDropdown(
+                              ? SubEventsAdditionalDirectionDropdown(
                                   parentEventId: state.parentEventId,
                                   onChange: (String selectedInstruction) {
                                     context

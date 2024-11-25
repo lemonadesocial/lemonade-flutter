@@ -86,7 +86,7 @@ class Event with _$Event {
     bool? applicationRequired,
     bool? registrationDisabled,
     String? shortId,
-    List<String>? addressDirections,
+    List<String>? addressDirectionsRecommendations,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -209,7 +209,8 @@ class Event with _$Event {
       applicationRequired: dto.applicationRequired,
       registrationDisabled: dto.registrationDisabled,
       shortId: dto.shortId,
-      addressDirections: dto.addressDirections,
+      addressDirectionsRecommendations:
+          List.from(dto.addressDirectionsRecommendations ?? []),
     );
   }
 

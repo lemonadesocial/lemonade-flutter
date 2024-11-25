@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
@@ -24,11 +25,14 @@ class EventLocationSettingDetailPage extends StatefulWidget {
     this.address,
     this.event,
     this.onConfirmLocation,
+    this.isSubEvent = false,
   });
 
   final Address? address;
   final Event? event;
   final Function(Address)? onConfirmLocation;
+  final bool isSubEvent;
+
   @override
   State<EventLocationSettingDetailPage> createState() =>
       _EventLocationSettingDetailPageState();
@@ -127,12 +131,15 @@ class _EventLocationSettingDetailPageState
                             ),
                           ),
                         ],
-                        SizedBox(height: Spacing.small),
-                        LemonTextField(
-                          controller: additionalDirectionsController,
-                          hintText:
-                              t.event.locationSetting.additionalDirections,
-                        ),
+                        // Don't show additional_direction for subEvent
+                        if (!widget.isSubEvent) ...[
+                          SizedBox(height: Spacing.small),
+                          LemonTextField(
+                            controller: additionalDirectionsController,
+                            hintText:
+                                t.event.locationSetting.additionalDirections,
+                          ),
+                        ],
                         SizedBox(height: Spacing.smMedium * 2),
                         _buildConfirmLocationButton(),
                       ],
@@ -157,7 +164,7 @@ class _EventLocationSettingDetailPageState
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            AutoRouter.of(context).pop();
+            Navigator.of(context).pop();
             if (widget.address == null) return;
             final finalAddress = widget.address!.copyWith(
               additionalDirections: additionalDirectionsController.text,

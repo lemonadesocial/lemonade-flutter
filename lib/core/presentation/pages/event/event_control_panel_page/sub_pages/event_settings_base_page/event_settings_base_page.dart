@@ -8,7 +8,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
-import 'package:app/core/presentation/pages/event/create_event/widgets/select_instruction_dropdown.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/sub_events_additional_direction_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -288,6 +288,9 @@ class EventSettingsBasePage extends StatelessWidget {
                                             enableDrag: false,
                                             builder: (mContext) {
                                               return EventLocationSettingPage(
+                                                isSubEvent:
+                                                    event.subeventParent !=
+                                                        null,
                                                 onConfirmLocation: (address) {
                                                   context
                                                       .read<
@@ -299,7 +302,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                                           address: address,
                                                         ),
                                                       );
-                                                  AutoRouter.of(mContext).pop();
+                                                  Navigator.pop(mContext);
                                                 },
                                               );
                                             },
@@ -308,8 +311,9 @@ class EventSettingsBasePage extends StatelessWidget {
                                       );
                                     },
                                   ),
+                                  // Only show additional_direction dropdown for subEvent
                                   event.subeventParent != null
-                                      ? SelectInstructionDropdown(
+                                      ? SubEventsAdditionalDirectionDropdown(
                                           initialInstruction: event.address
                                                   ?.additionalDirections ??
                                               '',

@@ -1,6 +1,24 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/core/data/payment/payment_query.dart';
 
+const eventAddressFragment = '''
+  fragment eventAddressFragment on Address {
+    _id
+    street_1
+    street_2
+    city
+    title
+    region
+    postal
+    country
+    title
+    latitude
+    longitude
+    recipient_name
+    additional_directions
+  }
+''';
+
 const eventHostExpandedFragment = '''
   fragment eventHostExpandedFragment on User {
     _id
@@ -141,9 +159,9 @@ const eventPaymentAccountFragment = '''
 
 const eventFragment = '''
   $eventHostExpandedFragment
+  $eventAddressFragment
   $eventPeopleFragment
   $eventMatrixFragment
-
   fragment eventFields on Event {
     _id
     shortid
@@ -177,18 +195,7 @@ const eventFragment = '''
       provider_id
     }
     address {
-      _id
-      street_1
-      street_2
-      city
-      title
-      region
-      country
-      additional_directions
-      latitude
-      longitude
-      postal
-      recipient_name
+      ...eventAddressFragment
     }
     latitude
     longitude
@@ -401,6 +408,7 @@ final getHostingEventsQuery = gql('''
 ''');
 
 final getUpcomingEventsQuery = gql('''
+  $eventAddressFragment
   query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0, \$host: Boolean) {
   events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
     _id
@@ -427,11 +435,7 @@ final getUpcomingEventsQuery = gql('''
     start
     end
     address {
-      street_1
-      city
-      title
-      region
-      additional_directions
+      ...eventAddressFragment
     }
     guests
     checkin_count
@@ -440,6 +444,7 @@ final getUpcomingEventsQuery = gql('''
 ''');
 
 final getPastEventsQuery = gql('''
+  $eventAddressFragment
   query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
   events: getPastEvents(user: \$id, limit: \$limit, skip: \$skip) {
     _id
@@ -464,11 +469,7 @@ final getPastEventsQuery = gql('''
     start
     end
     address {
-      street_1
-      city
-      title
-      region
-      additional_directions
+      ...eventAddressFragment
     }
   }
 }
