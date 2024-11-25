@@ -831,6 +831,7 @@
         "pendingCohostsDescription": "Cohosts must accept the invite to gain co-host access",
         "showCohost": "Show on event page",
         "hideCohost": "Hide from event page",
-        "removeCohost": "Remove cohost"
+        "removeCohost": "Remove cohost",
+        "creator": "Creator"
     }
 }
