@@ -283,7 +283,8 @@ class EventSettingsBasePage extends StatelessWidget {
                                             backgroundColor:
                                                 LemonColor.atomicBlack,
                                             topRadius: Radius.circular(
-                                                LemonRadius.small),
+                                              LemonRadius.small,
+                                            ),
                                             enableDrag: false,
                                             builder: (mContext) {
                                               return EventLocationSettingPage(
