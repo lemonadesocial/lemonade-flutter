@@ -1,5 +1,5 @@
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_add_instructions_setting_page/event_add_instructions_setting_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_custom_instructions_setting_page/event_custom_instructions_setting_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -70,7 +70,7 @@ class _SelectInstructionDropdownState extends State<SelectInstructionDropdown> {
     showCupertinoModalBottomSheet(
       context: context,
       useRootNavigator: true,
-      builder: (mContext) => EventAddInstructionsSettingPage(
+      builder: (mContext) => EventCustomInstructionsSettingPage(
         instruction: initialInstruction,
         onConfirm: _handleInstructionSelection,
       ),
@@ -241,7 +241,7 @@ class _InstructionDropdown extends StatelessWidget {
                     showCupertinoModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
-                      builder: (mContext) => EventAddInstructionsSettingPage(
+                      builder: (mContext) => EventCustomInstructionsSettingPage(
                         onConfirm: (instruction) {
                           onSelectInstruction(instruction);
                           Navigator.pop(context);

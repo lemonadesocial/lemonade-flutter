@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
+import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
@@ -7,6 +8,7 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/select_instruction_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_confirmation_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
@@ -234,52 +236,105 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.small,
+                            horizontal: Spacing.smMedium,
                           ),
                           sliver: SliverToBoxAdapter(
-                            child: SettingTileWidget(
-                              color: LemonColor.chineseBlack,
-                              title: event.address != null
-                                  ? event.address?.title ?? ''
-                                  : t.event.locationSetting.chooseLocation,
-                              subTitle: event.address?.street1 ?? '',
-                              description:
-                                  event.address?.additionalDirections ?? '',
-                              leading: Icon(
-                                Icons.location_on_outlined,
-                                size: 18.w,
-                                color: colorScheme.onSecondary,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: LemonColor.chineseBlack,
+                                borderRadius:
+                                    BorderRadius.circular(LemonRadius.small),
                               ),
-                              leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
-                              ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                              radius: LemonRadius.small,
-                              onTap: () {
-                                showCupertinoModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: LemonColor.atomicBlack,
-                                  topRadius: Radius.circular(LemonRadius.small),
-                                  enableDrag: false,
-                                  builder: (mContext) {
-                                    return EventLocationSettingPage(
-                                      onConfirmLocation: (address) {
-                                        context.read<EditEventDetailBloc>().add(
-                                              EditEventDetailEventUpdateAddress(
-                                                eventId: event.id ?? '',
-                                                address: address,
-                                              ),
+                              child: Column(
+                                children: [
+                                  BlocBuilder<EventLocationSettingBloc,
+                                      EventLocationSettingState>(
+                                    builder: (context, locationState) {
+                                      return SettingTileWidget(
+                                        color: LemonColor.chineseBlack,
+                                        title: event.address != null
+                                            ? event.address?.title ?? ''
+                                            : t.event.locationSetting
+                                                .chooseLocation,
+                                        subTitle: event.address?.street1 ?? '',
+                                        description: event.subeventParent ==
+                                                null
+                                            ? event.address
+                                                    ?.additionalDirections ??
+                                                ''
+                                            : '',
+                                        leading: Icon(
+                                          Icons.location_on_outlined,
+                                          size: 18.w,
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                        leadingCircle: false,
+                                        trailing: Assets.icons.icArrowBack.svg(
+                                          width: 18.w,
+                                          height: 18.w,
+                                        ),
+                                        titleStyle: Typo.medium.copyWith(
+                                          color: colorScheme.onPrimary,
+                                        ),
+                                        radius: LemonRadius.small,
+                                        onTap: () {
+                                          showCupertinoModalBottomSheet(
+                                            context: context,
+                                            backgroundColor:
+                                                LemonColor.atomicBlack,
+                                            topRadius: Radius.circular(
+                                                LemonRadius.small),
+                                            enableDrag: false,
+                                            builder: (mContext) {
+                                              return EventLocationSettingPage(
+                                                onConfirmLocation: (address) {
+                                                  context
+                                                      .read<
+                                                          EditEventDetailBloc>()
+                                                      .add(
+                                                        EditEventDetailEventUpdateAddress(
+                                                          eventId:
+                                                              event.id ?? '',
+                                                          address: address,
+                                                        ),
+                                                      );
+                                                  AutoRouter.of(mContext).pop();
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                  event.subeventParent != null
+                                      ? SelectInstructionDropdown(
+                                          initialInstruction: event.address
+                                                  ?.additionalDirections ??
+                                              '',
+                                          parentEventId: event.subeventParent,
+                                          onChange:
+                                              (String selectedInstruction) {
+                                            final newAddress =
+                                                event.address?.copyWith(
+                                              additionalDirections:
+                                                  selectedInstruction,
                                             );
-                                        AutoRouter.of(mContext).pop();
-                                      },
-                                    );
-                                  },
-                                );
-                              },
+                                            if (newAddress != null) {
+                                              context
+                                                  .read<EditEventDetailBloc>()
+                                                  .add(
+                                                    EditEventDetailEventUpdateAddress(
+                                                      eventId: event.id ?? '',
+                                                      address: newAddress,
+                                                    ),
+                                                  );
+                                            }
+                                          },
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
+                              ),
                             ),
                           ),
                         ),

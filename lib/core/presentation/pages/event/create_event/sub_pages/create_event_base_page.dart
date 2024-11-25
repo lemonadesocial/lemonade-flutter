@@ -16,7 +16,6 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -292,6 +291,11 @@ class CreateEventBasePage extends StatelessWidget {
                                 title: locationState.selectedAddress != null
                                     ? locationState.selectedAddress?.title ?? ''
                                     : t.event.locationSetting.chooseLocation,
+                                description: state.parentEventId == null
+                                    ? locationState.selectedAddress
+                                            ?.additionalDirections ??
+                                        ''
+                                    : '',
                                 subTitle:
                                     locationState.selectedAddress?.street1,
                                 leading: Icon(
@@ -332,17 +336,21 @@ class CreateEventBasePage extends StatelessWidget {
                               );
                             },
                           ),
-                          SelectInstructionDropdown(
-                            parentEventId: state.parentEventId,
-                            onChange: (String selectedInstruction) {
-                              context.read<EventLocationSettingBloc>().add(
-                                    EventLocationSettingEvent
-                                        .additionalDirectionsChanged(
-                                      additionalDirections: selectedInstruction,
-                                    ),
-                                  );
-                            },
-                          ),
+                          state.parentEventId != null
+                              ? SelectInstructionDropdown(
+                                  parentEventId: state.parentEventId,
+                                  onChange: (String selectedInstruction) {
+                                    context
+                                        .read<EventLocationSettingBloc>()
+                                        .add(
+                                          AdditionalDirectionsChanged(
+                                            additionalDirections:
+                                                selectedInstruction,
+                                          ),
+                                        );
+                                  },
+                                )
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ),

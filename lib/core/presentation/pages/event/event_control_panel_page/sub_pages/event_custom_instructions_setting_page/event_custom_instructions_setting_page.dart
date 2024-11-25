@@ -11,22 +11,22 @@ import 'package:flutter/material.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
-class EventAddInstructionsSettingPage extends StatefulWidget {
+class EventCustomInstructionsSettingPage extends StatefulWidget {
   final String? instruction;
   final Function(String instruction)? onConfirm;
-  const EventAddInstructionsSettingPage({
+  const EventCustomInstructionsSettingPage({
     super.key,
     this.instruction,
     this.onConfirm,
   });
 
   @override
-  State<EventAddInstructionsSettingPage> createState() =>
-      _EventAddInstructionsSettingPageState();
+  State<EventCustomInstructionsSettingPage> createState() =>
+      _EventCustomInstructionsSettingPageState();
 }
 
-class _EventAddInstructionsSettingPageState
-    extends State<EventAddInstructionsSettingPage> {
+class _EventCustomInstructionsSettingPageState
+    extends State<EventCustomInstructionsSettingPage> {
   final editingController = TextEditingController();
   bool isEmpty = false;
   @override
@@ -54,9 +54,7 @@ class _EventAddInstructionsSettingPageState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final bool isEditing = widget.instruction?.isNotEmpty ?? false;
-
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom != 0

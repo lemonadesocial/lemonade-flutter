@@ -89,8 +89,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 country: parentEvent?.address?.country ?? '',
                 latitude: parentEvent?.address?.latitude,
                 longitude: parentEvent?.address?.longitude,
-                additionalDirections:
-                    parentEvent?.address?.additionalDirections ?? '',
                 recipientName: parentEvent?.address?.recipientName ?? '',
               ),
             ),
