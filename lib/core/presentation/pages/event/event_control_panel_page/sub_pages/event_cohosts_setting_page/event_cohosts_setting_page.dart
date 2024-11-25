@@ -7,7 +7,6 @@ import 'package:app/core/domain/event/entities/event_cohost_request.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_manage_cohosts_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -154,6 +153,11 @@ class _EventCohostsSettingPageViewState
                       eventId: widget.event?.id ?? '',
                     ),
                   );
+              context.read<GetEventDetailBloc>().add(
+                    GetEventDetailEvent.fetch(
+                      eventId: widget.event?.id ?? '',
+                    ),
+                  );
             },
           );
         },
@@ -168,12 +172,10 @@ class _EventCohostsSettingPageViewState
                 child: loadingEventCohostsRequests ||
                         loadingManageEventCohostRequests
                     ? Loading.defaultLoading(context)
-                    : eventCohostsRequests.isEmpty
-                        ? const EmptyList()
-                        : EventManageCohostsList(
-                            eventCohostsRequests: eventCohostsRequests,
-                            event: widget.event,
-                          ),
+                    : EventManageCohostsList(
+                        eventCohostsRequests: eventCohostsRequests,
+                        event: widget.event,
+                      ),
               ),
               BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
                 builder: (context, state) {

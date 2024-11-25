@@ -114,21 +114,24 @@ class EventManageCohostsList extends StatelessWidget {
 
     return CustomScrollView(
       slivers: [
-        if (acceptedRequests.isNotEmpty) ...[
-          _AcceptedCohostsList(
-            acceptedRequests: acceptedRequests,
-            event: event,
-            onTapRevoke: (cohost) => _onTapRevoke(
-              context,
-              cohost: cohost,
-            ),
-            onTapShowHide: (cohost, hide) => _onTapShowHideCohosts(
-              context,
-              cohost: cohost,
-              hide: hide,
-            ),
+        _AcceptedCohostsList(
+          acceptedRequests: acceptedRequests,
+          event: event,
+          onTapRevoke: (cohost) => _onTapRevoke(
+            context,
+            cohost: cohost,
           ),
-        ],
+          onTapShowHide: (cohost, hide) => _onTapShowHideCohosts(
+            context,
+            cohost: cohost,
+            hide: hide,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.small,
+          ),
+        ),
         if (pendingRequests.isNotEmpty) ...[
           if (acceptedRequests.isNotEmpty)
             SliverToBoxAdapter(
@@ -181,6 +184,8 @@ class EventManageCohostsList extends StatelessWidget {
               return EventCohostSettingItem(
                 user: request.toExpanded,
                 trailing: _ActionButton(
+                  event: event,
+                  user: request.toExpanded,
                   canShowHide: false,
                   visible: false,
                   onTapRevoke: () =>
@@ -218,6 +223,8 @@ class EventManageCohostsList extends StatelessWidget {
               return EventCohostSettingItem(
                 user: request.toExpanded,
                 trailing: _ActionButton(
+                  event: event,
+                  user: request.toExpanded,
                   canShowHide: false,
                   visible: false,
                   onTapRevoke: () =>
@@ -275,6 +282,8 @@ class _AcceptedCohostsList extends StatelessWidget {
               return EventCohostSettingItem(
                 user: cohost,
                 trailing: _ActionButton(
+                  event: event,
+                  user: cohost,
                   canShowHide: true,
                   visible: true,
                   onTapShowHide: (hide) => onTapShowHide(cohost, hide),
@@ -330,13 +339,17 @@ class _AcceptedCohostsList extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: Spacing.small),
+          SliverToBoxAdapter(
+            child: SizedBox(height: Spacing.small),
+          ),
           SliverList.separated(
             itemBuilder: (context, index) {
               final cohost = unlistedAcceptedRequests[index];
               return EventCohostSettingItem(
                 user: cohost,
                 trailing: _ActionButton(
+                  event: event,
+                  user: cohost,
                   canShowHide: true,
                   visible: false,
                   onTapShowHide: (hide) => onTapShowHide(cohost, hide),
@@ -357,77 +370,110 @@ class _AcceptedCohostsList extends StatelessWidget {
 
 class _ActionButton extends StatelessWidget {
   const _ActionButton({
+    required this.user,
+    required this.event,
     required this.canShowHide,
     required this.visible,
     required this.onTapShowHide,
     required this.onTapRevoke,
   });
 
+  final User? user;
+  final Event? event;
   final bool canShowHide;
   final bool visible;
   final Function(bool) onTapShowHide;
   final Function() onTapRevoke;
 
+  bool get isCreator => event?.host == user?.userId;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return FloatingFrostedGlassDropdown(
-      offset: Offset(Spacing.small, -Spacing.small),
-      containerWidth: 210.w,
-      items: [
-        if (!visible && canShowHide)
-          DropdownItemDpo(
-            label: t.event.eventCohost.showCohost,
-            value: EventCohostSettingAction.show,
-            leadingIcon: Icon(
-              Icons.visibility_outlined,
-              color: colorScheme.onPrimary,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isCreator) ...[
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: Spacing.extraSmall / 2,
+              horizontal: Spacing.extraSmall,
             ),
-            textStyle: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
+            decoration: BoxDecoration(
+              color: LemonColor.chineseBlack,
+              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
             ),
-          ),
-        if (visible && canShowHide)
-          DropdownItemDpo(
-            label: t.event.eventCohost.hideCohost,
-            value: EventCohostSettingAction.hide,
-            leadingIcon: Icon(
-              Icons.visibility_off_outlined,
-              color: colorScheme.onPrimary,
-            ),
-            textStyle: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
+            child: Center(
+              child: Text(
+                t.event.eventCohost.creator,
+                style: Typo.small.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
+              ),
             ),
           ),
-        DropdownItemDpo(
-          label: t.event.eventCohost.removeCohost,
-          value: EventCohostSettingAction.remove,
-          leadingIcon: const Icon(
-            Icons.delete_outline,
-            color: LemonColor.coralReef,
-          ),
-          textStyle: Typo.medium.copyWith(
-            color: LemonColor.coralReef,
+          SizedBox(width: Spacing.small),
+        ],
+        FloatingFrostedGlassDropdown(
+          offset: Offset(Spacing.small, -Spacing.small),
+          containerWidth: 210.w,
+          items: [
+            if (!visible && canShowHide)
+              DropdownItemDpo(
+                label: t.event.eventCohost.showCohost,
+                value: EventCohostSettingAction.show,
+                leadingIcon: Icon(
+                  Icons.visibility_outlined,
+                  color: colorScheme.onPrimary,
+                ),
+                textStyle: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+            if (visible && canShowHide)
+              DropdownItemDpo(
+                label: t.event.eventCohost.hideCohost,
+                value: EventCohostSettingAction.hide,
+                leadingIcon: Icon(
+                  Icons.visibility_off_outlined,
+                  color: colorScheme.onPrimary,
+                ),
+                textStyle: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+            if (!isCreator)
+              DropdownItemDpo(
+                label: t.event.eventCohost.removeCohost,
+                value: EventCohostSettingAction.remove,
+                leadingIcon: const Icon(
+                  Icons.delete_outline,
+                  color: LemonColor.coralReef,
+                ),
+                textStyle: Typo.medium.copyWith(
+                  color: LemonColor.coralReef,
+                ),
+              ),
+          ],
+          onItemPressed: (item) {
+            if (item?.value == EventCohostSettingAction.remove) {
+              onTapRevoke();
+            }
+            if (item?.value == EventCohostSettingAction.hide) {
+              onTapShowHide(true);
+            }
+            if (item?.value == EventCohostSettingAction.show) {
+              onTapShowHide(false);
+            }
+          },
+          child: ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icMoreHoriz.svg(
+              colorFilter: filter,
+            ),
           ),
         ),
       ],
-      onItemPressed: (item) {
-        if (item?.value == EventCohostSettingAction.remove) {
-          onTapRevoke();
-        }
-        if (item?.value == EventCohostSettingAction.hide) {
-          onTapShowHide(true);
-        }
-        if (item?.value == EventCohostSettingAction.show) {
-          onTapShowHide(false);
-        }
-      },
-      child: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
-        builder: (filter) => Assets.icons.icMoreHoriz.svg(
-          colorFilter: filter,
-        ),
-      ),
     );
   }
 }

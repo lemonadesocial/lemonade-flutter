@@ -102,14 +102,40 @@ class _EventReorderingCohostsPageState
             child: EventCohostSettingItem(
               user: _orderedUsers[index],
               onPressItem: () {},
-              trailing: ReorderableDragStartListener(
-                index: index,
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icReorder.svg(
-                    colorFilter: filter,
+              trailing: Row(
+                children: [
+                  if (widget.event?.host == cohost.userId) ...[
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Spacing.extraSmall / 2,
+                        horizontal: Spacing.extraSmall,
+                      ),
+                      decoration: BoxDecoration(
+                        color: LemonColor.chineseBlack,
+                        borderRadius:
+                            BorderRadius.circular(LemonRadius.extraSmall),
+                      ),
+                      child: Center(
+                        child: Text(
+                          t.event.eventCohost.creator,
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: Spacing.small),
+                  ],
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icReorder.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );
