@@ -3,10 +3,11 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/helpers/sub_events_helper.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_filter_bottomsheet_view/sub_events_filter_bottomsheet_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_grid_view/sub_events_listing_grid_view.dart';
-import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_list_view/sub_events_listing_list_view.dart';
+import 'package:app/core/presentation/pages/event/sub_events_listing_page/views/sub_events_listing_list_view/sub_events_listing_grouped_list_view.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_event_calendar_day_cell_widget.dart';
 import 'package:app/core/presentation/pages/event/sub_events_listing_page/widgets/sub_events_date_filter_bar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/sticky_grouped_list/sticky_grouped_list.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -78,6 +79,8 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
   final Debouncer _debouncer = Debouncer(milliseconds: 200);
   SubEventViewMode _viewMode = SubEventViewMode.listing;
   Map<String, bool> addedCalendarEventsMap = {};
+  final GroupedItemScrollController groupedItemScrollController =
+      GroupedItemScrollController();
 
   // ignore: unused_element
   List<Event> _getEventsByDate(
@@ -105,6 +108,16 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
     _lastOffset = offset;
   }
 
+  void _scrollToDate(DateTime date) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (groupedItemScrollController.isAttached) {
+      groupedItemScrollController.scrollToElement(
+        identifier: '${date.year}-${date.month}-${date.day}',
+        duration: const Duration(milliseconds: 300),
+      );
+    }
+  }
+
   Future<void> _onCalendarChanged(DateTime date) async {
     _isMonthChanging = true;
     context.read<GetSubEventsByCalendarBloc>().add(
@@ -116,6 +129,7 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
     dayViewState.currentState?.jumpToDate(date);
     weekViewState.currentState?.jumpToWeek(date);
     monthViewState.currentState?.jumpToMonth(date);
+    _scrollToDate(date);
     _debouncer.run(() {
       _isMonthChanging = false;
     });
@@ -252,6 +266,9 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
                     setState(() {
                       _viewMode = mode;
                     });
+                    if (mode == SubEventViewMode.listing) {
+                      _scrollToDate(state.selectedDate);
+                    }
                   },
                   onDateChanged: (date) {
                     _onCalendarChanged(date);
@@ -339,10 +356,11 @@ class _SubEventsListingPageViewState extends State<SubEventsListingPageView>
               ),
               if (_calendarVisible) SizedBox(height: Spacing.xSmall),
               if (_viewMode == SubEventViewMode.listing)
-                SubEventsListingListView(
+                SubEventsListingGroupedListView(
                   parentEventId: widget.parentEventId,
                   isCalendarShowing: _calendarVisible,
                   onScroll: _onScroll,
+                  scrollController: groupedItemScrollController,
                 ),
               if (_viewMode == SubEventViewMode.calendar)
                 calendar_view.CalendarControllerProvider(
