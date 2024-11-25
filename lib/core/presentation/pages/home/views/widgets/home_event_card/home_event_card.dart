@@ -119,8 +119,8 @@ class HomeEventCard extends StatelessWidget {
                                           ),
                                         ),
                                         SizedBox(
-                                            height:
-                                                Spacing.superExtraSmall / 2),
+                                          height: Spacing.superExtraSmall / 2,
+                                        ),
                                         Text(
                                           event.address?.additionalDirections ??
                                               '',

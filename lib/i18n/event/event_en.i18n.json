@@ -825,5 +825,18 @@
         "editInstructions": "Edit instructions",
         "addFurtherInstructions": "Add further instructions",
         "addInstructionsDescription": "Tell guests how to reach you: parking spots, building entry codes, elevator location, or nearby landmarks."
+    },
+    "eventCohost": {
+        "cohosts": "Co-hosts",
+        "sendInvites": "Send invites",
+        "noCohostsDescription": "Not found any co-hosts",
+        "searchCoHostsDescription": "Start adding co-hosts to your event",
+        "unlistedCohostsTitle": "Unlisted co-hosts",
+        "unlistedCohostsDescription": "Hidden from event page, but retain co-host access",
+        "pendingCohostsTitle": "Pending",
+        "pendingCohostsDescription": "Cohosts must accept the invite to gain co-host access",
+        "showCohost": "Show on event page",
+        "hideCohost": "Hide from event page",
+        "removeCohost": "Remove cohost"
     }
 }

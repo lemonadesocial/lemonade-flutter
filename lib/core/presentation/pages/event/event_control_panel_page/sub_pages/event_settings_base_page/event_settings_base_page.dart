@@ -405,6 +405,41 @@ class EventSettingsBasePage extends StatelessWidget {
                             horizontal: Spacing.small,
                           ),
                           sliver: SliverToBoxAdapter(
+                            child: SettingTileWidget(
+                              color: LemonColor.chineseBlack,
+                              title: t.event.eventCohost.cohosts,
+                              leading: ThemeSvgIcon(
+                                color: colorScheme.onSecondary,
+                                builder: (filter) =>
+                                    Assets.icons.icHostOutline.svg(
+                                  colorFilter: filter,
+                                ),
+                              ),
+                              leadingCircle: false,
+                              trailing: Assets.icons.icArrowBack.svg(
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                              titleStyle: Typo.medium.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                              radius: LemonRadius.small,
+                              onTap: () {
+                                AutoRouter.of(context).push(
+                                  const EventCohostsSettingRoute(),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: SizedBox(height: Spacing.xSmall),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.small,
+                          ),
+                          sliver: SliverToBoxAdapter(
                             child: SelectEventTagsDropdown(
                               onChange: (tags) {
                                 context.read<EditEventDetailBloc>().add(

@@ -22,6 +22,7 @@ const eventHostExpandedFragment = '''
 const eventPeopleFragment = '''
   fragment eventPeopleFragment on Event {
     cohosts
+    visible_cohosts
     speaker_users
     speaker_users_expanded {
       ...eventHostExpandedFragment
@@ -150,10 +151,14 @@ const eventFragment = '''
     slug
     host
     approval_required
+    hide_cohosts
     host_expanded {
       ...eventHostExpandedFragment
     }
     cohosts_expanded(limit: 25) {
+      ...eventHostExpandedFragment
+    }
+    visible_cohosts_expanded(limit: 25) {
       ...eventHostExpandedFragment
     }
     new_new_photos
