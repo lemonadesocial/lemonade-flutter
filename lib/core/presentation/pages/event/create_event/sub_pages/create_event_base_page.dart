@@ -9,13 +9,13 @@ import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
+import 'package:app/core/presentation/pages/event/create_event/widgets/sub_events_additional_direction_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_virtual_link_setting_page/event_virtual_link_setting_page.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -276,66 +276,88 @@ class CreateEventBasePage extends StatelessWidget {
                     horizontal: Spacing.smMedium,
                   ),
                   sliver: SliverToBoxAdapter(
-                    child: BlocBuilder<EventLocationSettingBloc,
-                        EventLocationSettingState>(
-                      builder: (context, locationState) {
-                        return SettingTileWidget(
-                          color: LemonColor.chineseBlack,
-                          title: locationState.selectedAddress != null
-                              ? locationState.selectedAddress?.title ?? ''
-                              : t.event.locationSetting.chooseLocation,
-                          subTitle: locationState.selectedAddress?.street1,
-                          leading: Icon(
-                            Icons.location_on_outlined,
-                            size: 18.w,
-                            color: colorScheme.onSecondary,
-                          ),
-                          leadingCircle: false,
-                          trailing: locationState.selectedAddress != null
-                              ? ThemeSvgIcon(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: LemonColor.chineseBlack,
+                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                      ),
+                      child: Column(
+                        children: [
+                          BlocBuilder<EventLocationSettingBloc,
+                              EventLocationSettingState>(
+                            builder: (context, locationState) {
+                              return SettingTileWidget(
+                                color: Colors.transparent,
+                                title: locationState.selectedAddress != null
+                                    ? locationState.selectedAddress?.title ?? ''
+                                    : t.event.locationSetting.chooseLocation,
+                                description: state.parentEventId == null
+                                    ? locationState.selectedAddress
+                                            ?.additionalDirections ??
+                                        ''
+                                    : '',
+                                subTitle:
+                                    locationState.selectedAddress?.street1,
+                                leading: Icon(
+                                  Icons.location_on_outlined,
+                                  size: 18.w,
                                   color: colorScheme.onSecondary,
-                                  builder: (filter) => Assets.icons.icClose.svg(
-                                    width: 18.w,
-                                    height: 18.w,
-                                    colorFilter: filter,
-                                  ),
-                                )
-                              : Assets.icons.icArrowBack.svg(
+                                ),
+                                leadingCircle: false,
+                                trailing: Assets.icons.icArrowBack.svg(
                                   width: 18.w,
                                   height: 18.w,
                                 ),
-                          titleStyle: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                          ),
-                          radius: LemonRadius.small,
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                              useRootNavigator: true,
-                              context: context,
-                              backgroundColor: LemonColor.atomicBlack,
-                              topRadius: Radius.circular(LemonRadius.small),
-                              enableDrag: false,
-                              builder: (mContext) {
-                                return BlocProvider.value(
-                                  value:
-                                      context.read<EventLocationSettingBloc>(),
-                                  child: EventLocationSettingPage(
-                                    onConfirmLocation: (address) {
-                                      AutoRouter.of(context).pop();
+                                titleStyle: Typo.medium.copyWith(
+                                  color: colorScheme.onPrimary,
+                                ),
+                                radius: LemonRadius.small,
+                                onTap: () {
+                                  showCupertinoModalBottomSheet(
+                                    useRootNavigator: true,
+                                    context: context,
+                                    backgroundColor: LemonColor.atomicBlack,
+                                    topRadius:
+                                        Radius.circular(LemonRadius.small),
+                                    enableDrag: false,
+                                    builder: (mContext) {
+                                      return BlocProvider.value(
+                                        value: context
+                                            .read<EventLocationSettingBloc>(),
+                                        child: EventLocationSettingPage(
+                                          isSubEvent:
+                                              state.parentEventId != null,
+                                          onConfirmLocation: (address) {
+                                            Navigator.pop(mContext);
+                                          },
+                                        ),
+                                      );
                                     },
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          onTapTrailing: () {
-                            context.read<EventLocationSettingBloc>().add(
-                                  const EventLocationSettingEvent
-                                      .clearSelectedAddress(),
-                                );
-                          },
-                        );
-                      },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          /**
+                           * Only show this additional_direction dropdown for subEvent
+                           */
+                          state.parentEventId != null
+                              ? SubEventsAdditionalDirectionDropdown(
+                                  parentEventId: state.parentEventId,
+                                  onChange: (String selectedInstruction) {
+                                    context
+                                        .read<EventLocationSettingBloc>()
+                                        .add(
+                                          AdditionalDirectionsChanged(
+                                            additionalDirections:
+                                                selectedInstruction,
+                                          ),
+                                        );
+                                  },
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      ),
                     ),
                   ),
                 ),

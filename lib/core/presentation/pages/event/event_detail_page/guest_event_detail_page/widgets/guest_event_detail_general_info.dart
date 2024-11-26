@@ -171,14 +171,23 @@ class _InfoCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: Spacing.small),
-              Flexible(
-                child: Text(
-                  event.address?.title ?? '',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.address?.title ?? '',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
+                  Text(
+                    event.address?.additionalDirections ?? '',
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

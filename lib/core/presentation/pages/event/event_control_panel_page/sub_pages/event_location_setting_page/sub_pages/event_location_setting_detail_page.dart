@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
@@ -24,11 +25,14 @@ class EventLocationSettingDetailPage extends StatefulWidget {
     this.address,
     this.event,
     this.onConfirmLocation,
+    this.isSubEvent = false,
   });
 
   final Address? address;
   final Event? event;
   final Function(Address)? onConfirmLocation;
+  final bool isSubEvent;
+
   @override
   State<EventLocationSettingDetailPage> createState() =>
       _EventLocationSettingDetailPageState();
@@ -36,14 +40,6 @@ class EventLocationSettingDetailPage extends StatefulWidget {
 
 class _EventLocationSettingDetailPageState
     extends State<EventLocationSettingDetailPage> {
-  final TextEditingController placeDetailsController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController street1Controller = TextEditingController();
-  final TextEditingController street2Controller = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController regionController = TextEditingController();
-  final TextEditingController postalController = TextEditingController();
-  final TextEditingController countryController = TextEditingController();
   final TextEditingController additionalDirectionsController =
       TextEditingController();
 
@@ -51,17 +47,7 @@ class _EventLocationSettingDetailPageState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<EventLocationSettingBloc>()
-          .add(EventLocationSettingEvent.init(address: widget.address));
       if (widget.address != null) {
-        titleController.text = widget.address?.title ?? '';
-        street1Controller.text = widget.address?.street1 ?? '';
-        street2Controller.text = widget.address?.street2 ?? '';
-        cityController.text = widget.address?.city ?? '';
-        regionController.text = widget.address?.region ?? '';
-        postalController.text = widget.address?.postal ?? '';
-        countryController.text = widget.address?.country ?? '';
         additionalDirectionsController.text =
             widget.address?.additionalDirections ?? '';
       }
@@ -83,17 +69,8 @@ class _EventLocationSettingDetailPageState
         if (state.status.isSuccess) {
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
         }
-        if (state.placeDetailsText != '') {
-          placeDetailsController.text = state.placeDetailsText;
-        }
-        titleController.text = state.title.value;
-        street1Controller.text = state.street1.value;
-        street2Controller.text = state.street2;
-        cityController.text = state.city.value;
-        regionController.text = state.region.value;
-        postalController.text = state.postal.value;
-        countryController.text = state.country.value;
-        additionalDirectionsController.text = state.additionalDirections ?? '';
+        additionalDirectionsController.text =
+            state.selectedAddress?.additionalDirections ?? '';
       },
       builder: (context, state) {
         return Scaffold(
@@ -104,8 +81,8 @@ class _EventLocationSettingDetailPageState
                   children: [
                     Positioned.fill(
                       child: CreateEventMapLocationCard(
-                        latitude: state.latitude,
-                        longitude: state.longitude,
+                        latitude: widget.address?.latitude ?? 0,
+                        longitude: widget.address?.longitude ?? 0,
                       ),
                     ),
                     Column(
@@ -136,38 +113,33 @@ class _EventLocationSettingDetailPageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        if (state.title.value.isNotEmpty)
+                        if (widget.address?.title?.isNotEmpty ?? false)
                           Text(
-                            state.title.value,
+                            widget.address!.title!,
                             style: Typo.large.copyWith(
                               color: colorScheme.onPrimary,
                               height: 0,
                             ),
                           ),
-                        if (state.street1.value.isNotEmpty) ...[
+                        if (widget.address?.street1?.isNotEmpty ?? false) ...[
                           SizedBox(height: Spacing.extraSmall),
                           Text(
-                            state.street1.value,
+                            widget.address!.street1!,
                             style: Typo.mediumPlus.copyWith(
                               color: colorScheme.onSecondary,
                               height: 0,
                             ),
                           ),
                         ],
-                        SizedBox(height: Spacing.small),
-                        LemonTextField(
-                          controller: additionalDirectionsController,
-                          hintText:
-                              t.event.locationSetting.additionalDirections,
-                          onChange: (value) {
-                            context.read<EventLocationSettingBloc>().add(
-                                  EventLocationSettingEvent
-                                      .additionalDirectionsChanged(
-                                    additionalDirections: value,
-                                  ),
-                                );
-                          },
-                        ),
+                        // Don't show additional_direction for subEvent
+                        if (!widget.isSubEvent) ...[
+                          SizedBox(height: Spacing.small),
+                          LemonTextField(
+                            controller: additionalDirectionsController,
+                            hintText:
+                                t.event.locationSetting.additionalDirections,
+                          ),
+                        ],
                         SizedBox(height: Spacing.smMedium * 2),
                         _buildConfirmLocationButton(),
                       ],
@@ -191,24 +163,19 @@ class _EventLocationSettingDetailPageState
           radius: BorderRadius.circular(24),
           mode: GradientButtonMode.lavenderMode,
           onTap: () {
-            AutoRouter.of(context).pop();
             Vibrate.feedback(FeedbackType.light);
-            final address = Address(
-              id: state.id,
-              title: state.title.value,
-              street1: state.street1.value,
-              latitude: state.latitude,
-              longitude: state.longitude,
-              additionalDirections: state.additionalDirections,
+            Navigator.of(context).pop();
+            if (widget.address == null) return;
+            final finalAddress = widget.address!.copyWith(
+              additionalDirections: additionalDirectionsController.text,
             );
             context.read<EventLocationSettingBloc>().add(
-                  SelectAddress(address: address),
+                  SelectAddress(address: finalAddress),
                 );
             context
                 .read<EventLocationSettingBloc>()
                 .add(const SubmitAddLocation());
-            AutoRouter.of(context).pop();
-            widget.onConfirmLocation?.call(address);
+            widget.onConfirmLocation?.call(finalAddress);
           },
           loadingWhen: state.status.isInProgress,
         );

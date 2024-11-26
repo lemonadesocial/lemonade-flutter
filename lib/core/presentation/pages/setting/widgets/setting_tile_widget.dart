@@ -14,6 +14,7 @@ class SettingTileWidget extends StatelessWidget {
     this.leadingRadius,
     required this.onTap,
     this.subTitle,
+    this.description,
     this.trailing,
     this.featureAvailable = true,
     this.titleStyle,
@@ -27,6 +28,7 @@ class SettingTileWidget extends StatelessWidget {
 
   final String title;
   final String? subTitle;
+  final String? description;
   final Widget? leading;
   final double? leadingRadius;
   final bool? leadingCircle;
@@ -112,6 +114,21 @@ class SettingTileWidget extends StatelessWidget {
                                   fontWeight: FontWeight.w400,
                                 ),
                                 maxLines: 2,
+                              ),
+                        description == null || description == ''
+                            ? const SizedBox.shrink()
+                            : Column(
+                                children: [
+                                  SizedBox(height: 3.h),
+                                  Text(
+                                    description!,
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    maxLines: 2,
+                                  ),
+                                ],
                               ),
                       ],
                     ),

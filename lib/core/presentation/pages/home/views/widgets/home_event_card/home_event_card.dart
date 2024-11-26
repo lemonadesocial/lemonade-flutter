@@ -94,6 +94,9 @@ class HomeEventCard extends StatelessWidget {
                         SizedBox(height: Spacing.small / 2),
                         if ((event.address?.street1 ?? '').isNotEmpty)
                           Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
@@ -104,18 +107,35 @@ class HomeEventCard extends StatelessWidget {
                                   ),
                                   SizedBox(width: Spacing.extraSmall),
                                   Expanded(
-                                    child: Text(
-                                      event.address?.street1 ?? '',
-                                      style: Typo.small.copyWith(
-                                        color: colorScheme.onSecondary,
-                                      ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          event.address?.street1 ?? '',
+                                          style: Typo.small.copyWith(
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: Spacing.superExtraSmall / 2,
+                                        ),
+                                        Text(
+                                          event.address?.additionalDirections ??
+                                              '',
+                                          style: Typo.small.copyWith(
+                                            color: colorScheme.onSecondary,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: Spacing.small / 2),
                             ],
                           ),
+                        SizedBox(height: Spacing.small / 2),
                         Row(
                           children: [
                             LemonNetworkImage(

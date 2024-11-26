@@ -94,6 +94,8 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'application_required') bool? applicationRequired,
     @JsonKey(name: 'registration_disabled') bool? registrationDisabled,
     @JsonKey(name: 'shortid') String? shortId,
+    @JsonKey(name: 'address_directions')
+    List<String>? addressDirectionsRecommendations,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

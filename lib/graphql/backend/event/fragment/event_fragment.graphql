@@ -122,6 +122,7 @@ fragment EventFields on Event {
     city
     title
     region
+    additional_directions
   }
   latitude
   longitude
