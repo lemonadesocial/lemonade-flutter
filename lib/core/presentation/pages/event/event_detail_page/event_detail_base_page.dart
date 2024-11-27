@@ -106,10 +106,7 @@ class _EventDetailBasePageView extends StatelessWidget {
                       create: (context) => GetSubEventsByCalendarBloc(
                         parentEventId: event.id ?? '',
                       )..add(
-                          GetSubEventsByCalendarEvent.fetch(
-                            from: event.start?.toUtc(),
-                            to: event.end?.toUtc(),
-                          ),
+                          GetSubEventsByCalendarEvent.fetch(),
                         ),
                     ),
                     BlocProvider(
@@ -141,10 +138,7 @@ class _EventDetailBasePageView extends StatelessWidget {
                       create: (context) => GetSubEventsByCalendarBloc(
                         parentEventId: event.id ?? '',
                       )..add(
-                          GetSubEventsByCalendarEvent.fetch(
-                            from: event.start?.toUtc(),
-                            to: event.end?.toUtc(),
-                          ),
+                          GetSubEventsByCalendarEvent.fetch(),
                         ),
                     ),
                   ],

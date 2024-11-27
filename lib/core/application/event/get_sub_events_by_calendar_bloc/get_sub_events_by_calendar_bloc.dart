@@ -24,7 +24,7 @@ class GetSubEventsByCalendarBloc
     required this.parentEventId,
   }) : super(
           GetSubEventsByCalendarState(
-            selectedDate: DateTime.now().toLocal().withoutTime,
+            selectedDate: DateTime.now().withoutTime,
             events: [],
             eventsGroupByDate: <DateTime, List<Event>>{},
             selectedHosts: [],
@@ -51,13 +51,26 @@ class GetSubEventsByCalendarBloc
     Emitter emit,
   ) {
     DateTime selectedDate = event.selectedDate;
-    final lastSelectedDate = state.selectedDate;
-    if (DateUtils.isSameMonth(lastSelectedDate, selectedDate)) {
-      emit(state.copyWith(selectedDate: selectedDate));
-      return;
-    }
     emit(state.copyWith(selectedDate: selectedDate));
-    add(GetSubEventsByCalendarEvent.fetch());
+    int dayInMonth = DateUtils.getDaysInMonth(
+      state.selectedDate.year,
+      state.selectedDate.month,
+    );
+    DateTime startFrom =
+        DateTime(state.selectedDate.year, state.selectedDate.month, 1).toUtc();
+    DateTime startTo = DateTime(
+      state.selectedDate.year,
+      state.selectedDate.month,
+      dayInMonth,
+      23,
+      59,
+    ).toUtc();
+    add(
+      GetSubEventsByCalendarEvent.fetch(
+        from: startFrom,
+        to: startTo,
+      ),
+    );
   }
 
   void _onFilterUpdate(
@@ -77,30 +90,16 @@ class GetSubEventsByCalendarBloc
     Emitter emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    int dayInMonth = DateUtils.getDaysInMonth(
-      state.selectedDate.year,
-      state.selectedDate.month,
-    );
-    DateTime startFrom = event.from ??
-        DateTime(state.selectedDate.year, state.selectedDate.month, 1).toUtc();
-    DateTime startTo = event.to ??
-        DateTime(
-          state.selectedDate.year,
-          state.selectedDate.month,
-          dayInMonth,
-          23,
-          59,
-        ).toUtc();
     final result = await _client.query$GetEvents(
       Options$Query$GetEvents(
         fetchPolicy: FetchPolicy.networkOnly,
         variables: Variables$Query$GetEvents(
-          limit: 100,
+          limit: 1000,
           subevent_parent: parentEventId,
           // TODO: to be confirmed with PO
           // unpublished: true,
-          startFrom: startFrom,
-          startTo: startTo,
+          startFrom: event.from,
+          startTo: event.to,
         ),
       ),
     );

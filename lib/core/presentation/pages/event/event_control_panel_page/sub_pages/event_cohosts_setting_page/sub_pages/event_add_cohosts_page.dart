@@ -6,12 +6,15 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_cohosts_setting_page/widgets/event_add_cohost_item.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,17 +51,17 @@ class EventAddCohostsView extends StatefulWidget {
 
 class _EventAddCohostsViewState extends State<EventAddCohostsView> {
   List<String> selectedUserIds = [];
-
+  final searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: colorScheme.background,
+        backgroundColor: LemonColor.atomicBlack,
         title: t.event.cohosts.addCohosts,
       ),
-      backgroundColor: colorScheme.background,
+      backgroundColor: LemonColor.atomicBlack,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(
@@ -79,14 +82,14 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Spacing.small,
-            vertical: Spacing.small,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LemonTextField(
+                controller: searchController,
                 leadingIcon: ThemeSvgIcon(
-                  color: colorScheme.onSurfaceVariant,
+                  color: colorScheme.onSecondary,
                   builder: (filter) => Assets.icons.icSearch.svg(
                     colorFilter: filter,
                     width: 18.w,
@@ -94,7 +97,13 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                     fit: BoxFit.scaleDown,
                   ),
                 ),
+                filled: true,
+                fillColor: LemonColor.chineseBlack,
+                borderColor: LemonColor.chineseBlack,
                 hintText: t.common.search.capitalize(),
+                placeholderStyle: Typo.medium.copyWith(
+                  color: colorScheme.onSecondary,
+                ),
                 contentPadding: EdgeInsets.all(Spacing.small),
                 onChange: (value) {
                   if (value.isEmpty) {
@@ -121,6 +130,19 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                     return state.maybeWhen(
                       loading: () => Loading.defaultLoading(context),
                       success: (users) {
+                        if (users.isEmpty) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              EmptyList(
+                                emptyText: searchController.text.isEmpty
+                                    ? t.event.eventCohost
+                                        .searchCoHostsDescription
+                                    : t.event.eventCohost.noCohostsDescription,
+                              ),
+                            ],
+                          );
+                        }
                         return ListView.separated(
                           padding: EdgeInsets.only(bottom: Spacing.medium),
                           shrinkWrap: true,
@@ -159,44 +181,41 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                   },
                 ),
               ),
-              _buildAddCohostsButton(),
+              // Button
+              BlocBuilder<ManageEventCohostRequestsBloc,
+                  ManageEventCohostRequestsState>(
+                builder: (context, state) {
+                  final loading = state.maybeWhen(
+                    success: () => false,
+                    loading: () => true,
+                    orElse: () => false,
+                  );
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SafeArea(
+                      child: LinearGradientButton.primaryButton(
+                        label: t.event.eventCohost.sendInvites,
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          Vibrate.feedback(FeedbackType.light);
+                          context.read<ManageEventCohostRequestsBloc>().add(
+                                ManageEventCohostRequestsEvent.saveChanged(
+                                  eventId: widget.event?.id ?? '',
+                                  users: selectedUserIds,
+                                  decision: true,
+                                ),
+                              );
+                        },
+                        loadingWhen: loading,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildAddCohostsButton() {
-    return BlocBuilder<ManageEventCohostRequestsBloc,
-        ManageEventCohostRequestsState>(
-      builder: (context, state) {
-        final loading = state.maybeWhen(
-          success: () => false,
-          loading: () => true,
-          orElse: () => false,
-        );
-        return Align(
-          alignment: Alignment.bottomCenter,
-          child: SafeArea(
-            child: LinearGradientButton.primaryButton(
-              label: t.common.actions.saveChanges,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                Vibrate.feedback(FeedbackType.light);
-                context.read<ManageEventCohostRequestsBloc>().add(
-                      ManageEventCohostRequestsEvent.saveChanged(
-                        eventId: widget.event?.id ?? '',
-                        users: selectedUserIds,
-                        decision: true,
-                      ),
-                    );
-              },
-              loadingWhen: loading,
-            ),
-          ),
-        );
-      },
     );
   }
 }

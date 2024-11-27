@@ -174,6 +174,7 @@ class EditEventDetailBloc
           recipient_name: event.address.recipientName,
           latitude: event.address.latitude,
           longitude: event.address.longitude,
+          additional_directions: event.address.additionalDirections,
         ),
       ),
       eventId: event.eventId,
@@ -216,6 +217,7 @@ class EditEventDetailBloc
                 recipient_name: event.address!.recipientName,
                 latitude: event.address!.latitude,
                 longitude: event.address!.longitude,
+                additional_directions: event.address!.additionalDirections,
               )
             : null,
         speaker_users: event.speakerUsers ?? [],

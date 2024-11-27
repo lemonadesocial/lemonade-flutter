@@ -248,11 +248,17 @@ final eventDetailRoutes = AutoRoute(
         AutoRoute(
           page: EventLocationSettingDetailRoute.page,
         ),
-        AutoRoute(
+        CustomRoute(
           page: EventCohostsSettingRoute.page,
+          transitionsBuilder: TransitionsBuilders.slideBottom,
         ),
-        AutoRoute(
+        CustomRoute(
           page: EventAddCohostsRoute.page,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute(
+          page: EventReorderingCohostsRoute.page,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         AutoRoute(
           page: EventSpeakersRoute.page,

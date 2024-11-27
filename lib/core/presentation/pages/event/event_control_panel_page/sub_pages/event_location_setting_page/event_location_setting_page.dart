@@ -30,10 +30,11 @@ class EventLocationSettingPage extends StatefulWidget {
     super.key,
     this.event,
     this.onConfirmLocation,
+    required this.isSubEvent,
   });
   final Event? event;
   final Function(Address)? onConfirmLocation;
-
+  final bool isSubEvent;
   @override
   State<EventLocationSettingPage> createState() =>
       _EventLocationSettingPageState();
@@ -49,6 +50,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   @override
   void initState() {
     super.initState();
+    context.read<AuthBloc>().add(const AuthEvent.refreshData());
     _placeAutocompleteService = GooglePlaceAutocompleteService();
   }
 
@@ -95,14 +97,11 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   Widget _buildContent() {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    List<Address> addresses = context.watch<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession.addresses ?? [],
-          orElse: () => [],
-        );
 
     return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
       listener: (context, state) {
-        if (state.deleteStatus == FormzSubmissionStatus.success) {
+        if (state.status == FormzSubmissionStatus.success ||
+            state.deleteStatus == FormzSubmissionStatus.success) {
           context.read<AuthBloc>().add(const AuthEvent.refreshData());
           _searchController.clear();
           setState(() {
@@ -175,10 +174,21 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                                 ),
                               ),
                               Expanded(
-                                child: AddressList(
-                                  addresses: addresses,
-                                  event: widget.event,
-                                  onConfirmLocation: widget.onConfirmLocation,
+                                child: BlocBuilder<AuthBloc, AuthState>(
+                                  builder: (context, state) {
+                                    final addresses = state.maybeWhen(
+                                      authenticated: (authSession) =>
+                                          authSession.addresses ?? [],
+                                      orElse: () => <Address>[],
+                                    );
+                                    return AddressList(
+                                      addresses: addresses,
+                                      event: widget.event,
+                                      onConfirmLocation:
+                                          widget.onConfirmLocation,
+                                      isSubEvent: widget.isSubEvent,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -221,6 +231,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
       address,
       widget.event,
       widget.onConfirmLocation,
+      widget.isSubEvent,
     );
 
     _searchController.clear();
@@ -255,11 +266,13 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
 class AddressList extends StatelessWidget {
   final Event? event;
   final Function(Address)? onConfirmLocation;
+  final bool isSubEvent;
   const AddressList({
     super.key,
     required this.addresses,
     this.event,
     this.onConfirmLocation,
+    required this.isSubEvent,
   });
 
   final List<Address> addresses;
@@ -305,7 +318,13 @@ class AddressList extends StatelessWidget {
     Function(Address)? onConfirmLocation,
   ) {
     Vibrate.feedback(FeedbackType.light);
-    showBottomSheetDetail(context, address, event, onConfirmLocation);
+    showBottomSheetDetail(
+      context,
+      address,
+      event,
+      onConfirmLocation,
+      isSubEvent,
+    );
   }
 }
 
@@ -314,6 +333,7 @@ void showBottomSheetDetail(
   Address address,
   Event? event,
   Function(Address)? onConfirmLocation,
+  bool isSubEvent,
 ) {
   showCupertinoModalBottomSheet(
     expand: true,
@@ -336,6 +356,7 @@ void showBottomSheetDetail(
           address: address,
           event: event,
           onConfirmLocation: onConfirmLocation,
+          isSubEvent: isSubEvent,
         ),
       );
     },

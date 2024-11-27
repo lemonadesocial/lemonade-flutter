@@ -174,8 +174,11 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
                 recipient_name: event.address!.recipientName,
                 latitude: event.address!.latitude,
                 longitude: event.address!.longitude,
+                additional_directions: event.address!.additionalDirections,
               )
             : null,
+        latitude: event.address?.latitude,
+        longitude: event.address?.longitude,
         published: false,
         subevent_parent: parentEventId,
         subevent_enabled: event.subEventEnabled,

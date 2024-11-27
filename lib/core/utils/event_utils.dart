@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/date_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -230,5 +231,19 @@ class EventUtils {
     }
 
     return isOnlyOneTicketTypeAndFreeAndLimited(event: event);
+  }
+
+  static List<User> getVisibleCohosts(Event event) {
+    final visibleCohosts =
+        (event.visibleCohostsExpanded ?? []).whereType<User>().toList();
+
+    bool isCohost(String userId) {
+      return (event.cohosts ?? []).contains(userId);
+    }
+
+    if (event.hideCohosts == true) {
+      return visibleCohosts.where((user) => !isCohost(user.userId)).toList();
+    }
+    return visibleCohosts;
   }
 }

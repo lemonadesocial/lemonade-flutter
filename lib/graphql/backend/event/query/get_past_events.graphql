@@ -26,6 +26,7 @@ query GetPastEvents($id: MongoID!, $limit: Int = 100, $skip: Int = 0) {
       city
       title
       region
+      additional_directions
     }
   }
 }

@@ -25,14 +25,17 @@ class Event with _$Event {
   factory Event({
     String? id,
     User? hostExpanded,
-    List<User?>? cohostsExpanded,
     List<DbFile?>? newNewPhotosExpanded,
     List<String>? newNewPhotos,
     String? title,
     String? slug,
     List<String>? speakerUsers,
     List<User?>? speakerUsersExpanded,
+    bool? hideCohosts,
     List<String>? cohosts,
+    List<User?>? cohostsExpanded,
+    List<String>? visibleCohosts,
+    List<User?>? visibleCohostsExpanded,
     String? host,
     List<Broadcast>? broadcasts,
     String? description,
@@ -83,6 +86,7 @@ class Event with _$Event {
     bool? applicationRequired,
     bool? registrationDisabled,
     String? shortId,
+    List<String>? addressDirectionsRecommendations,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -105,8 +109,26 @@ class Event with _$Event {
       speakerUsersExpanded: List.from(dto.speakerUsersExpanded ?? [])
           .map((item) => item != null ? User.fromDto(item) : null)
           .toList(),
+      hideCohosts: dto.hideCohosts,
       cohosts:
           List<String>.from(dto.cohosts ?? []).map((item) => item).toList(),
+      visibleCohosts: dto.visibleCohosts?.isNotEmpty == true
+          ? List<String>.from(dto.visibleCohosts ?? [])
+              .map((item) => item)
+              .toList()
+          : [
+              dto.host ?? '',
+              ...(dto.cohosts ?? []),
+            ].whereType<String>().toList(),
+      visibleCohostsExpanded: dto.visibleCohosts?.isNotEmpty == true
+          ? List.from(dto.visibleCohostsExpanded ?? [])
+              .map((item) => item != null ? User.fromDto(item) : null)
+              .toList()
+          : [
+              dto.hostExpanded != null ? User.fromDto(dto.hostExpanded!) : null,
+              ...(dto.cohostsExpanded ?? [])
+                  .map((item) => item != null ? User.fromDto(item) : null),
+            ].whereType<User>().toList(),
       host: dto.host,
       broadcasts: List<BroadcastDto>.from(dto.broadcasts ?? [])
           .map(Broadcast.fromDto)
@@ -187,6 +209,8 @@ class Event with _$Event {
       applicationRequired: dto.applicationRequired,
       registrationDisabled: dto.registrationDisabled,
       shortId: dto.shortId,
+      addressDirectionsRecommendations:
+          List.from(dto.addressDirectionsRecommendations ?? []),
     );
   }
 
