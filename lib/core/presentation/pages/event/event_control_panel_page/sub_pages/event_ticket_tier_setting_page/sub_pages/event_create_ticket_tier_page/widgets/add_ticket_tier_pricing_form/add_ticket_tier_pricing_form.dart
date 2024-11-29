@@ -90,8 +90,8 @@ class _AddTicketTierPricingFormViewState
   @override
   void initState() {
     super.initState();
-    final initialTicketPrice =
-        context.read<ModifyTicketPriceBloc>().initialTicketPrice;
+    // final initialTicketPrice =
+    //     context.read<ModifyTicketPriceBloc>().initialTicketPrice;
     // TODO: ticket setup
     // if (initialTicketPrice?.network?.isNotEmpty == true) {
     //   setState(() {
