@@ -23,10 +23,13 @@ class EventTicketTypesResponse with _$EventTicketTypesResponse {
     EventTicketTypesResponseDto dto,
   ) =>
       EventTicketTypesResponse(
-        discount: dto.discount != null ? TicketDiscount.fromDto(dto.discount!) : null,
+        discount:
+            dto.discount != null ? TicketDiscount.fromDto(dto.discount!) : null,
         limit: dto.limit,
         ticketTypes: dto.ticketTypes != null
-            ? List.from(dto.ticketTypes ?? []).map((item) => PurchasableTicketType.fromDto(item)).toList()
+            ? List.from(dto.ticketTypes ?? [])
+                .map((item) => PurchasableTicketType.fromDto(item))
+                .toList()
             : [],
       );
 }
@@ -47,7 +50,8 @@ class TicketDiscount with _$TicketDiscount {
         ratio: dto.ratio,
       );
 
-  factory TicketDiscount.fromJson(Map<String, dynamic> json) => _$TicketDiscountFromJson(json);
+  factory TicketDiscount.fromJson(Map<String, dynamic> json) =>
+      _$TicketDiscountFromJson(json);
 }
 
 // Used for Guest
@@ -80,7 +84,8 @@ class PurchasableTicketType with _$PurchasableTicketType {
     EventTicketCategory? categoryExpanded,
   }) = _PurchasableTicketType;
 
-  factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) => PurchasableTicketType(
+  factory PurchasableTicketType.fromDto(PurchasableTicketTypeDto dto) =>
+      PurchasableTicketType(
         id: dto.id,
         active: dto.active,
         limited: dto.limited,
@@ -93,16 +98,27 @@ class PurchasableTicketType with _$PurchasableTicketType {
         discountable: dto.discountable,
         externalIds: dto.externalIds,
         limit: dto.limit,
-        offers: dto.offers != null ? List.from(dto.offers ?? []).map((item) => EventOffer.fromDto(item)).toList() : [],
+        offers: dto.offers != null
+            ? List.from(dto.offers ?? [])
+                .map((item) => EventOffer.fromDto(item))
+                .toList()
+            : [],
         photos: dto.photos,
         title: dto.title,
-        prices: List.from(dto.prices ?? []).map((item) => EventTicketPrice.fromDto(item)).toList(),
-        photosExpanded: List.from(dto.photosExpanded ?? []).map((item) => DbFile.fromDto(item)).toList(),
+        prices: List.from(dto.prices ?? [])
+            .map((item) => EventTicketPrice.fromDto(item))
+            .toList(),
+        photosExpanded: List.from(dto.photosExpanded ?? [])
+            .map((item) => DbFile.fromDto(item))
+            .toList(),
         category: dto.category,
-        categoryExpanded: dto.categoryExpanded != null ? EventTicketCategory.fromDto(dto.categoryExpanded!) : null,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
+            : null,
       );
 
-  factory PurchasableTicketType.fromJson(Map<String, dynamic> json) => _$PurchasableTicketTypeFromJson(json);
+  factory PurchasableTicketType.fromJson(Map<String, dynamic> json) =>
+      _$PurchasableTicketTypeFromJson(json);
 }
 
 // Used for Host
@@ -150,21 +166,33 @@ class EventTicketType with _$EventTicketType {
         discountable: dto.discountable,
         externalIds: dto.externalIds,
         limit: dto.limit,
-        offers: dto.offers != null ? List.from(dto.offers ?? []).map((item) => EventOffer.fromDto(item)).toList() : [],
+        offers: dto.offers != null
+            ? List.from(dto.offers ?? [])
+                .map((item) => EventOffer.fromDto(item))
+                .toList()
+            : [],
         photos: dto.photos,
         title: dto.title,
-        prices: List.from(dto.prices ?? []).map((item) => EventTicketPrice.fromDto(item)).toList(),
-        photosExpanded: List.from(dto.photosExpanded ?? []).map((item) => DbFile.fromDto(item)).toList(),
+        prices: List.from(dto.prices ?? [])
+            .map((item) => EventTicketPrice.fromDto(item))
+            .toList(),
+        photosExpanded: List.from(dto.photosExpanded ?? [])
+            .map((item) => DbFile.fromDto(item))
+            .toList(),
         ticketLimit: dto.ticketLimit,
         ticketLimitPer: dto.ticketLimitPer,
         ticketCount: dto.ticketCount,
-        limitedWhitelistUsers:
-            List.from(dto.limitedWhitelistUsers ?? []).map((item) => WhitelistUserInfo.fromDto(item)).toList(),
+        limitedWhitelistUsers: List.from(dto.limitedWhitelistUsers ?? [])
+            .map((item) => WhitelistUserInfo.fromDto(item))
+            .toList(),
         category: dto.category,
-        categoryExpanded: dto.categoryExpanded != null ? EventTicketCategory.fromDto(dto.categoryExpanded!) : null,
+        categoryExpanded: dto.categoryExpanded != null
+            ? EventTicketCategory.fromDto(dto.categoryExpanded!)
+            : null,
       );
 
-  factory EventTicketType.fromJson(Map<String, dynamic> json) => _$EventTicketTypeFromJson(json);
+  factory EventTicketType.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketTypeFromJson(json);
 }
 
 @freezed
@@ -183,17 +211,20 @@ class EventTicketPrice with _$EventTicketPrice {
 
   bool get isCrypto =>
       paymentAccountsExpanded?.isNotEmpty == true &&
-      (paymentAccountsExpanded?.every((paymentAccount) => paymentAccount.type != PaymentAccountType.digital) ??
-          false) &&
-      cost != '0';
+      (paymentAccountsExpanded?.every(
+            (paymentAccount) =>
+                paymentAccount.type != PaymentAccountType.digital,
+          ) ??
+          false);
 
   bool get isFiat =>
-      (paymentAccountsExpanded?.every(
-            (paymentAccount) => paymentAccount.type == PaymentAccountType.digital,
-          ) ??
-          false) ||
       // this handle where free ticket not have payment accounts
-      paymentAccountsExpanded?.isEmpty == true;
+      paymentAccountsExpanded?.isEmpty == true ||
+      (paymentAccountsExpanded?.every(
+            (paymentAccount) =>
+                paymentAccount.type == PaymentAccountType.digital,
+          ) ??
+          false);
 
   bool get isFree => cost == '0';
 
@@ -215,11 +246,14 @@ class EventTicketPrice with _$EventTicketPrice {
         isDefault: dto.isDefault,
         paymentAccounts: dto.paymentAccounts,
         paymentAccountsExpanded: dto.paymentAccountsExpanded != null
-            ? List.from(dto.paymentAccountsExpanded ?? []).map((item) => PaymentAccount.fromDto(item)).toList()
+            ? List.from(dto.paymentAccountsExpanded ?? [])
+                .map((item) => PaymentAccount.fromDto(item))
+                .toList()
             : [],
       );
 
-  factory EventTicketPrice.fromJson(Map<String, dynamic> json) => _$EventTicketPriceFromJson(json);
+  factory EventTicketPrice.fromJson(Map<String, dynamic> json) =>
+      _$EventTicketPriceFromJson(json);
 }
 
 @freezed
@@ -231,10 +265,12 @@ class WhitelistUserInfo with _$WhitelistUserInfo {
     String? email,
   }) = _WhitelistUserInfo;
 
-  factory WhitelistUserInfo.fromDto(WhitelistUserInfoDto dto) => WhitelistUserInfo(
+  factory WhitelistUserInfo.fromDto(WhitelistUserInfoDto dto) =>
+      WhitelistUserInfo(
         id: dto.id,
         email: dto.email,
       );
 
-  factory WhitelistUserInfo.fromJson(Map<String, dynamic> json) => _$WhitelistUserInfoFromJson(json);
+  factory WhitelistUserInfo.fromJson(Map<String, dynamic> json) =>
+      _$WhitelistUserInfoFromJson(json);
 }

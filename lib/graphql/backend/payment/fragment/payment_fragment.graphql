@@ -47,6 +47,15 @@ fragment PaymentAccountFragment on NewPaymentAccount {
       payment_splitter_contract
     }
 
+    ... on EthereumStakeAccount {
+      currencies
+      currency_map
+      address
+      network
+      config_id
+      requirement_checkin_before
+    }
+
     ... on StripeAccount {
       currencies
       currency_map

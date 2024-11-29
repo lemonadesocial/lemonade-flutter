@@ -107,7 +107,8 @@ class OtherTicketItem extends StatelessWidget {
                         // show other chains price
                         if (ticketPrice.supportedNetworks.isNotEmpty == true &&
                             networkFilter != null &&
-                            ticketPrice.supportedNetworks.contains(networkFilter)) {
+                            ticketPrice.supportedNetworks
+                                .contains(networkFilter)) {
                           return const SizedBox.shrink();
                         }
 

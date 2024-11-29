@@ -19,6 +19,7 @@ final getChainsListQuery = gql('''
         logo_url
       }
       relay_payment_contract
+      stake_payment_contract
     }
   }
 ''');
