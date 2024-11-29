@@ -1,5 +1,6 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/data/event/dtos/event_ticket_category_dto/event_ticket_category_dto.dart';
 part 'event_ticket_types_dto.freezed.dart';
@@ -97,8 +98,10 @@ class EventTicketPriceDto with _$EventTicketPriceDto {
   const factory EventTicketPriceDto({
     String? cost,
     String? currency,
-    String? network,
     @JsonKey(name: 'default') bool? isDefault,
+    @JsonKey(name: 'payment_accounts') List<String?>? paymentAccounts,
+    @JsonKey(name: 'payment_accounts_expanded')
+    List<PaymentAccountDto>? paymentAccountsExpanded,
   }) = _EventTicketPriceDto;
 
   factory EventTicketPriceDto.fromJson(Map<String, dynamic> json) =>

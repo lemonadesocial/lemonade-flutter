@@ -1,5 +1,6 @@
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_button.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PayByCryptoFooter extends StatelessWidget {
   final EventTicketsPricingInfo pricingInfo;
   final String selectedCurrency;
-  final String? selectedNetwork;
+  final PaymentAccount? selectedPaymentAccount;
   final List<PurchasableItem> selectedTickets;
   final bool isFree;
   final bool disabled;
@@ -23,7 +24,7 @@ class PayByCryptoFooter extends StatelessWidget {
     required this.pricingInfo,
     required this.selectedCurrency,
     required this.selectedTickets,
-    this.selectedNetwork,
+    required this.selectedPaymentAccount,
     this.isFree = false,
     this.disabled = false,
   });
@@ -33,7 +34,7 @@ class PayByCryptoFooter extends StatelessWidget {
     return PayByCryptoFooterView(
       pricingInfo: pricingInfo,
       selectedCurrency: selectedCurrency,
-      selectedNetwork: selectedNetwork,
+      selectedPaymentAccount: selectedPaymentAccount,
       selectedTickets: selectedTickets,
       isFree: isFree,
       disabled: disabled,
@@ -44,7 +45,7 @@ class PayByCryptoFooter extends StatelessWidget {
 class PayByCryptoFooterView extends StatefulWidget {
   final EventTicketsPricingInfo pricingInfo;
   final String selectedCurrency;
-  final String? selectedNetwork;
+  final PaymentAccount? selectedPaymentAccount;
   final List<PurchasableItem> selectedTickets;
   final bool isFree;
   final bool disabled;
@@ -54,7 +55,7 @@ class PayByCryptoFooterView extends StatefulWidget {
     required this.pricingInfo,
     required this.selectedCurrency,
     required this.selectedTickets,
-    this.selectedNetwork,
+    required this.selectedPaymentAccount,
     this.isFree = false,
     this.disabled = false,
   });
@@ -92,9 +93,9 @@ class _PayByCryptoFooterViewState extends State<PayByCryptoFooterView> {
                   PayButton(
                     disabled: widget.disabled,
                     selectedCurrency: widget.selectedCurrency,
-                    selectedNetwork: widget.selectedNetwork,
                     pricingInfo: widget.pricingInfo,
                     isFree: widget.isFree,
+                    selectedPaymentAccount: widget.selectedPaymentAccount,
                   ),
                 ],
               );
@@ -115,8 +116,8 @@ class _PayByCryptoFooterViewState extends State<PayByCryptoFooterView> {
                 PayButton(
                   disabled: widget.disabled,
                   selectedCurrency: widget.selectedCurrency,
-                  selectedNetwork: widget.selectedNetwork,
                   pricingInfo: widget.pricingInfo,
+                  selectedPaymentAccount: widget.selectedPaymentAccount,
                 ),
               ],
             );

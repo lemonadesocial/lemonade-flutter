@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LemonNetworkImage extends StatelessWidget {
   final double? width;
@@ -21,6 +22,8 @@ class LemonNetworkImage extends StatelessWidget {
     this.border,
   });
 
+  bool get _isSvg => imageUrl.toLowerCase().endsWith('.svg');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,12 +35,20 @@ class LemonNetworkImage extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
-        child: CachedNetworkImage(
-          fit: fit ?? BoxFit.cover,
-          imageUrl: imageUrl,
-          errorWidget: (_, __, ___) => placeholder ?? const SizedBox.shrink(),
-          placeholder: (_, __) => placeholder ?? const SizedBox.shrink(),
-        ),
+        child: _isSvg
+            ? SvgPicture.network(
+                imageUrl,
+                fit: fit ?? BoxFit.cover,
+                placeholderBuilder: (context) =>
+                    placeholder ?? const SizedBox.shrink(),
+              )
+            : CachedNetworkImage(
+                fit: fit ?? BoxFit.cover,
+                imageUrl: imageUrl,
+                errorWidget: (_, __, ___) =>
+                    placeholder ?? const SizedBox.shrink(),
+                placeholder: (_, __) => placeholder ?? const SizedBox.shrink(),
+              ),
       ),
     );
   }

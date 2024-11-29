@@ -28,8 +28,8 @@ class BuyTicketsWithCryptoBloc
     extends Bloc<BuyTicketsWithCryptoEvent, BuyTicketsWithCryptoState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
-  final String? selectedNetwork;
   final _web3Repository = getIt<Web3Repository>();
+  final PaymentAccount? selectedPaymentAccount;
 
   EventJoinRequest? _currentEventJoinRequest;
   Payment? _currentPayment;
@@ -39,8 +39,10 @@ class BuyTicketsWithCryptoBloc
   int _updatePaymentAttemptCount = 0;
   final walletConnectService = getIt<WalletConnectService>();
 
+  String? get _selectedNetwork => selectedPaymentAccount?.accountInfo?.network;
+
   BuyTicketsWithCryptoBloc({
-    required this.selectedNetwork,
+    required this.selectedPaymentAccount,
   }) : super(
           BuyTicketsWithCryptoState.idle(
             data: BuyTicketsWithCryptoStateData(),
@@ -65,7 +67,7 @@ class BuyTicketsWithCryptoBloc
       final result = await eventTicketRepository.buyTickets(
         input: event.input.copyWith(
           transferParams: BuyTicketsTransferParamsInput(
-            network: selectedNetwork,
+            network: _selectedNetwork,
           ),
         ),
       );
@@ -108,7 +110,7 @@ class BuyTicketsWithCryptoBloc
 
     try {
       final getChainResult =
-          await _web3Repository.getChainById(chainId: selectedNetwork!);
+          await _web3Repository.getChainById(chainId: _selectedNetwork!);
       final chain = getChainResult.getOrElse(() => null);
       final signature = await walletConnectService
           .personalSign(
@@ -130,7 +132,7 @@ class BuyTicketsWithCryptoBloc
             id: _currentPayment?.id ?? '',
             transferParams: UpdatePaymentTransferParams(
               signature: _signature,
-              network: selectedNetwork!,
+              network: _selectedNetwork!,
               from: walletConnectService.w3mService.session?.address ?? '',
             ),
           ),
@@ -179,10 +181,10 @@ class BuyTicketsWithCryptoBloc
     emit(BuyTicketsWithCryptoState.loading(data: state.data));
     try {
       final getChainResult =
-          await _web3Repository.getChainById(chainId: selectedNetwork!);
+          await _web3Repository.getChainById(chainId: _selectedNetwork!);
       final chain = getChainResult.getOrElse(() => null);
       final contractAddress =
-          event.currencyInfo.contracts?[selectedNetwork] ?? '';
+          event.currencyInfo.contracts?[_selectedNetwork] ?? '';
 
       if (contractAddress.isEmpty) {
         return emit(
@@ -201,7 +203,7 @@ class BuyTicketsWithCryptoBloc
         );
         // token address (can be native token or ERC20 token)
         final currencyAddress = _currentPayment?.accountExpanded?.accountInfo
-                ?.currencyMap?[event.currency]?.contracts?[selectedNetwork] ??
+                ?.currencyMap?[event.currency]?.contracts?[_selectedNetwork] ??
             '';
         // if currency is not native token
         // need to approve first
@@ -377,7 +379,7 @@ class BuyTicketsWithCryptoBloc
         transferParams: UpdatePaymentTransferParams(
           signature: _signature,
           txHash: _txHash,
-          network: selectedNetwork!,
+          network: _selectedNetwork,
           from: walletConnectService.w3mService.session?.address ?? '',
         ),
       ),

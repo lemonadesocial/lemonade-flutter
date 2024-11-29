@@ -8,6 +8,7 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/other_ticket_types_list.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
@@ -18,6 +19,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -33,7 +35,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -191,7 +192,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   id: ticketTypesByCategory.first.id!,
                 ),
                 currency: price.currency ?? '',
-                network: price.network,
+                price: price,
               ),
             );
       }
@@ -267,7 +268,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
     final selectedTickets = selectTicketBloc.state.selectedTickets;
     final selectedCurrency = selectTicketBloc.state.selectedCurrency;
-    final selectedNetwork = selectTicketBloc.state.selectedNetwork;
     final totalAmount = selectTicketBloc.state.totalAmount;
 
     return MultiBlocListener(
@@ -474,12 +474,18 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                         final supportedPaymentNetworks = filteredTicketTypes
                             .expand(
                               (ticketType) => (ticketType.prices ?? [])
-                                  .map((price) => price.network)
-                                  .where(
-                                    (network) => network?.isNotEmpty == true,
-                                  ),
+                                  .where((price) => price.isCrypto)
+                                  .map((price) => price.paymentAccountsExpanded)
+                                  .expand(
+                                    (paymentAccounts) =>
+                                        paymentAccounts ?? <PaymentAccount>[],
+                                  )
+                                  .map(
+                                    (paymentAccount) =>
+                                        paymentAccount.accountInfo?.network,
+                                  )
+                                  .whereType<String>(),
                             )
-                            .whereType<String>()
                             .toSet()
                             .toList();
 
@@ -532,30 +538,21 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                                           index - 1];
                                                 });
                                               },
-                                              leading: chain?.logoUrl != null
-                                                  ? ClipRRect(
+                                              leading: chain?.logoUrl
+                                                          ?.isNotEmpty ==
+                                                      true
+                                                  ? LemonNetworkImage(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                         Sizing.xSmall,
                                                       ),
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            chain?.logoUrl ??
-                                                                '',
-                                                        placeholder: (_, __) =>
-                                                            const SizedBox
-                                                                .shrink(),
-                                                        errorWidget: (
-                                                          _,
-                                                          __,
-                                                          ___,
-                                                        ) =>
-                                                            const SizedBox
-                                                                .shrink(),
-                                                        width: Sizing.xSmall,
-                                                        height: Sizing.xSmall,
-                                                        fit: BoxFit.cover,
-                                                      ),
+                                                      imageUrl:
+                                                          chain?.logoUrl ?? '',
+                                                      placeholder:
+                                                          const SizedBox
+                                                              .shrink(),
+                                                      width: Sizing.xSmall,
+                                                      height: Sizing.xSmall,
                                                     )
                                                   : null,
                                               label: chain?.name,
@@ -597,7 +594,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                           ticketTypes: ticketTypesByCategory,
                                           networkFilter: networkFilter,
                                           selectedCurrency: selectedCurrency,
-                                          selectedNetwork: selectedNetwork,
                                           selectedPaymentMethod:
                                               selectedPaymentMethod,
                                         ),
@@ -614,44 +610,31 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                           ticketTypes: ticketTypesByCategory,
                                           networkFilter: networkFilter,
                                           selectedCurrency: selectedCurrency,
-                                          selectedNetwork: selectedNetwork,
                                           selectedPaymentMethod:
                                               selectedPaymentMethod,
                                         ),
                                       );
                                     }
-
+                                    final ticketType =
+                                        filteredTicketTypes[index];
+                                    final ticketPrice =
+                                        ticketType.prices?.firstOrNull;
                                     return SelectTicketItem(
                                       networkFilter: networkFilter,
-                                      selectedCurrency: selectedCurrency,
-                                      selectedNetwork: selectedNetwork,
-                                      selectedPaymentMethod:
-                                          selectedPaymentMethod,
                                       event: widget.event,
-                                      ticketType: filteredTicketTypes[index],
-                                      count: selectedTickets
-                                              .firstWhereOrNull(
-                                                (element) =>
-                                                    element.id ==
-                                                    filteredTicketTypes[index]
-                                                        .id,
-                                              )
-                                              ?.count ??
-                                          0,
-                                      onCountChange:
-                                          (count, currency, network) {
+                                      ticketType: ticketType,
+                                      onCountChange: (count) {
                                         context
                                             .read<SelectEventTicketsBloc>()
                                             .add(
                                               SelectEventTicketsEvent.select(
                                                 ticket: PurchasableItem(
                                                   count: count,
-                                                  id: filteredTicketTypes[index]
-                                                          .id ??
-                                                      '',
+                                                  id: ticketType.id ?? '',
                                                 ),
-                                                currency: currency,
-                                                network: network,
+                                                currency:
+                                                    ticketPrice?.currency ?? '',
+                                                price: ticketPrice,
                                               ),
                                             );
                                       },
@@ -702,7 +685,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                     event: widget.event,
                     paymentMethod: selectedPaymentMethod,
                     selectedCurrency: selectedCurrency,
-                    selectedNetwork: selectedNetwork,
                     totalAmount: totalAmount,
                   ),
                 ),

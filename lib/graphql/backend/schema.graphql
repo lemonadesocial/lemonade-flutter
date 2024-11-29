@@ -24,7 +24,7 @@ type Query {
   getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
   getEvent(_id: MongoID, shortid: String): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
+  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, end_from: DateTimeISO, end_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
@@ -67,8 +67,11 @@ type Query {
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
   getGuildRooms: [GuildRoom!]!
+  getEventPaymentStatistics(event: MongoID!): EventPaymentStatistics!
   getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(payment_secret: String, _id: MongoID!): NewPayment
+  getEventPayment(event: MongoID!, _id: MongoID!): NewPayment
+  listEventPayments(skip: Int, limit: Int, event: MongoID!, provider: NewPaymentProvider, networks: [String!], ticket_types: [MongoID!], checked_in: Boolean, search: String): ListEventPaymentsResponse!
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, ids: [MongoID!], users: [MongoID!]): [NewPayment!]!
   getPaymentRefundSignature(_id: MongoID!): PaymentRefundSignature!
   listFiatCurrencies: [FiatCurrency!]!
@@ -811,9 +814,97 @@ type EventTicketCategory {
 type EventTicketPrice {
   default: Boolean
   currency: String!
-  network: String
   cost: String!
-  decimals: Int
+  payment_accounts: [MongoID!]
+  payment_accounts_expanded: [NewPaymentAccount!]
+}
+
+type NewPaymentAccount {
+  _id: MongoID!
+  active: Boolean!
+  created_at: DateTimeISO!
+  user: MongoID!
+  type: PaymentAccountType!
+  title: String
+  provider: NewPaymentProvider
+  account_info: AccountInfo!
+}
+
+enum PaymentAccountType {
+  ethereum
+  ethereum_escrow
+  ethereum_relay
+  ethereum_stake
+  digital
+}
+
+enum NewPaymentProvider {
+  stripe
+  safe
+}
+
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
+
+type EthereumAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+}
+
+type SafeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  owners: [String!]!
+  threshold: Float!
+  pending: Boolean
+}
+
+type DigitalAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+}
+
+type StripeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+  publishable_key: String!
+}
+
+type EthereumEscrowAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  minimum_deposit_percent: Int!
+  host_refund_percent: Float!
+  refund_policies: [RefundPolicy!]
+}
+
+type RefundPolicy {
+  timestamp: Float!
+  percent: Float!
+}
+
+type EthereumRelayAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  payment_splitter_contract: String
+}
+
+type EthereumStakeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  config_id: String!
+  requirement_checkin_before: DateTimeISO
 }
 
 type EventSession {
@@ -1001,94 +1092,6 @@ type StoreProductVariant {
   new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
 }
 
-type NewPaymentAccount {
-  _id: MongoID!
-  active: Boolean!
-  created_at: DateTimeISO!
-  user: MongoID!
-  type: PaymentAccountType!
-  title: String
-  provider: NewPaymentProvider
-  account_info: AccountInfo!
-}
-
-enum PaymentAccountType {
-  ethereum
-  ethereum_escrow
-  ethereum_relay
-  ethereum_stake
-  digital
-}
-
-enum NewPaymentProvider {
-  stripe
-  safe
-}
-
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
-
-type EthereumAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  networks: [String!]!
-}
-
-type SafeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  owners: [String!]!
-  threshold: Float!
-  pending: Boolean
-}
-
-type DigitalAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  account_id: String!
-}
-
-type StripeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  account_id: String!
-  publishable_key: String!
-}
-
-type EthereumEscrowAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  minimum_deposit_percent: Int!
-  host_refund_percent: Float!
-  refund_policies: [RefundPolicy!]
-}
-
-type RefundPolicy {
-  timestamp: Float!
-  percent: Float!
-}
-
-type EthereumRelayAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  payment_splitter_contract: String
-}
-
-type EthereumStakeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  config_id: String!
-  requirement_checkin_before: DateTimeISO
-}
-
 type EventPaymentTicketDiscount {
   active: Boolean!
   stamp: DateTimeISO!
@@ -1113,7 +1116,9 @@ type TicketBase {
   event: MongoID!
   type: MongoID!
   accepted: Boolean
+  acquired_by: MongoID
   cancelled_by: MongoID
+  acquired_by_email: String
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
@@ -1663,6 +1668,7 @@ enum EmailRecipientType {
   join_requester
   event_hosts
   ticket_cancelled
+  ticket_issued
 }
 
 type EmailRecipientFilters {
@@ -2008,6 +2014,33 @@ type GuildRoom {
   created_by_expanded: User
 }
 
+type EventPaymentStatistics {
+  total_payments: Int!
+  stripe_payments: PaymentStatistics!
+  crypto_payments: CryptoPaymentStatistics!
+}
+
+type PaymentStatistics {
+  count: Int!
+  revenue: [PaymentRevenue!]!
+}
+
+type PaymentRevenue {
+  currency: String!
+  formatted_total_amount: String!
+}
+
+type CryptoPaymentStatistics {
+  count: Int!
+  revenue: [PaymentRevenue!]!
+  networks: [CryptoPaymentNetworkStatistics!]!
+}
+
+type CryptoPaymentNetworkStatistics {
+  chain_id: String!
+  count: Int!
+}
+
 type NewPayment {
   _id: MongoID!
   stamps: JSON!
@@ -2024,8 +2057,17 @@ type NewPayment {
   transfer_params: JSON
   failure_reason: String
   account_expanded: NewPaymentAccount
+  tickets: [TicketBase!]
   ticket_types_expanded: [EventTicketType]
   due_amount: String
+  buyer_user: UserWithEmail
+  formatted_due_amount: String
+  formatted_total_amount: String
+  formatted_fee_amount: String
+  stripe_payment_info: StripePaymentInfo
+  crypto_payment_info: CryptoPaymentInfo
+  application: [EventApplicationQuestionAndAnswer!]
+  join_request: EventJoinRequestBase
 }
 
 type BuyerInfo {
@@ -2052,10 +2094,48 @@ type BillingInfo {
   lastname: String
 }
 
+type StripePaymentInfo {
+  card: StripeCardInfo
+  payment_intent: String!
+}
+
+type StripeCardInfo {
+  brand: String
+  last4: String
+}
+
+type CryptoPaymentInfo {
+  network: String
+  tx_hash: String
+}
+
+type EventApplicationQuestionAndAnswer {
+  question: String
+  answer: String
+}
+
+type EventJoinRequestBase {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  event: MongoID!
+  user: MongoID
+  email: String
+  state: EventJoinRequestState!
+  decided_at: DateTimeISO
+  decided_by: MongoID
+  requested_tickets: [RequestedTicket!]
+  payment_id: MongoID
+}
+
 input FilterPaymentStateInput {
   eq: NewPaymentState
   in: [NewPaymentState!]
   nin: [NewPaymentState!]
+}
+
+type ListEventPaymentsResponse {
+  total: Int!
+  records: [NewPayment!]!
 }
 
 type PaymentRefundSignature {
@@ -2834,7 +2914,7 @@ type PricingInfo {
   subtotal: String!
   total: String!
   deposit_infos: [EscrowDepositInfo!]
-  payment_accounts: [PaymentAccountInfo!]
+  payment_accounts: [PaymentAccountInfo!]!
 }
 
 type EscrowDepositInfo {
@@ -2868,7 +2948,6 @@ input CalculateTicketsPricingInput {
   inviter: MongoID
   user_info: UserInput
   currency: String!
-  network: String
   discount: String
 }
 
@@ -2987,7 +3066,9 @@ type Ticket {
   event: MongoID!
   type: MongoID!
   accepted: Boolean
+  acquired_by: MongoID
   cancelled_by: MongoID
+  acquired_by_email: String
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
@@ -3879,8 +3960,8 @@ input EventTicketTypeInput {
 input EventTicketPriceInput {
   default: Boolean
   currency: String!
-  network: String
   cost: String!
+  payment_accounts: [MongoID!]
 }
 
 input EventTicketTypeOffersInput {
@@ -4456,7 +4537,6 @@ input BuyTicketsInput {
   inviter: MongoID
   user_info: UserInput
   currency: String!
-  network: String
   discount: String
   total: String!
   fee: String

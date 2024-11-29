@@ -10,7 +10,6 @@ class CalculateTicketsPricingInput with _$CalculateTicketsPricingInput {
   factory CalculateTicketsPricingInput({
     @JsonKey(name: 'event') required String eventId,
     required String currency,
-    String? network,
     String? discount,
     @Default([]) List<PurchasableItem> items,
   }) = _CalculateTicketsPricingInput;

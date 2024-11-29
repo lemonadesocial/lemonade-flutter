@@ -1,9 +1,13 @@
+import 'package:app/core/data/event/gql/event_tickets_query.dart';
+import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 
 const postFragment = '''
+  $paymentAccountFragment
   $eventHostExpandedFragment
-    
+  $eventTicketPriceFragment
+
   fragment postFragment on Post {
   _id
   created_at
@@ -35,9 +39,7 @@ const postFragment = '''
     event_ticket_types {
       _id
       prices {
-        currency
-        network
-        cost
+        ...eventTicketPriceFragment
       }
     }
     start

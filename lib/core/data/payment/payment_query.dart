@@ -19,7 +19,7 @@ const paymentAccountInfoFragment = '''
         currencies
         currency_map
         address
-        networks
+        network
       }
 
       ... on EthereumRelayAccount {
@@ -83,7 +83,7 @@ const paymentAccountFragment = '''
           currencies
           currency_map
           address
-          networks
+          network
         }
 
       ... on EthereumRelayAccount {
