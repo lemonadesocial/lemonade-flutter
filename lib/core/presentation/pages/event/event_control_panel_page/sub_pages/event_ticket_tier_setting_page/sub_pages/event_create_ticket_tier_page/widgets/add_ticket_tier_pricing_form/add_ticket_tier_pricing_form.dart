@@ -92,11 +92,12 @@ class _AddTicketTierPricingFormViewState
     super.initState();
     final initialTicketPrice =
         context.read<ModifyTicketPriceBloc>().initialTicketPrice;
-    if (initialTicketPrice?.network?.isNotEmpty == true) {
-      setState(() {
-        pricingMethod = TicketPricingMethod.erc20;
-      });
-    }
+    // TODO: ticket setup
+    // if (initialTicketPrice?.network?.isNotEmpty == true) {
+    //   setState(() {
+    //     pricingMethod = TicketPricingMethod.erc20;
+    //   });
+    // }
   }
 
   void resetAmount() {

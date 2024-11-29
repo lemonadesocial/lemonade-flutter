@@ -178,9 +178,10 @@ class TicketTierItem extends StatelessWidget {
                       currencies: currencies,
                       currency: firstTicketPrice?.currency ?? '',
                     );
+                    // TODO: ticket setup
                     final isERC20 =
-                        eventTicketType.prices?.first.network?.isNotEmpty ==
-                            true;
+                        eventTicketType.prices?.firstOrNull?.isCrypto ?? false;
+
                     final decimals = currencyInfo?.decimals?.toInt() ?? 2;
                     String displayedAmount = "";
                     if (isERC20) {

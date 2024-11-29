@@ -32,9 +32,10 @@ class _ERC20PricingMethodFormState extends State<ERC20PricingMethodForm> {
     super.initState();
     final initialTicketPrice =
         context.read<ModifyTicketPriceBloc>().initialTicketPrice;
-    if (initialTicketPrice?.network?.isEmpty == true) {
-      return;
-    }
+    // TODO: ticket setup
+    // if (initialTicketPrice?.network?.isEmpty == true) {
+    //   return;
+    // }
     final initialNetwork = context.read<ModifyTicketPriceBloc>().initialNetwork;
     final initialDecimals = initialNetwork?.tokens
             ?.firstWhereOrNull(

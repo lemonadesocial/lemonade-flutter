@@ -69,7 +69,8 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
               currency: item.currency,
               cost: item.cost,
               $default: item.isDefault,
-              network: item.network,
+              // TODO: ticket setup
+              // paymentAccounts: [],
             ),
           )
           .toList(),
