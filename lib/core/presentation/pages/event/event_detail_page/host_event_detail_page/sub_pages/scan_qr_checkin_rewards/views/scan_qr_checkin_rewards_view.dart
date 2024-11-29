@@ -39,19 +39,15 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
 
     switch (widget.selectedScanTarget) {
       case ScanTarget.tickets:
-        final response = await showFutureLoadingDialog(
+        await showCupertinoModalBottomSheet(
           context: context,
-          future: () =>
-              getIt<EventTicketRepository>().getTicket(shortId: shortId),
+          useRootNavigator: true,
+          backgroundColor: LemonColor.atomicBlack,
+          builder: (context) => GuestDetailBottomSheetView(
+            shortId: shortId,
+            eventId: widget.event.id ?? '',
+          ),
         );
-        response.result?.fold((failure) => null, (ticket) async {
-          await showCupertinoModalBottomSheet(
-            context: context,
-            useRootNavigator: true,
-            backgroundColor: LemonColor.atomicBlack,
-            builder: (context) => GuestDetailBottomSheetView(ticket: ticket),
-          );
-        });
       case ScanTarget.rewards:
         final response = await showFutureLoadingDialog(
           context: context,

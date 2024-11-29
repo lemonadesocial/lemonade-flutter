@@ -19,14 +19,12 @@ const paymentAccountInfoFragment = '''
         currencies
         currency_map
         address
-        networks
       }
 
       ... on EthereumRelayAccount {
         address
         currencies
         currency_map
-        network
         payment_splitter_contract
       }
 
@@ -47,7 +45,6 @@ const paymentAccountInfoFragment = '''
         currencies
         currency_map
         address
-        network
         owners
         threshold
         pending
@@ -59,7 +56,6 @@ const paymentAccountInfoFragment = '''
         currency_map
         host_refund_percent
         minimum_deposit_percent
-        network
         refund_policies {
           percent
           timestamp
@@ -83,14 +79,12 @@ const paymentAccountFragment = '''
           currencies
           currency_map
           address
-          networks
         }
 
       ... on EthereumRelayAccount {
           address
           currencies
           currency_map
-          network
           payment_splitter_contract
         }
 
@@ -111,7 +105,6 @@ const paymentAccountFragment = '''
         currencies
         currency_map
         address
-        network
         owners
         threshold
         pending
@@ -123,7 +116,6 @@ const paymentAccountFragment = '''
         currency_map
         host_refund_percent
         minimum_deposit_percent
-        network
         refund_policies {
           percent
           timestamp

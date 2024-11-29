@@ -83,7 +83,6 @@ const eventTicketTypesFragment = '''
       prices {
         cost
         currency
-        network
         default
       }
       ticket_limit_per
@@ -226,7 +225,6 @@ const eventFragment = '''
       _id
       prices {
         currency
-        network
         cost
       }
     }

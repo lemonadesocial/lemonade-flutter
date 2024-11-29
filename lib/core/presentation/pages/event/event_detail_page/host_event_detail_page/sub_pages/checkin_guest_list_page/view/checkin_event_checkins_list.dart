@@ -12,10 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-class EventCheckInsList extends StatelessWidget {
+class CheckinEventCheckinsList extends StatelessWidget {
   final RefreshController refreshController = RefreshController();
   final Event? event;
-  EventCheckInsList({
+  CheckinEventCheckinsList({
     super.key,
     this.event,
   });

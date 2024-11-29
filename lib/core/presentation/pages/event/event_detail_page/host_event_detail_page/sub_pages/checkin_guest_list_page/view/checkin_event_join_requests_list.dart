@@ -23,14 +23,14 @@ enum ModifyJoinRequestAction {
   decline,
 }
 
-class EventJoinRequestList extends StatefulWidget {
+class CheckinEventJoinRequestList extends StatefulWidget {
   final Enum$EventJoinRequestState state;
   final Event? event;
   final Widget Function({
     required EventJoinRequest eventJoinRequest,
     void Function()? refresh,
   })? itemBuilder;
-  const EventJoinRequestList({
+  const CheckinEventJoinRequestList({
     super.key,
     required this.state,
     this.event,
@@ -38,10 +38,12 @@ class EventJoinRequestList extends StatefulWidget {
   });
 
   @override
-  State<EventJoinRequestList> createState() => _EventJoinRequestListState();
+  State<CheckinEventJoinRequestList> createState() =>
+      _CheckinEventJoinRequestListState();
 }
 
-class _EventJoinRequestListState extends State<EventJoinRequestList> {
+class _CheckinEventJoinRequestListState
+    extends State<CheckinEventJoinRequestList> {
   final refreshController = RefreshController();
   final debouncer = Debouncer(milliseconds: 300);
   final searchController = TextEditingController();

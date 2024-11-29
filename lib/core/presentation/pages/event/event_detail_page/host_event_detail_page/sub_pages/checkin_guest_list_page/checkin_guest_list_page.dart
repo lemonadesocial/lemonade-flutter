@@ -1,11 +1,11 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/event_accepted_export_list.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/event_checkins_list.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/event_invited_list.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/event_join_requests_list.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/widgets/join_request_item/event_confirmed_join_request_item.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/widgets/join_request_item/event_pending_join_request_item.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/widgets/join_request_item/event_rejected_join_request_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_confirmed_join_request_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_pending_join_request_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_item/event_rejected_join_request_item.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/checkin_event_accepted_export_list.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/checkin_event_checkins_list.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/checkin_event_invited_list.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/view/checkin_event_join_requests_list.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -189,17 +189,17 @@ class _CheckInGuestListPageState extends State<CheckInGuestListPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  EventAcceptedExportList(
+                  CheckinEventAcceptedExportList(
                     event: event,
                   ),
-                  EventInvitedList(
+                  CheckinEventInvitedList(
                     event: event,
                   ),
-                  EventCheckInsList(
+                  CheckinEventCheckinsList(
                     event: event,
                   ),
                   if (event?.approvalRequired == true) ...[
-                    EventJoinRequestList(
+                    CheckinEventJoinRequestList(
                       state: Enum$EventJoinRequestState.pending,
                       event: event,
                       itemBuilder: ({
@@ -211,7 +211,7 @@ class _CheckInGuestListPageState extends State<CheckInGuestListPage>
                         onRefetch: refresh,
                       ),
                     ),
-                    EventJoinRequestList(
+                    CheckinEventJoinRequestList(
                       state: Enum$EventJoinRequestState.approved,
                       event: event,
                       itemBuilder: ({
@@ -222,7 +222,7 @@ class _CheckInGuestListPageState extends State<CheckInGuestListPage>
                         eventJoinRequest: eventJoinRequest,
                       ),
                     ),
-                    EventJoinRequestList(
+                    CheckinEventJoinRequestList(
                       state: Enum$EventJoinRequestState.declined,
                       event: event,
                       itemBuilder: ({

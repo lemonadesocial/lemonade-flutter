@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
@@ -9,14 +10,17 @@ import 'package:flutter/material.dart';
 class GuestDetailInformationView extends StatelessWidget {
   const GuestDetailInformationView({
     super.key,
-    this.user,
+    required this.ticket,
   });
 
-  final User? user;
+  final EventTicket ticket;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final assignedEmail = ticket.assignedEmail;
+    final assignedToExpanded = ticket.assignedToExpanded;
+    final displayEmail = assignedEmail ?? assignedToExpanded?.email;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,20 +28,20 @@ class GuestDetailInformationView extends StatelessWidget {
       children: [
         LemonCircleAvatar(
           size: Sizing.xLarge,
-          url: AvatarUtils.getAvatarUrl(user: user),
+          url: AvatarUtils.getAvatarUrl(user: assignedToExpanded),
         ),
         SizedBox(height: Spacing.small),
-        if (user?.name != null)
+        if (assignedToExpanded?.name != null)
           Text(
-            user?.name ?? '',
+            assignedToExpanded?.name ?? '',
             style: Typo.large.copyWith(
               fontWeight: FontWeight.w500,
               color: colorScheme.onPrimary,
             ),
           ),
-        if (user?.email != null)
+        if (displayEmail != null)
           Text(
-            user?.email ?? '',
+            displayEmail,
             style: Typo.medium.copyWith(
               fontWeight: FontWeight.w400,
               color: colorScheme.onSecondary,
