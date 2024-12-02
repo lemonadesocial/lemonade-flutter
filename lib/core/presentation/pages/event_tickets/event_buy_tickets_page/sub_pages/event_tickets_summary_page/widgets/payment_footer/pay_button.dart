@@ -49,6 +49,7 @@ class PayButton extends StatelessWidget {
             _totalCryptoAmount,
             currency: selectedCurrency,
             decimals: currencyInfo?.decimals ?? 2,
+            decimalDigits: currencyInfo?.decimals ?? 2,
           )
         : NumberUtils.formatCurrency(
             amount: _totalFiatAmount,

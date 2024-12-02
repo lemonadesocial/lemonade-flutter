@@ -51,11 +51,12 @@ class EventTotalPriceSummary extends StatelessWidget {
               selectedPaymentAccount?.cryptoFee ?? BigInt.zero,
               currency: selectedCurrency,
               decimals: currencyInfo?.decimals ?? 0,
+              decimalDigits: currencyInfo?.decimals ?? 0,
             ),
             textColor: colorScheme.onSecondary,
           ),
+          SizedBox(height: Spacing.xSmall),
         ],
-        SizedBox(height: Spacing.xSmall),
         SummaryRow(
           label: t.event.eventOrder.grandTotal,
           value: isCryptoPayment
