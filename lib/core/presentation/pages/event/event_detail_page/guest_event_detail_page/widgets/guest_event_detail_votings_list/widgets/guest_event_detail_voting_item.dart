@@ -6,6 +6,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_votings/widgets/voting_bar_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -59,6 +60,14 @@ class _GuestEventDetailVotingItemState
   void dispose() {
     _votingUpdateSubscription.cancel();
     super.dispose();
+  }
+
+  VotingOption? get myVote {
+    final userId = AuthUtils.getUserId(context);
+    final myVote = widget.voting.votingOptions?.firstWhereOrNull(
+      (option) => (option.voters ?? []).any((voter) => voter.userId == userId),
+    );
+    return myVote;
   }
 
   @override
@@ -131,14 +140,16 @@ class _GuestEventDetailVotingItemState
                 ),
               ],
             ),
-            if (widget.voting.state == Enum$EventVotingState.starting)
+            if (myVote != null &&
+                widget.voting.state == Enum$EventVotingState.starting)
               Padding(
                 padding: EdgeInsets.all(Spacing.small),
                 child: VotingBar(
                   voting: widget.voting,
                 ),
               ),
-            if (widget.voting.state != Enum$EventVotingState.starting) ...[
+            if (widget.voting.state != Enum$EventVotingState.starting ||
+                myVote == null) ...[
               SizedBox(height: Spacing.small),
             ],
           ],
