@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
@@ -60,6 +61,9 @@ class EventSettingsBasePage extends StatelessWidget {
                           eventId: event.id ?? '',
                         ),
                       );
+                  context
+                      .read<RefreshBloc>()
+                      .add(const RefreshEvent.refreshEvents());
                 }
               },
               child: GestureDetector(

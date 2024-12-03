@@ -20,24 +20,27 @@ class HomeMyEventsList extends StatelessWidget {
     return state.maybeWhen(
       fetched: (events) {
         if (events.isEmpty) return const NoUpcomingEventsCard();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              t.event.myEvents.toUpperCase(),
-              style: Typo.small.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
+        return Padding(
+          padding: EdgeInsets.only(top: Spacing.medium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                t.event.myEvents.toUpperCase(),
+                style: Typo.small.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            SizedBox(height: Spacing.small),
-            ...events.map(
-              (event) => Padding(
-                padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                child: HomeEventCard(event: event),
+              SizedBox(height: Spacing.small),
+              ...events.map(
+                (event) => Padding(
+                  padding: EdgeInsets.only(bottom: Spacing.xSmall),
+                  child: HomeEventCard(event: event),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
       loading: () => const SizedBox.shrink(),
