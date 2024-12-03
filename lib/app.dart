@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
 import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
@@ -107,6 +108,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
               ..add(
                 const WalletEvent.getActiveSessions(),
               ),
+          ),
+          BlocProvider(
+            create: (context) => RefreshBloc(),
           ),
         ],
         child: child,
