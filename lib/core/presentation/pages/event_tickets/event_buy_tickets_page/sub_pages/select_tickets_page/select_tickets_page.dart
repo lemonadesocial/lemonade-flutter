@@ -8,29 +8,20 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
-import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/other_ticket_types_list.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/payment_methods_switcher.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
-import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
-import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -266,7 +257,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     final selectedTicketCategory =
         selectTicketBloc.state.selectedTicketCategory;
     final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
-    final selectedTickets = selectTicketBloc.state.selectedTickets;
     final selectedCurrency = selectTicketBloc.state.selectedCurrency;
     final totalAmount = selectTicketBloc.state.totalAmount;
 
@@ -351,8 +341,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
       ],
       child: Scaffold(
         backgroundColor: colorScheme.background,
-        appBar: const LemonAppBar(
-          leading: LemonBackButton(),
+        appBar: LemonAppBar(
+          leading: const LemonBackButton(),
+          title: t.event.eventBuyTickets.selectTickets,
         ),
         body: SafeArea(
           child: Stack(
@@ -360,84 +351,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          selectedTicketCategory != null
-                              ? selectedTicketCategory.title ?? ''
-                              : t.event.eventBuyTickets.selectTickets,
-                          style: Typo.extraLarge.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          "${widget.event.title}  •  ${DateFormatUtils.dateWithTimezone(
-                            dateTime: widget.event.start ?? DateTime.now(),
-                            timezone: widget.event.timezone ?? '',
-                            pattern: DateFormatUtils.dateOnlyFormat,
-                          )}",
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: Spacing.smMedium),
-                  BlocBuilder<GetEventTicketTypesBloc,
-                      GetEventTicketTypesState>(
-                    builder: (context, state) {
-                      return state.when(
-                        loading: () => const SizedBox.shrink(),
-                        failure: () => const SizedBox.shrink(),
-                        success: (response, supportedCurrencies) {
-                          final ticketTypesByCategory =
-                              EventTicketUtils.filterTicketTypeByCategory(
-                            response.ticketTypes ?? [],
-                            category: selectedTicketCategory?.id,
-                          );
-                          final stripeTicketTypes =
-                              EventTicketUtils.getTicketTypesSupportStripe(
-                            ticketTypes: ticketTypesByCategory,
-                          );
-                          final erc20TicketTypes =
-                              EventTicketUtils.getTicketTypesSupportCrypto(
-                            ticketTypes: ticketTypesByCategory,
-                          );
-
-                          // if there's only one supported payment methods (wallet or card)
-                          // then no need to render payment methods switcher
-                          if (stripeTicketTypes.isEmpty ||
-                              erc20TicketTypes.isEmpty) {
-                            return const SizedBox.shrink();
-                          }
-
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              bottom: Spacing.smMedium,
-                              left: Spacing.smMedium,
-                              right: Spacing.smMedium,
-                            ),
-                            child: PaymentMethodsSwitcher(
-                              selectedTickets: selectedTickets,
-                              selectedPaymentMethod: selectedPaymentMethod,
-                              onSelect: (paymentMethod) => context
-                                  .read<SelectEventTicketsBloc>()
-                                  .add(
-                                    SelectEventTicketsEvent.selectPaymentMethod(
-                                      paymentMethod: paymentMethod,
-                                    ),
-                                  ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
                   BlocBuilder<GetEventTicketTypesBloc,
                       GetEventTicketTypesState>(
                     builder: (context, state) => state.when(
@@ -462,159 +375,19 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                   return bOrder.compareTo(aOrder);
                                 },
                               );
-                        final filteredTicketTypes = selectedPaymentMethod ==
-                                SelectTicketsPaymentMethod.card
-                            ? EventTicketUtils.getTicketTypesSupportStripe(
-                                ticketTypes: ticketTypesByCategory,
-                              )
-                            : EventTicketUtils.getTicketTypesSupportCrypto(
-                                ticketTypes: ticketTypesByCategory,
-                              );
-
-                        final supportedPaymentNetworks = filteredTicketTypes
-                            .expand(
-                              (ticketType) => (ticketType.prices ?? [])
-                                  .where((price) => price.isCrypto)
-                                  .map((price) => price.paymentAccountsExpanded)
-                                  .expand(
-                                    (paymentAccounts) =>
-                                        paymentAccounts ?? <PaymentAccount>[],
-                                  )
-                                  .map(
-                                    (paymentAccount) =>
-                                        paymentAccount.accountInfo?.network,
-                                  )
-                                  .whereType<String>(),
-                            )
-                            .toSet()
-                            .toList();
-
+                        final filteredTicketTypes = ticketTypesByCategory;
                         return Flexible(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              if (selectedPaymentMethod ==
-                                  SelectTicketsPaymentMethod.wallet)
-                                SizedBox(
-                                  height: Sizing.medium,
-                                  child: ListView.separated(
-                                    padding:
-                                        EdgeInsets.only(left: Spacing.smMedium),
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      if (index == 0) {
-                                        return LemonOutlineButton(
-                                          onTap: () {
-                                            setState(() {
-                                              networkFilter = null;
-                                            });
-                                          },
-                                          backgroundColor:
-                                              LemonColor.atomicBlack,
-                                          borderColor: LemonColor.atomicBlack,
-                                          label: StringUtils.capitalize(
-                                            t.event.all,
-                                          ),
-                                        );
-                                      }
-
-                                      final selected =
-                                          supportedPaymentNetworks[index - 1] ==
-                                              networkFilter;
-                                      return Row(
-                                        children: [
-                                          ChainQuery(
-                                            chainId: supportedPaymentNetworks[
-                                                index - 1],
-                                            builder: (
-                                              chain, {
-                                              required bool isLoading,
-                                            }) =>
-                                                LemonOutlineButton(
-                                              onTap: () {
-                                                setState(() {
-                                                  networkFilter =
-                                                      supportedPaymentNetworks[
-                                                          index - 1];
-                                                });
-                                              },
-                                              leading: chain?.logoUrl
-                                                          ?.isNotEmpty ==
-                                                      true
-                                                  ? LemonNetworkImage(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        Sizing.xSmall,
-                                                      ),
-                                                      imageUrl:
-                                                          chain?.logoUrl ?? '',
-                                                      placeholder:
-                                                          const SizedBox
-                                                              .shrink(),
-                                                      width: Sizing.xSmall,
-                                                      height: Sizing.xSmall,
-                                                    )
-                                                  : null,
-                                              label: chain?.name,
-                                              backgroundColor: selected
-                                                  ? LemonColor.atomicBlack
-                                                  : null,
-                                              textColor: selected
-                                                  ? colorScheme.onPrimary
-                                                      .withOpacity(0.72)
-                                                  : null,
-                                              borderColor: selected
-                                                  ? Colors.transparent
-                                                  : null,
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return SizedBox(
-                                        width: Spacing.extraSmall,
-                                      );
-                                    },
-                                    itemCount:
-                                        supportedPaymentNetworks.length + 1,
-                                  ),
-                                ),
                               Expanded(
                                 child: ListView.separated(
-                                  padding: EdgeInsets.only(bottom: 200.w),
+                                  padding: EdgeInsets.only(
+                                    left: Spacing.small,
+                                    right: Spacing.small,
+                                    bottom: 200.w,
+                                  ),
                                   itemBuilder: (context, index) {
-                                    if (index == filteredTicketTypes.length) {
-                                      return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: Spacing.smMedium,
-                                        ),
-                                        child:
-                                            OtherPaymentMethodTicketTypesList(
-                                          ticketTypes: ticketTypesByCategory,
-                                          networkFilter: networkFilter,
-                                          selectedCurrency: selectedCurrency,
-                                          selectedPaymentMethod:
-                                              selectedPaymentMethod,
-                                        ),
-                                      );
-                                    }
-
-                                    if (index ==
-                                        filteredTicketTypes.length + 1) {
-                                      return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: Spacing.smMedium,
-                                        ),
-                                        child: OtherChainTicketTypesList(
-                                          ticketTypes: ticketTypesByCategory,
-                                          networkFilter: networkFilter,
-                                          selectedCurrency: selectedCurrency,
-                                          selectedPaymentMethod:
-                                              selectedPaymentMethod,
-                                        ),
-                                      );
-                                    }
                                     final ticketType =
                                         filteredTicketTypes[index];
                                     final ticketPrice =
@@ -640,29 +413,9 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                       },
                                     );
                                   },
-                                  separatorBuilder: (context, index) {
-                                    if (index == filteredTicketTypes.length ||
-                                        index ==
-                                            filteredTicketTypes.length + 1) {
-                                      return SizedBox(height: Spacing.xSmall);
-                                    }
-
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: index ==
-                                                filteredTicketTypes.length - 1
-                                            ? Spacing.xSmall
-                                            : 0,
-                                      ),
-                                      child: Divider(
-                                        height: 1.w,
-                                        thickness: 1.w,
-                                        color: colorScheme.onPrimary
-                                            .withOpacity(0.05),
-                                      ),
-                                    );
-                                  },
-                                  itemCount: filteredTicketTypes.length + 2,
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(height: Spacing.xSmall),
+                                  itemCount: filteredTicketTypes.length,
                                 ),
                               ),
                             ],

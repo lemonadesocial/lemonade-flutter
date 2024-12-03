@@ -78,7 +78,9 @@
         "processingPayment": "Processing payment",
         "processingPaymentDescription": "Your payment is being processed. This could sometimes take up to 60 seconds",
         "network": "Network",
-        "chooseNetwork": "Choose your network"
+        "chooseNetwork": "Choose your network",
+        "stakingTicket": "Staking",
+        "whileListedTicket": "Whitelist Exclusive"
     },
     "eventOrder": {
         "itemTotal": "Item total",

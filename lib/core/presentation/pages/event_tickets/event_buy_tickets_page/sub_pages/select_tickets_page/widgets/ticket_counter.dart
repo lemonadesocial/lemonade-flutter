@@ -1,3 +1,4 @@
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -23,19 +24,14 @@ class TicketCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final boxDecoration = BoxDecoration(
-      color: count > 0
-          ? colorScheme.onPrimary.withOpacity(0.05)
-          : Colors.transparent,
+      color: LemonColor.chineseBlack,
       border: Border.all(
-        color: count > 0
-            ? colorScheme.onPrimary.withOpacity(0.005)
-            : colorScheme.onPrimary.withOpacity(0.09),
+        color: colorScheme.outlineVariant,
       ),
-      borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+      borderRadius: BorderRadius.circular(Sizing.regular),
     );
-    final textColor =
-        count > 0 ? colorScheme.onPrimary : colorScheme.onSurfaceVariant;
-
+    final textColor = colorScheme.onPrimary;
+    final hasCount = count > 0;
     return Opacity(
       opacity: disabled ? 0.5 : 1,
       child: SizedBox(
@@ -44,44 +40,43 @@ class TicketCounter extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            InkWell(
-              onTap: () {
-                if (disabled) {
-                  onPressDisabled?.call();
-                  return;
-                }
-                if (count == 0) return;
-                onDecrease(count - 1);
-              },
-              child: Container(
-                width: Sizing.regular,
-                height: Sizing.regular,
-                decoration: boxDecoration,
-                child: Center(
-                  child: Icon(
-                    Icons.remove,
-                    size: Sizing.xSmall,
-                    color: textColor,
+            if (hasCount) ...[
+              InkWell(
+                onTap: () {
+                  if (disabled) {
+                    onPressDisabled?.call();
+                    return;
+                  }
+                  if (count == 0) return;
+                  onDecrease(count - 1);
+                },
+                child: Container(
+                  width: Sizing.regular,
+                  height: Sizing.regular,
+                  decoration: boxDecoration,
+                  child: Center(
+                    child: Icon(
+                      Icons.remove,
+                      size: Sizing.xSmall,
+                      color: colorScheme.onSecondary,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: Spacing.superExtraSmall),
-            Container(
-              width: Sizing.medium,
-              height: Sizing.medium,
-              decoration: boxDecoration,
-              child: Center(
+              SizedBox(width: Spacing.superExtraSmall),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: Spacing.superExtraSmall),
                 child: Text(
                   "${count.toInt()}",
-                  style: Typo.medium.copyWith(
+                  style: Typo.extraMedium.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            ),
-            SizedBox(width: Spacing.superExtraSmall),
+              SizedBox(width: Spacing.superExtraSmall),
+            ],
             InkWell(
               onTap: () {
                 if (disabled) {
@@ -98,7 +93,7 @@ class TicketCounter extends StatelessWidget {
                   child: Icon(
                     Icons.add,
                     size: Sizing.xSmall,
-                    color: textColor,
+                    color: colorScheme.onSecondary,
                   ),
                 ),
               ),
