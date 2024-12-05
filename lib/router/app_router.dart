@@ -231,9 +231,6 @@ final eventDetailRoutes = AutoRoute(
           page: EventSettingsBaseRoute.page,
         ),
         AutoRoute(
-          page: EventTitleDescriptionSettingRoute.page,
-        ),
-        AutoRoute(
           page: EventGuestSettingsRoute.page,
         ),
         AutoRoute(

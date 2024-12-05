@@ -42,7 +42,7 @@ class EventPassService {
     try {
       await _browser.openUrlRequest(
         urlRequest: URLRequest(
-          url: Uri.parse(
+          url: WebUri(
             "${AppConfig.rootBackendUrl}/event/pass/google/$ticketId",
           ),
           headers: {'Authorization': 'Bearer $token'},
