@@ -17,7 +17,6 @@ final lemonadeAppDarkThemeData = ThemeData(
   textTheme: lemonadeTextTheme,
   colorScheme: lemonadeDarkThemeColorScheme,
   // ignore: deprecated_member_use
-  backgroundColor: Colors.black,
   appBarTheme: AppBarTheme(
     elevation: 0,
     centerTitle: false,

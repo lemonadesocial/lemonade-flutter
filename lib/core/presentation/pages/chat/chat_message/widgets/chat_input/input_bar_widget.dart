@@ -223,7 +223,7 @@ class InputBar extends StatelessWidget {
     return ret;
   }
 
-  void insertSuggestion(_, Map<String, String?> suggestion) {
+  void insertSuggestion(Map<String, String?> suggestion) {
     final replaceText =
         controller!.text.substring(0, controller!.selection.baseOffset);
     var startText = '';
@@ -296,47 +296,41 @@ class InputBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TypeAheadField<Map<String, String?>>(
-      direction: AxisDirection.up,
+      direction: VerticalDirection.up,
       hideOnEmpty: true,
       hideOnLoading: true,
-      keepSuggestionsOnSuggestionSelected: true,
+      hideOnSelect: false,
       debounceDuration: const Duration(milliseconds: 50),
-      // show suggestions after 50ms idle time (default is 300)
-      textFieldConfiguration: TextFieldConfiguration(
-        minLines: minLines,
-        maxLines: maxLines,
-        keyboardType: keyboardType!,
-        textInputAction: textInputAction,
-        autofocus: autofocus!,
-        onSubmitted: (text) {
-          // fix for library for now
-          // it sets the types for the callback incorrectly
-          onSubmitted!(text);
-        },
-        controller: controller,
-        decoration: decoration!,
-        focusNode: focusNode,
-        onChanged: (text) {
-          // fix for the library for now
-          // it sets the types for the callback incorrectly
-          onChanged!(text);
-        },
-        textCapitalization: TextCapitalization.sentences,
-      ),
-      suggestionsBoxDecoration: const SuggestionsBoxDecoration(
-        color: Colors.black,
-        constraints: BoxConstraints(maxHeight: 300),
-      ),
+      builder: (context, controller, focusNode) {
+        return TextField(
+          controller: controller,
+          focusNode: focusNode,
+          minLines: minLines,
+          maxLines: maxLines,
+          keyboardType: keyboardType!,
+          textInputAction: textInputAction,
+          autofocus: autofocus!,
+          decoration: decoration!,
+          onSubmitted: onSubmitted,
+          onChanged: onChanged,
+          textCapitalization: TextCapitalization.sentences,
+        );
+      },
+      decorationBuilder: (context, child) {
+        return Material(
+          color: Colors.black,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 300),
+            child: child,
+          ),
+        );
+      },
       suggestionsCallback: getSuggestions,
       itemBuilder: (c, s) => InputBarSuggestionBox(suggestion: s),
-      onSuggestionSelected: (Map<String, String?> suggestion) =>
-          insertSuggestion(context, suggestion),
-      errorBuilder: (BuildContext context, Object? error) =>
-          const SizedBox.shrink(),
-      loadingBuilder: (BuildContext context) => const SizedBox.shrink(),
-      // fix loading briefly flickering a dark box
-      noItemsFoundBuilder: (BuildContext context) =>
-          const SizedBox.shrink(), // fix loading briefly showing no suggestions
+      onSelected: (suggestion) => insertSuggestion(suggestion),
+      loadingBuilder: (context) => const SizedBox.shrink(),
+      errorBuilder: (context, error) => const SizedBox.shrink(),
+      emptyBuilder: (context) => const SizedBox.shrink(),
     );
   }
 }
