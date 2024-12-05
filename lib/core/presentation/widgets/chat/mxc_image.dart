@@ -134,6 +134,7 @@ class _MxcImageState extends State<MxcImage> {
     } catch (_) {
       if (!mounted) return;
       await Future.delayed(widget.retryDuration);
+      // ignore: no_wildcard_variable_uses
       _tryLoad(_);
     }
   }
