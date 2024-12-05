@@ -164,7 +164,7 @@ class SettingPageView extends StatelessWidget {
                       onTap: () {
                         Vibrate.feedback(FeedbackType.light);
                         ChromeSafariBrowser().open(
-                          url: Uri.parse('https://lemonade.social/privacy'),
+                          url: WebUri('https://lemonade.social/privacy'),
                         );
                       },
                     ),
@@ -179,7 +179,7 @@ class SettingPageView extends StatelessWidget {
                       onTap: () {
                         Vibrate.feedback(FeedbackType.light);
                         ChromeSafariBrowser().open(
-                          url: Uri.parse('https://lemonade.social/terms'),
+                          url: WebUri('https://lemonade.social/terms'),
                         );
                       },
                     ),

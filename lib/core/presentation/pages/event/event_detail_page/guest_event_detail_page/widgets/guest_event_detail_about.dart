@@ -1,11 +1,11 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/common/html_display/html_display.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class GuestEventDetailAbout extends StatelessWidget {
   const GuestEventDetailAbout({
@@ -37,39 +37,51 @@ class GuestEventDetailAbout extends StatelessWidget {
             height: Spacing.xSmall,
           ),
         ],
-        MarkdownBody(
-          data: event.description ?? '',
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-            p: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.none,
-            ),
-            a: Typo.small.copyWith(
-              color: LemonColor.paleViolet,
-            ),
-            h1: Typo.extraLarge.copyWith(
-              color: colorScheme.onPrimary,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.none,
-            ),
-            h2: Typo.large.copyWith(
-              color: colorScheme.onPrimary,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.none,
-            ),
-            h3: Typo.extraMedium.copyWith(
-              color: colorScheme.onPrimary,
-              fontStyle: FontStyle.normal,
-              decoration: TextDecoration.none,
-            ),
-          ),
-          onTapLink: (text, href, title) {
-            if (href != null) {
-              launchUrl(Uri.parse(href));
-            }
+        InkWell(
+          onTap: () {
+            AutoRouter.of(context).push(
+              EventDescriptionFieldRoute(
+                description: event.description ?? '',
+                onDescriptionChanged: (value) {},
+              ),
+            );
           },
-        ),
+          child: HtmlDisplay(htmlContent: event.description ?? ''),
+        )
+
+        // MarkdownBody(
+        //   data: event.description ?? '',
+        //   styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+        //     p: Typo.medium.copyWith(
+        //       color: colorScheme.onPrimary,
+        //       fontStyle: FontStyle.normal,
+        //       decoration: TextDecoration.none,
+        //     ),
+        //     a: Typo.small.copyWith(
+        //       color: LemonColor.paleViolet,
+        //     ),
+        //     h1: Typo.extraLarge.copyWith(
+        //       color: colorScheme.onPrimary,
+        //       fontStyle: FontStyle.normal,
+        //       decoration: TextDecoration.none,
+        //     ),
+        //     h2: Typo.large.copyWith(
+        //       color: colorScheme.onPrimary,
+        //       fontStyle: FontStyle.normal,
+        //       decoration: TextDecoration.none,
+        //     ),
+        //     h3: Typo.extraMedium.copyWith(
+        //       color: colorScheme.onPrimary,
+        //       fontStyle: FontStyle.normal,
+        //       decoration: TextDecoration.none,
+        //     ),
+        //   ),
+        //   onTapLink: (text, href, title) {
+        //     if (href != null) {
+        //       launchUrl(Uri.parse(href));
+        //     }
+        //   },
+        // ),
       ],
     );
   }
