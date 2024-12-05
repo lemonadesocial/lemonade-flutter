@@ -47,41 +47,7 @@ class GuestEventDetailAbout extends StatelessWidget {
             );
           },
           child: HtmlDisplay(htmlContent: event.description ?? ''),
-        )
-
-        // MarkdownBody(
-        //   data: event.description ?? '',
-        //   styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-        //     p: Typo.medium.copyWith(
-        //       color: colorScheme.onPrimary,
-        //       fontStyle: FontStyle.normal,
-        //       decoration: TextDecoration.none,
-        //     ),
-        //     a: Typo.small.copyWith(
-        //       color: LemonColor.paleViolet,
-        //     ),
-        //     h1: Typo.extraLarge.copyWith(
-        //       color: colorScheme.onPrimary,
-        //       fontStyle: FontStyle.normal,
-        //       decoration: TextDecoration.none,
-        //     ),
-        //     h2: Typo.large.copyWith(
-        //       color: colorScheme.onPrimary,
-        //       fontStyle: FontStyle.normal,
-        //       decoration: TextDecoration.none,
-        //     ),
-        //     h3: Typo.extraMedium.copyWith(
-        //       color: colorScheme.onPrimary,
-        //       fontStyle: FontStyle.normal,
-        //       decoration: TextDecoration.none,
-        //     ),
-        //   ),
-        //   onTapLink: (text, href, title) {
-        //     if (href != null) {
-        //       launchUrl(Uri.parse(href));
-        //     }
-        //   },
-        // ),
+        ),
       ],
     );
   }

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+// Support convert color to hex string
+extension ColorExtension on Color {
+  String toHex() => '#${value.toRadixString(16).padLeft(8, '0').substring(2)}';
+}
+
 class LemonColor {
   static Color black = const Color(0xff000000);
   static Color black50 = const Color.fromRGBO(0, 0, 0, 0.5);
