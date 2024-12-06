@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.45.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.44.0...v1.45.0) (2024-12-05)
+
+
+### Features
+
+* debate polishment ([#806](https://github.com/lemonadesocial/lemonade-flutter/issues/806)) ([68ad7fc](https://github.com/lemonadesocial/lemonade-flutter/commit/68ad7fc0c5c1959df148b39cea1ce4d013540a21))
+* refresh home screen data correctly ([#809](https://github.com/lemonadesocial/lemonade-flutter/issues/809)) ([759c001](https://github.com/lemonadesocial/lemonade-flutter/commit/759c0017572933200aab55cb15ed4d93357361b6))
+* remake rich text description ([#810](https://github.com/lemonadesocial/lemonade-flutter/issues/810)) ([00ebb7a](https://github.com/lemonadesocial/lemonade-flutter/commit/00ebb7ab2d1a0b9c15fee45f77d4da5daa151375))
+
+
+### Bug Fixes
+
+* missing query for event listing ([#811](https://github.com/lemonadesocial/lemonade-flutter/issues/811)) ([42ccabb](https://github.com/lemonadesocial/lemonade-flutter/commit/42ccabbab4155a20ff7050aa6710f0e4aaf24496))
+
 ## [1.44.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.43.0...v1.44.0) (2024-11-26)
 
 
