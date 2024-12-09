@@ -1,4 +1,6 @@
-import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/common/add_to_calendar_bottomsheet/add_to_calendar_bottomsheet.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -9,7 +11,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddTicketToCalendarButton extends StatelessWidget {
-  const AddTicketToCalendarButton({super.key});
+  const AddTicketToCalendarButton({
+    super.key,
+    required this.event,
+  });
+
+  final Event event;
+
+  void _addToCalendar(BuildContext context) {
+    AddToCalendarBottomSheet.show(
+      context,
+      EventUtils.generateDeviceCalendarEvent(
+        context,
+        event: event,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +35,7 @@ class AddTicketToCalendarButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        SnackBarUtils.showComingSoon();
+        _addToCalendar(context);
       },
       child: Container(
         height: 54.w,

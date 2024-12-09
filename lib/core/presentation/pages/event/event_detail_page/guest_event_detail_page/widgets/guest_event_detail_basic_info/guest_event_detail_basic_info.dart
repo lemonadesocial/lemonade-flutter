@@ -2,6 +2,7 @@ import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_ti
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/widgets/post_guest_event_detail_add_ticket_to_wallet_button.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
+import 'package:app/core/presentation/widgets/common/add_to_calendar_bottomsheet/add_to_calendar_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -76,50 +77,56 @@ class _EventCountDown extends StatelessWidget {
 
   final Event event;
 
+  void _addToCalendar(BuildContext context) {
+    AddToCalendarBottomSheet.show(
+      context,
+      EventUtils.generateDeviceCalendarEvent(context, event: event),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
-    return InkWell(
-      onTap: () {
-        Vibrate.feedback(FeedbackType.light);
-        AutoRouter.of(context).navigate(
-          MyEventTicketRoute(
-            event: event,
-          ),
-        );
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: Spacing.small,
-          horizontal: Spacing.small,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LemonNetworkImage(
-                  width: 42.w,
-                  height: 42.w,
-                  borderRadius: BorderRadius.circular(
-                    LemonRadius.extraSmall,
-                  ),
-                  border: Border.all(
-                    color: colorScheme.outline,
-                  ),
-                  imageUrl: event.newNewPhotosExpanded?.isNotEmpty == true
-                      ? ImageUtils.generateUrl(
-                          file: event.newNewPhotosExpanded?.firstOrNull,
-                        )
-                      : '',
-                  placeholder: ImagePlaceholder.defaultPlaceholder(),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: Spacing.small,
+        horizontal: Spacing.small,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LemonNetworkImage(
+                width: 42.w,
+                height: 42.w,
+                borderRadius: BorderRadius.circular(
+                  LemonRadius.extraSmall,
                 ),
-                const Spacer(),
-                Container(
+                border: Border.all(
+                  color: colorScheme.outline,
+                ),
+                imageUrl: event.newNewPhotosExpanded?.isNotEmpty == true
+                    ? ImageUtils.generateUrl(
+                        file: event.newNewPhotosExpanded?.firstOrNull,
+                      )
+                    : '',
+                placeholder: ImagePlaceholder.defaultPlaceholder(),
+              ),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  AutoRouter.of(context).navigate(
+                    MyEventTicketRoute(
+                      event: event,
+                    ),
+                  );
+                },
+                child: Container(
                   decoration: BoxDecoration(
                     color: LemonColor.chineseBlack,
                     borderRadius: BorderRadius.circular(Sizing.medium),
@@ -140,38 +147,65 @@ class _EventCountDown extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: Spacing.extraSmall),
-                PostGuestEventDetailAddTicketToWalletButton(event: event),
+              ),
+              SizedBox(width: Spacing.extraSmall),
+              InkWell(
+                onTap: () {
+                  _addToCalendar(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: LemonColor.chineseBlack,
+                    borderRadius: BorderRadius.circular(Sizing.medium),
+                    border: Border.all(
+                      color: colorScheme.outlineVariant,
+                    ),
+                  ),
+                  width: Sizing.medium,
+                  height: Sizing.medium,
+                  child: Center(
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icCalendarAddLine.svg(
+                        colorFilter: filter,
+                        width: 15.w,
+                        height: 15.w,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: Spacing.extraSmall),
+              PostGuestEventDetailAddTicketToWalletButton(event: event),
+            ],
+          ),
+          SizedBox(height: Spacing.small),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildEventStatusText(context, event),
+                SizedBox(height: 2.w),
+                Text(
+                  formattedDate,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                    height: 0,
+                  ),
+                ),
+                SizedBox(height: 2.w),
+                Text(
+                  formattedTime,
+                  style: Typo.small.copyWith(
+                    color: colorScheme.onSecondary,
+                    height: 0,
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: Spacing.small),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildEventStatusText(context, event),
-                  SizedBox(height: 2.w),
-                  Text(
-                    formattedDate,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                      height: 0,
-                    ),
-                  ),
-                  SizedBox(height: 2.w),
-                  Text(
-                    formattedTime,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                      height: 0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
