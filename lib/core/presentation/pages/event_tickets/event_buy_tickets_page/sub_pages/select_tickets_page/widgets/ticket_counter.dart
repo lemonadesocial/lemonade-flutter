@@ -10,6 +10,7 @@ class TicketCounter extends StatelessWidget {
   final Function(int newCount) onIncrease;
   final bool disabled;
   final Function()? onPressDisabled;
+  final int? limit;
 
   const TicketCounter({
     super.key,
@@ -17,12 +18,14 @@ class TicketCounter extends StatelessWidget {
     required this.onDecrease,
     required this.onIncrease,
     required this.disabled,
+    this.limit,
     this.onPressDisabled,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final limitReached = limit != null && count == limit!;
     final boxDecoration = BoxDecoration(
       color: LemonColor.chineseBlack,
       border: Border.all(
@@ -79,21 +82,27 @@ class TicketCounter extends StatelessWidget {
             ],
             InkWell(
               onTap: () {
+                if (limitReached) {
+                  return;
+                }
                 if (disabled) {
                   onPressDisabled?.call();
                   return;
                 }
                 onIncrease(count + 1);
               },
-              child: Container(
-                width: Sizing.regular,
-                height: Sizing.regular,
-                decoration: boxDecoration,
-                child: Center(
-                  child: Icon(
-                    Icons.add,
-                    size: Sizing.xSmall,
-                    color: colorScheme.onSecondary,
+              child: Opacity(
+                opacity: limitReached ? 0.5 : 1,
+                child: Container(
+                  width: Sizing.regular,
+                  height: Sizing.regular,
+                  decoration: boxDecoration,
+                  child: Center(
+                    child: Icon(
+                      Icons.add,
+                      size: Sizing.xSmall,
+                      color: colorScheme.onSecondary,
+                    ),
                   ),
                 ),
               ),

@@ -330,6 +330,7 @@ class _PriceItem extends StatelessWidget {
           onDecrease: onDecrease,
           onIncrease: onIncrease,
           disabled: disabled,
+          limit: ticketType.limit,
           onPressDisabled: () {
             SnackBarUtils.showError(
               title: t.common.error.label,
