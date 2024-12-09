@@ -62,8 +62,10 @@ class EventUtils {
         .isNotEmpty;
   }
 
-  static String getAddress(
-      {required Event event, bool showCityCountryOnly = false}) {
+  static String getAddress({
+    required Event event,
+    bool showCityCountryOnly = false,
+  }) {
     final address = event.address;
     if (showCityCountryOnly) {
       final cityCountryParts = [
