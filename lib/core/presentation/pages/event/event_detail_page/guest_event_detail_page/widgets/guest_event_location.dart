@@ -108,7 +108,7 @@ class GuestEventLocation extends StatelessWidget {
                     SizedBox(height: Spacing.superExtraSmall),
                     if (isAttending)
                       Text(
-                        EventUtils.getAddress(event),
+                        EventUtils.getAddress(event: event),
                         style: Typo.small.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),

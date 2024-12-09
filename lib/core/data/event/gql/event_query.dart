@@ -408,7 +408,7 @@ final getHostingEventsQuery = gql('''
 ''');
 
 final getUpcomingEventsQuery = gql('''
-  $eventAddressFragment
+  $eventFragment
   query GetUpcomingEvents(
     \$id: MongoID!, 
     \$limit: Int = 100, 
@@ -416,34 +416,7 @@ final getUpcomingEventsQuery = gql('''
     \$host: Boolean
   ) {
     getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
-      _id
-      title
-      slug
-      host
-      cohosts
-      timezone
-      host_expanded {
-        _id
-        name
-        image_avatar
-        new_photos_expanded {
-          _id
-          key
-          bucket
-        }
-      }
-      new_new_photos_expanded(limit: 1) {
-        _id
-        key
-        bucket
-      }
-      start
-      end
-      address {
-        ...eventAddressFragment
-      }
-      guests
-      checkin_count
+      ...eventFields
     }
   }
 ''');
