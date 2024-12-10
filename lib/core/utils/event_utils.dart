@@ -62,15 +62,32 @@ class EventUtils {
         .isNotEmpty;
   }
 
-  static String getAddress(Event event) {
+  static String getAddress({
+    required Event event,
+    bool showCityCountryOnly = false,
+  }) {
     final address = event.address;
-    return [
+    if (showCityCountryOnly) {
+      final cityCountryParts = [
+        address?.city,
+        address?.country,
+      ]
+          .where((element) => element != null && element.trim().isNotEmpty)
+          .toList();
+      if (cityCountryParts.isEmpty) return '';
+      return cityCountryParts.join(', ');
+    }
+
+    final addressParts = [
+      address?.additionalDirections,
       address?.street1,
       address?.street2,
       address?.city,
       address?.region,
       address?.country,
-    ].where((element) => element != null).join(', ');
+    ].where((element) => element != null && element.trim().isNotEmpty).toList();
+    if (addressParts.isEmpty) return '';
+    return addressParts.join(', ');
   }
 
   static bool isInvited(

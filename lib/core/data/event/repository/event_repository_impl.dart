@@ -102,7 +102,8 @@ class EventRepositoryImpl implements EventRepository {
       QueryOptions(
         document: getHostingEventsQuery,
         variables: input.toJson(),
-        parserFn: (data) => List.from(data['events'])
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) => List.from(data['getHostingEvents'])
             .map(
               (item) => Event.fromDto(EventDto.fromJson(item)),
             )
@@ -158,7 +159,8 @@ class EventRepositoryImpl implements EventRepository {
       QueryOptions(
         document: getUpcomingEventsQuery,
         variables: input.toJson(),
-        parserFn: (data) => List.from(data['events'])
+        fetchPolicy: FetchPolicy.networkOnly,
+        parserFn: (data) => List.from(data['getUpcomingEvents'])
             .map(
               (item) => Event.fromDto(EventDto.fromJson(item)),
             )

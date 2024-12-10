@@ -212,7 +212,6 @@ class _TicketInformationView extends StatelessWidget {
   }
 }
 
-
 class _ViewApplicationInfoView extends StatelessWidget {
   const _ViewApplicationInfoView({required this.ticket, required this.eventId});
 
@@ -225,18 +224,18 @@ class _ViewApplicationInfoView extends StatelessWidget {
     print("ticket.assignedToExpanded.name ${ticket.assignedToExpanded?.name}");
     print("ticket.assignedEmail ${ticket.assignedEmail}");
     return Query$GetEventApplicationAnswers$Widget(
-          options: Options$Query$GetEventApplicationAnswers(
-            variables: Variables$Query$GetEventApplicationAnswers(
-              event: eventId,
-              user: ticket.assignedTo ?? '',
-              email: ticket.assignedEmail ?? '',
-            ),
-          ),
-          builder: (
-            result, {
-            refetch,
-            fetchMore,
-          }) {
+      options: Options$Query$GetEventApplicationAnswers(
+        variables: Variables$Query$GetEventApplicationAnswers(
+          event: eventId,
+          user: ticket.assignedTo ?? '',
+          email: ticket.assignedEmail ?? '',
+        ),
+      ),
+      builder: (
+        result, {
+        refetch,
+        fetchMore,
+      }) {
         print(".....");
         // print(result.parsedData?.getEventApplicationAnswers?.map((e) => e.toJson()).toList());
         print(result.parsedData?.getEventApplicationAnswers.length);

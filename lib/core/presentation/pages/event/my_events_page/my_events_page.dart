@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/event/my_events_listing_bloc/my_events_listing_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/input/get_events_listing_input.dart';
+import 'package:app/core/application/event/past_hosting_events_bloc/past_hosting_events_bloc.dart';
+import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/presentation/pages/event/my_events_page/views/my_events_list_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -13,7 +12,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
-import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 @RoutePage()
 class MyEventsPage extends StatelessWidget {
@@ -28,9 +26,12 @@ class MyEventsPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => MyEventsListingBloc(
-            defaultInput: GetHostingEventsInput(id: userId),
-          )..add(MyEventsListingEvent.fetch()),
+          create: (context) => UpcomingHostingEventsBloc(userId: userId)
+            ..add(UpcomingHostingEventsEvent.fetch()),
+        ),
+        BlocProvider(
+          create: (context) => PastHostingEventsBloc(userId: userId)
+            ..add(PastHostingEventsEvent.fetch()),
         ),
       ],
       child: const MyEventsPageView(),
@@ -73,42 +74,32 @@ class MyEventsPageView extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: BlocBuilder<MyEventsListingBloc, MyEventsListingState>(
-                builder: (context, state) => state.when(
-                  loading: () => Loading.defaultLoading(context),
-                  failure: () => EmptyList(
-                    emptyText: t.common.somethingWrong,
+              child: TabBarView(
+                children: [
+                  BlocBuilder<UpcomingHostingEventsBloc,
+                      UpcomingHostingEventsState>(
+                    builder: (context, state) => state.when(
+                      loading: () => Loading.defaultLoading(context),
+                      failure: () => EmptyList(
+                        emptyText: t.common.somethingWrong,
+                      ),
+                      fetched: (upcomingEvents) => MyEventsListView(
+                        events: upcomingEvents,
+                      ),
+                    ),
                   ),
-                  fetched: (events) {
-                    List<Event> upcomingEvents = events
-                        .where(
-                          (event) =>
-                              // Upcoming events
-                              !date_utils.DateUtils.isPast(event.start) ||
-                              // Current live events
-                              (date_utils.DateUtils.isPast(event.start) &&
-                                  !date_utils.DateUtils.isPast(event.end)),
-                        )
-                        .toList()
-                      ..sort((a, b) => b.start!.compareTo(a.start!));
-                    List<Event> pastEvents = events
-                        .where(
-                          (event) => date_utils.DateUtils.isPast(event.end),
-                        )
-                        .toList()
-                      ..sort((a, b) => b.end!.compareTo(a.end!));
-                    return TabBarView(
-                      children: [
-                        MyEventsListView(
-                          events: upcomingEvents,
-                        ),
-                        MyEventsListView(
-                          events: pastEvents,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                  BlocBuilder<PastHostingEventsBloc, PastHostingEventsState>(
+                    builder: (context, state) => state.when(
+                      loading: () => Loading.defaultLoading(context),
+                      failure: () => EmptyList(
+                        emptyText: t.common.somethingWrong,
+                      ),
+                      fetched: (pastEvents) => MyEventsListView(
+                        events: pastEvents,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

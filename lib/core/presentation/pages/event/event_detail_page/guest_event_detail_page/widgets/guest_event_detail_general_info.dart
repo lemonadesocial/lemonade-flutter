@@ -175,16 +175,10 @@ class _InfoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.address?.title ?? '',
+                    EventUtils.getAddress(event: event),
                     style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    event.address?.additionalDirections ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
                     ),
                   ),
                 ],

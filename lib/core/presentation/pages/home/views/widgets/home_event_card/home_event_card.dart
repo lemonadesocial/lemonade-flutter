@@ -1,7 +1,9 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -11,6 +13,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_left.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/widgets/home_event_card_footer_right.dart';
@@ -26,6 +29,12 @@ class HomeEventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final cohostsCount = event.cohosts?.length;
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession.userId,
+          orElse: () => '',
+        );
+    final isAttending = EventUtils.isAttending(event: event, userId: userId);
+    final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
     return InkWell(
       onTap: () {
         AutoRouter.of(context).navigate(
@@ -91,50 +100,31 @@ class HomeEventCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: Spacing.small / 2),
-                        if ((event.address?.street1 ?? '').isNotEmpty)
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        if (event.address != null) ...[
+                          SizedBox(height: Spacing.small / 2),
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    size: Sizing.mSmall,
+                              Icon(
+                                Icons.location_on,
+                                size: Sizing.mSmall,
+                                color: colorScheme.onSecondary,
+                              ),
+                              SizedBox(width: Spacing.extraSmall),
+                              Expanded(
+                                child: Text(
+                                  EventUtils.getAddress(
+                                    event: event,
+                                    showCityCountryOnly:
+                                        !isAttending && !isOwnEvent,
+                                  ),
+                                  style: Typo.small.copyWith(
                                     color: colorScheme.onSecondary,
                                   ),
-                                  SizedBox(width: Spacing.extraSmall),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          event.address?.street1 ?? '',
-                                          style: Typo.small.copyWith(
-                                            color: colorScheme.onSecondary,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: Spacing.superExtraSmall / 2,
-                                        ),
-                                        Text(
-                                          event.address?.additionalDirections ??
-                                              '',
-                                          style: Typo.small.copyWith(
-                                            color: colorScheme.onSecondary,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ],
                           ),
+                        ],
                         SizedBox(height: Spacing.small / 2),
                         Row(
                           children: [

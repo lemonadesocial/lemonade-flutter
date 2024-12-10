@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
@@ -139,6 +140,7 @@ class CreateEventBasePage extends StatelessWidget {
           } else {
             _onCreateEventSuccess(context, state);
           }
+          context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
         }
       },
       builder: (context, state) => GestureDetector(

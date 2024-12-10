@@ -1,5 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
+import 'package:app/core/presentation/widgets/common/html_display/html_display.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -7,7 +8,6 @@ import 'package:app/theme/typo.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,7 +52,7 @@ class ReadMoreWidget extends StatelessWidget {
           // Hard code using fontSize 14 + padding 15
           double fixedHeightAreaBox = (14 + 15) * fixedNumberOfLines;
           return numLines <= maxLines
-              ? MarkdownBody(data: body)
+              ? HtmlDisplay(htmlContent: body)
               : ExpandableNotifier(
                   child: Expandable(
                     collapsed: Column(
@@ -64,7 +64,7 @@ class ReadMoreWidget extends StatelessWidget {
                             clipBehavior: Clip.hardEdge,
                             direction: Axis.horizontal,
                             children: [
-                              MarkdownBody(data: body),
+                              HtmlDisplay(htmlContent: body),
                             ],
                           ),
                         ),
@@ -79,7 +79,7 @@ class ReadMoreWidget extends StatelessWidget {
                     expanded: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MarkdownBody(data: body),
+                        HtmlDisplay(htmlContent: body),
                         ExpandableButton(
                           child: Text(
                             t.common.showLess,

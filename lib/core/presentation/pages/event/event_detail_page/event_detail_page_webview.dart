@@ -117,8 +117,10 @@ class _EventDetailPageWebViewState extends State<EventDetailPageWebView>
       if (headers == null) {
         await _clearWebStorage();
       }
-      initialRequest =
-          URLRequest(url: Uri.parse(_getEventWebUrl()), headers: headers);
+      initialRequest = URLRequest(
+        url: WebUri(_getEventWebUrl()),
+        headers: headers,
+      );
     } catch (e) {
       if (kDebugMode) {
         print('Error _getInitialRequest: $e');
