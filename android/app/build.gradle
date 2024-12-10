@@ -153,3 +153,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
 }
+
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.webkit:webkit:1.8.0'
+        }
+    }
+}
