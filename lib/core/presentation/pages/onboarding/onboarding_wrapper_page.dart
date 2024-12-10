@@ -69,7 +69,7 @@ final onBoardingTheme = ThemeData(
     ),
   ),
   colorScheme: lemonadeDarkThemeColorScheme,
-  backgroundColor: Colors.black,
+  // backgroundColor: Colors.black,
   appBarTheme: AppBarTheme(
     elevation: 0,
     centerTitle: false,

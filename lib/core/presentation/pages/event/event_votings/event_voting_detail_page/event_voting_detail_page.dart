@@ -299,7 +299,8 @@ class _EventVotingDetailPageState extends State<EventVotingDetailPage> {
                       ),
                     ),
                   ),
-                if (myVote != null)
+                if (myVote != null ||
+                    _voting.state == Enum$EventVotingState.closed)
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: Spacing.small),
                     child: _CurrentVotingResult(voting: _voting),

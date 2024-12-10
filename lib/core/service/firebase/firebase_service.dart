@@ -205,7 +205,7 @@ class FirebaseService {
             variables: {
               'token': fcmToken,
             },
-            parserFn: (data) => data['addFcmToken'],
+            parserFn: (data) => data['addUserFcmToken'],
           ),
         );
   }
@@ -221,7 +221,7 @@ class FirebaseService {
             variables: {
               'token': fcmToken,
             },
-            parserFn: (data) => data['removeFcmToken'],
+            parserFn: (data) => data['removeUserFcmToken'],
           ),
         );
     if (!response.hasException) {

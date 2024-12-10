@@ -389,13 +389,13 @@ final getHomeEventsQuery = gql('''
 
 final getHostingEventsQuery = gql('''
   $eventFragment
-  query(
+  query GetHostingEvents(
     \$id: MongoID!, 
     \$state: FilterEventInput, 
     \$limit: Int = 100, 
     \$skip: Int = 0
   ) {
-    events: getHostingEvents(
+    getHostingEvents(
       user: \$id, 
       state: \$state, 
       limit: \$limit, 
@@ -407,39 +407,17 @@ final getHostingEventsQuery = gql('''
 ''');
 
 final getUpcomingEventsQuery = gql('''
-  $eventAddressFragment
-  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0, \$host: Boolean) {
-  events: getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
-    _id
-    title
-    slug
-    host
-    cohosts
-    timezone
-    host_expanded {
-      _id
-      name
-      image_avatar
-      new_photos_expanded {
-        _id
-        key
-        bucket
-      }
+  $eventFragment
+  query GetUpcomingEvents(
+    \$id: MongoID!, 
+    \$limit: Int = 100, 
+    \$skip: Int = 0, 
+    \$host: Boolean
+  ) {
+    getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
+      ...eventFields
     }
-    new_new_photos_expanded(limit: 1) {
-      _id
-      key
-      bucket
-    }
-    start
-    end
-    address {
-      ...eventAddressFragment
-    }
-    guests
-    checkin_count
   }
-}
 ''');
 
 final getPastEventsQuery = gql('''

@@ -131,7 +131,7 @@ class MyEventsListItem extends StatelessWidget {
                                     ),
                                     SizedBox(width: Spacing.superExtraSmall),
                                     Text(
-                                      event.invitedCount.toString(),
+                                      event.ticketCount.toString(),
                                       style: Typo.small.copyWith(
                                         color: colorScheme.onSecondary,
                                       ),

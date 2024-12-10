@@ -1,6 +1,4 @@
-import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_voting.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -28,31 +26,50 @@ class VotingStatusWidget extends StatelessWidget {
         ),
       );
     }
-    String statusText = '';
-    switch (voting.state) {
-      case Enum$EventVotingState.paused:
-        statusText = t.event.eventVoting.debatePaused;
-      case Enum$EventVotingState.not_started:
-        statusText = t.event.startingIn;
-      case Enum$EventVotingState.closed:
-        statusText = t.common.started;
-      default:
-        statusText = '';
+
+    if (voting.state == Enum$EventVotingState.paused) {
+      return Text(
+        t.event.eventVoting.debatePaused,
+        style: Typo.medium.copyWith(
+          color: colorScheme.onSecondary,
+        ),
+      );
     }
-    final durationText = EventUtils.getDurationToEventText(
-      Event(start: voting.start, end: voting.end, timezone: voting.timezone),
-      durationOnly: true,
-    );
+
+    if (voting.state == Enum$EventVotingState.closed) {
+      return Text(
+        t.event.eventVoting.debateEnded,
+        style: Typo.medium.copyWith(
+          color: colorScheme.onSecondary,
+        ),
+      );
+    }
+
+    final durationFromNowToEvent =
+        voting.start?.difference(DateTime.now()).inDays ?? 1;
+    final isUpcoming = (voting.start ?? DateTime.now()).isAfter(DateTime.now());
+
+    if (!isUpcoming) {
+      return Text(
+        t.event.eventStartedDaysAgo(days: durationFromNowToEvent.abs()),
+        style: Typo.medium.copyWith(
+          color: colorScheme.onSecondary,
+        ),
+      );
+    }
+
     return Text.rich(
       TextSpan(
-        text: '${StringUtils.capitalize(statusText)} ',
+        text: StringUtils.capitalize(
+          '${isUpcoming ? t.event.startingIn : t.common.started} ',
+        ),
         style: Typo.medium.copyWith(
           color: colorScheme.onSecondary,
         ),
         children: [
-          if (voting.state != Enum$EventVotingState.paused)
+          if (isUpcoming)
             TextSpan(
-              text: durationText,
+              text: t.common.day(n: durationFromNowToEvent),
               style: Typo.medium.copyWith(
                 color: LemonColor.paleViolet,
                 fontWeight: FontWeight.w600,

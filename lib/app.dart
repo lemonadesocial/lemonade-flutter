@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
 import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
@@ -17,7 +18,6 @@ import 'package:app/router/app_router.dart';
 import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +107,9 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
               ..add(
                 const WalletEvent.getActiveSessions(),
               ),
+          ),
+          BlocProvider(
+            create: (context) => RefreshBloc(),
           ),
         ],
         child: child,
@@ -228,13 +231,11 @@ class _AppState extends State<_App> {
             // use provider
             supportedLocales: [
               ...AppLocaleUtils.supportedLocales,
-              ...AppFlowyEditorLocalizations.delegate.supportedLocales,
             ],
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
-              AppFlowyEditorLocalizations.delegate,
             ],
             themeMode: ThemeMode.dark,
             darkTheme: lemonadeAppDarkThemeData,

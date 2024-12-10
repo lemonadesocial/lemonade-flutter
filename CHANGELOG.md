@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.45.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.44.0...v1.45.0) (2024-12-05)
+
+
+### Features
+
+* debate polishment ([#806](https://github.com/lemonadesocial/lemonade-flutter/issues/806)) ([68ad7fc](https://github.com/lemonadesocial/lemonade-flutter/commit/68ad7fc0c5c1959df148b39cea1ce4d013540a21))
+* refresh home screen data correctly ([#809](https://github.com/lemonadesocial/lemonade-flutter/issues/809)) ([759c001](https://github.com/lemonadesocial/lemonade-flutter/commit/759c0017572933200aab55cb15ed4d93357361b6))
+* remake rich text description ([#810](https://github.com/lemonadesocial/lemonade-flutter/issues/810)) ([00ebb7a](https://github.com/lemonadesocial/lemonade-flutter/commit/00ebb7ab2d1a0b9c15fee45f77d4da5daa151375))
+
+
+### Bug Fixes
+
+* missing query for event listing ([#811](https://github.com/lemonadesocial/lemonade-flutter/issues/811)) ([42ccabb](https://github.com/lemonadesocial/lemonade-flutter/commit/42ccabbab4155a20ff7050aa6710f0e4aaf24496))
+
+## [1.44.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.43.0...v1.44.0) (2024-11-26)
+
+
+### Features
+
+* pre-fill parent event location when creating sub-event ([#798](https://github.com/lemonadesocial/lemonade-flutter/issues/798)) ([04f910e](https://github.com/lemonadesocial/lemonade-flutter/commit/04f910e37ef7ba544bfc42da9b4cfd519767ab66))
+* remake additional directions ([#803](https://github.com/lemonadesocial/lemonade-flutter/issues/803)) ([cf26af1](https://github.com/lemonadesocial/lemonade-flutter/commit/cf26af10b8f72d1ffcc2cfcd9dac514a501e20ad))
+* rerodering, show/hide hosts ([#802](https://github.com/lemonadesocial/lemonade-flutter/issues/802)) ([93c58f1](https://github.com/lemonadesocial/lemonade-flutter/commit/93c58f1785758633c61e13a0f430e89e8e334a34))
+
+
+### Bug Fixes
+
+* always show main host in cohosts setting ([#805](https://github.com/lemonadesocial/lemonade-flutter/issues/805)) ([781ebeb](https://github.com/lemonadesocial/lemonade-flutter/commit/781ebebfd6d959ef6e3255f1fc933449a2759c42))
+* implement autoscroll for subevent listing ([#804](https://github.com/lemonadesocial/lemonade-flutter/issues/804)) ([178c50d](https://github.com/lemonadesocial/lemonade-flutter/commit/178c50df1c0ccc73ed16da4ca7355576c1779b4d))
+* scroll is block for ticket assignment page ([#799](https://github.com/lemonadesocial/lemonade-flutter/issues/799)) ([cbdc47a](https://github.com/lemonadesocial/lemonade-flutter/commit/cbdc47a8f1acd3d06a434a1942d9979910305930))
+* update fetch subevent logic ([#801](https://github.com/lemonadesocial/lemonade-flutter/issues/801)) ([62eaf18](https://github.com/lemonadesocial/lemonade-flutter/commit/62eaf18238355ad2bed15e1b23cbe1216fc72d32))
+
 ## [1.43.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.42.0...v1.43.0) (2024-11-18)
 
 

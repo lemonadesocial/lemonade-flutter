@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_guest_settings_page/widgets/delete_event_information_card.dart';
@@ -15,6 +16,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class DeleteEventConfirmationBottomSheet extends StatefulWidget {
@@ -129,6 +131,9 @@ class _DeleteEventConfirmationBottomSheetState
                               .cancelEvent(eventId: widget.event?.id ?? '');
                         },
                       );
+                      context
+                          .read<RefreshBloc>()
+                          .add(const RefreshEvent.refreshEvents());
                       setState(() {
                         cancelled = !cancelled;
                       });

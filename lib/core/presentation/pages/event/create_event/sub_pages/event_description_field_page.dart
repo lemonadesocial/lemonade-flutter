@@ -1,11 +1,10 @@
-import 'package:app/core/presentation/widgets/common/editor/mobile_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 @RoutePage()
 class EventDescriptionFieldPage extends StatefulWidget {
@@ -23,15 +22,10 @@ class EventDescriptionFieldPage extends StatefulWidget {
 }
 
 class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
-  late EditorState editorState;
-
+  HtmlEditorController controller = HtmlEditorController();
   @override
   void initState() {
     super.initState();
-    final document = markdownToDocument(widget.description);
-    setState(() {
-      editorState = EditorState(document: document);
-    });
   }
 
   @override
@@ -39,13 +33,12 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      extendBodyBehindAppBar: PlatformExtension.isDesktopOrWeb,
       appBar: LemonAppBar(
         backgroundColor: LemonColor.atomicBlack,
         title: t.event.eventCreation.description,
-        onPressBack: () {
+        onPressBack: () async {
           AutoRouter.of(context).pop();
-          widget.onDescriptionChanged(documentToMarkdown(editorState.document));
+          widget.onDescriptionChanged(await controller.getText());
         },
       ),
       body: SafeArea(
@@ -63,8 +56,58 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
                 color: colorScheme.outline,
               ),
             ),
-            child: MobileEditor(
-              editorState: editorState,
+            child: HtmlEditor(
+              controller: controller,
+              htmlEditorOptions: HtmlEditorOptions(
+                hint: 'Type something...',
+                shouldEnsureVisible: true,
+                initialText: widget.description,
+              ),
+              htmlToolbarOptions: HtmlToolbarOptions(
+                renderBorder: false,
+                renderSeparatorWidget: false,
+                gridViewVerticalSpacing: 0,
+                gridViewHorizontalSpacing: 0,
+                buttonColor: colorScheme.onSecondary,
+                buttonSelectedColor: LemonColor.paleViolet,
+                defaultToolbarButtons: [
+                  const StyleButtons(),
+                  const FontButtons(
+                    clearAll: false,
+                    strikethrough: false,
+                    superscript: false,
+                    subscript: false,
+                  ),
+                  const ListButtons(listStyles: false),
+                  const InsertButtons(
+                    picture: false,
+                    audio: false,
+                    video: false,
+                    otherFile: false,
+                    table: false,
+                    hr: false,
+                  ),
+                ],
+                toolbarPosition: ToolbarPosition.aboveEditor,
+                toolbarType: ToolbarType.nativeScrollable,
+              ),
+              otherOptions: OtherOptions(
+                height: MediaQuery.of(context).size.height * 0.9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(LemonRadius.medium),
+                  border: Border.all(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+              callbacks: Callbacks(
+                onBeforeCommand: (String? currentHtml) {
+                  debugPrint('html before change is $currentHtml');
+                },
+                onChangeContent: (String? changed) {
+                  debugPrint('content changed to $changed');
+                },
+              ),
             ),
           ),
         ),

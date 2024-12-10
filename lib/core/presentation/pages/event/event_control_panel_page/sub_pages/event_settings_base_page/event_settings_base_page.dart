@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
@@ -60,6 +62,9 @@ class EventSettingsBasePage extends StatelessWidget {
                           eventId: event.id ?? '',
                         ),
                       );
+                  context
+                      .read<RefreshBloc>()
+                      .add(const RefreshEvent.refreshEvents());
                 }
               },
               child: GestureDetector(
@@ -373,6 +378,9 @@ class EventSettingsBasePage extends StatelessWidget {
                             child: SettingTileWidget(
                               color: LemonColor.chineseBlack,
                               title: t.event.eventCreation.description,
+                              subTitle: StringUtils.stripHtmlTags(
+                                event.description ?? '',
+                              ),
                               leading: Assets.icons.icDescription.svg(),
                               leadingCircle: false,
                               trailing: Assets.icons.icArrowBack.svg(
