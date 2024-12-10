@@ -121,6 +121,26 @@ final getTicketQuery = gql('''
       }
       invited_by
       shortid
+      acquired_tickets {
+        _id
+        type_expanded {
+          title
+        }
+        assigned_email
+        assigned_to
+        assigned_to_expanded {
+          email
+          name
+        }
+        checkin {
+          active
+          created_at
+        }
+      }
+      checkin {
+        active
+        created_at
+      }
     }
   }
 ''');

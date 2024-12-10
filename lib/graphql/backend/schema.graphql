@@ -1315,6 +1315,7 @@ type EventApplicationAnswerExport {
 type EventCheckin {
   _id: MongoID!
   active: Boolean!
+  created_at: DateTimeISO!
   event: MongoID!
   user: MongoID
   email: String
@@ -2994,6 +2995,8 @@ type Ticket {
   assigned_to_expanded: User
   event_expanded: Event
   type_expanded: EventTicketType
+  acquired_tickets: [Ticket!]
+  checkin: EventCheckin
 }
 
 type TicketStatistics {

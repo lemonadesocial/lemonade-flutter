@@ -1,25 +1,20 @@
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event_tickets/get_ticket_bloc/get_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/guest_detail_information_view.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/widgets/scan_qr_ticket_information_item.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,152 +52,94 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const BottomSheetGrabber(),
-          Padding(
-            padding: EdgeInsets.only(
-              top: Spacing.medium,
-              bottom: Spacing.smMedium,
-              left: Spacing.smMedium,
-              right: Spacing.smMedium,
-            ),
-            child: BlocBuilder<GetTicketBloc, GetTicketState>(
-              builder: (context, state) {
-                return state.maybeWhen(
-                  loading: () => SizedBox(
-                    height: 300,
-                    child: Loading.defaultLoading(context),
-                  ),
-                  success: (ticket) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        GuestDetailInformationView(
-                          ticket: ticket,
-                        ),
-                        _TicketInformationView(ticket: ticket),
-                        _ViewApplicationInfoView(
-                          ticket: ticket,
-                          eventId: eventId,
-                        ),
-                        SizedBox(height: Spacing.smMedium * 2),
-                        SafeArea(
-                          child: LinearGradientButton.primaryButton(
-                            label: t.event.scanQR.checkInAll,
-                            onTap: () async {
-                              final response = await showFutureLoadingDialog(
-                                context: context,
-                                future: () => getIt<AppGQL>()
-                                    .client
-                                    .mutate$UpdateEventCheckin(
-                                      Options$Mutation$UpdateEventCheckin(
-                                        variables:
-                                            Variables$Mutation$UpdateEventCheckin(
-                                          input: Input$UpdateEventCheckinInput(
-                                            active: true,
-                                            shortid: ticket.shortId,
-                                          ),
-                                        ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: Spacing.medium,
+                bottom: Spacing.smMedium,
+                left: Spacing.smMedium,
+                right: Spacing.smMedium,
+              ),
+              child: BlocBuilder<GetTicketBloc, GetTicketState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () => SizedBox(
+                      height: 300,
+                      child: Loading.defaultLoading(context),
+                    ),
+                    success: (ticket) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            GuestDetailInformationView(
+                              ticket: ticket,
+                            ),
+                            SizedBox(height: Spacing.smMedium),
+                            ScanQrTicketInformationItem(ticket: ticket),
+                            SizedBox(height: Spacing.smMedium),
+                            if (ticket.acquiredTickets?.isNotEmpty ?? false)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...ticket.acquiredTickets!.map(
+                                    (acquiredTicket) => Padding(
+                                      padding: EdgeInsets.only(
+                                        top: Spacing.smMedium,
+                                      ),
+                                      child: ScanQrTicketInformationItem(
+                                        ticket: acquiredTicket,
                                       ),
                                     ),
-                              );
-                              if (response
-                                      .result?.parsedData?.updateEventCheckin !=
-                                  null) {
-                                SnackBarUtils.showSuccess(
-                                  message: t.event.scanQR.checkedinSuccessfully,
-                                );
-                                await AutoRouter.of(context).pop();
-                              }
-                            },
-                          ),
+                                  ),
+                                ],
+                              ),
+                            _ViewApplicationInfoView(
+                              ticket: ticket,
+                              eventId: eventId,
+                            ),
+                            SizedBox(height: Spacing.smMedium * 2),
+                            SafeArea(
+                              child: LinearGradientButton.primaryButton(
+                                label: t.event.scanQR.checkInAll,
+                                onTap: () async {
+                                  final response =
+                                      await showFutureLoadingDialog(
+                                    context: context,
+                                    future: () => getIt<AppGQL>()
+                                        .client
+                                        .mutate$UpdateEventCheckin(
+                                          Options$Mutation$UpdateEventCheckin(
+                                            variables:
+                                                Variables$Mutation$UpdateEventCheckin(
+                                              input:
+                                                  Input$UpdateEventCheckinInput(
+                                                active: true,
+                                                shortid: ticket.shortId,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                  );
+                                  if (response.result?.parsedData
+                                          ?.updateEventCheckin !=
+                                      null) {
+                                    SnackBarUtils.showSuccess(
+                                      message:
+                                          t.event.scanQR.checkedinSuccessfully,
+                                    );
+                                    await AutoRouter.of(context).pop();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                  orElse: () => const SizedBox.shrink(),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TicketInformationView extends StatelessWidget {
-  const _TicketInformationView({required this.ticket});
-
-  final EventTicket ticket;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final ticketType = ticket.typeExpanded;
-    final t = Translations.of(context);
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: Spacing.smMedium,
-        vertical: Spacing.small,
-      ),
-      decoration: BoxDecoration(
-        color: colorScheme.secondaryContainer,
-        borderRadius: BorderRadius.circular(LemonRadius.small),
-      ),
-      child: Row(
-        children: [
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icTicket.svg(
-              width: Sizing.mSmall,
-              height: Sizing.mSmall,
-              colorFilter: filter,
-            ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          Expanded(
-            child: Text(
-              ticketType?.title ?? "",
-              style: Typo.medium.copyWith(
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onPrimary,
-              ),
-            ),
-          ),
-          SizedBox(width: Spacing.xSmall),
-          InkWell(
-            onTap: () async {
-              final response = await showFutureLoadingDialog(
-                context: context,
-                future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckin(
-                      Options$Mutation$UpdateEventCheckin(
-                        variables: Variables$Mutation$UpdateEventCheckin(
-                          input: Input$UpdateEventCheckinInput(
-                            active: true,
-                            shortid: ticket.shortId,
-                          ),
-                        ),
-                      ),
-                    ),
-              );
-              if (response.result?.parsedData?.updateEventCheckin != null) {
-                SnackBarUtils.showSuccess(
-                  message: t.event.scanQR.checkedinSuccessfully,
-                );
-                await AutoRouter.of(context).pop();
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(Spacing.xSmall),
-              decoration: BoxDecoration(
-                color: LemonColor.white06,
-                borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-              ),
-              child: Text(
-                t.event.scanQR.checkin,
-                style: Typo.small.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: colorScheme.onPrimary,
-                ),
+                      );
+                    },
+                    orElse: () => const SizedBox.shrink(),
+                  );
+                },
               ),
             ),
           ),
@@ -220,9 +157,6 @@ class _ViewApplicationInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("ticket.json ${ticket.toJson()}");
-    print("ticket.assignedToExpanded.name ${ticket.assignedToExpanded?.name}");
-    print("ticket.assignedEmail ${ticket.assignedEmail}");
     return Query$GetEventApplicationAnswers$Widget(
       options: Options$Query$GetEventApplicationAnswers(
         variables: Variables$Query$GetEventApplicationAnswers(
@@ -236,7 +170,6 @@ class _ViewApplicationInfoView extends StatelessWidget {
         refetch,
         fetchMore,
       }) {
-        print(".....");
         // print(result.parsedData?.getEventApplicationAnswers?.map((e) => e.toJson()).toList());
         print(result.parsedData?.getEventApplicationAnswers.length);
         return const SizedBox.shrink();

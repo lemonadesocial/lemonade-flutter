@@ -10,6 +10,7 @@ class EventCheckin with _$EventCheckin {
   factory EventCheckin({
     String? id,
     bool? active,
+    DateTime? createdAt,
     String? email,
     String? event,
     String? user,
@@ -23,6 +24,7 @@ class EventCheckin with _$EventCheckin {
   factory EventCheckin.fromDto(EventCheckinDto dto) => EventCheckin(
         id: dto.id,
         active: dto.active,
+        createdAt: dto.createdAt,
         email: dto.email,
         event: dto.event,
         user: dto.user,

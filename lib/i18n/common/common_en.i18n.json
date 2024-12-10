@@ -240,5 +240,6 @@
     "started": "started",
     "starting": "starting",
     "ago": "ago",
-    "content": "Content"
+    "content": "Content",
+    "notAssigned": "Not assigned"
 }
