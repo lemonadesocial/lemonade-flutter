@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.46.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.45.0...v1.46.0) (2024-12-10)
+
+
+### Features
+
+* remake logic location text display ([#812](https://github.com/lemonadesocial/lemonade-flutter/issues/812)) ([ef808ac](https://github.com/lemonadesocial/lemonade-flutter/commit/ef808acc2f5e02bf942ae12fa31ac87bd06a7483))
+
+
+### Bug Fixes
+
+* description android and load improve load my events speed ([#816](https://github.com/lemonadesocial/lemonade-flutter/issues/816)) ([a0e09d5](https://github.com/lemonadesocial/lemonade-flutter/commit/a0e09d596d6df20453071e5b93907cb378d5d7ca))
+* remove hardcode event id ([#814](https://github.com/lemonadesocial/lemonade-flutter/issues/814)) ([0d5dd6b](https://github.com/lemonadesocial/lemonade-flutter/commit/0d5dd6b7e3737cb6ad526642817b2519af9475ed))
+
 ## [1.45.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.44.0...v1.45.0) (2024-12-05)
 
 
