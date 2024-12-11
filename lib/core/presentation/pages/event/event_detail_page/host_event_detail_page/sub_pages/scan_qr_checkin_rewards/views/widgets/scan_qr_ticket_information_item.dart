@@ -141,6 +141,7 @@ class _CheckedInView extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: EdgeInsets.all(Spacing.xSmall),
@@ -163,6 +164,25 @@ class _CheckedInView extends StatelessWidget {
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                 ),
+              ),
+            ],
+          ),
+        ),
+        DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            icon: Icon(
+              Icons.more_vert,
+              color: colorScheme.onSurface,
+            ),
+            onChanged: (String? newValue) {
+              if (newValue == 'undo') {
+                // Handle undo check-in action
+              }
+            },
+            items: <DropdownMenuItem<String>>[
+              DropdownMenuItem<String>(
+                value: 'undo',
+                child: Text('Undo Check In'),
               ),
             ],
           ),
