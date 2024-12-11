@@ -161,6 +161,7 @@ dependencies:
   html_editor_enhanced: 2.6.0
   flutter_widget_from_html: 0.15.3
   file_picker: 8.0.3
+  add_2_calendar: ^3.0.1
 
 dependency_overrides:
   matrix_api_lite:

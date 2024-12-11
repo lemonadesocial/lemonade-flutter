@@ -92,5 +92,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow access to your contacts to enable adding attendees to calendar</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow access to your calendar to enable adding events to calendar</string>
 </dict>
 </plist>
