@@ -61,9 +61,7 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null
-                ? price.network == null || price.network?.isEmpty == true
-                : false,
+            (price) => price.isFiat,
           ),
         )
         .toList();
@@ -75,9 +73,7 @@ class EventTicketUtils {
     return ticketTypes
         .where(
           (element) => (element.prices ?? []).any(
-            (price) => price.currency != null
-                ? price.network?.isNotEmpty == true
-                : false,
+            (price) => price.isCrypto,
           ),
         )
         .toList();
@@ -91,9 +87,6 @@ class EventTicketUtils {
     if (ticketType == null || currency == null) return null;
 
     return (ticketType.prices ?? []).firstWhereOrNull((element) {
-      if (network?.isNotEmpty == true) {
-        return element.currency == currency && element.network == network;
-      }
       return element.currency == currency;
     });
   }
@@ -106,9 +99,6 @@ class EventTicketUtils {
     if (currency == null) return null;
     return currencies.firstWhereOrNull(
       (element) {
-        if (network?.isNotEmpty == true) {
-          return element.currency == currency && element.network == network;
-        }
         return element.currency == currency;
       },
     );
@@ -158,7 +148,7 @@ class EventTicketUtils {
     );
     double? doubleAmount;
     String? erc20DisplayedAmount;
-    final isERC20 = price?.network?.isNotEmpty == true;
+    final isERC20 = price?.isCrypto ?? false;
 
     if (isERC20) {
       erc20DisplayedAmount = Web3Utils.formatCryptoCurrency(

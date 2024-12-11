@@ -15,6 +15,7 @@ class ChainDto with _$ChainDto {
     @JsonKey(name: 'safe_confirmations') double? safeConfirmations,
     List<ERC20TokenDto>? tokens,
     @JsonKey(name: 'relay_payment_contract') String? relayPaymentContract,
+    @JsonKey(name: 'stake_payment_contract') String? stakePaymentContract,
   }) = _ChainDto;
 
   factory ChainDto.fromJson(Map<String, dynamic> json) =>

@@ -31,9 +31,10 @@ class _FiatPricingMethodFormState extends State<FiatPricingMethodForm> {
     super.initState();
     final modifyTicketPriceBloc = context.read<ModifyTicketPriceBloc>();
     final initialTicketPrice = modifyTicketPriceBloc.initialTicketPrice;
-    if (initialTicketPrice?.network?.isNotEmpty == true) {
-      return;
-    }
+    // TODO: ticket setup
+    // if (initialTicketPrice?.network?.isNotEmpty == true) {
+    //   return;
+    // }
     final initialCurrency = initialTicketPrice?.currency;
     final initialDecimals = initialCurrency != null
         ? (widget.stripePaymentAccount?.accountInfo

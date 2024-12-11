@@ -1,8 +1,10 @@
 import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/list/unique_list_extension.dart';
+import 'package:app/core/utils/payment_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -29,9 +31,9 @@ class SelectEventTicketsBloc
             selectedTickets: [],
             isSelectionValid: false,
             isPaymentRequired: false,
+            commonPaymentAccounts: [],
             paymentMethod: SelectTicketsPaymentMethod.card,
             selectedCurrency: null,
-            selectedNetwork: null,
             totalAmount: null,
           ),
         ) {
@@ -39,8 +41,6 @@ class SelectEventTicketsBloc
       eventTicketTypesResponse = event.eventTicketTypesResponse;
     });
     on<SelectEventTicketsEventOnSelectTicket>(_onSelectTicketType);
-    // TODO:
-    on<SelectEventTicketsEventOnSelectCurrency>(_onSelectCurrency);
     on<SelectEventTicketsEventOnSelectPaymentMethod>(_onSelectPaymentMethod);
     on<SelectEventTicketsEventOnSelectTicketCategory>(_onSelectTicketCategory);
     on<SelectEventTicketsEventOnClear>(_onClear);
@@ -52,8 +52,8 @@ class SelectEventTicketsBloc
         selectedTickets: [],
         isSelectionValid: false,
         isPaymentRequired: false,
+        commonPaymentAccounts: [],
         selectedCurrency: null,
-        selectedNetwork: null,
         totalAmount: null,
       ),
     );
@@ -69,24 +69,9 @@ class SelectEventTicketsBloc
         selectedTickets: [],
         isSelectionValid: false,
         isPaymentRequired: false,
+        commonPaymentAccounts: [],
         selectedCurrency: null,
-        selectedNetwork: null,
         totalAmount: null,
-      ),
-    );
-  }
-
-  void _onSelectCurrency(
-    SelectEventTicketsEventOnSelectCurrency event,
-    Emitter emit,
-  ) {
-    selectedCurrency = event.currency;
-
-    emit(
-      state.copyWith(
-        selectedCurrency: selectedCurrency,
-        selectedTickets: [],
-        isSelectionValid: false,
       ),
     );
   }
@@ -106,9 +91,11 @@ class SelectEventTicketsBloc
     SelectEventTicketsEventOnSelectTicket event,
     Emitter emit,
   ) async {
+    final ticketPrice = event.price;
     selectedCurrency = event.currency;
-    selectedNetwork = event.network;
-    bool isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
+    // TODO: will remove
+    // selectedNetwork = event.network;
+    bool isCryptoCurrency = ticketPrice?.isCrypto == true;
 
     final newSelectedTickets = [
       event.ticket,
@@ -128,6 +115,55 @@ class SelectEventTicketsBloc
         ? Right(_calculateBlockchainTotalAmount(newSelectedTickets))
         : Left(_calculateFiatTotalAmount(newSelectedTickets));
 
+    List<PaymentAccount> newCommonPaymentAccounts = [];
+
+    if (isCryptoCurrency) {
+      newCommonPaymentAccounts =
+          ticketPrice?.paymentAccountsExpanded?.isEmpty == true
+              ? state.commonPaymentAccounts
+              : ticketPrice?.paymentAccountsExpanded ??
+                  state.commonPaymentAccounts;
+    }
+
+    if (!isCryptoCurrency) {
+      if (newSelectedTickets.isEmpty) {
+        // Reset when no tickets are selected
+        newCommonPaymentAccounts = [];
+      } else if (newSelectedTickets.length == 1) {
+        // When only one ticket type remains, use all its payment accounts
+        final ticketType =
+            eventTicketTypesResponse?.ticketTypes?.firstWhereOrNull(
+          (element) => element.id == newSelectedTickets.first.id,
+        );
+        newCommonPaymentAccounts =
+            EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                  ticketType: ticketType,
+                  currency: selectedCurrency,
+                )?.paymentAccountsExpanded ??
+                [];
+      } else {
+        // For multiple tickets, find common payment accounts across all selected tickets
+        newCommonPaymentAccounts = newSelectedTickets
+                .fold<List<PaymentAccount>?>(null, (previousAccounts, ticket) {
+              final ticketType = eventTicketTypesResponse?.ticketTypes
+                  ?.firstWhereOrNull((element) => element.id == ticket.id);
+              final ticketAccounts =
+                  EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
+                        ticketType: ticketType,
+                        currency: selectedCurrency,
+                      )?.paymentAccountsExpanded ??
+                      [];
+
+              if (previousAccounts == null) return ticketAccounts;
+              return PaymentUtils.getCommonPaymentAccounts(
+                accounts1: previousAccounts,
+                accounts2: ticketAccounts,
+              );
+            }) ??
+            [];
+      }
+    }
+
     emit(
       state.copyWith(
         selectedTickets: newSelectedTickets,
@@ -138,7 +174,7 @@ class SelectEventTicketsBloc
           return totalBlockchain > BigInt.zero;
         }),
         selectedCurrency: selectedCurrency,
-        selectedNetwork: selectedNetwork,
+        commonPaymentAccounts: newCommonPaymentAccounts,
         totalAmount: totalAmount,
       ),
     );
@@ -187,7 +223,6 @@ class SelectEventTicketsBloc
           EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
                 ticketType: ticketType,
                 currency: selectedCurrency,
-                network: selectedNetwork,
               )?.cryptoCost ??
               BigInt.zero;
 
@@ -204,15 +239,11 @@ class SelectEventTicketsEvent with _$SelectEventTicketsEvent {
   factory SelectEventTicketsEvent.onEventTicketTypesResponseLoaded({
     required EventTicketTypesResponse eventTicketTypesResponse,
   }) = SelectEventTicketsEventOnListTicketTypesLoaded;
-
   factory SelectEventTicketsEvent.select({
     required PurchasableItem ticket,
     required String currency,
-    String? network,
+    EventTicketPrice? price,
   }) = SelectEventTicketsEventOnSelectTicket;
-  factory SelectEventTicketsEvent.selectCurrency({
-    required String currency,
-  }) = SelectEventTicketsEventOnSelectCurrency;
   factory SelectEventTicketsEvent.selectPaymentMethod({
     required SelectTicketsPaymentMethod paymentMethod,
   }) = SelectEventTicketsEventOnSelectPaymentMethod;
@@ -229,9 +260,9 @@ class SelectEventTicketsState with _$SelectEventTicketsState {
     required bool isSelectionValid,
     required bool isPaymentRequired,
     required SelectTicketsPaymentMethod paymentMethod,
+    required List<PaymentAccount> commonPaymentAccounts,
     String? selectedCurrency,
     Either<double, BigInt>? totalAmount,
-    String? selectedNetwork,
     EventTicketCategory? selectedTicketCategory,
   }) = _SelectEventTicketsState;
 }

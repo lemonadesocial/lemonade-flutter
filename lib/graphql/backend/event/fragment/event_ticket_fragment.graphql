@@ -1,4 +1,14 @@
 # import '../../schema.graphql';
+# import '../../payment/fragment/payment_fragment.graphql;
+
+fragment EventTicketPrice on EventTicketPrice {
+  cost
+  currency
+  payment_accounts
+  payment_accounts_expanded {
+    ...PaymentAccountFragment
+  }
+}
 
 fragment EventTicketType on EventTicketType {
   _id
@@ -8,10 +18,7 @@ fragment EventTicketType on EventTicketType {
   event
   title
   prices {
-    cost
-    currency
-    network
-    default
+    ...EventTicketPrice
   }
   ticket_limit
   ticket_limit_per

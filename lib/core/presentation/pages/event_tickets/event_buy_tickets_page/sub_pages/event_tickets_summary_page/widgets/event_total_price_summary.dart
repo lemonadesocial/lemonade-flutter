@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -6,58 +7,59 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
 class EventTotalPriceSummary extends StatelessWidget {
   const EventTotalPriceSummary({
     super.key,
     required this.pricingInfo,
     required this.selectedCurrency,
-    required this.selectedNetwork,
+    required this.selectedPaymentAccount,
   });
 
   final EventTicketsPricingInfo pricingInfo;
-  final String? selectedNetwork;
   final String selectedCurrency;
+  final PaymentAccount? selectedPaymentAccount;
 
   BigInt get _totalCryptoAmount {
     return (pricingInfo.cryptoTotal ?? BigInt.zero) +
         // add fee if available for EthereumRelay
-        (pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ?? BigInt.zero);
+        (selectedPaymentAccount?.cryptoFee ?? BigInt.zero);
   }
 
   double get _totalFiatAmount {
     return (pricingInfo.fiatTotal ?? 0) +
-        (pricingInfo.paymentAccounts?.firstOrNull?.fiatFee ?? 0);
+        (selectedPaymentAccount?.fiatFee ?? 0);
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
-    final currencyInfo =
-        PaymentUtils.getCurrencyInfo(pricingInfo, currency: selectedCurrency);
+    final currencyInfo = PaymentUtils.getCurrencyInfo(
+      selectedPaymentAccount,
+      currency: selectedCurrency,
+    );
+    final isCryptoPayment = PaymentUtils.isCryptoPayment(pricingInfo);
+    false;
 
     return Column(
       children: [
-        if (pricingInfo.paymentAccounts?.firstOrNull?.fee?.isNotEmpty ==
-            true) ...[
+        if (selectedPaymentAccount?.fee?.isNotEmpty == true) ...[
           SummaryRow(
             label: t.event.eventOrder.fee,
             value: Web3Utils.formatCryptoCurrency(
-              pricingInfo.paymentAccounts?.firstOrNull?.cryptoFee ??
-                  BigInt.zero,
+              selectedPaymentAccount?.cryptoFee ?? BigInt.zero,
               currency: selectedCurrency,
               decimals: currencyInfo?.decimals ?? 0,
+              decimalDigits: currencyInfo?.decimals ?? 0,
             ),
             textColor: colorScheme.onSecondary,
           ),
+          SizedBox(height: Spacing.xSmall),
         ],
-        SizedBox(height: Spacing.xSmall),
         SummaryRow(
           label: t.event.eventOrder.grandTotal,
-          value: isCryptoCurrency
+          value: isCryptoPayment
               ? Web3Utils.formatCryptoCurrency(
                   _totalCryptoAmount,
                   currency: selectedCurrency,

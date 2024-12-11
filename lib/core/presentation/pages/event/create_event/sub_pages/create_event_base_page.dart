@@ -46,17 +46,19 @@ class CreateEventBasePage extends StatelessWidget {
     AutoRouter.of(context).root.push(
           EventDetailRoute(
             eventId: state.eventId ?? '',
-            children: [
-              const EventDetailBaseRoute(),
-              EventTicketTierSettingRoute(
-                children: [
-                  EventTicketTiersListingRoute(
-                    onNext: (mContext) => AutoRouter.of(mContext).replace(
-                      const HostEventPublishFlowRoute(),
-                    ),
-                  ),
-                ],
-              ),
+            children: const [
+              EventDetailBaseRoute(),
+              HostEventPublishFlowRoute(),
+              // TODO: Ticket setup
+              // EventTicketTierSettingRoute(
+              //   children: [
+              //     EventTicketTiersListingRoute(
+              //       onNext: (mContext) => AutoRouter.of(mContext).replace(
+              //         const HostEventPublishFlowRoute(),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         );
