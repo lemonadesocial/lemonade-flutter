@@ -90,13 +90,14 @@ class _AddTicketTierPricingFormViewState
   @override
   void initState() {
     super.initState();
-    final initialTicketPrice =
-        context.read<ModifyTicketPriceBloc>().initialTicketPrice;
-    if (initialTicketPrice?.network?.isNotEmpty == true) {
-      setState(() {
-        pricingMethod = TicketPricingMethod.erc20;
-      });
-    }
+    // final initialTicketPrice =
+    //     context.read<ModifyTicketPriceBloc>().initialTicketPrice;
+    // TODO: ticket setup
+    // if (initialTicketPrice?.network?.isNotEmpty == true) {
+    //   setState(() {
+    //     pricingMethod = TicketPricingMethod.erc20;
+    //   });
+    // }
   }
 
   void resetAmount() {

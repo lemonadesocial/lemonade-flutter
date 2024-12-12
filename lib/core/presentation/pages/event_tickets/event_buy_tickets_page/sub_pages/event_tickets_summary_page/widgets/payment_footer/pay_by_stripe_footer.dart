@@ -1,5 +1,6 @@
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_button.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/select_card_button.dart';
@@ -15,7 +16,7 @@ class PayByStripeFooter extends StatelessWidget {
     super.key,
     this.pricingInfo,
     required this.selectedCurrency,
-    this.selectedNetwork,
+    required this.selectedPaymentAccount,
     this.onSelectCard,
     this.onCardAdded,
     this.isFree = false,
@@ -25,14 +26,12 @@ class PayByStripeFooter extends StatelessWidget {
   final Function(PaymentCard paymentCard)? onSelectCard;
   final Function(PaymentCard paymentCard)? onCardAdded;
   final String selectedCurrency;
-  final String? selectedNetwork;
+  final PaymentAccount? selectedPaymentAccount;
   final bool isFree;
   final bool disabled;
 
   String get stripePublishableKey {
-    return pricingInfo?.paymentAccounts?.isNotEmpty == true
-        ? pricingInfo?.paymentAccounts?.first.accountInfo?.publishableKey ?? ''
-        : '';
+    return selectedPaymentAccount?.accountInfo?.publishableKey ?? '';
   }
 
   void _onPressedSelectCard(BuildContext context) {
@@ -61,7 +60,7 @@ class PayByStripeFooter extends StatelessWidget {
               disabled: disabled,
               pricingInfo: pricingInfo,
               selectedCurrency: selectedCurrency,
-              selectedNetwork: selectedNetwork,
+              selectedPaymentAccount: selectedPaymentAccount,
               isFree: isFree,
             ),
           ),
@@ -98,7 +97,7 @@ class PayByStripeFooter extends StatelessWidget {
                     disabled: disabled,
                     pricingInfo: pricingInfo,
                     selectedCurrency: selectedCurrency,
-                    selectedNetwork: selectedNetwork,
+                    selectedPaymentAccount: selectedPaymentAccount,
                     isFree: isFree,
                   ),
                 ],
@@ -123,7 +122,7 @@ class PayByStripeFooter extends StatelessWidget {
                       disabled: disabled,
                       pricingInfo: pricingInfo,
                       selectedCurrency: selectedCurrency,
-                      selectedNetwork: selectedNetwork,
+                      selectedPaymentAccount: selectedPaymentAccount,
                     ),
                   ],
                 );

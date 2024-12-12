@@ -34,7 +34,7 @@ class AccountInfoDto with _$AccountInfoDto {
     // Blockchain
     String? address,
     List<String>? networks,
-    // Safe | EthereumRelay | EthereumEscrow
+    // Safe | EthereumRelay | EthereumEscrow | EthereumStake | Ethereum
     String? network,
     // Safe
     List<String>? owners,
@@ -48,6 +48,10 @@ class AccountInfoDto with _$AccountInfoDto {
     @JsonKey(name: 'refund_policies') List<RefundPolicyDto>? refundPolicies,
     // EthereumRelay
     @JsonKey(name: 'payment_splitter_contract') String? paymentSplitterContract,
+    // EthereumStake
+    @JsonKey(name: 'config_id') String? configId,
+    @JsonKey(name: 'requirement_checkin_before')
+    DateTime? requirementCheckinBefore,
   }) = _AccountInfoDto;
 
   factory AccountInfoDto.fromJson(Map<String, dynamic> json) =>

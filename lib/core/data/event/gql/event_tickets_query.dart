@@ -1,8 +1,22 @@
 import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+const eventTicketPriceFragment = '''
+fragment eventTicketPriceFragment on EventTicketPrice {
+  cost
+  currency
+  payment_accounts
+  payment_accounts_expanded {
+    ...paymentAccountFragment
+  }
+}
+''';
+
 // this one for guest
 final getEventTicketTypesQuery = gql('''
+  $paymentAccountFragment
+  $eventTicketPriceFragment
+
   query getEventTicketTypes(\$input: GetEventTicketTypesInput!) {
     getEventTicketTypes(input: \$input) {
       discount {
@@ -19,9 +33,7 @@ final getEventTicketTypesQuery = gql('''
         event
         title
         prices {
-          cost
-          currency
-          network
+          ...eventTicketPriceFragment
         }
         default
         address_required

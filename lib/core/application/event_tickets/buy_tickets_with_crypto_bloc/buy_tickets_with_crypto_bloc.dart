@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/crypto_transaction_executor.dart';
 import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
@@ -9,17 +9,18 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
-import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/service/web3/web3_contract_service.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:convert/convert.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 import 'package:app/core/service/wallet/rpc_error_handler_extension.dart';
+import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_relay_transaction_executor.dart';
+import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_transaction_executor.dart';
+import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_stake_transaction_executor.dart';
+
 part 'buy_tickets_with_crypto_bloc.freezed.dart';
 
 const maxUpdatePaymentAttempt = 5;
@@ -28,19 +29,24 @@ class BuyTicketsWithCryptoBloc
     extends Bloc<BuyTicketsWithCryptoEvent, BuyTicketsWithCryptoState> {
   final eventTicketRepository = getIt<EventTicketRepository>();
   final paymentRepository = getIt<PaymentRepository>();
-  final String? selectedNetwork;
   final _web3Repository = getIt<Web3Repository>();
+  final PaymentAccount? selectedPaymentAccount;
 
   EventJoinRequest? _currentEventJoinRequest;
   Payment? _currentPayment;
   String? _signature;
   String? _txHash;
-  String? _erc20approveTxHash;
   int _updatePaymentAttemptCount = 0;
   final walletConnectService = getIt<WalletConnectService>();
 
+  String? get _selectedNetwork => selectedPaymentAccount?.accountInfo?.network;
+
+  final ethereumTransactionExecutor = EthereumTransactionExecutor();
+  final ethereumRelayTransactionExecutor = EthereumRelayTransactionExecutor();
+  final ethereumStakeTransactionExecutor = EthereumStakeTransactionExecutor();
+
   BuyTicketsWithCryptoBloc({
-    required this.selectedNetwork,
+    required this.selectedPaymentAccount,
   }) : super(
           BuyTicketsWithCryptoState.idle(
             data: BuyTicketsWithCryptoStateData(),
@@ -65,7 +71,7 @@ class BuyTicketsWithCryptoBloc
       final result = await eventTicketRepository.buyTickets(
         input: event.input.copyWith(
           transferParams: BuyTicketsTransferParamsInput(
-            network: selectedNetwork,
+            network: _selectedNetwork,
           ),
         ),
       );
@@ -108,7 +114,7 @@ class BuyTicketsWithCryptoBloc
 
     try {
       final getChainResult =
-          await _web3Repository.getChainById(chainId: selectedNetwork!);
+          await _web3Repository.getChainById(chainId: _selectedNetwork!);
       final chain = getChainResult.getOrElse(() => null);
       final signature = await walletConnectService
           .personalSign(
@@ -130,7 +136,7 @@ class BuyTicketsWithCryptoBloc
             id: _currentPayment?.id ?? '',
             transferParams: UpdatePaymentTransferParams(
               signature: _signature,
-              network: selectedNetwork!,
+              network: _selectedNetwork!,
               from: walletConnectService.w3mService.session?.address ?? '',
             ),
           ),
@@ -179,12 +185,11 @@ class BuyTicketsWithCryptoBloc
     emit(BuyTicketsWithCryptoState.loading(data: state.data));
     try {
       final getChainResult =
-          await _web3Repository.getChainById(chainId: selectedNetwork!);
+          await _web3Repository.getChainById(chainId: _selectedNetwork!);
       final chain = getChainResult.getOrElse(() => null);
-      final contractAddress =
-          event.currencyInfo.contracts?[selectedNetwork] ?? '';
-
-      if (contractAddress.isEmpty) {
+      if (chain == null ||
+          selectedPaymentAccount == null ||
+          _currentPayment == null) {
         return emit(
           BuyTicketsWithCryptoState.failure(
             data: state.data,
@@ -192,149 +197,65 @@ class BuyTicketsWithCryptoBloc
           ),
         );
       }
-      late EthereumTransaction ethereumTxn;
-
-      if (_currentPayment?.accountExpanded?.type ==
-          PaymentAccountType.ethereumRelay) {
-        final relayContract = Web3ContractService.getRelayPaymentContract(
-          chain?.relayPaymentContract ?? '',
-        );
-        // token address (can be native token or ERC20 token)
-        final currencyAddress = _currentPayment?.accountExpanded?.accountInfo
-                ?.currencyMap?[event.currency]?.contracts?[selectedNetwork] ??
-            '';
-        // if currency is not native token
-        // need to approve first
-        if (currencyAddress != zeroAddress && _erc20approveTxHash == null) {
-          final erc20Contract = Web3ContractService.getERC20Contract(
-            currencyAddress,
-          );
-          final approveContractCall = Transaction.callContract(
-            contract: erc20Contract,
-            function: erc20Contract.function('approve'),
-            parameters: [
-              EthereumAddress.fromHex(
-                chain?.relayPaymentContract ?? '',
-              ),
-              event.amount,
-            ],
-          );
-          final ethereumTxn = EthereumTransaction(
-            from: event.from,
-            to: currencyAddress,
-            value: BigInt.zero.toRadixString(16),
-            data: hex.encode(List<int>.from(approveContractCall.data!)),
-          );
-          final txHash = await walletConnectService.requestTransaction(
-            chainId: chain?.fullChainId ?? '',
-            transaction: ethereumTxn,
-          );
-          if (txHash.isEmpty || !txHash.startsWith("0x")) {
-            return emit(
-              BuyTicketsWithCryptoState.failure(
-                data: state.data,
-                failureReason: WalletConnectFailure(
-                  message: txHash,
-                ),
-              ),
-            );
-          }
-          _erc20approveTxHash = txHash;
-          await Future.delayed(
-            Duration(seconds: chain?.completedBlockTime ?? 1),
-          );
-          final receipt = await Web3Utils.waitForReceipt(
-            rpcUrl: chain?.rpcUrl ?? '',
-            txHash: _erc20approveTxHash!,
-            maxAttempt: 5,
-            deplayDuration: const Duration(seconds: 5),
-          );
-          if (receipt?.status != true) {
-            _erc20approveTxHash = null;
-            return emit(
-              BuyTicketsWithCryptoState.failure(
-                data: state.data,
-                failureReason: WalletConnectFailure(),
-              ),
-            );
-          }
-        }
-
-        final contractCallTxn = Transaction.callContract(
-          contract: relayContract,
-          function: relayContract.function('pay'),
-          parameters: [
-            EthereumAddress.fromHex(
-              _currentPayment
-                      ?.accountExpanded?.accountInfo?.paymentSplitterContract ??
-                  '',
-            ),
-            event.eventId,
-            _currentPayment?.id ?? '',
-            EthereumAddress.fromHex(currencyAddress),
-            event.amount,
-          ],
-        );
-        ethereumTxn = EthereumTransaction(
+      late CryptoTransactionExecutionResult result;
+      if (selectedPaymentAccount?.type == PaymentAccountType.ethereumRelay) {
+        result = await ethereumRelayTransactionExecutor.execute(
+          eventId: event.eventId,
           from: event.from,
-          to: chain?.relayPaymentContract ?? '',
-          value: (currencyAddress == zeroAddress ? event.amount : BigInt.zero)
-              .toRadixString(16),
-          data: hex.encode(List<int>.from(contractCallTxn.data!)),
+          to: event.to,
+          amount: event.amount,
+          currency: event.currency,
+          currencyInfo: event.currencyInfo,
+          chain: chain,
+          paymentAccount: selectedPaymentAccount!,
+          payment: _currentPayment!,
         );
-      } else {
-        // is erc20 token
-        if (contractAddress != zeroAddress) {
-          final contract =
-              Web3ContractService.getERC20Contract(contractAddress);
-          final contractCallTxn = Transaction.callContract(
-            contract: contract,
-            function: contract.function('transfer'),
-            parameters: [
-              EthereumAddress.fromHex(event.to),
-              event.amount,
-            ],
-          );
-          ethereumTxn = EthereumTransaction(
-            from: event.from,
-            to: contractAddress,
-            value: BigInt.zero.toRadixString(16),
-            data: hex.encode(List<int>.from(contractCallTxn.data!)),
-          );
-        } else {
-          // is native token
-          ethereumTxn = EthereumTransaction(
-            from: event.from,
-            to: event.to,
-            value: event.amount.toRadixString(16),
-          );
-        }
+        _txHash = result.txHash;
       }
 
-      _txHash = await walletConnectService
-          .requestTransaction(
-            chainId: chain?.fullChainId ?? '',
-            transaction: ethereumTxn,
-          )
-          .timeout(
-            const Duration(
-              seconds: 30,
-            ),
-          );
+      if (selectedPaymentAccount?.type == PaymentAccountType.ethereumStake) {
+        result = await ethereumStakeTransactionExecutor.execute(
+          eventId: event.eventId,
+          from: event.from,
+          to: event.to,
+          amount: event.amount,
+          currency: event.currency,
+          currencyInfo: event.currencyInfo,
+          chain: chain,
+          paymentAccount: selectedPaymentAccount!,
+          payment: _currentPayment!,
+        );
+      }
 
-      if (_txHash != null && _txHash!.startsWith('0x')) {
-        add(BuyTicketsWithCryptoEvent.processUpdatePayment());
-      } else {
-        emit(
+      if (selectedPaymentAccount?.type == PaymentAccountType.ethereum) {
+        result = await ethereumTransactionExecutor.execute(
+          eventId: event.eventId,
+          from: event.from,
+          to: event.to,
+          amount: event.amount,
+          currency: event.currency,
+          currencyInfo: event.currencyInfo,
+          chain: chain,
+          paymentAccount: selectedPaymentAccount!,
+          payment: _currentPayment!,
+        );
+        _txHash = result.txHash;
+      }
+
+      _txHash = result.txHash;
+      add(BuyTicketsWithCryptoEvent.processUpdatePayment());
+    } catch (e) {
+      if (e is CryptoTransactionException) {
+        return emit(
           BuyTicketsWithCryptoState.failure(
             data: state.data,
             failureReason: WalletConnectFailure(
-              message: _txHash,
+              message: e.message,
             ),
           ),
         );
       }
-    } catch (e) {
+
       if (e is TimeoutException) {
         return emit(
           BuyTicketsWithCryptoState.failure(
@@ -377,7 +298,7 @@ class BuyTicketsWithCryptoBloc
         transferParams: UpdatePaymentTransferParams(
           signature: _signature,
           txHash: _txHash,
-          network: selectedNetwork!,
+          network: _selectedNetwork,
           from: walletConnectService.w3mService.session?.address ?? '',
         ),
       ),

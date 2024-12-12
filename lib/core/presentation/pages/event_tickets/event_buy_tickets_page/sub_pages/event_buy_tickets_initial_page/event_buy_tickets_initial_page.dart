@@ -101,16 +101,15 @@ class EventBuyTicketsInitialPageView extends StatelessWidget {
                   event: event,
                 )) {
                   final ticketType = allTickets.firstOrNull;
+                  final ticketPrice = ticketType?.prices?.firstOrNull;
                   context.read<SelectEventTicketsBloc>().add(
                         SelectEventTicketsEvent.select(
                           ticket: PurchasableItem(
                             id: ticketType?.id ?? '',
                             count: 1,
                           ),
-                          currency: (ticketType?.prices ?? [])
-                                  .firstOrNull
-                                  ?.currency ??
-                              '',
+                          currency: ticketPrice?.currency ?? '',
+                          price: ticketPrice,
                         ),
                       );
                   AutoRouter.of(context).replace(

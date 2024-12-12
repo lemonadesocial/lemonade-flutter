@@ -814,9 +814,97 @@ type EventTicketCategory {
 type EventTicketPrice {
   default: Boolean
   currency: String!
-  network: String
   cost: String!
-  decimals: Int
+  payment_accounts: [MongoID!]
+  payment_accounts_expanded: [NewPaymentAccount!]
+}
+
+type NewPaymentAccount {
+  _id: MongoID!
+  active: Boolean!
+  created_at: DateTimeISO!
+  user: MongoID!
+  type: PaymentAccountType!
+  title: String
+  provider: NewPaymentProvider
+  account_info: AccountInfo!
+}
+
+enum PaymentAccountType {
+  ethereum
+  ethereum_escrow
+  ethereum_relay
+  ethereum_stake
+  digital
+}
+
+enum NewPaymentProvider {
+  stripe
+  safe
+}
+
+union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
+
+type EthereumAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+}
+
+type SafeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  owners: [String!]!
+  threshold: Float!
+  pending: Boolean
+}
+
+type DigitalAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+}
+
+type StripeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  account_id: String!
+  publishable_key: String!
+}
+
+type EthereumEscrowAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  minimum_deposit_percent: Int!
+  host_refund_percent: Float!
+  refund_policies: [RefundPolicy!]
+}
+
+type RefundPolicy {
+  timestamp: Float!
+  percent: Float!
+}
+
+type EthereumRelayAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  payment_splitter_contract: String
+}
+
+type EthereumStakeAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+  config_id: String!
+  requirement_checkin_before: DateTimeISO
 }
 
 type EventSession {
@@ -1002,94 +1090,6 @@ type StoreProductVariant {
   new_photos: [MongoID!]
   inventory: Float
   new_photos_expanded(skip: Int! = 0, limit: Int! = 25): [File]
-}
-
-type NewPaymentAccount {
-  _id: MongoID!
-  active: Boolean!
-  created_at: DateTimeISO!
-  user: MongoID!
-  type: PaymentAccountType!
-  title: String
-  provider: NewPaymentProvider
-  account_info: AccountInfo!
-}
-
-enum PaymentAccountType {
-  ethereum
-  ethereum_escrow
-  ethereum_relay
-  ethereum_stake
-  digital
-}
-
-enum NewPaymentProvider {
-  stripe
-  safe
-}
-
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
-
-type EthereumAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  networks: [String!]!
-}
-
-type SafeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  owners: [String!]!
-  threshold: Float!
-  pending: Boolean
-}
-
-type DigitalAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  account_id: String!
-}
-
-type StripeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  account_id: String!
-  publishable_key: String!
-}
-
-type EthereumEscrowAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  minimum_deposit_percent: Int!
-  host_refund_percent: Float!
-  refund_policies: [RefundPolicy!]
-}
-
-type RefundPolicy {
-  timestamp: Float!
-  percent: Float!
-}
-
-type EthereumRelayAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  payment_splitter_contract: String
-}
-
-type EthereumStakeAccount {
-  currencies: [String!]!
-  currency_map: JSON
-  address: String!
-  network: String!
-  config_id: String!
-  requirement_checkin_before: DateTimeISO
 }
 
 type EventPaymentTicketDiscount {
@@ -2929,7 +2929,7 @@ type PricingInfo {
   subtotal: String!
   total: String!
   deposit_infos: [EscrowDepositInfo!]
-  payment_accounts: [PaymentAccountInfo!]
+  payment_accounts: [PaymentAccountInfo!]!
 }
 
 type EscrowDepositInfo {
@@ -2963,7 +2963,6 @@ input CalculateTicketsPricingInput {
   inviter: MongoID
   user_info: UserInput
   currency: String!
-  network: String
   discount: String
 }
 
@@ -3982,8 +3981,8 @@ input EventTicketTypeInput {
 input EventTicketPriceInput {
   default: Boolean
   currency: String!
-  network: String
   cost: String!
+  payment_accounts: [MongoID!]
 }
 
 input EventTicketTypeOffersInput {
@@ -4559,7 +4558,6 @@ input BuyTicketsInput {
   inviter: MongoID
   user_info: UserInput
   currency: String!
-  network: String
   discount: String
   total: String!
   fee: String

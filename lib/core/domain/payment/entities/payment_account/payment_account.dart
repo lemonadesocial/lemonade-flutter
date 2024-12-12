@@ -73,6 +73,9 @@ class AccountInfo with _$AccountInfo {
     List<RefundPolicy>? refundPolicies,
     // Safe | EthereumRelay | EthereumEscrow
     String? paymentSplitterContract,
+    // EthereumStake
+    String? configId,
+    DateTime? requirementCheckinBefore,
   }) = _AccountInfo;
 
   factory AccountInfo.fromDto(AccountInfoDto dto) => AccountInfo(
@@ -105,6 +108,9 @@ class AccountInfo with _$AccountInfo {
             .toList(),
         // EthereumRelay
         paymentSplitterContract: dto.paymentSplitterContract,
+        // EthereumStake
+        configId: dto.configId,
+        requirementCheckinBefore: dto.requirementCheckinBefore,
       );
 
   factory AccountInfo.fromJson(Map<String, dynamic> json) =>

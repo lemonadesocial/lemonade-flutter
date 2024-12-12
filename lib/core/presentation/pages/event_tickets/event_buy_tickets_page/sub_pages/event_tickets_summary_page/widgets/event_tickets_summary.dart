@@ -20,8 +20,8 @@ class EventTicketsSummary extends StatelessWidget {
   final List<PurchasableTicketType> ticketTypes;
   final List<PurchasableItem> selectedTickets;
   final String selectedCurrency;
-  final String? selectedNetwork;
   final EventTicketsPricingInfo pricingInfo;
+  final PaymentAccount? selectedPaymentAccount;
 
   const EventTicketsSummary({
     super.key,
@@ -29,7 +29,7 @@ class EventTicketsSummary extends StatelessWidget {
     required this.selectedTickets,
     required this.selectedCurrency,
     required this.pricingInfo,
-    this.selectedNetwork,
+    required this.selectedPaymentAccount,
   });
 
   @override
@@ -46,7 +46,7 @@ class EventTicketsSummary extends StatelessWidget {
             final selectedTicketType =
                 ticketTypes.firstWhere((item) => item.id == selectedTicket.id);
             final currencyInfo = PaymentUtils.getCurrencyInfo(
-              pricingInfo,
+              selectedPaymentAccount,
               currency: selectedCurrency,
             );
 
@@ -54,7 +54,6 @@ class EventTicketsSummary extends StatelessWidget {
               ticketType: selectedTicketType,
               count: selectedTicket.count,
               currency: selectedCurrency,
-              network: selectedNetwork,
               currencyInfo: currencyInfo,
             );
           },
@@ -71,20 +70,18 @@ class TicketSummaryItem extends StatelessWidget {
     required this.count,
     required this.ticketType,
     required this.currency,
-    required this.network,
     this.currencyInfo,
   });
 
   final PurchasableTicketType ticketType;
   final int count;
   final String currency;
-  final String? network;
   final CurrencyInfo? currencyInfo;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isCrypto = network?.isNotEmpty == true;
+    final isCrypto = currencyInfo?.contracts?.isNotEmpty == true;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +136,6 @@ class TicketSummaryItem extends StatelessWidget {
               (EventTicketUtils.getTicketPriceByCurrencyAndNetwork(
                         ticketType: ticketType,
                         currency: currency,
-                        network: network,
                       )?.cryptoCost ??
                       BigInt.zero) *
                   BigInt.from(count),

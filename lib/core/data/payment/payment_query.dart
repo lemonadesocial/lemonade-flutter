@@ -19,7 +19,7 @@ const paymentAccountInfoFragment = '''
         currencies
         currency_map
         address
-        networks
+        network
       }
 
       ... on EthereumRelayAccount {
@@ -28,6 +28,15 @@ const paymentAccountInfoFragment = '''
         currency_map
         network
         payment_splitter_contract
+      }
+
+      ...on EthereumStakeAccount {
+        currencies
+        address
+        currency_map
+        network
+        config_id
+        requirement_checkin_before
       }
 
       ...on StripeAccount {
@@ -83,7 +92,7 @@ const paymentAccountFragment = '''
           currencies
           currency_map
           address
-          networks
+          network
         }
 
       ... on EthereumRelayAccount {
@@ -93,6 +102,15 @@ const paymentAccountFragment = '''
           network
           payment_splitter_contract
         }
+
+      ...on EthereumStakeAccount {
+        currencies
+        address
+        currency_map
+        network
+        config_id
+        requirement_checkin_before
+      }
 
       ...on StripeAccount {
         currencies

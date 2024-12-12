@@ -11,7 +11,6 @@ class BuyTicketsInput with _$BuyTicketsInput {
     @JsonKey(name: 'event') required String eventId,
     @JsonKey(name: 'account_id') required String accountId,
     required String currency,
-    String? network,
     required String total,
     required List<PurchasableItem>? items,
     @JsonKey(name: 'billing_info') BillingInfoInput? billingInfo,

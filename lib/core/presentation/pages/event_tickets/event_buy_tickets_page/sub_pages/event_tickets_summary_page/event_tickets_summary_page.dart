@@ -8,6 +8,7 @@ import 'package:app/core/application/payment/select_payment_card_cubit/select_pa
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_info_summary.dart';
@@ -17,9 +18,11 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/payment_footer/pay_by_stripe_footer.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/promo_code/promo_code_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/rsvp_application_form/rsvp_application_form.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/select_payment_accounts_dropdown/select_payment_accounts_dropdown.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -40,7 +43,6 @@ class EventTicketsSummaryPage extends StatelessWidget {
     final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketBlocState.selectedTickets;
     final selectedCurrency = selectTicketBlocState.selectedCurrency;
-    final selectedNetwork = selectTicketBlocState.selectedNetwork;
 
     return MultiBlocProvider(
       providers: [
@@ -52,7 +54,6 @@ class EventTicketsSummaryPage extends StatelessWidget {
                   eventId: eventId ?? '',
                   items: selectedTickets,
                   currency: selectedCurrency!,
-                  network: selectedNetwork,
                 ),
               ),
             ),
@@ -63,10 +64,35 @@ class EventTicketsSummaryPage extends StatelessWidget {
   }
 }
 
-class EventTicketsSummaryPageView extends StatelessWidget {
+class EventTicketsSummaryPageView extends StatefulWidget {
   const EventTicketsSummaryPageView({
     super.key,
   });
+
+  @override
+  State<EventTicketsSummaryPageView> createState() =>
+      _EventTicketsSummaryPageViewState();
+}
+
+class _EventTicketsSummaryPageViewState
+    extends State<EventTicketsSummaryPageView> {
+  PaymentAccount? _selectedPaymentAccount;
+
+  void _autoSelectPaymentAccount() {
+    final pricingInfo =
+        context.read<CalculateEventTicketPricingBloc>().state.maybeWhen(
+              orElse: () => null,
+              success: (pricingInfo, isFree) => pricingInfo,
+            );
+    if (pricingInfo == null) return;
+    _selectPaymentAccount(pricingInfo.paymentAccounts?.firstOrNull);
+  }
+
+  void _selectPaymentAccount(PaymentAccount? paymentAccount) {
+    setState(() {
+      _selectedPaymentAccount = paymentAccount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +102,6 @@ class EventTicketsSummaryPageView extends StatelessWidget {
     final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketsBlocState.selectedTickets;
     final selectedCurrency = selectTicketsBlocState.selectedCurrency!;
-    final selectedNetwork = selectTicketsBlocState.selectedNetwork;
-    final isCryptoCurrency = selectedNetwork?.isNotEmpty == true;
     final isApplicationFormRequired =
         event.applicationProfileFields?.isNotEmpty == true ||
             event.applicationQuestions?.isNotEmpty == true;
@@ -107,15 +131,15 @@ class EventTicketsSummaryPageView extends StatelessWidget {
           listener: (context, state) {
             state.maybeWhen(
               success: (pricingInfo, isFree) {
-                if (isCryptoCurrency) return;
+                _autoSelectPaymentAccount();
                 if (pricingInfo.paymentAccounts?.isEmpty == true) return;
+                if (PaymentUtils.isCryptoPayment(pricingInfo)) return;
                 context.read<GetPaymentCardsBloc>().add(
                       GetPaymentCardsEvent.fetch(
                         input: GetStripeCardsInput(
                           limit: 25,
                           skip: 0,
-                          paymentAccount:
-                              pricingInfo.paymentAccounts?.first.id ?? '',
+                          paymentAccount: _selectedPaymentAccount?.id ?? '',
                         ),
                       ),
                     );
@@ -190,8 +214,9 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                               selectedTickets: selectedTickets,
                                               selectedCurrency:
                                                   selectedCurrency,
-                                              selectedNetwork: selectedNetwork,
                                               pricingInfo: pricingInfo,
+                                              selectedPaymentAccount:
+                                                  _selectedPaymentAccount,
                                             );
                                           }
                                           return EmptyList(
@@ -203,13 +228,50 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                           ticketTypes: ticketTypes,
                                           selectedTickets: selectedTickets,
                                           selectedCurrency: selectedCurrency,
-                                          selectedNetwork: selectedNetwork,
+                                          selectedPaymentAccount:
+                                              _selectedPaymentAccount,
                                           pricingInfo: pricingInfo,
                                         ),
                                       );
                                     },
                                   ),
                                   SizedBox(height: Spacing.medium),
+                                  BlocBuilder<CalculateEventTicketPricingBloc,
+                                      CalculateEventTicketPricingState>(
+                                    builder: (context, state) {
+                                      final pricingInfo = state.maybeWhen(
+                                        orElse: () => null,
+                                        failure: (pricingInfo, isFree) =>
+                                            pricingInfo,
+                                        success: (pricingInfo, isFree) =>
+                                            pricingInfo,
+                                      );
+                                      if (pricingInfo == null) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      final allPaymentAccounts =
+                                          pricingInfo.paymentAccounts ?? [];
+                                      if (!PaymentUtils.isCryptoPayment(
+                                            pricingInfo,
+                                          ) ||
+                                          allPaymentAccounts.isEmpty) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      return Column(
+                                        children: [
+                                          SelectPaymentAccountsDropdown(
+                                            paymentAccounts:
+                                                pricingInfo.paymentAccounts ??
+                                                    [],
+                                            selectedPaymentAccount:
+                                                _selectedPaymentAccount,
+                                            onChanged: _selectPaymentAccount,
+                                          ),
+                                          SizedBox(height: Spacing.medium),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                   if (event.applicationFormSubmission ==
                                       null) ...[
                                     Padding(
@@ -245,14 +307,18 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                   if (pricingInfo == null) {
                                     return const SizedBox.shrink();
                                   }
-                                  if (isCryptoCurrency) {
+
+                                  if (PaymentUtils.isCryptoPayment(
+                                    pricingInfo,
+                                  )) {
                                     return PayByCryptoFooter(
                                       selectedTickets: selectedTickets,
                                       selectedCurrency: selectedCurrency,
-                                      selectedNetwork: selectedNetwork,
                                       pricingInfo: pricingInfo,
                                       isFree: isFree,
                                       disabled: !isApplicationFormValid,
+                                      selectedPaymentAccount:
+                                          _selectedPaymentAccount,
                                     );
                                   }
 
@@ -261,6 +327,8 @@ class EventTicketsSummaryPageView extends StatelessWidget {
                                     isFree: isFree,
                                     selectedCurrency: selectedCurrency,
                                     pricingInfo: pricingInfo,
+                                    selectedPaymentAccount:
+                                        _selectedPaymentAccount,
                                     onCardAdded: (newCard) {
                                       context.read<GetPaymentCardsBloc>().add(
                                             GetPaymentCardsEvent
@@ -305,15 +373,15 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
     required this.ticketTypes,
     required this.selectedTickets,
     required this.selectedCurrency,
-    required this.selectedNetwork,
     required this.pricingInfo,
+    required this.selectedPaymentAccount,
   });
 
   final List<PurchasableTicketType> ticketTypes;
   final List<PurchasableItem> selectedTickets;
   final String selectedCurrency;
-  final String? selectedNetwork;
   final EventTicketsPricingInfo pricingInfo;
+  final PaymentAccount? selectedPaymentAccount;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +427,7 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                         ticketTypes: ticketTypes,
                         selectedTickets: selectedTickets,
                         selectedCurrency: selectedCurrency,
-                        selectedNetwork: selectedNetwork,
+                        selectedPaymentAccount: selectedPaymentAccount,
                         pricingInfo: pricingInfo,
                       ),
                       if (isPaymentRequired) ...[
@@ -374,7 +442,6 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                                       eventId: event.id ?? '',
                                       items: selectedTickets,
                                       currency: selectedCurrency,
-                                      network: selectedNetwork,
                                     ),
                                   ),
                                 );
@@ -392,8 +459,8 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                   padding: EdgeInsets.all(Spacing.small),
                   child: EventTotalPriceSummary(
                     selectedCurrency: selectedCurrency,
-                    selectedNetwork: selectedNetwork,
                     pricingInfo: pricingInfo,
+                    selectedPaymentAccount: selectedPaymentAccount,
                   ),
                 ),
               ],

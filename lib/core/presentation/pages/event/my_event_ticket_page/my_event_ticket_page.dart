@@ -158,7 +158,9 @@ class MyEventTicketPageView extends StatelessWidget {
                             },
                           ),
                           SizedBox(height: Spacing.medium),
-                          const AddTicketToCalendarButton(),
+                          AddTicketToCalendarButton(
+                            event: eventDetail,
+                          ),
                           BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
                             builder: (context, myTicketsState) {
                               final myTicket = myTicketsState.maybeWhen(
