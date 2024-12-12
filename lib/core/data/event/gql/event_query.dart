@@ -244,6 +244,10 @@ const eventApplicationFormFragment = '''
       _id
       question
       required
+      position
+      type
+      select_type
+      options
     }
     application_form_submission
     registration_disabled

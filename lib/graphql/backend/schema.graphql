@@ -26,7 +26,7 @@ type Query {
   getEvent(_id: MongoID, shortid: String): Event
   getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, end_from: DateTimeISO, end_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
-  getEventInvitedStatistics(_id: MongoID!): GetEventInvitedStatisticsResponse!
+  getEventInvitedStatistics(search: String, _id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
   getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
   getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
@@ -1122,6 +1122,16 @@ type TicketBase {
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
+  assigned_to_info: ConfidentialUserInfo
+}
+
+type ConfidentialUserInfo {
+  _id: MongoID
+  name: String!
+  display_name: String
+  image_avatar: String
+  username: String
+  email: String
 }
 
 type EventApplicationQuestion {
@@ -1132,7 +1142,7 @@ type EventApplicationQuestion {
   type: QuestionType
   options: [String!]
   select_type: SelectType
-  questions: [String!]
+  questions: [String!] @deprecated(reason: "Nolonger needed")
 }
 
 """The type of the question in the event application question"""
@@ -1269,6 +1279,7 @@ type EventApplicationAnswer {
   email: String
   question: MongoID!
   answer: String
+  answers: [String!]
   question_expanded: EventApplicationQuestion!
 }
 
@@ -1320,6 +1331,7 @@ type EventApplicationAnswerExport {
 type EventCheckin {
   _id: MongoID!
   active: Boolean!
+  created_at: DateTimeISO!
   event: MongoID!
   user: MongoID
   email: String
@@ -1800,6 +1812,7 @@ type EventJoinRequest {
   payment: JoinRequestPayment
   event_expanded: Event
   decided_by_expanded: User
+  ticket_types_expanded: [EventTicketType]
   non_login_user: NonloginUser
 }
 
@@ -2063,6 +2076,7 @@ type NewPayment {
   buyer_user: UserWithEmail
   formatted_due_amount: String
   formatted_total_amount: String
+  formatted_discount_amount: String
   formatted_fee_amount: String
   stripe_payment_info: StripePaymentInfo
   crypto_payment_info: CryptoPaymentInfo
@@ -2175,6 +2189,7 @@ type Chain {
   marketplace_version: Int
   biconomy_api_key: String
   ens_registry: String
+  proxy_admin_contract: String
   payment_config_registry_contract: String
   escrow_manager_contract: String
   relay_payment_contract: String
@@ -3072,9 +3087,12 @@ type Ticket {
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
+  assigned_to_info: ConfidentialUserInfo
   assigned_to_expanded: User
   event_expanded: Event
   type_expanded: EventTicketType
+  acquired_tickets: [Ticket!]
+  checkin: EventCheckin
 }
 
 type TicketStatistics {
@@ -3336,7 +3354,8 @@ type Mutation {
   createEventBroadcast(input: CreateEventBroadcastInput!, event: MongoID!): Boolean!
   updateEventBroadcast(input: UpdateEventBroadcastInput!, event: MongoID!, _id: MongoID!): Boolean!
   deleteEventBroadcast(event: MongoID!, _id: MongoID!): Boolean!
-  updateEventCheckin(input: UpdateEventCheckinInput!): EventCheckin!
+  updateEventCheckins(input: UpdateEventCheckinInput!): [EventCheckin!]!
+  updateEventCheckin(input: UpdateEventCheckinInput!): EventCheckin! @deprecated(reason: "\nprefer using updateEventCheckins instead,\nthis mutation will be removed after this new checkin apis,\nafter making sure FE/mobile has no longer using this mutation anymore\n")
   manageEventCohostRequests(input: ManageEventCohostRequestsInput!): Boolean!
   decideEventCohostRequest(input: DecideEventCohostRequestInput!): Boolean!
   syncEventAttestation(chain_id: String!, event: MongoID!): Boolean!
@@ -3732,6 +3751,7 @@ input QuestionInput {
 input EventApplicationAnswerInput {
   question: MongoID!
   answer: String
+  answers: [String!]
 }
 
 input CreateEventBroadcastInput {
@@ -3755,9 +3775,10 @@ input UpdateEventBroadcastInput {
 
 input UpdateEventCheckinInput {
   active: Boolean!
-  shortid: String
-  event: MongoID
-  user: MongoID
+  shortids: [String!]
+  shortid: String @deprecated(reason: "Prefer using `shortids` along with `updateEventCheckins` mutation instead")
+  event: MongoID @deprecated(reason: "use shortIds instead")
+  user: MongoID @deprecated(reason: "use shortIds instead")
 }
 
 input ManageEventCohostRequestsInput {
