@@ -119,19 +119,19 @@ android {
     productFlavors {
         development {
             dimension "default"
-            resValue "string", "app_name", "Lemonade Social Development"
+            resValue "string", "app_name", "Lemonade Development"
             resValue "string", "uri_scheme", "staging.lemonadesocial"
             applicationId = "social.lemonade.app.development"
         }
         staging {
             dimension "default"
-            resValue "string", "app_name", "Lemonade Social Staging"
+            resValue "string", "app_name", "Lemonade Staging"
             resValue "string", "uri_scheme", "staging.lemonadesocial"
             applicationId = "social.lemonade.app.staging"
         }
         production {
             dimension "default"
-            resValue "string", "app_name", "Lemonade Social"
+            resValue "string", "app_name", "Lemonade"
             resValue "string", "uri_scheme", "lemonadesocial"
             applicationId = "social.lemonade.app"
             manifestPlaceholders += [
