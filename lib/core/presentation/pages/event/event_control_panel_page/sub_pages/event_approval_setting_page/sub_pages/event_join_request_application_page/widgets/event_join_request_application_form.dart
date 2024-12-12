@@ -9,6 +9,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -112,9 +113,14 @@ class EventJoinRequestApplicationForm extends StatelessWidget {
                   (element) =>
                       element.question == eventApplicationQuestions[index].id,
                 );
+                final question = eventApplicationQuestions[index];
+                final displayedAnswer =
+                    question.type == Enum$QuestionType.options
+                        ? answer?.answers?.join(', ')
+                        : answer?.answer;
                 return _FormField(
-                  label: eventApplicationQuestions[index].question ?? '',
-                  value: answer?.answer ?? '',
+                  label: question.question ?? '',
+                  value: displayedAnswer,
                 );
               },
               separatorBuilder: (context, index) =>

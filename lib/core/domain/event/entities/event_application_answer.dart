@@ -11,6 +11,7 @@ class EventApplicationAnswer with _$EventApplicationAnswer {
   factory EventApplicationAnswer({
     String? id,
     String? answer,
+    List<String>? answers,
     String? question,
     String? user,
     EventApplicationQuestion? questionExpanded,
@@ -20,6 +21,7 @@ class EventApplicationAnswer with _$EventApplicationAnswer {
       EventApplicationAnswer(
         id: dto.id,
         answer: dto.answer,
+        answers: dto.answers,
         question: dto.question,
         user: dto.user,
         questionExpanded: dto.questionExpanded != null

@@ -10,6 +10,7 @@ class EventApplicationAnswerDto with _$EventApplicationAnswerDto {
   factory EventApplicationAnswerDto({
     @JsonKey(name: '_id') String? id,
     String? answer,
+    List<String>? answers,
     String? question,
     String? user,
     @JsonKey(name: 'question_expanded')

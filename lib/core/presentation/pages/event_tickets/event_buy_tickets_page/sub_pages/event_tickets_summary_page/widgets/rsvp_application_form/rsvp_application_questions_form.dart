@@ -3,10 +3,11 @@ import 'package:app/core/application/event/event_application_form_bloc/event_app
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/rsvp_application_form/widgets/rsvp_application_multi_options_question.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/rsvp_application_form/widgets/rsvp_application_single_option_question.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/rsvp_application_form/widgets/rsvp_application_text_question.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
@@ -30,44 +31,75 @@ class RSVPApplicationQuestionsForm extends StatelessWidget {
     }
     return BlocBuilder<EventApplicationFormBloc, EventApplicationFormBlocState>(
       builder: (context, state) {
-        final colorScheme = Theme.of(context).colorScheme;
         return Column(
+          mainAxisSize: MainAxisSize.min,
           children: applicationQuestions.map((applicationQuestion) {
-            return Column(
-              children: [
-                LemonTextField(
-                  filled: true,
-                  fillColor: LemonColor.atomicBlack,
-                  borderColor: colorScheme.outlineVariant,
-                  label: applicationQuestion.question,
-                  labelStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  hintText: '',
-                  initialText: state.answers
-                          .firstWhereOrNull(
-                            (answer) =>
-                                answer.question == applicationQuestion.id,
-                          )
-                          ?.answer ??
-                      '',
-                  onChange: (value) {
-                    context.read<EventApplicationFormBloc>().add(
-                          EventApplicationFormBlocEvent.updateAnswer(
-                            event: event,
-                            questionId: applicationQuestion.id ?? '',
-                            answer: value,
-                          ),
-                        );
-                  },
-                  showRequired: applicationQuestion.isRequired,
-                ),
-                SizedBox(
-                  height: Spacing.smMedium,
-                ),
-              ],
+            final answerInput = state.answers.firstWhereOrNull(
+              (answer) => answer.question == applicationQuestion.id,
             );
+            if (applicationQuestion.type == Enum$QuestionType.text) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RsvpApplicationTextQuestion(
+                    question: applicationQuestion,
+                    answerInput: answerInput,
+                    onChange: (value) {
+                      context.read<EventApplicationFormBloc>().add(
+                            EventApplicationFormBlocEvent.updateAnswer(
+                              event: event,
+                              questionId: applicationQuestion.id ?? '',
+                              answer: value,
+                            ),
+                          );
+                    },
+                  ),
+                  SizedBox(
+                    height: Spacing.small,
+                  ),
+                ],
+              );
+            }
+
+            if (applicationQuestion.type == Enum$QuestionType.options) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (applicationQuestion.selectType == Enum$SelectType.single)
+                    RsvpApplicationSingleOptionQuestion(
+                      question: applicationQuestion,
+                      answerInput: answerInput,
+                      onChange: (value) {
+                        context.read<EventApplicationFormBloc>().add(
+                              EventApplicationFormBlocEvent.updateAnswer(
+                                event: event,
+                                questionId: applicationQuestion.id ?? '',
+                                answers: [value],
+                              ),
+                            );
+                      },
+                    ),
+                  if (applicationQuestion.selectType == Enum$SelectType.multi)
+                    RsvpApplicationMultiOptionsQuestion(
+                      question: applicationQuestion,
+                      answerInput: answerInput,
+                      onChange: (value) {
+                        context.read<EventApplicationFormBloc>().add(
+                              EventApplicationFormBlocEvent.updateAnswer(
+                                event: event,
+                                questionId: applicationQuestion.id ?? '',
+                                answers: value,
+                              ),
+                            );
+                      },
+                    ),
+                  SizedBox(
+                    height: Spacing.small,
+                  ),
+                ],
+              );
+            }
+            return const SizedBox.shrink();
           }).toList(),
         );
       },

@@ -6,6 +6,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:collection/collection.dart';
 
 part 'event_application_form_bloc.freezed.dart';
 
@@ -53,6 +54,7 @@ class EventApplicationFormBloc
               .map(
                 (item) => Input$EventApplicationAnswerInput(
                   answer: "",
+                  answers: [],
                   question: item.id ?? '',
                 ),
               )
@@ -85,7 +87,10 @@ class EventApplicationFormBloc
     // final applicationQuestions = event.event?.applicationQuestions ?? [];
     final newAnswers = state.answers.map((answer) {
       if (answer.question == event.questionId) {
-        return answer.copyWith(answer: event.answer);
+        return answer.copyWith(
+          answer: event.answer,
+          answers: event.answers,
+        );
       }
       return answer;
     }).toList();
@@ -129,10 +134,11 @@ class EventApplicationFormBloc
 
     // Check if state.answers contain these required questions or not
     final isValidAnswersField = requiredQuestions.every((requiredQuestion) {
-      final matchingAnswer = state.answers.firstWhere(
+      final matchingAnswer = state.answers.firstWhereOrNull(
         (answer) => answer.question == requiredQuestion.id,
       );
-      return !matchingAnswer.answer.isNullOrEmpty;
+      return (matchingAnswer?.answers?.isNotEmpty ?? false) ||
+          matchingAnswer?.answer?.isNotEmpty == true;
     });
     return state.copyWith(isValid: isValidProfileFields && isValidAnswersField);
   }
@@ -152,7 +158,8 @@ class EventApplicationFormBlocEvent with _$EventApplicationFormBlocEvent {
   factory EventApplicationFormBlocEvent.updateAnswer({
     required Event? event,
     required String questionId,
-    required String answer,
+    String? answer,
+    List<String>? answers,
   }) = EventApplicationFormBlocEventUpdateAnswer;
 }
 
