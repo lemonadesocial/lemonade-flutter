@@ -65,14 +65,17 @@ class RsvpApplicationMultiOptionsQuestionState
               final selected = selectedOptions.contains(option);
               return InkWell(
                 onTap: () {
+                  final newSelectedOptions = [...selectedOptions];
                   setState(() {
                     if (selected) {
-                      selectedOptions.remove(option);
+                      selectedOptions = newSelectedOptions
+                          .where((element) => element != option)
+                          .toList();
                     } else {
-                      selectedOptions.add(option);
+                      selectedOptions = [...newSelectedOptions, option];
                     }
-                    widget.onChange(selectedOptions);
                   });
+                  widget.onChange(selectedOptions);
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(

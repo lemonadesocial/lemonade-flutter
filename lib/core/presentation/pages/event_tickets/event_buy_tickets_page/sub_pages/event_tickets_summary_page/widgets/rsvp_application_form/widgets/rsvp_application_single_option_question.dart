@@ -34,7 +34,9 @@ class _RsvpApplicationSingleOptionQuestionState
   @override
   void initState() {
     super.initState();
-    selectedItem = widget.answerInput?.answer;
+    setState(() {
+      selectedItem = widget.answerInput?.answers?.firstOrNull;
+    });
   }
 
   void handleSelection(String value) {
