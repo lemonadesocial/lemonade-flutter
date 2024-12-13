@@ -2,6 +2,7 @@ import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -49,13 +50,26 @@ class _RsvpApplicationSingleOptionQuestionState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.question.question ?? '',
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
+        Text.rich(
+          TextSpan(
+            text: widget.question.question ?? '',
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+            ),
+            children: [
+              if (widget.question.isRequired == true)
+                TextSpan(
+                  text: ' *',
+                  style: Typo.mediumPlus.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+            ],
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -80,9 +94,11 @@ class _RsvpApplicationSingleOptionQuestionState
               child: Row(
                 children: [
                   Text(
-                    selectedItem ?? '',
+                    selectedItem ?? t.common.selectAnOption,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: selectedItem == null
+                          ? colorScheme.onSecondary
+                          : colorScheme.onPrimary,
                     ),
                   ),
                   const Spacer(),
