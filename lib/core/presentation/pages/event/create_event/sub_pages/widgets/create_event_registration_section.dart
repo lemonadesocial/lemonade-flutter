@@ -375,7 +375,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                     trailingIcon: Assets.icons.icArrowRight,
                     onTap: () {
                       AutoRouter.of(context).navigate(
-                        EventApplicationFormSettingRoute(),
+                        const EventApplicationFormSettingRoute(),
                       );
                     },
                     value: applicationFormCount > 0
