@@ -256,8 +256,9 @@ class ModifyTicketTypeBloc
                     (item) => TicketPriceInput(
                       currency: item.currency ?? '',
                       cost: item.cost ?? '0',
-                      network: item.network,
                       isDefault: item.isDefault,
+                      // TODO: ticket setup
+                      // paymentAccounts: []
                     ),
                   )
                   .toList() ??

@@ -36,7 +36,7 @@ fragment PaymentAccountFragment on NewPaymentAccount {
       currencies
       currency_map
       address
-      networks
+      network
     }
 
     ... on EthereumRelayAccount {
@@ -45,6 +45,15 @@ fragment PaymentAccountFragment on NewPaymentAccount {
       currency_map
       network
       payment_splitter_contract
+    }
+
+    ... on EthereumStakeAccount {
+      currencies
+      currency_map
+      address
+      network
+      config_id
+      requirement_checkin_before
     }
 
     ... on StripeAccount {

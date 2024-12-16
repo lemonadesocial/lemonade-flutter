@@ -1,6 +1,11 @@
+import 'package:app/core/data/event/gql/event_tickets_query.dart';
+import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 final getEventPaymentsQuery = gql('''
+  $paymentAccountFragment
+  $eventTicketPriceFragment
+
   query(
         \$user: MongoID,
         \$ticket_assignees: MongoID,
@@ -50,10 +55,7 @@ final getEventPaymentsQuery = gql('''
                 _id,
                 title,
                 prices {
-                  currency
-                  network
-                  cost
-                  default
+                  ...eventTicketPriceFragment
                 }
                 description,
               },

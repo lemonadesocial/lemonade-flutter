@@ -1,13 +1,15 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/utils/date_utils.dart';
+import 'package:app/core/service/device_calendar/device_calendar_service.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:duration/duration.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:collection/collection.dart';
@@ -200,7 +202,7 @@ class EventUtils {
     final startDateStr = dateFormatter.format(timezoneStartDate);
     final startTimeStr = timeFormatter.format(timezoneStartDate).toLowerCase();
     final endTimeStr = timeFormatter.format(timezoneEndDate).toLowerCase();
-    final gmtOffset = DateUtils.getGMTOffsetText(event.timezone!);
+    final gmtOffset = date_utils.DateUtils.getGMTOffsetText(event.timezone!);
 
     if (isSameDay) {
       return (startDateStr, '$startTimeStr - $endTimeStr $gmtOffset');
@@ -262,5 +264,21 @@ class EventUtils {
       return visibleCohosts.where((user) => !isCohost(user.userId)).toList();
     }
     return visibleCohosts;
+  }
+
+  static DeviceCalendarEvent generateDeviceCalendarEvent(
+    BuildContext context, {
+    required Event event,
+  }) {
+    final eventUrl = '${AppConfig.webUrl}/e/${event.shortId}';
+    final t = Translations.of(context);
+    return DeviceCalendarEvent(
+      title: event.title ?? '',
+      description: t.common.deviceCalendar.eventPlaceholder(url: eventUrl),
+      startTime: event.start ?? DateTime.now(),
+      endTime: event.end ?? DateTime.now(),
+      location: EventUtils.getAddress(event: event),
+      url: eventUrl,
+    );
   }
 }

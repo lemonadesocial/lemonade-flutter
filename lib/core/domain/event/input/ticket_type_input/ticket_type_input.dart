@@ -8,6 +8,6 @@ class TicketPriceInput with _$TicketPriceInput {
     required String currency,
     required String cost,
     bool? isDefault,
-    String? network,
+    List<String>? paymentAccounts,
   }) = _TicketPriceInput;
 }

@@ -57,7 +57,8 @@ class TicketTierPricingItem extends StatelessWidget {
     );
     double? doubleAmount;
     String? erc20DisplayedAmount;
-    final isERC20 = ticketPrice.network?.isNotEmpty == true;
+    // TODO: ticket setup
+    final isERC20 = currencyInfo?.network?.isNotEmpty == true;
     if (isERC20) {
       erc20DisplayedAmount = Web3Utils.formatCryptoCurrency(
         BigInt.parse(ticketPrice.cost),
@@ -74,9 +75,9 @@ class TicketTierPricingItem extends StatelessWidget {
     }
 
     return FutureBuilder<Either<Failure, Chain?>>(
-      future: ticketPrice.network?.isNotEmpty == true
+      future: currencyInfo?.network?.isNotEmpty == true
           ? getIt<Web3Repository>()
-              .getChainById(chainId: ticketPrice.network ?? '')
+              .getChainById(chainId: currencyInfo!.network!)
           : Future.value(
               const Right(null),
             ),

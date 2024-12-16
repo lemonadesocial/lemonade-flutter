@@ -4,7 +4,12 @@ import 'dart:typed_data';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/chain_metadata.dart';
+import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/web3/web3_contract_service.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:collection/collection.dart';
+import 'package:convert/convert.dart';
 import 'package:intl/intl.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
@@ -100,5 +105,53 @@ class Web3Utils {
     }
 
     return receipt;
+  }
+
+  static Future<String> approveSpender({
+    required String erc20Address,
+    required String from,
+    required String spender,
+    required BigInt amount,
+    required Chain chain,
+  }) async {
+    final erc20Contract = Web3ContractService.getERC20Contract(
+      erc20Address,
+    );
+    final approveContractCall = Transaction.callContract(
+      contract: erc20Contract,
+      function: erc20Contract.function('approve'),
+      parameters: [
+        EthereumAddress.fromHex(
+          spender,
+        ),
+        amount,
+      ],
+    );
+    final ethereumTxn = EthereumTransaction(
+      from: from,
+      to: erc20Address,
+      value: BigInt.zero.toRadixString(16),
+      data: hex.encode(List<int>.from(approveContractCall.data!)),
+    );
+    final txHash = await getIt<WalletConnectService>().requestTransaction(
+      chainId: chain.fullChainId ?? '',
+      transaction: ethereumTxn,
+    );
+    if (txHash.isEmpty || !txHash.startsWith("0x")) {
+      throw Exception(txHash);
+    }
+    await Future.delayed(
+      Duration(seconds: chain.completedBlockTime),
+    );
+    final receipt = await Web3Utils.waitForReceipt(
+      rpcUrl: chain.rpcUrl ?? '',
+      txHash: txHash,
+      maxAttempt: 20,
+      deplayDuration: const Duration(seconds: 5),
+    );
+    if (receipt?.status != true) {
+      throw Exception('Failed to approve ERC20: $txHash');
+    }
+    return txHash;
   }
 }

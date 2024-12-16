@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/gql/event_tickets_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/core/data/payment/payment_query.dart';
 
@@ -72,6 +73,8 @@ const eventOfferFragment = '''
 ''';
 
 const eventTicketTypesFragment = '''
+  $eventTicketPriceFragment
+
   fragment eventTicketTypesFragment on Event {
     event_ticket_types {
       _id
@@ -81,9 +84,7 @@ const eventTicketTypesFragment = '''
       event
       title
       prices {
-        cost
-        currency
-        default
+        ...eventTicketPriceFragment
       }
       ticket_limit_per
       ticket_limit
@@ -146,8 +147,6 @@ const eventProgramFragment = '''
 ''';
 
 const eventPaymentAccountFragment = '''
-  $paymentAccountFragment
-
   fragment eventPaymentAccountFragment on Event {
     payment_accounts_new,
     payment_accounts_expanded {
@@ -161,6 +160,7 @@ const eventFragment = '''
   $eventAddressFragment
   $eventPeopleFragment
   $eventMatrixFragment
+
   fragment eventFields on Event {
     _id
     shortid
@@ -244,6 +244,10 @@ const eventApplicationFormFragment = '''
       _id
       question
       required
+      position
+      type
+      select_type
+      options
     }
     application_form_submission
     registration_disabled
@@ -316,6 +320,7 @@ const eventSubEventFragment = '''
 ''';
 
 final getEventDetailQuery = gql('''
+  $paymentAccountFragment
   $eventFragment
   $eventOfferFragment
   $eventPaymentAccountFragment

@@ -76,7 +76,11 @@
         "confirmingTransactionDescription": "Your transaction is being verified. This could sometimes take up to $duration...",
         "viewTransaction": "View transaction",
         "processingPayment": "Processing payment",
-        "processingPaymentDescription": "Your payment is being processed. This could sometimes take up to 60 seconds"
+        "processingPaymentDescription": "Your payment is being processed. This could sometimes take up to 60 seconds",
+        "network": "Network",
+        "chooseNetwork": "Choose your network",
+        "stakingTicket": "Staking",
+        "whileListedTicket": "Whitelist Exclusive"
     },
     "eventOrder": {
         "itemTotal": "Item total",

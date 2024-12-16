@@ -1,4 +1,5 @@
 # import '../fragment/event_fragment.graphql'
+# import '../fragment/event_ticket_fragment.graphql'
 
 query GetEvents(
   $highlight: Boolean
@@ -28,9 +29,7 @@ query GetEvents(
     event_ticket_types {
       _id
       prices {
-        currency
-        network
-        cost
+        ...EventTicketPrice
       }
     }
   }

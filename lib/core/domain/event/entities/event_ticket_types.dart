@@ -2,6 +2,8 @@ import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_typ
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_category.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_types.freezed.dart';
@@ -201,18 +203,53 @@ class EventTicketPrice with _$EventTicketPrice {
     String? cost,
     BigInt? cryptoCost,
     double? fiatCost,
-    String? network,
     String? currency,
     bool? isDefault,
+    List<String?>? paymentAccounts,
+    List<PaymentAccount>? paymentAccountsExpanded,
   }) = _EventTicketPrice;
+
+  bool get isCrypto =>
+      paymentAccountsExpanded?.isNotEmpty == true &&
+      (paymentAccountsExpanded?.every(
+            (paymentAccount) =>
+                paymentAccount.type != PaymentAccountType.digital,
+          ) ??
+          false);
+
+  bool get isFiat =>
+      // this handle where free ticket not have payment accounts
+      paymentAccountsExpanded?.isEmpty == true ||
+      (paymentAccountsExpanded?.every(
+            (paymentAccount) =>
+                paymentAccount.type == PaymentAccountType.digital,
+          ) ??
+          false);
+
+  bool get isFree => cost == '0';
+
+  List<String> get supportedNetworks {
+    if (isFiat) return [];
+
+    return paymentAccountsExpanded
+            ?.map((paymentAccount) => paymentAccount.accountInfo?.network)
+            .whereType<String>()
+            .toList() ??
+        [];
+  }
 
   factory EventTicketPrice.fromDto(EventTicketPriceDto dto) => EventTicketPrice(
         cost: dto.cost,
         fiatCost: dto.cost != null ? double.tryParse(dto.cost!) : null,
         cryptoCost: dto.cost != null ? BigInt.tryParse(dto.cost!) : null,
-        network: dto.network,
         currency: dto.currency,
         isDefault: dto.isDefault,
+        paymentAccounts: dto.paymentAccounts,
+        paymentAccountsExpanded: dto.paymentAccountsExpanded != null
+            ? List.from(dto.paymentAccountsExpanded ?? [])
+                .map((item) => PaymentAccount.fromDto(item))
+                .toList()
+            : [],
       );
 
   factory EventTicketPrice.fromJson(Map<String, dynamic> json) =>

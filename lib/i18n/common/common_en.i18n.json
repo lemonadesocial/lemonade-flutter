@@ -80,7 +80,8 @@
         "apply": "Apply",
         "skip": "Skip",
         "confirm": "Confirm",
-        "vote": "Vote"
+        "vote": "Vote",
+        "addToCalendar": "Add to calendar"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -118,6 +119,7 @@
     "done": "Done",
     "processing": "Processing",
     "selectItem": "Select item",
+    "selectAnOption": "Select an option",
     "start": "Start",
     "areYouSure": "Are you sure ?",
     "next": "Next",
@@ -241,5 +243,12 @@
     "starting": "starting",
     "ago": "ago",
     "content": "Content",
-    "notAssigned": "Not assigned"
+    "notAssigned": "Not assigned",
+    "deviceCalendar": {
+        "addToCalendarTitle": "Add to calendar",
+        "addToCalendarDescription": "When you create or register for an event, you will get an email that automatically adds it to your Google Calendar. You can also add it manually below.",
+        "eventPlaceholder": "Get up-to-date information at $url",
+        "addToGoogleCalendar": "Add to Google Calendar",
+        "addToAppleCalendar": "Add to Apple Calendar"
+    }
 }

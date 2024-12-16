@@ -104,7 +104,8 @@ class ModifyTicketPriceBloc
     return TicketPriceInput(
       currency: state.currency ?? '',
       cost: transformedCost,
-      network: state.network?.chainId ?? '',
+      // TODO: ticket setup
+      // paymentAccounts: []
     );
   }
 }

@@ -6,11 +6,15 @@ query GetEventApplicationAnswers(
   getEventApplicationAnswers(event: $event, user: $user, email: $email) {
     _id
     answer
+    answers
     question
     question_expanded {
-      question
       _id
+      question
       required
+      type
+      select_type
+      options
     }
     user
   }

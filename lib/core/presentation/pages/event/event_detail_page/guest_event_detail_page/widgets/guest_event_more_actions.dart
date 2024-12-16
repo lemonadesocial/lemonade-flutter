@@ -19,6 +19,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/core/presentation/widgets/common/add_to_calendar_bottomsheet/add_to_calendar_bottomsheet.dart';
 
 class GuestEventMoreActions extends StatelessWidget {
   final reportBloc = ReportBloc();
@@ -31,6 +32,13 @@ class GuestEventMoreActions extends StatelessWidget {
     required this.isAppBarCollapsed,
   });
 
+  void _addToCalendar(BuildContext context) {
+    AddToCalendarBottomSheet.show(
+      context,
+      EventUtils.generateDeviceCalendarEvent(context, event: event),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -38,12 +46,21 @@ class GuestEventMoreActions extends StatelessWidget {
     final authState = context.read<AuthBloc>().state;
     final userId = AuthUtils.getUserId(context);
     final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
-
+    final addToCalendarDropdownItem = DropdownItemDpo(
+      leadingIcon: Assets.icons.icCalendar.svg(
+        width: Sizing.xSmall,
+        height: Sizing.xSmall,
+      ),
+      label: t.common.actions.addToCalendar,
+      value: "add_to_calendar",
+      customColor: colorScheme.onPrimary,
+    );
     return FloatingFrostedGlassDropdown(
       offset: Offset(0, Sizing.xxSmall),
       items: isOwnEvent
           ? []
           : [
+              addToCalendarDropdownItem,
               DropdownItemDpo(
                 leadingIcon: Assets.icons.icRoundReport.svg(
                   width: Sizing.xSmall,
@@ -58,6 +75,10 @@ class GuestEventMoreActions extends StatelessWidget {
         SnackBarUtils.showComingSoon();
       },
       onItemPressed: (item) {
+        if (item?.value == 'add_to_calendar') {
+          _addToCalendar(context);
+          return;
+        }
         if (item?.value == 'report') {
           authState.maybeWhen(
             authenticated: (_) => BottomSheetUtils.showSnapBottomSheet(

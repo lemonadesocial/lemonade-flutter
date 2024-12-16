@@ -1,4 +1,5 @@
 # import '../fragment/event_fragment.graphql'
+# import '../fragment/event_ticket_fragment.graphql'
 
 query GetHostingEvents(
   $user: MongoID!
@@ -6,14 +7,17 @@ query GetHostingEvents(
   $limit: Int = 100
   $skip: Int = 0
 ) {
-  events: getHostingEvents(user: $user, state: $state, limit: $limit, skip: $skip) {
+  events: getHostingEvents(
+    user: $user
+    state: $state
+    limit: $limit
+    skip: $skip
+  ) {
     ...EventFields
     event_ticket_types {
       _id
       prices {
-        currency
-        network
-        cost
+        ...EventTicketPrice
       }
     }
   }

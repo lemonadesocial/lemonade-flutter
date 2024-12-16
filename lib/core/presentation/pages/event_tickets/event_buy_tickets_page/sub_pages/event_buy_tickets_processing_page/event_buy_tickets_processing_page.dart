@@ -12,6 +12,7 @@ import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -42,12 +43,14 @@ import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
 @RoutePage()
 class EventBuyTicketsProcessingPage extends StatelessWidget {
-  const EventBuyTicketsProcessingPage({super.key});
+  final PaymentAccount? selectedPaymentAccount;
+  const EventBuyTicketsProcessingPage({
+    super.key,
+    required this.selectedPaymentAccount,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final selectedNetwork =
-        context.read<SelectEventTicketsBloc>().state.selectedNetwork;
     final event = context.read<EventProviderBloc>().event;
     return MultiBlocProvider(
       providers: [
@@ -56,21 +59,26 @@ class EventBuyTicketsProcessingPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => BuyTicketsWithCryptoBloc(
-            selectedNetwork: selectedNetwork,
+            selectedPaymentAccount: selectedPaymentAccount,
           ),
         ),
         BlocProvider(
           create: (context) => RedeemTicketsBloc(event: event),
         ),
       ],
-      child: const EventBuyTicketsProcessingPageView(),
+      child: EventBuyTicketsProcessingPageView(
+        selectedPaymentAccount: selectedPaymentAccount,
+      ),
     );
   }
 }
 
 class EventBuyTicketsProcessingPageView extends StatefulWidget {
+  final PaymentAccount? selectedPaymentAccount;
+
   const EventBuyTicketsProcessingPageView({
     super.key,
+    required this.selectedPaymentAccount,
   });
 
   @override
@@ -109,7 +117,7 @@ class _EventBuyTicketsProcessingPageViewState
       context.read<SelectEventTicketsBloc>().state.selectedCurrency;
 
   String? get selectedNetwork =>
-      context.read<SelectEventTicketsBloc>().state.selectedNetwork;
+      widget.selectedPaymentAccount?.accountInfo?.network;
 
   bool get isCryptoCurrency => selectedNetwork?.isNotEmpty == true;
 
@@ -166,11 +174,11 @@ class _EventBuyTicketsProcessingPageViewState
             input: BuyTicketsInput(
               discount: pricingInfo?.promoCode,
               eventId: event.id ?? '',
-              accountId: pricingInfo?.paymentAccounts?.firstOrNull?.id ?? '',
+              accountId: widget.selectedPaymentAccount?.id ?? '',
               currency: selectedCurrency ?? '',
               items: selectedTickets,
               total: pricingInfo?.total ?? '0',
-              fee: pricingInfo?.paymentAccounts?.firstOrNull?.fee ?? '0',
+              fee: widget.selectedPaymentAccount?.fee ?? '0',
               transferParams: isFree
                   ? null
                   : BuyTicketsTransferParamsInput(
@@ -187,13 +195,12 @@ class _EventBuyTicketsProcessingPageViewState
             userWalletAddress: userWalletAddress,
             input: BuyTicketsInput(
               eventId: event.id ?? '',
-              accountId: pricingInfo?.paymentAccounts?.firstOrNull?.id ?? '',
+              accountId: widget.selectedPaymentAccount?.id ?? '',
               currency: selectedCurrency ?? '',
               items: selectedTickets,
               total: pricingInfo?.total ?? '0',
-              network: selectedNetwork ?? '',
               discount: pricingInfo?.promoCode,
-              fee: pricingInfo?.paymentAccounts?.firstOrNull?.fee,
+              fee: widget.selectedPaymentAccount?.fee,
             ),
           ),
         );
@@ -410,7 +417,7 @@ class _EventBuyTicketsProcessingPageViewState
           onSigned: (data) {
             // NOTE: Auto trigger transaction when user done signing signature
             final currencyInfo = PaymentUtils.getCurrencyInfo(
-              pricingInfo,
+              widget.selectedPaymentAccount,
               currency: selectedCurrency ?? '',
             );
 
@@ -418,14 +425,12 @@ class _EventBuyTicketsProcessingPageViewState
             final totalCryptoAmount =
                 (pricingInfo?.cryptoTotal ?? BigInt.zero) +
                     // add fee if available for EthereumRelay
-                    (pricingInfo?.paymentAccounts?.firstOrNull?.cryptoFee ??
-                        BigInt.zero);
+                    (widget.selectedPaymentAccount?.cryptoFee ?? BigInt.zero);
             context.read<BuyTicketsWithCryptoBloc>().add(
                   BuyTicketsWithCryptoEvent.makeTransaction(
                     from: userWalletAddress,
                     amount: totalCryptoAmount,
-                    to: pricingInfo?.paymentAccounts?.firstOrNull?.accountInfo
-                            ?.address ??
+                    to: widget.selectedPaymentAccount?.accountInfo?.address ??
                         '',
                     currencyInfo: currencyInfo,
                     currency: selectedCurrency ?? '',
@@ -532,7 +537,10 @@ class _EventBuyTicketsProcessingPageViewState
                       orElse: () => const SizedBox.shrink(),
                       loading: (data) {
                         if (data.signature == null) {
-                          return const WalletSignaturePendingView();
+                          return WalletSignaturePendingView(
+                            selectedPaymentAccount:
+                                widget.selectedPaymentAccount,
+                          );
                         }
                         return const PaymentProcessingView();
                       },

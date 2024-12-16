@@ -1,5 +1,6 @@
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/presentation/widgets/animation/circular_animation_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/payment_utils.dart';
@@ -15,8 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class WalletSignaturePendingView extends StatelessWidget {
+  final PaymentAccount? selectedPaymentAccount;
   const WalletSignaturePendingView({
     super.key,
+    required this.selectedPaymentAccount,
   });
 
   @override
@@ -36,7 +39,7 @@ class WalletSignaturePendingView extends StatelessWidget {
           success: (pricingInfo, isFree) => pricingInfo,
         );
         final currencyInfo = PaymentUtils.getCurrencyInfo(
-          pricingInfo,
+          selectedPaymentAccount,
           currency: selectedCurrency ?? '',
         );
         final amountText = Web3Utils.formatCryptoCurrency(

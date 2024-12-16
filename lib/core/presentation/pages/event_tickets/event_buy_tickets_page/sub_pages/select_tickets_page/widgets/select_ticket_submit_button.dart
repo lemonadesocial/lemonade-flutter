@@ -16,7 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SelectTicketSubmitButton extends StatelessWidget {
   final SelectTicketsPaymentMethod paymentMethod;
   final String? selectedCurrency;
-  final String? selectedNetwork;
   final Either<double, BigInt>? totalAmount;
   final Event event;
 
@@ -25,7 +24,6 @@ class SelectTicketSubmitButton extends StatelessWidget {
     required this.paymentMethod,
     required this.totalAmount,
     required this.selectedCurrency,
-    required this.selectedNetwork,
     required this.event,
   });
 
@@ -45,6 +43,7 @@ class SelectTicketSubmitButton extends StatelessWidget {
         child: Opacity(
           opacity: state.isSelectionValid && !isLoading ? 1 : 0.5,
           child: LinearGradientButton.primaryButton(
+            loadingWhen: isLoading,
             onTap: () {
               if (!state.isSelectionValid || isLoading) return;
               if (!state.isPaymentRequired &&
