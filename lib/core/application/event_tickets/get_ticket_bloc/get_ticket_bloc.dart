@@ -17,7 +17,9 @@ class GetTicketBloc extends Bloc<GetTicketEvent, GetTicketState> {
     GetTicketEventFetch event,
     Emitter emit,
   ) async {
-    emit(GetTicketState.loading());
+    if (event.showLoading) {
+      emit(GetTicketState.loading());
+    }
 
     final result = await _eventTicketRepository.getTicket(
       shortId: event.shortId,
@@ -38,6 +40,7 @@ class GetTicketBloc extends Bloc<GetTicketEvent, GetTicketState> {
 class GetTicketEvent with _$GetTicketEvent {
   factory GetTicketEvent.fetch({
     required String shortId,
+    required bool showLoading,
   }) = GetTicketEventFetch;
 }
 

@@ -1,3 +1,4 @@
+import 'package:app/core/application/event_tickets/get_ticket_bloc/get_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -13,8 +14,10 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ScanQrTicketInformationItem extends StatelessWidget {
   const ScanQrTicketInformationItem({super.key, required this.ticket});
@@ -111,6 +114,12 @@ class _CheckinButton extends StatelessWidget {
           SnackBarUtils.showSuccess(
             message: t.event.scanQR.checkedinSuccessfully,
           );
+          context.read<GetTicketBloc>().add(
+                GetTicketEventFetch(
+                  shortId: ticket.shortId ?? "",
+                  showLoading: false,
+                ),
+              );
         }
       },
       child: Container(
@@ -169,22 +178,77 @@ class _CheckedInView extends StatelessWidget {
           ),
         ),
         DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            icon: Icon(
+          child: DropdownButton2<String>(
+            customButton: Icon(
               Icons.more_vert,
               color: colorScheme.onSurface,
             ),
-            onChanged: (String? newValue) {
-              if (newValue == 'undo') {
-                // Handle undo check-in action
-              }
-            },
-            items: <DropdownMenuItem<String>>[
+            items: [
               DropdownMenuItem<String>(
                 value: 'undo',
-                child: Text('Undo Check In'),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (filter) => Assets.icons.icRemoveUser.svg(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        colorFilter: filter,
+                      ),
+                    ),
+                    SizedBox(width: Spacing.xSmall),
+                    Text(
+                      t.event.scanQR.undoCheckIn,
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
+            onChanged: (String? newValue) async {
+              if (newValue == 'undo') {
+                final response = await showFutureLoadingDialog(
+                  context: context,
+                  future: () =>
+                      getIt<AppGQL>().client.mutate$UpdateEventCheckin(
+                            Options$Mutation$UpdateEventCheckin(
+                              variables: Variables$Mutation$UpdateEventCheckin(
+                                input: Input$UpdateEventCheckinInput(
+                                  active: false,
+                                  shortid: ticket.shortId,
+                                ),
+                              ),
+                            ),
+                          ),
+                );
+                if (response.result?.parsedData?.updateEventCheckin != null) {
+                  SnackBarUtils.showSuccess(
+                    message: t.event.scanQR.undoCheckInSuccessfully,
+                  );
+                  context.read<GetTicketBloc>().add(
+                        GetTicketEventFetch(
+                          shortId: ticket.shortId ?? "",
+                          showLoading: false,
+                        ),
+                      );
+                }
+              }
+            },
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 250,
+              width: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(LemonRadius.normal),
+                color: LemonColor.atomicBlack,
+              ),
+              offset: Offset(0, -Spacing.superExtraSmall),
+            ),
+            menuItemStyleData: const MenuItemStyleData(
+              overlayColor: MaterialStatePropertyAll(LemonColor.darkBackground),
+            ),
           ),
         ),
       ],

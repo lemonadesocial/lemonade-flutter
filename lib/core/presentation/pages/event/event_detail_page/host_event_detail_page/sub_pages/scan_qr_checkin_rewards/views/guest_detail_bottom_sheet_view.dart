@@ -32,8 +32,8 @@ class GuestDetailBottomSheetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          GetTicketBloc()..add(GetTicketEventFetch(shortId: shortId)),
+      create: (context) => GetTicketBloc()
+        ..add(GetTicketEventFetch(shortId: shortId, showLoading: true)),
       child: _GuestDetailBottomSheetView(eventId: eventId),
     );
   }
@@ -68,73 +68,85 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                       child: Loading.defaultLoading(context),
                     ),
                     success: (ticket) {
-                      return SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            GuestDetailInformationView(
-                              ticket: ticket,
-                            ),
-                            SizedBox(height: Spacing.smMedium),
-                            ScanQrTicketInformationItem(ticket: ticket),
-                            SizedBox(height: Spacing.smMedium),
-                            if (ticket.acquiredTickets?.isNotEmpty ?? false)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  ...ticket.acquiredTickets!.map(
-                                    (acquiredTicket) => Padding(
-                                      padding: EdgeInsets.only(
-                                        top: Spacing.smMedium,
-                                      ),
-                                      child: ScanQrTicketInformationItem(
-                                        ticket: acquiredTicket,
-                                      ),
-                                    ),
+                                  GuestDetailInformationView(
+                                    ticket: ticket,
                                   ),
-                                ],
-                              ),
-                            _ViewApplicationInfoView(
-                              ticket: ticket,
-                              eventId: eventId,
-                            ),
-                            SizedBox(height: Spacing.smMedium * 2),
-                            SafeArea(
-                              child: LinearGradientButton.primaryButton(
-                                label: t.event.scanQR.checkInAll,
-                                onTap: () async {
-                                  final response =
-                                      await showFutureLoadingDialog(
-                                    context: context,
-                                    future: () => getIt<AppGQL>()
-                                        .client
-                                        .mutate$UpdateEventCheckin(
-                                          Options$Mutation$UpdateEventCheckin(
-                                            variables:
-                                                Variables$Mutation$UpdateEventCheckin(
-                                              input:
-                                                  Input$UpdateEventCheckinInput(
-                                                active: true,
-                                                shortid: ticket.shortId,
-                                              ),
+                                  SizedBox(height: Spacing.smMedium),
+                                  ScanQrTicketInformationItem(ticket: ticket),
+                                  SizedBox(height: Spacing.smMedium),
+                                  if (ticket.acquiredTickets?.isNotEmpty ??
+                                      false)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ...ticket.acquiredTickets!.map(
+                                          (acquiredTicket) => Padding(
+                                            padding: EdgeInsets.only(
+                                              top: Spacing.smMedium,
+                                            ),
+                                            child: ScanQrTicketInformationItem(
+                                              ticket: acquiredTicket,
                                             ),
                                           ),
                                         ),
-                                  );
-                                  if (response.result?.parsedData
-                                          ?.updateEventCheckin !=
-                                      null) {
-                                    SnackBarUtils.showSuccess(
-                                      message:
-                                          t.event.scanQR.checkedinSuccessfully,
-                                    );
-                                    await AutoRouter.of(context).pop();
-                                  }
-                                },
+                                      ],
+                                    ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Column(
+                            children: [
+                              _ViewApplicationInfoView(
+                                ticket: ticket,
+                                eventId: eventId,
+                              ),
+                              SizedBox(height: Spacing.smMedium * 2),
+                              SafeArea(
+                                child: LinearGradientButton.primaryButton(
+                                  label: t.event.scanQR.checkInAll,
+                                  onTap: () async {
+                                    final response =
+                                        await showFutureLoadingDialog(
+                                      context: context,
+                                      future: () => getIt<AppGQL>()
+                                          .client
+                                          .mutate$UpdateEventCheckin(
+                                            Options$Mutation$UpdateEventCheckin(
+                                              variables:
+                                                  Variables$Mutation$UpdateEventCheckin(
+                                                input:
+                                                    Input$UpdateEventCheckinInput(
+                                                  active: true,
+                                                  shortid: ticket.shortId,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                    );
+                                    if (response.result?.parsedData
+                                            ?.updateEventCheckin !=
+                                        null) {
+                                      SnackBarUtils.showSuccess(
+                                        message: t
+                                            .event.scanQR.checkedinSuccessfully,
+                                      );
+                                      await AutoRouter.of(context).pop();
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       );
                     },
                     orElse: () => const SizedBox.shrink(),
