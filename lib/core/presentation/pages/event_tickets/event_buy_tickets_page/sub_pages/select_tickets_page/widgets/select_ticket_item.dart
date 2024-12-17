@@ -155,7 +155,7 @@ class SelectTicketItem extends StatelessWidget {
                       count: enabled ? count : 0,
                       currency: ticketPrice.currency!,
                       price: ticketPrice,
-                      disabled: !enabled,
+                      disabled: isLocked || !enabled,
                       onIncrease: (newCount) {
                         add(
                           newCount: newCount,

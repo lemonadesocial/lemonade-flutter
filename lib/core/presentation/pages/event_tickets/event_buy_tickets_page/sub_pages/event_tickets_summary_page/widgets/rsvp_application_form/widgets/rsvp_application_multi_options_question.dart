@@ -41,10 +41,22 @@ class RsvpApplicationMultiOptionsQuestionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.question.question ?? '',
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
+        Text.rich(
+          TextSpan(
+            text: widget.question.question ?? '',
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+            ),
+            children: [
+              if (widget.question.isRequired == true)
+                TextSpan(
+                  text: ' *',
+                  style: Typo.mediumPlus.copyWith(
+                    color: LemonColor.coralReef,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+            ],
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -77,7 +89,7 @@ class RsvpApplicationMultiOptionsQuestionState
                   });
                   widget.onChange(selectedOptions);
                 },
-                child: Padding(
+                child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.small,
                     vertical: Spacing.small,
@@ -110,15 +122,20 @@ class RsvpApplicationMultiOptionsQuestionState
               );
             },
             separatorBuilder: (context, index) {
-              return Row(
-                children: [
-                  SizedBox(width: Spacing.medium * 2),
-                  Expanded(
-                    child: Divider(
-                      color: colorScheme.outlineVariant,
+              return SizedBox(
+                height: 1.w,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(width: Spacing.medium * 2),
+                    Expanded(
+                      child: Divider(
+                        thickness: 1.w,
+                        color: colorScheme.outlineVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),

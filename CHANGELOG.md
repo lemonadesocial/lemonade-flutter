@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.47.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.46.0...v1.47.0) (2024-12-13)
+
+
+### Features
+
+* add event to calendar ([#815](https://github.com/lemonadesocial/lemonade-flutter/issues/815)) ([3c17848](https://github.com/lemonadesocial/lemonade-flutter/commit/3c178489de8ecb2c46fa9b636fbca7b40418c997))
+* adjust app name to Lemonade only ([#819](https://github.com/lemonadesocial/lemonade-flutter/issues/819)) ([8846a26](https://github.com/lemonadesocial/lemonade-flutter/commit/8846a26b81cb1b52a57dc49a031c3d383a5aa0fe))
+* guest side application form - multi choice questions ([#818](https://github.com/lemonadesocial/lemonade-flutter/issues/818)) ([bc99cd3](https://github.com/lemonadesocial/lemonade-flutter/commit/bc99cd3a86597c4c1af8f38b83e734ba40eec7b1))
+* Restructure new ticket price  ([#807](https://github.com/lemonadesocial/lemonade-flutter/issues/807)) ([7441f66](https://github.com/lemonadesocial/lemonade-flutter/commit/7441f669f1acf701c905ad0811cf1bdc450b743f))
+
+
+### Bug Fixes
+
+* guest side mcq polishment ([#820](https://github.com/lemonadesocial/lemonade-flutter/issues/820)) ([5bf5172](https://github.com/lemonadesocial/lemonade-flutter/commit/5bf5172f15fe247af56fa29261ea488d17a5c0f9))
+
 ## [1.46.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.45.0...v1.46.0) (2024-12-10)
 
 
