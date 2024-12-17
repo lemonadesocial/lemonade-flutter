@@ -67,6 +67,7 @@ class EventApplicationFormSettingBloc extends Bloc<
     List<Input$QuestionInput> newQuestions = [...state.questions];
     newQuestions.removeAt(blocEvent.index);
     emit(state.copyWith(questions: newQuestions));
+    add(EventApplicationFormSettingBlocEvent.submitCreate(eventId: event?.id));
   }
 
   void onSubmitCreate(

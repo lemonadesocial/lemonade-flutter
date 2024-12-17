@@ -4,14 +4,17 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/sub_pages/event_application_form_select_question_setting_page/event_application_form_select_question_setting_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/sub_pages/event_application_form_text_question_setting_page/event_application_form_text_question_setting_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -93,8 +96,16 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
               itemCount: state.questions.length,
               itemBuilder: (context, index) {
                 final question = state.questions[index];
-                return InkWell(
-                  onTap: () {
+                return _QuestionItem(
+                  question: question,
+                  onDelete: () {
+                    applicationFormSettingBloc.add(
+                      EventApplicationFormSettingBlocEvent.removeQuestion(
+                        index: index,
+                      ),
+                    );
+                  },
+                  onEdit: () {
                     showCupertinoModalBottomSheet(
                       expand: true,
                       context: context,
@@ -116,7 +127,6 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
                       ),
                     );
                   },
-                  child: _QuestionItem(question: question),
                 );
               },
               separatorBuilder: (context, index) {
@@ -133,9 +143,13 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
 class _QuestionItem extends StatelessWidget {
   const _QuestionItem({
     required this.question,
+    required this.onEdit,
+    required this.onDelete,
   });
 
   final Input$QuestionInput question;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +174,7 @@ class _QuestionItem extends StatelessWidget {
           ),
           SizedBox(width: Spacing.small),
           Flexible(
+            flex: 1,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,6 +248,59 @@ class _QuestionItem extends StatelessWidget {
                   ],
                 ),
               ],
+            ),
+          ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton2<String>(
+              value: "edit",
+              onChanged: (value) {
+                if (value == "edit") {
+                  onEdit();
+                } else if (value == "delete") {
+                  onDelete();
+                }
+              },
+              customButton: ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icEdit.svg(
+                  colorFilter: filter,
+                  width: 16.w,
+                  height: 16.w,
+                ),
+              ),
+              items: [
+                DropdownMenuItem<String>(
+                  value: "edit",
+                  child: Text(
+                    StringUtils.capitalize(t.common.actions.edit),
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: "delete",
+                  child: Text(
+                    t.common.actions.remove,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                  ),
+                ),
+              ],
+              dropdownStyleData: DropdownStyleData(
+                width: 100.w,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                  color: colorScheme.secondaryContainer,
+                ),
+                offset: Offset(0, -Spacing.superExtraSmall),
+              ),
+              menuItemStyleData: const MenuItemStyleData(
+                overlayColor: MaterialStatePropertyAll(
+                  LemonColor.darkBackground,
+                ),
+              ),
             ),
           ),
         ],
