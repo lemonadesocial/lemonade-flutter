@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/choose_question_type_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/event_application_form_setting_questions_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/event_application_form_setting_selected_profile_fields_list.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/event_application_form_setting_web3_identity.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -145,6 +146,18 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
                         EventApplicationFormSettingSelectedProfileFieldsList(
                       profileFields: event?.applicationProfileFields ?? [],
                     ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Divider(
+                      color: colorScheme.outline,
+                      height: Spacing.medium * 2,
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.small,
+                    ),
+                    sliver: const EventApplicationFormSettingWeb3Identity(),
                   ),
                   SliverToBoxAdapter(
                     child: Divider(

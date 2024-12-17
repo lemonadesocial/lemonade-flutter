@@ -9,6 +9,7 @@ import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_typ
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/event/dtos/sub_event_settings_dto/sub_event_settings_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
+import 'package:app/core/data/web3/dtos/application_blockchain_platform_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -96,6 +97,8 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'shortid') String? shortId,
     @JsonKey(name: 'address_directions')
     List<String>? addressDirectionsRecommendations,
+    @JsonKey(name: 'rsvp_wallet_platforms')
+    List<ApplicationBlockchainPlatformDto>? rsvpWalletPlatforms,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

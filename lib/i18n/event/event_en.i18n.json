@@ -530,7 +530,11 @@
         "options": "Options",
         "addOption": "Add option...",
         "noQuestions": "No questions Yet",
-        "noQuestionsDescription": "Add questions you want your guests to answers"
+        "noQuestionsDescription": "Add questions you want your guests to answers",
+        "web3Identity": {
+            "web3IdentityTitle": "Web3 identity",
+            "ethAddress": "ETH address"
+        }
     },
     "reserve": "Reserve",
     "rsvpStatus": {

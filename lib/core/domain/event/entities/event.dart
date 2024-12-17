@@ -11,6 +11,7 @@ import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/web3/entities/application_blockchain_platform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 
@@ -87,6 +88,7 @@ class Event with _$Event {
     bool? registrationDisabled,
     String? shortId,
     List<String>? addressDirectionsRecommendations,
+    List<ApplicationBlockchainPlatform>? rsvpWalletPlatforms,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -211,6 +213,9 @@ class Event with _$Event {
       shortId: dto.shortId,
       addressDirectionsRecommendations:
           List.from(dto.addressDirectionsRecommendations ?? []),
+      rsvpWalletPlatforms: List.from(dto.rsvpWalletPlatforms ?? [])
+          .map((item) => ApplicationBlockchainPlatform.fromDto(item))
+          .toList(),
     );
   }
 
