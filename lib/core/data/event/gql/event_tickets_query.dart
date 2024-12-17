@@ -5,6 +5,10 @@ const eventTicketPriceFragment = '''
 fragment eventTicketPriceFragment on EventTicketPrice {
   cost
   currency
+  payment_accounts
+  payment_accounts_expanded {
+    ...paymentAccountFragment
+  }
 }
 ''';
 
