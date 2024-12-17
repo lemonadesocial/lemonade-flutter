@@ -77,7 +77,7 @@ class ScannerActions extends StatelessWidget {
                         Text(
                           t.event.eventApproval.tabs.guestList,
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onSurface,
+                            color: colorScheme.onPrimary,
                           ),
                         ),
                       ],

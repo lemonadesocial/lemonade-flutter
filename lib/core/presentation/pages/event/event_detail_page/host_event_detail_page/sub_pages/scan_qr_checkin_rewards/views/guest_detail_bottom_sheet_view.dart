@@ -1,24 +1,18 @@
 import 'package:app/core/application/event_tickets/get_ticket_bloc/get_ticket_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/guest_detail_information_view.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/widgets/scan_qr_ticket_action_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/widgets/scan_qr_ticket_information_item.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/utils/gql/gql.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -136,6 +130,7 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: Spacing.small),
                           Column(
                             children: [
                               _ViewApplicationInfoView(
@@ -144,7 +139,9 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                               ),
                               SizedBox(height: Spacing.smMedium),
                               SafeArea(
-                                child: _ActionButton(ticket: ticket),
+                                child: ScanQrTicketActionButton(
+                                  ticket: ticket,
+                                ),
                               ),
                             ],
                           ),
@@ -163,83 +160,6 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
   }
 }
 
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({required this.ticket});
-
-  final EventTicket ticket;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final bool allCheckedIn = ticket.checkin?.active == true &&
-        (ticket.acquiredTickets?.every((t) => t.checkin?.active == true) ??
-            true);
-    if (allCheckedIn) {
-      return Container(
-        height: Sizing.large,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: LemonColor.white06,
-            width: 1,
-            style: BorderStyle.none,
-          ),
-        ),
-        child: DottedBorder(
-          borderType: BorderType.RRect,
-          radius: const Radius.circular(12),
-          color: LemonColor.white06,
-          child: Center(
-            child: Text(
-              t.event.scanQR.checkedInAll,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
-                // fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return LinearGradientButton.primaryButton(
-      label: t.event.scanQR.checkInAll,
-      onTap: () async {
-        final response = await showFutureLoadingDialog(
-          context: context,
-          future: () {
-            final shortIds = [
-              ticket.shortId ?? '',
-              ...(ticket.acquiredTickets ?? []).map((e) => e.shortId ?? ''),
-            ];
-            return getIt<AppGQL>().client.mutate$UpdateEventCheckins(
-                  Options$Mutation$UpdateEventCheckins(
-                    variables: Variables$Mutation$UpdateEventCheckins(
-                      input: Input$UpdateEventCheckinInput(
-                        active: true,
-                        shortids: shortIds,
-                      ),
-                    ),
-                  ),
-                );
-          },
-        );
-        if (response.result?.parsedData?.updateEventCheckins != null) {
-          SnackBarUtils.showSuccess(
-            message: t.event.scanQR.checkedInAllSuccessfully,
-          );
-          context.read<GetTicketBloc>().add(
-                GetTicketEventFetch(
-                  shortId: ticket.shortId ?? "",
-                  showLoading: false,
-                ),
-              );
-        }
-      },
-    );
-  }
-}
-
 class _ViewApplicationInfoView extends StatelessWidget {
   const _ViewApplicationInfoView({required this.ticket, required this.eventId});
 
@@ -248,6 +168,8 @@ class _ViewApplicationInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Query$GetEventApplicationAnswers$Widget(
       options: Options$Query$GetEventApplicationAnswers(
         variables: Variables$Query$GetEventApplicationAnswers(
@@ -256,14 +178,74 @@ class _ViewApplicationInfoView extends StatelessWidget {
           email: ticket.assignedEmail ?? '',
         ),
       ),
-      builder: (
-        result, {
-        refetch,
-        fetchMore,
-      }) {
-        // print(result.parsedData?.getEventApplicationAnswers?.map((e) => e.toJson()).toList());
-        print(result.parsedData?.getEventApplicationAnswers.length);
-        return const SizedBox.shrink();
+      builder: (result, {refetch, fetchMore}) {
+        final hasApplications =
+            (result.parsedData?.getEventApplicationAnswers.length ?? 0) > 0;
+
+        if (!hasApplications) return const SizedBox.shrink();
+
+        return InkWell(
+          onTap: () {},
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.small,
+              vertical: Spacing.small,
+            ),
+            decoration: BoxDecoration(
+              color: colorScheme.secondary,
+              borderRadius: BorderRadius.circular(LemonRadius.small),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.description_outlined,
+                  color: colorScheme.onSecondary,
+                  size: Sizing.xSmall,
+                ),
+                SizedBox(width: Spacing.small),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Text(
+                        t.event.eventApproval.viewApplication,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.small),
+                      Container(
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                        decoration: BoxDecoration(
+                          color: LemonColor.white06,
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.extraSmall),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${result.parsedData?.getEventApplicationAnswers.length ?? 0}',
+                            style: Typo.xSmall.copyWith(
+                              color: colorScheme.onSecondary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ThemeSvgIcon(
+                  color: colorScheme.onSurfaceVariant,
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
+                    colorFilter: filter,
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
