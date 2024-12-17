@@ -20,9 +20,14 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ScanQrTicketInformationItem extends StatelessWidget {
-  const ScanQrTicketInformationItem({super.key, required this.ticket});
+  const ScanQrTicketInformationItem({
+    super.key,
+    required this.ticket,
+    required this.originalTicket,
+  });
 
   final EventTicket ticket;
+  final EventTicket originalTicket;
 
   @override
   Widget build(BuildContext context) {
@@ -76,79 +81,83 @@ class ScanQrTicketInformationItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: Spacing.xSmall),
-          if (alreadyCheckedIn)
-            _CheckedInView(ticket: ticket)
-          else
-            _CheckinButton(ticket: ticket),
+          _TicketStatusButton(
+              ticket: ticket,
+              originalTicket: originalTicket,
+              isCheckedIn: alreadyCheckedIn),
         ],
       ),
     );
   }
 }
 
-class _CheckinButton extends StatelessWidget {
-  const _CheckinButton({super.key, required this.ticket});
+class _TicketStatusButton extends StatelessWidget {
+  const _TicketStatusButton({
+    required this.ticket,
+    required this.originalTicket,
+    required this.isCheckedIn,
+  });
 
   final EventTicket ticket;
+  final EventTicket? originalTicket;
+  final bool isCheckedIn;
 
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _handleCheckin(BuildContext context) async {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: () async {
-        final response = await showFutureLoadingDialog(
-          context: context,
-          future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckin(
-                Options$Mutation$UpdateEventCheckin(
-                  variables: Variables$Mutation$UpdateEventCheckin(
-                    input: Input$UpdateEventCheckinInput(
-                      active: true,
-                      shortid: ticket.shortId,
-                    ),
-                  ),
+    final response = await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckins(
+            Options$Mutation$UpdateEventCheckins(
+              variables: Variables$Mutation$UpdateEventCheckins(
+                input: Input$UpdateEventCheckinInput(
+                  active: !isCheckedIn,
+                  shortids: [ticket.shortId ?? ''],
                 ),
               ),
-        );
-        if (response.result?.parsedData?.updateEventCheckin != null) {
-          SnackBarUtils.showSuccess(
-            message: t.event.scanQR.checkedinSuccessfully,
-          );
-          context.read<GetTicketBloc>().add(
-                GetTicketEventFetch(
-                  shortId: ticket.shortId ?? "",
-                  showLoading: false,
-                ),
-              );
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(Spacing.xSmall),
-        decoration: BoxDecoration(
-          color: LemonColor.white06,
-          borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-        ),
-        child: Text(
-          t.event.scanQR.checkin,
-          style: Typo.small.copyWith(
-            fontWeight: FontWeight.w500,
-            color: colorScheme.onPrimary,
+            ),
           ),
-        ),
-      ),
     );
+
+    if (response.result?.parsedData?.updateEventCheckins != null) {
+      SnackBarUtils.showSuccess(
+        message: isCheckedIn
+            ? t.event.scanQR.undoCheckInSuccessfully
+            : t.event.scanQR.checkedinSuccessfully,
+      );
+      context.read<GetTicketBloc>().add(
+            GetTicketEventFetch(
+              shortId: originalTicket?.shortId ?? "",
+              showLoading: false,
+            ),
+          );
+    }
   }
-}
-
-class _CheckedInView extends StatelessWidget {
-  const _CheckedInView({required this.ticket});
-
-  final EventTicket ticket;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (!isCheckedIn) {
+      return InkWell(
+        onTap: () => _handleCheckin(context),
+        child: Container(
+          padding: EdgeInsets.all(Spacing.xSmall),
+          decoration: BoxDecoration(
+            color: LemonColor.white06,
+            borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+          ),
+          child: Text(
+            t.event.scanQR.checkin,
+            style: Typo.small.copyWith(
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onPrimary,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -156,7 +165,6 @@ class _CheckedInView extends StatelessWidget {
           padding: EdgeInsets.all(Spacing.xSmall),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -171,7 +179,8 @@ class _CheckedInView extends StatelessWidget {
                   ticket.checkin?.createdAt ?? DateTime.now(),
                 ),
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: LemonColor.white23,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],
@@ -181,7 +190,8 @@ class _CheckedInView extends StatelessWidget {
           child: DropdownButton2<String>(
             customButton: Icon(
               Icons.more_vert,
-              color: colorScheme.onSurface,
+              color: colorScheme.onSecondary,
+              size: Sizing.mSmall,
             ),
             items: [
               DropdownMenuItem<String>(
@@ -208,35 +218,7 @@ class _CheckedInView extends StatelessWidget {
                 ),
               ),
             ],
-            onChanged: (String? newValue) async {
-              if (newValue == 'undo') {
-                final response = await showFutureLoadingDialog(
-                  context: context,
-                  future: () =>
-                      getIt<AppGQL>().client.mutate$UpdateEventCheckin(
-                            Options$Mutation$UpdateEventCheckin(
-                              variables: Variables$Mutation$UpdateEventCheckin(
-                                input: Input$UpdateEventCheckinInput(
-                                  active: false,
-                                  shortid: ticket.shortId,
-                                ),
-                              ),
-                            ),
-                          ),
-                );
-                if (response.result?.parsedData?.updateEventCheckin != null) {
-                  SnackBarUtils.showSuccess(
-                    message: t.event.scanQR.undoCheckInSuccessfully,
-                  );
-                  context.read<GetTicketBloc>().add(
-                        GetTicketEventFetch(
-                          shortId: ticket.shortId ?? "",
-                          showLoading: false,
-                        ),
-                      );
-                }
-              }
-            },
+            onChanged: (_) => _handleCheckin(context),
             dropdownStyleData: DropdownStyleData(
               maxHeight: 250,
               width: 200,

@@ -114,7 +114,6 @@ final getTicketQuery = gql('''
         prices {
           cost
           currency
-          network
         }
       }
       accepted
@@ -135,6 +134,7 @@ final getTicketQuery = gql('''
       shortid
       acquired_tickets {
         _id
+        shortid
         type_expanded {
           title
         }

@@ -368,9 +368,12 @@
         "pleaseScan": "Please scan QR Code",
         "checkin": "Check in",
         "checkedinSuccessfully": "Successfully checked in",
+        "checkedInAllSuccessfully": "Successfully checked in all",
         "rewards": "Rewards",
         "checkInAll": "Check in All",
-        "undoCheckIn": "Undo check in"
+        "undoCheckIn": "Undo check in",
+        "checkedInAll": "Checked in all",
+        "additionalTickets": "Additional Tickets"
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",

@@ -14,8 +14,11 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,6 +49,7 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       color: LemonColor.white06,
       child: Column(
@@ -79,26 +83,55 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                                     ticket: ticket,
                                   ),
                                   SizedBox(height: Spacing.smMedium),
-                                  ScanQrTicketInformationItem(ticket: ticket),
-                                  SizedBox(height: Spacing.smMedium),
+                                  ScanQrTicketInformationItem(
+                                    originalTicket: ticket,
+                                    ticket: ticket,
+                                  ),
                                   if (ticket.acquiredTickets?.isNotEmpty ??
-                                      false)
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ...ticket.acquiredTickets!.map(
-                                          (acquiredTicket) => Padding(
-                                            padding: EdgeInsets.only(
-                                              top: Spacing.smMedium,
+                                      false) ...[
+                                    SizedBox(height: Spacing.smMedium),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.secondary,
+                                        borderRadius: BorderRadius.circular(
+                                          LemonRadius.normal,
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.hardEdge,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: Spacing.smMedium,
+                                              vertical: Spacing.small,
                                             ),
-                                            child: ScanQrTicketInformationItem(
-                                              ticket: acquiredTicket,
+                                            child: Text(
+                                              '${t.event.scanQR.additionalTickets} (${ticket.acquiredTickets?.length ?? 0})',
+                                              style: Typo.small.copyWith(
+                                                color: colorScheme.onSecondary,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          ...ticket.acquiredTickets!.map(
+                                            (acquiredTicket) => Container(
+                                              decoration: BoxDecoration(
+                                                color: colorScheme
+                                                    .secondaryContainer,
+                                              ),
+                                              child:
+                                                  ScanQrTicketInformationItem(
+                                                originalTicket: ticket,
+                                                ticket: acquiredTicket,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -109,40 +142,9 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                                 ticket: ticket,
                                 eventId: eventId,
                               ),
-                              SizedBox(height: Spacing.smMedium * 2),
+                              SizedBox(height: Spacing.smMedium),
                               SafeArea(
-                                child: LinearGradientButton.primaryButton(
-                                  label: t.event.scanQR.checkInAll,
-                                  onTap: () async {
-                                    final response =
-                                        await showFutureLoadingDialog(
-                                      context: context,
-                                      future: () => getIt<AppGQL>()
-                                          .client
-                                          .mutate$UpdateEventCheckin(
-                                            Options$Mutation$UpdateEventCheckin(
-                                              variables:
-                                                  Variables$Mutation$UpdateEventCheckin(
-                                                input:
-                                                    Input$UpdateEventCheckinInput(
-                                                  active: true,
-                                                  shortid: ticket.shortId,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                    );
-                                    if (response.result?.parsedData
-                                            ?.updateEventCheckin !=
-                                        null) {
-                                      SnackBarUtils.showSuccess(
-                                        message: t
-                                            .event.scanQR.checkedinSuccessfully,
-                                      );
-                                      await AutoRouter.of(context).pop();
-                                    }
-                                  },
-                                ),
+                                child: _ActionButton(ticket: ticket),
                               ),
                             ],
                           ),
@@ -157,6 +159,83 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({required this.ticket});
+
+  final EventTicket ticket;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final bool allCheckedIn = ticket.checkin?.active == true &&
+        (ticket.acquiredTickets?.every((t) => t.checkin?.active == true) ??
+            true);
+    if (allCheckedIn) {
+      return Container(
+        height: Sizing.large,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: LemonColor.white06,
+            width: 1,
+            style: BorderStyle.none,
+          ),
+        ),
+        child: DottedBorder(
+          borderType: BorderType.RRect,
+          radius: const Radius.circular(12),
+          color: LemonColor.white06,
+          child: Center(
+            child: Text(
+              t.event.scanQR.checkedInAll,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+                // fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return LinearGradientButton.primaryButton(
+      label: t.event.scanQR.checkInAll,
+      onTap: () async {
+        final response = await showFutureLoadingDialog(
+          context: context,
+          future: () {
+            final shortIds = [
+              ticket.shortId ?? '',
+              ...(ticket.acquiredTickets ?? []).map((e) => e.shortId ?? ''),
+            ];
+            return getIt<AppGQL>().client.mutate$UpdateEventCheckins(
+                  Options$Mutation$UpdateEventCheckins(
+                    variables: Variables$Mutation$UpdateEventCheckins(
+                      input: Input$UpdateEventCheckinInput(
+                        active: true,
+                        shortids: shortIds,
+                      ),
+                    ),
+                  ),
+                );
+          },
+        );
+        if (response.result?.parsedData?.updateEventCheckins != null) {
+          SnackBarUtils.showSuccess(
+            message: t.event.scanQR.checkedInAllSuccessfully,
+          );
+          context.read<GetTicketBloc>().add(
+                GetTicketEventFetch(
+                  shortId: ticket.shortId ?? "",
+                  showLoading: false,
+                ),
+              );
+        }
+      },
     );
   }
 }

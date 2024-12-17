@@ -208,18 +208,18 @@ class _GuestActions extends StatelessWidget {
     if (event != null) {
       final response = await showFutureLoadingDialog(
         context: context,
-        future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckin(
-              Options$Mutation$UpdateEventCheckin(
-                variables: Variables$Mutation$UpdateEventCheckin(
+        future: () => getIt<AppGQL>().client.mutate$UpdateEventCheckins(
+              Options$Mutation$UpdateEventCheckins(
+                variables: Variables$Mutation$UpdateEventCheckins(
                   input: Input$UpdateEventCheckinInput(
                     active: true,
-                    shortid: eventAccepted.shortId ?? '',
+                    shortids: [eventAccepted.shortId ?? ''],
                   ),
                 ),
               ),
             ),
       );
-      if (response.result?.parsedData?.updateEventCheckin != null) {
+      if (response.result?.parsedData?.updateEventCheckins != null) {
         SnackBarUtils.showSuccess(
           message: t.event.eventApproval.checkedinSuccessfully,
         );
