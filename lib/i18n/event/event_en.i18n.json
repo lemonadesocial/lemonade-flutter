@@ -506,6 +506,8 @@
         "applicationQuestions": "Application questions",
         "enterQuestion": "Enter question",
         "required": "Required",
+        "optional": "Optional",
+        "off": "Off",
         "saveForm": "Save form",
         "saveFormSuccessfully": "Update application form successfully",
         "updateApplicationFormSuccessfully": "Update application form successfully",

@@ -1,8 +1,10 @@
+import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
 import 'package:app/core/application/event/event_application_form_setting_bloc/event_application_form_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/choose_question_type_bottomsheet.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/event_application_form_setting_questions_list.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/widgets/event_application_form_setting_selected_profile_fields_list.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +27,21 @@ class EventApplicationFormSettingPage extends StatelessWidget {
           fetched: (event) => event,
           orElse: () => null,
         );
-    return BlocProvider(
-      create: (context) => EventApplicationFormSettingBloc(
-        event: event,
-        initialQuestions: event?.applicationQuestions ?? [],
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => EventApplicationFormSettingBloc(
+            event: event,
+            initialQuestions: event?.applicationQuestions ?? [],
+          ),
+        ),
+        BlocProvider(
+          create: (context) => EventApplicationFormProfileSettingBloc(
+            event: event,
+            initialProfileFields: event?.applicationProfileFields ?? [],
+          ),
+        ),
+      ],
       child: EventApplicationFormSettingPageView(),
     );
   }
@@ -71,45 +83,87 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
           orElse: () => '',
         );
     final getEventDetailBloc = context.read<GetEventDetailBloc>();
-
-    return Scaffold(
-      appBar: LemonAppBar(
-        title: t.event.applicationForm.applicationFormTitle,
-      ),
-      resizeToAvoidBottomInset: false,
-      body: BlocListener<EventApplicationFormSettingBloc,
-          EventApplicationFormSettingBlocState>(
-        listener: (context, state) {
-          if (state.status == EventApplicationFormStatus.success) {
-            SnackBarUtils.showSuccess(
-              message: t.event.applicationForm.saveFormSuccessfully,
-            );
-            getEventDetailBloc.add(
-              GetEventDetailEvent.fetch(
-                eventId: eventId,
-              ),
-            );
-          }
-        },
-        child: GestureDetector(
+    final event = getEventDetailBloc.state.maybeWhen(
+      fetched: (event) => event,
+      orElse: () => null,
+    );
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<EventApplicationFormSettingBloc,
+            EventApplicationFormSettingBlocState>(
+          listener: (context, state) {
+            if (state.status == EventApplicationFormStatus.success) {
+              SnackBarUtils.showSuccess(
+                message:
+                    t.event.applicationForm.updateApplicationFormSuccessfully,
+              );
+              getEventDetailBloc.add(
+                GetEventDetailEvent.fetch(
+                  eventId: eventId,
+                ),
+              );
+            }
+          },
+        ),
+        BlocListener<EventApplicationFormProfileSettingBloc,
+            EventApplicationFormProfileSettingBlocState>(
+          listener: (context, state) {
+            if (state.status ==
+                EventApplicationFormProfileSettingStatus.success) {
+              SnackBarUtils.showSuccess(
+                message:
+                    t.event.applicationForm.updateApplicationFormSuccessfully,
+              );
+              getEventDetailBloc.add(
+                GetEventDetailEvent.fetch(
+                  eventId: eventId,
+                ),
+              );
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: LemonAppBar(
+          title: t.event.applicationForm.applicationFormTitle,
+        ),
+        resizeToAvoidBottomInset: false,
+        body: GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    const EventApplicationFormSettingQuestionsList(),
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: Spacing.large,
-                      ),
+              CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.small,
                     ),
-                  ],
-                ),
+                    sliver:
+                        EventApplicationFormSettingSelectedProfileFieldsList(
+                      profileFields: event?.applicationProfileFields ?? [],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Divider(
+                      color: colorScheme.outline,
+                      height: Spacing.medium * 2,
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.small,
+                    ),
+                    sliver: const EventApplicationFormSettingQuestionsList(),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: Spacing.large * 4,
+                    ),
+                  ),
+                ],
               ),
               Align(
                 alignment: Alignment.bottomCenter,

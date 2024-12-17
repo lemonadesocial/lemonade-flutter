@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
 import 'package:app/core/application/event/event_application_form_setting_bloc/event_application_form_setting_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_application_form_setting_page/sub_pages/event_application_form_profile_setting_page/event_application_form_profile_setting_page.dart';
@@ -38,13 +39,22 @@ class ChooseQuestionTypeBottomSheet extends StatefulWidget {
   static show(BuildContext context) {
     final applicationFormSettingBloc =
         context.read<EventApplicationFormSettingBloc>();
+    final applicationProfileSettingBloc =
+        context.read<EventApplicationFormProfileSettingBloc>();
     showCupertinoModalBottomSheet(
       context: context,
       topRadius: Radius.circular(LemonRadius.medium),
       barrierColor: Colors.black.withOpacity(0.5),
       backgroundColor: LemonColor.atomicBlack,
-      builder: (context) => BlocProvider.value(
-        value: applicationFormSettingBloc,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: applicationFormSettingBloc,
+          ),
+          BlocProvider.value(
+            value: applicationProfileSettingBloc,
+          ),
+        ],
         child: const ChooseQuestionTypeBottomSheet(),
       ),
     );
@@ -67,6 +77,8 @@ class _ChooseQuestionTypeBottomSheetState
         );
     final applicationFormSettingBloc =
         context.read<EventApplicationFormSettingBloc>();
+    final applicationProfileSettingBloc =
+        context.read<EventApplicationFormProfileSettingBloc>();
     final items = [
       ApplicationFormQuestionTypeItem(
         title: t.event.applicationForm.questionType.personalInfo,
@@ -78,9 +90,12 @@ class _ChooseQuestionTypeBottomSheetState
             expand: true,
             context: context,
             topRadius: Radius.circular(LemonRadius.medium),
-            builder: (context) => EventApplicationFormProfileSettingPage(
-              event: event,
-              profileType: ApplicationFormProfileType.basicInfo,
+            builder: (context) => BlocProvider.value(
+              value: applicationProfileSettingBloc,
+              child: EventApplicationFormProfileSettingPage(
+                event: event,
+                profileType: ApplicationFormProfileType.basicInfo,
+              ),
             ),
           );
         },
@@ -95,9 +110,12 @@ class _ChooseQuestionTypeBottomSheetState
             expand: true,
             context: context,
             topRadius: Radius.circular(LemonRadius.medium),
-            builder: (context) => EventApplicationFormProfileSettingPage(
-              event: event,
-              profileType: ApplicationFormProfileType.socialMediaInfo,
+            builder: (context) => BlocProvider.value(
+              value: applicationProfileSettingBloc,
+              child: EventApplicationFormProfileSettingPage(
+                event: event,
+                profileType: ApplicationFormProfileType.socialMediaInfo,
+              ),
             ),
           );
         },
@@ -215,7 +233,6 @@ class _ChooseQuestionTypeBottomSheetState
               },
               itemCount: items.length,
             ),
-            // SizedBox(height: Spacing.small),
           ],
         ),
       ),
