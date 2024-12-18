@@ -65,6 +65,7 @@ class GuestApplicationInfoPage extends StatelessWidget {
                     GuestApplicationInfoForm(
                       userInfo: userInfo,
                       event: event,
+                      eventTicket: eventTicket,
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(

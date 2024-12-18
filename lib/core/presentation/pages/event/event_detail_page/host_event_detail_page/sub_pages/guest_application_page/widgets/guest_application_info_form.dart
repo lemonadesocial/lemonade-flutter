@@ -3,6 +3,7 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -22,16 +23,17 @@ import 'package:collection/collection.dart';
 class GuestApplicationInfoForm extends StatelessWidget {
   final User? userInfo;
   final Event? event;
-  final EventJoinRequest? eventJoinRequest;
+  final EventTicket? eventTicket;
 
   const GuestApplicationInfoForm({
     super.key,
     this.userInfo,
     this.event,
-    this.eventJoinRequest,
+    this.eventTicket,
   });
 
-  bool get _isNonLoginUser => eventJoinRequest?.user == null;
+  bool get _isNonLoginUser =>
+      eventTicket?.assignedTo == null && eventTicket?.assignedEmail != null;
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +85,8 @@ class GuestApplicationInfoForm extends StatelessWidget {
           options: Options$Query$GetEventApplicationAnswers(
             variables: Variables$Query$GetEventApplicationAnswers(
               event: event?.id ?? '',
-              user: _isNonLoginUser ? null : eventJoinRequest?.user ?? '',
-              email: _isNonLoginUser
-                  ? eventJoinRequest?.nonLoginUser?.email ?? ''
-                  : null,
+              user: _isNonLoginUser ? null : eventTicket?.assignedTo ?? '',
+              email: _isNonLoginUser ? eventTicket?.assignedEmail ?? '' : null,
             ),
           ),
           builder: (
