@@ -72,6 +72,7 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
     required EventApplicationProfileField field,
     required int value,
   }) {
+    // field is required
     if (value == 1) {
       context.read<EventApplicationFormProfileSettingBloc>().add(
             EventApplicationFormProfileSettingBlocEvent.toggleRequired(
@@ -79,8 +80,8 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
               isRequired: true,
             ),
           );
-      // field is required
     }
+    // field is optional
     if (value == 0) {
       context.read<EventApplicationFormProfileSettingBloc>().add(
             EventApplicationFormProfileSettingBlocEvent.toggleRequired(
@@ -88,10 +89,9 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
               isRequired: false,
             ),
           );
-      // field is optional
     }
+    // remove field
     if (value == -1) {
-      // remove field
       context.read<EventApplicationFormProfileSettingBloc>().add(
             EventApplicationFormProfileSettingBlocEvent.toggleSelect(
               fieldKey: field.field ?? '',
