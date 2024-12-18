@@ -94,6 +94,7 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'quest_points') int? questPoints,
     @JsonKey(name: 'stripe_connected_account')
     StripeConnectedAccountDto? stripeConnectedAccount,
+    @JsonKey(name: 'wallets_new') Map<String, List<String>?>? walletsNew,
   }) = _UserDto;
 
   factory UserDto.fromJson(Map<String, dynamic> json) =>

@@ -80,7 +80,9 @@
         "network": "Network",
         "chooseNetwork": "Choose your network",
         "stakingTicket": "Staking",
-        "whileListedTicket": "Whitelist Exclusive"
+        "whileListedTicket": "Whitelist Exclusive",
+        "verifyWithWallet": "Verify with wallet",
+        "verifiedWithWallet": "Verified $address"
     },
     "eventOrder": {
         "itemTotal": "Item total",
@@ -869,5 +871,11 @@
         "hideCohost": "Hide from event page",
         "removeCohost": "Remove cohost",
         "creator": "Creator"
+    },
+    "rsvpWeb3Indetity": {
+        "yourEthereumAddress": "Your Ethereum address",
+        "yourSolanaAddress": "Your Solana address",
+        "verifyWithWallet": "Verify with wallet",
+        "connecctedAddress": "Connected $address"
     }
 }

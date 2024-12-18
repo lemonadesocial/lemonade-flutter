@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/event_application_form_bloc/event_application_form_bloc.dart';
 import 'package:app/core/application/event/event_provider_bloc/event_provider_bloc.dart';
 import 'package:app/core/application/event_tickets/calculate_event_tickets_pricing_bloc/calculate_event_tickets_pricing_bloc.dart';
@@ -22,8 +23,11 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/core/utils/user_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -99,6 +103,10 @@ class _EventTicketsSummaryPageViewState
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
+    final user = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
     final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
     final selectedTickets = selectTicketsBlocState.selectedTickets;
     final selectedCurrency = selectTicketsBlocState.selectedCurrency!;
@@ -110,6 +118,19 @@ class _EventTicketsSummaryPageViewState
         : event.applicationFormSubmission != null
             ? true
             : context.watch<EventApplicationFormBloc>().state.isValid;
+    final isEthereumWalletVerifiedRequired =
+        EventUtils.isWalletVerifiedRequired(
+      event,
+      platform: Enum$BlockchainPlatform.ethereum,
+    );
+    final isUserEthereumWalletVerified = UserUtils.isWalletVerified(
+      user,
+      platform: Enum$BlockchainPlatform.ethereum,
+    );
+    final isWalletVerificationValid =
+        isEthereumWalletVerifiedRequired ? isUserEthereumWalletVerified : true;
+    final isSubmitDisabled =
+        !isApplicationFormValid || !isWalletVerificationValid;
 
     return MultiBlocListener(
       listeners: [
@@ -316,14 +337,14 @@ class _EventTicketsSummaryPageViewState
                                       selectedCurrency: selectedCurrency,
                                       pricingInfo: pricingInfo,
                                       isFree: isFree,
-                                      disabled: !isApplicationFormValid,
+                                      disabled: isSubmitDisabled,
                                       selectedPaymentAccount:
                                           _selectedPaymentAccount,
                                     );
                                   }
 
                                   return PayByStripeFooter(
-                                    disabled: !isApplicationFormValid,
+                                    disabled: isSubmitDisabled,
                                     isFree: isFree,
                                     selectedCurrency: selectedCurrency,
                                     pricingInfo: pricingInfo,

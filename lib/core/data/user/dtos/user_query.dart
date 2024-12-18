@@ -10,6 +10,7 @@ const baseUserFragment = '''
   image_avatar
   wallets
   wallet_custodial
+  wallets_new
   blocked
   blocked_expanded {
       _id,

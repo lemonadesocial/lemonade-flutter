@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/service/device_calendar/device_calendar_service.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:auto_route/auto_route.dart';
@@ -280,5 +281,17 @@ class EventUtils {
       location: EventUtils.getAddress(event: event),
       url: eventUrl,
     );
+  }
+
+  static bool isWalletVerifiedRequired(
+    Event event, {
+    required Enum$BlockchainPlatform platform,
+  }) {
+    final applicationBlockchainPlatforms = event.rsvpWalletPlatforms;
+    final isRequired = applicationBlockchainPlatforms
+            ?.firstWhereOrNull((element) => element.platform == platform)
+            ?.isRequired ??
+        false;
+    return isRequired;
   }
 }
