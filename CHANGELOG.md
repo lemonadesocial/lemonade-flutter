@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.48.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.47.0...v1.48.0) (2024-12-18)
+
+
+### Features
+
+* event web3 identity ([#824](https://github.com/lemonadesocial/lemonade-flutter/issues/824)) ([3f237ec](https://github.com/lemonadesocial/lemonade-flutter/commit/3f237ec3f61960df5503245ac6f42e949a28e288))
+* host application form setup ([#823](https://github.com/lemonadesocial/lemonade-flutter/issues/823)) ([bee0332](https://github.com/lemonadesocial/lemonade-flutter/commit/bee03329ee544f80f07faff9208aa18eb1ce97c8))
+
 ## [1.47.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.46.0...v1.47.0) (2024-12-13)
 
 
