@@ -506,9 +506,35 @@
         "applicationQuestions": "Application questions",
         "enterQuestion": "Enter question",
         "required": "Required",
+        "optional": "Optional",
+        "off": "Off",
         "saveForm": "Save form",
         "saveFormSuccessfully": "Update application form successfully",
-        "updateApplicationFormSuccessfully": "Update application form successfully"
+        "updateApplicationFormSuccessfully": "Update application form successfully",
+        "chooseQuestionType": "Choose question type",
+        "questionType": {
+            "personalInfo": "Personal info",
+            "personalInfoDescription": "Details you want to know about guests",
+            "socialProfile": "Social profile",
+            "socialProfileDescription": "Get links to guests’ social media profiles",
+            "text": "Text",
+            "textDescription": "Ask for a free-form response",
+            "singleSelect": "Single select",
+            "singleSelectDescription": "Choose one of the listed options",
+            "multipleSelect": "Multiple select",
+            "multipleSelectDescription": "Choose one or more options"
+        },
+        "addQuestion": "Add question",
+        "registrationQuestions": "Registration questions",
+        "question": "Question",
+        "options": "Options",
+        "addOption": "Add option...",
+        "noQuestions": "No questions Yet",
+        "noQuestionsDescription": "Add questions you want your guests to answers",
+        "web3Identity": {
+            "web3IdentityTitle": "Web3 identity",
+            "ethAddress": "ETH address"
+        }
     },
     "reserve": "Reserve",
     "rsvpStatus": {

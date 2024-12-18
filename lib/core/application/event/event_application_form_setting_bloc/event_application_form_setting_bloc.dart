@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -11,14 +12,13 @@ class EventApplicationFormSettingBloc extends Bloc<
     EventApplicationFormSettingBlocEvent,
     EventApplicationFormSettingBlocState> {
   final List<EventApplicationQuestion>? initialQuestions;
+  final Event? event;
   EventApplicationFormSettingBloc({
+    this.event,
     this.initialQuestions,
   }) : super(
           EventApplicationFormSettingBlocState.initial(),
         ) {
-    on<EventApplicationFormSettingBlocEventUpdateRequiredProfileFields>(
-      onUpdateRequiredProfileFields,
-    );
     on<EventApplicationFormSettingBlocEventUpdateQuestion>(onUpdateQuestion);
     on<EventApplicationFormSettingBlocEventAddQuestion>(onAddQuestion);
     on<EventApplicationFormSettingBlocEventRemoveQuestion>(onRemoveQuestion);
@@ -33,81 +33,50 @@ class EventApplicationFormSettingBloc extends Bloc<
 
   final _eventRepository = getIt<EventRepository>();
 
-  void onUpdateRequiredProfileFields(
-    EventApplicationFormSettingBlocEventUpdateRequiredProfileFields event,
-    Emitter emit,
-  ) {
-    emit(
-      state.copyWith(requiredProfileFields: event.requiredProfileFields),
-    );
-  }
-
   void onUpdateQuestion(
-    EventApplicationFormSettingBlocEventUpdateQuestion event,
+    EventApplicationFormSettingBlocEventUpdateQuestion blocEvent,
     Emitter emit,
   ) {
     final newQuestions = state.questions.asMap().entries.map((entry) {
-      if (entry.key == event.index) {
-        return event.questions;
+      if (entry.key == blocEvent.index) {
+        return blocEvent.question;
       }
       return entry.value;
     }).toList();
-    emit(
-      _validate(state.copyWith(questions: newQuestions)),
-    );
+    emit(state.copyWith(questions: newQuestions));
+    add(EventApplicationFormSettingBlocEvent.submitCreate(eventId: event?.id));
   }
 
   void onAddQuestion(
-    EventApplicationFormSettingBlocEventAddQuestion event,
+    EventApplicationFormSettingBlocEventAddQuestion blocEvent,
     Emitter emit,
   ) {
     List<Input$QuestionInput> newQuestions = [
       ...state.questions,
-      Input$QuestionInput(
-        question: "",
-        required: false,
-        type: Enum$QuestionType.text,
-      ),
+      blocEvent.question,
     ];
 
-    emit(
-      _validate(
-        state.copyWith(questions: newQuestions),
-      ),
-    );
+    emit(state.copyWith(questions: newQuestions));
+    add(EventApplicationFormSettingBlocEvent.submitCreate(eventId: event?.id));
   }
 
   void onRemoveQuestion(
-    EventApplicationFormSettingBlocEventRemoveQuestion event,
+    EventApplicationFormSettingBlocEventRemoveQuestion blocEvent,
     Emitter emit,
   ) {
     List<Input$QuestionInput> newQuestions = [...state.questions];
-    newQuestions.removeAt(event.index);
-    emit(
-      _validate(
-        state.copyWith(questions: newQuestions),
-      ),
-    );
-  }
-
-  EventApplicationFormSettingBlocState _validate(
-    EventApplicationFormSettingBlocState state,
-  ) {
-    final allQuestionsIsValid = state.questions
-        .map((question) => question.question != '')
-        .every((element) => element == true);
-    return state.copyWith(
-      isValid: allQuestionsIsValid,
-    );
+    newQuestions.removeAt(blocEvent.index);
+    emit(state.copyWith(questions: newQuestions));
+    add(EventApplicationFormSettingBlocEvent.submitCreate(eventId: event?.id));
   }
 
   void onSubmitCreate(
-    EventApplicationFormSettingBlocEventSubmitCreate event,
+    EventApplicationFormSettingBlocEventSubmitCreate blocEvent,
     Emitter emit,
   ) async {
     emit(state.copyWith(status: EventApplicationFormStatus.loading));
     final result = await _eventRepository.submitEventApplicationQuestions(
-      eventId: event.eventId ?? '',
+      eventId: blocEvent.eventId ?? '',
       questions: state.questions,
     );
     result.fold(
@@ -120,28 +89,28 @@ class EventApplicationFormSettingBloc extends Bloc<
   }
 
   void onPopulateInitialQuestions(
-    EventApplicationFormSettingBlocEventPopulateInitialQuestions event,
+    EventApplicationFormSettingBlocEventPopulateInitialQuestions blocEvent,
     Emitter emit,
   ) {
     if (initialQuestions == null) {
       return;
     }
     emit(
-      _validate(
-        EventApplicationFormSettingBlocState(
-          questions: initialQuestions!
-              .map(
-                (item) => Input$QuestionInput(
-                  $_id: item.id,
-                  question: item.question ?? '',
-                  required: item.isRequired,
-                  type: Enum$QuestionType.text,
-                ),
-              )
-              .toList(),
-          isValid: false,
-          requiredProfileFields: [],
-        ),
+      EventApplicationFormSettingBlocState(
+        questions: initialQuestions!
+            .map(
+              (item) => Input$QuestionInput(
+                $_id: item.id,
+                question: item.question ?? '',
+                required: item.isRequired,
+                type: item.type ?? Enum$QuestionType.text,
+                select_type: item.selectType,
+                options: item.options,
+                position: item.position,
+              ),
+            )
+            .toList(),
+        isValid: false,
       ),
     );
   }
@@ -152,10 +121,11 @@ class EventApplicationFormSettingBlocEvent
     with _$EventApplicationFormSettingBlocEvent {
   factory EventApplicationFormSettingBlocEvent.updateQuestion({
     required int index,
-    required Input$QuestionInput questions,
+    required Input$QuestionInput question,
   }) = EventApplicationFormSettingBlocEventUpdateQuestion;
-  factory EventApplicationFormSettingBlocEvent.addQuestion() =
-      EventApplicationFormSettingBlocEventAddQuestion;
+  factory EventApplicationFormSettingBlocEvent.addQuestion({
+    required Input$QuestionInput question,
+  }) = EventApplicationFormSettingBlocEventAddQuestion;
   factory EventApplicationFormSettingBlocEvent.removeQuestion({
     required int index,
   }) = EventApplicationFormSettingBlocEventRemoveQuestion;
@@ -164,9 +134,6 @@ class EventApplicationFormSettingBlocEvent
   }) = EventApplicationFormSettingBlocEventSubmitCreate;
   factory EventApplicationFormSettingBlocEvent.populateInitialQuestions() =
       EventApplicationFormSettingBlocEventPopulateInitialQuestions;
-  factory EventApplicationFormSettingBlocEvent.updateRequiredProfileFields({
-    required List<String> requiredProfileFields,
-  }) = EventApplicationFormSettingBlocEventUpdateRequiredProfileFields;
 }
 
 @freezed
@@ -177,7 +144,6 @@ class EventApplicationFormSettingBlocState
     EventApplicationFormStatus status,
     required List<Input$QuestionInput> questions,
     required bool isValid,
-    required List<String> requiredProfileFields,
   }) = _EventApplicationFormSettingBlocState;
 
   factory EventApplicationFormSettingBlocState.initial() =>
@@ -185,7 +151,6 @@ class EventApplicationFormSettingBlocState
         status: EventApplicationFormStatus.initial,
         questions: [],
         isValid: false,
-        requiredProfileFields: [],
       );
 }
 

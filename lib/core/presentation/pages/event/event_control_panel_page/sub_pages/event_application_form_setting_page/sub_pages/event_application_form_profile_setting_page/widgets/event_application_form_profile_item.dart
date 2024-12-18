@@ -1,6 +1,5 @@
 import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -28,12 +27,10 @@ class EventApplicationFormProfileItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final double topRadius = isSpecialRadiusTop == true
-        ? LemonRadius.medium
-        : LemonRadius.extraSmall;
-    final double bottomRadius = isSpecialRadiusBottom == true
-        ? LemonRadius.medium
-        : LemonRadius.extraSmall;
+    final double topRadius =
+        isSpecialRadiusTop == true ? LemonRadius.medium : LemonRadius.medium;
+    final double bottomRadius =
+        isSpecialRadiusBottom == true ? LemonRadius.medium : LemonRadius.medium;
 
     return BlocBuilder<EventApplicationFormProfileSettingBloc,
         EventApplicationFormProfileSettingBlocState>(
@@ -50,6 +47,9 @@ class EventApplicationFormProfileItem extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: LemonColor.chineseBlack,
+            border: Border.all(
+              color: colorScheme.outlineVariant,
+            ),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(topRadius),
               topRight: Radius.circular(topRadius),
@@ -89,83 +89,66 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                       child: Container(
                         child: isChecked
                             ? Assets.icons.icChecked.svg(
-                                width: Sizing.small,
-                                height: Sizing.small,
+                                width: Sizing.xSmall,
+                                height: Sizing.xSmall,
                               )
-                            : Icon(
-                                Icons.circle_outlined,
-                                size: Sizing.small,
-                                color: colorScheme.onSecondary,
+                            : Assets.icons.icUncheck.svg(
+                                width: Sizing.xSmall,
+                                height: Sizing.xSmall,
                               ),
                       ),
                     ),
                   ],
                 ),
               ),
-              isChecked
-                  ? Column(
-                      children: [
-                        Container(
-                          height: 1,
-                          color: colorScheme.outline,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.smMedium,
-                            vertical: Spacing.small,
+              if (isChecked)
+                Column(
+                  children: [
+                    Container(
+                      height: 1,
+                      color: colorScheme.outlineVariant,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.smMedium,
+                        vertical: Spacing.small,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            t.event.applicationForm.required,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  ThemeSvgIcon(
-                                    color: colorScheme.onSurface,
-                                    builder: (filter) =>
-                                        Assets.icons.icAsterisk.svg(
-                                      colorFilter: filter,
+                          FlutterSwitch(
+                            inactiveColor: colorScheme.outline,
+                            inactiveToggleColor: colorScheme.onSurfaceVariant,
+                            activeColor: LemonColor.paleViolet,
+                            activeToggleColor: colorScheme.onPrimary,
+                            height: 24.h,
+                            width: 42.w,
+                            value: isRequired,
+                            onToggle: (value) {
+                              Vibrate.feedback(FeedbackType.light);
+                              context
+                                  .read<
+                                      EventApplicationFormProfileSettingBloc>()
+                                  .add(
+                                    EventApplicationFormProfileSettingBlocEvent
+                                        .toggleRequired(
+                                      fieldKey: item.fieldKey,
+                                      isRequired: value,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: Spacing.xSmall,
-                                  ),
-                                  Text(
-                                    t.event.applicationForm.required,
-                                    style: Typo.medium.copyWith(
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              FlutterSwitch(
-                                inactiveColor: colorScheme.outline,
-                                inactiveToggleColor:
-                                    colorScheme.onSurfaceVariant,
-                                activeColor: LemonColor.paleViolet,
-                                activeToggleColor: colorScheme.onPrimary,
-                                height: 24.h,
-                                width: 42.w,
-                                value: isRequired,
-                                onToggle: (value) {
-                                  Vibrate.feedback(FeedbackType.light);
-                                  context
-                                      .read<
-                                          EventApplicationFormProfileSettingBloc>()
-                                      .add(
-                                        EventApplicationFormProfileSettingBlocEvent
-                                            .toggleRequired(
-                                          fieldKey: item.fieldKey,
-                                          isRequired: value,
-                                        ),
-                                      );
-                                },
-                              ),
-                            ],
+                                  );
+                            },
                           ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         );

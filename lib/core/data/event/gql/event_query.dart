@@ -251,6 +251,10 @@ const eventApplicationFormFragment = '''
     }
     application_form_submission
     registration_disabled
+    rsvp_wallet_platforms {
+      platform
+      required
+    }
   }
 ''';
 

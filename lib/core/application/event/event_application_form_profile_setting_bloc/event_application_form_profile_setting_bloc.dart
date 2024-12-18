@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -10,8 +11,10 @@ part 'event_application_form_profile_setting_bloc.freezed.dart';
 class EventApplicationFormProfileSettingBloc extends Bloc<
     EventApplicationFormProfileSettingBlocEvent,
     EventApplicationFormProfileSettingBlocState> {
+  final Event? event;
   final List<EventApplicationProfileField>? initialProfileFields;
   EventApplicationFormProfileSettingBloc({
+    this.event,
     this.initialProfileFields,
   }) : super(
           EventApplicationFormProfileSettingBlocState.initial(),
@@ -39,15 +42,15 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
   final _eventRepository = getIt<EventRepository>();
 
   void onToggleSelect(
-    EventApplicationFormProfileSettingBlocEventToggleSelect event,
+    EventApplicationFormProfileSettingBlocEventToggleSelect blocEvent,
     Emitter emit,
   ) {
     bool isExist = state.applicationProfileFields
-        .any((element) => element.field == event.fieldKey);
+        .any((element) => element.field == blocEvent.fieldKey);
     if (isExist) {
       List<EventApplicationProfileField> newApplicationProfileFields = state
           .applicationProfileFields
-          .where((element) => element.field != event.fieldKey)
+          .where((element) => element.field != blocEvent.fieldKey)
           .toList();
       emit(
         state.copyWith(
@@ -60,7 +63,7 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
           applicationProfileFields: [
             ...state.applicationProfileFields,
             EventApplicationProfileField(
-              field: event.fieldKey,
+              field: blocEvent.fieldKey,
               required: false,
             ),
           ],
@@ -70,14 +73,14 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
   }
 
   void onToggleRequired(
-    EventApplicationFormProfileSettingBlocEventToggleRequired event,
+    EventApplicationFormProfileSettingBlocEventToggleRequired blocEvent,
     Emitter emit,
   ) {
     List<EventApplicationProfileField> updatedFields =
         state.applicationProfileFields
             .map(
-              (element) => element.field == event.fieldKey
-                  ? element.copyWith(required: event.isRequired)
+              (element) => element.field == blocEvent.fieldKey
+                  ? element.copyWith(required: blocEvent.isRequired)
                   : element,
             )
             .toList();
@@ -90,7 +93,7 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
 
   void onPopulateInitialProfileFields(
     EventApplicationFormProfileSettingBlocEventPopulateInitialProfileFields
-        event,
+        blocEvent,
     Emitter emit,
   ) {
     if (initialProfileFields == null) {
@@ -104,7 +107,7 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
   }
 
   void onSubmit(
-    EventApplicationFormProfileSettingBlocEventSubmit event,
+    EventApplicationFormProfileSettingBlocEventSubmit blocEvent,
     Emitter emit,
   ) async {
     emit(
@@ -123,7 +126,7 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
             )
             .toList(),
       ),
-      id: event.eventId,
+      id: event?.id ?? '',
     );
     result.fold(
       (failure) => emit(
@@ -131,11 +134,18 @@ class EventApplicationFormProfileSettingBloc extends Bloc<
           status: EventApplicationFormProfileSettingStatus.error,
         ),
       ),
-      (eventDetail) => emit(
-        state.copyWith(
-          status: EventApplicationFormProfileSettingStatus.success,
-        ),
-      ),
+      (eventDetail) async {
+        emit(
+          state.copyWith(
+            status: EventApplicationFormProfileSettingStatus.success,
+          ),
+        );
+        emit(
+          state.copyWith(
+            status: EventApplicationFormProfileSettingStatus.initial,
+          ),
+        );
+      },
     );
   }
 }
@@ -152,9 +162,8 @@ class EventApplicationFormProfileSettingBlocEvent
   }) = EventApplicationFormProfileSettingBlocEventToggleRequired;
   factory EventApplicationFormProfileSettingBlocEvent.populateInitialProfileFields() =
       EventApplicationFormProfileSettingBlocEventPopulateInitialProfileFields;
-  factory EventApplicationFormProfileSettingBlocEvent.submit({
-    required String eventId,
-  }) = EventApplicationFormProfileSettingBlocEventSubmit;
+  factory EventApplicationFormProfileSettingBlocEvent.submit() =
+      EventApplicationFormProfileSettingBlocEventSubmit;
 }
 
 @freezed
