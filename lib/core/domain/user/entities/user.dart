@@ -111,6 +111,7 @@ class User with _$User {
     double? age,
     int? questPoints,
     StripeConnectedAccount? stripeConnectedAccount,
+    Map<String, List<String>?>? walletsNew,
   }) = _User;
 
   factory User.fromDto(UserDto dto) {
@@ -215,6 +216,7 @@ class User with _$User {
       stripeConnectedAccount: dto.stripeConnectedAccount != null
           ? StripeConnectedAccount.fromDto(dto.stripeConnectedAccount!)
           : null,
+      walletsNew: dto.walletsNew,
     );
   }
 
