@@ -1,5 +1,7 @@
 import 'package:app/core/application/event_tickets/get_ticket_bloc/get_ticket_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/guest_application_page/guest_application_info_page.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/guest_detail_information_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/widgets/scan_qr_ticket_action_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/widgets/scan_qr_ticket_information_item.dart';
@@ -15,31 +17,32 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class GuestDetailBottomSheetView extends StatelessWidget {
   const GuestDetailBottomSheetView({
     super.key,
     required this.shortId,
-    required this.eventId,
+    this.event,
   });
 
   final String shortId;
-  final String eventId;
+  final Event? event;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetTicketBloc()
         ..add(GetTicketEventFetch(shortId: shortId, showLoading: true)),
-      child: _GuestDetailBottomSheetView(eventId: eventId),
+      child: _GuestDetailBottomSheetView(event: event),
     );
   }
 }
 
 class _GuestDetailBottomSheetView extends StatelessWidget {
-  const _GuestDetailBottomSheetView({required this.eventId});
+  const _GuestDetailBottomSheetView({required this.event});
 
-  final String eventId;
+  final Event? event;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +138,7 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
                             children: [
                               _ViewApplicationInfoView(
                                 ticket: ticket,
-                                eventId: eventId,
+                                event: event,
                               ),
                               SizedBox(height: Spacing.smMedium),
                               SafeArea(
@@ -161,19 +164,21 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
 }
 
 class _ViewApplicationInfoView extends StatelessWidget {
-  const _ViewApplicationInfoView({required this.ticket, required this.eventId});
+  const _ViewApplicationInfoView({required this.ticket, required this.event});
 
   final EventTicket ticket;
-  final String eventId;
+  final Event? event;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    if (ticket.assignedTo == null && ticket.assignedEmail == null) {
+      return const SizedBox.shrink();
+    }
     return Query$GetEventApplicationAnswers$Widget(
       options: Options$Query$GetEventApplicationAnswers(
         variables: Variables$Query$GetEventApplicationAnswers(
-          event: eventId,
+          event: event?.id ?? '',
           user: ticket.assignedTo ?? '',
           email: ticket.assignedEmail ?? '',
         ),
@@ -185,7 +190,18 @@ class _ViewApplicationInfoView extends StatelessWidget {
         if (!hasApplications) return const SizedBox.shrink();
 
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            showCupertinoModalBottomSheet(
+              expand: true,
+              useRootNavigator: true,
+              backgroundColor: LemonColor.atomicBlack,
+              context: context,
+              builder: (context) => GuestApplicationInfoPage(
+                event: event,
+                eventTicket: ticket,
+              ),
+            );
+          },
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: Spacing.small,

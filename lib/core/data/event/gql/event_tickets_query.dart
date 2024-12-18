@@ -123,6 +123,7 @@ final getTicketQuery = gql('''
         _id
         name
         email
+        image_avatar
         new_photos_expanded {
           _id
           key
@@ -141,8 +142,15 @@ final getTicketQuery = gql('''
         assigned_email
         assigned_to
         assigned_to_expanded {
-          email
           name
+          email
+          image_avatar
+          new_photos_expanded {
+            _id
+            key
+            bucket
+            type
+          }
         }
         checkin {
           active

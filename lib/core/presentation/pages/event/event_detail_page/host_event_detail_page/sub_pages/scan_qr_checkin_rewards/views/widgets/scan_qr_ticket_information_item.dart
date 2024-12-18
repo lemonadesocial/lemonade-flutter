@@ -82,9 +82,10 @@ class ScanQrTicketInformationItem extends StatelessWidget {
           ),
           SizedBox(width: Spacing.xSmall),
           _TicketStatusButton(
-              ticket: ticket,
-              originalTicket: originalTicket,
-              isCheckedIn: alreadyCheckedIn),
+            ticket: ticket,
+            originalTicket: originalTicket,
+            isCheckedIn: alreadyCheckedIn,
+          ),
         ],
       ),
     );
@@ -117,19 +118,18 @@ class _TicketStatusButton extends StatelessWidget {
             ),
           ),
     );
-
     if (response.result?.parsedData?.updateEventCheckins != null) {
-      SnackBarUtils.showSuccess(
-        message: isCheckedIn
-            ? t.event.scanQR.undoCheckInSuccessfully
-            : t.event.scanQR.checkedinSuccessfully,
-      );
       context.read<GetTicketBloc>().add(
             GetTicketEventFetch(
               shortId: originalTicket?.shortId ?? "",
               showLoading: false,
             ),
           );
+      SnackBarUtils.showSuccess(
+        message: isCheckedIn
+            ? t.event.scanQR.undoCheckInSuccessfully
+            : t.event.scanQR.checkedinSuccessfully,
+      );
     }
   }
 

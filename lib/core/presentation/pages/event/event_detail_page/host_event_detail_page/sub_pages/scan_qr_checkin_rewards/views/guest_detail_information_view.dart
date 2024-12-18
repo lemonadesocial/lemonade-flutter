@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_ticket.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/theme/sizing.dart';
@@ -21,6 +20,9 @@ class GuestDetailInformationView extends StatelessWidget {
     final assignedEmail = ticket.assignedEmail;
     final assignedToExpanded = ticket.assignedToExpanded;
     final displayEmail = assignedEmail ?? assignedToExpanded?.email;
+    if (assignedEmail == null && assignedToExpanded == null) {
+      return const SizedBox.shrink();
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -45,7 +45,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           backgroundColor: LemonColor.atomicBlack,
           builder: (context) => GuestDetailBottomSheetView(
             shortId: shortId,
-            eventId: widget.event.id ?? '',
+            event: widget.event,
           ),
         );
       case ScanTarget.rewards:

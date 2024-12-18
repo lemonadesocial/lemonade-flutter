@@ -1,11 +1,8 @@
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
-import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/widgets/checkin_guest_item.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/guest_detail_bottom_sheet_view.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -14,13 +11,11 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -258,7 +253,7 @@ class _CheckinEventAcceptedExportListState
                               backgroundColor: LemonColor.atomicBlack,
                               builder: (context) => GuestDetailBottomSheetView(
                                 shortId: eventAccepted.shortId ?? '',
-                                eventId: widget.event?.id ?? '',
+                                event: widget.event,
                               ),
                             );
                           },
