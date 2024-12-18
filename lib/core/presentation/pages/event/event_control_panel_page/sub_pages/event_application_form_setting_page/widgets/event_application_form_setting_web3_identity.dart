@@ -46,6 +46,7 @@ class _EventApplicationFormSettingWeb3IdentityState
     final hasPlatform =
         currentPlatformsInput.any((e) => e.platform == platform);
 
+    // field is required
     if (action == 1) {
       if (hasPlatform) {
         currentPlatformsInput = currentPlatformsInput
@@ -60,6 +61,7 @@ class _EventApplicationFormSettingWeb3IdentityState
         );
       }
     }
+    // field is optional
     if (action == 0) {
       if (hasPlatform) {
         currentPlatformsInput = currentPlatformsInput
@@ -76,6 +78,7 @@ class _EventApplicationFormSettingWeb3IdentityState
         );
       }
     }
+    // field is off
     if (action == -1) {
       currentPlatformsInput.removeWhere((e) => e.platform == platform);
     }
