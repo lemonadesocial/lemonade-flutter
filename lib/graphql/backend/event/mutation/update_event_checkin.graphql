@@ -1,5 +1,5 @@
-mutation UpdateEventCheckin($input: UpdateEventCheckinInput!) {
-  updateEventCheckin(input: $input) {
+mutation UpdateEventCheckins($input: UpdateEventCheckinInput!) {
+  updateEventCheckins(input: $input) {
     _id
     active
     email

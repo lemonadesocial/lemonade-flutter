@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ScannerOverlay extends CustomPainter {
   const ScannerOverlay({
     required this.scanWindow,
-    this.borderRadius = 12.0,
+    this.borderRadius = 30.0,
   });
 
   final Rect scanWindow;

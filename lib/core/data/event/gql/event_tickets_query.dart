@@ -107,11 +107,60 @@ final getTicketQuery = gql('''
       _id
       event
       type
+      type_expanded {
+        _id
+        title
+        description
+        prices {
+          cost
+          currency
+        }
+      }
       accepted
       assigned_email
       assigned_to
+      assigned_to_expanded {
+        _id
+        name
+        email
+        image_avatar
+        new_photos_expanded {
+          _id
+          key
+          bucket
+          type
+        }
+      }
       invited_by
       shortid
+      acquired_tickets {
+        _id
+        shortid
+        type_expanded {
+          title
+        }
+        assigned_email
+        assigned_to
+        assigned_to_expanded {
+          name
+          email
+          image_avatar
+          new_photos_expanded {
+            _id
+            key
+            bucket
+            type
+          }
+        }
+        checkin {
+          active
+          created_at
+        }
+      }
+      checkin {
+        active
+        created_at
+      }
     }
   }
 ''');

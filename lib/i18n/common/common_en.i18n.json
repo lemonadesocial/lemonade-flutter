@@ -243,6 +243,7 @@
     "starting": "starting",
     "ago": "ago",
     "content": "Content",
+    "notAssigned": "Not assigned",
     "deviceCalendar": {
         "addToCalendarTitle": "Add to calendar",
         "addToCalendarDescription": "When you create or register for an event, you will get an email that automatically adds it to your Google Calendar. You can also add it manually below.",

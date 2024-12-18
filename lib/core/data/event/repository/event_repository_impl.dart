@@ -1,5 +1,4 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
-import 'package:app/core/data/event/dtos/event_checkin_dto/event_checkin_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
@@ -270,23 +269,24 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, EventCheckin>> updateEventCheckin({
+  Future<Either<Failure, List<EventCheckin>>> updateEventCheckin({
     required Input$UpdateEventCheckinInput input,
   }) async {
-    final result = await client.mutate$UpdateEventCheckin(
-      Options$Mutation$UpdateEventCheckin(
-        variables: Variables$Mutation$UpdateEventCheckin(input: input),
+    final result = await client.mutate$UpdateEventCheckins(
+      Options$Mutation$UpdateEventCheckins(
+        variables: Variables$Mutation$UpdateEventCheckins(input: input),
       ),
     );
-    if (result.hasException || result.parsedData?.updateEventCheckin == null) {
+    if (result.hasException || result.parsedData?.updateEventCheckins == null) {
       return Left(Failure.withGqlException(result.exception));
     }
-
     return Right(
-      EventCheckin.fromDto(
-        EventCheckinDto.fromJson(
-          result.parsedData!.updateEventCheckin.toJson(),
-        ),
+      List.from(
+        result.parsedData!.updateEventCheckins
+            .map(
+              (item) => EventCheckin.fromJson(item.toJson()),
+            )
+            .toList(),
       ),
     );
   }
