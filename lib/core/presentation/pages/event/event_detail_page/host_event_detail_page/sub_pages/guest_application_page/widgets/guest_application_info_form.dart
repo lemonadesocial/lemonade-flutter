@@ -2,7 +2,6 @@ import 'package:app/core/data/event/dtos/event_application_answer_dto/event_appl
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
-import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/social_utils.dart';
