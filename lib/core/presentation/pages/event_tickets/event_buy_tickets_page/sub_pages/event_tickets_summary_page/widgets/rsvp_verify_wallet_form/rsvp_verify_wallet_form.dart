@@ -33,13 +33,12 @@ class RSVPVerifyWalletForm extends StatelessWidget {
     );
     return Column(
       children: [
-        if (ethereumPlatform != null)
-          BlocProvider(
-            create: (context) => SignWalletBloc(),
-            child: EthereumWalletVerificationWidget(
-              rsvpPlatform: ethereumPlatform,
-            ),
+        if (ethereumPlatform != null) ...[
+          EthereumWalletVerificationWidget(
+            rsvpPlatform: ethereumPlatform,
           ),
+          SizedBox(height: Spacing.smMedium),
+        ],
       ],
     );
   }
@@ -60,114 +59,106 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
           authenticated: (userProfile) => userProfile,
           orElse: () => null,
         );
+    final signEthereumWalletBlocState = context.watch<SignWalletBloc>().state;
     final verifiedWallets = userProfile?.walletsNew;
     final isRequired = rsvpPlatform?.isRequired == true;
     final verifiedEthereumAddresses = verifiedWallets?['ethereum'];
     final isVerified = UserUtils.isWalletVerified(
-      userProfile,
-      platform: Enum$BlockchainPlatform.ethereum,
-    );
+          userProfile,
+          platform: Enum$BlockchainPlatform.ethereum,
+        ) ||
+        signEthereumWalletBlocState is SignWalletStateSuccess;
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<SignWalletBloc, SignWalletState>(
-          listener: (context, state) {
-            if (state is SignWalletStateSuccess) {
-              context.read<AuthBloc>().add(const AuthEvent.refreshData());
-            }
-          },
-        ),
-      ],
-      child: BlocBuilder<WalletBloc, WalletState>(
-        builder: (context, state) {
-          final isWalletConnected = state.activeSession != null;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text.rich(
-                TextSpan(
-                  children: [
+    return BlocBuilder<WalletBloc, WalletState>(
+      builder: (context, state) {
+        final isWalletConnected = state.activeSession != null;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: t.event.rsvpWeb3Indetity.yourEthereumAddress,
+                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  ),
+                  if (isRequired)
                     TextSpan(
-                      text: t.event.rsvpWeb3Indetity.yourEthereumAddress,
-                      style: Typo.medium.copyWith(color: colorScheme.onPrimary),
-                    ),
-                    if (isRequired)
-                      TextSpan(
-                        text: " *",
-                        style: Typo.medium.copyWith(
-                          color: LemonColor.coralReef,
-                        ),
+                      text: " *",
+                      style: Typo.medium.copyWith(
+                        color: LemonColor.coralReef,
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-              SizedBox(height: Spacing.xSmall),
-              if (!isWalletConnected && !isVerified)
-                ConnectWalletButton(
-                  builder: (onPress, connectButtonState) {
-                    return SizedBox(
-                      width: 150.w,
-                      height: 50.w,
-                      child: LemonOutlineButton(
-                        leading: ThemeSvgIcon(
-                          builder: (filter) => Assets.icons.icCurrencyEth.svg(
-                            colorFilter: filter,
+            ),
+            SizedBox(height: Spacing.xSmall),
+            if (!isWalletConnected && !isVerified)
+              ConnectWalletButton(
+                builder: (onPress, connectButtonState) {
+                  return SizedBox(
+                    width: 150.w,
+                    height: 50.w,
+                    child: LemonOutlineButton(
+                      leading: ThemeSvgIcon(
+                        builder: (filter) => Assets.icons.icCurrencyEth.svg(
+                          colorFilter: filter,
+                        ),
+                        color: colorScheme.onSecondary,
+                      ),
+                      onTap: () => onPress.call(context),
+                      label: t.common.actions.connectWallet,
+                      radius: BorderRadius.circular(LemonRadius.medium),
+                      backgroundColor: LemonColor.chineseBlack,
+                      borderColor: colorScheme.outlineVariant,
+                      textStyle: Typo.medium.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            if (isVerified || (isWalletConnected && !isVerified))
+              SizedBox(
+                width: isVerified ? 200.w : 178.w,
+                height: 50.w,
+                child: LemonOutlineButton(
+                  leading: ThemeSvgIcon(
+                    builder: (filter) => Assets.icons.icCurrencyEth.svg(
+                      colorFilter: filter,
+                    ),
+                    color: colorScheme.onSecondary,
+                  ),
+                  onTap: () {
+                    if (isVerified) {
+                      return;
+                    }
+                    context.read<SignWalletBloc>().add(
+                          SignWalletEvent.sign(
+                            wallet: state.activeSession?.address ?? '',
                           ),
-                          color: colorScheme.onSecondary,
-                        ),
-                        onTap: () => onPress.call(context),
-                        label: t.common.actions.connectWallet,
-                        radius: BorderRadius.circular(LemonRadius.medium),
-                        backgroundColor: LemonColor.chineseBlack,
-                        borderColor: colorScheme.outlineVariant,
-                        textStyle: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      ),
-                    );
+                        );
                   },
-                ),
-              if (isVerified || (isWalletConnected && !isVerified))
-                SizedBox(
-                  width: isVerified ? 200.w : 178.w,
-                  height: 50.w,
-                  child: LemonOutlineButton(
-                    leading: ThemeSvgIcon(
-                      builder: (filter) => Assets.icons.icCurrencyEth.svg(
-                        colorFilter: filter,
-                      ),
-                      color: colorScheme.onSecondary,
-                    ),
-                    onTap: () {
-                      if (isVerified) {
-                        return;
-                      }
-                      context.read<SignWalletBloc>().add(
-                            SignWalletEvent.sign(
-                              wallet: state.activeSession?.address ?? '',
-                            ),
-                          );
-                    },
-                    label: isVerified
-                        ? t.event.eventBuyTickets.verifiedWithWallet(
-                            address: Web3Utils.formatIdentifier(
-                              verifiedEthereumAddresses?[1] ?? '',
-                            ),
-                          )
-                        : t.event.eventBuyTickets.verifyWithWallet,
-                    radius: BorderRadius.circular(LemonRadius.medium),
-                    backgroundColor: LemonColor.chineseBlack,
-                    borderColor: colorScheme.outlineVariant,
-                    textStyle: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
+                  label: isVerified
+                      ? t.event.eventBuyTickets.verifiedWithWallet(
+                          address: Web3Utils.formatIdentifier(
+                            verifiedEthereumAddresses?.elementAtOrNull(1) ??
+                                state.activeSession?.address ??
+                                '',
+                          ),
+                        )
+                      : t.event.eventBuyTickets.verifyWithWallet,
+                  radius: BorderRadius.circular(LemonRadius.medium),
+                  backgroundColor: LemonColor.chineseBlack,
+                  borderColor: colorScheme.outlineVariant,
+                  textStyle: Typo.medium.copyWith(
+                    color: colorScheme.onSecondary,
                   ),
                 ),
-            ],
-          );
-        },
-      ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
