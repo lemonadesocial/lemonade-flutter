@@ -103,6 +103,8 @@ class WalletConnectService {
 
       _app!.onSessionEvent.subscribe(_onSessionEvent);
       _app!.onSessionUpdate.subscribe(_onSessionUpdate);
+      _app!.onSessionConnect.subscribe(_onSessionConnect);
+      _app!.onSessionDelete.subscribe(_onSessionDelete);
 
       return true;
     } catch (e) {
@@ -114,6 +116,8 @@ class WalletConnectService {
     if (_app == null) return;
     _app!.onSessionEvent.unsubscribeAll();
     _app!.onSessionUpdate.unsubscribeAll();
+    _app!.onSessionConnect.unsubscribeAll();
+    _app!.onSessionDelete.unsubscribeAll();
   }
 
   Future<W3MSession?> getActiveSession() async {
@@ -129,7 +133,6 @@ class WalletConnectService {
     String? chainId,
   }) async {
     _w3mService.launchConnectedWallet();
-
     final data = await _w3mService.request(
       topic: _w3mService.session?.topic ?? '',
       chainId: chainId ?? _currentWalletChainId ?? ETHEREUM.chainId,
@@ -182,6 +185,19 @@ class WalletConnectService {
       ),
       switchChain: true,
     );
+  }
+
+  _onSessionConnect(SessionConnect? sessionConnect) {
+    final firstAccount = sessionConnect
+            ?.session.namespaces.values.firstOrNull?.accounts.firstOrNull ??
+        '';
+    _currentWalletAccount = NamespaceUtils.getAccount(firstAccount);
+    _currentWalletChainId = NamespaceUtils.getChainFromAccount(firstAccount);
+  }
+
+  _onSessionDelete(SessionDelete? sessionDelete) {
+    _currentWalletAccount = null;
+    _currentWalletChainId = null;
   }
 
   _onSessionEvent(SessionEvent? sessionEvent) {
