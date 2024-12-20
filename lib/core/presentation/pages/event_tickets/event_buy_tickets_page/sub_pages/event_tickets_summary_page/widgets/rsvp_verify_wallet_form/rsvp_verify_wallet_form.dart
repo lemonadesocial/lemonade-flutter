@@ -142,7 +142,10 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                   label: isVerified
                       ? t.event.eventBuyTickets.verifiedWithWallet(
                           address: Web3Utils.formatIdentifier(
-                            verifiedEthereumAddresses?.elementAtOrNull(1) ??
+                            verifiedEthereumAddresses?.firstWhereOrNull(
+                                  (element) =>
+                                      element != userProfile?.walletCustodial,
+                                ) ??
                                 state.activeSession?.address ??
                                 '',
                           ),
