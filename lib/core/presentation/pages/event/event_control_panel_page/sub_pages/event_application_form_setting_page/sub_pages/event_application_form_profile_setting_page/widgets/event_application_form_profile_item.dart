@@ -3,7 +3,6 @@ import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -59,46 +58,44 @@ class EventApplicationFormProfileItem extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Spacing.smMedium,
-                  vertical: Spacing.small,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      item.label,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+              InkWell(
+                onTap: () {
+                  Vibrate.feedback(FeedbackType.light);
+                  context.read<EventApplicationFormProfileSettingBloc>().add(
+                        EventApplicationFormProfileSettingBlocEvent
+                            .toggleSelect(
+                          fieldKey: item.fieldKey,
+                        ),
+                      );
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                    vertical: Spacing.small,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        item.label,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        context
-                            .read<EventApplicationFormProfileSettingBloc>()
-                            .add(
-                              EventApplicationFormProfileSettingBlocEvent
-                                  .toggleSelect(
-                                fieldKey: item.fieldKey,
-                              ),
-                            );
-                      },
-                      child: Container(
+                      Container(
                         child: isChecked
                             ? Assets.icons.icChecked.svg(
-                                width: Sizing.xSmall,
-                                height: Sizing.xSmall,
+                                width: 18.w,
+                                height: 18.w,
                               )
                             : Assets.icons.icUncheck.svg(
-                                width: Sizing.xSmall,
-                                height: Sizing.xSmall,
+                                width: 18.w,
+                                height: 18.w,
                               ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               if (isChecked)
@@ -123,6 +120,7 @@ class EventApplicationFormProfileItem extends StatelessWidget {
                             ),
                           ),
                           FlutterSwitch(
+                            padding: 2.w,
                             inactiveColor: colorScheme.outline,
                             inactiveToggleColor: colorScheme.onSurfaceVariant,
                             activeColor: LemonColor.paleViolet,

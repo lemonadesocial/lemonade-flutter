@@ -7,11 +7,14 @@ import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/g
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
+import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event.dart' as event_entity;
+import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
+import 'package:app/core/domain/user/entities/user.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matrix/matrix.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 @RoutePage()
 class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
@@ -24,19 +27,34 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
   final event_entity.Event event;
   final bool isBuyMore;
 
+  event_entity.Event _preModifyEvent(event_entity.Event event, User? user) {
+    // manually add displayName field to applicationProfileFields if it is not present
+    return event.copyWith(
+      applicationProfileFields: [
+        if (user?.displayName == null || user?.displayName?.isEmpty == true)
+          EventApplicationProfileField(
+            field: ProfileFieldKey.displayName.fieldKey,
+            required: true,
+          ),
+        ...(event.applicationProfileFields ?? []),
+      ],
+    );
+  }
+
   @override
   Widget wrappedRoute(BuildContext context) {
     final user = context.watch<AuthBloc>().state.maybeWhen(
           authenticated: (user) => user,
           orElse: () => null,
         );
+    final modifiedEvent = _preModifyEvent(event, user);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => EventProviderBloc(event: event),
+          create: (context) => EventProviderBloc(event: modifiedEvent),
         ),
         BlocProvider(
-          create: (context) => GetEventTicketTypesBloc(event: event)
+          create: (context) => GetEventTicketTypesBloc(event: modifiedEvent)
             ..add(
               GetEventTicketTypesEvent.fetch(),
             ),
@@ -62,7 +80,7 @@ class EventBuyTicketsPage extends StatelessWidget implements AutoRouteWrapper {
           create: (context) => EventApplicationFormBloc()
             ..add(
               EventApplicationFormBlocEvent.initFieldState(
-                event: event,
+                event: modifiedEvent,
                 user: user,
               ),
             ),

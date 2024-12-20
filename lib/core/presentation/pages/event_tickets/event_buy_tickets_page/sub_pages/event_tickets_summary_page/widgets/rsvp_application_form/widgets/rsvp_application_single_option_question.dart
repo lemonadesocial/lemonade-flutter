@@ -97,7 +97,7 @@ class _RsvpApplicationSingleOptionQuestionState
                     selectedItem ?? t.common.selectAnOption,
                     style: Typo.medium.copyWith(
                       color: selectedItem == null
-                          ? colorScheme.onSecondary
+                          ? colorScheme.onSurfaceVariant
                           : colorScheme.onPrimary,
                     ),
                   ),

@@ -57,7 +57,6 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     List<ProfileFieldKey> basicInfoKeys = [
-      ProfileFieldKey.displayName,
       ProfileFieldKey.pronoun,
       ProfileFieldKey.tagline,
       ProfileFieldKey.description,
@@ -80,96 +79,105 @@ class EventApplicationFormProfileSettingPage extends StatelessWidget
       ProfileFieldKey.handleFarcaster,
       ProfileFieldKey.handleLens,
     ];
-    return Scaffold(
-      appBar: LemonAppBar(
-        title: t.event.applicationForm.addQuestion,
-        actions: [
-          BlocBuilder<EventApplicationFormProfileSettingBloc,
-              EventApplicationFormProfileSettingBlocState>(
-            builder: (context, state) {
-              if (state.status ==
-                  EventApplicationFormProfileSettingStatus.loading) {
-                return Loading.defaultLoading(context);
-              }
-              return LemonOutlineButton(
-                radius: BorderRadius.circular(LemonRadius.button),
-                backgroundColor: LemonColor.white87,
-                textColor: colorScheme.primary,
-                onTap: () {
-                  Vibrate.feedback(FeedbackType.light);
-                  context.read<EventApplicationFormProfileSettingBloc>().add(
-                        EventApplicationFormProfileSettingBlocEvent.submit(),
-                      );
-                },
-                label: t.common.actions.save,
-              );
-            },
-          ),
-          SizedBox(width: Spacing.small),
-        ],
+    return BlocListener<EventApplicationFormProfileSettingBloc,
+        EventApplicationFormProfileSettingBlocState>(
+      listener: (context, state) {
+        if (state.status == EventApplicationFormProfileSettingStatus.success) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: LemonAppBar(
+          title: t.event.applicationForm.addQuestion,
+          actions: [
+            BlocBuilder<EventApplicationFormProfileSettingBloc,
+                EventApplicationFormProfileSettingBlocState>(
+              builder: (context, state) {
+                if (state.status ==
+                    EventApplicationFormProfileSettingStatus.loading) {
+                  return Loading.defaultLoading(context);
+                }
+                return LemonOutlineButton(
+                  radius: BorderRadius.circular(LemonRadius.button),
+                  backgroundColor: LemonColor.white87,
+                  textColor: colorScheme.primary,
+                  onTap: () {
+                    Vibrate.feedback(FeedbackType.light);
+                    context.read<EventApplicationFormProfileSettingBloc>().add(
+                          EventApplicationFormProfileSettingBlocEvent.submit(),
+                        );
+                  },
+                  label: t.common.actions.save,
+                );
+              },
+            ),
+            SizedBox(width: Spacing.small),
+          ],
+          backgroundColor: LemonColor.atomicBlack,
+        ),
         backgroundColor: LemonColor.atomicBlack,
-      ),
-      backgroundColor: LemonColor.atomicBlack,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: AddQuestionInfoWidget(
-              title: profileType == ApplicationFormProfileType.basicInfo
-                  ? t.event.applicationForm.questionType.personalInfo
-                  : t.event.applicationForm.questionType.socialProfile,
-              description: profileType == ApplicationFormProfileType.basicInfo
-                  ? t.event.applicationForm.questionType.personalInfoDescription
-                  : t.event.applicationForm.questionType
-                      .socialProfileDescription,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: Spacing.smMedium),
-          ),
-          if (profileType == ApplicationFormProfileType.basicInfo)
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.small,
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: AddQuestionInfoWidget(
+                title: profileType == ApplicationFormProfileType.basicInfo
+                    ? t.event.applicationForm.questionType.personalInfo
+                    : t.event.applicationForm.questionType.socialProfile,
+                description: profileType == ApplicationFormProfileType.basicInfo
+                    ? t.event.applicationForm.questionType
+                        .personalInfoDescription
+                    : t.event.applicationForm.questionType
+                        .socialProfileDescription,
               ),
-              sliver: SliverList.separated(
-                itemCount: basicInfoKeys.length,
-                itemBuilder: (context, index) {
-                  final field = basicInfoKeys[index];
-                  return EventApplicationFormProfileItem(
-                    item: field,
-                    isSpecialRadiusTop: index == 0,
-                    isSpecialRadiusBottom: index == basicInfoKeys.length - 1,
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: Spacing.xSmall,
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.smMedium),
+            ),
+            if (profileType == ApplicationFormProfileType.basicInfo)
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.small,
+                ),
+                sliver: SliverList.separated(
+                  itemCount: basicInfoKeys.length,
+                  itemBuilder: (context, index) {
+                    final field = basicInfoKeys[index];
+                    return EventApplicationFormProfileItem(
+                      item: field,
+                      isSpecialRadiusTop: index == 0,
+                      isSpecialRadiusBottom: index == basicInfoKeys.length - 1,
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: Spacing.xSmall,
+                  ),
                 ),
               ),
-            ),
-          if (profileType == ApplicationFormProfileType.socialMediaInfo)
-            SliverPadding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.small,
-              ),
-              sliver: SliverList.separated(
-                itemCount: socialInfoKeys.length,
-                itemBuilder: (context, index) {
-                  final field = socialInfoKeys[index];
-                  return EventApplicationFormProfileItem(
-                    item: field,
-                    isSpecialRadiusTop: index == 0,
-                    isSpecialRadiusBottom: index == socialInfoKeys.length - 1,
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: Spacing.xSmall,
+            if (profileType == ApplicationFormProfileType.socialMediaInfo)
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.small,
+                ),
+                sliver: SliverList.separated(
+                  itemCount: socialInfoKeys.length,
+                  itemBuilder: (context, index) {
+                    final field = socialInfoKeys[index];
+                    return EventApplicationFormProfileItem(
+                      item: field,
+                      isSpecialRadiusTop: index == 0,
+                      isSpecialRadiusBottom: index == socialInfoKeys.length - 1,
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: Spacing.xSmall,
+                  ),
                 ),
               ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.large * 4),
             ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: Spacing.large * 4),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

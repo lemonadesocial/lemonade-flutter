@@ -84,6 +84,7 @@ class EventApplicationFormSettingBloc extends Bloc<
           emit(state.copyWith(status: EventApplicationFormStatus.error)),
       (result) {
         emit(state.copyWith(status: EventApplicationFormStatus.success));
+        emit(state.copyWith(status: EventApplicationFormStatus.initial));
       },
     );
   }
