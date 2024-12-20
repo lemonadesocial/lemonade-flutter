@@ -513,7 +513,7 @@
         "saveForm": "Save form",
         "saveFormSuccessfully": "Update application form successfully",
         "updateApplicationFormSuccessfully": "Update application form successfully",
-        "chooseQuestionType": "Choose question type",
+        "chooseQuestionType": "Choose Question Type",
         "questionType": {
             "personalInfo": "Personal info",
             "personalInfoDescription": "Details you want to know about guests",
@@ -523,7 +523,7 @@
             "textDescription": "Ask for a free-form response",
             "singleSelect": "Single select",
             "singleSelectDescription": "Choose one of the listed options",
-            "multipleSelect": "Multiple select",
+            "multipleSelect": "Multi select",
             "multipleSelectDescription": "Choose one or more options"
         },
         "addQuestion": "Add question",
@@ -535,8 +535,10 @@
         "noQuestionsDescription": "Add questions you want your guests to answers",
         "web3Identity": {
             "web3IdentityTitle": "Web3 identity",
-            "ethAddress": "ETH address"
-        }
+            "ethAddress": "ETH address",
+            "web3IdentityDescription": "Guests will be asked to connect their wallet"
+        },
+        "deleteQuestion": "Delete question"
     },
     "reserve": "Reserve",
     "rsvpStatus": {
