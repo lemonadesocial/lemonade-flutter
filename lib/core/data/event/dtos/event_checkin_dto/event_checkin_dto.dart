@@ -9,6 +9,7 @@ class EventCheckinDto with _$EventCheckinDto {
   factory EventCheckinDto({
     @JsonKey(name: '_id') String? id,
     bool? active,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
     String? event,
     String? user,
     String? email,

@@ -1,15 +1,23 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/views/scan_qr_checkin_rewards_view.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_actions.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/typo.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
-enum SelectedScannerTab {
-  checkIn,
-  rewards,
+enum ScanTarget {
+  tickets,
+  rewards;
+
+  String get label {
+    return switch (this) {
+      ScanTarget.tickets => t.event.configuration.tickets,
+      ScanTarget.rewards => t.event.scanQR.rewards,
+    };
+  }
 }
 
 @RoutePage()
@@ -36,50 +44,66 @@ class _ScanQRCheckinRewardsView extends StatefulWidget {
 }
 
 class _ScanQRCheckinRewardsViewState extends State<_ScanQRCheckinRewardsView> {
-  var selectedScannerTabIndex = SelectedScannerTab.checkIn.index;
+  late final MobileScannerController controller;
+  ScanTarget selectedScanTarget = ScanTarget.tickets;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = MobileScannerController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(),
-      body: DefaultTabController(
-        initialIndex: 0,
-        length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              onTap: (item) {
-                setState(() => selectedScannerTabIndex = item);
-              },
-              labelStyle: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w500,
-              ),
-              unselectedLabelStyle: Typo.medium.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-              indicatorColor: LemonColor.paleViolet,
-              tabs: [
-                Tab(text: t.event.scanQR.checkin.toUpperCase()),
-                Tab(text: t.event.scanQR.rewards.toUpperCase()),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // Using same instance scan QR code controller when scan QR code
-                  // Even it's 2 tabbar
-                  ScanQRCheckinRewardsView(
-                    event: widget.event,
-                    selectedScannerTabIndex: selectedScannerTabIndex,
+      appBar: LemonAppBar(
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: ValueListenableBuilder<TorchState>(
+              valueListenable: controller.torchState,
+              builder: (context, value, child) {
+                final iconColor =
+                    value == TorchState.on ? Colors.yellow : Colors.white;
+                return IconButton(
+                  onPressed: () => controller.toggleTorch(),
+                  icon: Icon(
+                    Icons.flashlight_on_outlined,
+                    color: iconColor,
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ScanQRCheckinRewardsView(
+              event: widget.event,
+              selectedScanTarget: selectedScanTarget,
+              controller: controller,
+            ),
+          ),
+          SafeArea(
+            child: ScannerActions(
+              controller: controller,
+              selectedScanTarget: selectedScanTarget,
+              onScanTargetChanged: (target) {
+                setState(() => selectedScanTarget = target);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

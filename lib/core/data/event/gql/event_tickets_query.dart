@@ -1,6 +1,33 @@
 import 'package:app/core/data/payment/payment_query.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+const eventTicketFragment = '''
+fragment eventTicketFragment on Ticket {
+  _id
+  shortid
+  type_expanded {
+    title
+  }
+  assigned_email
+  assigned_to
+  assigned_to_expanded {
+    name
+    email
+    image_avatar
+    new_photos_expanded {
+      _id
+      key
+      bucket
+      type
+    }
+  }
+  checkin {
+    active
+    created_at
+  }
+}
+''';
+
 const eventTicketPriceFragment = '''
 fragment eventTicketPriceFragment on EventTicketPrice {
   cost
@@ -102,16 +129,14 @@ final getTicketsQuery = gql('''
 ''');
 
 final getTicketQuery = gql('''
+  $eventTicketFragment
+  
   query GetTicket(\$shortid: String!) {
     getTicket(shortid: \$shortid) {
-      _id
-      event
-      type
-      accepted
-      assigned_email
-      assigned_to
-      invited_by
-      shortid
+      ...eventTicketFragment
+      acquired_tickets {
+        ...eventTicketFragment
+      }
     }
   }
 ''');

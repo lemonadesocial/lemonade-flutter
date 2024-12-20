@@ -365,11 +365,17 @@
     "scanQR": {
         "scan": "Scan",
         "scanTicketSuccess": "Scan ticket successfully",
+        "undoCheckInSuccessfully": "Undo check in successfully",
         "checkedIn": "checked in",
         "pleaseScan": "Please scan QR Code",
         "checkin": "Check in",
         "checkedinSuccessfully": "Successfully checked in",
-        "rewards": "Rewards"
+        "checkedInAllSuccessfully": "Successfully checked in all",
+        "rewards": "Rewards",
+        "checkInAll": "Check in All",
+        "undoCheckIn": "Undo check in",
+        "checkedInAll": "Checked in all",
+        "additionalTickets": "Additional Tickets"
     },
     "rewardSetting": {
         "createNewReward": "Create new reward",
