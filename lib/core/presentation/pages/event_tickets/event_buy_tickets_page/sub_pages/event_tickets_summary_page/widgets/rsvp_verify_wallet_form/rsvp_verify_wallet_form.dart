@@ -109,7 +109,7 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                       onTap: () => onPress.call(context),
                       label: t.common.actions.connectWallet,
                       radius: BorderRadius.circular(LemonRadius.medium),
-                      backgroundColor: LemonColor.chineseBlack,
+                      backgroundColor: LemonColor.atomicBlack,
                       borderColor: colorScheme.outlineVariant,
                       textStyle: Typo.medium.copyWith(
                         color: colorScheme.onSecondary,
@@ -152,7 +152,7 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                         )
                       : t.event.eventBuyTickets.verifyWithWallet,
                   radius: BorderRadius.circular(LemonRadius.medium),
-                  backgroundColor: LemonColor.chineseBlack,
+                  backgroundColor: LemonColor.atomicBlack,
                   borderColor: colorScheme.outlineVariant,
                   textStyle: Typo.medium.copyWith(
                     color: colorScheme.onSecondary,

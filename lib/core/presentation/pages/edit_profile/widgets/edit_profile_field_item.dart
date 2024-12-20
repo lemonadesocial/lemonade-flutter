@@ -66,6 +66,7 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           backgroundColor: backgroundColor,
           border: border,
+          offset: Offset(0, -Spacing.superExtraSmall),
         );
       case ProfileFieldKey.industry:
         return FrostedGlassDropDownV2(
@@ -82,6 +83,7 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           backgroundColor: backgroundColor,
           border: border,
+          offset: Offset(0, -Spacing.superExtraSmall),
         );
       case ProfileFieldKey.newGender:
         return FrostedGlassDropDownV2(
@@ -98,6 +100,7 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           backgroundColor: backgroundColor,
           border: border,
+          offset: Offset(0, -Spacing.superExtraSmall),
         );
       case ProfileFieldKey.ethnicity:
         return FrostedGlassDropDownV2(
@@ -114,12 +117,14 @@ class EditProfileFieldItem extends StatelessWidget {
           showRequired: showRequired,
           backgroundColor: backgroundColor,
           border: border,
+          offset: const Offset(0, 0),
         );
       //
       // DateTimePicker mode
       //
       case ProfileFieldKey.dateOfBirth:
         return LemonTextField(
+          inputHeight: 53.w,
           label: t.profile.dob,
           labelStyle: labelStyle,
           onChange: onChange,
@@ -169,9 +174,10 @@ class EditProfileFieldItem extends StatelessWidget {
         );
       default:
         return LemonTextField(
+          inputHeight: 53.w,
           label: profileFieldKey.label,
           labelStyle: labelStyle,
-          hintText: '',
+          hintText: t.common.hint.enterYourAnswer,
           initialText: value,
           onChange: onChange,
           showRequired: showRequired,

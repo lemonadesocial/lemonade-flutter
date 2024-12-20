@@ -1,3 +1,5 @@
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -18,6 +20,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
     this.backgroundColor,
     this.labelStyle,
     this.border,
+    this.offset,
   });
 
   final String? label;
@@ -29,7 +32,7 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
   final bool? showRequired;
   final Color? backgroundColor;
   final Border? border;
-
+  final Offset? offset;
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -104,10 +107,19 @@ class FrostedGlassDropDownV2 extends StatelessWidget {
               value: selectedValue,
               onChanged: onValueChange,
               dropdownStyleData: DropdownStyleData(
-                offset: Offset(-18.w, 0),
+                maxHeight: 360.w,
+                offset: offset ?? Offset(-18.w, 0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.r),
-                  color: LemonColor.dropdownBackground,
+                  color: backgroundColor ?? LemonColor.atomicBlack,
+                ),
+              ),
+              iconStyleData: IconStyleData(
+                icon: ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icArrowUpDown.svg(
+                    colorFilter: filter,
+                  ),
                 ),
               ),
               menuItemStyleData: MenuItemStyleData(

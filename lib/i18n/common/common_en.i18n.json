@@ -249,5 +249,8 @@
         "eventPlaceholder": "Get up-to-date information at $url",
         "addToGoogleCalendar": "Add to Google Calendar",
         "addToAppleCalendar": "Add to Apple Calendar"
+    },
+    "hint": {
+        "enterYourAnswer": "Enter your answer"
     }
 }
