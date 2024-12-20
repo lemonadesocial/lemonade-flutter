@@ -294,4 +294,24 @@ class EventUtils {
         false;
     return isRequired;
   }
+
+  static DateTime getDefaultStartDateTime() {
+    final now = DateTime.now();
+    // Round up to next 30 minutes
+    final minutes = now.minute;
+    final roundedMinutes = minutes <= 30 ? 30 : 60;
+
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour + (roundedMinutes == 60 ? 1 : 0),
+      roundedMinutes == 60 ? 0 : roundedMinutes,
+    );
+  }
+
+  static DateTime getDefaultEndDateTime() {
+    // Add 1 hour to start time
+    return getDefaultStartDateTime().add(const Duration(hours: 1));
+  }
 }
