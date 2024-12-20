@@ -220,7 +220,9 @@ class CreateEventBasePage extends StatelessWidget {
                     horizontal: Spacing.smMedium,
                   ),
                   sliver: const SliverToBoxAdapter(
-                    child: EventDateTimeSettingSection(),
+                    child: EventDateTimeSettingSection(
+                      event: null,
+                    ),
                   ),
                 ),
                 SliverToBoxAdapter(

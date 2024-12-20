@@ -183,8 +183,10 @@ class EventSettingsBasePage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             horizontal: Spacing.small,
                           ),
-                          sliver: const SliverToBoxAdapter(
-                            child: EventDateTimeSettingSection(),
+                          sliver: SliverToBoxAdapter(
+                            child: EventDateTimeSettingSection(
+                              event: event,
+                            ),
                           ),
                         ),
                         SliverToBoxAdapter(
