@@ -93,22 +93,27 @@ class PostGuestEventDetailView extends StatelessWidget {
               ),
               child: GuestEventDetailDashboard(event: event),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: Spacing.smMedium,
-              ),
-              child: const PostGuestEventDetailSocialLoungeButton(),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.smMedium,
+                  ),
+                  child: const PostGuestEventDetailSocialLoungeButton(),
+                ),
+                if (event.subeventEnabled == true) ...[
+                  SizedBox(height: Spacing.small),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    child: CreateSubSideEventButton(
+                      event: event,
+                    ),
+                  ),
+                ],
+              ],
             ),
-            if (event.subeventEnabled == true) ...[
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Spacing.smMedium,
-                ),
-                child: CreateSubSideEventButton(
-                  event: event,
-                ),
-              ),
-            ],
             if (EventUtils.hasPoapOffers(event))
               GuestEventPoapOffers(
                 event: event,

@@ -10,7 +10,6 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -97,8 +96,8 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
             icon: ThemeSvgIcon(
               color: LemonColor.paleViolet,
               builder: (colorFilter) => Assets.icons.icOutlineVerified.svg(
-                width: Sizing.small,
-                height: Sizing.small,
+                width: 18.w,
+                height: 18.w,
                 colorFilter: colorFilter,
               ),
             ),
@@ -112,8 +111,8 @@ class GuestEventDetailRSVPStatus extends StatelessWidget {
             // TODO: will handle escrow different escrow description
             subTitle: t.event.rsvpStatus.requestDeclinedDirectDescription,
             icon: Assets.icons.icCloseCircle.svg(
-              width: Sizing.small,
-              height: Sizing.small,
+              width: 18.w,
+              height: 18.w,
             ),
             onPressCancel: () {},
           );
