@@ -22,8 +22,6 @@ class EventDateTimeSettingsBloc
     on<EventDateTimeSettingsEventSaveChangesDateTime>(_onSaveChangesDateTime);
     on<EventDateTimeSettingsEventSaveChangesTimezone>(_onSaveChangesTimezone);
     on<EventDateTimeSettingsEventReset>(_onReset);
-    on<EventDateTimeSettingsEventUpdateTempStart>(_onUpdateTempStart);
-    on<EventDateTimeSettingsEventUpdateTempEnd>(_onUpdateTempEnd);
   }
   final EventRepository eventRepository = getIt<EventRepository>();
 
@@ -41,8 +39,6 @@ class EventDateTimeSettingsBloc
       state.copyWith(
         start: DateTimeFormz.dirty(start),
         end: DateTimeFormz.dirty(end),
-        tempStart: start,
-        tempEnd: end,
         timezone: finalTimezone,
       ),
     );
@@ -52,8 +48,8 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventSaveChangesDateTime event,
     Emitter emit,
   ) async {
-    final newStart = state.tempStart ?? state.start.value!;
-    final newEnd = state.tempEnd ?? state.end.value!;
+    final newStart = event.tempStart;
+    final newEnd = event.tempEnd;
     if (newStart.isBefore(DateTime.now())) {
       emit(
         state.copyWith(
@@ -118,20 +114,20 @@ class EventDateTimeSettingsBloc
     final location = tz.getLocation(event.timezone);
     final newStart = tz.TZDateTime(
       location,
-      state.tempStart!.year,
-      state.tempStart!.month,
-      state.tempStart!.day,
-      state.tempStart!.hour,
-      state.tempStart!.minute,
+      state.start.value!.year,
+      state.start.value!.month,
+      state.start.value!.day,
+      state.start.value!.hour,
+      state.start.value!.minute,
     );
 
     final newEnd = tz.TZDateTime(
       location,
-      state.tempEnd!.year,
-      state.tempEnd!.month,
-      state.tempEnd!.day,
-      state.tempEnd!.hour,
-      state.tempEnd!.minute,
+      state.end.value!.year,
+      state.end.value!.month,
+      state.end.value!.day,
+      state.end.value!.hour,
+      state.end.value!.minute,
     );
     // Edit mode
     if (event.event != null) {
@@ -172,107 +168,6 @@ class EventDateTimeSettingsBloc
     Emitter<EventDateTimeSettingsState> emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final start = DateTimeFormz.dirty(state.start.value!);
-    final end = DateTimeFormz.dirty(state.end.value!);
-    emit(
-      state.copyWith(
-        start: start,
-        end: end,
-      ),
-    );
-  }
-
-  void _onUpdateTempStart(
-    EventDateTimeSettingsEventUpdateTempStart event,
-    Emitter<EventDateTimeSettingsState> emit,
-  ) {
-    final tempStart = event.tempStart;
-    var tempEnd = state.tempEnd ?? state.end.value!;
-
-    // Edit mode
-    if (event.event != null) {
-      emit(
-        state.copyWith(
-          isValid: false,
-          errorMessage: "",
-          tempStart: tempStart,
-          tempEnd: tempEnd,
-        ),
-      );
-      return;
-    }
-
-    // If new start date is after or equal to end date, adjust end date
-    if (!tempStart.isBefore(tempEnd)) {
-      tempEnd = tz.TZDateTime(
-        tz.getLocation(
-          state.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue(),
-        ),
-        tempStart.year,
-        tempStart.month,
-        tempStart.day,
-        tempStart.hour,
-        tempStart.minute,
-      ).add(
-        const Duration(hours: 1),
-      ); // Add 1 hour to ensure end is after start
-    }
-
-    emit(
-      state.copyWith(
-        isValid: false,
-        errorMessage: "",
-        tempStart: tempStart,
-        tempEnd: tempEnd,
-      ),
-    );
-  }
-
-  void _onUpdateTempEnd(
-    EventDateTimeSettingsEventUpdateTempEnd event,
-    Emitter<EventDateTimeSettingsState> emit,
-  ) {
-    final tempEnd = event.tempEnd;
-    var tempStart = state.tempStart ?? state.start.value!;
-
-    // Edit mode
-    if (event.event != null) {
-      emit(
-        state.copyWith(
-          isValid: false,
-          errorMessage: "",
-          tempStart: tempStart,
-          tempEnd: tempEnd,
-        ),
-      );
-      return;
-    }
-
-    // If end date is before or equal to start date, adjust start date
-    if (!tempEnd.isAfter(tempStart)) {
-      tempStart = tz.TZDateTime(
-        tz.getLocation(
-          state.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue(),
-        ),
-        tempEnd.year,
-        tempEnd.month,
-        tempEnd.day,
-        tempEnd.hour,
-        tempEnd.minute,
-      ).subtract(
-        const Duration(
-          hours: 1,
-        ),
-      ); // Subtract 1 hour to ensure start is before end
-    }
-    emit(
-      state.copyWith(
-        isValid: false,
-        errorMessage: "",
-        tempStart: tempStart,
-        tempEnd: tempEnd,
-      ),
-    );
   }
 }
 
@@ -286,6 +181,8 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.saveChangesDateTime({
     Event? event,
+    required DateTime tempStart,
+    required DateTime tempEnd,
   }) = EventDateTimeSettingsEventSaveChangesDateTime;
 
   const factory EventDateTimeSettingsEvent.saveChangesTimezone({
@@ -295,16 +192,6 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.reset() =
       EventDateTimeSettingsEventReset;
-
-  const factory EventDateTimeSettingsEvent.updateTempStart({
-    required DateTime tempStart,
-    Event? event,
-  }) = EventDateTimeSettingsEventUpdateTempStart;
-
-  const factory EventDateTimeSettingsEvent.updateTempEnd({
-    required DateTime tempEnd,
-    Event? event,
-  }) = EventDateTimeSettingsEventUpdateTempEnd;
 }
 
 @freezed
@@ -312,8 +199,6 @@ class EventDateTimeSettingsState with _$EventDateTimeSettingsState {
   const factory EventDateTimeSettingsState({
     @Default(DateTimeFormz.pure()) DateTimeFormz start,
     @Default(DateTimeFormz.pure()) DateTimeFormz end,
-    DateTime? tempStart,
-    DateTime? tempEnd,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
     @Default(false) bool isValid,
     @Default("") String errorMessage,

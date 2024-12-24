@@ -59,6 +59,21 @@ class _EventDatetimeSettingsPageState
     extends State<EventDatetimeSettingsPageView> {
   bool? expandedStarts;
   bool? expandedEnds;
+  DateTime? tempStart;
+  DateTime? tempEnd;
+
+  DateTime _createDateTimeInTimezone(
+      DateTime date, TimeOfDay? time, tz.Location location) {
+    final timeToUse = time ?? TimeOfDay.fromDateTime(date);
+    return tz.TZDateTime(
+      location,
+      date.year,
+      date.month,
+      date.day,
+      timeToUse.hour,
+      timeToUse.minute,
+    );
+  }
 
   @override
   void initState() {
@@ -66,6 +81,30 @@ class _EventDatetimeSettingsPageState
     setState(() {
       expandedStarts = widget.expandedStarts;
       expandedEnds = widget.expandedEnds;
+      final bloc = context.read<EventDateTimeSettingsBloc>();
+      tempStart = bloc.state.start.value ?? DateTime.now();
+      tempEnd =
+          bloc.state.end.value ?? DateTime.now().add(const Duration(hours: 1));
+    });
+  }
+
+  void _handleStartDateChange(DateTime newStart) {
+    setState(() {
+      tempStart = newStart;
+      // Ensure end time is at least 1 hour after start time
+      if (tempEnd == null || tempEnd!.isBefore(newStart)) {
+        tempEnd = newStart.add(const Duration(hours: 1));
+      }
+    });
+  }
+
+  void _handleEndDateChange(DateTime newEnd) {
+    setState(() {
+      tempEnd = newEnd;
+      // Ensure start time is at most 1 hour before end time
+      if (tempStart == null || tempStart!.isAfter(newEnd)) {
+        tempStart = newEnd.subtract(const Duration(hours: 1));
+      }
     });
   }
 
@@ -84,10 +123,7 @@ class _EventDatetimeSettingsPageState
                 context.read<EventDateTimeSettingsBloc>().state.start.value;
             final end =
                 context.read<EventDateTimeSettingsBloc>().state.end.value;
-            if (context.read<EventDateTimeSettingsBloc>().state.tempStart !=
-                    start ||
-                context.read<EventDateTimeSettingsBloc>().state.tempEnd !=
-                    end) {
+            if (tempStart != start || tempEnd != end) {
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -152,7 +188,7 @@ class _EventDatetimeSettingsPageState
                         child: EventDatetimeSettingRowItem(
                           label: t.event.datetimeSettings.starts,
                           dotColor: LemonColor.snackBarSuccess,
-                          selectedDateTime: state.tempStart!,
+                          selectedDateTime: tempStart!,
                           expanded: expandedStarts == true,
                           onSelectTab: () {
                             setState(() {
@@ -160,35 +196,21 @@ class _EventDatetimeSettingsPageState
                               expandedEnds = false;
                             });
                           },
-                          onDateChanged: (DateTime datetime) {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventUpdateTempStart(
-                                    event: widget.event,
-                                    tempStart: tz.TZDateTime(
-                                      location,
-                                      datetime.year,
-                                      datetime.month,
-                                      datetime.day,
-                                      state.tempStart!.hour,
-                                      state.tempStart!.minute,
-                                    ),
-                                  ),
-                                );
+                          onDateChanged: (DateTime date) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              date,
+                              TimeOfDay.fromDateTime(tempStart!),
+                              location,
+                            );
+                            _handleStartDateChange(newDateTime);
                           },
-                          onTimeChanged: (TimeOfDay timeOfDay) {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventUpdateTempStart(
-                                    event: widget.event,
-                                    tempStart: tz.TZDateTime(
-                                      location,
-                                      state.tempStart!.year,
-                                      state.tempStart!.month,
-                                      state.tempStart!.day,
-                                      timeOfDay.hour,
-                                      timeOfDay.minute,
-                                    ),
-                                  ),
-                                );
+                          onTimeChanged: (TimeOfDay time) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              tempStart!,
+                              time,
+                              location,
+                            );
+                            _handleStartDateChange(newDateTime);
                           },
                         ),
                       ),
@@ -215,40 +237,28 @@ class _EventDatetimeSettingsPageState
                           label: t.event.datetimeSettings.ends,
                           dotColor: LemonColor.coralReef,
                           expanded: expandedEnds == true,
-                          selectedDateTime: state.tempEnd!,
+                          selectedDateTime: tempEnd!,
                           onSelectTab: () {
                             setState(() {
                               expandedStarts = false;
                               expandedEnds = true;
                             });
                           },
-                          onDateChanged: (DateTime datetime) {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventUpdateTempEnd(
-                                    tempEnd: tz.TZDateTime(
-                                      location,
-                                      datetime.year,
-                                      datetime.month,
-                                      datetime.day,
-                                      state.tempEnd!.hour,
-                                      state.tempEnd!.minute,
-                                    ),
-                                  ),
-                                );
+                          onDateChanged: (DateTime date) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              date,
+                              TimeOfDay.fromDateTime(tempEnd!),
+                              location,
+                            );
+                            _handleEndDateChange(newDateTime);
                           },
-                          onTimeChanged: (TimeOfDay timeOfDay) {
-                            context.read<EventDateTimeSettingsBloc>().add(
-                                  EventDateTimeSettingsEventUpdateTempEnd(
-                                    tempEnd: tz.TZDateTime(
-                                      location,
-                                      state.tempEnd!.year,
-                                      state.tempEnd!.month,
-                                      state.tempEnd!.day,
-                                      timeOfDay.hour,
-                                      timeOfDay.minute,
-                                    ),
-                                  ),
-                                );
+                          onTimeChanged: (TimeOfDay time) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              tempEnd!,
+                              time,
+                              location,
+                            );
+                            _handleEndDateChange(newDateTime);
                           },
                         ),
                       ),
@@ -268,6 +278,8 @@ class _EventDatetimeSettingsPageState
                               context.read<EventDateTimeSettingsBloc>().add(
                                     EventDateTimeSettingsEventSaveChangesDateTime(
                                       event: widget.event,
+                                      tempStart: tempStart ?? DateTime.now(),
+                                      tempEnd: tempEnd ?? DateTime.now(),
                                     ),
                                   );
                             },
