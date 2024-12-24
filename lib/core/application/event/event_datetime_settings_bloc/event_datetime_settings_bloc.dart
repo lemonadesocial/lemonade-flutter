@@ -251,8 +251,9 @@ class EventDateTimeSettingsBloc
     // If end date is before or equal to start date, adjust start date
     if (!tempEnd.isAfter(tempStart)) {
       tempStart = tz.TZDateTime(
-        tz.getLocation(state.timezone ??
-            date_utils.DateUtils.getUserTimezoneOptionValue()),
+        tz.getLocation(
+          state.timezone ?? date_utils.DateUtils.getUserTimezoneOptionValue(),
+        ),
         tempEnd.year,
         tempEnd.month,
         tempEnd.day,
