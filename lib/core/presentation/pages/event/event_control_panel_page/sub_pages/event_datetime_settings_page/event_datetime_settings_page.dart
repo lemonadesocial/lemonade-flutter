@@ -63,7 +63,10 @@ class _EventDatetimeSettingsPageState
   DateTime? tempEnd;
 
   DateTime _createDateTimeInTimezone(
-      DateTime date, TimeOfDay? time, tz.Location location) {
+    DateTime date,
+    TimeOfDay? time,
+    tz.Location location,
+  ) {
     final timeToUse = time ?? TimeOfDay.fromDateTime(date);
     return tz.TZDateTime(
       location,
