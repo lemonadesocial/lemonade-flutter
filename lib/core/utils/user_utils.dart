@@ -1,5 +1,6 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:collection/collection.dart';
 
 class UserUtils {
   static String getUserAge({User? user, String emptyText = ''}) {
@@ -25,7 +26,10 @@ class UserUtils {
       verifiedAddresses = verifiedWallets?['solana'];
     }
     return platform == Enum$BlockchainPlatform.ethereum
-        ? (verifiedAddresses?.length ?? 0) >= 2
+        ? verifiedAddresses?.firstWhereOrNull(
+              (element) => element != user?.walletCustodial,
+            ) !=
+            null
         : verifiedAddresses?.isNotEmpty == true;
   }
 }

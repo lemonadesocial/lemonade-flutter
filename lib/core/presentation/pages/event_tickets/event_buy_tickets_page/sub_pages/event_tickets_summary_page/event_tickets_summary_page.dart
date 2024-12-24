@@ -6,6 +6,7 @@ import 'package:app/core/application/event_tickets/get_event_ticket_types_bloc/g
 import 'package:app/core/application/event_tickets/select_event_tickets_bloc/select_event_tickets_bloc.dart';
 import 'package:app/core/application/payment/get_payment_cards_bloc/get_payment_cards_bloc.dart';
 import 'package:app/core/application/payment/select_payment_card_cubit/select_payment_card_cubit.dart';
+import 'package:app/core/application/wallet/sign_wallet_bloc/sign_wallet_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
@@ -50,6 +51,9 @@ class EventTicketsSummaryPage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => SignWalletBloc(),
+        ),
         BlocProvider.value(
           value: context.read<CalculateEventTicketPricingBloc>()
             ..add(
@@ -118,15 +122,17 @@ class _EventTicketsSummaryPageViewState
         : event.applicationFormSubmission != null
             ? true
             : context.watch<EventApplicationFormBloc>().state.isValid;
+    final signEthereumWalletBlocState = context.watch<SignWalletBloc>().state;
     final isEthereumWalletVerifiedRequired =
         EventUtils.isWalletVerifiedRequired(
       event,
       platform: Enum$BlockchainPlatform.ethereum,
     );
     final isUserEthereumWalletVerified = UserUtils.isWalletVerified(
-      user,
-      platform: Enum$BlockchainPlatform.ethereum,
-    );
+          user,
+          platform: Enum$BlockchainPlatform.ethereum,
+        ) ||
+        signEthereumWalletBlocState is SignWalletStateSuccess;
     final isWalletVerificationValid =
         isEthereumWalletVerifiedRequired ? isUserEthereumWalletVerified : true;
     final isSubmitDisabled =
@@ -167,6 +173,14 @@ class _EventTicketsSummaryPageViewState
               },
               orElse: () => null,
             );
+          },
+        ),
+        BlocListener<SignWalletBloc, SignWalletState>(
+          listener: (context, state) async {
+            if (state is SignWalletStateSuccess) {
+              await Future.delayed(const Duration(seconds: 3));
+              context.read<AuthBloc>().add(const AuthEvent.refreshData());
+            }
           },
         ),
       ],

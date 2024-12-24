@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -154,7 +155,7 @@ class _EventApplicationFormSettingWeb3IdentityState
   }
 }
 
-class _IdentityItem extends StatelessWidget {
+class _IdentityItem extends StatefulWidget {
   final Enum$BlockchainPlatform blockChainPlatform;
   final String label;
   final Widget icon;
@@ -172,96 +173,194 @@ class _IdentityItem extends StatelessWidget {
   });
 
   @override
+  State<_IdentityItem> createState() => _IdentityItemState();
+}
+
+class _IdentityItemState extends State<_IdentityItem> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.medium),
-        color: LemonColor.atomicBlack,
-        border: Border.all(
-          color: colorScheme.outlineVariant,
+    return BlocListener<GetEventDetailBloc, GetEventDetailState>(
+      listener: (context, state) {
+        if (state is GetEventDetailStateFetched) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+          color: LemonColor.atomicBlack,
+          border: Border.all(
+            color: colorScheme.outlineVariant,
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          icon,
-          SizedBox(width: Spacing.small),
-          Text(
-            label,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-            ),
-          ),
-          const Spacer(),
-          DropdownButtonHideUnderline(
-            child: DropdownButton2<int>(
-              value: isOff
-                  ? -1
-                  : isRequired
-                      ? 1
-                      : 0,
-              onChanged: (value) {
-                onChange.call(value ?? 0);
-              },
-              customButton: Row(
-                children: [
-                  Text(
-                    isOff
-                        ? t.event.applicationForm.off
-                        : isRequired
-                            ? t.event.applicationForm.required
-                            : t.event.applicationForm.optional,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                  SizedBox(width: Spacing.superExtraSmall),
-                  ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
-                      colorFilter: filter,
-                    ),
-                  ),
-                ],
-              ),
-              items: [
-                DropdownMenuItem<int>(
-                  value: 1,
-                  child: Text(
-                    t.event.applicationForm.required,
-                  ),
-                ),
-                DropdownMenuItem<int>(
-                  value: 0,
-                  child: Text(
-                    t.event.applicationForm.optional,
-                  ),
-                ),
-                DropdownMenuItem<int>(
-                  value: -1,
-                  child: Text(
-                    t.event.applicationForm.off,
-                  ),
-                ),
-              ],
-              dropdownStyleData: DropdownStyleData(
-                width: 200.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(LemonRadius.small),
-                  color: colorScheme.secondaryContainer,
-                ),
-                offset: Offset(0, -Spacing.superExtraSmall),
-              ),
-              menuItemStyleData: const MenuItemStyleData(
-                overlayColor: MaterialStatePropertyAll(
-                  LemonColor.darkBackground,
-                ),
+        child: Row(
+          children: [
+            widget.icon,
+            SizedBox(width: Spacing.small),
+            Text(
+              widget.label,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
               ),
             ),
-          ),
-        ],
+            const Spacer(),
+            DropdownButtonHideUnderline(
+              child: DropdownButton2<int>(
+                value: widget.isOff
+                    ? -1
+                    : widget.isRequired
+                        ? 1
+                        : 0,
+                onChanged: (value) {
+                  if (value == -2) {
+                    return;
+                  }
+                  setState(() {
+                    isLoading = true;
+                  });
+                  widget.onChange.call(value ?? 0);
+                },
+                customButton: Row(
+                  children: [
+                    if (isLoading) Loading.defaultLoading(context),
+                    if (!isLoading) ...[
+                      Text(
+                        widget.isOff
+                            ? t.event.applicationForm.off
+                            : widget.isRequired
+                                ? t.event.applicationForm.required
+                                : t.event.applicationForm.optional,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.superExtraSmall),
+                      ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) =>
+                            Assets.icons.icDoubleArrowUpDown.svg(
+                          colorFilter: filter,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                items: isLoading
+                    ? []
+                    : [
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.small,
+                            ),
+                            child: Text(
+                              t.event.applicationForm.required,
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.small,
+                            ),
+                            child: Text(
+                              t.event.applicationForm.optional,
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: -1,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.small,
+                            ),
+                            child: Text(
+                              t.event.applicationForm.off,
+                            ),
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: -2,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Divider(
+                                color: colorScheme.outline,
+                                thickness: 1.w,
+                                height: 1.w,
+                              ),
+                              SizedBox(height: Spacing.xSmall),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(width: Spacing.small),
+                                  ThemeSvgIcon(
+                                    color: colorScheme.onSecondary,
+                                    builder: (filter) =>
+                                        Assets.icons.icInfo.svg(
+                                      colorFilter: filter,
+                                      width: 16.w,
+                                      height: 16.w,
+                                    ),
+                                  ),
+                                  SizedBox(width: Spacing.xSmall),
+                                  Flexible(
+                                    child: Text(
+                                      t.event.applicationForm.web3Identity
+                                          .web3IdentityDescription,
+                                      style: Typo.small.copyWith(
+                                        color: colorScheme.onSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                dropdownStyleData: DropdownStyleData(
+                  width: 200.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(LemonRadius.small),
+                    color: colorScheme.secondaryContainer,
+                  ),
+                  offset: Offset(0, -Spacing.superExtraSmall),
+                ),
+                menuItemStyleData: MenuItemStyleData(
+                  padding: EdgeInsets.zero,
+                  overlayColor: const MaterialStatePropertyAll(
+                    LemonColor.darkBackground,
+                  ),
+                  selectedMenuItemBuilder: (context, child) => Row(
+                    children: [
+                      child,
+                      const Spacer(),
+                      ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) => Assets.icons.icDone.svg(
+                          colorFilter: filter,
+                          width: 16.w,
+                          height: 16.w,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.small),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

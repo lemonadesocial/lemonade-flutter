@@ -3,6 +3,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LemonTextField extends StatelessWidget {
   const LemonTextField({
@@ -36,6 +37,7 @@ class LemonTextField extends StatelessWidget {
     this.style,
     this.labelStyle,
     this.placeholderStyle,
+    this.inputHeight,
   });
 
   final ValueChanged<String>? onChange;
@@ -67,7 +69,7 @@ class LemonTextField extends StatelessWidget {
   final TextStyle? style;
   final TextStyle? labelStyle;
   final TextStyle? placeholderStyle;
-
+  final double? inputHeight;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -113,42 +115,46 @@ class LemonTextField extends StatelessWidget {
           ),
           SizedBox(height: Spacing.superExtraSmall),
         ],
-        TextFormField(
-          onTap: onTap,
-          onFieldSubmitted: onFieldSubmitted,
-          controller: controller,
-          autofocus: autofocus,
-          onChanged: onChange,
-          focusNode: focusNode,
-          style: style ??
-              theme.textTheme.bodyMedium!
-                  .copyWith(color: theme.colorScheme.onPrimary),
-          minLines: minLines,
-          maxLines: maxLines ?? minLines,
-          cursorColor: theme.colorScheme.onPrimary,
-          initialValue: initialText,
-          keyboardType: textInputType,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: placeholderStyle ??
-                theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-            errorText: errorText,
-            enabledBorder: border,
-            focusedBorder: border,
-            errorBorder: errorBorder,
-            border: border,
-            contentPadding: contentPadding ?? EdgeInsets.all(Spacing.smMedium),
-            suffixIcon: suffixIcon,
-            prefixIcon: leadingIcon,
-            filled: filled ?? false,
-            fillColor: fillColor ?? Colors.transparent,
+        SizedBox(
+          height: inputHeight ?? 56.w,
+          child: TextFormField(
+            onTap: onTap,
+            onFieldSubmitted: onFieldSubmitted,
+            controller: controller,
+            autofocus: autofocus,
+            onChanged: onChange,
+            focusNode: focusNode,
+            style: style ??
+                theme.textTheme.bodyMedium!
+                    .copyWith(color: theme.colorScheme.onPrimary),
+            minLines: minLines,
+            maxLines: maxLines ?? minLines,
+            cursorColor: theme.colorScheme.onPrimary,
+            initialValue: initialText,
+            keyboardType: textInputType,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: placeholderStyle ??
+                  theme.textTheme.bodyMedium!.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+              errorText: errorText,
+              enabledBorder: border,
+              focusedBorder: border,
+              errorBorder: errorBorder,
+              border: border,
+              contentPadding:
+                  contentPadding ?? EdgeInsets.all(Spacing.smMedium),
+              suffixIcon: suffixIcon,
+              prefixIcon: leadingIcon,
+              filled: filled ?? false,
+              fillColor: fillColor ?? Colors.transparent,
+            ),
+            inputFormatters: inputFormatters,
+            readOnly: readOnly ?? false,
+            enableSuggestions: enableSuggestions ?? false,
+            autocorrect: autocorrect ?? false,
           ),
-          inputFormatters: inputFormatters,
-          readOnly: readOnly ?? false,
-          enableSuggestions: enableSuggestions ?? false,
-          autocorrect: autocorrect ?? false,
         ),
         if (statusWidget != null) ...[
           SizedBox(height: Spacing.xSmall),

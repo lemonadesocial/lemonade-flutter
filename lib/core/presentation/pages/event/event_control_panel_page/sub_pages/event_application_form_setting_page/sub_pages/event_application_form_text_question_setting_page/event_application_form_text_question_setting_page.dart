@@ -11,8 +11,10 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 class EventApplicationFormTextQuestionSettingPage extends StatefulWidget {
@@ -132,6 +134,31 @@ class _EventApplicationFormTextQuestionSettingPageState
                     });
                   },
                 ),
+                SizedBox(height: Spacing.small),
+                if (widget.index != null)
+                  LemonOutlineButton(
+                    onTap: () {
+                      context.read<EventApplicationFormSettingBloc>().add(
+                            EventApplicationFormSettingBlocEvent.removeQuestion(
+                              index: widget.index!,
+                            ),
+                          );
+                      Navigator.pop(context);
+                    },
+                    label: t.event.applicationForm.deleteQuestion,
+                    leading: ThemeSvgIcon(
+                      color: LemonColor.coralReef,
+                      builder: (filter) => Assets.icons.icDelete.svg(
+                        colorFilter: filter,
+                      ),
+                    ),
+                    radius: BorderRadius.circular(LemonRadius.medium),
+                    height: 50.w,
+                    borderColor: colorScheme.outlineVariant,
+                    textStyle: Typo.medium.copyWith(
+                      color: LemonColor.coralReef,
+                    ),
+                  ),
               ],
             ),
           ),
