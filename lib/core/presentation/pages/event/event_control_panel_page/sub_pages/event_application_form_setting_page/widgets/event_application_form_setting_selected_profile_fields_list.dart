@@ -1,6 +1,8 @@
 import 'package:app/core/application/event/event_application_form_profile_setting_bloc/event_application_form_profile_setting_bloc.dart';
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/common/common_enums.dart';
 import 'package:app/core/domain/event/entities/event_application_profile_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -258,7 +260,7 @@ class _DefaultProfileFieldItem extends StatelessWidget {
   }
 }
 
-class _ProfileFieldItem extends StatelessWidget {
+class _ProfileFieldItem extends StatefulWidget {
   final ProfileFieldKey fieldKey;
   final EventApplicationProfileField profileField;
   final bool isFirst;
@@ -274,92 +276,136 @@ class _ProfileFieldItem extends StatelessWidget {
   });
 
   @override
+  State<_ProfileFieldItem> createState() => _ProfileFieldItemState();
+}
+
+class _ProfileFieldItemState extends State<_ProfileFieldItem> {
+  bool isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
-      decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        border: Border.all(
-          color: colorScheme.outlineVariant,
-          width: 0.5.w,
-        ),
-        borderRadius: BorderRadius.vertical(
-          top: isFirst ? Radius.circular(LemonRadius.medium) : Radius.zero,
-          bottom: isLast ? Radius.circular(LemonRadius.medium) : Radius.zero,
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            fieldKey.label,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-            ),
+    return BlocListener<GetEventDetailBloc, GetEventDetailState>(
+      listener: (context, state) {
+        if (state is GetEventDetailStateFetched) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.all(Spacing.small),
+        decoration: BoxDecoration(
+          color: LemonColor.atomicBlack,
+          border: Border.all(
+            color: colorScheme.outlineVariant,
+            width: 0.5.w,
           ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton2<int>(
-              value: profileField.required == true ? 1 : 0,
-              onChanged: (value) {
-                onChange?.call(value ?? 0);
-              },
-              customButton: Row(
-                children: [
-                  Text(
-                    profileField.required == true
-                        ? t.event.applicationForm.required
-                        : t.event.applicationForm.optional,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                  SizedBox(width: Spacing.superExtraSmall),
-                  ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
-                    builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
-                      colorFilter: filter,
-                    ),
-                  ),
-                ],
-              ),
-              items: [
-                DropdownMenuItem<int>(
-                  value: 1,
-                  child: Text(
-                    t.event.applicationForm.required,
-                  ),
-                ),
-                DropdownMenuItem<int>(
-                  value: 0,
-                  child: Text(
-                    t.event.applicationForm.optional,
-                  ),
-                ),
-                DropdownMenuItem<int>(
-                  value: -1,
-                  child: Text(
-                    t.event.applicationForm.off,
-                  ),
-                ),
-              ],
-              dropdownStyleData: DropdownStyleData(
-                width: 200.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(LemonRadius.small),
-                  color: colorScheme.secondaryContainer,
-                ),
-                offset: Offset(0, -Spacing.superExtraSmall),
-              ),
-              menuItemStyleData: const MenuItemStyleData(
-                overlayColor: MaterialStatePropertyAll(
-                  LemonColor.darkBackground,
-                ),
+          borderRadius: BorderRadius.vertical(
+            top: widget.isFirst
+                ? Radius.circular(LemonRadius.medium)
+                : Radius.zero,
+            bottom: widget.isLast
+                ? Radius.circular(LemonRadius.medium)
+                : Radius.zero,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.fieldKey.label,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
               ),
             ),
-          ),
-        ],
+            DropdownButtonHideUnderline(
+              child: DropdownButton2<int>(
+                value: widget.profileField.required == true ? 1 : 0,
+                onChanged: (value) {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  widget.onChange?.call(value ?? 0);
+                },
+                customButton: Row(
+                  children: [
+                    if (isLoading) Loading.defaultLoading(context),
+                    if (!isLoading) ...[
+                      Text(
+                        widget.profileField.required == true
+                            ? t.event.applicationForm.required
+                            : t.event.applicationForm.optional,
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSecondary,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.superExtraSmall),
+                      ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) =>
+                            Assets.icons.icDoubleArrowUpDown.svg(
+                          colorFilter: filter,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                items: isLoading
+                    ? []
+                    : [
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Text(
+                            t.event.applicationForm.required,
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Text(
+                            t.event.applicationForm.optional,
+                          ),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: -1,
+                          child: Text(
+                            t.event.applicationForm.off,
+                          ),
+                        ),
+                      ],
+                dropdownStyleData: DropdownStyleData(
+                  width: 200.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(LemonRadius.small),
+                    color: colorScheme.secondaryContainer,
+                  ),
+                  offset: Offset(0, -Spacing.superExtraSmall),
+                ),
+                menuItemStyleData: MenuItemStyleData(
+                  overlayColor: const MaterialStatePropertyAll(
+                    LemonColor.darkBackground,
+                  ),
+                  selectedMenuItemBuilder: (context, child) => Row(
+                    children: [
+                      child,
+                      const Spacer(),
+                      ThemeSvgIcon(
+                        color: colorScheme.onPrimary,
+                        builder: (filter) => Assets.icons.icDone.svg(
+                          colorFilter: filter,
+                          width: 16.w,
+                          height: 16.w,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.small),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

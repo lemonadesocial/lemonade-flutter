@@ -104,6 +104,10 @@ class _Button extends StatelessWidget {
               decoration: BoxDecoration(
                 color: LemonColor.chineseBlack,
                 borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                border: Border.all(
+                  color: colorScheme.outlineVariant,
+                  width: 1.w,
+                ),
               ),
               child: Center(
                 child: icon,
@@ -119,12 +123,13 @@ class _Button extends StatelessWidget {
                   title,
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 2.w),
                 Text(
                   subTitle,
-                  style: Typo.xSmall.copyWith(
+                  style: Typo.small.copyWith(
                     color: colorScheme.onSecondary,
                   ),
                 ),

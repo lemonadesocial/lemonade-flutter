@@ -3,7 +3,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +40,8 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
                 color: colorScheme.onSecondary,
                 builder: (colorFilter) => Assets.icons.icOutlineVerified.svg(
                   colorFilter: colorFilter,
+                  width: 18.w,
+                  height: 18.w,
                 ),
               ),
             ),
@@ -64,6 +65,8 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
                 color: colorScheme.onSecondary,
                 builder: (colorFilter) => Assets.icons.icClockBurning.svg(
                   colorFilter: colorFilter,
+                  width: 18.w,
+                  height: 18.w,
                 ),
               ),
             ),
@@ -88,28 +91,19 @@ class _RowInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          width: Sizing.medium,
-          height: Sizing.medium,
-          decoration: BoxDecoration(
-            color: colorScheme.secondary,
-            borderRadius: BorderRadius.circular(Sizing.medium),
-          ),
-          child: Center(
-            child: icon,
-          ),
-        ),
+        icon,
         SizedBox(width: Spacing.xSmall),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: Typo.small.copyWith(
+              style: Typo.medium.copyWith(
                 color: colorScheme.onPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(height: 2.w),

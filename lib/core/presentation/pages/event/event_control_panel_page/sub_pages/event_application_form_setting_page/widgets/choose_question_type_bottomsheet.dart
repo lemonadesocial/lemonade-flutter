@@ -15,6 +15,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ApplicationFormQuestionTypeItem {
@@ -213,6 +214,8 @@ class _ChooseQuestionTypeBottomSheetState
                         ThemeSvgIcon(
                           color: colorScheme.onSecondary,
                           builder: (filter) => questionTypeItem.icon.svg(
+                            width: 18.w,
+                            height: 18.w,
                             colorFilter: filter,
                           ),
                         ),

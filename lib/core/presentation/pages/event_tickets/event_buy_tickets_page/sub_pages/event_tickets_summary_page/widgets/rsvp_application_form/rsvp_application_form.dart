@@ -14,9 +14,9 @@ class RSVPApplicationForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        RSVPVerifyWalletForm(),
         RSVPProfileFieldsForm(),
         RSVPApplicationQuestionsForm(),
-        RSVPVerifyWalletForm(),
       ],
     );
   }
