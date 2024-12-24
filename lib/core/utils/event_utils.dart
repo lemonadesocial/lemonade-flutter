@@ -295,8 +295,16 @@ class EventUtils {
     return isRequired;
   }
 
-  static DateTime getDefaultStartDateTime() {
+  static DateTime getDefaultStartDateTime({
+    DateTime? parentEventStart,
+    DateTime? parentEventEnd,
+  }) {
     final now = DateTime.now();
+
+    // If parent event has not started: session datetime defaults to parent event date
+    if (parentEventStart != null && parentEventStart.isAfter(now)) {
+      return parentEventStart;
+    }
     // Round up to next 30 minutes
     final minutes = now.minute;
     final roundedMinutes = minutes <= 30 ? 30 : 60;
@@ -310,7 +318,18 @@ class EventUtils {
     );
   }
 
-  static DateTime getDefaultEndDateTime() {
+  static DateTime getDefaultEndDateTime({
+    DateTime? parentEventStart,
+    DateTime? parentEventEnd,
+  }) {
+    final now = DateTime.now();
+
+    // If parent event has not started: session datetime defaults to parent event date
+    if (parentEventStart != null &&
+        parentEventEnd != null &&
+        parentEventStart.isAfter(now)) {
+      return parentEventEnd;
+    }
     // Add 1 hour to start time
     return getDefaultStartDateTime().add(const Duration(hours: 1));
   }

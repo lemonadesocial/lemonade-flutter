@@ -15,9 +15,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 @RoutePage()
 class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
   final String? parentEventId;
+  final DateTime? parentEventStart;
+  final DateTime? parentEventEnd;
+  final String? parentTimezone;
   const CreateEventPage({
     super.key,
     this.parentEventId,
+    this.parentEventStart,
+    this.parentEventEnd,
+    this.parentTimezone,
   });
 
   @override
@@ -43,8 +49,15 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
           create: (context) => EventDateTimeSettingsBloc()
             ..add(
               EventDateTimeSettingsEvent.init(
-                startDateTime: EventUtils.getDefaultStartDateTime(),
-                endDateTime: EventUtils.getDefaultEndDateTime(),
+                startDateTime: EventUtils.getDefaultStartDateTime(
+                  parentEventStart: parentEventStart,
+                  parentEventEnd: parentEventEnd,
+                ),
+                endDateTime: EventUtils.getDefaultEndDateTime(
+                  parentEventStart: parentEventStart,
+                  parentEventEnd: parentEventEnd,
+                ),
+                timezone: parentTimezone,
               ),
             ),
         ),
