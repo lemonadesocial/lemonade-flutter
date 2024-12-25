@@ -16,6 +16,7 @@ class EventCheckin with _$EventCheckin {
     String? user,
     User? loginUser,
     User? nonLoginUser,
+    String? ticket,
   }) = _EventCheckin;
 
   factory EventCheckin.fromJson(Map<String, dynamic> json) =>
@@ -31,5 +32,6 @@ class EventCheckin with _$EventCheckin {
         loginUser: dto.loginUser != null ? User.fromDto(dto.loginUser!) : null,
         nonLoginUser:
             dto.nonLoginUser != null ? User.fromDto(dto.nonLoginUser!) : null,
+        ticket: dto.ticket,
       );
 }

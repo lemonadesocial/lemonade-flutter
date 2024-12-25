@@ -20,5 +20,6 @@ query GetEventCheckins($input: GetEventCheckinsInput!) {
       display_name
       email
     }
+    created_at
   }
 }

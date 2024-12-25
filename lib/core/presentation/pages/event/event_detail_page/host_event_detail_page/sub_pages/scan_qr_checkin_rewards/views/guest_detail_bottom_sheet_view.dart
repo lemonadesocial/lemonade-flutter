@@ -22,18 +22,18 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class GuestDetailBottomSheetView extends StatelessWidget {
   const GuestDetailBottomSheetView({
     super.key,
-    required this.shortId,
+    required this.ticketShortId,
     this.event,
   });
 
-  final String shortId;
+  final String ticketShortId;
   final Event? event;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetTicketBloc()
-        ..add(GetTicketEventFetch(shortId: shortId, showLoading: true)),
+        ..add(GetTicketEventFetch(shortId: ticketShortId, showLoading: true)),
       child: _GuestDetailBottomSheetView(event: event),
     );
   }
@@ -52,109 +52,129 @@ class _GuestDetailBottomSheetView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetGrabber(),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: Spacing.medium,
-                bottom: Spacing.smMedium,
-                left: Spacing.smMedium,
-                right: Spacing.smMedium,
-              ),
-              child: BlocBuilder<GetTicketBloc, GetTicketState>(
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    loading: () => SizedBox(
-                      height: 300,
-                      child: Loading.defaultLoading(context),
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const BottomSheetGrabber(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: Spacing.medium,
+                      bottom: Spacing.smMedium,
+                      left: Spacing.smMedium,
+                      right: Spacing.smMedium,
                     ),
-                    success: (ticket) {
-                      return Column(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  GuestDetailInformationView(
-                                    ticket: ticket,
-                                  ),
-                                  SizedBox(height: Spacing.smMedium),
-                                  ScanQrTicketInformationItem(
-                                    originalTicket: ticket,
-                                    ticket: ticket,
-                                  ),
-                                  if (ticket.acquiredTickets?.isNotEmpty ??
-                                      false) ...[
+                    child: BlocBuilder<GetTicketBloc, GetTicketState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          loading: () => SizedBox(
+                            height: 300,
+                            child: Loading.defaultLoading(context),
+                          ),
+                          success: (ticket) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    GuestDetailInformationView(
+                                      ticket: ticket,
+                                    ),
                                     SizedBox(height: Spacing.smMedium),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colorScheme.secondary,
-                                        borderRadius: BorderRadius.circular(
-                                          LemonRadius.normal,
+                                    ScanQrTicketInformationItem(
+                                      originalTicket: ticket,
+                                      ticket: ticket,
+                                    ),
+                                    if (ticket.acquiredTickets?.isNotEmpty ??
+                                        false) ...[
+                                      SizedBox(height: Spacing.smMedium),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: colorScheme.secondary,
+                                          borderRadius: BorderRadius.circular(
+                                            LemonRadius.normal,
+                                          ),
+                                        ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: Spacing.smMedium,
+                                                vertical: Spacing.small,
+                                              ),
+                                              child: Text(
+                                                '${t.event.scanQR.additionalTickets} (${ticket.acquiredTickets?.length ?? 0})',
+                                                style: Typo.small.copyWith(
+                                                  color:
+                                                      colorScheme.onSecondary,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                            ...ticket.acquiredTickets!.map(
+                                              (acquiredTicket) => Container(
+                                                decoration: BoxDecoration(
+                                                  color: colorScheme
+                                                      .secondaryContainer,
+                                                ),
+                                                child:
+                                                    ScanQrTicketInformationItem(
+                                                  originalTicket: ticket,
+                                                  ticket: acquiredTicket,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      clipBehavior: Clip.hardEdge,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: Spacing.smMedium,
-                                              vertical: Spacing.small,
-                                            ),
-                                            child: Text(
-                                              '${t.event.scanQR.additionalTickets} (${ticket.acquiredTickets?.length ?? 0})',
-                                              style: Typo.small.copyWith(
-                                                color: colorScheme.onSecondary,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                          ...ticket.acquiredTickets!.map(
-                                            (acquiredTicket) => Container(
-                                              decoration: BoxDecoration(
-                                                color: colorScheme
-                                                    .secondaryContainer,
-                                              ),
-                                              child:
-                                                  ScanQrTicketInformationItem(
-                                                originalTicket: ticket,
-                                                ticket: acquiredTicket,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    ],
                                   ],
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: Spacing.small),
-                          Column(
-                            children: [
-                              _ViewApplicationInfoView(
-                                ticket: ticket,
-                                event: event,
-                              ),
-                              SizedBox(height: Spacing.smMedium),
-                              SafeArea(
-                                child: ScanQrTicketActionButton(
-                                  ticket: ticket,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                    orElse: () => const SizedBox.shrink(),
-                  );
-                },
+                              ],
+                            );
+                          },
+                          orElse: () => const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
+            ),
+          ),
+          // Fixed bottom content
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Spacing.smMedium,
+              vertical: Spacing.small,
+            ),
+            child: BlocBuilder<GetTicketBloc, GetTicketState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  success: (ticket) => Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _ViewApplicationInfoView(
+                        ticket: ticket,
+                        event: event,
+                      ),
+                      SizedBox(height: Spacing.smMedium),
+                      SafeArea(
+                        child: ScanQrTicketActionButton(
+                          ticket: ticket,
+                        ),
+                      ),
+                    ],
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                );
+              },
             ),
           ),
         ],

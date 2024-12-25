@@ -96,6 +96,7 @@ class _ScanQRCheckinRewardsViewState extends State<_ScanQRCheckinRewardsView> {
           ),
           SafeArea(
             child: ScannerActions(
+              event: widget.event,
               controller: controller,
               selectedScanTarget: selectedScanTarget,
               onScanTargetChanged: (target) {

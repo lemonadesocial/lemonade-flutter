@@ -20,6 +20,9 @@ class GuestDetailInformationView extends StatelessWidget {
     final assignedEmail = ticket.assignedEmail;
     final assignedToExpanded = ticket.assignedToExpanded;
     final displayEmail = assignedEmail ?? assignedToExpanded?.email;
+    print("assignedEmail: $assignedEmail");
+    print("assignedToExpanded: $assignedToExpanded");
+    print("displayEmail: $displayEmail");
     if (assignedEmail == null && assignedToExpanded == null) {
       return const SizedBox.shrink();
     }

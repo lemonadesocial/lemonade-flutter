@@ -2,30 +2,26 @@ import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventCheckInItem extends StatelessWidget {
   final EventCheckin checkIn;
+  final Function() onTap;
   const EventCheckInItem({
     super.key,
     required this.checkIn,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (checkIn.user != null) {
-          AutoRouter.of(context).push(ProfileRoute(userId: checkIn.user!));
-        }
-      },
+      onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

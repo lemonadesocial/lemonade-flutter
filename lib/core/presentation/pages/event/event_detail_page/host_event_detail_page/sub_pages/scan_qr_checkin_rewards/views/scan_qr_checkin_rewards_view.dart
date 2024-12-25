@@ -33,7 +33,7 @@ class ScanQRCheckinRewardsView extends StatefulWidget {
 class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
   Future<void> onBarcodeDetect(BarcodeCapture barcodeCapture) async {
     await widget.controller.stop();
-    final shortId = barcodeCapture.barcodes.isNotEmpty
+    final ticketShortId = barcodeCapture.barcodes.isNotEmpty
         ? barcodeCapture.barcodes.last.displayValue?.toString() ?? ''
         : '';
 
@@ -43,8 +43,9 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           context: context,
           useRootNavigator: true,
           backgroundColor: LemonColor.atomicBlack,
+          barrierColor: LemonColor.black87,
           builder: (context) => GuestDetailBottomSheetView(
-            shortId: shortId,
+            ticketShortId: ticketShortId,
             event: widget.event,
           ),
         );
@@ -52,7 +53,7 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
         final response = await showFutureLoadingDialog(
           context: context,
           future: () =>
-              getIt<EventTicketRepository>().getTicket(shortId: shortId),
+              getIt<EventTicketRepository>().getTicket(shortId: ticketShortId),
         );
         response.result?.fold(
           (failure) => null,
