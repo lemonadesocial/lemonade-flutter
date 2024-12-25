@@ -281,8 +281,8 @@ class _EventDatetimeSettingsPageState
                               context.read<EventDateTimeSettingsBloc>().add(
                                     EventDateTimeSettingsEventSaveChangesDateTime(
                                       event: widget.event,
-                                      tempStart: tempStart ?? DateTime.now(),
-                                      tempEnd: tempEnd ?? DateTime.now(),
+                                      newStart: tempStart ?? DateTime.now(),
+                                      newEnd: tempEnd ?? DateTime.now(),
                                     ),
                                   );
                             },

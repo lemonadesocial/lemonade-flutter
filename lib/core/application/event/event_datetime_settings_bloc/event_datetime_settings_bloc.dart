@@ -48,8 +48,8 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventSaveChangesDateTime event,
     Emitter emit,
   ) async {
-    final newStart = event.tempStart;
-    final newEnd = event.tempEnd;
+    final newStart = event.newStart;
+    final newEnd = event.newEnd;
     if (newStart.isBefore(DateTime.now())) {
       emit(
         state.copyWith(
@@ -181,8 +181,8 @@ class EventDateTimeSettingsEvent with _$EventDateTimeSettingsEvent {
 
   const factory EventDateTimeSettingsEvent.saveChangesDateTime({
     Event? event,
-    required DateTime tempStart,
-    required DateTime tempEnd,
+    required DateTime newStart,
+    required DateTime newEnd,
   }) = EventDateTimeSettingsEventSaveChangesDateTime;
 
   const factory EventDateTimeSettingsEvent.saveChangesTimezone({
