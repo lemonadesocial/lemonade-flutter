@@ -4,6 +4,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LemonTextField extends StatelessWidget {
   const LemonTextField({
@@ -90,25 +92,28 @@ class LemonTextField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
-                    text: label ?? '',
-                    style: labelStyle ??
+              Flexible(
+                child: MarkdownBody(
+                  data: "$label ${showRequired == true ? '**&#42;**' : ''}",
+                  styleSheet: MarkdownStyleSheet(
+                    a: Typo.small.copyWith(
+                      color: LemonColor.paleViolet,
+                      decoration: TextDecoration.none,
+                    ),
+                    p: labelStyle ??
                         Typo.small.copyWith(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onPrimary,
                         ),
-                    children: [
-                      if (showRequired == true)
-                        TextSpan(
-                          text: " *",
-                          style: Typo.mediumPlus.copyWith(
-                            color: LemonColor.coralReef,
-                            fontWeight: FontWeight.w500,
-                          ),
+                    strong: labelStyle?.copyWith(
+                          color: LemonColor.coralReef,
+                        ) ??
+                        Typo.small.copyWith(
+                          color: LemonColor.coralReef,
                         ),
-                    ],
                   ),
+                  onTapLink: (text, href, title) async {
+                    await launchUrl(Uri.parse(text));
+                  },
                 ),
               ),
             ],

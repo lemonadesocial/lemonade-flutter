@@ -6,6 +6,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RsvpApplicationMultiOptionsQuestion extends StatefulWidget {
   final EventApplicationQuestion question;
@@ -41,23 +43,24 @@ class RsvpApplicationMultiOptionsQuestionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text.rich(
-          TextSpan(
-            text: widget.question.question ?? '',
-            style: Typo.medium.copyWith(
+        MarkdownBody(
+          data:
+              "${widget.question.question} ${widget.question.isRequired == true ? '**&#42;**' : ''}",
+          styleSheet: MarkdownStyleSheet(
+            a: Typo.medium.copyWith(
+              color: LemonColor.paleViolet,
+              decoration: TextDecoration.none,
+            ),
+            p: Typo.medium.copyWith(
               color: colorScheme.onPrimary,
             ),
-            children: [
-              if (widget.question.isRequired == true)
-                TextSpan(
-                  text: ' *',
-                  style: Typo.mediumPlus.copyWith(
-                    color: LemonColor.coralReef,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-            ],
+            strong: Typo.medium.copyWith(
+              color: LemonColor.coralReef,
+            ),
           ),
+          onTapLink: (text, href, title) async {
+            await launchUrl(Uri.parse(text));
+          },
         ),
         SizedBox(height: Spacing.xSmall),
         Container(
