@@ -9,6 +9,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -143,11 +144,18 @@ class _FormField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
+        Linkify(
+          text: label,
           style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onSecondary,
+            color: colorScheme.onPrimary,
           ),
+          linkStyle: Typo.mediumPlus.copyWith(
+            color: LemonColor.paleViolet,
+            decoration: TextDecoration.none,
+          ),
+          onOpen: (link) async {
+            await launchUrl(Uri.parse(link.url));
+          },
         ),
         SizedBox(height: Spacing.xSmall),
         Container(
