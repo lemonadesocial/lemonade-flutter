@@ -48,7 +48,6 @@ class EventDateTimeSettingsBloc
     EventDateTimeSettingsEventSaveChangesDateTime event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     final newStart = event.newStart;
     final newEnd = event.newEnd;
     if (newStart.isBefore(DateTime.now())) {
@@ -74,6 +73,7 @@ class EventDateTimeSettingsBloc
     } else {
       // Edit mode
       if (event.event != null) {
+        emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
         final result = await eventRepository.updateEvent(
           input: Input$EventInput(
             start: newStart.toUtc(),
@@ -96,10 +96,10 @@ class EventDateTimeSettingsBloc
       } else {
         emit(
           state.copyWith(
-            start: DateTimeFormz.dirty(newStart),
-            end: DateTimeFormz.dirty(newEnd),
             isValid: true,
             status: FormzSubmissionStatus.success,
+            start: DateTimeFormz.dirty(newStart),
+            end: DateTimeFormz.dirty(newEnd),
           ),
         );
       }
@@ -168,14 +168,6 @@ class EventDateTimeSettingsBloc
     Emitter<EventDateTimeSettingsState> emit,
   ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.initial));
-    final start = DateTimeFormz.dirty(state.start.value!);
-    final end = DateTimeFormz.dirty(state.end.value!);
-    emit(
-      state.copyWith(
-        start: start,
-        end: end,
-      ),
-    );
   }
 }
 

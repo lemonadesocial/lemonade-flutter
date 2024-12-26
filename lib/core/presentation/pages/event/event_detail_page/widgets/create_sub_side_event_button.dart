@@ -27,7 +27,12 @@ class CreateSubSideEventButton extends StatelessWidget {
         _Button(
           onTap: () {
             AutoRouter.of(context).push(
-              CreateEventRoute(parentEventId: event.id ?? ''),
+              CreateEventRoute(
+                parentEventId: event.id ?? '',
+                parentEventStart: event.start ?? DateTime.now(),
+                parentEventEnd: event.end ?? DateTime.now(),
+                parentTimezone: event.timezone ?? '',
+              ),
             );
           },
           icon: Assets.icons.icSessionsGradient.svg(),

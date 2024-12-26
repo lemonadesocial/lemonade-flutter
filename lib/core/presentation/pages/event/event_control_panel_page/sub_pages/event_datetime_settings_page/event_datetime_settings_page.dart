@@ -57,28 +57,57 @@ class EventDatetimeSettingsPageView extends StatefulWidget {
 
 class _EventDatetimeSettingsPageState
     extends State<EventDatetimeSettingsPageView> {
-  final TextEditingController startDateInputController =
-      TextEditingController();
-  final TextEditingController endDateInputController = TextEditingController();
-  final TextEditingController startTimeInputController =
-      TextEditingController();
-  final TextEditingController endTimeInputController = TextEditingController();
-
   bool? expandedStarts;
   bool? expandedEnds;
-  late DateTime tempStart;
-  late DateTime tempEnd;
+  DateTime? tempStart;
+  DateTime? tempEnd;
+
+  DateTime _createDateTimeInTimezone(
+    DateTime date,
+    TimeOfDay? time,
+    tz.Location location,
+  ) {
+    final timeToUse = time ?? TimeOfDay.fromDateTime(date);
+    return tz.TZDateTime(
+      location,
+      date.year,
+      date.month,
+      date.day,
+      timeToUse.hour,
+      timeToUse.minute,
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    final start = context.read<EventDateTimeSettingsBloc>().state.start.value;
-    final end = context.read<EventDateTimeSettingsBloc>().state.end.value;
     setState(() {
       expandedStarts = widget.expandedStarts;
       expandedEnds = widget.expandedEnds;
-      tempStart = start!;
-      tempEnd = end!;
+      final bloc = context.read<EventDateTimeSettingsBloc>();
+      tempStart = bloc.state.start.value ?? DateTime.now();
+      tempEnd =
+          bloc.state.end.value ?? DateTime.now().add(const Duration(hours: 1));
+    });
+  }
+
+  void _handleStartDateChange(DateTime newStart) {
+    setState(() {
+      tempStart = newStart;
+      // Ensure end time is at least 1 hour after start time
+      if (tempEnd == null || tempEnd!.isBefore(newStart)) {
+        tempEnd = newStart.add(const Duration(hours: 1));
+      }
+    });
+  }
+
+  void _handleEndDateChange(DateTime newEnd) {
+    setState(() {
+      tempEnd = newEnd;
+      // Ensure start time is at most 1 hour before end time
+      if (tempStart == null || tempStart!.isAfter(newEnd)) {
+        tempStart = newEnd.subtract(const Duration(hours: 1));
+      }
     });
   }
 
@@ -135,11 +164,16 @@ class _EventDatetimeSettingsPageState
                 iconContainerColor: LemonColor.acidGreen,
               );
               AutoRouter.of(context).pop();
-              Future.delayed(const Duration(milliseconds: 500));
-              context.read<GetEventDetailBloc>().add(
-                    GetEventDetailEvent.fetch(
-                      eventId: widget.event!.id ?? '',
-                    ),
+              if (widget.event != null) {
+                Future.delayed(const Duration(milliseconds: 500));
+                context.read<GetEventDetailBloc>().add(
+                      GetEventDetailEvent.fetch(
+                        eventId: widget.event!.id ?? '',
+                      ),
+                    );
+              }
+              context.read<EventDateTimeSettingsBloc>().add(
+                    const EventDateTimeSettingsEventReset(),
                   );
             }
           },
@@ -157,7 +191,7 @@ class _EventDatetimeSettingsPageState
                         child: EventDatetimeSettingRowItem(
                           label: t.event.datetimeSettings.starts,
                           dotColor: LemonColor.snackBarSuccess,
-                          selectedDateTime: tempStart,
+                          selectedDateTime: tempStart!,
                           expanded: expandedStarts == true,
                           onSelectTab: () {
                             setState(() {
@@ -165,29 +199,21 @@ class _EventDatetimeSettingsPageState
                               expandedEnds = false;
                             });
                           },
-                          onDateChanged: (DateTime datetime) {
-                            setState(() {
-                              tempStart = tz.TZDateTime(
-                                location,
-                                datetime.year,
-                                datetime.month,
-                                datetime.day,
-                                tempStart.hour,
-                                tempStart.minute,
-                              );
-                            });
+                          onDateChanged: (DateTime date) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              date,
+                              TimeOfDay.fromDateTime(tempStart!),
+                              location,
+                            );
+                            _handleStartDateChange(newDateTime);
                           },
-                          onTimeChanged: (TimeOfDay timeOfDay) {
-                            setState(() {
-                              tempStart = tz.TZDateTime(
-                                location,
-                                tempStart.year,
-                                tempStart.month,
-                                tempStart.day,
-                                timeOfDay.hour,
-                                timeOfDay.minute,
-                              );
-                            });
+                          onTimeChanged: (TimeOfDay time) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              tempStart!,
+                              time,
+                              location,
+                            );
+                            _handleStartDateChange(newDateTime);
                           },
                         ),
                       ),
@@ -214,36 +240,28 @@ class _EventDatetimeSettingsPageState
                           label: t.event.datetimeSettings.ends,
                           dotColor: LemonColor.coralReef,
                           expanded: expandedEnds == true,
-                          selectedDateTime: tempEnd,
+                          selectedDateTime: tempEnd!,
                           onSelectTab: () {
                             setState(() {
                               expandedStarts = false;
                               expandedEnds = true;
                             });
                           },
-                          onDateChanged: (DateTime datetime) {
-                            setState(() {
-                              tempEnd = tz.TZDateTime(
-                                location,
-                                datetime.year,
-                                datetime.month,
-                                datetime.day,
-                                tempEnd.hour,
-                                tempEnd.minute,
-                              );
-                            });
+                          onDateChanged: (DateTime date) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              date,
+                              TimeOfDay.fromDateTime(tempEnd!),
+                              location,
+                            );
+                            _handleEndDateChange(newDateTime);
                           },
-                          onTimeChanged: (TimeOfDay timeOfDay) {
-                            setState(() {
-                              tempEnd = tz.TZDateTime(
-                                location,
-                                tempEnd.year,
-                                tempEnd.month,
-                                tempEnd.day,
-                                timeOfDay.hour,
-                                timeOfDay.minute,
-                              );
-                            });
+                          onTimeChanged: (TimeOfDay time) {
+                            final newDateTime = _createDateTimeInTimezone(
+                              tempEnd!,
+                              time,
+                              location,
+                            );
+                            _handleEndDateChange(newDateTime);
                           },
                         ),
                       ),
@@ -263,8 +281,8 @@ class _EventDatetimeSettingsPageState
                               context.read<EventDateTimeSettingsBloc>().add(
                                     EventDateTimeSettingsEventSaveChangesDateTime(
                                       event: widget.event,
-                                      newStart: tempStart,
-                                      newEnd: tempEnd,
+                                      newStart: tempStart ?? DateTime.now(),
+                                      newEnd: tempEnd ?? DateTime.now(),
                                     ),
                                   );
                             },
