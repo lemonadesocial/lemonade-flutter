@@ -22,71 +22,70 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return LemonSnapBottomSheet(
-      snapSizes: const [.8, 1],
+      snapSizes: const [0.4, 1],
       maxSnapSize: 1,
-      minSnapSize: .8,
-      defaultSnapSize: .8,
+      minSnapSize: 0.4,
+      defaultSnapSize: 0.4,
       backgroundColor: LemonColor.atomicBlack,
       builder: (scrollController) {
-        return Flexible(
-          child: SafeArea(
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: Spacing.smMedium * 2,
-                      left: Spacing.smMedium,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          event.title ?? '',
-                          style: Typo.extraLarge.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.w800,
-                          ),
+        return SafeArea(
+          child: CustomScrollView(
+            controller: scrollController,
+            shrinkWrap: true,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: Spacing.smMedium * 2,
+                    left: Spacing.smMedium,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title ?? '',
+                        style: Typo.extraLarge.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontFamily: FontFamily.nohemiVariable,
+                          fontWeight: FontWeight.w800,
                         ),
-                        SizedBox(
-                          height: 3.w,
+                      ),
+                      SizedBox(
+                        height: 3.w,
+                      ),
+                      Text(
+                        DateFormatUtils.dateWithTimezone(
+                          dateTime: event.start ?? DateTime.now(),
+                          timezone: event.timezone ?? '',
+                          pattern: DateFormatUtils.fullDateFormat,
                         ),
-                        Text(
-                          DateFormatUtils.dateWithTimezone(
-                            dateTime: event.start ?? DateTime.now(),
-                            timezone: event.timezone ?? '',
-                            pattern: DateFormatUtils.fullDateFormat,
-                          ),
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
+                        style: Typo.medium.copyWith(
+                          color: colorScheme.onSurfaceVariant,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                SliverPadding(
-                  padding: EdgeInsets.only(bottom: Spacing.medium),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: Spacing.medium),
+              ),
+              SliverToBoxAdapter(
+                child: GuestEventDetailPhotos(
+                  event: event,
+                  showTitle: false,
                 ),
-                SliverToBoxAdapter(
-                  child: GuestEventDetailPhotos(
-                    event: event,
-                    showTitle: false,
-                  ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.only(bottom: Spacing.medium),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: HtmlDisplay(htmlContent: event.description ?? ''),
                 ),
-                SliverPadding(
-                  padding: EdgeInsets.only(bottom: Spacing.medium),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                    child: HtmlDisplay(htmlContent: event.description ?? ''),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

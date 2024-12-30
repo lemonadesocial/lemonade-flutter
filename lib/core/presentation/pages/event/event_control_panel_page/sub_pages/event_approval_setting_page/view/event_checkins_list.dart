@@ -7,7 +7,9 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -90,6 +92,13 @@ class EventCheckInsList extends StatelessWidget {
                       final eventCheckin = eventCheckinsList[index];
                       return EventCheckInItem(
                         checkIn: eventCheckin,
+                        onTap: () {
+                          if (eventCheckin.user != null) {
+                            AutoRouter.of(context).push(
+                              ProfileRoute(userId: eventCheckin.user!),
+                            );
+                          }
+                        },
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(

@@ -251,8 +251,9 @@ class _CheckinEventAcceptedExportListState
                               context: context,
                               useRootNavigator: true,
                               backgroundColor: LemonColor.atomicBlack,
+                              barrierColor: LemonColor.black87,
                               builder: (context) => GuestDetailBottomSheetView(
-                                shortId: eventAccepted.shortId ?? '',
+                                ticketShortId: eventAccepted.shortId ?? '',
                                 event: widget.event,
                               ),
                             );

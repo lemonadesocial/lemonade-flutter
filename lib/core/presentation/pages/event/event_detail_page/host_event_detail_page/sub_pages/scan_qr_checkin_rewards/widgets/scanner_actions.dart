@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/checkin_guest_list_page/checkin_guest_list_page.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/scan_qr_checkin_rewards_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -24,13 +25,24 @@ class ScannerActions extends StatelessWidget {
   final MobileScannerController controller;
   final ScanTarget selectedScanTarget;
   final Function(ScanTarget) onScanTargetChanged;
+  final Event event;
 
   const ScannerActions({
     super.key,
     required this.controller,
     required this.selectedScanTarget,
     required this.onScanTargetChanged,
+    required this.event,
   });
+
+  List<ScanTarget> get _availableScanTargets {
+    final hasRewards = event.rewards?.isNotEmpty ?? false;
+    return ScanTarget.values.where((target) {
+      return target == ScanTarget.tickets ||
+          (target == ScanTarget.rewards && hasRewards);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -88,6 +100,7 @@ class ScannerActions extends StatelessWidget {
                 ScanTargetDropdown(
                   selectedValue: selectedScanTarget,
                   onItemPressed: onScanTargetChanged,
+                  availableTargets: _availableScanTargets,
                 ),
               ],
             ),
@@ -116,25 +129,30 @@ class ScannerActions extends StatelessWidget {
 class ScanTargetDropdown extends StatelessWidget {
   final ScanTarget selectedValue;
   final Function(ScanTarget value)? onItemPressed;
+  final List<ScanTarget> availableTargets;
 
   const ScanTargetDropdown({
     super.key,
     required this.selectedValue,
     this.onItemPressed,
+    required this.availableTargets,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final bool showDropdown = availableTargets.length > 1;
 
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
         value: selectedValue,
-        onChanged: (ScanTarget? value) {
-          if (value != null) {
-            onItemPressed?.call(value);
-          }
-        },
+        onChanged: showDropdown
+            ? (ScanTarget? value) {
+                if (value != null) {
+                  onItemPressed?.call(value);
+                }
+              }
+            : null,
         customButton: Container(
           padding: EdgeInsets.symmetric(horizontal: Spacing.small),
           height: Sizing.large,
@@ -160,19 +178,21 @@ class ScanTargetDropdown extends StatelessWidget {
                   color: colorScheme.onPrimary,
                 ),
               ),
-              SizedBox(width: 9.w),
-              ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icArrowDown.svg(
-                  colorFilter: filter,
-                  width: Sizing.mSmall,
-                  height: Sizing.mSmall,
+              if (showDropdown) ...[
+                SizedBox(width: 9.w),
+                ThemeSvgIcon(
+                  color: colorScheme.onSecondary,
+                  builder: (filter) => Assets.icons.icArrowDown.svg(
+                    colorFilter: filter,
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
-        items: ScanTarget.values.map((type) {
+        items: availableTargets.map((type) {
           return DropdownMenuItem(
             value: type,
             child: _ActionItem(
