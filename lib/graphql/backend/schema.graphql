@@ -24,16 +24,16 @@ type Query {
   getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!]): [Event!]!
   getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
   getEvent(_id: MongoID, shortid: String): Event
-  getEvents(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, end_from: DateTimeISO, end_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
+  getEvents(skip: Int, limit: Int, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, space: MongoID, tags: [String!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, end_from: DateTimeISO, end_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getEventInvitedStatistics(search: String, _id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
-  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, sort: JSON): [Event!]!
-  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, host: Boolean, sort: JSON): [Event!]!
+  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, space: MongoID, sort: JSON): [Event!]!
+  getUpcomingEvents(skip: Int! = 0, limit: Int! = 25, search: String, site: MongoID, user: MongoID, space: MongoID, host: Boolean, sort: JSON): [Event!]!
   getEventTags(all: Boolean): [String!]!
   listEventHosts(skip: Int! = 0, limit: Int! = 25, name: String): ListEventHostsResponse!
   getEventApplicationAnswers(event: MongoID!, user: MongoID, email: String): [EventApplicationAnswer!]!
-  getApplicantsInfo(users: [MongoID!]!, event: MongoID!): [Applicant!]!
+  getApplicantsInfo(users: [MongoID!], emails: [String!], event: MongoID!): [Applicant!]!
   exportEventApplications(event: MongoID!): [EventApplicationExport!]!
   getEventCheckins(input: GetEventCheckinsInput!): [EventCheckin!]!
   getEventCohostInvites(input: GetEventCohostRequestsInput!): [EventCohostRequest!]!
@@ -91,6 +91,9 @@ type Query {
   getSafeFreeLimit(network: String!): FreeSafeInitInfo!
   getInitSafeTransaction(input: GetInitSafeTransactionInput!): RawTransaction!
   getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
+  listSpaces(with_my_spaces: Boolean, with_public_spaces: Boolean, with_subscribed_spaces: Boolean): [Space!]!
+  getSpace(slug: String, _id: MongoID): Space
+  canUseSpaceSlug(slug: String!): Boolean!
   listSpaceMembers(space: MongoID!, role: SpaceRole, state: SpaceMembershipState, visible: Boolean): [SpaceMember!]!
   listSpaceRoleFeatures(space: MongoID!, role: SpaceRole!): ListSpaceRoleFeaturesResponse!
   getStore(promotion: MongoID, _id: MongoID): Store
@@ -123,6 +126,7 @@ type Query {
     ticket_types: [MongoID!]
   ): [Ticket!]!
   getTicket(shortid: String!): Ticket
+  getMyTickets(event: MongoID!, with_payment_info: Boolean): GetMyTicketsResponse!
   getTicketStatistics(id: MongoID!): TicketStatistics!
   exportEventTickets(_id: MongoID!, ticket_type_ids: [MongoID!], search_text: String, checked_in: Boolean, pagination: PaginationInput): ExportedTickets!
   getRecommendedUsers(skip: Int! = 0, limit: Int! = 25): [User!]!
@@ -142,6 +146,12 @@ type Query {
   listUserExpertises: [UserExpertise!]!
   getUserWalletRequest(wallet: String!): UserWalletRequest!
   listEventVotings(event: MongoID!, votings: [MongoID!], hidden: Boolean): [EventVoting!]!
+  listEventStakePayments(skip: Int, limit: Int, search: String, event: MongoID!, networks: [String!]): ListEventStakePaymentsResponse!
+  generateSlashPaymentSignature(event: MongoID!, paymentIds: [MongoID!]!): PaymentRefundSignature!
+  getStakePaymentStatistics(event: MongoID!): StakePaymentStatistics!
+  getVaultSalt(name: String!, type: String!): String!
+  getMySpaceEventRequests(skip: Int! = 0, limit: Int! = 25, space: MongoID!, state: EventJoinRequestState): GetSpaceEventRequestsResponse!
+  getSpaceEventRequests(skip: Int! = 0, limit: Int! = 25, space: MongoID!, state: EventJoinRequestState): GetSpaceEventRequestsResponse!
 }
 
 type Badge {
@@ -538,6 +548,8 @@ type Event {
   stores: [MongoID!]
   stories: [MongoID!]
   stories_eponym: Boolean
+  space: MongoID
+  listing_spaces: [MongoID!]
   tags: [String!]
   terms_email_permission_text: Boolean
   terms_text: String
@@ -577,6 +589,7 @@ type Event {
   checkedin: Boolean
   ticket_count: Float
   data: JSON
+  space_expanded: SpaceBase
   host_expanded: User
   subevent_parent_expanded: Event
   cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
@@ -594,6 +607,7 @@ type Event {
   tickets: [TicketBase!]
   application_questions: [EventApplicationQuestion!]
   application_form_submission: DateTimeISO
+  calendar_links: EventCalendarLinks
 }
 
 enum EventState {
@@ -921,6 +935,53 @@ type EventSession {
   speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
 }
 
+type SpaceBase {
+  _id: MongoID!
+  title: String!
+  description: String
+  creator: MongoID!
+
+  """Private space requires moderation for membership"""
+  private: Boolean
+  state: SpaceState!
+  personal: Boolean
+  daos: SpaceDao
+  event_tags: [SpaceTag!]
+  member_tags: [SpaceTag!]
+  tint_color: String
+  slug: String
+  handle_twitter: String
+  handle_instagram: String
+  handle_youtube: String
+  handle_tiktok: String
+  handle_linkedin: String
+  website: String
+  address: Address
+  image_avatar: MongoID
+  image_cover: MongoID
+
+  """External events are listed on this space"""
+  listed_events: [MongoID!]
+}
+
+enum SpaceState {
+  inactive
+  active
+  comingSoon
+  archived
+}
+
+type SpaceDao {
+  network: String!
+  address: String!
+  name: String!
+}
+
+type SpaceTag {
+  title: String!
+  color: String
+}
+
 type Store {
   _id: MongoID!
   active: Boolean!
@@ -1113,6 +1174,7 @@ type EventPaymentTicketDiscount {
 type TicketBase {
   _id: MongoID!
   shortid: String!
+  created_at: DateTimeISO!
   event: MongoID!
   type: MongoID!
   accepted: Boolean
@@ -1160,6 +1222,13 @@ Select type for the question of type "options"
 enum SelectType {
   single
   multi
+}
+
+type EventCalendarLinks {
+  google: String!
+  yahoo: String!
+  outlook: String!
+  ical: String!
 }
 
 type BadgeCity {
@@ -1285,7 +1354,8 @@ type EventApplicationAnswer {
 
 type Applicant {
   _id: MongoID
-  active: Boolean!
+  active: Boolean
+  name: String
   email: String
   display_name: String
   calendly_url: String
@@ -1308,6 +1378,8 @@ type Applicant {
   new_gender: String
   tagline: String
   username: String
+  wallets_new: JSON
+  wallet_custodial: String
 }
 
 type EventApplicationExport {
@@ -2069,6 +2141,7 @@ type NewPayment {
   transfer_metadata: JSON
   transfer_params: JSON
   failure_reason: String
+  attempting_refund: Boolean
   account_expanded: NewPaymentAccount
   tickets: [TicketBase!]
   ticket_types_expanded: [EventTicketType]
@@ -2156,7 +2229,7 @@ type PaymentRefundSignature {
   signature: String!
 
   """The args that will be supplied to the contract refund function"""
-  args: [String!]!
+  args: [JSON!]!
 }
 
 type FiatCurrency {
@@ -2749,6 +2822,40 @@ type SitePassport {
   crowdfundAddress: JSON
 }
 
+type Space {
+  _id: MongoID!
+  title: String!
+  description: String
+  creator: MongoID!
+
+  """Private space requires moderation for membership"""
+  private: Boolean
+  state: SpaceState!
+  personal: Boolean
+  daos: SpaceDao
+  event_tags: [SpaceTag!]
+  member_tags: [SpaceTag!]
+  tint_color: String
+  slug: String
+  handle_twitter: String
+  handle_instagram: String
+  handle_youtube: String
+  handle_tiktok: String
+  handle_linkedin: String
+  website: String
+  address: Address
+  image_avatar: MongoID
+  image_cover: MongoID
+
+  """External events are listed on this space"""
+  listed_events: [MongoID!]
+  followed: Boolean
+  admins: [User!]
+  creator_expanded: User!
+  image_avatar_expanded: File
+  image_cover_expanded: File
+}
+
 type SpaceMember {
   _id: MongoID!
   user: MongoID!
@@ -2760,9 +2867,10 @@ type SpaceMember {
 
 enum SpaceRole {
   member
-  moderator
+  ambassador
   admin
   creator
+  subscriber
 }
 
 enum SpaceMembershipState {
@@ -2791,8 +2899,12 @@ enum FeatureCode {
   PromotionCodes
   CollectibleData
   Checkin
-  Space
-  SpaceMembership
+  ViewSpace
+  ManageSpace
+  ViewSpaceMembership
+  ManageSpaceMembership
+  ViewSpaceEvent
+  ManageSpaceEvent
 }
 
 input AddressInput {
@@ -3078,6 +3190,7 @@ input UserDaoInput {
 type Ticket {
   _id: MongoID!
   shortid: String!
+  created_at: DateTimeISO!
   event: MongoID!
   type: MongoID!
   accepted: Boolean
@@ -3093,6 +3206,44 @@ type Ticket {
   type_expanded: EventTicketType
   acquired_tickets: [Ticket!]
   checkin: EventCheckin
+}
+
+type GetMyTicketsResponse {
+  tickets: [Ticket!]!
+  payments: [PaymentRefundInfo!]
+}
+
+type PaymentRefundInfo {
+  _id: MongoID!
+  amount: String!
+  currency: String!
+  state: NewPaymentState!
+  attempting_refund: Boolean
+
+  """If null is returned then this payment does not support refund"""
+  refund_policy: PaymentRefundPolicy
+
+  """Null for undeterminated, true if requirement met, otherwise false"""
+  refund_requirements_met: Boolean
+  refund_info: RefundInfo
+  payment_account: NewPaymentAccount!
+}
+
+type PaymentRefundPolicy {
+  percent: Float!
+
+  """Whether all requirements must be met"""
+  satisfy_all: Boolean
+  requirements: RefundRequirements
+}
+
+type RefundRequirements {
+  checkin_before: DateTimeISO
+}
+
+type RefundInfo {
+  available_amount: String!
+  refunded: Boolean
 }
 
 type TicketStatistics {
@@ -3330,6 +3481,85 @@ type VotingOption {
   voters: [User!]!
 }
 
+type ListEventStakePaymentsResponse {
+  items: [EventStakePayment!]!
+  total: Int!
+}
+
+type EventStakePayment {
+  _id: MongoID!
+  currency: String!
+  staker: StakeUser!
+  ticket_count: Float!
+  formatted_stake_amount: String!
+  refund_requirements_met: Boolean
+  state: StakeState!
+  network: String!
+}
+
+type StakeUser {
+  _id: MongoID
+  name: String
+  email: String
+  display_name: String
+  image_avatar: String
+  wallet: String!
+}
+
+enum StakeState {
+  locked
+  defaulted
+  unstaked
+  slashed
+  unlocked
+}
+
+type StakePaymentStatistics {
+  total: Int!
+  slash_states: [StakePaymentStateStatistic!]!
+  slash_infos: [SlashInfo!]!
+}
+
+type StakePaymentStateStatistic {
+  state: StakeState!
+  count: Int!
+}
+
+type SlashInfo {
+  vault: String!
+  account_info: NewPaymentAccount
+  slashable_payments: [MongoID!]!
+  payouts: [SlashPayout!]!
+}
+
+type SlashPayout {
+  currency: String!
+  formatted_amount: String!
+}
+
+type GetSpaceEventRequestsResponse {
+  total: Int!
+  records: [SpaceEventRequest!]!
+}
+
+type SpaceEventRequest {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  created_by: MongoID!
+  space: MongoID!
+  event: MongoID
+  state: SpaceEventRequestState!
+  decided_at: DateTimeISO
+  decided_by: MongoID
+  event_expanded: Event
+}
+
+enum SpaceEventRequestState {
+  pending
+  approved
+  declined
+}
+
 type Mutation {
   createBadge(input: CreateBadgeInput!): Badge!
   updateBadge(input: UpdateBadgeInput!, _id: MongoID!): Badge!
@@ -3436,6 +3666,7 @@ type Mutation {
   updateSite(input: UpdateSiteInput!, _id: MongoID!): Site
   deleteSite(_id: MongoID!): Boolean!
   createSpace(input: SpaceInput!): Space!
+  activatePersonalSpace(input: SpaceInput!): ActivatePersonalSpace!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
   pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
@@ -3499,6 +3730,8 @@ type Mutation {
   createUserExpertise(title: String!): UserExpertise!
   setUserWallet(token: String!, signature: String!): Boolean!
   castVote(input: CastVoteInput!): Boolean!
+  createSpaceEventRequests(input: CreateSpaceEventRequestsInput!): SpaceEventRequestBase!
+  decideSpaceEventRequests(input: DecideSpaceEventRequestsInput!): Boolean!
 }
 
 input CreateBadgeInput {
@@ -3591,6 +3824,8 @@ input EventInput {
   speaker_users: [MongoID!]
   stores: [MongoID!]
   stories: [MongoID!]
+  space: MongoID
+  listing_spaces: [MongoID!]
   tags: [String!]
   terms_email_permission_text: Boolean
   terms_text: String
@@ -3605,7 +3840,6 @@ input EventInput {
   subevent_settings: SubeventSettingsInput
   subevent_parent: MongoID
   telegram_channels: [TelegramChannelInput!]
-  space: MongoID
 }
 
 input ApplicationBlokchainPlatformInput {
@@ -4298,38 +4532,36 @@ input UpdateSiteInput {
   active: Boolean
 }
 
-type Space {
-  _id: MongoID!
-  title: String!
-  description: String
-  creator: MongoID!
-
-  """Private space requires moderation for membership"""
-  private: Boolean
-  followers: [MongoID!]
-  daos: SpaceDao
-  handle_twitter: String
-  handle_instagram: String
-  events: [MongoID!]
-
-  """Events that are being listed on space home page"""
-  listed_events: [MongoID!]
-}
-
-type SpaceDao {
-  network: String!
-  address: String!
-  name: String!
-}
-
 input SpaceInput {
-  title: String!
+  title: String
   description: String
 
   """Private space requires moderation for membership"""
   private: Boolean
+  state: SpaceState
+  event_tags: [SpaceTagInput!]
+  member_tags: [SpaceTagInput!]
+  tint_color: String
+  slug: String
   handle_twitter: String
   handle_instagram: String
+  handle_youtube: String
+  handle_tiktok: String
+  handle_linkedin: String
+  website: String
+  address: AddressInput
+  image_avatar: MongoID
+  image_cover: MongoID
+}
+
+input SpaceTagInput {
+  title: String!
+  color: String
+}
+
+type ActivatePersonalSpace {
+  space: Space!
+  personal_space: Space!
 }
 
 input AddSpaceMemberInput {
@@ -4618,6 +4850,28 @@ input DeleteUserFriendshipInput {
 input CastVoteInput {
   voting_id: MongoID!
   option_id: String
+}
+
+type SpaceEventRequestBase {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  created_by: MongoID!
+  space: MongoID!
+  event: MongoID
+  state: SpaceEventRequestState!
+  decided_at: DateTimeISO
+  decided_by: MongoID
+}
+
+input CreateSpaceEventRequestsInput {
+  space: MongoID!
+  event: MongoID!
+}
+
+input DecideSpaceEventRequestsInput {
+  space: MongoID!
+  requests: [MongoID!]!
+  decision: SpaceEventRequestState!
 }
 
 type Subscription {
