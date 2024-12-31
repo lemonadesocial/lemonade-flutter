@@ -1,9 +1,7 @@
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/widgets/event_join_request_application_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/widgets/event_join_request_application_user_card.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -12,7 +10,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
-import 'package:app/graphql/backend/user/query/get_user_from_user_migration.graphql.dart';
+import 'package:app/graphql/backend/applicant/query/get_applicants_info.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -40,26 +38,21 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
   bool get _isNonLoginUser => eventJoinRequest.user == null;
 
   Future<User?> _getUserInfo() async {
-    if (_isNonLoginUser) {
-      final data = await getIt<AppGQL>().client.query$getUserFromUserMigration(
-            Options$Query$getUserFromUserMigration(
-              variables: Variables$Query$getUserFromUserMigration(
-                email: eventJoinRequest.nonLoginUser?.email ?? '',
-              ),
+    final data = await getIt<AppGQL>().client.query$GetApplicantsInfo(
+          Options$Query$GetApplicantsInfo(
+            variables: Variables$Query$GetApplicantsInfo(
+              emails: _isNonLoginUser
+                  ? [eventJoinRequest.nonLoginUser?.email ?? '']
+                  : null,
+              users: _isNonLoginUser
+                  ? null
+                  : [eventJoinRequest.userExpanded?.userId ?? ''],
+              event: event?.id ?? '',
             ),
-          );
-      final userInfo = data.parsedData?.getUserFromUserMigration?.toJson();
-      return userInfo != null ? User.fromDto(UserDto.fromJson(userInfo)) : null;
-    }
-    final response = await getIt<UserRepository>().getUserProfile(
-      GetProfileInput(
-        id: eventJoinRequest.userExpanded?.userId ?? '',
-      ),
-    );
-    return response.fold(
-      (l) => null,
-      (r) => r,
-    );
+          ),
+        );
+    final userInfo = data.parsedData?.getApplicantsInfo.firstOrNull?.toJson();
+    return userInfo != null ? User.fromDto(UserDto.fromJson(userInfo)) : null;
   }
 
   @override
@@ -86,6 +79,7 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
                       child: EventJoinRequestApplicationUserCard(
                         eventJoinRequest: eventJoinRequest,
                         userInfo: userInfo,
+                        event: event,
                       ),
                     ),
                     EventJoinRequestApplicationForm(

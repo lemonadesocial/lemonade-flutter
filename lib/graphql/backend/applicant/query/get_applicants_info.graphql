@@ -1,28 +1,35 @@
-query GetApplicantsInfo($users: [MongoID!]!, $event: MongoID!) {
-    getApplicantsInfo(users: $users, event: $event) {
-        _id
-        active
-        email
-        display_name
-        calendly_url
-        company_name
-        date_of_birth
-        description
-        education_title
-        ethnicity
-        handle_farcaster
-        handle_github
-        handle_instagram
-        handle_lens
-        handle_linkedin
-        handle_mirror
-        handle_twitter
-        image_avatar
-        industry
-        job_title
-        pronoun
-        new_gender
-        tagline
-        username
-    }
+query GetApplicantsInfo(
+  $event: MongoID!
+  $emails: [String!]
+  $users: [MongoID!]
+) {
+  getApplicantsInfo(event: $event, emails: $emails, users: $users) {
+    _id
+    active
+    calendly_url
+    company_name
+    date_of_birth
+    description
+    display_name
+    education_title
+    email
+    ethnicity
+    handle_farcaster
+    handle_github
+    handle_instagram
+    handle_lens
+    handle_linkedin
+    handle_mirror
+    handle_twitter
+    image_avatar
+    industry
+    job_title
+    name
+    new_gender
+    pronoun
+    tagline
+    username
+    wallets_new
+    wallet_custodial
+  }
 }

@@ -884,6 +884,7 @@
         "yourEthereumAddress": "Your Ethereum address",
         "yourSolanaAddress": "Your Solana address",
         "verifyWithWallet": "Verify with wallet",
-        "connecctedAddress": "Connected $address"
+        "connecctedAddress": "Connected $address",
+        "ethAddress": "ETH Address"
     }
 }
