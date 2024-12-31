@@ -114,8 +114,9 @@ class HomeEventCard extends StatelessWidget {
                                 child: Text(
                                   EventUtils.getAddress(
                                     event: event,
-                                    showCityCountryOnly:
-                                        !isAttending && !isOwnEvent,
+                                    showInHomeCard: true,
+                                    isAttending: isAttending,
+                                    isOwnEvent: isOwnEvent,
                                   ),
                                   style: Typo.small.copyWith(
                                     color: colorScheme.onSecondary,
