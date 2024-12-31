@@ -67,30 +67,32 @@ class EventUtils {
 
   static String getAddress({
     required Event event,
-    bool showCityCountryOnly = false,
+    bool showInHomeCard = false,
+    bool isAttending = false,
+    bool isOwnEvent = false,
   }) {
     final address = event.address;
-    if (showCityCountryOnly) {
-      final cityCountryParts = [
-        address?.city,
-        address?.country,
-      ]
-          .where((element) => element != null && element.trim().isNotEmpty)
-          .toList();
-      if (cityCountryParts.isEmpty) return '';
-      return cityCountryParts.join(', ');
+    if (address == null) return '';
+
+    // For home card view:
+    // - Attending or own events: show location title and city
+    // - Other events: show city and country
+    if (showInHomeCard) {
+      return [
+        if (isAttending || isOwnEvent) ...[address.title, address.city],
+        if (!isAttending && !isOwnEvent) ...[address.city, address.country],
+      ].where((part) => part != null && part.trim().isNotEmpty).join(', ');
     }
 
-    final addressParts = [
-      address?.additionalDirections,
-      address?.street1,
-      address?.street2,
-      address?.city,
-      address?.region,
-      address?.country,
-    ].where((element) => element != null && element.trim().isNotEmpty).toList();
-    if (addressParts.isEmpty) return '';
-    return addressParts.join(', ');
+    // Show full address if not in home card
+    return [
+      address.additionalDirections,
+      address.street1,
+      address.street2,
+      address.city,
+      address.region,
+      address.country,
+    ].where((part) => part != null && part.trim().isNotEmpty).join(', ');
   }
 
   static bool isInvited(
