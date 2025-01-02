@@ -78,7 +78,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
               .svg(width: Sizing.small, height: Sizing.small),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            SnackBarUtils.showComingSoon();
+            AutoRouter.of(context).navigate(EventInviteFormRoute());
           },
         ),
         SizedBox(width: 10.w),
