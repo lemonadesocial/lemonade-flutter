@@ -26,6 +26,8 @@ class Web3RepositoryIml implements Web3Repository {
                 ChainDto.fromJson(item),
               ),
             )
+            // TODO: Solana chain is not supported yet
+            .where((element) => element.chainId?.contains("solana") == false)
             .toList(),
       ),
     );
