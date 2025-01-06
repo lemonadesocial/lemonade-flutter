@@ -33,7 +33,10 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final verifiedEthereumAddresses = userInfo?.walletsNew?['ethereum'];
-
+    final verifiedAddress = verifiedEthereumAddresses?.firstWhereOrNull(
+          (element) => element != userInfo?.walletCustodial,
+        ) ??
+        '';
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
@@ -72,14 +75,11 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
                 event!,
                 platform: Enum$BlockchainPlatform.ethereum,
               ) &&
-              verifiedEthereumAddresses?.isNotEmpty == true) ...[
+              verifiedAddress.isNotEmpty == true) ...[
             SizedBox(height: Spacing.medium),
             _VerifiedWallet(
               label: t.event.rsvpWeb3Indetity.ethAddress,
-              address: verifiedEthereumAddresses?.firstWhereOrNull(
-                    (element) => element != userInfo?.walletCustodial,
-                  ) ??
-                  '',
+              address: verifiedAddress,
             ),
           ],
         ],

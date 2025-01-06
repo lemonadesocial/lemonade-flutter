@@ -37,7 +37,9 @@ class Chain with _$Chain {
       active: dto.active,
       chainId: dto.chainId,
       // Ethereum based
-      fullChainId: 'eip155:${dto.chainId}',
+      fullChainId: dto.chainId?.contains("solana") == true
+          ? dto.chainId
+          : 'eip155:${dto.chainId}',
       name: dto.name,
       rpcUrl: dto.rpcUrl,
       logoUrl: dto.logoUrl,
