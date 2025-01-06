@@ -4,10 +4,8 @@ import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -70,12 +68,7 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
               ],
             ),
           ),
-          if (event != null &&
-              EventUtils.isWalletVerifiedRequired(
-                event!,
-                platform: Enum$BlockchainPlatform.ethereum,
-              ) &&
-              verifiedAddress.isNotEmpty == true) ...[
+          if (verifiedAddress.isNotEmpty == true) ...[
             SizedBox(height: Spacing.medium),
             _VerifiedWallet(
               label: t.event.rsvpWeb3Indetity.ethAddress,
