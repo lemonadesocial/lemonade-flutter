@@ -3,7 +3,6 @@ import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_ti
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/event/event_dashboard_item.dart';
 import 'package:app/core/utils/share_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -78,7 +77,7 @@ class GuestEventDetailDashboard extends StatelessWidget {
               .svg(width: Sizing.small, height: Sizing.small),
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
-            SnackBarUtils.showComingSoon();
+            AutoRouter.of(context).navigate(EventInviteFormRoute());
           },
         ),
         SizedBox(width: 10.w),
