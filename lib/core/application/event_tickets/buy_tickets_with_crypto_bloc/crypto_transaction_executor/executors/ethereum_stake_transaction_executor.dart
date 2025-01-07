@@ -53,7 +53,7 @@ class EthereumStakeTransactionExecutor implements CryptoTransactionExecutor {
       contract: stakePaymentContract,
       function: stakePaymentContract.function('stake'),
       parameters: [
-        BigInt.parse(paymentAccount.accountInfo?.configId ?? ''),
+        EthereumAddress.fromHex(paymentAccount.accountInfo?.configId ?? ''),
         eventId,
         payment.id,
         EthereumAddress.fromHex(erc20currencyAddress),
