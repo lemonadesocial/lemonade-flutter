@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 
 class WaitForPaymentNotificationHandler {
   Timer? timer;
+  int _remainingAttempt = 30;
 
-  static get maxDurationToWaitForNotification => const Duration(minutes: 3);
+  static get maxDurationToWaitForNotification => const Duration(minutes: 5);
 
   static get delayIntervalDuration => const Duration(seconds: 5);
 
@@ -47,6 +48,11 @@ class WaitForPaymentNotificationHandler {
     Function(Payment? payment)? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
+    if (_remainingAttempt == 0) {
+      _remainingAttempt = 30;
+      onPaymentFailed?.call();
+      return;
+    }
     timer = Timer(const Duration(seconds: 15), () async {
       final payment = await _checkPayment(paymentId);
 
@@ -54,7 +60,13 @@ class WaitForPaymentNotificationHandler {
           payment?.state == Enum$NewPaymentState.await_capture) {
         onPaymentDone?.call(payment);
       } else {
-        onPaymentFailed?.call();
+        _remainingAttempt--;
+        start(
+          context,
+          paymentId: paymentId,
+          onPaymentDone: onPaymentDone,
+          onPaymentFailed: onPaymentFailed,
+        );
       }
     });
   }
@@ -67,6 +79,11 @@ class WaitForPaymentNotificationHandler {
     Function(Payment? payment)? onPaymentDone,
     Function()? onPaymentFailed,
   }) async {
+    if (_remainingAttempt == 0) {
+      _remainingAttempt = 30;
+      onPaymentFailed?.call();
+      return;
+    }
     final getChainResult =
         await getIt<Web3Repository>().getChainById(chainId: chainId);
     final chain = getChainResult.getOrElse(() => null);
@@ -85,7 +102,15 @@ class WaitForPaymentNotificationHandler {
               payment?.state == Enum$NewPaymentState.await_capture)) {
         onPaymentDone?.call(payment);
       } else {
-        onPaymentFailed?.call();
+        _remainingAttempt--;
+        startWithCrypto(
+          context,
+          chainId: chainId,
+          txHash: txHash,
+          paymentId: paymentId,
+          onPaymentDone: onPaymentDone,
+          onPaymentFailed: onPaymentFailed,
+        );
       }
     });
   }

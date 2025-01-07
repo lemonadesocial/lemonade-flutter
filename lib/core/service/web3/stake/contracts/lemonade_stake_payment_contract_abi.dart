@@ -7,17 +7,7 @@ const lemonadeStakePaymentContractAbi = '''
     },
     {
       "inputs": [],
-      "name": "CannotPayFee",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "CannotRelease",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "CannotStake",
+      "name": "CannotTransfer",
       "type": "error"
     },
     {
@@ -27,7 +17,7 @@ const lemonadeStakePaymentContractAbi = '''
     },
     {
       "inputs": [],
-      "name": "NotAvailable",
+      "name": "NoStaking",
       "type": "error"
     },
     {
@@ -67,9 +57,9 @@ const lemonadeStakePaymentContractAbi = '''
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "id",
-          "type": "uint256"
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
         }
       ],
       "name": "VaultRegistered",
@@ -83,48 +73,6 @@ const lemonadeStakePaymentContractAbi = '''
           "internalType": "address",
           "name": "",
           "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "configs",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "vault",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "refundPercent",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "counter",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -154,11 +102,6 @@ const lemonadeStakePaymentContractAbi = '''
             },
             {
               "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
               "name": "stakeAmount",
               "type": "uint256"
             },
@@ -178,7 +121,7 @@ const lemonadeStakePaymentContractAbi = '''
               "type": "bool"
             }
           ],
-          "internalType": "struct LemonadeStakePayment.Staking[]",
+          "internalType": "struct Staking[]",
           "name": "result",
           "type": "tuple[]"
         }
@@ -233,13 +176,18 @@ const lemonadeStakePaymentContractAbi = '''
     {
       "inputs": [
         {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        },
+        {
           "internalType": "address",
-          "name": "vault",
+          "name": "payout",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "refundPercent",
+          "name": "refundPPM",
           "type": "uint256"
         }
       ],
@@ -258,14 +206,32 @@ const lemonadeStakePaymentContractAbi = '''
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "registry",
+          "type": "address"
+        }
+      ],
+      "name": "setConfigRegistry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
+        },
+        {
           "internalType": "string[]",
           "name": "paymentIds",
           "type": "string[]"
         },
         {
-          "internalType": "bytes[]",
-          "name": "signatures",
-          "type": "bytes[]"
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
         }
       ],
       "name": "slash",
@@ -276,9 +242,9 @@ const lemonadeStakePaymentContractAbi = '''
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "configId",
-          "type": "uint256"
+          "internalType": "address",
+          "name": "vault",
+          "type": "address"
         },
         {
           "internalType": "string",
@@ -304,6 +270,25 @@ const lemonadeStakePaymentContractAbi = '''
       "name": "stake",
       "outputs": [],
       "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "stakings",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {

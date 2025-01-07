@@ -153,7 +153,9 @@ class BuyTicketsWithCryptoBloc
         emit(
           BuyTicketsWithCryptoState.failure(
             data: state.data,
-            failureReason: WalletConnectFailure(),
+            failureReason: WalletConnectFailure(
+              message: _signature,
+            ),
           ),
         );
       }
@@ -174,7 +176,7 @@ class BuyTicketsWithCryptoBloc
           failureReason: WalletConnectFailure(
             message: e is JsonRpcError
                 ? walletConnectService.getMessageFromRpcError(e)
-                : null,
+                : e.toString(),
           ),
         ),
       );
