@@ -87,7 +87,11 @@ class _HomeViewState extends State<_HomeView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    final isAuthenticated = context.read<AuthBloc>().state.maybeWhen(
+          authenticated: (_) => true,
+          orElse: () => false,
+        );
+    if (state == AppLifecycleState.resumed && isAuthenticated) {
       _refreshAllEvents();
     }
   }
