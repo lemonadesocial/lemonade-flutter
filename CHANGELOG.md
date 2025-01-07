@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.48.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.47.0...v1.48.0) (2025-01-07)
+
+
+### Features
+
+* add logic display address on home card ([#832](https://github.com/lemonadesocial/lemonade-flutter/issues/832)) ([cf7d95d](https://github.com/lemonadesocial/lemonade-flutter/commit/cf7d95d025408fd622fcf66b1b45c327ee71b346))
+* check in flow ([#822](https://github.com/lemonadesocial/lemonade-flutter/issues/822)) ([b3bbf72](https://github.com/lemonadesocial/lemonade-flutter/commit/b3bbf7282aa64b47253081c8571824ed3c95ea36))
+* event web3 identity ([#824](https://github.com/lemonadesocial/lemonade-flutter/issues/824)) ([3f237ec](https://github.com/lemonadesocial/lemonade-flutter/commit/3f237ec3f61960df5503245ac6f42e949a28e288))
+* host application form setup ([#823](https://github.com/lemonadesocial/lemonade-flutter/issues/823)) ([bee0332](https://github.com/lemonadesocial/lemonade-flutter/commit/bee03329ee544f80f07faff9208aa18eb1ce97c8))
+* polish datetime create event ([#829](https://github.com/lemonadesocial/lemonade-flutter/issues/829)) ([bbdbe16](https://github.com/lemonadesocial/lemonade-flutter/commit/bbdbe1670554d1c7beb4228b6c4ea1c21368999c))
+* show verified address in application form ([#833](https://github.com/lemonadesocial/lemonade-flutter/issues/833)) ([bfa67c6](https://github.com/lemonadesocial/lemonade-flutter/commit/bfa67c6d26c8184be671e2abff7ecda84068cccf))
+* support navigate to invite on event home ([#834](https://github.com/lemonadesocial/lemonade-flutter/issues/834)) ([6254041](https://github.com/lemonadesocial/lemonade-flutter/commit/6254041ff4c9a01e40d42e619db60c636dba3a03))
+
+
+### Bug Fixes
+
+* always show verified address ([#836](https://github.com/lemonadesocial/lemonade-flutter/issues/836)) ([d3f0234](https://github.com/lemonadesocial/lemonade-flutter/commit/d3f02341040143cc57bf3d17f69db9c3d6dd636b))
+* filter out solana chain cause its not supported yet ([#835](https://github.com/lemonadesocial/lemonade-flutter/issues/835)) ([36ceaac](https://github.com/lemonadesocial/lemonade-flutter/commit/36ceaacb76ccbcf936e6d16b2202ba16bb8f63aa))
+* href support for application form question ([#831](https://github.com/lemonadesocial/lemonade-flutter/issues/831)) ([54a0f68](https://github.com/lemonadesocial/lemonade-flutter/commit/54a0f6808f2b0f92b24e8aec25982df6c176c660))
+* logout issue ([#838](https://github.com/lemonadesocial/lemonade-flutter/issues/838)) ([d420250](https://github.com/lemonadesocial/lemonade-flutter/commit/d420250a84672a9b34ad1c6d5ef140bcc140b9fe))
+* polish check in flow ([#830](https://github.com/lemonadesocial/lemonade-flutter/issues/830)) ([3183980](https://github.com/lemonadesocial/lemonade-flutter/commit/31839801d1dd148873a301cb71a9c071ec649a3f))
+* polish require approval card ([#828](https://github.com/lemonadesocial/lemonade-flutter/issues/828)) ([0a5af62](https://github.com/lemonadesocial/lemonade-flutter/commit/0a5af62d9803801f04fad916ae5b7712fdb6bf94))
+* update stake contract abi ([#837](https://github.com/lemonadesocial/lemonade-flutter/issues/837)) ([4ac9529](https://github.com/lemonadesocial/lemonade-flutter/commit/4ac9529f37351d97575cb14cbdab32374c3fa7cb))
+* web3 identity application form polish ([#827](https://github.com/lemonadesocial/lemonade-flutter/issues/827)) ([b4ad8c9](https://github.com/lemonadesocial/lemonade-flutter/commit/b4ad8c97eb5869d1822ded5a87352fb0d14f45c9))
+
 ## [1.47.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.46.0...v1.47.0) (2024-12-13)
 
 
