@@ -97,7 +97,10 @@ class HostEventLocation extends StatelessWidget {
                     ),
                     SizedBox(height: Spacing.superExtraSmall),
                     Text(
-                      EventUtils.getAddress(event: event),
+                      EventUtils.getAddress(
+                        event: event,
+                        showFullAddress: true,
+                      ),
                       style: Typo.small.copyWith(
                         fontFamily: FontFamily.switzerVariable,
                         fontWeight: FontWeight.w600,
