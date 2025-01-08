@@ -24,7 +24,6 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/handler/wait_for_payment_notification_handler.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/payment_processing_view.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/transaction_confirming_view.dart';
-import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/wallet_signature_pending_view.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -536,12 +535,13 @@ class _EventBuyTicketsProcessingPageViewState
                     return state.maybeWhen(
                       orElse: () => const SizedBox.shrink(),
                       loading: (data) {
-                        if (data.signature == null) {
-                          return WalletSignaturePendingView(
-                            selectedPaymentAccount:
-                                widget.selectedPaymentAccount,
-                          );
-                        }
+                        // TODO: Remove require signature before buying ticket
+                        // if (data.signature == null) {
+                        //   return WalletSignaturePendingView(
+                        //     selectedPaymentAccount:
+                        //         widget.selectedPaymentAccount,
+                        //   );
+                        // }
                         return const PaymentProcessingView();
                       },
                       signed: (data) => const PaymentProcessingView(),

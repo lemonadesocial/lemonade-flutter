@@ -11,7 +11,6 @@ import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -113,52 +112,70 @@ class BuyTicketsWithCryptoBloc
     }
 
     try {
-      final getChainResult =
-          await _web3Repository.getChainById(chainId: _selectedNetwork!);
-      final chain = getChainResult.getOrElse(() => null);
-      final signature = await walletConnectService
-          .personalSign(
-            chainId: chain?.fullChainId,
-            message: Web3Utils.toHex(_currentPayment?.id ?? ''),
-            wallet: event.userWalletAddress,
-          )
-          .timeout(
-            const Duration(
-              seconds: 30,
-            ),
-          );
+      emit(BuyTicketsWithCryptoState.loading(data: state.data));
+      await paymentRepository.updatePayment(
+        input: UpdatePaymentInput(
+          id: _currentPayment?.id ?? '',
+          transferParams: UpdatePaymentTransferParams(
+            network: _selectedNetwork!,
+            from: walletConnectService.w3mService.session?.address ?? '',
+          ),
+        ),
+      );
+      emit(
+        BuyTicketsWithCryptoState.signed(
+          data: state.data.copyWith(
+            payment: _currentPayment,
+            signature: _signature,
+          ),
+        ),
+      );
+      // TODO: Remove require signature before buying ticket
+      // final getChainResult =
+      //     await _web3Repository.getChainById(chainId: _selectedNetwork!);
+      // final chain = getChainResult.getOrElse(() => null);
+      // final signature = await walletConnectService
+      //     .personalSign(
+      //       chainId: chain?.fullChainId,
+      //       message: Web3Utils.toHex(_currentPayment?.id ?? ''),
+      //       wallet: event.userWalletAddress,
+      //     )
+      //     .timeout(
+      //       const Duration(
+      //         seconds: 30,
+      //       ),
+      //     );
 
-      _signature = signature;
-
-      if (_signature != null && _signature!.startsWith("0x")) {
-        await paymentRepository.updatePayment(
-          input: UpdatePaymentInput(
-            id: _currentPayment?.id ?? '',
-            transferParams: UpdatePaymentTransferParams(
-              signature: _signature,
-              network: _selectedNetwork!,
-              from: walletConnectService.w3mService.session?.address ?? '',
-            ),
-          ),
-        );
-        emit(
-          BuyTicketsWithCryptoState.signed(
-            data: state.data.copyWith(
-              payment: _currentPayment,
-              signature: _signature,
-            ),
-          ),
-        );
-      } else {
-        emit(
-          BuyTicketsWithCryptoState.failure(
-            data: state.data,
-            failureReason: WalletConnectFailure(
-              message: _signature,
-            ),
-          ),
-        );
-      }
+      // _signature = signature;
+      // if (_signature != null && _signature!.startsWith("0x")) {
+      //   await paymentRepository.updatePayment(
+      //     input: UpdatePaymentInput(
+      //       id: _currentPayment?.id ?? '',
+      //       transferParams: UpdatePaymentTransferParams(
+      //         signature: _signature,
+      //         network: _selectedNetwork!,
+      //         from: walletConnectService.w3mService.session?.address ?? '',
+      //       ),
+      //     ),
+      //   );
+      //   emit(
+      //     BuyTicketsWithCryptoState.signed(
+      //       data: state.data.copyWith(
+      //         payment: _currentPayment,
+      //         signature: _signature,
+      //       ),
+      //     ),
+      //   );
+      // } else {
+      //   emit(
+      //     BuyTicketsWithCryptoState.failure(
+      //       data: state.data,
+      //       failureReason: WalletConnectFailure(
+      //         message: _signature,
+      //       ),
+      //     ),
+      //   );
+      // }
     } catch (e) {
       if (e is TimeoutException) {
         return emit(
@@ -298,7 +315,8 @@ class BuyTicketsWithCryptoBloc
       input: UpdatePaymentInput(
         id: _currentPayment?.id ?? '',
         transferParams: UpdatePaymentTransferParams(
-          signature: _signature,
+          // TODO: Remove require signature before buying ticket
+          // signature: _signature,
           txHash: _txHash,
           network: _selectedNetwork,
           from: walletConnectService.w3mService.session?.address ?? '',
