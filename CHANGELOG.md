@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.49.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.48.0...v1.49.0) (2025-01-09)
+
+
+### Features
+
+* update display location in event detail ([#839](https://github.com/lemonadesocial/lemonade-flutter/issues/839)) ([8c750ba](https://github.com/lemonadesocial/lemonade-flutter/commit/8c750ba24e075acb72583978f9202e4147c2570f))
+
+
+### Bug Fixes
+
+* fix chat input not work ([#843](https://github.com/lemonadesocial/lemonade-flutter/issues/843)) ([a3ff33d](https://github.com/lemonadesocial/lemonade-flutter/commit/a3ff33d7f0dd5178beed1486258fd2d013cfca89))
+* fix display crypto price in event card ([#842](https://github.com/lemonadesocial/lemonade-flutter/issues/842)) ([4073314](https://github.com/lemonadesocial/lemonade-flutter/commit/4073314cd979c8898217f98d86d98bb530bf7004))
+* remove require signature step when buying tickets ([#840](https://github.com/lemonadesocial/lemonade-flutter/issues/840)) ([9e8b31d](https://github.com/lemonadesocial/lemonade-flutter/commit/9e8b31d6374a414d83d845ea7f3d484ad83a16ba))
+
 ## [1.48.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.47.0...v1.48.0) (2025-01-07)
 
 
