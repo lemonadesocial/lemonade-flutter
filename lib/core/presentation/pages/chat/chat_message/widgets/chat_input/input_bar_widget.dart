@@ -301,6 +301,7 @@ class InputBar extends StatelessWidget {
       hideOnLoading: true,
       hideOnSelect: false,
       debounceDuration: const Duration(milliseconds: 50),
+      controller: controller,
       builder: (context, controller, focusNode) {
         return TextField(
           controller: controller,
