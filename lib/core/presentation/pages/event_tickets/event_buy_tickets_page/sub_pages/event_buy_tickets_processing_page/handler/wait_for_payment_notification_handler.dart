@@ -21,7 +21,7 @@ class WaitForPaymentNotificationHandler {
     int remainingAttempt = 20;
     Payment? payment;
     while (remainingAttempt > 0) {
-      Future.delayed(
+      await Future.delayed(
         delayIntervalDuration,
       );
       final paymentResult = await getIt<PaymentRepository>().getPayment(
