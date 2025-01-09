@@ -137,8 +137,11 @@ class EventTicketUtils {
   }
 
   static String getDisplayedTicketPrice({
-    int? decimals,
     EventTicketPrice? price,
+    int? decimals,
+    // The reason adding this is because price does not
+    // always contain enough info to check if it's crypto price
+    bool? isCrypto,
   }) {
     if (decimals == null) return t.event.free;
 
@@ -148,14 +151,13 @@ class EventTicketUtils {
     );
     double? doubleAmount;
     String? erc20DisplayedAmount;
-    final isERC20 = price?.isCrypto ?? false;
+    final isERC20 = price?.isCrypto == true || isCrypto == true;
 
     if (isERC20) {
       erc20DisplayedAmount = Web3Utils.formatCryptoCurrency(
         BigInt.parse(price?.cost ?? '0'),
         currency: price?.currency ?? '',
         decimals: decimals,
-        decimalDigits: decimals,
       );
     } else {
       final parsedAmount = int.parse(price?.cost ?? '0');
