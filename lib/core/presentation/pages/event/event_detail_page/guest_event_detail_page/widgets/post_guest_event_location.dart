@@ -105,7 +105,10 @@ class PostGuestEventLocation extends StatelessWidget {
         ),
         SizedBox(height: 3.w),
         Text(
-          EventUtils.getAddress(event: event),
+          EventUtils.getAddress(
+            event: event,
+            showFullAddress: true,
+          ),
           style: Typo.small.copyWith(
             color: colorScheme.onSecondary,
           ),

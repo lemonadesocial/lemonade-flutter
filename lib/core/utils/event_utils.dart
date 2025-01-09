@@ -67,24 +67,20 @@ class EventUtils {
 
   static String getAddress({
     required Event event,
-    bool showInHomeCard = false,
+    bool showFullAddress = false,
     bool isAttending = false,
     bool isOwnEvent = false,
   }) {
     final address = event.address;
     if (address == null) return '';
 
-    // For home card view:
-    // - Attending or own events: show location title and city
-    // - Other events: show city and country
-    if (showInHomeCard) {
+    if (!showFullAddress) {
       return [
         if (isAttending || isOwnEvent) ...[address.title, address.city],
         if (!isAttending && !isOwnEvent) ...[address.city, address.country],
       ].where((part) => part != null && part.trim().isNotEmpty).join(', ');
     }
 
-    // Show full address if not in home card
     return [
       address.additionalDirections,
       address.street1,

@@ -114,7 +114,7 @@ class HomeEventCard extends StatelessWidget {
                                 child: Text(
                                   EventUtils.getAddress(
                                     event: event,
-                                    showInHomeCard: true,
+                                    showFullAddress: false,
                                     isAttending: isAttending,
                                     isOwnEvent: isOwnEvent,
                                   ),
