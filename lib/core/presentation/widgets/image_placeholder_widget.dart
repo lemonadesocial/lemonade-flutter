@@ -13,6 +13,8 @@ class ImagePlaceholder {
   static Widget eventCard() {
     return Image(
       fit: BoxFit.cover,
+      height: double.infinity,
+      width: double.infinity,
       image: Assets.images.bgNoPhotoEvent.provider(),
     );
   }
