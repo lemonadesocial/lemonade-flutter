@@ -80,7 +80,7 @@ class _CreateEventBannerPhotoCardState
         );
       },
       child: AspectRatio(
-        aspectRatio: 16 / 9,
+        aspectRatio: 1,
         child: Container(
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
@@ -98,12 +98,14 @@ class _CreateEventBannerPhotoCardState
                 Image.file(
                   File(_localImagePath!),
                   width: double.infinity,
+                  height: double.infinity,
                   fit: BoxFit.cover,
                 )
               else if (widget.thumbnailUrl != null)
                 Image.network(
                   widget.thumbnailUrl!,
                   width: double.infinity,
+                  height: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) =>
                       ImagePlaceholder.eventCard(),
