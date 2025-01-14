@@ -1,8 +1,10 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/application/event/get_event_votings_bloc/get_event_votings_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_pending_invites_widget/guest_event_pending_invites_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about.dart';
@@ -29,6 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:collection/collection.dart';
 
 class PostGuestEventDetailView extends StatelessWidget {
   const PostGuestEventDetailView({super.key});
@@ -57,6 +60,8 @@ class PostGuestEventDetailView extends StatelessWidget {
           final getMyTicketsBloc = context.watch<GetMyTicketsBloc>();
           final getEventVotingsListBloc =
               context.watch<GetEventVotingsListBloc>();
+          final getEventPendingInvitesBloc =
+              context.watch<GetEventPendingInvitesBloc>();
 
           final subEvents = [...getSubEventsBloc.state.events]
               .where(
@@ -80,6 +85,14 @@ class PostGuestEventDetailView extends StatelessWidget {
             (a, b) => (a.start ?? DateTime.now())
                 .compareTo(b.start ?? DateTime.now()),
           );
+          final pendingCohostRequest =
+              getEventPendingInvitesBloc.state.maybeWhen(
+            orElse: () => null,
+            fetched: (pendingInvites) =>
+                (pendingInvites.cohostRequests ?? []).firstWhereOrNull(
+              (element) => element.event == event.id,
+            ),
+          );
           final widgets = [
             Padding(
               padding: EdgeInsets.symmetric(
@@ -87,6 +100,13 @@ class PostGuestEventDetailView extends StatelessWidget {
               ),
               child: GuestEventDetailBasicInfo(event: event),
             ),
+            if (pendingCohostRequest != null)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Spacing.smMedium,
+                ),
+                child: const GuestEventCohostRequestWidget(),
+              ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Spacing.smMedium,

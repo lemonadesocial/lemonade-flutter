@@ -1,0 +1,40 @@
+query GetEventPendingInvites {
+  getEventPendingInvites {
+    cohost_requests {
+      event
+      event_expanded {
+        _id
+        cover
+        start
+        end
+        title
+        shortid
+      }
+      inviter
+      inviter_expanded {
+        _id
+        image_avatar
+        username
+        name
+      }
+    }
+    event_invites {
+      event
+      event_expanded {
+        _id
+        cover
+        start
+        end
+        title
+        shortid
+      }
+      inviter
+      inviter_expanded {
+        _id
+        image_avatar
+        username
+        name
+      }
+    }
+  }
+}

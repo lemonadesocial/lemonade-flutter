@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_invite.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -143,6 +144,9 @@ abstract class EventRepository {
   Stream<String> watchEventVotingUpdated({
     required String votingId,
   });
+
+  Future<Either<Failure, GetEventPendingInvitesResponse>>
+      getEventPendingInvites();
 
   // Future<Either<Failure, List<EventRole>>> getEventRoles();
 

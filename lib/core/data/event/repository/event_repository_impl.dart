@@ -1,6 +1,7 @@
 import 'package:app/core/data/event/dtos/event_application_answer_dto/event_application_answer_dto.dart';
 import 'package:app/core/data/event/dtos/event_cohost_request_dto/event_cohost_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_dtos.dart';
+import 'package:app/core/data/event/dtos/event_invite_dto/event_invite_dto.dart';
 import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_rsvp_dto/event_rsvp_dto.dart';
 import 'package:app/core/data/event/dtos/event_story_dto/event_story_dto.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/data/event/gql/event_mutation.dart';
 import 'package:app/core/data/event/gql/event_query.dart';
 import 'package:app/core/data/event/gql/watch_event_voting_updated.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_invite.dart';
 import 'package:app/core/domain/event/entities/event_ticket_export.dart';
 import 'package:app/core/domain/event/entities/event_application_answer.dart';
 import 'package:app/core/domain/event/entities/event_checkin.dart';
@@ -41,6 +43,7 @@ import 'package:app/graphql/backend/event/query/generate_event_invitation_url.gr
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_cohost_requests.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_checkins.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_event_pending_invites.graphql.dart';
 import 'package:app/graphql/backend/event/query/list_event_votings.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -676,6 +679,39 @@ class EventRepositoryImpl implements EventRepository {
           ),
         )
         .asyncMap((result) => result.data?.tryGet('votingUpdated') ?? '');
+  }
+
+  @override
+  Future<Either<Failure, GetEventPendingInvitesResponse>>
+      getEventPendingInvites() async {
+    final result = await client.query$GetEventPendingInvites(
+      Options$Query$GetEventPendingInvites(
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final invitesData = result.parsedData!.getEventPendingInvites;
+
+    return Right(
+      GetEventPendingInvitesResponse(
+        eventInvites: (invitesData.event_invites ?? [])
+            .map(
+              (dto) =>
+                  EventInvite.fromDto(EventInviteDto.fromJson(dto.toJson())),
+            )
+            .toList(),
+        cohostRequests: (invitesData.cohost_requests ?? [])
+            .map(
+              (dto) =>
+                  EventInvite.fromDto(EventInviteDto.fromJson(dto.toJson())),
+            )
+            .toList(),
+      ),
+    );
   }
 
   // @override

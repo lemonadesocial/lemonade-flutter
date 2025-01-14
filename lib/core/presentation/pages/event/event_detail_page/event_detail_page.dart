@@ -3,6 +3,7 @@ import 'package:app/core/application/event/event_buy_tickets_prerequisite_check_
 import 'package:app/core/application/event/get_event_checkins_bloc/get_event_checkins_bloc.dart';
 import 'package:app/core/application/event/get_event_cohost_requests_bloc/get_event_cohost_requests_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/application/event_tickets/generate_event_invitation_url_bloc/generate_event_invitation_url_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,12 @@ class EventDetailPage extends StatelessWidget implements AutoRouteWrapper {
               GenerateEventInvitationUrlEvent.generate(
                 eventId: eventId,
               ),
+            ),
+        ),
+        BlocProvider(
+          create: (context) => GetEventPendingInvitesBloc()
+            ..add(
+              const GetEventPendingInvitesEvent.fetch(),
             ),
         ),
         // BlocProvider(
