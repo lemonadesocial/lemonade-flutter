@@ -886,5 +886,9 @@
         "verifyWithWallet": "Verify with wallet",
         "connecctedAddress": "Connected $address",
         "ethAddress": "ETH Address"
+    },
+    "eventPendingInvites": {
+        "pendingCohostRequestTitle": "Accept Co-host request",
+        "pendingCohostRequestDescription": "sent by $name"
     }
 }
