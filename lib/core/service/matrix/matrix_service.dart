@@ -37,6 +37,19 @@ class MatrixService {
         await _client.roomsLoading;
         await _client.accountDataLoading;
         await backgroundPush.setupPush();
+        try {
+          final rooms = _client.rooms;
+          for (final room in rooms) {
+            // Set don't notify for group chats
+            if (!room.isDirectChat &&
+                room.pushRuleState != PushRuleState.dontNotify) {
+              await room.setPushRuleState(PushRuleState.dontNotify);
+            }
+          }
+        } catch (e) {
+          // Setting push rules for certain rooms may throw errors but the setPushRuleState still works correctly,
+          // so we ignore them to keep logs clean
+        }
         return;
       }
 
