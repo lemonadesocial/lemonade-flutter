@@ -111,7 +111,11 @@ class _CreateEventBannerPhotoCardState
                       ImagePlaceholder.eventCard(),
                 )
               else
-                ImagePlaceholder.eventCard(),
+                Image(
+                  fit: BoxFit.cover,
+                  image: Assets.images.bgNoPhotoEvent.provider(),
+                  height: double.infinity,
+                ),
               Positioned(
                 right: Spacing.small,
                 bottom: Spacing.small,
