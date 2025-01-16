@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.50.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.49.0...v1.50.0) (2025-01-15)
+
+
+### Features
+
+* pending cohost request for guest on event home ([#846](https://github.com/lemonadesocial/lemonade-flutter/issues/846)) ([7727f3b](https://github.com/lemonadesocial/lemonade-flutter/commit/7727f3ba77bd56d2b4b7ba21f1715527a8750f42))
+* prevent notify group channel ([#847](https://github.com/lemonadesocial/lemonade-flutter/issues/847)) ([ad26b62](https://github.com/lemonadesocial/lemonade-flutter/commit/ad26b626fa80c85e95dc53e3d6497cdf65079722))
+* update cover photo dimension to 1:1 ([#844](https://github.com/lemonadesocial/lemonade-flutter/issues/844)) ([c2e981c](https://github.com/lemonadesocial/lemonade-flutter/commit/c2e981c82b1187717743e3b14e98ebf62098c0f1))
+
 ## [1.49.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.48.0...v1.49.0) (2025-01-09)
 
 
