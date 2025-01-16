@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
+import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
@@ -20,6 +21,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 class PreGuestEventDetailView extends StatefulWidget {
   const PreGuestEventDetailView({super.key});
@@ -48,6 +50,8 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
           orElse: () => '',
         );
     final getSubEventsBloc = context.watch<GetSubEventsByCalendarBloc>();
+    final getEventPendingInvitesBloc =
+        context.watch<GetEventPendingInvitesBloc>();
     final subEvents = [...getSubEventsBloc.state.events]
         .where(
           (e) => e.start != null
@@ -75,11 +79,20 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
             final coverPhoto = EventUtils.getEventThumbnailUrl(event: event);
             final isOwnEvent =
                 EventUtils.isOwnEvent(event: event, userId: userId);
+            final pendingCohostRequest =
+                getEventPendingInvitesBloc.state.maybeWhen(
+              orElse: () => null,
+              fetched: (pendingInvites) =>
+                  (pendingInvites.cohostRequests ?? []).firstWhereOrNull(
+                (element) => element.event == event.id,
+              ),
+            );
             final widgets = [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                 child: GuestEventDetailGeneralInfo(
                   event: event,
+                  pendingCohostRequest: pendingCohostRequest,
                 ),
               ),
               // NOTE: requirement - Hide location in pre-rsvp

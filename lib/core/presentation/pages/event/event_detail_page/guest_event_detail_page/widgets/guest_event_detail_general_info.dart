@@ -1,5 +1,5 @@
-import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event_invite.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_about.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_hosts_avatars.dart';
@@ -15,7 +15,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
 
@@ -23,22 +22,14 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
   const GuestEventDetailGeneralInfo({
     super.key,
     required this.event,
+    this.pendingCohostRequest,
   });
-
   final Event event;
+  final EventInvite? pendingCohostRequest;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final getEventPendingInvitesBloc =
-        context.watch<GetEventPendingInvitesBloc>();
-    final pendingCohostRequest = getEventPendingInvitesBloc.state.maybeWhen(
-      orElse: () => null,
-      fetched: (pendingInvites) =>
-          (pendingInvites.cohostRequests ?? []).firstWhereOrNull(
-        (element) => element.event == event.id,
-      ),
-    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
