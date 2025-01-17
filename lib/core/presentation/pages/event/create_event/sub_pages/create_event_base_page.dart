@@ -84,7 +84,11 @@ class CreateEventBasePage extends StatelessWidget {
     final eventAction = result?.$1;
     final eventData = result?.$2;
     if (eventAction != EventActionType.publishSubEvent) {
-      router.root.push(EventDetailRoute(eventId: eventData?.id ?? ''));
+      router.root.push(
+        EventDetailRoute(
+          eventId: eventData?.id ?? state.eventId ?? '',
+        ),
+      );
       return;
     }
     final eventAction2 = await router.root.push<EventActionType?>(
@@ -121,7 +125,11 @@ class CreateEventBasePage extends StatelessWidget {
       return;
     }
     if (eventAction2 == EventActionType.viewSubEvent) {
-      router.root.push(EventDetailRoute(eventId: eventData.id ?? ''));
+      router.root.push(
+        EventDetailRoute(
+          eventId: eventData.id ?? state.eventId ?? '',
+        ),
+      );
       return;
     }
   }
