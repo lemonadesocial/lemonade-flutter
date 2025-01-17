@@ -43,9 +43,11 @@ import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 @RoutePage()
 class EventBuyTicketsProcessingPage extends StatelessWidget {
   final PaymentAccount? selectedPaymentAccount;
+  final String? selectedCurrency;
   const EventBuyTicketsProcessingPage({
     super.key,
     required this.selectedPaymentAccount,
+    required this.selectedCurrency,
   });
 
   @override
@@ -67,6 +69,7 @@ class EventBuyTicketsProcessingPage extends StatelessWidget {
       ],
       child: EventBuyTicketsProcessingPageView(
         selectedPaymentAccount: selectedPaymentAccount,
+        selectedCurrency: selectedCurrency,
       ),
     );
   }
@@ -74,10 +77,12 @@ class EventBuyTicketsProcessingPage extends StatelessWidget {
 
 class EventBuyTicketsProcessingPageView extends StatefulWidget {
   final PaymentAccount? selectedPaymentAccount;
+  final String? selectedCurrency;
 
   const EventBuyTicketsProcessingPageView({
     super.key,
     required this.selectedPaymentAccount,
+    required this.selectedCurrency,
   });
 
   @override
@@ -112,8 +117,7 @@ class _EventBuyTicketsProcessingPageViewState
   List<PurchasableItem> get selectedTickets =>
       context.read<SelectEventTicketsBloc>().state.selectedTickets;
 
-  String? get selectedCurrency =>
-      context.read<SelectEventTicketsBloc>().state.selectedCurrency;
+  String? get selectedCurrency => widget.selectedCurrency;
 
   String? get selectedNetwork =>
       widget.selectedPaymentAccount?.accountInfo?.network;
@@ -141,7 +145,7 @@ class _EventBuyTicketsProcessingPageViewState
     try {
       await _checkAndSubmitApplicationForm(context);
 
-      if (isFree && (pricingInfo?.paymentAccounts ?? []).isEmpty == true) {
+      if (isFree && widget.selectedPaymentAccount == null) {
         _processRedeem(context);
         return;
       }
@@ -535,13 +539,6 @@ class _EventBuyTicketsProcessingPageViewState
                     return state.maybeWhen(
                       orElse: () => const SizedBox.shrink(),
                       loading: (data) {
-                        // TODO: Remove require signature before buying ticket
-                        // if (data.signature == null) {
-                        //   return WalletSignaturePendingView(
-                        //     selectedPaymentAccount:
-                        //         widget.selectedPaymentAccount,
-                        //   );
-                        // }
                         return const PaymentProcessingView();
                       },
                       signed: (data) => const PaymentProcessingView(),

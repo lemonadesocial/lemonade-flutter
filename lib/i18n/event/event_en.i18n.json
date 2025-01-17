@@ -52,7 +52,7 @@
         },
         "payViaCard": "Pay via Card",
         "payViaWallet": "Pay via Wallet",
-        "multipleTicketsError": "Multiple tickets require the same chain and currency",
+        "multipleTicketsError": "Selected tickets must share at least one common payment option, such as crypto network, or Stripe integration.",
         "discardSelectionWarning": {
             "title": "Discard selection?",
             "description": "Switching payment methods will discard your previous selection. Continue anyway?",
@@ -82,7 +82,11 @@
         "stakingTicket": "Staking",
         "whileListedTicket": "Whitelist Exclusive",
         "verifyWithWallet": "Verify with wallet",
-        "verifiedWithWallet": "Verified $address"
+        "verifiedWithWallet": "Verified $address",
+        "stripe": "Stripe",
+        "creditDebit": "Credit/Debit Card",
+        "unavailable": "Unvailable",
+        "unavailableDescription": "All selected tickets are not available on these payment options"
     },
     "eventOrder": {
         "itemTotal": "Item total",

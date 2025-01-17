@@ -37,6 +37,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:collection/collection.dart';
 
 @RoutePage()
 class EventTicketsSummaryPage extends StatelessWidget {
@@ -44,27 +45,13 @@ class EventTicketsSummaryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final eventId = context.read<EventProviderBloc>().event.id;
-    final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
-    final selectedTickets = selectTicketBlocState.selectedTickets;
-    final selectedCurrency = selectTicketBlocState.selectedCurrency;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => SignWalletBloc(),
         ),
         BlocProvider.value(
-          value: context.read<CalculateEventTicketPricingBloc>()
-            ..add(
-              CalculateEventTicketPricingEvent.calculate(
-                input: CalculateTicketsPricingInput(
-                  eventId: eventId ?? '',
-                  items: selectedTickets,
-                  currency: selectedCurrency!,
-                ),
-              ),
-            ),
+          value: context.read<CalculateEventTicketPricingBloc>(),
         ),
       ],
       child: const EventTicketsSummaryPageView(),
@@ -85,21 +72,94 @@ class EventTicketsSummaryPageView extends StatefulWidget {
 class _EventTicketsSummaryPageViewState
     extends State<EventTicketsSummaryPageView> {
   PaymentAccount? _selectedPaymentAccount;
+  String? _selectedCurrency;
 
-  void _autoSelectPaymentAccount() {
-    final pricingInfo =
-        context.read<CalculateEventTicketPricingBloc>().state.maybeWhen(
-              orElse: () => null,
-              success: (pricingInfo, isFree) => pricingInfo,
-            );
-    if (pricingInfo == null) return;
-    _selectPaymentAccount(pricingInfo.paymentAccounts?.firstOrNull);
+  @override
+  void initState() {
+    super.initState();
+    _autoSelectPaymentAccount();
+  }
+
+  String? _findCurrency(PaymentAccount? paymentAccount) {
+    if (paymentAccount == null) return null;
+
+    final selectTicketsBloc = context.read<SelectEventTicketsBloc>();
+    final ticketTypes =
+        selectTicketsBloc.eventTicketTypesResponse?.ticketTypes ?? [];
+    final selectedTickets = selectTicketsBloc.state.selectedTickets;
+
+    if (selectedTickets.isEmpty) return null;
+
+    // Get currencies for first ticket to start intersection
+    final firstTicket = selectedTickets.first;
+    final firstTicketType =
+        ticketTypes.firstWhereOrNull((type) => type.id == firstTicket.id);
+    var commonCurrencies = firstTicketType?.prices
+            ?.where(
+              (price) =>
+                  (price.paymentAccounts ?? []).contains(paymentAccount.id),
+            )
+            .map((price) => price.currency)
+            .toSet() ??
+        {};
+
+    // Early return if first ticket has no valid currencies
+    if (commonCurrencies.isEmpty) return null;
+
+    /*
+        ticketCurrencies = [
+          ["USD", "ETH"],       // ticket A currencies
+          ["USD", "ETH"],       // ticket B currencies
+          ["USD", "ETH", "USDC"] // ticket C currencies
+        ];
+        commonCurrencies = ["USD", "ETH"];
+    */
+    // Intersect with remaining tickets
+    for (final ticket in selectedTickets.skip(1)) {
+      final ticketType =
+          ticketTypes.firstWhereOrNull((type) => type.id == ticket.id);
+      final ticketCurrencies = ticketType?.prices
+              ?.where(
+                (price) =>
+                    (price.paymentAccounts ?? []).contains(paymentAccount.id),
+              )
+              .map((price) => price.currency)
+              .toSet() ??
+          {};
+
+      commonCurrencies = commonCurrencies.intersection(ticketCurrencies);
+
+      // Early return if no common currencies found
+      if (commonCurrencies.isEmpty) return null;
+    }
+
+    return commonCurrencies.firstOrNull;
   }
 
   void _selectPaymentAccount(PaymentAccount? paymentAccount) {
     setState(() {
       _selectedPaymentAccount = paymentAccount;
+      _selectedCurrency = _findCurrency(paymentAccount) ?? 'USD';
     });
+    final eventId = context.read<EventProviderBloc>().event.id;
+    final selectTicketBlocState = context.read<SelectEventTicketsBloc>().state;
+    final selectedTickets = selectTicketBlocState.selectedTickets;
+    context.read<CalculateEventTicketPricingBloc>().add(
+          CalculateEventTicketPricingEvent.calculate(
+            input: CalculateTicketsPricingInput(
+              eventId: eventId ?? '',
+              items: selectedTickets,
+              currency: _selectedCurrency ?? '',
+            ),
+          ),
+        );
+  }
+
+  void _autoSelectPaymentAccount() {
+    final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
+    final commonPaymentAccounts = selectTicketsBlocState.commonPaymentAccounts;
+    final defaultPaymentAccount = commonPaymentAccounts.firstOrNull;
+    _selectPaymentAccount(defaultPaymentAccount);
   }
 
   @override
@@ -112,8 +172,8 @@ class _EventTicketsSummaryPageViewState
           authenticated: (user) => user,
         );
     final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
+    final commonPaymentAccounts = selectTicketsBlocState.commonPaymentAccounts;
     final selectedTickets = selectTicketsBlocState.selectedTickets;
-    final selectedCurrency = selectTicketsBlocState.selectedCurrency!;
     final isApplicationFormRequired =
         event.applicationProfileFields?.isNotEmpty == true ||
             event.applicationQuestions?.isNotEmpty == true;
@@ -158,8 +218,14 @@ class _EventTicketsSummaryPageViewState
           listener: (context, state) {
             state.maybeWhen(
               success: (pricingInfo, isFree) {
-                _autoSelectPaymentAccount();
                 if (pricingInfo.paymentAccounts?.isEmpty == true) return;
+                // payment account returned from pricinng info contain fee for transaction
+                // so we need to update the selected one
+                _selectedPaymentAccount =
+                    pricingInfo.paymentAccounts?.firstWhereOrNull(
+                  (element) => element.id == _selectedPaymentAccount?.id,
+                );
+
                 if (PaymentUtils.isCryptoPayment(pricingInfo)) return;
                 context.read<GetPaymentCardsBloc>().add(
                       GetPaymentCardsEvent.fetch(
@@ -248,7 +314,7 @@ class _EventTicketsSummaryPageViewState
                                               ticketTypes: ticketTypes,
                                               selectedTickets: selectedTickets,
                                               selectedCurrency:
-                                                  selectedCurrency,
+                                                  _selectedCurrency ?? '',
                                               pricingInfo: pricingInfo,
                                               selectedPaymentAccount:
                                                   _selectedPaymentAccount,
@@ -262,7 +328,8 @@ class _EventTicketsSummaryPageViewState
                                             _TicketsAndTotalPricingSummary(
                                           ticketTypes: ticketTypes,
                                           selectedTickets: selectedTickets,
-                                          selectedCurrency: selectedCurrency,
+                                          selectedCurrency:
+                                              _selectedCurrency ?? '',
                                           selectedPaymentAccount:
                                               _selectedPaymentAccount,
                                           pricingInfo: pricingInfo,
@@ -271,33 +338,44 @@ class _EventTicketsSummaryPageViewState
                                     },
                                   ),
                                   SizedBox(height: Spacing.medium),
-                                  BlocBuilder<CalculateEventTicketPricingBloc,
-                                      CalculateEventTicketPricingState>(
-                                    builder: (context, state) {
-                                      final pricingInfo = state.maybeWhen(
-                                        orElse: () => null,
-                                        failure: (pricingInfo, isFree) =>
-                                            pricingInfo,
-                                        success: (pricingInfo, isFree) =>
-                                            pricingInfo,
-                                      );
-                                      if (pricingInfo == null) {
-                                        return const SizedBox.shrink();
-                                      }
-                                      final allPaymentAccounts =
-                                          pricingInfo.paymentAccounts ?? [];
-                                      if (!PaymentUtils.isCryptoPayment(
-                                            pricingInfo,
-                                          ) ||
-                                          allPaymentAccounts.isEmpty) {
-                                        return const SizedBox.shrink();
-                                      }
+                                  Builder(
+                                    builder: (context) {
+                                      final allPaymentAccountsOfSelectedTickets =
+                                          ticketTypes
+                                              .where(
+                                                (type) => selectedTickets.any(
+                                                  (ticket) =>
+                                                      ticket.id == type.id,
+                                                ),
+                                              )
+                                              .expand<PaymentAccount>(
+                                                (type) =>
+                                                    type.prices?.expand<
+                                                        PaymentAccount>(
+                                                      (price) =>
+                                                          price
+                                                              .paymentAccountsExpanded ??
+                                                          [],
+                                                    ) ??
+                                                    [],
+                                              )
+                                              .toSet()
+                                              .toList();
+                                      final disabledPaymentAccounts =
+                                          allPaymentAccountsOfSelectedTickets
+                                              .where(
+                                                (account) =>
+                                                    !commonPaymentAccounts
+                                                        .contains(account),
+                                              )
+                                              .toList();
                                       return Column(
                                         children: [
                                           SelectPaymentAccountsDropdown(
                                             paymentAccounts:
-                                                pricingInfo.paymentAccounts ??
-                                                    [],
+                                                commonPaymentAccounts,
+                                            disabledPaymentAccounts:
+                                                disabledPaymentAccounts,
                                             selectedPaymentAccount:
                                                 _selectedPaymentAccount,
                                             onChanged: _selectPaymentAccount,
@@ -348,7 +426,7 @@ class _EventTicketsSummaryPageViewState
                                   )) {
                                     return PayByCryptoFooter(
                                       selectedTickets: selectedTickets,
-                                      selectedCurrency: selectedCurrency,
+                                      selectedCurrency: _selectedCurrency ?? '',
                                       pricingInfo: pricingInfo,
                                       isFree: isFree,
                                       disabled: isSubmitDisabled,
@@ -360,7 +438,7 @@ class _EventTicketsSummaryPageViewState
                                   return PayByStripeFooter(
                                     disabled: isSubmitDisabled,
                                     isFree: isFree,
-                                    selectedCurrency: selectedCurrency,
+                                    selectedCurrency: _selectedCurrency ?? '',
                                     pricingInfo: pricingInfo,
                                     selectedPaymentAccount:
                                         _selectedPaymentAccount,

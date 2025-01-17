@@ -45,6 +45,28 @@ class PaymentAccount with _$PaymentAccount {
 
   factory PaymentAccount.fromJson(Map<String, dynamic> json) =>
       _$PaymentAccountFromJson(json);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other is PaymentAccount && other.id == id);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        active,
+        createdAt,
+        user,
+        title,
+        type,
+        provider,
+        accountInfo,
+        fee,
+        cryptoFee,
+        fiatFee,
+        relay,
+      );
 }
 
 @freezed

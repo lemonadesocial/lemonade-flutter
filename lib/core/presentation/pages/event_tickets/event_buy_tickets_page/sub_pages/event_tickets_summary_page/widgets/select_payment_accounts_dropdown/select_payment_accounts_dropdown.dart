@@ -1,4 +1,5 @@
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -12,11 +13,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectPaymentAccountsDropdown extends StatelessWidget {
   final List<PaymentAccount> paymentAccounts;
+  final List<PaymentAccount> disabledPaymentAccounts;
   final PaymentAccount? selectedPaymentAccount;
   final Function(PaymentAccount?) onChanged;
   const SelectPaymentAccountsDropdown({
     super.key,
     required this.paymentAccounts,
+    required this.disabledPaymentAccounts,
     required this.selectedPaymentAccount,
     required this.onChanged,
   });
@@ -43,6 +46,9 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
             child: DropdownButton2<PaymentAccount>(
               value: selectedPaymentAccount,
               onChanged: (value) {
+                if (value == null) {
+                  return;
+                }
                 onChanged.call(value);
               },
               customButton: Container(
@@ -65,33 +71,68 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
                         style: Typo.medium
                             .copyWith(color: colorScheme.onSecondary),
                       ),
-                    if (paymentAccounts.length >= 2)
-                      Assets.icons.icDoubleArrowUpDown.svg(
-                        color: colorScheme.onSecondary,
-                      ),
+                    Assets.icons.icDoubleArrowUpDown.svg(
+                      color: colorScheme.onSecondary,
+                    ),
                   ],
                 ),
               ),
-              items: paymentAccounts.length < 2
-                  ? []
-                  : paymentAccounts
-                      .map(
-                        (paymentAccount) => DropdownMenuItem<PaymentAccount>(
-                          value: paymentAccount,
-                          child: _PaymentAccountItem(
-                            paymentAccount: paymentAccount,
+              items: [
+                ...paymentAccounts.map(
+                  (paymentAccount) => DropdownMenuItem<PaymentAccount>(
+                    value: paymentAccount,
+                    child: _PaymentAccountItem(
+                      paymentAccount: paymentAccount,
+                    ),
+                  ),
+                ),
+                if (disabledPaymentAccounts.isNotEmpty)
+                  DropdownMenuItem(
+                    value: null,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            t.event.eventBuyTickets.unavailable,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                          Text(
+                            t.event.eventBuyTickets.unavailableDescription,
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ...disabledPaymentAccounts.map(
+                  (paymentAccount) => DropdownMenuItem<PaymentAccount>(
+                    value: null,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: _PaymentAccountItem(
+                        paymentAccount: paymentAccount,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               dropdownStyleData: DropdownStyleData(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(LemonRadius.small),
                   color: LemonColor.atomicBlack,
+                  border: Border.all(color: colorScheme.outlineVariant),
                 ),
                 offset: Offset(0, -Spacing.superExtraSmall),
               ),
               menuItemStyleData: const MenuItemStyleData(
+                // height: 80,
                 overlayColor: MaterialStatePropertyAll(
                   LemonColor.darkBackground,
                 ),
@@ -111,6 +152,32 @@ class _PaymentAccountItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    if (paymentAccount.type == PaymentAccountType.digital) {
+      return Row(
+        children: [
+          Assets.icons.icStripe.svg(),
+          SizedBox(
+            width: Spacing.extraSmall,
+          ),
+          Text(
+            t.event.eventBuyTickets.stripe,
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+            ),
+          ),
+          SizedBox(
+            width: Spacing.extraSmall,
+          ),
+          Text(
+            t.event.eventBuyTickets.creditDebit,
+            style: Typo.medium.copyWith(
+              color: colorScheme.onSecondary,
+            ),
+          ),
+        ],
+      );
+    }
     return ChainQuery(
       chainId: paymentAccount.accountInfo?.network ?? '',
       builder: (
