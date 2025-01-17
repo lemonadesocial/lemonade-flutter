@@ -3,18 +3,18 @@
     <channel>
         <title>Lemonade Social - Appcast</title>
         <item>
-            <title>Version 1.47.0</title>
+            <title>Version 1.50.0</title>
             <description>Bug fixes and performance improvements.</description>
-            <pubDate>Sun Dec 16 2024 00:00:00 +0000</pubDate>
-            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.47.0" sparkle:os="ios" />
+            <pubDate>Fri Jan 17 2025 00:00:00 +0000</pubDate>
+            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.50.0" sparkle:os="ios" />
             <!-- Force update version -->
             <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags>
         </item>
         <item>
-            <title>Version 1.47.0</title>
+            <title>Version 1.50.1</title>
             <description>Bug fixes and performance improvements.</description>
-            <pubDate>Sun Dec 16 2024 00:00:00 +0000</pubDate>
-            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app" sparkle:version="1.47.0" sparkle:os="android" />
+            <pubDate>Fri Jan 17 2025 00:00:00 +0000</pubDate>
+            <enclosure url="https://play.google.com/store/apps/details?id=social.lemonade.app" sparkle:version="1.50.1" sparkle:os="android" />
             <!-- Force update version -->
             <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags>
         </item>
