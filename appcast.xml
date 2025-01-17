@@ -3,10 +3,10 @@
     <channel>
         <title>Lemonade Social - Appcast</title>
         <item>
-            <title>Version 1.50.1</title>
+            <title>Version 1.50.0</title>
             <description>Bug fixes and performance improvements.</description>
             <pubDate>Fri Jan 17 2025 00:00:00 +0000</pubDate>
-            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.50.1" sparkle:os="ios" />
+            <enclosure url="https://apps.apple.com/us/app/lemonade-social/id6450694884" sparkle:version="1.50.0" sparkle:os="ios" />
             <!-- Force update version -->
             <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags>
         </item>
