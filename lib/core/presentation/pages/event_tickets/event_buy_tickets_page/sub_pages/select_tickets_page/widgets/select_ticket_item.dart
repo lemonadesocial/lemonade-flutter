@@ -208,7 +208,7 @@ class SelectTicketItem extends StatelessWidget {
                                     horizontal: Spacing.superExtraSmall,
                                   ),
                                   child: Text(
-                                    'or',
+                                    t.common.or,
                                     style: Typo.medium.copyWith(
                                       color: colorScheme.onSecondary,
                                     ),

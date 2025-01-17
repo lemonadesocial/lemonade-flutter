@@ -143,6 +143,7 @@
     "calendar": "calendar",
     "appleWallet": "Apple Wallet",
     "googleWallet": "Google Wallet",
+    "or": "or",
     "report": {
         "reportPost": "Report post",
         "reportEvent": "Report event",
