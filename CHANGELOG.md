@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.50.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.0...v1.50.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* fix bug cannot find pending invite bloc when creating session ([#848](https://github.com/lemonadesocial/lemonade-flutter/issues/848)) ([fa6c662](https://github.com/lemonadesocial/lemonade-flutter/commit/fa6c6622399befc1cc75e99f69e2e1f45a97a57e))
+* show unpublished session in session listing ([#849](https://github.com/lemonadesocial/lemonade-flutter/issues/849)) ([0de68a5](https://github.com/lemonadesocial/lemonade-flutter/commit/0de68a5d2a3f2df762ccd19403f208d5a40288bf))
+
 ## [1.50.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.49.0...v1.50.0) (2025-01-15)
 
 
