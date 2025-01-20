@@ -1,5 +1,6 @@
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/widgets/staking_config_info_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -23,6 +24,11 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
     required this.selectedPaymentAccount,
     required this.onChanged,
   });
+
+  bool get isStakingPaymentAccount {
+    return paymentAccounts
+        .any((account) => account.type == PaymentAccountType.ethereumStake);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +145,25 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
               ),
             ),
           ),
+          if (isStakingPaymentAccount && selectedPaymentAccount != null) ...[
+            SizedBox(height: Spacing.xSmall),
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                color: colorScheme.background,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(LemonRadius.medium),
+                  side: BorderSide(color: colorScheme.outline),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(Spacing.small),
+                  child: StakingConfigInfoWidget(
+                    paymentAccount: selectedPaymentAccount,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

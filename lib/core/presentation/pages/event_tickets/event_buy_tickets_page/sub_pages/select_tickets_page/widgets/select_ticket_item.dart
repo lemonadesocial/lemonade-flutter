@@ -6,6 +6,7 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/widgets/staking_config_info_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -56,6 +57,14 @@ class SelectTicketItem extends StatelessWidget {
 
   bool get isWhitelistExclusive {
     return ticketType.limited == true;
+  }
+
+  PaymentAccount? get stakingPaymentAccount {
+    return (ticketType.prices ?? [])
+        .expand((price) => price.paymentAccountsExpanded ?? <PaymentAccount>[])
+        .firstWhereOrNull(
+          (element) => element.type == PaymentAccountType.ethereumStake,
+        );
   }
 
   @override
@@ -158,129 +167,164 @@ class SelectTicketItem extends StatelessWidget {
               color: colorScheme.outlineVariant,
             ),
           ),
-          padding: EdgeInsets.all(Spacing.smMedium),
+          padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          ticketType.title ?? '',
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            ticketType.title ?? '',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
                           ),
-                        ),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.end,
-                          children: (ticketType.prices ?? [])
-                              .toList()
-                              .asMap()
-                              .entries
-                              .expand((entry) {
-                            final ticketPrice = entry.value;
-                            final isLast = entry.key ==
-                                (ticketType.prices?.length ?? 0) - 1;
-                            final decimals = EventTicketUtils.getEventCurrency(
-                                  currencies: eventCurrencies,
-                                  currency: ticketPrice.currency,
-                                )?.decimals?.toInt() ??
-                                2;
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.end,
+                            children: (ticketType.prices ?? [])
+                                .toList()
+                                .asMap()
+                                .entries
+                                .expand((entry) {
+                              final ticketPrice = entry.value;
+                              final isLast = entry.key ==
+                                  (ticketType.prices?.length ?? 0) - 1;
+                              final decimals =
+                                  EventTicketUtils.getEventCurrency(
+                                        currencies: eventCurrencies,
+                                        currency: ticketPrice.currency,
+                                      )?.decimals?.toInt() ??
+                                      2;
 
-                            return [
-                              _PriceItem(
-                                ticketType: ticketType,
-                                decimals: decimals,
-                                currency: ticketPrice.currency!,
-                                price: ticketPrice,
-                              ),
-                              if (!isLast &&
-                                  (ticketType.prices?.length ?? 0) > 1)
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.superExtraSmall,
-                                  ),
-                                  child: Text(
-                                    t.common.or,
-                                    style: Typo.medium.copyWith(
-                                      color: colorScheme.onSecondary,
+                              return [
+                                _PriceItem(
+                                  ticketType: ticketType,
+                                  decimals: decimals,
+                                  currency: ticketPrice.currency!,
+                                  price: ticketPrice,
+                                ),
+                                if (!isLast &&
+                                    (ticketType.prices?.length ?? 0) > 1)
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Spacing.superExtraSmall,
+                                    ),
+                                    child: Text(
+                                      t.common.or,
+                                      style: Typo.medium.copyWith(
+                                        color: colorScheme.onSecondary,
+                                      ),
                                     ),
                                   ),
-                                ),
-                            ];
-                          }).toList(),
-                        ),
-                        if (ticketType.description != null &&
-                            ticketType.description!.isNotEmpty) ...[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: Spacing.xSmall,
-                              right: isLocked ? Spacing.xLarge : 0,
-                            ),
-                            child: Text(
-                              ticketType.description ?? '',
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
+                              ];
+                            }).toList(),
+                          ),
+                          if (isWhitelistExclusive ||
+                              stakingPaymentAccount != null)
+                            Padding(
+                              padding: EdgeInsets.only(top: Spacing.xSmall),
+                              child: Wrap(
+                                spacing: Spacing.xSmall,
+                                children: [
+                                  if (isWhitelistExclusive)
+                                    FittedBox(
+                                      child: LemonOutlineButton(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.superExtraSmall,
+                                          vertical: 2.w,
+                                        ),
+                                        label: t.event.eventBuyTickets
+                                            .whileListedTicket,
+                                        backgroundColor: LemonColor.white18,
+                                        textColor: colorScheme.onPrimary,
+                                        borderColor: colorScheme.outlineVariant,
+                                      ),
+                                    ),
+                                  if (stakingPaymentAccount != null)
+                                    FittedBox(
+                                      child: LemonOutlineButton(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.superExtraSmall,
+                                          vertical: 2.w,
+                                        ),
+                                        label: t.event.eventBuyTickets
+                                            .stakingTicket,
+                                        backgroundColor: LemonColor.white18,
+                                        textColor: colorScheme.onPrimary,
+                                        borderColor: colorScheme.outlineVariant,
+                                      ),
+                                    ),
+                                ],
                               ),
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
                         ],
-                      ],
-                    ),
-                  ),
-                  TicketCounter(
-                    count: count,
-                    onIncrease: (newCount) {
-                      add(
-                        newCount: newCount,
-                      );
-                    },
-                    onDecrease: (newCount) {
-                      minus(
-                        newCount: newCount,
-                      );
-                    },
-                    disabled: isLocked || !enabled,
-                    limit: ticketType.limit,
-                    onPressDisabled: () {
-                      SnackBarUtils.showError(
-                        title: t.common.error.label,
-                        message: t.event.eventBuyTickets.multipleTicketsError,
-                      );
-                    },
-                  ),
-                ],
-              ),
-              if (isWhitelistExclusive)
-                Padding(
-                  padding: EdgeInsets.only(top: Spacing.xSmall),
-                  child: Wrap(
-                    spacing: Spacing.xSmall,
-                    children: [
-                      FittedBox(
-                        child: LemonOutlineButton(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.superExtraSmall,
-                            vertical: 2.w,
-                          ),
-                          label: t.event.eventBuyTickets.whileListedTicket,
-                          backgroundColor: LemonColor.white18,
-                          textColor: colorScheme.onPrimary,
-                          borderColor: colorScheme.outlineVariant,
-                        ),
                       ),
-                    ],
+                    ),
+                    TicketCounter(
+                      count: count,
+                      onIncrease: (newCount) {
+                        add(
+                          newCount: newCount,
+                        );
+                      },
+                      onDecrease: (newCount) {
+                        minus(
+                          newCount: newCount,
+                        );
+                      },
+                      disabled: isLocked || !enabled,
+                      limit: ticketType.limit,
+                      onPressDisabled: () {
+                        SnackBarUtils.showError(
+                          title: t.common.error.label,
+                          message: t.event.eventBuyTickets.multipleTicketsError,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              if (ticketType.description != null &&
+                  ticketType.description!.isNotEmpty) ...[
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: Spacing.smMedium,
+                    right: Spacing.smMedium,
+                    top: Spacing.xSmall,
+                  ),
+                  child: Text(
+                    ticketType.description ?? '',
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
+              ],
+              if (stakingPaymentAccount != null) ...[
+                SizedBox(height: Spacing.xSmall),
+                Divider(
+                  color: colorScheme.outlineVariant,
+                ),
+                SizedBox(height: Spacing.xSmall),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: StakingConfigInfoWidget(
+                    paymentAccount: stakingPaymentAccount,
+                  ),
+                ),
+              ],
             ],
           ),
         ),

@@ -86,7 +86,9 @@
         "stripe": "Stripe",
         "creditDebit": "Credit/Debit Card",
         "unavailable": "Unvailable",
-        "unavailableDescription": "All selected tickets are not available on these payment options"
+        "unavailableDescription": "All selected tickets are not available on these payment options",
+        "beforeTime": "before $time",
+        "claimStakingRefund": "to claim $percentage refund"
     },
     "eventOrder": {
         "itemTotal": "Item total",

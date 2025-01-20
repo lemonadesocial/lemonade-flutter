@@ -29,7 +29,7 @@ class EthereumStakeTransactionExecutor implements CryptoTransactionExecutor {
   }) async {
     final network = paymentAccount.accountInfo?.network;
     String erc20ApproveTxHash = '';
-    final stakePaymentContract = Web3ContractService.getStakePaymentContract(
+    final stakePaymentContract = Web3ContractService.getStakeFactoryContract(
       chain.stakePaymentContract ?? '',
     );
     // token address (can be native token or ERC20 token)
