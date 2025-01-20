@@ -96,8 +96,7 @@ class GetSubEventsByCalendarBloc
         variables: Variables$Query$GetEvents(
           limit: 1000,
           subevent_parent: parentEventId,
-          // TODO: to be confirmed with PO
-          // unpublished: true,
+          unpublished: true,
           startFrom: event.from,
           startTo: event.to,
         ),
