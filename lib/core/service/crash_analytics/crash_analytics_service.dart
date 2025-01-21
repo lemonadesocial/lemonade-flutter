@@ -5,4 +5,5 @@ abstract class CrashAnalyticsService {
   void clearSetUser();
   void setTag(String key, String value);
   void captureError(dynamic error, StackTrace? stacktrace);
+  void captureMessage(String message, List<dynamic>? params);
 }

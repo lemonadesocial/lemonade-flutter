@@ -67,6 +67,11 @@ class SentryCrashAnalyticsService implements CrashAnalyticsService {
     Sentry.captureException(error, stackTrace: stacktrace);
   }
 
+  @override
+  void captureMessage(String message, List<dynamic>? params) async {
+    Sentry.captureMessage(message, params: params);
+  }
+
   void sendFeedback({
     String? name,
     String? email,
