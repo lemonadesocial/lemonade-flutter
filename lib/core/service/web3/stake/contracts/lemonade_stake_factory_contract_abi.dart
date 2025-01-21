@@ -1,4 +1,4 @@
-const lemonadeStakePaymentContractAbi = '''
+const lemonadeStakeFactoryContractAbi = '''
 [
     {
       "inputs": [],

@@ -68,6 +68,7 @@ class PayButton extends StatelessWidget {
           AutoRouter.of(context).push(
             EventBuyTicketsProcessingRoute(
               selectedPaymentAccount: selectedPaymentAccount,
+              selectedCurrency: selectedCurrency,
             ),
           );
         },
