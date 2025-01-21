@@ -130,11 +130,12 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     child: Opacity(
                       opacity: isEnabledNextButton == true ? 1 : 0.5,
                       child: LinearGradientButton(
-                        onTap: () {
+                        onTap: () async {
                           if (isEnabledNextButton == false) {
                             return;
                           }
-                          context.router.push(const OnboardingAboutRoute());
+                          await context.router
+                              .push(const OnboardingAboutRoute());
                         },
                         label: t.onboarding.next,
                         textStyle: Typo.medium.copyWith(
