@@ -212,10 +212,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     final selectTicketBloc = context.watch<SelectEventTicketsBloc>();
     final selectedTicketCategory =
         selectTicketBloc.state.selectedTicketCategory;
-    // final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
-    // final selectedCurrency = selectTicketBloc.state.selectedCurrency;
-    // final totalAmount = selectTicketBloc.state.totalAmount;
-
     return MultiBlocListener(
       listeners: [
         BlocListener<GetEventTicketTypesBloc, GetEventTicketTypesState>(
