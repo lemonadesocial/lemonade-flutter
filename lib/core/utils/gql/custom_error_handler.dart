@@ -67,7 +67,7 @@ class CustomErrorHandler {
       if (errorCode == GraphQLErrorCodeStrings.INTERNAL_SERVER_ERROR) {
         CrashAnalyticsManager()
             .crashAnalyticsService
-            ?.captureError(errors, exception.originalStackTrace);
+            ?.captureMessage(errorMessage, errors);
       }
     }
     return null;
@@ -94,11 +94,11 @@ class CustomErrorHandler {
 
     if (!unauthenticatedErrorAfterLogout) {
       showSnackbarError(errorCode, errorMessage);
+      CrashAnalyticsManager().crashAnalyticsService?.captureMessage(
+        errors?.map((e) => e.toString()).join('\n') ?? '',
+        [StackTrace.fromString(request.toString())],
+      );
     }
-    CrashAnalyticsManager().crashAnalyticsService?.captureError(
-          errors,
-          StackTrace.fromString(request.toString()),
-        );
     return null;
   }
 

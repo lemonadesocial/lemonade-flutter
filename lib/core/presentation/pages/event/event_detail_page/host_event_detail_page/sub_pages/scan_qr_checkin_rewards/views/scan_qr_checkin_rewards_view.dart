@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_error_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/sub_pages/scan_qr_checkin_rewards/widgets/scanner_overlay.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ScanQRCheckinRewardsView extends StatefulWidget {
   const ScanQRCheckinRewardsView({
@@ -31,6 +33,8 @@ class ScanQRCheckinRewardsView extends StatefulWidget {
 }
 
 class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
+  bool _hasShowDeniedPermissionDialog = false;
+
   Future<void> onBarcodeDetect(BarcodeCapture barcodeCapture) async {
     await widget.controller.stop();
     final ticketShortId = barcodeCapture.barcodes.isNotEmpty
@@ -109,6 +113,15 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
                   controller: widget.controller,
                   scanWindow: scanWindow,
                   errorBuilder: (context, error, child) {
+                    if (error.errorCode ==
+                            MobileScannerErrorCode.permissionDenied &&
+                        !_hasShowDeniedPermissionDialog) {
+                      _hasShowDeniedPermissionDialog = true;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _showPermissionDialog();
+                      });
+                    }
+
                     return ScannerErrorWidget(error: error);
                   },
                 ),
@@ -120,6 +133,37 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showPermissionDialog() async {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: colorScheme.secondary,
+        title: Text(t.common.cameraPermissionTitle),
+        content: Text(
+          t.common.cameraPermissionMessage,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              context.router.pop();
+            },
+            child: Text(t.common.actions.close),
+          ),
+          TextButton(
+            onPressed: () async {
+              context.router.pop();
+              await openAppSettings();
+            },
+            child: Text(t.common.settings),
+          ),
+        ],
+      ),
     );
   }
 }

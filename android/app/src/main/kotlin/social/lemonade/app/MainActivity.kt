@@ -9,6 +9,7 @@ import androidx.multidex.MultiDex
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.content.Intent
 
 class MainActivity : FlutterFragmentActivity() {
     
@@ -32,5 +33,9 @@ class MainActivity : FlutterFragmentActivity() {
             engine = eng
             return eng
         }
+    }
+    
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

@@ -130,7 +130,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     child: Opacity(
                       opacity: isEnabledNextButton == true ? 1 : 0.5,
                       child: LinearGradientButton(
-                        onTap: () {
+                        onTap: () async {
                           if (isEnabledNextButton == false) {
                             return;
                           }
