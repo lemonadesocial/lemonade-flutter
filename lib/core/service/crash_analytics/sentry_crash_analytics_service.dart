@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/service/crash_analytics/crash_analytics_service.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -69,7 +70,11 @@ class SentryCrashAnalyticsService implements CrashAnalyticsService {
 
   @override
   void captureMessage(String message, List<dynamic>? params) async {
-    Sentry.captureMessage(message, params: params);
+    try {
+      Sentry.captureMessage(message, params: params);
+    } catch (e) {
+      debugPrint("Error capturing message: $e");
+    }
   }
 
   void sendFeedback({
