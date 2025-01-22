@@ -81,7 +81,8 @@
         "skip": "Skip",
         "confirm": "Confirm",
         "vote": "Vote",
-        "addToCalendar": "Add to calendar"
+        "addToCalendar": "Add to calendar",
+        "close": "Close"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -253,5 +254,7 @@
     },
     "hint": {
         "enterYourAnswer": "Enter your answer"
-    }
+    },
+    "cameraPermissionTitle": "Camera Access Required",
+    "cameraPermissionMessage": "Camera permission is needed to scan QR codes. Please enable it in settings."
 }
