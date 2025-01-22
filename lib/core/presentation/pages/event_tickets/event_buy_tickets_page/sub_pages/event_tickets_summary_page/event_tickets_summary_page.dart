@@ -80,6 +80,18 @@ class _EventTicketsSummaryPageViewState
     _autoSelectPaymentAccount();
   }
 
+  List<PaymentAccount> get commonPaymentAccounts {
+    final selectTicketsBloc = context.read<SelectEventTicketsBloc>();
+    final paymentAccounts = selectTicketsBloc.state.commonPaymentAccounts;
+    final result = paymentAccounts
+        .where(
+          (account) => _findCurrency(account) != null,
+        )
+        .toList();
+
+    return result;
+  }
+
   String? _findCurrency(PaymentAccount? paymentAccount) {
     if (paymentAccount == null) return null;
 
@@ -156,8 +168,6 @@ class _EventTicketsSummaryPageViewState
   }
 
   void _autoSelectPaymentAccount() {
-    final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
-    final commonPaymentAccounts = selectTicketsBlocState.commonPaymentAccounts;
     final defaultPaymentAccount = commonPaymentAccounts.firstOrNull;
     _selectPaymentAccount(defaultPaymentAccount);
   }
@@ -172,7 +182,6 @@ class _EventTicketsSummaryPageViewState
           authenticated: (user) => user,
         );
     final selectTicketsBlocState = context.read<SelectEventTicketsBloc>().state;
-    final commonPaymentAccounts = selectTicketsBlocState.commonPaymentAccounts;
     final selectedTickets = selectTicketsBlocState.selectedTickets;
     final isApplicationFormRequired =
         event.applicationProfileFields?.isNotEmpty == true ||

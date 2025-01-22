@@ -212,6 +212,9 @@ class SelectTicketItem extends StatelessWidget {
                                   decimals: decimals,
                                   currency: ticketPrice.currency!,
                                   price: ticketPrice,
+                                  textColor: entry.key != 0
+                                      ? colorScheme.onSecondary
+                                      : colorScheme.onPrimary,
                                 ),
                                 if (!isLast &&
                                     (ticketType.prices?.length ?? 0) > 1)
@@ -338,12 +341,14 @@ class _PriceItem extends StatelessWidget {
   final PurchasableTicketType ticketType;
   final EventTicketPrice price;
   final int decimals;
+  final Color? textColor;
 
   const _PriceItem({
     required this.currency,
     required this.ticketType,
     required this.price,
     required this.decimals,
+    this.textColor,
   });
 
   bool get isStakingTicket {
@@ -376,7 +381,7 @@ class _PriceItem extends StatelessWidget {
                   currency: currency,
                 ),
           style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
+            color: textColor ?? colorScheme.onPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
