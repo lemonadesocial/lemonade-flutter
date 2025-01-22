@@ -134,8 +134,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                           if (isEnabledNextButton == false) {
                             return;
                           }
-                          await context.router
-                              .push(const OnboardingAboutRoute());
+                          context.router.push(const OnboardingAboutRoute());
                         },
                         label: t.onboarding.next,
                         textStyle: Typo.medium.copyWith(
