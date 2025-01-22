@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.50.2](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.1...v1.50.2) (2025-01-22)
+
+
+### Bug Fixes
+
+* handle multi prices ticket ([#851](https://github.com/lemonadesocial/lemonade-flutter/issues/851)) ([b28c13a](https://github.com/lemonadesocial/lemonade-flutter/commit/b28c13a1d3d149231cd7bd36d7dd4287a5fc2e3f))
+* Implement capture message & fix some minor bugs ([#854](https://github.com/lemonadesocial/lemonade-flutter/issues/854)) ([01803e5](https://github.com/lemonadesocial/lemonade-flutter/commit/01803e5881a94bc2969cd66908baeafb8eba9f97))
+* multi-prices polish ([#855](https://github.com/lemonadesocial/lemonade-flutter/issues/855)) ([669e1f2](https://github.com/lemonadesocial/lemonade-flutter/commit/669e1f2b43da679bfed9bb366f32868f75a3695c))
+
 ## [1.50.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.0...v1.50.1) (2025-01-20)
 
 
