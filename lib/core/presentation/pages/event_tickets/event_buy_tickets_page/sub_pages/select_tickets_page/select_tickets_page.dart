@@ -29,7 +29,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:collection/collection.dart';
 
 @RoutePage()
 class SelectTicketsPage extends StatelessWidget {
@@ -90,51 +89,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     final response =
         (getEventTicketTypesBloc.state as GetEventTicketTypesStateSuccess)
             .eventTicketTypesResponse;
-    final selectTicketBloc = context.read<SelectEventTicketsBloc>();
-    final selectedTickets = selectTicketBloc.state.selectedTickets;
-    final selectedTicketCategory =
-        selectTicketBloc.state.selectedTicketCategory;
     context.read<SelectEventTicketsBloc>().add(
           SelectEventTicketsEvent.onEventTicketTypesResponseLoaded(
             eventTicketTypesResponse: response,
           ),
         );
-    final ticketTypesByCategory = EventTicketUtils.filterTicketTypeByCategory(
-      response.ticketTypes ?? [],
-      category: selectedTicketCategory?.id,
-    );
-
-    // if user already selected tickets (maybe in other category) then no need to init payment method
-    if (selectedTickets.isNotEmpty) {
-      return;
-    }
-
-    if (ticketTypesByCategory.isEmpty) {
-      return;
-    }
-
-    final stripeTicketTypes = EventTicketUtils.getTicketTypesSupportStripe(
-      ticketTypes: ticketTypesByCategory,
-    );
-    final erc20TicketTypes = EventTicketUtils.getTicketTypesSupportCrypto(
-      ticketTypes: ticketTypesByCategory,
-    );
-
-    if (stripeTicketTypes.isEmpty) {
-      context.read<SelectEventTicketsBloc>().add(
-            SelectEventTicketsEvent.selectPaymentMethod(
-              paymentMethod: SelectTicketsPaymentMethod.wallet,
-            ),
-          );
-    }
-
-    if (erc20TicketTypes.isEmpty) {
-      context.read<SelectEventTicketsBloc>().add(
-            SelectEventTicketsEvent.selectPaymentMethod(
-              paymentMethod: SelectTicketsPaymentMethod.card,
-            ),
-          );
-    }
   }
 
   void _handleAutoSelect() {
@@ -175,15 +134,12 @@ class _SelectTicketViewState extends State<SelectTicketView> {
           ticketTypesByCategory.first.whitelisted == true;
 
       if (isPublic || isWhitelisted) {
-        final price = ticketTypesByCategory.first.prices!.first;
         context.read<SelectEventTicketsBloc>().add(
               SelectEventTicketsEvent.select(
                 ticket: PurchasableItem(
                   count: 1,
                   id: ticketTypesByCategory.first.id!,
                 ),
-                currency: price.currency ?? '',
-                price: price,
               ),
             );
       }
@@ -256,10 +212,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     final selectTicketBloc = context.watch<SelectEventTicketsBloc>();
     final selectedTicketCategory =
         selectTicketBloc.state.selectedTicketCategory;
-    final selectedPaymentMethod = selectTicketBloc.state.paymentMethod;
-    final selectedCurrency = selectTicketBloc.state.selectedCurrency;
-    final totalAmount = selectTicketBloc.state.totalAmount;
-
     return MultiBlocListener(
       listeners: [
         BlocListener<GetEventTicketTypesBloc, GetEventTicketTypesState>(
@@ -390,12 +342,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                   itemBuilder: (context, index) {
                                     final ticketType =
                                         filteredTicketTypes[index];
-                                    final ticketPrice =
-                                        ticketType.prices?.firstOrNull;
                                     return SelectTicketItem(
                                       networkFilter: networkFilter,
                                       event: widget.event,
                                       ticketType: ticketType,
+                                      allTicketTypes: filteredTicketTypes,
                                       onCountChange: (count) {
                                         context
                                             .read<SelectEventTicketsBloc>()
@@ -405,9 +356,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                                                   count: count,
                                                   id: ticketType.id ?? '',
                                                 ),
-                                                currency:
-                                                    ticketPrice?.currency ?? '',
-                                                price: ticketPrice,
                                               ),
                                             );
                                       },
@@ -436,9 +384,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                   color: colorScheme.background,
                   child: SelectTicketSubmitButton(
                     event: widget.event,
-                    paymentMethod: selectedPaymentMethod,
-                    selectedCurrency: selectedCurrency,
-                    totalAmount: totalAmount,
                   ),
                 ),
               ),

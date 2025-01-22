@@ -82,7 +82,8 @@
         "confirm": "Confirm",
         "vote": "Vote",
         "addToCalendar": "Add to calendar",
-        "close": "Close"
+        "close": "Close",
+        "checkIn": "Check in"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -144,6 +145,7 @@
     "calendar": "calendar",
     "appleWallet": "Apple Wallet",
     "googleWallet": "Google Wallet",
+    "or": "or",
     "report": {
         "reportPost": "Report post",
         "reportEvent": "Report event",

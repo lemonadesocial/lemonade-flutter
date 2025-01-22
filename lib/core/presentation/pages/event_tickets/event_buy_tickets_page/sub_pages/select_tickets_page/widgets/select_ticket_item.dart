@@ -3,8 +3,10 @@ import 'package:app/core/application/event_tickets/select_event_tickets_bloc/sel
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
+import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/widgets/staking_config_info_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -29,28 +31,40 @@ class SelectTicketItem extends StatelessWidget {
   const SelectTicketItem({
     super.key,
     required this.ticketType,
+    required this.allTicketTypes,
     required this.event,
     required this.onCountChange,
     this.networkFilter,
   });
 
   final Event event;
+  final List<PurchasableTicketType> allTicketTypes;
   final PurchasableTicketType ticketType;
   final String? networkFilter;
   final Function(int count) onCountChange;
 
   void add({
     required int newCount,
-    required String currency,
   }) {
     onCountChange(newCount);
   }
 
   void minus({
     required int newCount,
-    required String currency,
   }) {
     onCountChange(newCount);
+  }
+
+  bool get isWhitelistExclusive {
+    return ticketType.limited == true;
+  }
+
+  PaymentAccount? get stakingPaymentAccount {
+    return (ticketType.prices ?? [])
+        .expand((price) => price.paymentAccountsExpanded ?? <PaymentAccount>[])
+        .firstWhereOrNull(
+          (element) => element.type == PaymentAccountType.ethereumStake,
+        );
   }
 
   @override
@@ -64,7 +78,6 @@ class SelectTicketItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final isLocked =
         ticketType.limited == true && ticketType.whitelisted == false;
-    final selectedCurrency = selectTicketsBloc.state.selectedCurrency;
     final count = selectTicketsBloc.state.selectedTickets
             .firstWhereOrNull(
               (element) => element.id == ticketType.id,
@@ -72,7 +85,49 @@ class SelectTicketItem extends StatelessWidget {
             ?.count ??
         0;
     final commonPaymentAccounts = selectTicketsBloc.state.commonPaymentAccounts;
+    final allPaymentAccountsOfTicketType = (ticketType.prices ?? [])
+        .expand((price) => price.paymentAccountsExpanded ?? <PaymentAccount>[])
+        .toList();
 
+    // Get all currencies from this ticket type
+    final ticketTypeCurrencies =
+        ticketType.prices?.map((p) => p.currency).whereType<String>().toSet() ??
+            {};
+
+    // Get all currencies from selected ticket types before
+    final selectedTicketsCurrencies = selectTicketsBloc.state.selectedTickets
+        .map((ticket) => ticket.id)
+        .map((id) => allTicketTypes.firstWhere((t) => t.id == id))
+        .expand(
+          (ticketType) => (ticketType.prices ?? []).map((p) => p.currency),
+        )
+        .whereType<String>()
+        .toSet();
+
+    // Check if there are any common currencies
+    final hasCommonCurrencies = selectedTicketsCurrencies.isEmpty ||
+        ticketTypeCurrencies
+            .any((currency) => selectedTicketsCurrencies.contains(currency));
+
+    // For free ticket, there aren't any payment accounts
+    final isFreeTicket = allPaymentAccountsOfTicketType.isEmpty;
+
+    bool enabled = hasCommonCurrencies;
+
+    if (commonPaymentAccounts.isEmpty) {
+      // if this is paid ticket and we have selected free tickets before, disable it
+      if (selectTicketsBloc.state.selectedTickets.isNotEmpty && !isFreeTicket) {
+        enabled = false;
+      } else {
+        enabled = hasCommonCurrencies;
+      }
+    } else {
+      final newCommonPaymentAccounts = PaymentUtils.getCommonPaymentAccounts(
+        accounts1: commonPaymentAccounts,
+        accounts2: allPaymentAccountsOfTicketType,
+      );
+      enabled = newCommonPaymentAccounts.isNotEmpty && hasCommonCurrencies;
+    }
     return InkWell(
       onTap: () {
         if (!isLocked) {
@@ -101,97 +156,178 @@ class SelectTicketItem extends StatelessWidget {
           message: t.event.eventBuyTickets.ticketLockedDescription,
         );
       },
-      child: Stack(
-        children: [
-          Opacity(
-            opacity: isLocked ? 0.5 : 1,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: LemonColor.atomicBlack,
-                borderRadius: BorderRadius.circular(LemonRadius.medium),
-                border: Border.all(
-                  color: colorScheme.outlineVariant,
-                ),
-              ),
-              padding: EdgeInsets.all(Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    ticketType.title ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
-                  ),
-                  ...(ticketType.prices ?? []).map((ticketPrice) {
-                    bool enabled = true;
-                    if (selectedCurrency == null) {
-                      enabled = true;
-                    } else {
-                      // Need to check if has common payment accounts
-                      final newCommonPaymentAccounts =
-                          PaymentUtils.getCommonPaymentAccounts(
-                        accounts1: commonPaymentAccounts,
-                        accounts2: ticketPrice.paymentAccountsExpanded ?? [],
-                      );
-                      if (ticketPrice.isCrypto) {
-                        enabled = ticketPrice.currency == selectedCurrency &&
-                            newCommonPaymentAccounts.isNotEmpty;
-                      } else {
-                        enabled = ticketPrice.currency == selectedCurrency;
-                      }
-                    }
-                    final decimals = EventTicketUtils.getEventCurrency(
-                          currencies: eventCurrencies,
-                          currency: ticketPrice.currency,
-                        )?.decimals?.toInt() ??
-                        2;
+      child: Opacity(
+        opacity: isLocked ? 0.5 : 1,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: LemonColor.atomicBlack,
+            borderRadius: BorderRadius.circular(LemonRadius.medium),
+            border: Border.all(
+              color: colorScheme.outlineVariant,
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            ticketType.title ?? '',
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
+                          ),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.end,
+                            children: (ticketType.prices ?? [])
+                                .toList()
+                                .asMap()
+                                .entries
+                                .expand((entry) {
+                              final ticketPrice = entry.value;
+                              final isLast = entry.key ==
+                                  (ticketType.prices?.length ?? 0) - 1;
+                              final decimals =
+                                  EventTicketUtils.getEventCurrency(
+                                        currencies: eventCurrencies,
+                                        currency: ticketPrice.currency,
+                                      )?.decimals?.toInt() ??
+                                      2;
 
-                    return _PriceItem(
-                      ticketType: ticketType,
-                      decimals: decimals,
-                      count: enabled ? count : 0,
-                      currency: ticketPrice.currency!,
-                      price: ticketPrice,
-                      disabled: isLocked || !enabled,
+                              return [
+                                _PriceItem(
+                                  ticketType: ticketType,
+                                  decimals: decimals,
+                                  currency: ticketPrice.currency!,
+                                  price: ticketPrice,
+                                ),
+                                if (!isLast &&
+                                    (ticketType.prices?.length ?? 0) > 1)
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Spacing.superExtraSmall,
+                                    ),
+                                    child: Text(
+                                      t.common.or,
+                                      style: Typo.medium.copyWith(
+                                        color: colorScheme.onSecondary,
+                                      ),
+                                    ),
+                                  ),
+                              ];
+                            }).toList(),
+                          ),
+                          if (isWhitelistExclusive ||
+                              stakingPaymentAccount != null)
+                            Padding(
+                              padding: EdgeInsets.only(top: Spacing.xSmall),
+                              child: Wrap(
+                                spacing: Spacing.xSmall,
+                                children: [
+                                  if (isWhitelistExclusive)
+                                    FittedBox(
+                                      child: LemonOutlineButton(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.superExtraSmall,
+                                          vertical: 2.w,
+                                        ),
+                                        label: t.event.eventBuyTickets
+                                            .whileListedTicket,
+                                        backgroundColor: LemonColor.white18,
+                                        textColor: colorScheme.onPrimary,
+                                        borderColor: colorScheme.outlineVariant,
+                                      ),
+                                    ),
+                                  if (stakingPaymentAccount != null)
+                                    FittedBox(
+                                      child: LemonOutlineButton(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: Spacing.superExtraSmall,
+                                          vertical: 2.w,
+                                        ),
+                                        label: t.event.eventBuyTickets
+                                            .stakingTicket,
+                                        backgroundColor: LemonColor.white18,
+                                        textColor: colorScheme.onPrimary,
+                                        borderColor: colorScheme.outlineVariant,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    TicketCounter(
+                      count: count,
                       onIncrease: (newCount) {
                         add(
                           newCount: newCount,
-                          currency: ticketPrice.currency!,
                         );
                       },
                       onDecrease: (newCount) {
                         minus(
                           newCount: newCount,
-                          currency: ticketPrice.currency!,
                         );
                       },
-                    );
-                  }),
-                  if (ticketType.description != null &&
-                      ticketType.description!.isNotEmpty) ...[
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: Spacing.xSmall,
-                        right: isLocked ? Spacing.xLarge : 0,
-                      ),
-                      child: Text(
-                        ticketType.description ?? '',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      disabled: isLocked || !enabled,
+                      limit: ticketType.limit,
+                      onPressDisabled: () {
+                        SnackBarUtils.showError(
+                          title: t.common.error.label,
+                          message: t.event.eventBuyTickets.multipleTicketsError,
+                        );
+                      },
                     ),
                   ],
-                ],
+                ),
               ),
-            ),
+              if (ticketType.description != null &&
+                  ticketType.description!.isNotEmpty) ...[
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: Spacing.smMedium,
+                    right: Spacing.smMedium,
+                    top: Spacing.xSmall,
+                  ),
+                  child: Text(
+                    ticketType.description ?? '',
+                    style: Typo.small.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+              if (stakingPaymentAccount != null) ...[
+                SizedBox(height: Spacing.xSmall),
+                Divider(
+                  color: colorScheme.outlineVariant,
+                ),
+                SizedBox(height: Spacing.xSmall),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
+                  child: StakingConfigInfoWidget(
+                    paymentAccount: stakingPaymentAccount,
+                  ),
+                ),
+              ],
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -202,20 +338,12 @@ class _PriceItem extends StatelessWidget {
   final PurchasableTicketType ticketType;
   final EventTicketPrice price;
   final int decimals;
-  final bool disabled;
-  final Function(int newCount) onDecrease;
-  final Function(int newCount) onIncrease;
-  final int count;
 
   const _PriceItem({
     required this.currency,
     required this.ticketType,
     required this.price,
-    required this.count,
     required this.decimals,
-    required this.disabled,
-    required this.onIncrease,
-    required this.onDecrease,
   });
 
   bool get isStakingTicket {
@@ -226,10 +354,6 @@ class _PriceItem extends StatelessWidget {
             false);
   }
 
-  bool get isWhitelistExclusive {
-    return ticketType.limited == true;
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -238,106 +362,55 @@ class _PriceItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              isCryptoCurrency
-                  ? Web3Utils.formatCryptoCurrency(
-                      price.cryptoCost ?? BigInt.zero,
-                      currency: currency,
-                      decimals: decimals,
-                    )
-                  : NumberUtils.formatCurrency(
-                      amount: price.fiatCost ?? 0,
-                      currency: currency,
+        Text(
+          isCryptoCurrency
+              ? Web3Utils.formatCryptoCurrency(
+                  price.cryptoCost ?? BigInt.zero,
+                  currency: currency,
+                  decimals: decimals,
+                )
+              : NumberUtils.formatCurrency(
+                  amount: price.fiatCost ?? 0,
+                  currency: currency,
+                ),
+          style: Typo.mediumPlus.copyWith(
+            color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (price.supportedNetworks.isNotEmpty) ...[
+          SizedBox(width: Spacing.xSmall),
+          SizedBox(
+            height: 20.w,
+            child: Wrap(
+              spacing: Spacing.extraSmall,
+              children: price.supportedNetworks
+                  .map(
+                    (chainId) => ChainQuery(
+                      chainId: chainId,
+                      builder: (
+                        chain, {
+                        required isLoading,
+                      }) {
+                        if (isLoading) {
+                          return const SizedBox.shrink();
+                        }
+                        return LemonNetworkImage(
+                          imageUrl: chain?.logoUrl ?? '',
+                          width: 20.w,
+                          height: 20.w,
+                          borderRadius: BorderRadius.circular(20.r),
+                          placeholder: const SizedBox.shrink(),
+                        );
+                      },
                     ),
-              style: Typo.mediumPlus.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+                  )
+                  .toList(),
             ),
-            if (price.supportedNetworks.isNotEmpty) ...[
-              SizedBox(height: Spacing.xSmall),
-              SizedBox(
-                height: 20.w,
-                child: ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => ChainQuery(
-                    chainId: price.supportedNetworks[index],
-                    builder: (
-                      chain, {
-                      required isLoading,
-                    }) {
-                      if (isLoading) {
-                        return const SizedBox.shrink();
-                      }
-                      return LemonNetworkImage(
-                        imageUrl: chain?.logoUrl ?? '',
-                        width: 20.w,
-                        height: 20.w,
-                        borderRadius: BorderRadius.circular(20.r),
-                        placeholder: const SizedBox.shrink(),
-                      );
-                    },
-                  ),
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: Spacing.extraSmall),
-                  itemCount: price.supportedNetworks.length,
-                ),
-              ),
-            ],
-            if (isStakingTicket || isWhitelistExclusive)
-              Padding(
-                padding: EdgeInsets.only(top: Spacing.xSmall),
-                child: Wrap(
-                  spacing: Spacing.xSmall,
-                  children: [
-                    if (isStakingTicket)
-                      LemonOutlineButton(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.superExtraSmall,
-                          vertical: 2.w,
-                        ),
-                        label: t.event.eventBuyTickets.stakingTicket,
-                        backgroundColor: LemonColor.white18,
-                        textColor: colorScheme.onPrimary,
-                        borderColor: colorScheme.outlineVariant,
-                      ),
-                    if (isWhitelistExclusive)
-                      LemonOutlineButton(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.superExtraSmall,
-                          vertical: 2.w,
-                        ),
-                        label: t.event.eventBuyTickets.whileListedTicket,
-                        backgroundColor: LemonColor.white18,
-                        textColor: colorScheme.onPrimary,
-                        borderColor: colorScheme.outlineVariant,
-                      ),
-                  ],
-                ),
-              ),
-          ],
-        ),
-        TicketCounter(
-          count: count,
-          onDecrease: onDecrease,
-          onIncrease: onIncrease,
-          disabled: disabled,
-          limit: ticketType.limit,
-          onPressDisabled: () {
-            SnackBarUtils.showError(
-              title: t.common.error.label,
-              message: t.event.eventBuyTickets.multipleTicketsError,
-            );
-          },
-        ),
+          ),
+        ],
       ],
     );
   }
