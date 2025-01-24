@@ -30,6 +30,7 @@ fragment eventTicketFragment on Ticket {
 
 const eventTicketPriceFragment = '''
 fragment eventTicketPriceFragment on EventTicketPrice {
+  default
   cost
   currency
   payment_accounts

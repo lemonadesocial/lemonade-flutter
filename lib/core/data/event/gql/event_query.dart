@@ -223,9 +223,11 @@ const eventFragment = '''
     }
     event_ticket_types {
       _id
+      default
       prices {
         currency
         cost
+        default
       }
     }
     tags

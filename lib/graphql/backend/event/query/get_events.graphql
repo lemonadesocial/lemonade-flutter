@@ -28,6 +28,7 @@ query GetEvents(
     ...EventFields
     event_ticket_types {
       _id
+      default
       prices {
         ...EventTicketPrice
       }
