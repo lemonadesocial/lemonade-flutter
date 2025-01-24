@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -10,7 +11,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class PayButton extends StatelessWidget {
-  const PayButton({
+  PayButton({
     super.key,
     required this.selectedCurrency,
     required this.selectedPaymentAccount,
@@ -24,6 +25,7 @@ class PayButton extends StatelessWidget {
   final PaymentAccount? selectedPaymentAccount;
   final bool disabled;
   final bool isFree;
+  final debouncer = Debouncer(milliseconds: 300);
 
   BigInt get _totalCryptoAmount {
     return (pricingInfo?.cryptoTotal ?? BigInt.zero) +
@@ -65,12 +67,14 @@ class PayButton extends StatelessWidget {
             : t.event.eventBuyTickets.payAmount(amount: amountText),
         onTap: () {
           if (disabled) return;
-          AutoRouter.of(context).push(
-            EventBuyTicketsProcessingRoute(
-              selectedPaymentAccount: selectedPaymentAccount,
-              selectedCurrency: selectedCurrency,
-            ),
-          );
+          debouncer.run(() {
+            AutoRouter.of(context).push(
+              EventBuyTicketsProcessingRoute(
+                selectedPaymentAccount: selectedPaymentAccount,
+                selectedCurrency: selectedCurrency,
+              ),
+            );
+          });
         },
       ),
     );
