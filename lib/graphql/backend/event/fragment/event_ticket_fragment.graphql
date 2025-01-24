@@ -2,6 +2,7 @@
 # import '../../payment/fragment/payment_fragment.graphql;
 
 fragment EventTicketPrice on EventTicketPrice {
+  default
   cost
   currency
   payment_accounts

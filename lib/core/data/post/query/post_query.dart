@@ -38,6 +38,7 @@ const postFragment = '''
     }
     event_ticket_types {
       _id
+      default
       prices {
         ...eventTicketPriceFragment
       }
