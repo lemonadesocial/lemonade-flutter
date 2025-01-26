@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.50.3](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.2...v1.50.3) (2025-01-24)
+
+
+### Bug Fixes
+
+* add debounce to prevent potential duplicate buy ticket request ([#858](https://github.com/lemonadesocial/lemonade-flutter/issues/858)) ([0ef9e72](https://github.com/lemonadesocial/lemonade-flutter/commit/0ef9e7277496c37eb2bf116d5e1034688dab4978))
+* show wrong default ticket price on event home card ([#856](https://github.com/lemonadesocial/lemonade-flutter/issues/856)) ([7c77e42](https://github.com/lemonadesocial/lemonade-flutter/commit/7c77e426dc3916f554437b6fb805d35ed14938c4))
+
 ## [1.50.2](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.1...v1.50.2) (2025-01-22)
 
 
