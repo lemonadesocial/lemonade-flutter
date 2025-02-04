@@ -92,7 +92,11 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
                 toolbarType: ToolbarType.nativeScrollable,
               ),
               otherOptions: OtherOptions(
-                height: MediaQuery.of(context).size.height * 0.9,
+                height: MediaQuery.sizeOf(context).height -
+                    MediaQuery.paddingOf(context).vertical -
+                    AppBar().preferredSize.height -
+                    MediaQuery.viewInsetsOf(context).vertical -
+                    (2 * Spacing.medium), // Account for vertical margins
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
                   border: Border.all(
