@@ -38,6 +38,14 @@ class EventAcceptedExportItem extends StatelessWidget {
     this.onTapCancelTicket,
   });
 
+  String? get displayedPaymentAmount {
+    final number = num.tryParse(eventAccepted.paymentAmount ?? '');
+    if (number == null) {
+      return null;
+    }
+    return '${eventAccepted.paymentAmount} ${eventAccepted.currency}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -89,20 +97,22 @@ class EventAcceptedExportItem extends StatelessWidget {
                       ),
                       label: eventAccepted.ticketType ?? '',
                     ),
-                    SizedBox(
-                      width: Spacing.extraSmall,
-                    ),
-                    _InfoTag(
-                      icon: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icCashVariant.svg(
-                          width: 15.w,
-                          height: 15.w,
-                          colorFilter: filter,
-                        ),
+                    if (displayedPaymentAmount != null) ...[
+                      SizedBox(
+                        width: Spacing.extraSmall,
                       ),
-                      label: '\$${eventAccepted.paymentAmount}',
-                    ),
+                      _InfoTag(
+                        icon: ThemeSvgIcon(
+                          color: colorScheme.onSecondary,
+                          builder: (filter) => Assets.icons.icCashVariant.svg(
+                            width: 15.w,
+                            height: 15.w,
+                            colorFilter: filter,
+                          ),
+                        ),
+                        label: displayedPaymentAmount!,
+                      ),
+                    ],
                   ],
                 ),
               ),
