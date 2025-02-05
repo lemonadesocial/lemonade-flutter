@@ -1,0 +1,26 @@
+fragment TokenRewardSettingFields on TicketTokenRewardSetting {
+  _id
+  title
+  photo
+  vault
+  currency_address
+  event
+  rewards {
+    ticket_type
+    reward_per_ticket
+  }
+  vault_expanded {
+    _id
+    title
+    network
+    address
+    tokens {
+      address
+      symbol
+      name
+      decimals
+      icon
+      icon_url
+    }
+  }
+} 

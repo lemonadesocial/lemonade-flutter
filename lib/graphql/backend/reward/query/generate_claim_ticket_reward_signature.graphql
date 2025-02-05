@@ -1,0 +1,14 @@
+#import "../fragment/token_reward_setting_fragment.graphql"
+
+query GenerateClaimTicketRewardSignature($payment: MongoID, $event: MongoID!) {
+  generateClaimTicketRewardSignature(payment: $payment, event: $event) {
+    settings {
+      ...TokenRewardSettingFields
+    }
+    signature {
+      claimId
+      signature
+      args
+    }
+  }
+} 
