@@ -1,7 +1,7 @@
 import 'package:app/core/data/reward/dtos/reward_signature_response_dto/reward_signature_response_dto.dart';
-import 'package:app/core/data/reward/dtos/ticket_token_reward_setting_dto/ticket_token_reward_setting_dto.dart';
+import 'package:app/core/data/reward/dtos/token_reward_setting_dto/token_reward_setting_dto.dart';
 import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
-import 'package:app/core/domain/reward/entities/ticket_token_reward_setting.dart';
+import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/domain/reward/reward_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -19,7 +19,7 @@ class RewardRepositoryImpl implements RewardRepository {
   final _client = getIt<AppGQL>().client;
 
   @override
-  Future<Either<Failure, List<TicketTokenRewardSetting>>>
+  Future<Either<Failure, List<TokenRewardSetting>>>
       listCheckinTokenRewardSettings({
     required String event,
     List<String>? ticketTypes,
@@ -41,8 +41,8 @@ class RewardRepositoryImpl implements RewardRepository {
     return Right(
       result.parsedData!.listCheckinTokenRewardSettings
           .map(
-            (dto) => TicketTokenRewardSetting.fromDto(
-              TicketTokenRewardSettingDto.fromJson(dto.toJson()),
+            (dto) => TokenRewardSetting.fromDto(
+              TokenRewardSettingDto.fromJson(dto.toJson()),
             ),
           )
           .toList(),
@@ -50,7 +50,7 @@ class RewardRepositoryImpl implements RewardRepository {
   }
 
   @override
-  Future<Either<Failure, List<TicketTokenRewardSetting>>>
+  Future<Either<Failure, List<TokenRewardSetting>>>
       listTicketTokenRewardSettings({
     required String event,
     List<String>? ticketTypes,
@@ -73,8 +73,8 @@ class RewardRepositoryImpl implements RewardRepository {
     return Right(
       result.parsedData!.listTicketTokenRewardSettings
           .map(
-            (dto) => TicketTokenRewardSetting.fromDto(
-              TicketTokenRewardSettingDto.fromJson(dto.toJson()),
+            (dto) => TokenRewardSetting.fromDto(
+              TokenRewardSettingDto.fromJson(dto.toJson()),
             ),
           )
           .toList(),

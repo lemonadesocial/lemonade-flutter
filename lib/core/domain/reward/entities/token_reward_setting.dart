@@ -1,14 +1,14 @@
-import 'package:app/core/data/reward/dtos/ticket_token_reward_setting_dto/ticket_token_reward_setting_dto.dart';
+import 'package:app/core/data/reward/dtos/token_reward_setting_dto/token_reward_setting_dto.dart';
 import 'package:app/core/domain/reward/entities/ticket_type_reward.dart';
 import 'package:app/core/domain/reward/entities/token_reward_vault.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'ticket_token_reward_setting.freezed.dart';
-part 'ticket_token_reward_setting.g.dart';
+part 'token_reward_setting.freezed.dart';
+part 'token_reward_setting.g.dart';
 
 @freezed
-class TicketTokenRewardSetting with _$TicketTokenRewardSetting {
-  factory TicketTokenRewardSetting({
+class TokenRewardSetting with _$TokenRewardSetting {
+  factory TokenRewardSetting({
     String? id,
     String? title,
     String? photo,
@@ -17,10 +17,10 @@ class TicketTokenRewardSetting with _$TicketTokenRewardSetting {
     String? event,
     List<TicketTypeReward>? rewards,
     TokenRewardVault? vaultExpanded,
-  }) = _TicketTokenRewardSetting;
+  }) = _TokenRewardSetting;
 
-  factory TicketTokenRewardSetting.fromDto(TicketTokenRewardSettingDto dto) =>
-      TicketTokenRewardSetting(
+  factory TokenRewardSetting.fromDto(TokenRewardSettingDto dto) =>
+      TokenRewardSetting(
         id: dto.id,
         title: dto.title,
         photo: dto.photo,
@@ -33,6 +33,6 @@ class TicketTokenRewardSetting with _$TicketTokenRewardSetting {
             : null,
       );
 
-  factory TicketTokenRewardSetting.fromJson(Map<String, dynamic> json) =>
-      _$TicketTokenRewardSettingFromJson(json);
+  factory TokenRewardSetting.fromJson(Map<String, dynamic> json) =>
+      _$TokenRewardSettingFromJson(json);
 }

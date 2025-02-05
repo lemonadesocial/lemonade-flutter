@@ -1,5 +1,5 @@
 import 'package:app/core/data/reward/dtos/reward_signature_response_dto/reward_signature_response_dto.dart';
-import 'package:app/core/domain/reward/entities/ticket_token_reward_setting.dart';
+import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'reward_signature_response.freezed.dart';
@@ -8,7 +8,7 @@ part 'reward_signature_response.g.dart';
 @freezed
 class RewardSignatureResponse with _$RewardSignatureResponse {
   factory RewardSignatureResponse({
-    List<TicketTokenRewardSetting>? settings,
+    List<TokenRewardSetting>? settings,
     TokenRewardSignature? signature,
   }) = _RewardSignatureResponse;
 
@@ -16,9 +16,8 @@ class RewardSignatureResponse with _$RewardSignatureResponse {
     RewardSignatureResponseDto dto,
   ) =>
       RewardSignatureResponse(
-        settings: dto.settings
-            ?.map((s) => TicketTokenRewardSetting.fromDto(s))
-            .toList(),
+        settings:
+            dto.settings?.map((s) => TokenRewardSetting.fromDto(s)).toList(),
         signature: dto.signature != null
             ? TokenRewardSignature.fromDto(dto.signature!)
             : null,

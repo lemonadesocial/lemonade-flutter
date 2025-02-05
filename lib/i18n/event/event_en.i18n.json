@@ -896,5 +896,14 @@
     "eventPendingInvites": {
         "pendingCohostRequestTitle": "Accept Co-host request",
         "pendingCohostRequestDescription": "sent by $name"
+    },
+    "tokenReward": {
+        "rewardPerTicket": "$amount per ticket",
+        "onClaimingSelectTickets": "On claiming select tickets",
+        "claimYourReward": "Claim your reward",
+        "claimYourRewardDescription": "You have been rewarded with $amount as rewards for purchasing $n tickets. Claim now!",
+        "claimYourRewardScreenDescription": "Congratulations! You can now claim rewards against your $n tickets. You can do this later inside the event.",
+        "rewardClaimed": "Reward Claimed!",
+        "rewardClaimedDescription": "Congratulations! Your reward of $amount has been deposited into your wallet successfully."
     }
 }
