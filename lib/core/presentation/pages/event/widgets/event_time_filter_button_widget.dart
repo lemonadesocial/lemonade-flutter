@@ -24,13 +24,21 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
   final GlobalKey _btnKey = GlobalKey();
   bool isVisible = false;
   double y = 0;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
-  late final AnimationController _animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 200),
-  );
-  late final Animation<double> _animation =
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   void dispose() {
@@ -115,13 +123,19 @@ class _EventTimeFilterButtonState extends State<EventTimeFilterButton>
     );
   }
 
-  _show() {
-    isVisible = true;
+  void _show() {
+    if (!mounted) return;
+    setState(() {
+      isVisible = true;
+    });
     _animationController.forward();
   }
 
-  _hide() {
-    isVisible = false;
+  void _hide() {
+    if (!mounted) return;
+    setState(() {
+      isVisible = false;
+    });
     _animationController.reverse();
   }
 
