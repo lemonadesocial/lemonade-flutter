@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/accept_event_input/accept_event_input.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -106,6 +107,23 @@ class _GuestEventDetailOneClickRedeemButtonViewState
       throw Exception(acceptResult.fold((l) => l, (r) => null));
     }
     final eventRsvp = acceptResult.fold((l) => null, (r) => r);
+
+    final rewardSignatureResponse =
+        (await getIt<RewardRepository>().generateClaimTicketRewardSignature(
+      event: widget.event.id ?? '',
+      // No payment ID since this is redeem flow
+    ))
+            .fold((failure) => null, (response) => response);
+
+    if (rewardSignatureResponse != null &&
+        (rewardSignatureResponse.settings ?? []).isNotEmpty) {
+      await AutoRouter.of(context).push(
+        ClaimTokenRewardRoute(
+          rewardSignatureResponse: rewardSignatureResponse,
+        ),
+      );
+    }
+
     AutoRouter.of(context).replace(
       RSVPEventSuccessPopupRoute(
         event: widget.event,

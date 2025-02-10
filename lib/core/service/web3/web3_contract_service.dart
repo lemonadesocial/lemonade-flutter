@@ -5,6 +5,7 @@ import 'package:app/core/service/web3/lemonade_relay/contracts/lemonade_payment_
 import 'package:app/core/service/web3/lemonade_relay/contracts/lemonade_relay_payment_contract_abi.dart';
 import 'package:app/core/service/web3/stake/contracts/lemaonde_stake_vault_contract_abi.dart';
 import 'package:app/core/service/web3/stake/contracts/lemonade_stake_factory_contract_abi.dart';
+import 'package:app/core/service/web3/token_reward/contracts/lemonande_token_reward_vault_registry_abi_contract.dart';
 import 'package:web3dart/web3dart.dart';
 
 class Web3ContractService {
@@ -53,6 +54,15 @@ class Web3ContractService {
   static DeployedContract getStakeVaultContract(String contractAddress) {
     return DeployedContract(
       ContractAbi.fromJson(lemonadeStakeVaultContractAbi, ''),
+      EthereumAddress.fromHex(contractAddress),
+    );
+  }
+
+  static DeployedContract getTokenRewardVaultRegistryContract(
+    String contractAddress,
+  ) {
+    return DeployedContract(
+      ContractAbi.fromJson(lemonandeTokenRewardVaultRegistryAbiContract, ''),
       EthereumAddress.fromHex(contractAddress),
     );
   }

@@ -9,6 +9,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_rsvp.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item/select_ticket_item.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_submit_button.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
@@ -21,6 +22,7 @@ import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -201,6 +203,42 @@ class _SelectTicketViewState extends State<SelectTicketView> {
     );
   }
 
+  Future<void> _handleRewardAndNavigate({
+    required EventRsvp? eventRsvp,
+    int? ticketsCount,
+  }) async {
+    // Check for rewards
+    final rewardSignatureResponse =
+        (await getIt<RewardRepository>().generateClaimTicketRewardSignature(
+      event: widget.event.id ?? '',
+      // No payment ID since this is redeem flow
+    ))
+            .fold((failure) => null, (response) => response);
+
+    if (rewardSignatureResponse == null ||
+        (rewardSignatureResponse.settings ?? []).isEmpty == true) {
+      // No reward - proceed with normal flow
+      if (eventRsvp != null) {
+        _handleRedeemSingleTicketSuccess(eventRsvp: eventRsvp);
+      } else {
+        _handleRedeemMultipleTicketsSuccess(ticketsCount: ticketsCount);
+      }
+      return;
+    }
+
+    await AutoRouter.of(context).push(
+      ClaimTokenRewardRoute(
+        rewardSignatureResponse: rewardSignatureResponse,
+      ),
+    );
+    // Continue with normal flow regardless of claim result
+    if (eventRsvp != null) {
+      _handleRedeemSingleTicketSuccess(eventRsvp: eventRsvp);
+    } else {
+      _handleRedeemMultipleTicketsSuccess(ticketsCount: ticketsCount);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -240,7 +278,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                 // if guest already joined the event but
                 // buy additional tickets then go to pick tickets page
                 if (isAttending) {
-                  _handleRedeemMultipleTicketsSuccess(
+                  // _handleRedeemMultipleTicketsSuccess(
+                  //   ticketsCount: tickets.length,
+                  // );
+                  _handleRewardAndNavigate(
+                    eventRsvp: null,
                     ticketsCount: tickets.length,
                   );
                   return;
@@ -260,7 +302,11 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                       );
                 } else {
                   // go to event rsvp success with button go to pick my ticket page
-                  _handleRedeemMultipleTicketsSuccess();
+                  // _handleRedeemMultipleTicketsSuccess();
+                  _handleRewardAndNavigate(
+                    eventRsvp: null,
+                    ticketsCount: tickets.length,
+                  );
                 }
               },
             );
@@ -285,7 +331,10 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             state.maybeWhen(
               orElse: () => null,
               success: (eventRsvp) async {
-                _handleRedeemSingleTicketSuccess(eventRsvp: eventRsvp);
+                _handleRewardAndNavigate(
+                  eventRsvp: eventRsvp,
+                  ticketsCount: 1,
+                );
               },
             );
           },

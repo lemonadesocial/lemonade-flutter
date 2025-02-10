@@ -7,6 +7,8 @@ part 'token_reward_vault.g.dart';
 
 @freezed
 class TokenRewardVault with _$TokenRewardVault {
+  TokenRewardVault._();
+
   factory TokenRewardVault({
     String? id,
     String? title,
@@ -25,4 +27,16 @@ class TokenRewardVault with _$TokenRewardVault {
 
   factory TokenRewardVault.fromJson(Map<String, dynamic> json) =>
       _$TokenRewardVaultFromJson(json);
+
+  // Custom equality based on id and address
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is TokenRewardVault &&
+        other.id == id &&
+        other.address == address;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, address);
 }

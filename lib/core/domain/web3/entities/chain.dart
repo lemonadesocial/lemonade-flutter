@@ -22,6 +22,7 @@ class Chain with _$Chain {
     double? safeConfirmations,
     String? relayPaymentContract,
     String? stakePaymentContract,
+    String? rewardRegistryContract,
   }) = _Chain;
 
   int get completedBlockTime =>
@@ -49,6 +50,7 @@ class Chain with _$Chain {
       safeConfirmations: dto.safeConfirmations,
       relayPaymentContract: dto.relayPaymentContract,
       stakePaymentContract: dto.stakePaymentContract,
+      rewardRegistryContract: dto.rewardRegistryContract,
     );
   }
 }
