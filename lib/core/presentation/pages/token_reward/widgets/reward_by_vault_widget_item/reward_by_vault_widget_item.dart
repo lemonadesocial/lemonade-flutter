@@ -1,4 +1,5 @@
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:app/core/domain/reward/entities/reward_token.dart';
 import 'package:app/core/domain/reward/entities/ticket_type_reward.dart';
 import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
@@ -7,6 +8,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -20,13 +23,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RewardByVaultWidgetItem extends StatelessWidget {
   final List<TokenRewardSetting> tokenRewardSettings;
+  final Function(TokenRewardVault) onTapClaim;
+  final TokenRewardSignature signature;
+
   const RewardByVaultWidgetItem({
     super.key,
     required this.tokenRewardSettings,
     required this.onTapClaim,
+    required this.signature,
   });
-
-  final Function(TokenRewardVault) onTapClaim;
 
   TokenRewardVault? get vault => tokenRewardSettings.firstOrNull?.vaultExpanded;
 
@@ -117,12 +122,30 @@ class RewardByVaultWidgetItem extends StatelessWidget {
                               },
                             );
                           }
-                          return LinearGradientButton.primaryButton(
-                            radius: BorderRadius.circular(LemonRadius.normal),
-                            label: t.common.actions.claim,
-                            onTap: () {
-                              if (vault == null) return;
-                              onTapClaim(vault!);
+                          return FutureBuilder<bool>(
+                            future: vault == null || chain == null
+                                ? Future.value(false)
+                                : TokenRewardUtils.isClaimed(
+                                    claimId: signature.claimId ?? '',
+                                    vault: vault!,
+                                    chain: chain,
+                                  ),
+                            builder: (context, snapshot) {
+                              return Opacity(
+                                opacity: snapshot.data == true ? 0.5 : 1,
+                                child: LinearGradientButton.primaryButton(
+                                  radius:
+                                      BorderRadius.circular(LemonRadius.normal),
+                                  label: snapshot.data == true
+                                      ? StringUtils.capitalize(t.common.claimed)
+                                      : t.common.actions.claim,
+                                  onTap: () {
+                                    if (snapshot.data == true) return;
+                                    if (vault == null) return;
+                                    onTapClaim(vault!);
+                                  },
+                                ),
+                              );
                             },
                           );
                         },

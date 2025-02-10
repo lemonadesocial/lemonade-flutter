@@ -1,3 +1,4 @@
+import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/domain/reward/entities/token_reward_vault.dart';
 import 'package:app/core/presentation/pages/token_reward/widgets/reward_by_vault_widget_item/reward_by_vault_widget_item.dart';
@@ -10,11 +11,14 @@ import 'package:flutter/material.dart';
 class ClaimMultipleTokenRewardsView extends StatelessWidget {
   final Function(TokenRewardVault) onTapClaim;
   final VoidCallback onTapDoItLater;
+  final TokenRewardSignature signature;
+
   const ClaimMultipleTokenRewardsView({
     super.key,
     required this.rewardSettingsGroupByVault,
     required this.onTapClaim,
     required this.onTapDoItLater,
+    required this.signature,
   });
 
   final Map<TokenRewardVault?, List<TokenRewardSetting>>
@@ -55,6 +59,7 @@ class ClaimMultipleTokenRewardsView extends StatelessWidget {
                           onTapClaim: (vault) {
                             onTapClaim(vault);
                           },
+                          signature: signature,
                           tokenRewardSettings: rewardSettingsGroupByVault.values
                               .elementAt(index),
                         );

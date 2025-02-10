@@ -117,6 +117,7 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
                     },
                   )
                 : ClaimMultipleTokenRewardsView(
+                    signature: widget.rewardSignatureResponse.signature!,
                     rewardSettingsGroupByVault: rewardSettingsGroupByVault,
                     onTapClaim: (vault) {
                       _claim(vault);
