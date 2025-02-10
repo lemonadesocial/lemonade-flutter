@@ -9,6 +9,7 @@ import 'package:app/core/presentation/pages/token_reward/views/claim_token_rewar
 import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,6 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
     setState(() {
       _isLoading = true;
     });
-
     try {
       final walletAddress =
           context.read<WalletBloc>().state.activeSession?.address;
@@ -76,6 +76,10 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
           _isSuccess = true;
         });
       } else {
+        final t = Translations.of(context);
+        SnackBarUtils.showError(
+          message: t.event.tokenReward.claimRewardFailed,
+        );
         setState(() {
           _isSuccess = false;
           _isLoading = false;
