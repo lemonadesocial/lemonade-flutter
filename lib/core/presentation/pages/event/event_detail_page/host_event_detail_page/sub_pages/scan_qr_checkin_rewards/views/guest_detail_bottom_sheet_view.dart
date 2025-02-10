@@ -199,8 +199,11 @@ class _ViewApplicationInfoView extends StatelessWidget {
       options: Options$Query$GetEventApplicationAnswers(
         variables: Variables$Query$GetEventApplicationAnswers(
           event: event?.id ?? '',
-          user: ticket.assignedTo ?? '',
-          email: ticket.assignedEmail ?? '',
+          user:
+              ticket.assignedTo?.isNotEmpty == true ? ticket.assignedTo : null,
+          email: ticket.assignedEmail?.isNotEmpty == true
+              ? ticket.assignedEmail
+              : null,
         ),
       ),
       builder: (result, {refetch, fetchMore}) {
