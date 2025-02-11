@@ -183,7 +183,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
           height: Spacing.extraSmall,
         ),
         if (event.published != true) ...[
-          _PublishEventButton(),
+          const _PublishEventButton(),
         ],
         if (event.published == true) ...[
           Row(

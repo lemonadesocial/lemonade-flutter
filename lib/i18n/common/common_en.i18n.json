@@ -258,5 +258,6 @@
         "enterYourAnswer": "Enter your answer"
     },
     "cameraPermissionTitle": "Camera Access Required",
-    "cameraPermissionMessage": "Camera permission is needed to scan QR codes. Please enable it in settings."
+    "cameraPermissionMessage": "Camera permission is needed to scan QR codes. Please enable it in settings.",
+    "draft": "Draft"
 }
