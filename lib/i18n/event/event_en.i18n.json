@@ -624,6 +624,7 @@
     "eventPublish": {
         "eventPublishTitle": "Publish your event",
         "eventPublishDescription": "Your guide to crafting an unforgettable event!",
+        "eventPublishDescription2": "This event is a draft and visible only to hosts. Guests cannot view or register to this event until it is published.",
         "eventPublishSuccess": "Your event is successfully published!",
         "addTickets": "Add tickets",
         "addCoverPhoto": "Add cover photo",
