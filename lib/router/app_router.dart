@@ -50,6 +50,10 @@ class AppRouter extends $AppRouter {
           ],
         ),
         AutoRoute(
+          path: '/claim-token-reward',
+          page: ClaimTokenRewardRoute.page,
+        ),
+        AutoRoute(
           path: '/me',
           page: MyProfileRoute.page,
         ),
@@ -404,6 +408,12 @@ final eventDetailRoutes = AutoRoute(
         ),
       ],
     ),
+    AutoRoute(
+      page: EventDetailClaimTokenRewardRoute.page,
+    ),
+    AutoRoute(
+      page: ClaimTokenRewardRoute.page,
+    ),
   ],
 );
 
@@ -431,6 +441,9 @@ final eventBuyTicketsRoutes = AutoRoute(
     ),
     AutoRoute(
       page: EventTicketsPaymentMethodRoute.page,
+    ),
+    AutoRoute(
+      page: ClaimTokenRewardRoute.page,
     ),
     AutoRoute(
       page: EventPickMyTicketRoute.page,

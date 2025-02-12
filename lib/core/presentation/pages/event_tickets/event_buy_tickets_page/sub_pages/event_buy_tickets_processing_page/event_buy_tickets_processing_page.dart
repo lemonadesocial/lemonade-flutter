@@ -15,6 +15,7 @@ import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/payment_card/payment_card.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
@@ -347,6 +348,46 @@ class _EventBuyTicketsProcessingPageViewState
     );
   }
 
+  Future<void> _handleRewardAndNavigate({
+    required BuildContext context,
+    required Event event,
+    Payment? payment,
+    bool isRedeem = false,
+    int? ticketsCount,
+  }) async {
+    // Check for rewards
+    final rewardSignatureResponse =
+        (await getIt<RewardRepository>().generateClaimTicketRewardSignature(
+      event: event.id ?? '',
+      payment: payment?.id,
+    ))
+            .fold((failure) => null, (response) => response);
+
+    if (rewardSignatureResponse == null ||
+        (rewardSignatureResponse.settings ?? []).isEmpty == true) {
+      // No reward - proceed with normal flow
+      if (isRedeem) {
+        _onNavigateWhenRedeemSucess(context, ticketsCount: ticketsCount);
+      } else {
+        _onNavigateWhenPaymentConfirmed(context, event, payment);
+      }
+      return;
+    }
+
+    // Push the claim screen and wait for result
+    await AutoRouter.of(context).push(
+      ClaimTokenRewardRoute(
+        rewardSignatureResponse: rewardSignatureResponse,
+      ),
+    );
+
+    if (isRedeem) {
+      _onNavigateWhenRedeemSucess(context, ticketsCount: ticketsCount);
+    } else {
+      _onNavigateWhenPaymentConfirmed(context, event, payment);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -366,8 +407,10 @@ class _EventBuyTicketsProcessingPageViewState
                       );
                   return;
                 }
-                _onNavigateWhenRedeemSucess(
-                  context,
+                await _handleRewardAndNavigate(
+                  context: context,
+                  event: event,
+                  isRedeem: true,
                   ticketsCount: ticketsCount,
                 );
               },
@@ -386,10 +429,10 @@ class _EventBuyTicketsProcessingPageViewState
               return _handleEventRequireApproval(context);
             }
             if (isFree) {
-              _onNavigateWhenPaymentConfirmed(
-                context,
-                event,
-                payment,
+              _handleRewardAndNavigate(
+                context: context,
+                event: event,
+                payment: payment,
               );
               return;
             }
@@ -404,10 +447,10 @@ class _EventBuyTicketsProcessingPageViewState
                     );
               },
               onPaymentDone: (payment) {
-                _onNavigateWhenPaymentConfirmed(
-                  context,
-                  event,
-                  payment,
+                _handleRewardAndNavigate(
+                  context: context,
+                  event: event,
+                  payment: payment,
                 );
               },
             );
@@ -446,10 +489,10 @@ class _EventBuyTicketsProcessingPageViewState
               return _handleEventRequireApproval(context);
             }
             if (isFree) {
-              _onNavigateWhenPaymentConfirmed(
-                context,
-                event,
-                data.payment,
+              _handleRewardAndNavigate(
+                context: context,
+                event: event,
+                payment: data.payment,
               );
               return;
             }
@@ -467,10 +510,10 @@ class _EventBuyTicketsProcessingPageViewState
                     );
               },
               onPaymentDone: (payment) {
-                _onNavigateWhenPaymentConfirmed(
-                  context,
-                  event,
-                  payment,
+                _handleRewardAndNavigate(
+                  context: context,
+                  event: event,
+                  payment: payment,
                 );
               },
             );
@@ -519,10 +562,15 @@ class _EventBuyTicketsProcessingPageViewState
           }
           if (eventId == event.id) {
             _waitForNotificationTimer.cancel();
-            _onNavigateWhenPaymentConfirmed(
-              context,
-              event,
-              payment,
+            // _onNavigateWhenPaymentConfirmed(
+            //   context,
+            //   event,
+            //   payment,
+            // );
+            _handleRewardAndNavigate(
+              context: context,
+              event: event,
+              payment: payment,
             );
           }
         },

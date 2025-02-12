@@ -1,0 +1,7 @@
+#import "../fragment/token_reward_setting_fragment.graphql"
+
+query ListTicketTokenRewardSettings($ticketTypes: [MongoID!], $event: MongoID!) {
+  listTicketTokenRewardSettings(ticket_types: $ticketTypes, event: $event) {
+    ...TokenRewardSettingFields
+  }
+} 

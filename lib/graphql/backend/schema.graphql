@@ -50,7 +50,7 @@ type Query {
   getEventInvitation(event: MongoID!): EventInvitation
   generateEventInvitationUrl(event: MongoID!): GenerateEventInvitationUrlResponse
   getEventInvitationUrl(shortid: String!, tk: String): EventInvitationUrl
-  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState, search: String): GetEventJoinRequestsResponse!
+  getEventJoinRequests(skip: Int! = 0, limit: Int! = 25, event: MongoID!, state: EventJoinRequestState, search: String, payment_expired: Boolean): GetEventJoinRequestsResponse!
   getMyEventJoinRequest(event: MongoID!): EventJoinRequest
   getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
@@ -91,10 +91,29 @@ type Query {
   getSafeFreeLimit(network: String!): FreeSafeInitInfo!
   getInitSafeTransaction(input: GetInitSafeTransactionInput!): RawTransaction!
   getSites(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], active: Boolean): [Site!]!
-  listSpaces(with_my_spaces: Boolean, with_public_spaces: Boolean, with_subscribed_spaces: Boolean): [Space!]!
+  listSpaces(with_my_spaces: Boolean, with_public_spaces: Boolean, roles: [SpaceRole!]): [Space!]!
   getSpace(slug: String, _id: MongoID): Space
   canUseSpaceSlug(slug: String!): Boolean!
-  listSpaceMembers(space: MongoID!, role: SpaceRole, state: SpaceMembershipState, visible: Boolean): [SpaceMember!]!
+  listSpaceMembers(
+    skip: Int
+    limit: Int
+    space: MongoID!
+    role: SpaceRole @deprecated(reason: "Use `roles` instead. Avoid using both `role` and `roles` simultaneously to prevent potential bugs.")
+    roles: [SpaceRole!]
+    state: SpaceMembershipState
+    visible: Boolean
+    search: String
+
+    """
+    - true: Lists deleted space members.
+    - false: Lists all space members that are not deleted.
+    - Not specified: Lists all space members.
+    """
+    deletion: Boolean
+    tags: [MongoID!]
+    sort: SortInput
+  ): ListSpaceMembersResponse!
+  getSpaceMember(_id: MongoID!): SpaceMember!
   listSpaceRoleFeatures(space: MongoID!, role: SpaceRole!): ListSpaceRoleFeaturesResponse!
   getStore(promotion: MongoID, _id: MongoID): Store
   getStores(skip: Int! = 0, limit: Int! = 25, user: MongoID, longitude: Float, latitude: Float, country: String, region: String, city: String, postal: String, tags: String): [Store!]!
@@ -152,6 +171,12 @@ type Query {
   getVaultSalt(name: String!, type: String!): String!
   getMySpaceEventRequests(skip: Int! = 0, limit: Int! = 25, space: MongoID!, state: EventJoinRequestState): GetSpaceEventRequestsResponse!
   getSpaceEventRequests(skip: Int! = 0, limit: Int! = 25, space: MongoID!, state: EventJoinRequestState): GetSpaceEventRequestsResponse!
+  listSpaceTags(space: MongoID!): [SpaceTagBase!]!
+  listRewardVaults: [TokenRewardVault!]!
+  listCheckinTokenRewardSettings(ticket_types: [MongoID!], event: MongoID!): [CheckinTokenRewardSetting!]!
+  listTicketTokenRewardSettings(ticket_types: [MongoID!], event: MongoID!): [TicketTokenRewardSetting!]!
+  generateClaimCheckinRewardSignature(event: MongoID!): ClaimCheckinRewardSignatureResponse
+  generateClaimTicketRewardSignature(payment: MongoID, event: MongoID!): ClaimTicketRewardSignatureResponse
 }
 
 type Badge {
@@ -501,6 +526,7 @@ type Event {
   """Show secondary CTA button text"""
   cta_secondary_visible: Boolean
   description: String
+  description_plain_text: String
   events: [MongoID!]
   frequent_questions: [FrequentQuestion!]
   guest_limit: Float
@@ -561,6 +587,7 @@ type Event {
   welcome_text: String
   welcome_video: Video
   zones_menu_text: String
+  checkin_menu_text: String
 
   """Number of users who have tickets"""
   attending_count: Float
@@ -582,6 +609,7 @@ type Event {
   url_go: String
   telegram_channels: [TelegramChannel!]
   broadcasts: [Broadcast!]
+  space_tags: [SpaceTagBase!]
   event_ticket_types: [EventTicketType!]
   pending_request_count: Float
   sessions: [EventSession!]
@@ -786,6 +814,20 @@ type BroadcastMetaData {
   static_thumbnail: String
 }
 
+type SpaceTagBase {
+  _id: MongoID!
+  space: MongoID!
+  tag: String!
+  color: String!
+  type: SpaceTagType!
+  targets: [String!]
+}
+
+enum SpaceTagType {
+  event
+  member
+}
+
 type EventTicketType {
   _id: MongoID!
   active: Boolean
@@ -945,9 +987,8 @@ type SpaceBase {
   private: Boolean
   state: SpaceState!
   personal: Boolean
+  followers: [MongoID!]
   daos: SpaceDao
-  event_tags: [SpaceTag!]
-  member_tags: [SpaceTag!]
   tint_color: String
   slug: String
   handle_twitter: String
@@ -965,9 +1006,7 @@ type SpaceBase {
 }
 
 enum SpaceState {
-  inactive
   active
-  comingSoon
   archived
 }
 
@@ -975,11 +1014,6 @@ type SpaceDao {
   network: String!
   address: String!
   name: String!
-}
-
-type SpaceTag {
-  title: String!
-  color: String
 }
 
 type Store {
@@ -1184,6 +1218,8 @@ type TicketBase {
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
+  payment_id: MongoID
+  metadata: JSON
   assigned_to_info: ConfidentialUserInfo
 }
 
@@ -1798,6 +1834,10 @@ enum EmailTemplateType {
   buyer_store_order_delivered
   buyer_store_order_cancelled
   buyer_store_order_tracking
+  space_add_admin_invitation
+  space_add_ambassador_invitation
+  space_add_subscriber_manually_invitation
+  space_request_pinning_event
 }
 
 type RecipientDetail {
@@ -1896,6 +1936,9 @@ type RequestedTicket {
 type JoinRequestPayment {
   _id: MongoID!
   state: NewPaymentState!
+  buyer_info: BuyerInfo
+  ref_data: JSON
+  transfer_metadata: JSON
 }
 
 enum NewPaymentState {
@@ -1905,6 +1948,11 @@ enum NewPaymentState {
   await_capture
   succeeded
   refunded
+}
+
+type BuyerInfo {
+  email: String!
+  name: String
 }
 
 type EventPaymentSummary {
@@ -2157,11 +2205,6 @@ type NewPayment {
   join_request: EventJoinRequestBase
 }
 
-type BuyerInfo {
-  email: String!
-  name: String
-}
-
 type BillingInfo {
   _id: MongoID
   recipient_name: String
@@ -2244,6 +2287,7 @@ type Currency {
 
 type Chain {
   active: Boolean
+  platform: String!
   chain_id: String!
   name: String!
   code_name: String!
@@ -2267,6 +2311,7 @@ type Chain {
   escrow_manager_contract: String
   relay_payment_contract: String
   stake_payment_contract: String
+  reward_registry_contract: String
   eas_event_contract: String
   eas_graphql_url: String
   aragon_network: String
@@ -2341,12 +2386,14 @@ type Notification {
   ref_user: MongoID
   ref_store_order: MongoID
   ref_room: MongoID
+  ref_space: MongoID
   is_seen: Boolean
   from_expanded: User
   ref_user_expanded: User
   ref_event_expanded: Event
   ref_store_order_expanded: StoreOrder
   ref_room_expanded: Room
+  ref_space_expanded: Space
 }
 
 enum NotificationType {
@@ -2408,6 +2455,8 @@ enum NotificationType {
   store_order_in_transit
   store_order_pending
   store_order_preparing
+  space_member_added
+  space_event_pin_request
 }
 
 type StoreOrder {
@@ -2561,6 +2610,40 @@ type RoomOffer {
   provider_network: String!
   provider_id: String!
   position: Float
+}
+
+type Space {
+  _id: MongoID!
+  title: String!
+  description: String
+  creator: MongoID!
+
+  """Private space requires moderation for membership"""
+  private: Boolean
+  state: SpaceState!
+  personal: Boolean
+  followers: [MongoID!]
+  daos: SpaceDao
+  tint_color: String
+  slug: String
+  handle_twitter: String
+  handle_instagram: String
+  handle_youtube: String
+  handle_tiktok: String
+  handle_linkedin: String
+  website: String
+  address: Address
+  image_avatar: MongoID
+  image_cover: MongoID
+
+  """External events are listed on this space"""
+  listed_events: [MongoID!]
+  followed: Boolean
+  is_ambassador: Boolean
+  admins: [User!]
+  creator_expanded: User
+  image_avatar_expanded: File
+  image_cover_expanded: File
 }
 
 input NotificationTypeFilterInput {
@@ -2822,61 +2905,50 @@ type SitePassport {
   crowdfundAddress: JSON
 }
 
-type Space {
-  _id: MongoID!
-  title: String!
-  description: String
-  creator: MongoID!
+enum SpaceRole {
+  unsubscriber
+  subscriber
+  ambassador
+  admin
+  creator
+}
 
-  """Private space requires moderation for membership"""
-  private: Boolean
-  state: SpaceState!
-  personal: Boolean
-  daos: SpaceDao
-  event_tags: [SpaceTag!]
-  member_tags: [SpaceTag!]
-  tint_color: String
-  slug: String
-  handle_twitter: String
-  handle_instagram: String
-  handle_youtube: String
-  handle_tiktok: String
-  handle_linkedin: String
-  website: String
-  address: Address
-  image_avatar: MongoID
-  image_cover: MongoID
-
-  """External events are listed on this space"""
-  listed_events: [MongoID!]
-  followed: Boolean
-  admins: [User!]
-  creator_expanded: User!
-  image_avatar_expanded: File
-  image_cover_expanded: File
+type ListSpaceMembersResponse {
+  items: [SpaceMember!]!
+  total: Int!
 }
 
 type SpaceMember {
   _id: MongoID!
-  user: MongoID!
+  user: MongoID
+  user_name: String
+  email: String
+  space: MongoID!
   role: SpaceRole!
   state: SpaceMembershipState!
   visible: Boolean
-  user_expanded: User
-}
-
-enum SpaceRole {
-  member
-  ambassador
-  admin
-  creator
-  subscriber
+  role_changed_at: DateTimeISO
+  deleted_at: DateTimeISO
+  user_expanded: UserWithEmail
+  event_count: Float
+  checkin_count: Float
 }
 
 enum SpaceMembershipState {
+  invited
   requested
   rejected
   joined
+}
+
+input SortInput {
+  field: String!
+
+  """
+  - 1 for increasing
+  - -1 for descreasing
+  """
+  order: Int! = 1
 }
 
 type ListSpaceRoleFeaturesResponse {
@@ -2905,6 +2977,8 @@ enum FeatureCode {
   ManageSpaceMembership
   ViewSpaceEvent
   ManageSpaceEvent
+  ViewSpaceTag
+  ManageSpaceTag
 }
 
 input AddressInput {
@@ -3200,12 +3274,20 @@ type Ticket {
   assigned_email: String
   assigned_to: MongoID
   invited_by: MongoID
+  payment_id: MongoID
+  metadata: JSON
   assigned_to_info: ConfidentialUserInfo
   assigned_to_expanded: User
   event_expanded: Event
   type_expanded: EventTicketType
   acquired_tickets: [Ticket!]
   checkin: EventCheckin
+
+  """
+  This object includes the email when compared to the `assigned_to_expanded` field.
+  """
+  assignee_expanded: UserWithEmail
+  acquired_expanded: UserWithEmail
 }
 
 type GetMyTicketsResponse {
@@ -3545,9 +3627,10 @@ type GetSpaceEventRequestsResponse {
 type SpaceEventRequest {
   _id: MongoID!
   created_at: DateTimeISO!
-  created_by: MongoID!
+  created_by: MongoID
   space: MongoID!
-  event: MongoID
+  event: MongoID!
+  tags: [MongoID!]
   state: SpaceEventRequestState!
   decided_at: DateTimeISO
   decided_by: MongoID
@@ -3558,6 +3641,75 @@ enum SpaceEventRequestState {
   pending
   approved
   declined
+}
+
+type TokenRewardVault {
+  _id: MongoID!
+  title: String!
+  user: MongoID!
+  network: String!
+  address: String!
+  tokens: [RewardToken!]
+}
+
+type RewardToken {
+  address: String!
+  symbol: String!
+  name: String
+  decimals: Int!
+  icon: MongoID
+  icon_url: String
+  icon_expanded: File
+}
+
+type CheckinTokenRewardSetting {
+  _id: MongoID!
+  user: MongoID!
+  title: String!
+  photo: MongoID
+  vault: MongoID!
+  currency_address: String!
+  event: MongoID!
+  rewards: [TicketTypeReward!]!
+  photo_expanded: File
+  vault_expanded: TokenRewardVault
+}
+
+type TicketTypeReward {
+  ticket_type: MongoID!
+  reward_per_ticket: String!
+  reward_id: String!
+}
+
+type TicketTokenRewardSetting {
+  _id: MongoID!
+  user: MongoID!
+  title: String!
+  photo: MongoID
+  vault: MongoID!
+  currency_address: String!
+  event: MongoID!
+  rewards: [TicketTypeReward!]!
+  photo_expanded: File
+  vault_expanded: TokenRewardVault
+}
+
+type ClaimCheckinRewardSignatureResponse {
+  settings: [CheckinTokenRewardSetting!]!
+  signature: TokenRewardSignature
+}
+
+type TokenRewardSignature {
+  claimId: String!
+  signature: String!
+
+  """The args that will be supplied to the contract"""
+  args: [JSON!]!
+}
+
+type ClaimTicketRewardSignatureResponse {
+  settings: [TicketTokenRewardSetting!]!
+  signature: TokenRewardSignature!
 }
 
 type Mutation {
@@ -3668,14 +3820,13 @@ type Mutation {
   createSpace(input: SpaceInput!): Space!
   activatePersonalSpace(input: SpaceInput!): ActivatePersonalSpace!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
-  pinEventsToSpace(events: [MongoID!]!, space: MongoID!): Boolean!
+  pinEventsToSpace(tags: [MongoID!], events: [MongoID!]!, space: MongoID!): PinEventsToSpaceResponse!
   unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   followSpace(space: MongoID!): Boolean!
   unfollowSpace(space: MongoID!): Boolean!
-  addSpaceMembers(input: AddSpaceMemberInput!): [SpaceMember!]!
+  addSpaceMembers(input: AddSpaceMemberInput!): Boolean!
   deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
   updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
-  requestSpaceMembership(space: MongoID!): SpaceMember!
   decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   updateSpaceRoleFeatures(input: UpdateSpaceRoleFeaturesInput!): Boolean!
   createStore(input: StoreInput!): Store!
@@ -3730,8 +3881,16 @@ type Mutation {
   createUserExpertise(title: String!): UserExpertise!
   setUserWallet(token: String!, signature: String!): Boolean!
   castVote(input: CastVoteInput!): Boolean!
-  createSpaceEventRequests(input: CreateSpaceEventRequestsInput!): SpaceEventRequestBase!
   decideSpaceEventRequests(input: DecideSpaceEventRequestsInput!): Boolean!
+  insertSpaceTag(input: SpaceTagInput!): SpaceTagBase!
+  deleteSpaceTag(_id: MongoID!, space: MongoID!): Boolean!
+  manageSpaceTag(tagged: Boolean!, target: String!, _id: MongoID!, space: MongoID!): Boolean!
+  createRewardVault(input: TokenRewardVaultInput!): TokenRewardVault!
+  updateRewardVault(input: TokenRewardVaultInput!, _id: MongoID!): TokenRewardVault
+  createCheckinTokenRewardSetting(input: CheckinTokenRewardSettingInput!): CheckinTokenRewardSetting!
+  createTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!): TicketTokenRewardSetting!
+  updateCheckinTokenRewardSetting(input: CheckinTokenRewardSettingInput!, _id: MongoID!): CheckinTokenRewardSetting!
+  updateTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!, _id: MongoID!): TicketTokenRewardSetting!
 }
 
 input CreateBadgeInput {
@@ -3785,6 +3944,7 @@ input EventInput {
   """Show secondary CTA button text"""
   cta_secondary_visible: Boolean
   description: String
+  description_plain_text: String
   events: [MongoID!]
   frequent_questions: [FrequentQuestionInput!]
   guest_limit: Float
@@ -3835,6 +3995,7 @@ input EventInput {
   welcome_text: String
   welcome_video: VideoInput
   zones_menu_text: String
+  checkin_menu_text: String
   guest_directory_enabled: Boolean
   subevent_enabled: Boolean
   subevent_settings: SubeventSettingsInput
@@ -4539,8 +4700,6 @@ input SpaceInput {
   """Private space requires moderation for membership"""
   private: Boolean
   state: SpaceState
-  event_tags: [SpaceTagInput!]
-  member_tags: [SpaceTagInput!]
   tint_color: String
   slug: String
   handle_twitter: String
@@ -4554,26 +4713,31 @@ input SpaceInput {
   image_cover: MongoID
 }
 
-input SpaceTagInput {
-  title: String!
-  color: String
-}
-
 type ActivatePersonalSpace {
   space: Space!
   personal_space: Space!
+}
+
+type PinEventsToSpaceResponse {
+  requests: [SpaceEventRequest!]
 }
 
 input AddSpaceMemberInput {
   space: MongoID!
   role: SpaceRole!
   visible: Boolean
-  users: [MongoID!]!
+  users: [AddMemberInput!]!
+  tags: [MongoID!]
+}
+
+input AddMemberInput {
+  email: String!
+  user_name: String
 }
 
 input DeleteSpaceMemberInput {
   space: MongoID!
-  users: [MongoID!]!
+  ids: [MongoID!]!
 }
 
 input UpdateSpaceMemberInput {
@@ -4852,26 +5016,57 @@ input CastVoteInput {
   option_id: String
 }
 
-type SpaceEventRequestBase {
-  _id: MongoID!
-  created_at: DateTimeISO!
-  created_by: MongoID!
-  space: MongoID!
-  event: MongoID
-  state: SpaceEventRequestState!
-  decided_at: DateTimeISO
-  decided_by: MongoID
-}
-
-input CreateSpaceEventRequestsInput {
-  space: MongoID!
-  event: MongoID!
-}
-
 input DecideSpaceEventRequestsInput {
   space: MongoID!
   requests: [MongoID!]!
   decision: SpaceEventRequestState!
+}
+
+input SpaceTagInput {
+  space: MongoID!
+  tag: String!
+  color: String!
+  type: SpaceTagType!
+  _id: MongoID
+}
+
+input TokenRewardVaultInput {
+  title: String
+  network: String
+  address: String
+  tokens: [RewardTokenInput!]
+}
+
+input RewardTokenInput {
+  address: String!
+  symbol: String!
+  name: String
+  decimals: Int!
+  icon: MongoID
+  icon_url: String
+}
+
+input CheckinTokenRewardSettingInput {
+  title: String
+  photo: MongoID
+  vault: MongoID
+  currency_address: String
+  event: MongoID
+  rewards: [TicketTypeRewardInput!]
+}
+
+input TicketTypeRewardInput {
+  ticket_type: MongoID!
+  reward_per_ticket: String!
+}
+
+input TicketTokenRewardSettingInput {
+  title: String
+  photo: MongoID
+  vault: MongoID
+  currency_address: String
+  event: MongoID
+  rewards: [TicketTypeRewardInput!]
 }
 
 type Subscription {

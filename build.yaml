@@ -14,7 +14,7 @@ targets:
             MongoID:
               type: String
             JSON:
-              type: Map<String, dynamic>
+              type: dynamic
             Map:
               type: Map<String, dynamic>
             Time:
