@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/core/config.dart';
+import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/custom_oauth_helper.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
@@ -114,31 +115,53 @@ class AppOauth {
   Future<AccessTokenResponse?> getToken() async => helper.getToken();
 
   Future<String> getTokenForGql() async {
-    AccessTokenResponse? tokenRes;
-    tokenRes = await getTokenFromStorage();
-    if (tokenRes == null) {
-      _processTokenState(Future.value(tokenRes));
-      return '';
-    }
-    if (tokenRes.refreshNeeded() || tokenRes.isExpired()) {
-      // if token is expired, all coming request have to wait only one refresh token request
-      // prevent duplicate call refresh token
-      refreshTokenFuture ??= getToken().then((tokenRes) async {
-        _processTokenState(Future.value(tokenRes));
-        refreshTokenFuture = null;
-        return tokenRes?.accessToken != null ? '${tokenRes?.accessToken}' : '';
-      }).catchError((e) {
-        _processTokenState(Future.value(null));
-        return '';
-      });
+    if (refreshTokenFuture != null) {
       return refreshTokenFuture!;
     }
-    _processTokenState(Future.value(tokenRes));
-    return tokenRes.accessToken != null ? '${tokenRes.accessToken}' : '';
+
+    try {
+      refreshTokenFuture = _getTokenAndProcess();
+      final result = await refreshTokenFuture!;
+      return result;
+    } finally {
+      refreshTokenFuture = null;
+    }
   }
 
-  _checkTokenState() async {
-    await _processTokenState(getToken());
+  Future<String> _getTokenAndProcess() async {
+    try {
+      final tokenRes = await helper.getToken();
+      if (tokenRes == null || !tokenRes.isValid()) {
+        CrashAnalyticsManager().crashAnalyticsService?.addBreadcrumb(
+          category: 'oauth',
+          message: '_getTokenAndProcess token is invalid',
+          params: {
+            'isNull': tokenRes == null,
+            'error': tokenRes?.error,
+            'errorDescription': tokenRes?.errorDescription,
+          },
+        );
+        await _processTokenState(Future.value(null));
+        return '';
+      }
+
+      await _processTokenState(Future.value(tokenRes));
+      return tokenRes.accessToken ?? '';
+    } catch (e) {
+      CrashAnalyticsManager().crashAnalyticsService?.addBreadcrumb(
+        category: 'oauth',
+        message: 'Token processing error',
+        params: {
+          'error': e.toString(),
+        },
+      );
+      await _processTokenState(Future.value(null));
+      rethrow;
+    }
+  }
+
+  Future<void> _checkTokenState() async {
+    await _processTokenState(helper.getToken());
   }
 
   Future<AccessTokenResponse?> _processTokenState(
@@ -159,6 +182,13 @@ class AppOauth {
   }
 
   Future<void> _reset() async {
+    CrashAnalyticsManager().crashAnalyticsService?.addBreadcrumb(
+      category: 'oauth',
+      message: 'Token reset triggered',
+      params: {
+        'previousState': _tokenState.toString(),
+      },
+    );
     await helper.removeAllTokens();
     _updateTokenState(OAuthTokenState.invalid);
   }

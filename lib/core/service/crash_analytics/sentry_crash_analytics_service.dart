@@ -77,6 +77,13 @@ class SentryCrashAnalyticsService implements CrashAnalyticsService {
     }
   }
 
+  @override
+  void addBreadcrumb(
+      {String? category, String? message, Map<String, dynamic>? params}) {
+    Sentry.addBreadcrumb(
+        Breadcrumb(category: category, message: message, data: params));
+  }
+
   void sendFeedback({
     String? name,
     String? email,
