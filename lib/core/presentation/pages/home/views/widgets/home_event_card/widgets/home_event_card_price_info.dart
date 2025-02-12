@@ -83,6 +83,7 @@ class HomeEventCardPriceInfo extends StatelessWidget {
                     EventTicketUtils.getDisplayedTicketPrice(
                       decimals: currencyInfo?.decimals?.toInt(),
                       price: defaultPrice,
+                      isCrypto: currencyInfo?.network?.isNotEmpty == true,
                     ),
                     style: Typo.small.copyWith(color: colorScheme.onPrimary),
                   ),
