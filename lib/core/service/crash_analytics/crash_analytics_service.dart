@@ -7,5 +7,5 @@ abstract class CrashAnalyticsService {
   void captureError(dynamic error, StackTrace? stacktrace);
   void captureMessage(String message, List<dynamic>? params);
   void addBreadcrumb(
-      {String? category, String? message, Map<String, dynamic>? params});
+      {String? category, String? message, Map<String, dynamic>? params,});
 }
