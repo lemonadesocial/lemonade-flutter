@@ -1,10 +1,12 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -27,6 +29,7 @@ class HomeEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final cohostsCount = event.cohosts?.length;
     final userId = context.watch<AuthBloc>().state.maybeWhen(
@@ -72,6 +75,22 @@ class HomeEventCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (event.published != true) ...[
+                          FittedBox(
+                            child: LemonOutlineButton(
+                              label: t.common.draft,
+                              radius: BorderRadius.circular(LemonRadius.xSmall),
+                              borderColor: colorScheme.onPrimary,
+                              textStyle: Typo.small.copyWith(
+                                color: colorScheme.onPrimary,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.extraSmall,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: Spacing.extraSmall),
+                        ],
                         Text(
                           event.title ?? '',
                           style: Typo.medium.copyWith(

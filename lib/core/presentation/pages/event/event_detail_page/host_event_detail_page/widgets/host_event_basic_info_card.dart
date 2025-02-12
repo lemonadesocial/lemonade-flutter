@@ -1,6 +1,7 @@
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/event_approval_setting_page.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
@@ -181,187 +182,192 @@ class HostEventBasicInfoCard extends StatelessWidget {
         SizedBox(
           height: Spacing.extraSmall,
         ),
-        // if (canShowGuestList)
-        Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () => AutoRouter.of(context).push(
-                  EventApprovalSettingRoute(
-                    initialTab: EventGuestsTabs.checkins,
-                  ),
-                ),
-                child: Container(
-                  height: 73.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(LemonRadius.extraSmall),
+        if (event.published != true) ...[
+          const _PublishEventButton(),
+        ],
+        if (event.published == true) ...[
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => AutoRouter.of(context).push(
+                    EventApprovalSettingRoute(
+                      initialTab: EventGuestsTabs.checkins,
                     ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: Spacing.smMedium),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          event.checkInCount?.toString() ?? '',
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.bold,
+                  child: Container(
+                    height: 73.w,
+                    decoration: BoxDecoration(
+                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Spacing.smMedium),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            event.checkInCount?.toString() ?? '',
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          t.event.checkedIn.capitalize(),
-                          style: Typo.small
-                              .copyWith(color: colorScheme.onSecondary),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            t.event.checkedIn.capitalize(),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: Spacing.extraSmall,
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () => AutoRouter.of(context).push(
-                  EventApprovalSettingRoute(
-                    initialTab: EventGuestsTabs.reservations,
-                  ),
-                ),
-                child: Container(
-                  height: 73.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(LemonRadius.extraSmall),
+              SizedBox(
+                width: Spacing.extraSmall,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () => AutoRouter.of(context).push(
+                    EventApprovalSettingRoute(
+                      initialTab: EventGuestsTabs.reservations,
                     ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: Spacing.smMedium),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Query$ExportEventTickets$Widget(
-                          options: Options$Query$ExportEventTickets(
-                            fetchPolicy: FetchPolicy.networkOnly,
-                            variables: Variables$Query$ExportEventTickets(
-                              id: event.id ?? '',
-                              pagination: Input$PaginationInput(
-                                limit: 1,
-                                skip: 0,
+                  child: Container(
+                    height: 73.w,
+                    decoration: BoxDecoration(
+                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Spacing.smMedium),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Query$ExportEventTickets$Widget(
+                            options: Options$Query$ExportEventTickets(
+                              fetchPolicy: FetchPolicy.networkOnly,
+                              variables: Variables$Query$ExportEventTickets(
+                                id: event.id ?? '',
+                                pagination: Input$PaginationInput(
+                                  limit: 1,
+                                  skip: 0,
+                                ),
                               ),
                             ),
-                          ),
-                          builder: (result, {refetch, fetchMore}) {
-                            if (result.isLoading) {
+                            builder: (result, {refetch, fetchMore}) {
+                              if (result.isLoading) {
+                                return Text(
+                                  '--',
+                                  style: Typo.mediumPlus.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontFamily: FontFamily.nohemiVariable,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }
+                              final registrationCount =
+                                  result.parsedData?.exportEventTickets.count;
                               return Text(
-                                '--',
+                                registrationCount?.toStringAsFixed(0) ??
+                                    event.attendingCount
+                                        ?.toString() ?? // fallback for old events data
+                                    '',
                                 style: Typo.mediumPlus.copyWith(
                                   color: colorScheme.onPrimary,
                                   fontFamily: FontFamily.nohemiVariable,
                                   fontWeight: FontWeight.bold,
                                 ),
                               );
-                            }
-                            final registrationCount =
-                                result.parsedData?.exportEventTickets.count;
-                            return Text(
-                              registrationCount?.toStringAsFixed(0) ??
-                                  event.attendingCount
-                                      ?.toString() ?? // fallback for old events data
-                                  '',
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          t.event.registration.capitalize(),
-                          style: Typo.small
-                              .copyWith(color: colorScheme.onSecondary),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: Spacing.extraSmall,
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () => AutoRouter.of(context).push(
-                  EventApprovalSettingRoute(
-                    initialTab: EventGuestsTabs.invited,
-                  ),
-                ),
-                child: Container(
-                  height: 73.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(LemonRadius.extraSmall),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: Spacing.smMedium),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          event.invitedCount?.toString() ?? '',
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontFamily: FontFamily.nohemiVariable,
-                            fontWeight: FontWeight.bold,
+                            },
                           ),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          t.event.invited.capitalize(),
-                          style: Typo.small
-                              .copyWith(color: colorScheme.onSecondary),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            t.event.registration.capitalize(),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        // if (canShowGuestList)
-        SizedBox(
-          height: Spacing.extraSmall,
-        ),
-        if (relayPaymentSupported) ...[
-          _ClaimRelayPaymentButton(event: event),
-          SizedBox(
-            height: Spacing.extraSmall,
+              SizedBox(
+                width: Spacing.extraSmall,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () => AutoRouter.of(context).push(
+                    EventApprovalSettingRoute(
+                      initialTab: EventGuestsTabs.invited,
+                    ),
+                  ),
+                  child: Container(
+                    height: 73.w,
+                    decoration: BoxDecoration(
+                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(LemonRadius.extraSmall),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: Spacing.smMedium),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            event.invitedCount?.toString() ?? '',
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontFamily: FontFamily.nohemiVariable,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(
+                            t.event.invited.capitalize(),
+                            style: Typo.small
+                                .copyWith(color: colorScheme.onSecondary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+          if (event.published == true) ...[
+            SizedBox(
+              height: Spacing.extraSmall,
+            ),
+            if (relayPaymentSupported) ...[
+              _ClaimRelayPaymentButton(event: event),
+              SizedBox(
+                height: Spacing.extraSmall,
+              ),
+            ],
+            // if (canShowGuestList)
+            _ViewGuestsButton(event: event),
+          ],
         ],
-        // if (canShowGuestList)
-        _ViewGuestsButton(event: event),
       ],
     );
   }
@@ -540,6 +546,56 @@ class _EditEventButton extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PublishEventButton extends StatelessWidget {
+  const _PublishEventButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.all(Spacing.smMedium),
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(LemonRadius.extraSmall),
+          topLeft: Radius.circular(LemonRadius.extraSmall),
+          bottomLeft: Radius.circular(LemonRadius.medium),
+          bottomRight: Radius.circular(LemonRadius.medium),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            t.event.eventPublish.eventPublishTitle,
+            style: Typo.medium.copyWith(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 2.w),
+          Text(
+            t.event.eventPublish.eventPublishDescription2,
+            style: Typo.small.copyWith(
+              color: colorScheme.onSecondary,
+            ),
+          ),
+          SizedBox(height: Spacing.small),
+          LinearGradientButton.primaryButton(
+            radius: BorderRadius.circular(LemonRadius.extraSmall),
+            onTap: () => AutoRouter.of(context).push(
+              const HostEventPublishFlowRoute(),
+            ),
+            label: t.common.actions.publish,
+          ),
+        ],
+      ),
     );
   }
 }
