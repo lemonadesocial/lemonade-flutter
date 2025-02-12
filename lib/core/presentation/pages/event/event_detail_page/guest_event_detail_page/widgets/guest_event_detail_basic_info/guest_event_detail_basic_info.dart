@@ -1,5 +1,7 @@
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/application/token_reward/get_my_event_token_rewards_bloc/get_my_event_token_rewards_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/widgets/post_guest_event_detail_add_ticket_to_wallet_button.dart';
 import 'package:app/core/presentation/pages/event/my_event_ticket_page/widgets/ticket_qr_code_popup.dart';
 import 'package:app/core/presentation/widgets/common/add_to_calendar_bottomsheet/add_to_calendar_bottomsheet.dart';
@@ -62,6 +64,33 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
             height: 1,
             thickness: 1.w,
             color: colorScheme.outlineVariant,
+          ),
+          BlocBuilder<GetMyEventTokenRewardsBloc, GetMyEventTokenRewardsState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () => const SizedBox.shrink(),
+                success: (rewardResponses) {
+                  if (rewardResponses.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _ClaimTokenRewardButton(
+                        event: event,
+                        rewardResponses: rewardResponses,
+                      ),
+                      Divider(
+                        height: 1,
+                        thickness: 1.w,
+                        color: colorScheme.outlineVariant,
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
           _AssignTicketsButton(event: event),
         ],
@@ -404,6 +433,77 @@ class _AssignTicketsButton extends StatelessWidget {
                   },
                 );
               },
+            ),
+            SizedBox(width: Spacing.extraSmall),
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icArrowRight.svg(
+                colorFilter: filter,
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ClaimTokenRewardButton extends StatelessWidget {
+  const _ClaimTokenRewardButton({
+    required this.event,
+    required this.rewardResponses,
+  });
+
+  final Event event;
+  final List<RewardSignatureResponse> rewardResponses;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final t = Translations.of(context);
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          EventDetailClaimTokenRewardRoute(
+            event: event,
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: Spacing.small,
+          horizontal: Spacing.small,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (filter) => Assets.icons.icGift.svg(
+                colorFilter: filter,
+                width: Sizing.mSmall,
+                height: Sizing.mSmall,
+              ),
+            ),
+            SizedBox(width: Spacing.small),
+            Expanded(
+              child: Text(
+                t.event.tokenReward.claimRewards,
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Text(
+              rewardResponses.length.toString(),
+              style: Typo.medium.copyWith(
+                color: LemonColor.paleViolet,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(width: Spacing.extraSmall),
             ThemeSvgIcon(

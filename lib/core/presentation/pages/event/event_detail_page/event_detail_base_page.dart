@@ -3,6 +3,7 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/application/token_reward/get_my_event_token_rewards_bloc/get_my_event_token_rewards_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/pre_guest_event_detail_view.dart';
@@ -125,6 +126,14 @@ class _EventDetailBasePageView extends StatelessWidget {
                       create: (context) => GetEventVotingsListBloc()
                         ..add(
                           GetEventVotingsListEvent.fetch(
+                            eventId: event.id ?? '',
+                          ),
+                        ),
+                    ),
+                    BlocProvider(
+                      create: (context) => GetMyEventTokenRewardsBloc()
+                        ..add(
+                          GetMyEventTokenRewardsEvent.fetch(
                             eventId: event.id ?? '',
                           ),
                         ),

@@ -5,6 +5,10 @@ import 'package:app/core/domain/event/entities/event_currency.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
+import 'package:app/core/failure.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item/ticket_token_rewards_list.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/ticket_counter.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/widgets/staking_config_info_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -18,10 +22,12 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
@@ -328,6 +334,39 @@ class SelectTicketItem extends StatelessWidget {
                   ),
                 ),
               ],
+              FutureBuilder<Either<Failure, List<TokenRewardSetting>>>(
+                future: getIt<RewardRepository>().listTicketTokenRewardSettings(
+                  event: event.id ?? '',
+                  ticketTypes: [ticketType.id ?? ''],
+                ),
+                builder: (context, snapshot) {
+                  final tokenRewardSettings =
+                      snapshot.data?.getOrElse(() => []);
+                  if (tokenRewardSettings == null ||
+                      tokenRewardSettings.isEmpty == true) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: Spacing.xSmall),
+                      Divider(
+                        color: colorScheme.outlineVariant,
+                      ),
+                      SizedBox(height: Spacing.xSmall),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.small,
+                        ),
+                        child: TicketTokenRewardsList(
+                          tokenRewardSettings: tokenRewardSettings,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),

@@ -1,0 +1,12 @@
+query GetMyTickets($event: MongoID!, $withPaymentInfo: Boolean) {
+  getMyTickets(event: $event, with_payment_info: $withPaymentInfo) {
+    payments {
+      _id
+      state
+      currency
+    }
+    tickets {
+      _id
+    }
+  }
+}

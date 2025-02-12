@@ -84,8 +84,8 @@ class GuestApplicationInfoForm extends StatelessWidget {
           options: Options$Query$GetEventApplicationAnswers(
             variables: Variables$Query$GetEventApplicationAnswers(
               event: event?.id ?? '',
-              user: _isNonLoginUser ? null : eventTicket?.assignedTo ?? '',
-              email: _isNonLoginUser ? eventTicket?.assignedEmail ?? '' : null,
+              user: _isNonLoginUser ? null : eventTicket?.assignedTo,
+              email: _isNonLoginUser ? eventTicket?.assignedEmail : null,
             ),
           ),
           builder: (

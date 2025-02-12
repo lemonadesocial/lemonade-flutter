@@ -1,0 +1,14 @@
+#import "../fragment/token_reward_setting_fragment.graphql"
+
+query GenerateClaimCheckinRewardSignature($event: MongoID!) {
+  generateClaimCheckinRewardSignature(event: $event) {
+    settings {
+      ...TokenRewardSettingFields
+    }
+    signature {
+      claimId
+      signature
+      args
+    }
+  }
+} 

@@ -83,7 +83,8 @@
         "vote": "Vote",
         "addToCalendar": "Add to calendar",
         "close": "Close",
-        "checkIn": "Check in"
+        "checkIn": "Check in",
+        "doItLater": "Do it later"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

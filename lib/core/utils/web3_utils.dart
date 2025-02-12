@@ -154,4 +154,27 @@ class Web3Utils {
     }
     return txHash;
   }
+
+  static Uint8List hexToBytes(String hex, {bool padTo32Bytes = false}) {
+    // Remove '0x' prefix if present
+    hex = hex.startsWith('0x') ? hex.substring(2) : hex;
+
+    // Ensure even length
+    if (hex.length % 2 != 0) {
+      hex = '0$hex';
+    }
+
+    // For bytes32, pad to 32 bytes (64 hex characters)
+    if (padTo32Bytes && hex.length < 64) {
+      hex = hex.padLeft(64, '0');
+    }
+
+    final bytes = Uint8List.fromList(
+      List.generate(hex.length ~/ 2, (i) {
+        return int.parse(hex.substring(i * 2, i * 2 + 2), radix: 16);
+      }),
+    );
+
+    return bytes;
+  }
 }

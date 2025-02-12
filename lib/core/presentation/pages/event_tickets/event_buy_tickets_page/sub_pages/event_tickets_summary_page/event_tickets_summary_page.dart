@@ -13,6 +13,9 @@ import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calc
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/entities/purchasable_item/purchasable_item.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
+import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
+import 'package:app/core/failure.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_info_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_total_price_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/event_tickets_summary.dart';
@@ -21,6 +24,7 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/promo_code/promo_code_summary.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/rsvp_application_form/rsvp_application_form.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_summary_page/widgets/select_payment_accounts_dropdown/select_payment_accounts_dropdown.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/select_tickets_page/widgets/select_ticket_item/ticket_token_rewards_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -30,10 +34,12 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/user_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -388,6 +394,64 @@ class _EventTicketsSummaryPageViewState
                                             selectedPaymentAccount:
                                                 _selectedPaymentAccount,
                                             onChanged: _selectPaymentAccount,
+                                          ),
+                                          SizedBox(height: Spacing.medium),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  FutureBuilder<
+                                      dartz.Either<Failure,
+                                          List<TokenRewardSetting>>>(
+                                    future: getIt<RewardRepository>()
+                                        .listTicketTokenRewardSettings(
+                                      event: event.id ?? '',
+                                      ticketTypes: selectedTickets
+                                          .map((ticket) => ticket.id)
+                                          .toList(),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      final tokenRewardSettings =
+                                          snapshot.data?.getOrElse(() => []);
+                                      if (tokenRewardSettings == null ||
+                                          tokenRewardSettings.isEmpty == true) {
+                                        return const SizedBox.shrink();
+                                      }
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: Spacing.small,
+                                            ),
+                                            child: TicketTokenRewardsList(
+                                              titleColor: colorScheme.onPrimary,
+                                              containerDecoration:
+                                                  BoxDecoration(
+                                                color: LemonColor.atomicBlack,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  LemonRadius.medium,
+                                                ),
+                                                border: Border.all(
+                                                  color: colorScheme
+                                                      .outlineVariant,
+                                                  width: 1.w,
+                                                ),
+                                              ),
+                                              itemSeparator: Divider(
+                                                height: 1.w,
+                                                color:
+                                                    colorScheme.outlineVariant,
+                                              ),
+                                              itemPadding: EdgeInsets.all(
+                                                Spacing.small,
+                                              ),
+                                              tokenRewardSettings:
+                                                  tokenRewardSettings,
+                                            ),
                                           ),
                                           SizedBox(height: Spacing.medium),
                                         ],

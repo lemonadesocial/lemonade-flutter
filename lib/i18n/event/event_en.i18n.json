@@ -896,5 +896,18 @@
     "eventPendingInvites": {
         "pendingCohostRequestTitle": "Accept Co-host request",
         "pendingCohostRequestDescription": "sent by $name"
+    },
+    "tokenReward": {
+        "rewardPerTicket": "$amount per ticket",
+        "onClaimingSelectTickets": "On claiming select tickets",
+        "claimRewards": "Claim rewards",
+        "claimYourReward": "Claim your reward",
+        "claimYourRewardDescription": "You have been rewarded with $amount. Claim now!",
+        "claimYourRewardScreenDescription": "Congratulations! You can now claim rewards. You can do this later inside the event.",
+        "rewardClaimed": "Reward Claimed!",
+        "rewardClaimedDescription": "Congratulations! Your reward has been deposited into your wallet successfully.",
+        "depositingRewards": "Depositing rewards",
+        "depositingRewardsDescription": "Please wait while we deposit your rewards—don’t leave this page.  This can take up to 60 seconds.",
+        "claimRewardFailed": "Claim reward failed"
     }
 }
