@@ -254,7 +254,8 @@
         "info": "Info",
         "guests": "Guests",
         "team": "Team",
-        "applicationForm": "Application form"
+        "applicationForm": "Application form",
+        "ledger": "Ledger"
     },
     "rewards": "Rewards",
     "addPoap": "Add POAP",
@@ -910,5 +911,10 @@
         "depositingRewards": "Depositing rewards",
         "depositingRewardsDescription": "Please wait while we deposit your rewards—don’t leave this page.  This can take up to 60 seconds.",
         "claimRewardFailed": "Claim reward failed"
+    },
+    "eventPaymentLedger": {
+        "allNetworks": "All Networks",
+        "countSelected": "$count selected",
+        "stripe": "Stripe"
     }
 }

@@ -22,6 +22,13 @@ import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:app/core/data/payment/dtos/event_payment_statistics_dto/event_payment_statistics_dto.dart';
+import 'package:app/core/domain/payment/entities/event_payment_statistics/event_payment_statistics.dart';
+import 'package:app/graphql/backend/payment/query/get_event_payment_statistics.graphql.dart';
+import 'package:graphql/client.dart';
+import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
+import 'package:app/core/data/payment/dtos/list_event_payments_response_dto/list_event_payments_response_dto.dart';
+import 'package:app/core/domain/payment/entities/list_event_payments_response/list_event_payments_response.dart';
 
 @LazySingleton(as: PaymentRepository)
 class PaymentRepositoryImpl extends PaymentRepository {
@@ -180,5 +187,52 @@ class PaymentRepositoryImpl extends PaymentRepository {
     }
 
     return Right(result.parsedData?.mailTicketPaymentReceipt ?? false);
+  }
+
+  @override
+  Future<Either<Failure, EventPaymentStatistics>> getEventPaymentStatistics({
+    required String eventId,
+  }) async {
+    final result = await _client.query$GetEventPaymentStatistics(
+      Options$Query$GetEventPaymentStatistics(
+        variables: Variables$Query$GetEventPaymentStatistics(
+          event: eventId,
+        ),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final data = result.parsedData?.getEventPaymentStatistics;
+    if (data == null) {
+      return Left(Failure());
+    }
+    final dto = EventPaymentStatisticsDto.fromJson(data.toJson());
+    return Right(EventPaymentStatistics.fromDto(dto));
+  }
+
+  @override
+  Future<Either<Failure, ListEventPaymentsResponse>> listEventPayments({
+    required Variables$Query$ListEventPayments input,
+  }) async {
+    final result = await _client.query$ListEventPayments(
+      Options$Query$ListEventPayments(
+        variables: input,
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final data = result.parsedData?.listEventPayments;
+    if (data == null) {
+      return Left(Failure());
+    }
+
+    final dto = ListEventPaymentsResponseDto.fromJson(data.toJson());
+    return Right(ListEventPaymentsResponse.fromDto(dto));
   }
 }
