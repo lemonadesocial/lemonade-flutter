@@ -1,6 +1,5 @@
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -19,7 +18,6 @@ class HomeMyEventsList extends StatelessWidget {
 
     return state.maybeWhen(
       fetched: (events) {
-        if (events.isEmpty) return const NoUpcomingEventsCard();
         return Padding(
           padding: EdgeInsets.only(top: Spacing.medium),
           child: Column(

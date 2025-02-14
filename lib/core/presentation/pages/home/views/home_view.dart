@@ -12,6 +12,7 @@ import 'package:app/core/presentation/pages/home/views/widgets/home_collaborator
 import 'package:app/core/presentation/pages/home/views/widgets/home_discover_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_hosting_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
@@ -235,14 +236,34 @@ class _HomeViewState extends State<_HomeView>
                       left: Spacing.small,
                       right: Spacing.small,
                     ),
-                    sliver: const SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          HomeHostingEventsList(),
-                          HomeMyEventsList(),
-                        ],
-                      ),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        const HomeHostingEventsList(),
+                        const HomeMyEventsList(),
+                        BlocBuilder<UpcomingHostingEventsBloc,
+                            UpcomingHostingEventsState>(
+                          builder: (context, hostingState) {
+                            return BlocBuilder<UpcomingAttendingEventsBloc,
+                                UpcomingAttendingEventsState>(
+                              builder: (context, myEventsState) {
+                                final hostingEvents = hostingState.maybeWhen(
+                                  fetched: (events) => events,
+                                  orElse: () => [],
+                                );
+                                final myEvents = myEventsState.maybeWhen(
+                                  fetched: (events) => events,
+                                  orElse: () => [],
+                                );
+
+                                if (hostingEvents.isEmpty && myEvents.isEmpty) {
+                                  return const NoUpcomingEventsCard();
+                                }
+                                return const SizedBox.shrink();
+                              },
+                            );
+                          },
+                        ),
+                      ]),
                     ),
                   ),
                 SliverPadding(
