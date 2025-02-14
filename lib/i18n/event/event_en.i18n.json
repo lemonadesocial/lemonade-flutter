@@ -915,6 +915,9 @@
     "eventPaymentLedger": {
         "allNetworks": "All Networks",
         "countSelected": "$count selected",
-        "stripe": "Stripe"
+        "stripe": "Stripe",
+        "allGuests": "All guests",
+        "checkedIn": "Checked in",
+        "notCheckedIn": "Not checked in"
     }
 }

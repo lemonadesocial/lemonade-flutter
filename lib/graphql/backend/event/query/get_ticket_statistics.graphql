@@ -1,0 +1,19 @@
+query GetTicketStatistics($event: MongoID!) {
+  getTicketStatistics(id: $event) {
+    all
+    checked_in
+    invited
+    issued
+    cancelled
+    not_checked_in
+    applicants {
+      state
+      count
+    }
+    ticket_types {
+      ticket_type
+      ticket_type_title
+      count
+    }
+  }
+} 

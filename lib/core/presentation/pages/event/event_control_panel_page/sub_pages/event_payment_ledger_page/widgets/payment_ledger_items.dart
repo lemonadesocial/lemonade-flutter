@@ -84,7 +84,7 @@ class _PaymentInfoWidget extends StatelessWidget {
                 colorFilter: filter,
               ),
             ),
-            label: payment.tickets?.length.toString() ?? '1',
+            label: payment.ticketTypesExpanded?.length.toString() ?? '1',
           ),
         ),
         FittedBox(

@@ -1,10 +1,13 @@
+import 'package:app/core/data/event/dtos/ticket_statistics_dto/ticket_statistics_dto.dart';
 import 'package:app/core/data/payment/dtos/event_payment_statistics_dto/event_payment_statistics_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/ticket_statistics.dart';
 import 'package:app/core/domain/payment/entities/event_payment_statistics/event_payment_statistics.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_items.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_network_filter_dropdown.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_ticket_filter_dropdown.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -13,6 +16,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/query/get_ticket_statistics.graphql.dart';
 import 'package:app/graphql/backend/payment/query/get_event_payment_statistics.graphql.dart';
 import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -42,8 +46,6 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
   final refreshController = RefreshController();
   bool hasNextPage = true;
   int limit = 25;
-
-  // Add variables state
   late Variables$Query$ListEventPayments _filterVariables;
 
   @override
@@ -64,10 +66,8 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
   }) {
     if (searchValue.isEmpty) {
       setState(() {
-        _filterVariables = Variables$Query$ListEventPayments(
-          event: widget.event?.id ?? '',
-          skip: 0,
-          limit: limit,
+        _filterVariables = _filterVariables.copyWith(
+          search: null,
         );
       });
       refetch?.call();
@@ -75,11 +75,8 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
     }
 
     setState(() {
-      _filterVariables = Variables$Query$ListEventPayments(
-        event: widget.event?.id ?? '',
+      _filterVariables = _filterVariables.copyWith(
         search: searchValue,
-        skip: 0,
-        limit: limit,
       );
     });
 
@@ -233,6 +230,35 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                     SliverToBoxAdapter(
                       child: Row(
                         children: [
+                          Query$GetTicketStatistics$Widget(
+                            options: Options$Query$GetTicketStatistics(
+                              variables: Variables$Query$GetTicketStatistics(
+                                event: widget.event?.id ?? '',
+                              ),
+                            ),
+                            builder: (result, {fetchMore, refetch}) {
+                              return PaymentLedgerTicketFilterDropdown(
+                                ticketStatistics: result
+                                            .parsedData?.getTicketStatistics !=
+                                        null
+                                    ? TicketStatistics.fromDto(
+                                        TicketStatisticsDto.fromJson(
+                                          result.parsedData!.getTicketStatistics
+                                              .toJson(),
+                                        ),
+                                      )
+                                    : null,
+                                filterVariables: _filterVariables,
+                                onChanged: (newFilterVariables) {
+                                  setState(() {
+                                    _filterVariables = newFilterVariables;
+                                  });
+                                  refetch?.call();
+                                },
+                              );
+                            },
+                          ),
+                          SizedBox(width: Spacing.extraSmall),
                           Query$GetEventPaymentStatistics$Widget(
                             options: Options$Query$GetEventPaymentStatistics(
                               variables:
