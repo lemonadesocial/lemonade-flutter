@@ -121,7 +121,6 @@ class CreateEventRegistrationSection extends StatelessWidget {
         isEditMode ? initialEvent?.paymentTicketDiscounts?.length ?? 0 : 0;
     final applicationFormCount =
         isEditMode ? initialEvent?.applicationQuestions?.length ?? 0 : 0;
-    final rewardCount = isEditMode ? initialEvent?.rewards?.length ?? 0 : 0;
 
     return Container(
       width: double.infinity,
