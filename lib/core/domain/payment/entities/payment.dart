@@ -53,6 +53,15 @@ class Payment with _$Payment {
 
   String get discountCode => refData?['discount'] ?? '';
 
+  int get ticketCount => refData?['items'] is List<dynamic>
+      ? (refData?['items'] as List<dynamic>)
+          .map((item) => (item['count'] as int?) ?? 0)
+          .fold(
+            0,
+            (previous, element) => previous + element,
+          )
+      : 0;
+
   factory Payment.fromDto(PaymentDto dto) => Payment(
         id: dto.id,
         user: dto.user,

@@ -5,6 +5,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/ticket_statistics.dart';
 import 'package:app/core/domain/payment/entities/event_payment_statistics/event_payment_statistics.dart';
 import 'package:app/core/domain/payment/entities/payment.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/export_payment_ledger.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_items.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_network_filter_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_payment_ledger_page/widgets/payment_ledger_ticket_filter_dropdown.dart';
@@ -288,6 +289,11 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                                 },
                               );
                             },
+                          ),
+                          const Spacer(),
+                          ExportPaymentLedgerWidget(
+                            payments: payments,
+                            event: widget.event,
                           ),
                         ],
                       ),
