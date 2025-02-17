@@ -221,14 +221,14 @@ class SettingPageView extends StatelessWidget {
                       ),
                       onTap: () async {
                         Vibrate.feedback(FeedbackType.light);
-                        final confirmDeleteAccount = await showDialog(
+                        final confirmDeleteAccount = await showDialog<bool>(
                           context: context,
                           barrierDismissible: true,
                           builder: (BuildContext context) {
                             return const SettingDeleteAccountDialog();
                           },
-                        ) as bool;
-                        if (confirmDeleteAccount) {
+                        );
+                        if (confirmDeleteAccount == true) {
                           context
                               .read<DeleteUserBloc>()
                               .add(DeleteUserEvent.delete());
