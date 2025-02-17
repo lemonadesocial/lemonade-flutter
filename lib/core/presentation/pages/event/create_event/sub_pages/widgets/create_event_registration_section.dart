@@ -121,6 +121,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
         isEditMode ? initialEvent?.paymentTicketDiscounts?.length ?? 0 : 0;
     final applicationFormCount =
         isEditMode ? initialEvent?.applicationQuestions?.length ?? 0 : 0;
+    // final rewardCount = isEditMode ? initialEvent?.rewards?.length ?? 0 : 0;
 
     return Container(
       width: double.infinity,
@@ -384,6 +385,31 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 ],
               ),
             ),
+            // TODO: Temporary hide reward setting
+            // SizedBox(height: Spacing.xSmall),
+            // Container(
+            //   width: double.infinity,
+            //   decoration: BoxDecoration(
+            //     color: LemonColor.chineseBlack,
+            //     borderRadius: BorderRadius.circular(LemonRadius.medium),
+            //   ),
+            //   child: Column(
+            //     children: [
+            //       _buildSettingRow(
+            //         context,
+            //         icon: Assets.icons.icGift,
+            //         title: t.event.configuration.rewards,
+            //         trailingIcon: Assets.icons.icArrowRight,
+            //         onTap: () {
+            //           AutoRouter.of(context).navigate(
+            //             const EventRewardSettingRoute(),
+            //           );
+            //         },
+            //         value: rewardCount > 0 ? rewardCount.toString() : null,
+            //       ),
+            //     ],
+            //   ),
+            // ),
             if (initialEvent?.subeventParent == null ||
                 initialEvent?.subeventParent?.isEmpty == true) ...[
               SizedBox(height: Spacing.xSmall),
