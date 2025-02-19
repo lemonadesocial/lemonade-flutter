@@ -9,6 +9,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_programs.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_title/guest_event_detail_title.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -142,8 +143,14 @@ class _EventPreviewViewState extends State<_EventPreviewView> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                      child: GuestEventDetailGeneralInfo(
-                        event: event,
+                      child: Column(
+                        children: [
+                          GuestEventDetailTitle(event: event),
+                          SizedBox(height: Spacing.medium),
+                          GuestEventDetailGeneralInfo(
+                            event: event,
+                          ),
+                        ],
                       ),
                     ),
                     if ((event.newNewPhotosExpanded ?? []).isNotEmpty &&
