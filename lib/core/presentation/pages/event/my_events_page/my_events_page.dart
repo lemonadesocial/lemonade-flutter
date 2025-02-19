@@ -1,6 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/event/past_hosting_events_bloc/past_hosting_events_bloc.dart';
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
+import 'package:app/core/application/event/draft_hosting_events_bloc/draft_hosting_events_bloc.dart';
 import 'package:app/core/presentation/pages/event/my_events_page/views/my_events_list_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -33,6 +34,10 @@ class MyEventsPage extends StatelessWidget {
           create: (context) => PastHostingEventsBloc(userId: userId)
             ..add(PastHostingEventsEvent.fetch()),
         ),
+        BlocProvider(
+          create: (context) => DraftHostingEventsBloc(userId: userId)
+            ..add(const DraftHostingEventsEvent.fetch()),
+        ),
       ],
       child: const MyEventsPageView(),
     );
@@ -55,7 +60,7 @@ class MyEventsPageView extends StatelessWidget {
       ),
       body: DefaultTabController(
         initialIndex: 0,
-        length: 2,
+        length: 3,
         child: Column(
           children: [
             TabBar(
@@ -69,6 +74,7 @@ class MyEventsPageView extends StatelessWidget {
               ),
               indicatorColor: LemonColor.paleViolet,
               tabs: <Widget>[
+                Tab(text: t.event.draft.capitalize()),
                 Tab(text: t.event.upcoming.capitalize()),
                 Tab(text: t.event.past.capitalize()),
               ],
@@ -76,6 +82,17 @@ class MyEventsPageView extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
+                  BlocBuilder<DraftHostingEventsBloc, DraftHostingEventsState>(
+                    builder: (context, state) => state.when(
+                      loading: () => Loading.defaultLoading(context),
+                      failure: () => EmptyList(
+                        emptyText: t.common.somethingWrong,
+                      ),
+                      fetched: (draftEvents) => MyEventsListView(
+                        events: draftEvents,
+                      ),
+                    ),
+                  ),
                   BlocBuilder<UpcomingHostingEventsBloc,
                       UpcomingHostingEventsState>(
                     builder: (context, state) => state.when(

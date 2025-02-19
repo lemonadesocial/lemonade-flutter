@@ -40,6 +40,7 @@ abstract class GetHostingEventsInput with _$GetHostingEventsInput {
     @JsonKey(includeIfNull: false) FilterEventInput? state,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
+    @JsonKey(includeIfNull: false) bool? draft,
   }) = _GetHostingEventsInput;
 
   factory GetHostingEventsInput.fromJson(Map<String, dynamic> json) =>

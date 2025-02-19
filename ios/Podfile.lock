@@ -280,8 +280,6 @@ PODS:
   - SDWebImage (5.19.2):
     - SDWebImage/Core (= 5.19.2)
   - SDWebImage/Core (5.19.2)
-  - sensors_plus (0.0.1):
-    - Flutter
   - Sentry/HybridSDK (8.21.0):
     - SentryPrivate (= 8.21.0)
   - sentry_flutter (0.0.1):
@@ -382,7 +380,6 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
   - restart_app (from `.symlinks/plugins/restart_app/ios`)
-  - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -508,8 +505,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
   restart_app:
     :path: ".symlinks/plugins/restart_app/ios"
-  sensors_plus:
-    :path: ".symlinks/plugins/sensors_plus/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   share_plus:
@@ -593,7 +588,6 @@ SPEC CHECKSUMS:
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   SDWebImage: dfe95b2466a9823cf9f0c6d01217c06550d7b29a
-  sensors_plus: 5717760720f7e6acd96fdbd75b7428f5ad755ec2
   Sentry: ebc12276bd17613a114ab359074096b6b3725203
   sentry_flutter: dff1df05dc39c83d04f9330b36360fc374574c5e
   SentryPrivate: d651efb234cf385ec9a1cdd3eff94b5e78a0e0fe
