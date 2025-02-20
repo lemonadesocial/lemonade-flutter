@@ -4,16 +4,12 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_hosts_avatars.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_pending_invites_widget/guest_event_pending_invites_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
@@ -29,23 +25,10 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _HostInfo(event: event),
-        SizedBox(
-          height: Spacing.superExtraSmall,
-        ),
-        Text(
-          event.title ?? '',
-          style: Typo.superLarge.copyWith(
-            fontWeight: FontWeight.w600,
-            color: colorScheme.onPrimary,
-          ),
-        ),
-        SizedBox(height: Spacing.xSmall),
         if (pendingCohostRequest != null) ...[
           const GuestEventCohostRequestWidget(),
           SizedBox(height: Spacing.xSmall),
@@ -70,53 +53,6 @@ class GuestEventDetailGeneralInfo extends StatelessWidget {
         ],
         // CastOnFarcasterButton(event: event),
       ],
-    );
-  }
-}
-
-class _HostInfo extends StatelessWidget {
-  const _HostInfo({
-    required this.event,
-  });
-
-  final Event event;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: () {
-        AutoRouter.of(context).push(
-          ProfileRoute(
-            userId: event.hostExpanded?.userId ?? '',
-          ),
-        );
-      },
-      child: Row(
-        children: [
-          LemonNetworkImage(
-            imageUrl: event.hostExpanded?.imageAvatar ?? '',
-            width: 18.w,
-            height: 18.w,
-            borderRadius: BorderRadius.circular(18.w),
-            placeholder: ImagePlaceholder.avatarPlaceholder(),
-          ),
-          SizedBox(width: Spacing.extraSmall),
-          Text(
-            event.hostExpanded?.name ?? '',
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
-            ),
-          ),
-          SizedBox(width: Spacing.superExtraSmall),
-          ThemeSvgIcon(
-            color: colorScheme.onSecondary,
-            builder: (filter) => Assets.icons.icArrowRight.svg(
-              colorFilter: filter,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

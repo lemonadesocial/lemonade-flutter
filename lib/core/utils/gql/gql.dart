@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
@@ -9,6 +10,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class GeoLocationLink extends Link {
   GeoLocationLink({
@@ -25,6 +27,27 @@ class GeoLocationLink extends Link {
           ...headers?.headers ?? <String, String>{},
           'x-geolocation-latitude': '${geoPoint.lat}',
           'x-geolocation-longitude': '${geoPoint.lng}',
+        },
+      ),
+    );
+    yield* forward!(req);
+  }
+}
+
+class CustomUserAgentLink extends Link {
+  CustomUserAgentLink();
+
+  @override
+  Stream<Response> request(Request request, [NextLink? forward]) async* {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final userAgent =
+        '${packageInfo.appName}/${packageInfo.version} (${Platform.operatingSystem})';
+    final req = request.updateContextEntry<HttpLinkHeaders>(
+      (headers) => HttpLinkHeaders(
+        headers: {
+          // put oldest headers
+          ...headers?.headers ?? <String, String>{},
+          'User-Agent': userAgent,
         },
       ),
     );
@@ -124,6 +147,7 @@ class AppGQL extends BaseGQL {
       : super(
           httpUrl: AppConfig.backedUrl,
           wssUrl: AppConfig.wssBackedUrl,
+          customLinks: [CustomUserAgentLink()],
         );
 }
 
