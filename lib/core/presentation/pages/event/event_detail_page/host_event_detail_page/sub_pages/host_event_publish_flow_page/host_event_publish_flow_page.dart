@@ -1,3 +1,4 @@
+import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_repository.dart';
@@ -79,6 +80,8 @@ class HostEventPublishFlowPage extends StatelessWidget {
       context.read<GetEventDetailBloc>().add(
             GetEventDetailEvent.fetch(eventId: event.id ?? ''),
           );
+
+      context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
       SnackBarUtils.showSuccess(
         message: t.event.eventPublish.eventPublishSuccess,
       );
