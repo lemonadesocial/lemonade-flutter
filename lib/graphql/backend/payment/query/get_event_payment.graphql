@@ -1,0 +1,80 @@
+# import '../../schema.graphql'
+# import '../fragment/user_fragment.graphql'
+
+query GetEventPayment($event: MongoID!, $id: MongoID!) {
+  getEventPayment(event: $event, _id: $id) {
+    _id
+    user
+    transfer_params
+    transfer_metadata
+    state
+    stamps
+    failure_reason
+    currency
+    application {
+      answer
+      question
+    }
+    billing_info {
+      _id
+      firstname
+      lastname
+      email
+    }
+    amount
+    account_expanded {
+      ...PaymentAccountFragment
+    }
+    account
+    due_amount
+    ticket_types_expanded {
+      _id
+      title
+      description
+      position
+    }
+    tickets {
+      _id
+      type
+      assigned_email
+      assigned_to
+      invited_by
+      cancelled_by
+      accepted
+      acquired_by
+      acquired_by_email
+    }
+    ref_data
+    buyer_info {
+      name
+      email
+    }
+    buyer_user {
+      name
+      email
+      display_name
+      image_avatar
+    }
+    formatted_discount_amount
+    formatted_due_amount
+    formatted_fee_amount
+    formatted_total_amount
+    crypto_payment_info {
+      network
+      tx_hash
+    }
+    stripe_payment_info {
+      payment_intent
+      card {
+        brand
+        last4
+      }
+    }
+    join_request {
+      _id
+      created_at
+      email
+      state
+    }
+  }
+}

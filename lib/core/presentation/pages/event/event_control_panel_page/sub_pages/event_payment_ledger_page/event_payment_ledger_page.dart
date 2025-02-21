@@ -21,6 +21,7 @@ import 'package:app/graphql/backend/event/query/get_ticket_statistics.graphql.da
 import 'package:app/graphql/backend/payment/query/get_event_payment_statistics.graphql.dart';
 import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -332,8 +333,18 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                               : const SizedBox.shrink();
                         }
                         final payment = payments[index];
-                        return PaymentLedgerItem(
-                          payment: payment,
+                        return InkWell(
+                          onTap: () {
+                            context.router.push(
+                              GuestPaymentDetailRoute(
+                                eventId: widget.event?.id ?? '',
+                                paymentId: payment.id ?? '',
+                              ),
+                            );
+                          },
+                          child: PaymentLedgerItem(
+                            payment: payment,
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) => SizedBox(

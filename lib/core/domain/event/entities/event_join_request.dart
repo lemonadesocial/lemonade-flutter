@@ -5,6 +5,7 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_join_request.freezed.dart';
+part 'event_join_request.g.dart';
 
 @freezed
 class EventJoinRequest with _$EventJoinRequest {
@@ -22,6 +23,14 @@ class EventJoinRequest with _$EventJoinRequest {
     Event? eventExpanded,
     Enum$EventJoinRequestState? state,
   }) = _EventJoinRequest;
+
+  bool get isPending =>
+      state == Enum$EventJoinRequestState.pending ||
+      state == Enum$EventJoinRequestState.$unknown;
+
+  bool get isDeclined => state == Enum$EventJoinRequestState.declined;
+
+  bool get isApproved => state == Enum$EventJoinRequestState.approved;
 
   factory EventJoinRequest.fromDto(EventJoinRequestDto dto) => EventJoinRequest(
         id: dto.id,
@@ -42,11 +51,6 @@ class EventJoinRequest with _$EventJoinRequest {
         state: dto.state,
       );
 
-  bool get isPending =>
-      state == Enum$EventJoinRequestState.pending ||
-      state == Enum$EventJoinRequestState.$unknown;
-
-  bool get isDeclined => state == Enum$EventJoinRequestState.declined;
-
-  bool get isApproved => state == Enum$EventJoinRequestState.approved;
+  factory EventJoinRequest.fromJson(Map<String, dynamic> json) =>
+      _$EventJoinRequestFromJson(json);
 }
