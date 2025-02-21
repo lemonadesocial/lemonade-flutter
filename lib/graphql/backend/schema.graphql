@@ -22,7 +22,7 @@ type Query {
   getEventPendingInvites: GetEventPendingInvitesResponse!
   getEventCurrencies(_id: MongoID!, used: Boolean): [EventCurrency!]!
   getMyEvents(skip: Int! = 0, limit: Int! = 25, state: GetEventsState, subevent_parent: MongoID, tags: [String!], draft: Boolean): [Event!]!
-  getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON): [Event!]!
+  getHostingEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, state: FilterEventInput, sort: JSON, draft: Boolean): [Event!]!
   getEvent(_id: MongoID, shortid: String): Event
   getEvents(skip: Int, limit: Int, _id: [MongoID!], site: MongoID, search: String, accepted: MongoID, highlight: Boolean, subevent_parent: MongoID, space: MongoID, tags: [String!] @deprecated(reason: "No longer supported and will be removed soon. Consider using `space_tags` instead."), space_tags: [MongoID!], unpublished: Boolean, start_from: DateTimeISO, start_to: DateTimeISO, end_from: DateTimeISO, end_to: DateTimeISO, host_filter: HostFilter, sort: EventSortInput): [Event!]!
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!

@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +32,9 @@ class DraftHostingEventsBloc
         skip: 0,
         limit: 50,
         draft: true,
+        state: const FilterEventInput(
+          include: [EventState.created, EventState.started],
+        ),
       ),
     );
 
