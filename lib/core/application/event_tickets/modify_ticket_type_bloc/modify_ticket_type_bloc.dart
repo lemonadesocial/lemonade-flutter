@@ -7,7 +7,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'modify_ticket_type_bloc.freezed.dart';
 
-class ModifyTicketTypeBloc extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeState> {
+class ModifyTicketTypeBloc
+    extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeState> {
   final EventTicketType? initialTicketType;
   ModifyTicketTypeBloc({
     this.initialTicketType,
@@ -231,7 +232,8 @@ class ModifyTicketTypeBloc extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeS
       _validate(
         ModifyTicketTypeState(
           title: StringFormz.pure(initialTicketType?.title ?? ''),
-          description: OptionalStringFormz.pure(initialTicketType?.description ?? ''),
+          description:
+              OptionalStringFormz.pure(initialTicketType?.description ?? ''),
           limit: initialTicketType?.ticketLimit,
           ticketLimitPer: initialTicketType?.ticketLimitPer,
           active: initialTicketType?.active,
@@ -243,7 +245,8 @@ class ModifyTicketTypeBloc extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeS
                       currency: item.currency ?? '',
                       cost: item.cost ?? '0',
                       isDefault: item.isDefault,
-                      paymentAccounts: item.paymentAccounts?.whereType<String>().toList(),
+                      paymentAccounts:
+                          item.paymentAccounts?.whereType<String>().toList(),
                     ),
                   )
                   .toList() ??
@@ -303,7 +306,8 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     String? category,
   }) = _ModifyTicketTypeEventOnCategoryChanged;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
-  factory ModifyTicketTypeEvent.populateInitialTicketType() = _ModifyTicketTypeEventPopulateTicketType;
+  factory ModifyTicketTypeEvent.populateInitialTicketType() =
+      _ModifyTicketTypeEventPopulateTicketType;
 }
 
 @freezed

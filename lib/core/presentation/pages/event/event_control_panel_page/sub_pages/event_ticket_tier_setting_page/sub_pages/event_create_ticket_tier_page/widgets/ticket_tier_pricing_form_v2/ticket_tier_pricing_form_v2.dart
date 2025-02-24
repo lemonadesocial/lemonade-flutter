@@ -4,7 +4,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_price_button.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_stripe_price_form_popup.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/widgets/create_stripe_payment_account_popup/create_stripe_payment_account_popup.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/event_setup_stripe_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -286,7 +286,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
       backgroundColor: LemonColor.atomicBlack,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
-      builder: (context) => const CreateStripePaymentAccountPopup(),
+      builder: (context) => const EventSetupStripePaymentAccountPage(),
     );
     if (stripePaymentAccount == null) {
       return;

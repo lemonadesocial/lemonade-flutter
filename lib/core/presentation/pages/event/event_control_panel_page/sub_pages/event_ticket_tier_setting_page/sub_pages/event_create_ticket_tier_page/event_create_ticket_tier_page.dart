@@ -3,7 +3,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_basic_info_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_basic_info_form/ticket_tier_basic_info_form.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/ticket_tier_pricing_form_v2.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_tier_setting_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -132,7 +132,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                   ),
                 ),
                 const SliverToBoxAdapter(
-                  child: CreateTicketBasicInfoForm(),
+                  child: TicketTierBasicInforForm(),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(height: Spacing.smMedium * 2),

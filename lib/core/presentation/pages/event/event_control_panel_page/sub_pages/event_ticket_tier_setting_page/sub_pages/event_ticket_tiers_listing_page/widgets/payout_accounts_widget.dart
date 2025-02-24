@@ -1,7 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/widgets/create_stripe_payment_account_popup/create_stripe_payment_account_popup.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/event_setup_stripe_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -40,7 +40,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
       backgroundColor: LemonColor.atomicBlack,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
-      builder: (context) => const CreateStripePaymentAccountPopup(),
+      builder: (context) => const EventSetupStripePaymentAccountPage(),
     );
   }
 

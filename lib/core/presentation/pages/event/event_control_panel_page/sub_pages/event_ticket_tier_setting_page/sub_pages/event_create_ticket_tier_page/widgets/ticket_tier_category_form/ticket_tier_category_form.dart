@@ -9,21 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class CreateTicketCategoryBottomsheetForm extends StatefulWidget {
+class TicketTierCategoryForm extends StatefulWidget {
   final Function(String title, String decription) onSubmit;
 
-  const CreateTicketCategoryBottomsheetForm({
+  const TicketTierCategoryForm({
     super.key,
     required this.onSubmit,
   });
 
   @override
-  State<CreateTicketCategoryBottomsheetForm> createState() =>
-      _CreateTicketCategoryBottomsheetFormState();
+  State<TicketTierCategoryForm> createState() => _TicketTierCategoryFormState();
 }
 
-class _CreateTicketCategoryBottomsheetFormState
-    extends State<CreateTicketCategoryBottomsheetForm> {
+class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
   String title = '';
   String description = '';
 

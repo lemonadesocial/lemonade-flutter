@@ -1,4 +1,4 @@
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/widgets/create_stripe_payment_account_popup/setup_stripe_payment_account_builder.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/setup_stripe_payment_account_builder.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -9,8 +9,8 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CreateStripePaymentAccountPopup extends StatelessWidget {
-  const CreateStripePaymentAccountPopup({
+class EventSetupStripePaymentAccountPage extends StatelessWidget {
+  const EventSetupStripePaymentAccountPage({
     super.key,
   });
 
