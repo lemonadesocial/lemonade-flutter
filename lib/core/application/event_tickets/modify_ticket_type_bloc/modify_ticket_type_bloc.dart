@@ -7,8 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'modify_ticket_type_bloc.freezed.dart';
 
-class ModifyTicketTypeBloc
-    extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeState> {
+class ModifyTicketTypeBloc extends Bloc<ModifyTicketTypeEvent, ModifyTicketTypeState> {
   final EventTicketType? initialTicketType;
   ModifyTicketTypeBloc({
     this.initialTicketType,
@@ -110,20 +109,8 @@ class ModifyTicketTypeBloc
     _ModifyTicketTypeEventOnPricesChanged event,
     Emitter emit,
   ) {
-    final currentPrices = state.prices;
-    List<TicketPriceInput> newPrices;
-    if (event.index != null) {
-      newPrices = currentPrices.asMap().entries.map((entry) {
-        if (entry.key == event.index) {
-          return event.ticketPrice;
-        }
-        return entry.value;
-      }).toList();
-    } else {
-      newPrices = [...currentPrices, event.ticketPrice];
-    }
     final newState = state.copyWith(
-      prices: newPrices,
+      prices: event.ticketPrices,
     );
     emit(_validate(newState));
   }
@@ -244,8 +231,7 @@ class ModifyTicketTypeBloc
       _validate(
         ModifyTicketTypeState(
           title: StringFormz.pure(initialTicketType?.title ?? ''),
-          description:
-              OptionalStringFormz.pure(initialTicketType?.description ?? ''),
+          description: OptionalStringFormz.pure(initialTicketType?.description ?? ''),
           limit: initialTicketType?.ticketLimit,
           ticketLimitPer: initialTicketType?.ticketLimitPer,
           active: initialTicketType?.active,
@@ -257,8 +243,7 @@ class ModifyTicketTypeBloc
                       currency: item.currency ?? '',
                       cost: item.cost ?? '0',
                       isDefault: item.isDefault,
-                      // TODO: ticket setup
-                      // paymentAccounts: []
+                      paymentAccounts: item.paymentAccounts?.whereType<String>().toList(),
                     ),
                   )
                   .toList() ??
@@ -306,8 +291,7 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     required List<String> emails,
   }) = _ModifyTicketTypeEventOnWhitelistAddedModify;
   factory ModifyTicketTypeEvent.onPricesChanged({
-    required TicketPriceInput ticketPrice,
-    int? index,
+    required List<TicketPriceInput> ticketPrices,
   }) = _ModifyTicketTypeEventOnPricesChanged;
   factory ModifyTicketTypeEvent.onDeletePrice({
     required int index,
@@ -319,8 +303,7 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     String? category,
   }) = _ModifyTicketTypeEventOnCategoryChanged;
   factory ModifyTicketTypeEvent.onValidate() = _ModifyTicketTypeEventOnValidate;
-  factory ModifyTicketTypeEvent.populateInitialTicketType() =
-      _ModifyTicketTypeEventPopulateTicketType;
+  factory ModifyTicketTypeEvent.populateInitialTicketType() = _ModifyTicketTypeEventPopulateTicketType;
 }
 
 @freezed

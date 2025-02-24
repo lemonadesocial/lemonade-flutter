@@ -5,7 +5,6 @@ import 'package:app/core/presentation/pages/event/create_event/widgets/guest_lim
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_subevents_setting_page/event_subevents_setting_page.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -309,11 +308,9 @@ class CreateEventRegistrationSection extends StatelessWidget {
                               t.event.ticketTierSetting.ticketTierSettingTitle,
                           trailingIcon: Assets.icons.icArrowRight,
                           onTap: () {
-                            // TODO: ticket setup
-                            // AutoRouter.of(context).navigate(
-                            //   const EventTicketTierSettingRoute(),
-                            // );
-                            SnackBarUtils.showComingSoon();
+                            AutoRouter.of(context).navigate(
+                              const EventTicketTierSettingRoute(),
+                            );
                           },
                           value:
                               ticketsCount > 0 ? ticketsCount.toString() : null,
