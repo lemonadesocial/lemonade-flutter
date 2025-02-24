@@ -26,7 +26,8 @@ class ChatInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildAddButton(context),
+            // Commented out because add button functionality is not implemented yet
+            // _buildAddButton(context),
             SizedBox(width: Spacing.superExtraSmall),
             Expanded(
               child: Theme(
@@ -114,19 +115,19 @@ class ChatInput extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        height: 42,
-        width: 42,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(42 / 2),
-        ),
-        child: Center(
-          child: Assets.icons.icAdd.svg(),
-        ),
-      ),
-    );
-  }
+  // Widget _buildAddButton(BuildContext context) {
+  //   return GestureDetector(
+  //     child: Container(
+  //       height: 42,
+  //       width: 42,
+  //       decoration: BoxDecoration(
+  //         color: Theme.of(context).colorScheme.surfaceVariant,
+  //         borderRadius: BorderRadius.circular(42 / 2),
+  //       ),
+  //       child: Center(
+  //         child: Assets.icons.icAdd.svg(),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
