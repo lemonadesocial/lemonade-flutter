@@ -1,6 +1,5 @@
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/input_bar_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
