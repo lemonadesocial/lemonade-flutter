@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.51.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.3...v1.51.0) (2025-02-24)
+
+
+### Features
+
+* add support add/edit description flow ([#874](https://github.com/lemonadesocial/lemonade-flutter/issues/874)) ([72d4c45](https://github.com/lemonadesocial/lemonade-flutter/commit/72d4c454ed9773d1dd7367963ccb8bc0142156df))
+* customize user agent ([#872](https://github.com/lemonadesocial/lemonade-flutter/issues/872)) ([886a743](https://github.com/lemonadesocial/lemonade-flutter/commit/886a7430f2dd8764bd07dc4399dbf68549b4c5d9))
+* define ai workflow to help adding new domain for new feature ([#862](https://github.com/lemonadesocial/lemonade-flutter/issues/862)) ([b196d09](https://github.com/lemonadesocial/lemonade-flutter/commit/b196d092f174682774bc63c2763ad695789dcd3e))
+* event draft polishment ([#865](https://github.com/lemonadesocial/lemonade-flutter/issues/865)) ([72164fa](https://github.com/lemonadesocial/lemonade-flutter/commit/72164fa38b129c75545e80e668c65acfd2b1cc4f))
+* events draft ([#875](https://github.com/lemonadesocial/lemonade-flutter/issues/875)) ([f668d61](https://github.com/lemonadesocial/lemonade-flutter/commit/f668d61b89a277d87f0c70b5174e78cacaf07795))
+* hide reward in setting ([#868](https://github.com/lemonadesocial/lemonade-flutter/issues/868)) ([44030bb](https://github.com/lemonadesocial/lemonade-flutter/commit/44030bb859ab981c58d50c170d742a557df1e31e))
+* ticket rewards ([#863](https://github.com/lemonadesocial/lemonade-flutter/issues/863)) ([cf71916](https://github.com/lemonadesocial/lemonade-flutter/commit/cf71916ce66dbf228b47062dbcea0a542d2a7c2e))
+
+
+### Bug Fixes
+
+* empty state home screen ([#869](https://github.com/lemonadesocial/lemonade-flutter/issues/869)) ([9d82ba5](https://github.com/lemonadesocial/lemonade-flutter/commit/9d82ba561c0ea5fb08df123e5239406f5f8a659c))
+* enhance display payment amount event host guest list ([#859](https://github.com/lemonadesocial/lemonade-flutter/issues/859)) ([3cccb39](https://github.com/lemonadesocial/lemonade-flutter/commit/3cccb3931ed2a6d3fc0ddd37da3883082b43fc85))
+* filter empty reward response ([#876](https://github.com/lemonadesocial/lemonade-flutter/issues/876)) ([ea39929](https://github.com/lemonadesocial/lemonade-flutter/commit/ea39929918d5f447383bf79ce146a836c7261dda))
+* hide plus button in chat detail ([#877](https://github.com/lemonadesocial/lemonade-flutter/issues/877)) ([3d868e1](https://github.com/lemonadesocial/lemonade-flutter/commit/3d868e16a7223a763e50de9d0dbab5f17bea4ee1))
+* improve oauth helper ([#866](https://github.com/lemonadesocial/lemonade-flutter/issues/866)) ([8e3f782](https://github.com/lemonadesocial/lemonade-flutter/commit/8e3f7820114008e53d2d72f434a10eae76ac8bca))
+* minor sentry bugs ([#860](https://github.com/lemonadesocial/lemonade-flutter/issues/860)) ([daa978b](https://github.com/lemonadesocial/lemonade-flutter/commit/daa978b57b7499aff261ae0d3e5671a9f617f8d7))
+* minor sentry bugs ([#871](https://github.com/lemonadesocial/lemonade-flutter/issues/871)) ([b9e8e34](https://github.com/lemonadesocial/lemonade-flutter/commit/b9e8e3400218dd7529d35fbaf5bde12054aaca38))
+* passing empty string query application answers ([#864](https://github.com/lemonadesocial/lemonade-flutter/issues/864)) ([0e0e777](https://github.com/lemonadesocial/lemonade-flutter/commit/0e0e7774cbef8b747455cb6798a615128ccfb428))
+* reward bugs ([#873](https://github.com/lemonadesocial/lemonade-flutter/issues/873)) ([55b4b16](https://github.com/lemonadesocial/lemonade-flutter/commit/55b4b165e1513324ce84cb6c6b8b47e8ecaea416))
+
 ## [1.50.3](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.2...v1.50.3) (2025-01-24)
 
 
