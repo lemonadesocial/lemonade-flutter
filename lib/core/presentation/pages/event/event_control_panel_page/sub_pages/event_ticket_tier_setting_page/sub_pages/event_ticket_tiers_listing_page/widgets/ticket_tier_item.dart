@@ -172,9 +172,13 @@ class TicketTierItem extends StatelessWidget {
                 GetEventCurrenciesBuilder(
                   eventId: eventId,
                   builder: (context, loading, currencies) {
-                    return Wrap(
-                      spacing: Spacing.xSmall,
-                      children: (eventTicketType.prices ?? []).map((price) {
+                    return Row(
+                      children: (eventTicketType.prices ?? [])
+                          .asMap()
+                          .entries
+                          .map((entry) {
+                        final price = entry.value;
+                        final index = entry.key;
                         final currencyInfo = EventTicketUtils.getEventCurrency(
                           currencies: currencies,
                           currency: price.currency ?? '',
@@ -201,9 +205,13 @@ class TicketTierItem extends StatelessWidget {
                             isFree ? t.event.free : displayedAmount;
                         return RichText(
                           text: TextSpan(
-                            text: loading ? '-' : displayedAmount,
+                            text: loading
+                                ? '-'
+                                : '${index == 0 ? '' : ' ${t.common.or}'} $displayedAmount',
                             style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
+                              color: index == 0
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSecondary,
                             ),
                           ),
                         );
