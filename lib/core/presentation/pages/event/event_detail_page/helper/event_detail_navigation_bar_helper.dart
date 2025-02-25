@@ -299,6 +299,25 @@ class EventDetailNavigationBarHelper {
           );
         },
       ),
+      FeatureItem(
+        label: t.event.configuration.ledger,
+        iconData: ThemeSvgIcon(
+          color: colorScheme.onSecondary,
+          builder: (filter) => Assets.icons.icBook.svg(
+            colorFilter: filter,
+            width: iconSize,
+            height: iconSize,
+          ),
+        ),
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          AutoRouter.of(context).push(
+            EventPaymentLedgerRoute(
+              event: event,
+            ),
+          );
+        },
+      ),
       if (shouldShowProgram)
         FeatureItem(
           label: t.event.configuration.program,

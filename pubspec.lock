@@ -458,7 +458,7 @@ packages:
     source: hosted
     version: "0.17.3"
   csv:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: csv
       sha256: "63ed2871dd6471193dffc52c0e6c76fb86269c00244d244297abbb355c84a86e"

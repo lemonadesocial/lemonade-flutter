@@ -1,0 +1,87 @@
+# import '../../schema.graphql'
+# import '../fragment/user_fragment.graphql'
+
+query ListEventPayments(
+  $skip: Int
+  $limit: Int
+  $event: MongoID!
+  $provider: NewPaymentProvider
+  $networks: [String!]
+  $ticketTypes: [MongoID!]
+  $checkedIn: Boolean
+  $search: String
+) {
+  listEventPayments(
+    skip: $skip
+    limit: $limit
+    event: $event
+    provider: $provider
+    networks: $networks
+    ticket_types: $ticketTypes
+    checked_in: $checkedIn
+    search: $search
+  ) {
+    total
+    records {
+      _id
+      user
+      transfer_params
+      transfer_metadata
+      state
+      stamps
+      failure_reason
+      currency
+      billing_info {
+        _id
+        firstname
+        lastname
+        email
+      }
+      amount
+      account_expanded {
+        ...PaymentAccountFragment
+      }
+      account
+      due_amount
+      ticket_types_expanded {
+        _id
+        title
+        description
+        position
+      }
+      tickets {
+        _id
+        created_at
+        shortid
+        event
+        type
+      }
+      ref_data
+      buyer_info {
+        name
+        email
+      }
+      buyer_user {
+        name,
+        email,
+        display_name,
+        image_avatar
+      }
+      formatted_discount_amount
+      formatted_due_amount
+      formatted_fee_amount
+      formatted_total_amount
+      crypto_payment_info {
+        network
+        tx_hash
+      }
+      stripe_payment_info {
+        payment_intent
+        card {
+          brand
+          last4
+        }
+      }
+    }
+  }
+} 

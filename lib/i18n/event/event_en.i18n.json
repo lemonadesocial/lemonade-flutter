@@ -255,7 +255,8 @@
         "info": "Info",
         "guests": "Guests",
         "team": "Team",
-        "applicationForm": "Application form"
+        "applicationForm": "Application form",
+        "ledger": "Ledger"
     },
     "rewards": "Rewards",
     "addPoap": "Add POAP",
@@ -913,5 +914,13 @@
         "claimRewardFailed": "Claim reward failed",
         "currencyReward": "$currency Reward",
         "onClaimingTickets": "On claiming $ticketType tickets"
+    },
+    "eventPaymentLedger": {
+        "allNetworks": "All Networks",
+        "countSelected": "$count selected",
+        "stripe": "Stripe",
+        "allGuests": "All guests",
+        "checkedIn": "Checked in",
+        "notCheckedIn": "Not checked in"
     }
 }
