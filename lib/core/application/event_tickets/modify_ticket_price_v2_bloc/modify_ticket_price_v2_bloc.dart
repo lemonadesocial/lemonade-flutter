@@ -1,6 +1,4 @@
 import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.dart';
-import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -9,10 +7,8 @@ part 'modify_ticket_price_v2_bloc.freezed.dart';
 class ModifyTicketPriceV2Bloc
     extends Bloc<ModifyTicketPriceV2Event, ModifyTicketPriceV2State> {
   final TicketPriceInput? initialTicketPrice;
-  final Chain? initialNetwork;
   ModifyTicketPriceV2Bloc({
     this.initialTicketPrice,
-    this.initialNetwork,
   }) : super(
           ModifyTicketPriceV2State(
             isValid: false,
@@ -51,10 +47,7 @@ class ModifyTicketPriceV2Bloc
     Emitter emit,
   ) {
     final newState = state.copyWith(
-      selectedPaymentAccounts:
-          event.paymentAccounts.map((e) => e.id).whereType<String>().toList(),
-      currency: null,
-      cost: null,
+      selectedPaymentAccounts: event.paymentAccounts,
     );
     emit(_validate(newState));
   }
@@ -107,7 +100,7 @@ class ModifyTicketPriceV2Event with _$ModifyTicketPriceV2Event {
     required String currency,
   }) = _ModifyTicketPriceV2EventOnCurrencyChanged;
   factory ModifyTicketPriceV2Event.onPaymentAccountSelected({
-    required List<PaymentAccount> paymentAccounts,
+    required List<String> paymentAccounts,
   }) = _ModifyTicketPriceV2EventOnPaymentAccountSelected;
   factory ModifyTicketPriceV2Event.populateTicketPrice() =
       _ModifyTicketPriceV2EventPopulateTicketPrice;

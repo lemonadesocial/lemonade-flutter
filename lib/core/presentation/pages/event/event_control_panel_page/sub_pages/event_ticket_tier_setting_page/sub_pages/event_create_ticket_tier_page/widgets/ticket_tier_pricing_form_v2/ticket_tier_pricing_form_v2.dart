@@ -2,6 +2,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_direct_crypto_price_form_popup.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_price_button.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_stripe_price_form_popup.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/event_setup_stripe_payment_account_page.dart';
@@ -317,15 +318,26 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
         );
   }
 
-  void _onTapCryptoRelay() {
-    // TOOD: mock data
-    //await openCreateDirectCryptoPrice();
-    final newPrice = TicketPriceInput(
-      // cost: '200000000000000',
-      cost: '60000',
-      currency: 'USDC',
-      paymentAccounts: ['67b7fd9a7d154a8139aa3561'],
+  void _onTapCryptoRelay() async {
+    final eventLevelDirectCryptoPaymentAccounts =
+        widget.eventLevelPaymentAccounts
+            .where(
+              (element) => element.type == PaymentAccountType.ethereumRelay,
+            )
+            .toList();
+    final newPrice = await showCupertinoModalBottomSheet<TicketPriceInput?>(
+      context: context,
+      backgroundColor: LemonColor.atomicBlack,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) => TicketTierAddDirectCryptoFormPopup(
+        eventLevelDirectCryptoPaymentAccounts:
+            eventLevelDirectCryptoPaymentAccounts,
+        initialTicketPrice: cryptoPriceAndPaymentAccounts.$1,
+      ),
     );
+    if (newPrice == null) {
+      return;
+    }
     final state = context.read<ModifyTicketTypeBloc>().state;
     final newPrices = generateNewPrices(
       [...state.prices],

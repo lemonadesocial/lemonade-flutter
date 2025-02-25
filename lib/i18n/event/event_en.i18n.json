@@ -367,8 +367,11 @@
         "getStarted": "Get started",
         "settingUp": "Setting up...",
         "startSelling": "Start selling!",
-        "startSellingDesc": "Collect payments by creating a Stripe account. Receive payouts daily. Set up in under 5 minutes."
-        
+        "startSellingDesc": "Collect payments by creating a Stripe account. Receive payouts daily. Set up in under 5 minutes.",
+        "cryptoPrice": "Crypto price",
+        "cryptoPriceDescription": "Accept payments instantly via crypto wallet.",
+        "selectNetworks": "Select networks to receive payments on",
+        "activate": "Activate"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

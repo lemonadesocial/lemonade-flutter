@@ -49,8 +49,8 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
               Expanded(
                 child: Text(
                   placeholder ?? '',
-                  style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.outlineVariant,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -64,7 +64,7 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
                 ),
               ),
             Assets.icons.icDoubleArrowUpDown.svg(
-              color: colorScheme.onSurfaceVariant,
+              color: colorScheme.onSecondary,
             ),
           ],
         ),
