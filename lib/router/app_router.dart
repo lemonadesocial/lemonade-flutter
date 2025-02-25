@@ -218,18 +218,20 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
-    AutoRoute(
-      page: EventTicketTierSettingRoute.page,
-      children: [
-        AutoRoute(
-          initial: true,
-          page: EventTicketTiersListingRoute.page,
-        ),
-        AutoRoute(
-          page: EventCreateTicketTierRoute.page,
-        ),
-      ],
-    ),
+    // TODO: I dont know why we place this route here
+    // should be already child of EventSettingsRoute
+    // AutoRoute(
+    //   page: EventTicketTierSettingRoute.page,
+    //   children: [
+    //     AutoRoute(
+    //       initial: true,
+    //       page: EventTicketTiersListingRoute.page,
+    //     ),
+    //     AutoRoute(
+    //       page: EventCreateTicketTierRoute.page,
+    //     ),
+    //   ],
+    // ),
     AutoRoute(
       page: EventSettingsRoute.page,
       children: [
@@ -276,6 +278,9 @@ final eventDetailRoutes = AutoRoute(
             ),
             AutoRoute(
               page: EventCreateTicketTierRoute.page,
+            ),
+            AutoRoute(
+              page: EventActiveCryptoPaymentAccountsRoute.page,
             ),
           ],
         ),

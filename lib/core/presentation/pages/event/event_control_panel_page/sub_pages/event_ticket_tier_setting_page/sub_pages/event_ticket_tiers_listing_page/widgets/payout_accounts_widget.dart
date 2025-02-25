@@ -228,7 +228,8 @@ class PayoutAccountItem extends StatelessWidget {
                 Text(
                   title,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 2.w),

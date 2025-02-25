@@ -373,7 +373,9 @@
         "selectNetworks": "Select networks to receive payments on",
         "activate": "Activate",
         "activateChainDescription": "Enter the wallet ID where you want to receive payments on the $chainName network",
-        "walletId": "Wallet ID"
+        "walletId": "Wallet ID",
+        "activeNetworks": "Active networks",
+        "chainActivated": "$chainName activated"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

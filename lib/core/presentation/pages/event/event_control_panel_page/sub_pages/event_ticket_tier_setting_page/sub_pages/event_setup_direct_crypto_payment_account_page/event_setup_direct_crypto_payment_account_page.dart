@@ -103,7 +103,13 @@ class _EventSetupDirectCryptoPaymentAccountPageState
     context
         .read<GetEventDetailBloc>()
         .add(GetEventDetailEvent.fetch(eventId: event.id ?? ''));
-    Navigator.of(context).pop(_createdPaymentAccount!);
+    if (_createdPaymentAccount != null) {
+      SnackBarUtils.showSuccess(
+        message: t.event.ticketTierSetting
+            .chainActivated(chainName: widget.chain.name ?? ''),
+      );
+      Navigator.of(context).pop(_createdPaymentAccount!);
+    }
   }
 
   Future<PaymentAccount?> _createEthereumRelayPaymentAccount({

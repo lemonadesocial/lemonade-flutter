@@ -2,7 +2,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_price_v2_bloc/m
 import 'package:app/core/domain/event/input/ticket_type_input/ticket_type_input.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/get_chains_list_builder.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/widgets/get_chains_list_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_direct_crypto_payment_account_page/event_setup_direct_crypto_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
