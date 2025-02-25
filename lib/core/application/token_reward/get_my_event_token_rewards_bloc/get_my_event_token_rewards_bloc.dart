@@ -72,6 +72,9 @@ class GetMyEventTokenRewardsBloc
       final signatureResponses = response
           .map((r) => r.fold((l) => null, (r) => r))
           .whereType<RewardSignatureResponse>()
+          .where(
+            (r) => r.settings != null && r.settings?.isNotEmpty == true,
+          )
           .toList();
 
       emit(GetMyEventTokenRewardsState.success(signatureResponses));

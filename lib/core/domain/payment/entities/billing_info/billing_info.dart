@@ -2,6 +2,7 @@ import 'package:app/core/data/payment/dtos/billing_info_dto/billing_info_dto.dar
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'billing_info.freezed.dart';
+part 'billing_info.g.dart';
 
 @freezed
 class BillingInfo with _$BillingInfo {
@@ -20,4 +21,7 @@ class BillingInfo with _$BillingInfo {
         lastName: dto.lastName,
         email: dto.email,
       );
+
+  factory BillingInfo.fromJson(Map<String, dynamic> json) =>
+      _$BillingInfoFromJson(json);
 }

@@ -1,0 +1,23 @@
+query GetEventPaymentStatistics($event: MongoID!) {
+  getEventPaymentStatistics(event: $event) {
+    total_payments
+    stripe_payments {
+      count
+      revenue {
+        currency
+        formatted_total_amount
+      }
+    }
+    crypto_payments {
+      count
+      revenue {
+        currency
+        formatted_total_amount
+      }
+      networks {
+        chain_id
+        count
+      }
+    }
+  }
+} 

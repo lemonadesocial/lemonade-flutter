@@ -419,6 +419,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: ClaimTokenRewardRoute.page,
     ),
+    AutoRoute(
+      page: EventPaymentLedgerRoute.page,
+    ),
   ],
 );
 

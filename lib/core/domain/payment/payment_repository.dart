@@ -8,7 +8,10 @@ import 'package:app/core/domain/payment/input/get_payment_input/get_payment_inpu
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
 import 'package:dartz/dartz.dart';
+import 'package:app/core/domain/payment/entities/event_payment_statistics/event_payment_statistics.dart';
+import 'package:app/core/domain/payment/entities/list_event_payments_response/list_event_payments_response.dart';
 
 abstract class PaymentRepository {
   Future<Either<Failure, List<PaymentCard>>> getStripeCards({
@@ -37,5 +40,13 @@ abstract class PaymentRepository {
 
   Future<Either<Failure, bool>> mailTicketPaymentReciept({
     required String ticketId,
+  });
+
+  Future<Either<Failure, EventPaymentStatistics>> getEventPaymentStatistics({
+    required String eventId,
+  });
+
+  Future<Either<Failure, ListEventPaymentsResponse>> listEventPayments({
+    required Variables$Query$ListEventPayments input,
   });
 }

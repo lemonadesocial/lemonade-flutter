@@ -6,6 +6,7 @@ import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart'
 import 'package:app/core/data/event/dtos/event_tickets_pricing_info_dto/event_tickets_pricing_info_dto.dart';
 import 'package:app/core/data/event/dtos/get_my_tickets_response_dto/get_my_tickets_response_dto.dart';
 import 'package:app/core/data/event/dtos/redeem_tickets_response_dto/redeem_tickets_response_dto.dart';
+import 'package:app/core/data/event/dtos/ticket_statistics_dto/ticket_statistics_dto.dart';
 import 'package:app/core/data/event/gql/event_tickets_mutation.dart';
 import 'package:app/core/data/event/gql/event_tickets_query.dart';
 import 'package:app/core/domain/event/entities/buy_tickets_response.dart';
@@ -16,6 +17,7 @@ import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_tickets_pricing_info.dart';
 import 'package:app/core/domain/event/entities/get_my_tickets_response.dart';
 import 'package:app/core/domain/event/entities/redeem_tickets_response.dart';
+import 'package:app/core/domain/event/entities/ticket_statistics.dart';
 import 'package:app/core/domain/event/input/assign_tickets_input/assign_tickets_input.dart';
 import 'package:app/core/domain/event/input/buy_tickets_input/buy_tickets_input.dart';
 import 'package:app/core/domain/event/input/calculate_tickets_pricing_input/calculate_tickets_pricing_input.dart';
@@ -34,6 +36,7 @@ import 'package:app/graphql/backend/event/mutation/delete_event_ticket_type.grap
 import 'package:app/graphql/backend/event/mutation/email_event_ticket.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_ticket_type.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_my_tickets.graphql.dart';
+import 'package:app/graphql/backend/event/query/get_ticket_statistics.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/tickets/mutation/redeem_tickets.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -413,5 +416,30 @@ class EventTicketRepositoryImpl implements EventTicketRepository {
       return Left(Failure());
     }
     return Right(result.parsedData!.cancelTickets);
+  }
+
+  @override
+  Future<Either<Failure, TicketStatistics>> getTicketStatistics({
+    required String eventId,
+  }) async {
+    final result = await _client.query$GetTicketStatistics(
+      Options$Query$GetTicketStatistics(
+        variables: Variables$Query$GetTicketStatistics(
+          event: eventId,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(
+      TicketStatistics.fromDto(
+        TicketStatisticsDto.fromJson(
+          result.parsedData!.getTicketStatistics.toJson(),
+        ),
+      ),
+    );
   }
 }
