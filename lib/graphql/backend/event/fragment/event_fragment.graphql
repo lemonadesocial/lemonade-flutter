@@ -134,6 +134,7 @@ fragment EventFields on Event {
   attending_count
   pending_request_count
   guest_directory_enabled
+  published
   tags
   timezone
 }

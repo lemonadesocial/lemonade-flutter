@@ -42,7 +42,7 @@ class GuestEventDetailAbout extends StatelessWidget {
             AutoRouter.of(context).push(
               EventDescriptionFieldRoute(
                 description: event.description ?? '',
-                onDescriptionChanged: (value) {},
+                onSave: (value) async {},
               ),
             );
           },

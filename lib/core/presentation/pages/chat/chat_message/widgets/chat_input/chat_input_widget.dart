@@ -1,6 +1,5 @@
 import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/input_bar_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -26,7 +25,8 @@ class ChatInput extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildAddButton(context),
+            // Commented out because add button functionality is not implemented yet
+            // _buildAddButton(context),
             SizedBox(width: Spacing.superExtraSmall),
             Expanded(
               child: Theme(
@@ -114,19 +114,19 @@ class ChatInput extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        height: 42,
-        width: 42,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(42 / 2),
-        ),
-        child: Center(
-          child: Assets.icons.icAdd.svg(),
-        ),
-      ),
-    );
-  }
+  // Widget _buildAddButton(BuildContext context) {
+  //   return GestureDetector(
+  //     child: Container(
+  //       height: 42,
+  //       width: 42,
+  //       decoration: BoxDecoration(
+  //         color: Theme.of(context).colorScheme.surfaceVariant,
+  //         borderRadius: BorderRadius.circular(42 / 2),
+  //       ),
+  //       child: Center(
+  //         child: Assets.icons.icAdd.svg(),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

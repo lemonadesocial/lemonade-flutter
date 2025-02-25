@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_button/connect_farcaster_button.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -91,15 +92,16 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                       final w3mService =
                           getIt<WalletConnectService>().w3mService;
                       final userWalletAddress =
-                          w3mService.session?.address ?? '';
+                          connectButtonState == ConnectButtonState.connected
+                              ? w3mService.session?.address
+                              : null;
                       return SettingTileWidget(
                         radius: LemonRadius.medium,
                         leadingRadius: LemonRadius.xSmall,
                         title: t.common.actions.connectWallet,
-                        subTitle:
-                            connectButtonState == ConnectButtonState.connected
-                                ? Web3Utils.formatIdentifier(userWalletAddress)
-                                : t.common.status.notConnected,
+                        subTitle: userWalletAddress != null
+                            ? Web3Utils.formatIdentifier(userWalletAddress)
+                            : t.common.status.notConnected,
                         leading: ThemeSvgIcon(
                           color: colorScheme.onSecondary,
                           builder: (filter) => Assets.icons.icWallet.svg(
@@ -110,7 +112,18 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                           width: 18.w,
                           height: 18.w,
                         ),
-                        onTap: () => onPressConnect(context),
+                        onTap: () {
+                          try {
+                            onPressConnect(context);
+                          } catch (e) {
+                            CrashAnalyticsManager()
+                                .crashAnalyticsService
+                                ?.captureError(
+                                  e,
+                                  StackTrace.current,
+                                );
+                          }
+                        },
                       );
                     },
                   ),

@@ -3,12 +3,16 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
+import 'package:app/core/application/token_reward/list_ticket_token_rewards_bloc/list_ticket_token_rewards_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_general_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_title/guest_event_detail_title.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_token_rewards_list/guest_event_detail_token_rewards_list.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_programs.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_subevents.dart';
@@ -64,6 +68,11 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
     subEvents.sort(
       (a, b) => a.start!.compareTo(b.start!),
     );
+    final rewardSettings =
+        context.watch<ListTicketTokenRewardsBloc>().state.maybeWhen(
+              orElse: () => <TokenRewardSetting>[],
+              success: (rewards) => rewards,
+            );
 
     return Scaffold(
       backgroundColor: colorScheme.primary,
@@ -90,9 +99,22 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
             final widgets = [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: GuestEventDetailGeneralInfo(
-                  event: event,
-                  pendingCohostRequest: pendingCohostRequest,
+                child: Column(
+                  children: [
+                    GuestEventDetailTitle(event: event),
+                    SizedBox(height: Spacing.medium),
+                    if (rewardSettings.isNotEmpty) ...[
+                      GuestEventDetailTokenRewardsList(
+                        rewardSettings: rewardSettings,
+                        ticketTypes: event.eventTicketTypes ?? [],
+                      ),
+                      SizedBox(height: Spacing.medium),
+                    ],
+                    GuestEventDetailGeneralInfo(
+                      event: event,
+                      pendingCohostRequest: pendingCohostRequest,
+                    ),
+                  ],
                 ),
               ),
               // NOTE: requirement - Hide location in pre-rsvp

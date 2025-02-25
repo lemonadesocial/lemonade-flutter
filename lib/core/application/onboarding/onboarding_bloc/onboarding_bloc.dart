@@ -130,6 +130,11 @@ class OnboardingBloc extends Cubit<OnboardingState> {
   }
 
   Future<void> updateProfile({String? imageId}) async {
+    if (state.username == null || state.username!.isEmpty) {
+      emit(state.copyWith(status: OnboardingStatus.error));
+      return;
+    }
+
     emit(state.copyWith(status: OnboardingStatus.loading));
     final response = await userRepository.updateUserProfile(
       UpdateUserProfileInput(

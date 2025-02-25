@@ -17,6 +17,7 @@ enum PaymentAccountType {
   ethereumRelay,
   @JsonValue('ethereum_stake')
   ethereumStake,
+  solana
 }
 
 enum PaymentState {

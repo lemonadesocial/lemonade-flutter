@@ -6,6 +6,7 @@
     "created": "created",
     "hosting": "hosting",
     "upcoming": "upcoming",
+    "draft": "draft",
     "past": "past",
     "buy": "buy",
     "free": "Free",
@@ -910,7 +911,9 @@
         "rewardClaimedDescription": "Congratulations! Your reward has been deposited into your wallet successfully.",
         "depositingRewards": "Depositing rewards",
         "depositingRewardsDescription": "Please wait while we deposit your rewards—don’t leave this page.  This can take up to 60 seconds.",
-        "claimRewardFailed": "Claim reward failed"
+        "claimRewardFailed": "Claim reward failed",
+        "currencyReward": "$currency Reward",
+        "onClaimingTickets": "On claiming $ticketType tickets"
     },
     "eventPaymentLedger": {
         "allNetworks": "All Networks",

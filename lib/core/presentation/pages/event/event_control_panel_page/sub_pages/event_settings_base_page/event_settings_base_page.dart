@@ -397,7 +397,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 AutoRouter.of(context).navigate(
                                   EventDescriptionFieldRoute(
                                     description: event.description ?? '',
-                                    onDescriptionChanged: (value) {
+                                    onSave: (value) async {
                                       context.read<EditEventDetailBloc>().add(
                                             EditEventDetailEventUpdateDescription(
                                               eventId: event.id ?? '',
