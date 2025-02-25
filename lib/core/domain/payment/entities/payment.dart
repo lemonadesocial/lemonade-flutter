@@ -1,4 +1,5 @@
 import 'package:app/core/data/payment/dtos/payment_dto/payment_dto.dart';
+import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/billing_info/billing_info.dart';
@@ -42,6 +43,7 @@ class Payment with _$Payment {
     String? formattedTotalAmount,
     CryptoPaymentInfo? cryptoPaymentInfo,
     StripePaymentInfo? stripePaymentInfo,
+    EventJoinRequest? joinRequest,
   }) = _Payment;
 
   String get buyerName =>
@@ -101,6 +103,9 @@ class Payment with _$Payment {
             : null,
         stripePaymentInfo: dto.stripePaymentInfo != null
             ? StripePaymentInfo.fromDto(dto.stripePaymentInfo!)
+            : null,
+        joinRequest: dto.joinRequest != null
+            ? EventJoinRequest.fromDto(dto.joinRequest!)
             : null,
       );
 

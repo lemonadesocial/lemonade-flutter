@@ -49,13 +49,6 @@ query ListEventPayments(
         description
         position
       }
-      tickets {
-        _id
-        created_at
-        shortid
-        event
-        type
-      }
       ref_data
       buyer_info {
         name

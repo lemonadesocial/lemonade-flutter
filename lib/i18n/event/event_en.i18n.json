@@ -922,5 +922,15 @@
         "allGuests": "All guests",
         "checkedIn": "Checked in",
         "notCheckedIn": "Not checked in"
+    },
+    "eventPaymentDetail": {
+        "tickets": "Tickets",
+        "payment": "Payment",
+        "paid": "Paid",
+        "paymentMethod": "Payment method",
+        "stripePaymentId": "Stripe payment ID",
+        "paymentStatus": "status",
+        "chain": "Chain",
+        "walletID": "Wallet ID"
     }
 }

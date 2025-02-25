@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_join_request_dto/event_join_request_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
 import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/data/payment/dtos/billing_info_dto/billing_info_dto.dart';
@@ -42,6 +43,7 @@ class PaymentDto with _$PaymentDto {
     CryptoPaymentInfoDto? cryptoPaymentInfo,
     @JsonKey(name: 'stripe_payment_info')
     StripePaymentInfoDto? stripePaymentInfo,
+    @JsonKey(name: 'join_request') EventJoinRequestDto? joinRequest,
   }) = _PaymentDto;
 
   factory PaymentDto.fromJson(Map<String, dynamic> json) =>
