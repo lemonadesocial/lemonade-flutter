@@ -47,6 +47,8 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
   final refreshController = RefreshController();
   bool hasNextPage = true;
   int limit = 25;
+
+  // Add variables state
   late Variables$Query$ListEventPayments _filterVariables;
 
   @override
