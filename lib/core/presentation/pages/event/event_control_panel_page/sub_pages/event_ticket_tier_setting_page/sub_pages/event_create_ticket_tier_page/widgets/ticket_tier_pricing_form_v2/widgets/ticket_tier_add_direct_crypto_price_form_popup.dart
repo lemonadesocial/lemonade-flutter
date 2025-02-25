@@ -4,6 +4,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/get_chains_list_builder.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_dropdown.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_direct_crypto_payment_account_page/event_setup_direct_crypto_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -305,8 +306,31 @@ class _ViewState extends State<_View> {
                                       },
                                     );
                                   },
-                                  onTap: (chain, selectable, selected) {
-                                    if (!selectable) return;
+                                  onTap: (chain, selectable, selected) async {
+                                    if (!selectable) {
+                                      final paymentAccount =
+                                          await showCupertinoModalBottomSheet<
+                                              PaymentAccount?>(
+                                        context: context,
+                                        backgroundColor: LemonColor.atomicBlack,
+                                        barrierColor:
+                                            Colors.black.withOpacity(0.5),
+                                        builder: (context) =>
+                                            EventSetupDirectCryptoPaymentAccountPage(
+                                          chain: chain,
+                                        ),
+                                      );
+                                      if (paymentAccount == null) {
+                                        return;
+                                      }
+                                      setState(() {
+                                        availablePaymentAccounts = [
+                                          ...availablePaymentAccounts,
+                                          paymentAccount,
+                                        ];
+                                      });
+                                      return;
+                                    }
                                     final paymentAccountId =
                                         availablePaymentAccounts
                                             .firstWhereOrNull(

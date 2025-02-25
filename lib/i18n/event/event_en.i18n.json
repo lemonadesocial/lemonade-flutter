@@ -371,7 +371,9 @@
         "cryptoPrice": "Crypto price",
         "cryptoPriceDescription": "Accept payments instantly via crypto wallet.",
         "selectNetworks": "Select networks to receive payments on",
-        "activate": "Activate"
+        "activate": "Activate",
+        "activateChainDescription": "Enter the wallet ID where you want to receive payments on the $chainName network",
+        "walletId": "Wallet ID"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {

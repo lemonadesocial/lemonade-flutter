@@ -196,7 +196,8 @@ class TicketTierFeatureDropdownListState<T, V>
             color: LemonColor.atomicBlack,
             padding: EdgeInsets.all(Spacing.smMedium),
             child: SafeArea(
-              child: LinearGradientButton(
+              child: LinearGradientButton.primaryButton(
+                label: t.common.confirm,
                 onTap: () {
                   widget.onConfirm?.call(
                     widget.data.firstWhereOrNull(
@@ -204,13 +205,6 @@ class TicketTierFeatureDropdownListState<T, V>
                     ),
                   );
                 },
-                height: 42.w,
-                radius: BorderRadius.circular(LemonRadius.small * 2),
-                mode: GradientButtonMode.lavenderMode,
-                label: t.common.confirm,
-                textStyle: Typo.medium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
               ),
             ),
           ),
