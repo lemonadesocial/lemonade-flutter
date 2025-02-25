@@ -4,6 +4,7 @@ import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/event_ticket_tiers_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/payout_accounts_widget.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/view_active_crypto_payment_accounts_button.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_ticket_tiers_listing_page/widgets/view_payment_ledger_button.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -109,6 +110,12 @@ class EventTicketTiersListingPage extends StatelessWidget {
                     ),
                     const SliverToBoxAdapter(
                       child: ViewActiveCryptoPaymentAccountsButton(),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: Spacing.xSmall),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: ViewPaymentLedgerButton(),
                     ),
                     SliverToBoxAdapter(
                       child: SizedBox(

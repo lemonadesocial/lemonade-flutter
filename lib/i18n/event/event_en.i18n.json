@@ -937,6 +937,7 @@
         "onClaimingTickets": "On claiming $ticketType tickets"
     },
     "eventPaymentLedger": {
+        "paymentLedger": "Payment ledger",
         "allNetworks": "All Networks",
         "countSelected": "$count selected",
         "stripe": "Stripe",
