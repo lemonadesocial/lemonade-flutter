@@ -15,6 +15,7 @@ class LemonadeRelayUtils {
   static Future<Either<Failure, String>> register({
     required Chain chain,
     required String payeeAddress,
+    String? userWalletAddress,
   }) async {
     try {
       final relayContract = Web3ContractService.getRelayPaymentContract(
@@ -30,7 +31,7 @@ class LemonadeRelayUtils {
         ],
       );
       final ethTx = EthereumTransaction(
-        from: payeeAddress,
+        from: userWalletAddress ?? payeeAddress,
         to: chain.relayPaymentContract!,
         value: '0x0',
         data: hex.encode(
@@ -41,6 +42,9 @@ class LemonadeRelayUtils {
         chainId: chain.fullChainId ?? '',
         transaction: ethTx,
       );
+      if (!txId.startsWith('0x')) {
+        throw Exception(txId);
+      }
       await Future.delayed(
         Duration(seconds: chain.completedBlockTime),
       );
@@ -56,9 +60,14 @@ class LemonadeRelayUtils {
           return Right(paymentSplitter!);
         }
       }
-      return Left(Failure());
+      return Left(
+        Failure(
+          message:
+              'Failed to register with tx hash: ${receipt?.transactionHash}',
+        ),
+      );
     } catch (e) {
-      return Left(Failure());
+      return Left(Failure(message: e.toString()));
     }
   }
 

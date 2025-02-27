@@ -110,20 +110,8 @@ class ModifyTicketTypeBloc
     _ModifyTicketTypeEventOnPricesChanged event,
     Emitter emit,
   ) {
-    final currentPrices = state.prices;
-    List<TicketPriceInput> newPrices;
-    if (event.index != null) {
-      newPrices = currentPrices.asMap().entries.map((entry) {
-        if (entry.key == event.index) {
-          return event.ticketPrice;
-        }
-        return entry.value;
-      }).toList();
-    } else {
-      newPrices = [...currentPrices, event.ticketPrice];
-    }
     final newState = state.copyWith(
-      prices: newPrices,
+      prices: event.ticketPrices,
     );
     emit(_validate(newState));
   }
@@ -257,8 +245,8 @@ class ModifyTicketTypeBloc
                       currency: item.currency ?? '',
                       cost: item.cost ?? '0',
                       isDefault: item.isDefault,
-                      // TODO: ticket setup
-                      // paymentAccounts: []
+                      paymentAccounts:
+                          item.paymentAccounts?.whereType<String>().toList(),
                     ),
                   )
                   .toList() ??
@@ -306,8 +294,7 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
     required List<String> emails,
   }) = _ModifyTicketTypeEventOnWhitelistAddedModify;
   factory ModifyTicketTypeEvent.onPricesChanged({
-    required TicketPriceInput ticketPrice,
-    int? index,
+    required List<TicketPriceInput> ticketPrices,
   }) = _ModifyTicketTypeEventOnPricesChanged;
   factory ModifyTicketTypeEvent.onDeletePrice({
     required int index,

@@ -3,7 +3,7 @@ import 'package:app/core/data/event/dtos/event_ticket_category_dto/event_ticket_
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_category.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_category_bottom_sheet_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_category_form/ticket_tier_category_form.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -72,7 +72,7 @@ class TicketCategoryDropdown extends StatelessWidget {
                       backgroundColor: LemonColor.atomicBlack,
                       context: context,
                       builder: (newContext) {
-                        return CreateTicketCategoryBottomsheetForm(
+                        return TicketTierCategoryForm(
                           onSubmit: (title, description) async {
                             Navigator.of(newContext).pop();
                             final response = await showFutureLoadingDialog(

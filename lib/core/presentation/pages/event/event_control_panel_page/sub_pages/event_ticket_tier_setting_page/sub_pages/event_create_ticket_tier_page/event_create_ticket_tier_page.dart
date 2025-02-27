@@ -3,9 +3,9 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_basic_info_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_basic_info_form/ticket_tier_basic_info_form.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/ticket_tier_pricing_form_v2.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_tier_setting_form.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/create_ticket_pricing_form.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -69,8 +69,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
               currency: item.currency,
               cost: item.cost,
               $default: item.isDefault,
-              // TODO: ticket setup
-              // paymentAccounts: [],
+              payment_accounts: item.paymentAccounts,
             ),
           )
           .toList(),
@@ -98,10 +97,12 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
-          fetched: (event) => event.id ?? '',
-          orElse: () => '',
+    final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
+          fetched: (event) => event,
+          orElse: () => null,
         );
+    final eventId = event?.id ?? '';
+    final eventLevelPaymentAccounts = event?.paymentAccountsExpanded ?? [];
     return Scaffold(
       backgroundColor: colorScheme.background,
       appBar: const LemonAppBar(
@@ -131,14 +132,16 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                   ),
                 ),
                 const SliverToBoxAdapter(
-                  child: CreateTicketBasicInfoForm(),
+                  child: TicketTierBasicInforForm(),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: Spacing.medium * 2,
+                  child: SizedBox(height: Spacing.smMedium * 2),
+                ),
+                SliverToBoxAdapter(
+                  child: TicketTierPricingFormV2(
+                    eventLevelPaymentAccounts: eventLevelPaymentAccounts,
                   ),
                 ),
-                const CreateTicketPricingForm(),
                 SliverToBoxAdapter(
                   child: SizedBox(
                     height: Spacing.smMedium,

@@ -290,6 +290,7 @@
         "ticketDescription": "Description (optional)",
         "pricingAndPaymentMethods": "Pricing & payment methods",
         "free": "Free",
+        "direct": "Direct",
         "paid": "Paid",
         "guests": "Guests",
         "guestsCount(ordinal)": {
@@ -355,7 +356,27 @@
         "connectWallet": "Connect Wallet",
         "connectWalletDesc": "Receive crypto payments",
         "stripeConnected": "Stripe connected",
-        "walletConnected": "Wallet connected"
+        "walletConnected": "Wallet connected",
+        "stripe": "Stripe",
+        "addCardPrice": "Add Card Price",
+        "addCryptoPrice": "Add Crypto Price",
+        "cardStripe": "Card Stripe",
+        "cardStripeDesc": "Accept payments instantly via debit/credit card.",
+        "enterPrice": "Enter price",
+        "stripeSetup": "Stripe Setup",
+        "stripeSetupDesc": "Accept payments instantly via debit/credit card.",
+        "getStarted": "Get started",
+        "settingUp": "Setting up...",
+        "startSelling": "Start selling!",
+        "startSellingDesc": "Collect payments by creating a Stripe account. Receive payouts daily. Set up in under 5 minutes.",
+        "cryptoPrice": "Crypto price",
+        "cryptoPriceDescription": "Accept payments instantly via crypto wallet.",
+        "selectNetworks": "Select networks to receive payments on",
+        "activate": "Activate",
+        "activateChainDescription": "Enter the wallet ID where you want to receive payments on the $chainName network",
+        "walletId": "Wallet ID",
+        "activeNetworks": "Active networks",
+        "chainActivated": "$chainName activated"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
@@ -916,6 +937,7 @@
         "onClaimingTickets": "On claiming $ticketType tickets"
     },
     "eventPaymentLedger": {
+        "paymentLedger": "Payment ledger",
         "allNetworks": "All Networks",
         "countSelected": "$count selected",
         "stripe": "Stripe",
