@@ -177,7 +177,7 @@ class __ViewState extends State<_View> {
                         ),
                       ),
                       Text(
-                        '${widget.stripePaymentAccount.accountInfo?.accountId}',
+                        ' ${widget.stripePaymentAccount.accountInfo?.accountId}',
                         style: Typo.medium.copyWith(
                           color: colorScheme.onSecondary,
                         ),
