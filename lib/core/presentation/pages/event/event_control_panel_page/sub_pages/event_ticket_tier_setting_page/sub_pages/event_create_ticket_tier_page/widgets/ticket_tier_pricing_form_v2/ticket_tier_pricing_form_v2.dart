@@ -4,6 +4,7 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_direct_crypto_price_form_popup.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_price_button.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_stake_crypto_price_form_popup.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_pricing_form_v2/widgets/ticket_tier_add_stripe_price_form_popup.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/event_setup_stripe_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -107,6 +108,22 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                   ),
                 ),
               ),
+              Tab(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      t.event.ticketTierSetting.staking,
+                      style: Typo.medium.copyWith(
+                        color:
+                            _pricingType == TicketTierPricingFormV2Type.staking
+                                ? colorScheme.onPrimary
+                                : colorScheme.onSecondary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -149,6 +166,30 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
               );
             },
           ),
+        if (_pricingType == TicketTierPricingFormV2Type.staking)
+          BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  SizedBox(height: Spacing.xSmall),
+                  TicketTierAddPriceButton(
+                    ticketPrice: stakePriceAndPaymentAccounts.$1,
+                    paymentAccounts: stakePriceAndPaymentAccounts.$2,
+                    label: t.event.ticketTierSetting.addStakePrice,
+                    onTap: _onTapStaking,
+                    icon: ThemeSvgIcon(
+                      color: colorScheme.onSecondary,
+                      builder: (colorFilter) => Assets.icons.icWallet.svg(
+                        width: Sizing.xSmall,
+                        height: Sizing.xSmall,
+                        colorFilter: colorFilter,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
       ],
     );
   }
@@ -156,13 +197,15 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
   @override
   void initState() {
     super.initState();
-    _tabbarController = TabController(length: 2, vsync: this)
+    _tabbarController = TabController(length: 3, vsync: this)
       ..addListener(() {
         if (_tabbarController.index == 0) {
           _onSelectType(TicketTierPricingFormV2Type.free);
           _onTapFree();
-        } else {
+        } else if (_tabbarController.index == 1) {
           _onSelectType(TicketTierPricingFormV2Type.direct);
+        } else {
+          _onSelectType(TicketTierPricingFormV2Type.staking);
         }
       });
     _checkInitialFormType();
@@ -191,6 +234,23 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                   element.paymentAccounts?.any(
                     _isCorrectPaymentAccountType(
                       PaymentAccountType.ethereumRelay,
+                    ),
+                  ) ==
+                  true,
+            );
+    final paymentAccounts =
+        getPaymentAccountsDetailByIds(price?.paymentAccounts ?? []);
+    return (price, paymentAccounts);
+  }
+
+  (TicketPriceInput?, List<PaymentAccount> paymentAccounts)
+      get stakePriceAndPaymentAccounts {
+    final price =
+        context.read<ModifyTicketTypeBloc>().state.prices.firstWhereOrNull(
+              (element) =>
+                  element.paymentAccounts?.any(
+                    _isCorrectPaymentAccountType(
+                      PaymentAccountType.ethereumStake,
                     ),
                   ) ==
                   true,
@@ -251,8 +311,13 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
     } else {
       _pricingType = TicketTierPricingFormV2Type.staking;
     }
-    _tabbarController
-        .animateTo(_pricingType == TicketTierPricingFormV2Type.free ? 0 : 1);
+    _tabbarController.animateTo(
+      _pricingType == TicketTierPricingFormV2Type.free
+          ? 0
+          : _pricingType == TicketTierPricingFormV2Type.direct
+              ? 1
+              : 2,
+    );
     setState(() {});
   }
 
@@ -333,6 +398,37 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
         eventLevelDirectCryptoPaymentAccounts:
             eventLevelDirectCryptoPaymentAccounts,
         initialTicketPrice: cryptoPriceAndPaymentAccounts.$1,
+      ),
+    );
+    if (newPrice == null) {
+      return;
+    }
+    final state = context.read<ModifyTicketTypeBloc>().state;
+    final newPrices = generateNewPrices(
+      [...state.prices],
+      newPrice,
+      PaymentAccountType.ethereumRelay,
+    );
+    context.read<ModifyTicketTypeBloc>().add(
+          ModifyTicketTypeEvent.onPricesChanged(
+            ticketPrices: newPrices,
+          ),
+        );
+  }
+
+  void _onTapStaking() async {
+    final eventLevelStakePaymentAccounts = widget.eventLevelPaymentAccounts
+        .where(
+          (element) => element.type == PaymentAccountType.ethereumStake,
+        )
+        .toList();
+    final newPrice = await showCupertinoModalBottomSheet<TicketPriceInput?>(
+      context: context,
+      backgroundColor: LemonColor.atomicBlack,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) => TicketTierAddStakeCryptoPriceFormPopup(
+        eventLevelStakePaymentAccounts: eventLevelStakePaymentAccounts,
+        initialTicketPrice: stakePriceAndPaymentAccounts.$1,
       ),
     );
     if (newPrice == null) {

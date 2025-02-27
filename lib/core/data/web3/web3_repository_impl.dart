@@ -4,6 +4,7 @@ import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/web3/query/get_vault_salt.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -47,5 +48,27 @@ class Web3RepositoryIml implements Web3Repository {
     return Right(
       chains.firstWhereOrNull((element) => element.chainId == chainId),
     );
+  }
+
+  @override
+  Future<Either<Failure, String>> getVaultSalt({
+    required String eventId,
+  }) async {
+    final result = await _client.query$GetVaultSalt(
+      Options$Query$GetVaultSalt(
+        variables: Variables$Query$GetVaultSalt(
+          name: eventId,
+          type: 'stake_vault',
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData?.getVaultSalt == null) {
+      return Left(
+        Failure(
+          message: result.exception.toString(),
+        ),
+      );
+    }
+    return Right(result.parsedData!.getVaultSalt);
   }
 }

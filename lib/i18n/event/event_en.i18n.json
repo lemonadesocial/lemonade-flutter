@@ -291,6 +291,8 @@
         "pricingAndPaymentMethods": "Pricing & payment methods",
         "free": "Free",
         "direct": "Direct",
+        "staking": "Staking",
+        "addStakePrice": "Add stake price",
         "paid": "Paid",
         "guests": "Guests",
         "guestsCount(ordinal)": {
@@ -374,9 +376,12 @@
         "selectNetworks": "Select networks to receive payments on",
         "activate": "Activate",
         "activateChainDescription": "Enter the wallet ID where you want to receive payments on the $chainName network",
+        "activateStakeChainDescription": "Configure rules to activate staking vault on $chainName",
         "walletId": "Wallet ID",
         "activeNetworks": "Active networks",
-        "chainActivated": "$chainName activated"
+        "chainActivated": "$chainName activated",
+        "checkinBefore": "Check in before",
+        "refundPercent": "Refund % if check in rule is followed"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
