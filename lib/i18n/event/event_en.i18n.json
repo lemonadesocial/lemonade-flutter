@@ -381,7 +381,10 @@
         "activeNetworks": "Active networks",
         "chainActivated": "$chainName activated",
         "checkinBefore": "Check in before",
-        "refundPercent": "Refund % if check in rule is followed"
+        "refundPercent": "Refund % if check in rule is followed",
+        "stakeActivatedDescription": "Your event’s vault on $chainName is ready to accept payments!",
+        "refundToGuest": "refund to guest",
+        "refundPercentDescription": "if check in rule is followed"
     },
     "speakers": {
         "speakersCountInfo(ordinal)": {
