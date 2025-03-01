@@ -14,10 +14,12 @@ import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -43,83 +45,97 @@ class EventAcceptedExportItem extends StatelessWidget {
     if (number == null) {
       return null;
     }
+    if (eventAccepted.currency == null) {
+      return null;
+    }
     return '${eventAccepted.paymentAmount} ${eventAccepted.currency}';
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
-            borderRadius: BorderRadius.circular(
-              LemonRadius.medium,
-            ),
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          EventGuestDetailRoute(
+            eventId: event?.id ?? '',
+            userId: eventAccepted.buyerId ?? '',
+            email: eventAccepted.buyerEmail ?? '',
           ),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(Spacing.small),
-                color: LemonColor.white03,
-                child: Row(
-                  children: [
-                    _GuestInfo(eventAccepted: eventAccepted),
-                    const Spacer(),
-                    eventAccepted.active == true
-                        ? _GuestActions(
-                            event: event,
-                            eventAccepted: eventAccepted,
-                            onTapCancelTicket: onTapCancelTicket,
-                            refetch: refetch,
-                          )
-                        : _InfoTag(
-                            icon: null,
-                            label: t.event.cancelEvent.cancelled,
-                          ),
-                  ],
-                ),
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: LemonColor.atomicBlack,
+              borderRadius: BorderRadius.circular(
+                LemonRadius.medium,
               ),
-              Container(
-                padding: EdgeInsets.all(Spacing.small),
-                child: Row(
-                  children: [
-                    _InfoTag(
-                      icon: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icTicket.svg(
-                          width: 15.w,
-                          height: 15.w,
-                          colorFilter: filter,
-                        ),
-                      ),
-                      label: eventAccepted.ticketType ?? '',
-                    ),
-                    if (displayedPaymentAmount != null) ...[
-                      SizedBox(
-                        width: Spacing.extraSmall,
-                      ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(Spacing.small),
+                  color: LemonColor.white03,
+                  child: Row(
+                    children: [
+                      _GuestInfo(eventAccepted: eventAccepted),
+                      const Spacer(),
+                      eventAccepted.active == true
+                          ? _GuestActions(
+                              event: event,
+                              eventAccepted: eventAccepted,
+                              onTapCancelTicket: onTapCancelTicket,
+                              refetch: refetch,
+                            )
+                          : _InfoTag(
+                              icon: null,
+                              label: t.event.cancelEvent.cancelled,
+                            ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(Spacing.small),
+                  child: Row(
+                    children: [
                       _InfoTag(
                         icon: ThemeSvgIcon(
                           color: colorScheme.onSecondary,
-                          builder: (filter) => Assets.icons.icCashVariant.svg(
+                          builder: (filter) => Assets.icons.icTicket.svg(
                             width: 15.w,
                             height: 15.w,
                             colorFilter: filter,
                           ),
                         ),
-                        label: displayedPaymentAmount!,
+                        label: eventAccepted.ticketType ?? '',
                       ),
+                      if (displayedPaymentAmount != null) ...[
+                        SizedBox(
+                          width: Spacing.extraSmall,
+                        ),
+                        _InfoTag(
+                          icon: ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (filter) => Assets.icons.icCashVariant.svg(
+                              width: 15.w,
+                              height: 15.w,
+                              colorFilter: filter,
+                            ),
+                          ),
+                          label: displayedPaymentAmount!,
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

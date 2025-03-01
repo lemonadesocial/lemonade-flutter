@@ -1,4 +1,4 @@
-import 'package:app/core/domain/payment/entities/payment.dart';
+import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -7,50 +7,54 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class PaymentDetailPaymentInfoWidget extends StatelessWidget {
-  final Payment payment;
-  const PaymentDetailPaymentInfoWidget({
+class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
+  final EventGuestDetail eventGuestDetail;
+  const EventGuestDetailPaymentInfoWidget({
     super.key,
-    required this.payment,
+    required this.eventGuestDetail,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final payment = eventGuestDetail.payment;
+    if (payment == null) {
+      return const SizedBox.shrink();
+    }
     final widgets = [
       _PaymentInfoItem(
-        title: t.event.eventPaymentDetail.paid,
-        value: '${payment.formattedTotalAmount} ${payment.currency}',
+        title: t.event.eventGuestDetail.paid,
+        value: '${payment?.formattedTotalAmount} ${payment?.currency}',
       ),
-      if (payment.stripePaymentInfo != null)
+      if (payment?.stripePaymentInfo != null)
         _PaymentInfoItem(
-          title: t.event.eventPaymentDetail.paymentMethod,
+          title: t.event.eventGuestDetail.paymentMethod,
           value:
-              '${payment.stripePaymentInfo?.card?.brand} **** ${payment.stripePaymentInfo?.card?.last4}',
+              '${payment?.stripePaymentInfo?.card?.brand} **** ${payment?.stripePaymentInfo?.card?.last4}',
         ),
-      if (payment.stripePaymentInfo != null)
+      if (payment?.stripePaymentInfo != null)
         _PaymentInfoItem(
-          title: t.event.eventPaymentDetail.stripePaymentId,
-          value: payment.stripePaymentInfo?.paymentIntent ?? '',
+          title: t.event.eventGuestDetail.stripePaymentId,
+          value: payment?.stripePaymentInfo?.paymentIntent ?? '',
         ),
-      if (payment.cryptoPaymentInfo != null)
+      if (payment?.cryptoPaymentInfo != null)
         _PaymentInfoItem(
-          title: t.event.eventPaymentDetail.paymentMethod,
+          title: t.event.eventGuestDetail.paymentMethod,
           value:
-              Web3Utils.formatIdentifier('${payment.transferParams?['from']}'),
+              Web3Utils.formatIdentifier('${payment?.transferParams?['from']}'),
         ),
-      if (payment.cryptoPaymentInfo != null)
+      if (payment?.cryptoPaymentInfo != null)
         _PaymentInfoItem(
-          title: 'Transaction ID',
+          title: t.event.eventGuestDetail.transactionID,
           value: Web3Utils.formatIdentifier(
-            payment.cryptoPaymentInfo?.txHash ?? '',
+            payment?.cryptoPaymentInfo?.txHash ?? '',
           ),
         ),
-      if (payment.state != null)
+      if (payment?.state != null)
         _PaymentInfoItem(
-          title: 'Status',
-          value: PaymentUtils.getPaymentStatus(payment.state!),
+          title: t.event.eventGuestDetail.status,
+          value: PaymentUtils.getPaymentStatus(payment!.state),
         ),
     ];
     return Column(
@@ -58,7 +62,7 @@ class PaymentDetailPaymentInfoWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Payment",
+          t.event.eventGuestDetail.payment,
           style: Typo.mediumPlus.copyWith(
             color: colorScheme.onPrimary,
             fontWeight: FontWeight.w600,

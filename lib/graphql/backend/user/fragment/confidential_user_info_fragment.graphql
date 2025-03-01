@@ -1,0 +1,8 @@
+fragment ConfidentialUserInfoFragment on ConfidentialUserInfo {
+    _id
+    name
+    display_name
+    image_avatar
+    username
+    email
+}

@@ -1,5 +1,5 @@
+import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
-import 'package:app/core/domain/payment/entities/payment.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -10,23 +10,28 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
-class PaymentDetailUserInfoWidget extends StatelessWidget {
-  final Payment payment;
-  const PaymentDetailUserInfoWidget({
+class EventGuestDetailUserInfoWidget extends StatelessWidget {
+  final EventGuestDetail? eventGuestDetail;
+  const EventGuestDetailUserInfoWidget({
     super.key,
-    required this.payment,
+    this.eventGuestDetail,
   });
+
+  String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
+  String get _buyerName => eventGuestDetail?.user.name ?? 'Unknown';
+  String get _buyerEmail => eventGuestDetail?.user.email ?? 'N/A';
+  DateTime? get _ticketCreatedAt => eventGuestDetail?.ticket.createdAt;
+  EventJoinRequest? get _joinRequest => eventGuestDetail?.joinRequest;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     return Column(
       children: [
         Row(
           children: [
             LemonNetworkImage(
-              imageUrl: payment.buyerAvatar,
+              imageUrl: _buyerAvatar,
               width: Sizing.medium,
               height: Sizing.medium,
               borderRadius: BorderRadius.circular(Sizing.medium),
@@ -39,13 +44,13 @@ class PaymentDetailUserInfoWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    payment.buyerName,
+                    _buyerName,
                     style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
                     ),
                   ),
                   Text(
-                    payment.buyerEmail,
+                    _buyerEmail,
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                     ),
@@ -53,9 +58,9 @@ class PaymentDetailUserInfoWidget extends StatelessWidget {
                 ],
               ),
             ),
-            if (payment.joinRequest != null)
+            if (_joinRequest != null)
               _ApprovalStatus(
-                joinRequest: payment.joinRequest!,
+                joinRequest: _joinRequest!,
               ),
           ],
         ),
@@ -64,27 +69,22 @@ class PaymentDetailUserInfoWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            if (payment.stamps?['initialized'] != null) ...[
-              _InfoItem(
-                title: 'Registered on',
-                value: DateFormatUtils.custom(
-                  payment.stamps?['initialized']!,
-                  pattern: 'dd MMM, hh:mm a',
-                ),
-              ),
-              SizedBox(
-                height: Sizing.medium,
-                child: VerticalDivider(
-                  color: colorScheme.outline,
-                  thickness: 1,
-                  width: Spacing.large,
-                ),
-              ),
-            ],
             _InfoItem(
-              title: 'Tickets',
-              value:
-                  '${payment.tickets?.length} ${t.event.tickets(n: payment.tickets?.length ?? 0)}',
+              title: 'Registered on',
+              value: _ticketCreatedAt != null
+                  ? DateFormatUtils.custom(
+                      _ticketCreatedAt!,
+                      pattern: 'dd MMM, HH:mm',
+                    )
+                  : 'N/A',
+            ),
+            SizedBox(
+              height: Sizing.medium,
+              child: VerticalDivider(
+                color: colorScheme.outline,
+                thickness: 1,
+                width: Spacing.large,
+              ),
             ),
           ],
         ),
@@ -108,12 +108,18 @@ class _InfoItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          title,
-          style: Typo.small.copyWith(
-            color: colorScheme.onSecondary,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ],
         ),
+        SizedBox(height: Spacing.superExtraSmall),
         Text(
           value,
           style: Typo.medium.copyWith(
@@ -134,15 +140,16 @@ class _ApprovalStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    Color? color = LemonColor.malachiteGreen;
-    String displayText = 'Peding';
+    Color? color;
+    String displayText;
+
     if (joinRequest.isPending) {
       displayText = 'Pending';
       color = colorScheme.onSecondary;
     } else if (joinRequest.isDeclined) {
       displayText = 'Declined';
       color = LemonColor.coralReef;
-    } else if (joinRequest.isApproved) {
+    } else {
       displayText = 'Going';
       color = LemonColor.malachiteGreen;
     }
