@@ -1,5 +1,6 @@
 import 'package:app/core/data/common/dtos/common_dtos.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'space_dto.freezed.dart';
@@ -13,7 +14,7 @@ class SpaceDto with _$SpaceDto {
     String? description,
     @JsonKey(name: 'creator') required String creatorId,
     bool? private,
-    required String state,
+    required Enum$SpaceState state,
     bool? personal,
     List<String>? followers,
     SpaceDaoDto? daos,

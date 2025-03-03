@@ -1,15 +1,11 @@
 import 'package:app/core/domain/common/entities/common.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 
 part 'space.freezed.dart';
 part 'space.g.dart';
-
-enum SpaceState {
-  active,
-  archived,
-}
 
 @freezed
 class Space with _$Space {
@@ -19,7 +15,7 @@ class Space with _$Space {
     String? description,
     required String creatorId,
     bool? private,
-    required SpaceState state,
+    required Enum$SpaceState state,
     bool? personal,
     List<String>? followers,
     SpaceDao? daos,
@@ -52,10 +48,7 @@ class Space with _$Space {
       description: dto.description,
       creatorId: dto.creatorId,
       private: dto.private,
-      state: SpaceState.values.firstWhere(
-        (e) => e.name == dto.state.toLowerCase(),
-        orElse: () => SpaceState.active,
-      ),
+      state: dto.state,
       personal: dto.personal,
       followers: dto.followers,
       daos: dto.daos != null ? SpaceDao.fromDto(dto.daos!) : null,
