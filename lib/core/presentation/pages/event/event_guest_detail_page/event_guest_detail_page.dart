@@ -2,6 +2,7 @@ import 'package:app/core/data/event/dtos/event_guest_detail_dto/event_guest_deta
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_application_questions.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_payment_info_widget.dart';
+import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_timeline_info_widget.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_user_info_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -55,27 +56,31 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
               child: Loading.defaultLoading(context),
             );
           }
-          final guestDetail = EventGuestDetail.fromDto(
+          final eventGuestDetail = EventGuestDetail.fromDto(
             EventGuestDetailDto.fromJson(
               result.parsedData!.getEventGuestDetail!.toJson(),
             ),
           );
+          print(
+              'eventGuestDetail joinRequest: ${eventGuestDetail.joinRequest?.toJson().toString()}');
           final widgets = [
             EventGuestDetailUserInfoWidget(
-              eventGuestDetail: guestDetail,
+              eventGuestDetail: eventGuestDetail,
             ),
-            if (guestDetail.payment != null)
+            if (eventGuestDetail.payment != null)
               EventGuestDetailPaymentInfoWidget(
-                eventGuestDetail: guestDetail,
+                eventGuestDetail: eventGuestDetail,
               ),
-            if (guestDetail.application != null &&
-                guestDetail.application!.isNotEmpty)
+            if (eventGuestDetail.application != null &&
+                eventGuestDetail.application!.isNotEmpty)
               EventGuestDetailApplicationQuestionsWidget(
-                eventGuestDetail: guestDetail,
+                eventGuestDetail: eventGuestDetail,
+              ),
+            if (eventGuestDetail.joinRequest != null)
+              EventGuestDetailTimelineInfoWidget(
+                eventGuestDetail: eventGuestDetail,
               ),
           ];
-          final payment = guestDetail.payment;
-          final application = guestDetail.application;
           return CustomScrollView(
             slivers: [
               SliverPadding(
@@ -89,10 +94,10 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
                     return widgets[index];
                   },
                   separatorBuilder: (context, index) {
-                    if (index == 1 && payment == null) {
+                    if (index == 1 && eventGuestDetail.payment == null) {
                       return const SizedBox.shrink();
                     }
-                    if (index == 2 && application == null) {
+                    if (index == 2 && eventGuestDetail.application == null) {
                       return const SizedBox.shrink();
                     }
                     return Divider(

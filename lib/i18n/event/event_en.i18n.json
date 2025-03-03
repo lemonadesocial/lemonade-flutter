@@ -936,6 +936,10 @@
         "walletID": "Wallet ID",
         "transactionID": "Transaction ID",
         "status": "Status",
-        "applicationQuestions": "Application questions"
+        "applicationQuestions": "Application questions",
+        "timeline": "Timeline",
+        "requestSubmitted": "Request submitted",
+        "requestApproved": "Request approved",
+        "requestDeclined": "Request declined"
     }
 }

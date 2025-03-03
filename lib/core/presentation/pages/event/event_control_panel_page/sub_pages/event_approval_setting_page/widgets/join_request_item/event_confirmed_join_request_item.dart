@@ -19,11 +19,13 @@ class EventConfirmedJoinRequestItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
-      onTap: () => AutoRouter.of(context).push(
-        EventJoinRequestDetailRoute(
-          eventJoinRequest: eventJoinRequest,
-        ),
-      ),
+      onTap: () {
+        // AutoRouter.of(context).push(
+        //   EventJoinRequestDetailRoute(
+        //     eventJoinRequest: eventJoinRequest,
+        //   ),
+        // );
+      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
