@@ -44,34 +44,8 @@ class EventBuyTicketsPrerequisiteCheckBloc extends Bloc<
       );
       return;
     }
-
-    // NOTE: We let user buy ticket and BE will auto create join request
-
-    // if (blocEvent.event.approvalRequired == true) {
-    //   final joinRequest = await _checkEventJoinRequest(blocEvent.event);
-    //   if (joinRequest == null) {
-    //     final createdJoinRequest = await _createEventJoinRequest(blocEvent.event);
-    //     if (createdJoinRequest != null) {
-    //       emit(
-    //         EventBuyTicketsPrerequisiteCheckState.hasJoinRequest(
-    //           eventJoinRequest: createdJoinRequest,
-    //         ),
-    //       );
-    //     }
-    //   }
-    // }
     emit(EventBuyTicketsPrerequisiteCheckState.allPassed());
   }
-
-  // Future<EventJoinRequest?> _createEventJoinRequest(Event event) async {
-  //   final result = await getIt<EventRepository>().createEventJoinRequest(eventId: event.id ?? '');
-  //   return result.fold((l) => null, (r) => r);
-  // }
-
-  // Future<EventJoinRequest?> _checkEventJoinRequest(Event event) async {
-  //   final result = await getIt<EventRepository>().getMyEventJoinRequest(eventId: event.id ?? '');
-  //   return result.fold((l) => null, (r) => r);
-  // }
 
   Future<Tuple2<bool, User?>> _checkApplicationFormCompleted(
     Event event,

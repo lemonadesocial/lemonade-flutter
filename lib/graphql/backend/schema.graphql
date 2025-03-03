@@ -47,6 +47,7 @@ type Query {
 
   """For guests, return attending guests basic information of an event"""
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
+  getEventGuestDetail(event: MongoID!, user: MongoID, email: String): EventGuestDetail
   getEventInvitation(event: MongoID!): EventInvitation
   generateEventInvitationUrl(event: MongoID!): GenerateEventInvitationUrlResponse
   getEventInvitationUrl(shortid: String!, tk: String): EventInvitationUrl
@@ -67,11 +68,8 @@ type Query {
   getFiles(skip: Int! = 0, limit: Int! = 25, id_lt: MongoID, user: MongoID, links: FileLinkInput): [File!]!
   getFrequentQuestions(input: GetFrequentQuestionsInput!): [FrequentQuestion!]!
   getGuildRooms: [GuildRoom!]!
-  getEventPaymentStatistics(event: MongoID!): EventPaymentStatistics!
   getMyPayments(state: FilterPaymentStateInput, event: MongoID): [NewPayment!]!
   getNewPayment(payment_secret: String, _id: MongoID!): NewPayment
-  getEventPayment(event: MongoID!, _id: MongoID!): NewPayment
-  listEventPayments(skip: Int, limit: Int, event: MongoID!, provider: NewPaymentProvider, networks: [String!], ticket_types: [MongoID!], checked_in: Boolean, search: String): ListEventPaymentsResponse!
   listNewPayments(skip: Int! = 0, limit: Int! = 25, event: MongoID!, ids: [MongoID!], users: [MongoID!]): [NewPayment!]!
   getPaymentRefundSignature(_id: MongoID!): PaymentRefundSignature!
   listFiatCurrencies: [FiatCurrency!]!
@@ -177,6 +175,10 @@ type Query {
   listTicketTokenRewardSettings(ticket_types: [MongoID!], event: MongoID!): [TicketTokenRewardSetting!]!
   generateClaimCheckinRewardSignature(event: MongoID!): ClaimCheckinRewardSignatureResponse
   generateClaimTicketRewardSignature(payment: MongoID, event: MongoID!): ClaimTicketRewardSignatureResponse
+  getEventPaymentStatistics(event: MongoID!): EventPaymentStatistics!
+  getEventPayment(event: MongoID!, _id: MongoID!): NewPayment
+  listEventPayments(skip: Int, limit: Int, event: MongoID!, provider: NewPaymentProvider, networks: [String!], ticket_types: [MongoID!], checked_in: Boolean, search: String): ListEventPaymentsResponse!
+  listDonationVaults: [DonationVault!]!
 }
 
 type Badge {
@@ -503,6 +505,9 @@ type Event {
   accepted: [MongoID!]
   declined: [MongoID!]
   payment_fee: Float!
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
   application_required: Boolean
   rsvp_wallet_platforms: [ApplicationBlokchainPlatform!]
   application_form_url: String
@@ -608,6 +613,7 @@ type Event {
   url: String
   url_go: String
   telegram_channels: [TelegramChannel!]
+  donation_vaults_expanded: [DonationVault!]
   broadcasts: [Broadcast!]
   space_tags: [SpaceTagBase!]
   event_ticket_types: [EventTicketType!]
@@ -617,7 +623,7 @@ type Event {
   checkedin: Boolean
   ticket_count: Float
   data: JSON
-  space_expanded: SpaceBase
+  space_expanded: Space
   host_expanded: User
   subevent_parent_expanded: Event
   cohosts_expanded(skip: Int! = 0, limit: Int! = 25): [User]
@@ -750,6 +756,15 @@ type TelegramChannel {
   username: String
   inviteLink: String
   joined: [MongoID!]
+}
+
+type DonationVault {
+  _id: MongoID!
+  title: String!
+  user: MongoID!
+  network: String!
+  address: String!
+  events: [MongoID!]
 }
 
 type Broadcast {
@@ -887,6 +902,7 @@ type NewPaymentAccount {
 }
 
 enum PaymentAccountType {
+  solana
   ethereum
   ethereum_escrow
   ethereum_relay
@@ -899,7 +915,14 @@ enum NewPaymentProvider {
   safe
 }
 
-union AccountInfo = EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
+union AccountInfo = SolanaAccount | EthereumAccount | SafeAccount | DigitalAccount | StripeAccount | EthereumEscrowAccount | EthereumRelayAccount | EthereumStakeAccount
+
+type SolanaAccount {
+  currencies: [String!]!
+  currency_map: JSON
+  address: String!
+  network: String!
+}
 
 type EthereumAccount {
   currencies: [String!]!
@@ -977,7 +1000,7 @@ type EventSession {
   speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
 }
 
-type SpaceBase {
+type Space {
   _id: MongoID!
   title: String!
   description: String
@@ -1003,6 +1026,12 @@ type SpaceBase {
 
   """External events are listed on this space"""
   listed_events: [MongoID!]
+  followed: Boolean
+  is_ambassador: Boolean
+  admins: [User!]
+  creator_expanded: User
+  image_avatar_expanded: File
+  image_cover_expanded: File
 }
 
 enum SpaceState {
@@ -1679,7 +1708,8 @@ type EventCohostRequest {
   stamp: DateTimeISO!
   from: MongoID!
   event: MongoID!
-  to: MongoID!
+  to: MongoID
+  to_email: String
   state: EventCohostRequestState!
   from_expanded: User
   to_expanded: User
@@ -1811,6 +1841,7 @@ enum EmailTemplateType {
   invitation
   invitation_cancelled
   event_cancelled
+  event_cohost_invitation
   join_request_approved
   join_request_approved_with_tickets
   join_request_declined
@@ -1841,10 +1872,10 @@ enum EmailTemplateType {
 }
 
 type RecipientDetail {
-  _id: MongoID
   name: String!
   email: String
   image_avatar: String
+  _id: MongoID
 }
 
 type EventFeedbackSummary {
@@ -1876,37 +1907,129 @@ type BasicUserInfo {
   matrix_localpart: String
 }
 
-type EventInvitation {
-  _id: MongoID!
-  event: MongoID!
-  inviters: [MongoID!]!
-  user: MongoID
+type EventGuestDetail {
+  user: EventGuestUser!
+  ticket: Ticket!
+  payment: EventGuestPayment
+  application: [EventApplicationQuestionAndAnswer!]
+  join_request: EventJoinRequest
+}
+
+type EventGuestUser {
+  _id: MongoID
+  name: String
   email: String
-  phone: String
-  created_at: DateTimeISO!
-  status: InvitationResponse!
+  image_avatar: String
 }
 
-enum InvitationResponse {
-  PENDING
-  DECLINED
-  ACCEPTED
-  CANCELLED
-}
-
-type GenerateEventInvitationUrlResponse {
+type Ticket {
+  _id: MongoID!
   shortid: String!
-  tk: String
-}
-
-type EventInvitationUrl {
+  created_at: DateTimeISO!
   event: MongoID!
-  user: MongoID!
+  type: MongoID!
+  accepted: Boolean
+  acquired_by: MongoID
+  cancelled_by: MongoID
+  acquired_by_email: String
+  assigned_email: String
+  assigned_to: MongoID
+  invited_by: MongoID
+  payment_id: MongoID
+  metadata: JSON
+  assigned_to_info: ConfidentialUserInfo
+  assigned_to_expanded: User
+  event_expanded: Event
+  type_expanded: EventTicketType
+  acquired_tickets: [Ticket!]
+  checkin: EventCheckin
+
+  """
+  This object includes the email when compared to the `assigned_to_expanded` field.
+  """
+  assignee_expanded: UserWithEmail
+  acquired_expanded: UserWithEmail
 }
 
-type GetEventJoinRequestsResponse {
-  total: Int!
-  records: [EventJoinRequest!]!
+type EventGuestPayment {
+  _id: MongoID!
+  stamps: JSON!
+  amount: String!
+  fee: String
+  currency: String!
+  state: NewPaymentState!
+  user: MongoID
+  buyer_info: BuyerInfo
+  account: MongoID!
+  ref_data: JSON
+  billing_info: BillingInfo
+  transfer_metadata: JSON
+  transfer_params: JSON
+  failure_reason: String
+  attempting_refund: Boolean
+  account_expanded: NewPaymentAccount
+  due_amount: String
+  buyer_user: UserWithEmail
+  formatted_due_amount: String
+  formatted_total_amount: String
+  formatted_discount_amount: String
+  formatted_fee_amount: String
+  stripe_payment_info: StripePaymentInfo
+  crypto_payment_info: CryptoPaymentInfo
+}
+
+enum NewPaymentState {
+  created
+  initialized
+  failed
+  await_capture
+  succeeded
+  refunded
+}
+
+type BuyerInfo {
+  email: String!
+  name: String
+}
+
+type BillingInfo {
+  _id: MongoID
+  recipient_name: String
+  street_1: String
+  street_2: String
+  city: String
+  region: String
+  postal: String
+  country: String
+  title: String
+  phone: String
+  longitude: Float
+  latitude: Float
+  additional_directions: String
+  email: String
+  firstname: String
+  lastname: String
+}
+
+type StripePaymentInfo {
+  card: StripeCardInfo
+  payment_intent: String!
+}
+
+type StripeCardInfo {
+  brand: String
+  last4: String
+}
+
+type CryptoPaymentInfo {
+  network: String
+  tx_hash: String
+}
+
+type EventApplicationQuestionAndAnswer {
+  question: String
+  answer: String
+  answers: [String!]
 }
 
 type EventJoinRequest {
@@ -1941,18 +2064,37 @@ type JoinRequestPayment {
   transfer_metadata: JSON
 }
 
-enum NewPaymentState {
-  created
-  initialized
-  failed
-  await_capture
-  succeeded
-  refunded
+type EventInvitation {
+  _id: MongoID!
+  event: MongoID!
+  inviters: [MongoID!]!
+  user: MongoID
+  email: String
+  phone: String
+  created_at: DateTimeISO!
+  status: InvitationResponse!
 }
 
-type BuyerInfo {
-  email: String!
-  name: String
+enum InvitationResponse {
+  PENDING
+  DECLINED
+  ACCEPTED
+  CANCELLED
+}
+
+type GenerateEventInvitationUrlResponse {
+  shortid: String!
+  tk: String
+}
+
+type EventInvitationUrl {
+  event: MongoID!
+  user: MongoID!
+}
+
+type GetEventJoinRequestsResponse {
+  total: Int!
+  records: [EventJoinRequest!]!
 }
 
 type EventPaymentSummary {
@@ -2147,33 +2289,6 @@ type GuildRoom {
   created_by_expanded: User
 }
 
-type EventPaymentStatistics {
-  total_payments: Int!
-  stripe_payments: PaymentStatistics!
-  crypto_payments: CryptoPaymentStatistics!
-}
-
-type PaymentStatistics {
-  count: Int!
-  revenue: [PaymentRevenue!]!
-}
-
-type PaymentRevenue {
-  currency: String!
-  formatted_total_amount: String!
-}
-
-type CryptoPaymentStatistics {
-  count: Int!
-  revenue: [PaymentRevenue!]!
-  networks: [CryptoPaymentNetworkStatistics!]!
-}
-
-type CryptoPaymentNetworkStatistics {
-  chain_id: String!
-  count: Int!
-}
-
 type NewPayment {
   _id: MongoID!
   stamps: JSON!
@@ -2205,45 +2320,6 @@ type NewPayment {
   join_request: EventJoinRequestBase
 }
 
-type BillingInfo {
-  _id: MongoID
-  recipient_name: String
-  street_1: String
-  street_2: String
-  city: String
-  region: String
-  postal: String
-  country: String
-  title: String
-  phone: String
-  longitude: Float
-  latitude: Float
-  additional_directions: String
-  email: String
-  firstname: String
-  lastname: String
-}
-
-type StripePaymentInfo {
-  card: StripeCardInfo
-  payment_intent: String!
-}
-
-type StripeCardInfo {
-  brand: String
-  last4: String
-}
-
-type CryptoPaymentInfo {
-  network: String
-  tx_hash: String
-}
-
-type EventApplicationQuestionAndAnswer {
-  question: String
-  answer: String
-}
-
 type EventJoinRequestBase {
   _id: MongoID!
   created_at: DateTimeISO!
@@ -2261,11 +2337,6 @@ input FilterPaymentStateInput {
   eq: NewPaymentState
   in: [NewPaymentState!]
   nin: [NewPaymentState!]
-}
-
-type ListEventPaymentsResponse {
-  total: Int!
-  records: [NewPayment!]!
 }
 
 type PaymentRefundSignature {
@@ -2312,6 +2383,7 @@ type Chain {
   relay_payment_contract: String
   stake_payment_contract: String
   reward_registry_contract: String
+  donation_registry_contract: String
   eas_event_contract: String
   eas_graphql_url: String
   aragon_network: String
@@ -2612,40 +2684,6 @@ type RoomOffer {
   position: Float
 }
 
-type Space {
-  _id: MongoID!
-  title: String!
-  description: String
-  creator: MongoID!
-
-  """Private space requires moderation for membership"""
-  private: Boolean
-  state: SpaceState!
-  personal: Boolean
-  followers: [MongoID!]
-  daos: SpaceDao
-  tint_color: String
-  slug: String
-  handle_twitter: String
-  handle_instagram: String
-  handle_youtube: String
-  handle_tiktok: String
-  handle_linkedin: String
-  website: String
-  address: Address
-  image_avatar: MongoID
-  image_cover: MongoID
-
-  """External events are listed on this space"""
-  listed_events: [MongoID!]
-  followed: Boolean
-  is_ambassador: Boolean
-  admins: [User!]
-  creator_expanded: User
-  image_avatar_expanded: File
-  image_cover_expanded: File
-}
-
 input NotificationTypeFilterInput {
   eq: NotificationType
   in: [NotificationType!]
@@ -2932,6 +2970,7 @@ type SpaceMember {
   user_expanded: UserWithEmail
   event_count: Float
   checkin_count: Float
+  tags: [SpaceTagBase!]
 }
 
 enum SpaceMembershipState {
@@ -3259,35 +3298,6 @@ input UserOfferInput {
 input UserDaoInput {
   network: String!
   address: String!
-}
-
-type Ticket {
-  _id: MongoID!
-  shortid: String!
-  created_at: DateTimeISO!
-  event: MongoID!
-  type: MongoID!
-  accepted: Boolean
-  acquired_by: MongoID
-  cancelled_by: MongoID
-  acquired_by_email: String
-  assigned_email: String
-  assigned_to: MongoID
-  invited_by: MongoID
-  payment_id: MongoID
-  metadata: JSON
-  assigned_to_info: ConfidentialUserInfo
-  assigned_to_expanded: User
-  event_expanded: Event
-  type_expanded: EventTicketType
-  acquired_tickets: [Ticket!]
-  checkin: EventCheckin
-
-  """
-  This object includes the email when compared to the `assigned_to_expanded` field.
-  """
-  assignee_expanded: UserWithEmail
-  acquired_expanded: UserWithEmail
 }
 
 type GetMyTicketsResponse {
@@ -3679,6 +3689,7 @@ type TicketTypeReward {
   ticket_type: MongoID!
   reward_per_ticket: String!
   reward_id: String!
+  ticket_type_expanded: EventTicketType
 }
 
 type TicketTokenRewardSetting {
@@ -3710,6 +3721,38 @@ type TokenRewardSignature {
 type ClaimTicketRewardSignatureResponse {
   settings: [TicketTokenRewardSetting!]!
   signature: TokenRewardSignature!
+}
+
+type EventPaymentStatistics {
+  total_payments: Int!
+  stripe_payments: PaymentStatistics!
+  crypto_payments: CryptoPaymentStatistics!
+}
+
+type PaymentStatistics {
+  count: Int!
+  revenue: [PaymentRevenue!]!
+}
+
+type PaymentRevenue {
+  currency: String!
+  formatted_total_amount: String!
+}
+
+type CryptoPaymentStatistics {
+  count: Int!
+  revenue: [PaymentRevenue!]!
+  networks: [CryptoPaymentNetworkStatistics!]!
+}
+
+type CryptoPaymentNetworkStatistics {
+  chain_id: String!
+  count: Int!
+}
+
+type ListEventPaymentsResponse {
+  total: Int!
+  records: [NewPayment!]!
 }
 
 type Mutation {
@@ -3747,7 +3790,6 @@ type Mutation {
   deleteEventEmailSetting(_id: MongoID!): Boolean!
   submitEventFeedback(input: SubmitEventFeedbackInput!): Boolean!
   cancelEventInvitations(input: CancelEventInvitationsInput!): Boolean!
-  createEventJoinRequest(input: CreateEventJoinRequestInput!): EventJoinRequest!
   decideUserJoinRequests(input: DecideUserJoinRequestsInput!): [DecidedJoinRequest!]!
   createEventQuestion(input: CreateEventQuestionsInput!): EventQuestion!
   deleteEventQuestion(_id: MongoID!): Boolean!
@@ -3820,6 +3862,7 @@ type Mutation {
   createSpace(input: SpaceInput!): Space!
   activatePersonalSpace(input: SpaceInput!): ActivatePersonalSpace!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
+  deleteSpace(_id: MongoID!): Boolean!
   pinEventsToSpace(tags: [MongoID!], events: [MongoID!]!, space: MongoID!): PinEventsToSpaceResponse!
   unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   followSpace(space: MongoID!): Boolean!
@@ -3827,7 +3870,6 @@ type Mutation {
   addSpaceMembers(input: AddSpaceMemberInput!): Boolean!
   deleteSpaceMembers(input: DeleteSpaceMemberInput!): [SpaceMember!]!
   updateSpaceMember(input: UpdateSpaceMemberInput!): SpaceMember
-  decideSpaceMembership(decision: Boolean!, user: MongoID!, space: MongoID!): SpaceMember
   updateSpaceRoleFeatures(input: UpdateSpaceRoleFeaturesInput!): Boolean!
   createStore(input: StoreInput!): Store!
   updateStore(_id: MongoID!, input: StoreInput!): Store!
@@ -3891,6 +3933,8 @@ type Mutation {
   createTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!): TicketTokenRewardSetting!
   updateCheckinTokenRewardSetting(input: CheckinTokenRewardSettingInput!, _id: MongoID!): CheckinTokenRewardSetting!
   updateTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!, _id: MongoID!): TicketTokenRewardSetting!
+  createDonationVault(input: DonationVaultInput!): DonationVault!
+  updateDonationVault(input: DonationVaultInput!, _id: MongoID!): DonationVault
 }
 
 input CreateBadgeInput {
@@ -3925,6 +3969,9 @@ input EventInput {
   start: DateTimeISO
   end: DateTimeISO
   visible_cohosts: [MongoID!]
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
   application_required: Boolean
   rsvp_wallet_platforms: [ApplicationBlokchainPlatformInput!]
   application_form_url: String
@@ -4179,7 +4226,8 @@ input UpdateEventCheckinInput {
 input ManageEventCohostRequestsInput {
   event: MongoID!
   decision: Boolean!
-  users: [MongoID!]!
+  users: [MongoID!]
+  emails: [String!]
 }
 
 input DecideEventCohostRequestInput {
@@ -4234,16 +4282,6 @@ input SubmitEventFeedbackInput {
 input CancelEventInvitationsInput {
   invitations: [MongoID!]!
   event: MongoID!
-}
-
-input CreateEventJoinRequestInput {
-  event: MongoID!
-  requested_tickets: [RequestedTicketInput!]
-}
-
-input RequestedTicketInput {
-  ticket_type: MongoID!
-  count: Float!
 }
 
 type DecidedJoinRequest {
@@ -5067,6 +5105,12 @@ input TicketTokenRewardSettingInput {
   currency_address: String
   event: MongoID
   rewards: [TicketTypeRewardInput!]
+}
+
+input DonationVaultInput {
+  title: String
+  network: String
+  address: String
 }
 
 type Subscription {

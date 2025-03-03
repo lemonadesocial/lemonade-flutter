@@ -1,0 +1,57 @@
+fragment SpaceFragment on Space {
+  _id
+  title
+  description
+  creator
+  private
+  state
+  personal
+  followers
+  daos {
+    network
+    address
+    name
+  }
+  tint_color
+  slug
+  handle_twitter
+  handle_instagram
+  handle_youtube
+  handle_tiktok
+  handle_linkedin
+  website
+  address {
+    _id
+    recipient_name
+    street_1
+    street_2
+    city
+    region
+    postal
+    country
+    title
+    phone
+    longitude
+    latitude
+    additional_directions
+  }
+  image_avatar
+  image_cover
+  listed_events
+  followed
+  is_ambassador
+  creator_expanded {
+    _id
+    name
+    image_avatar
+    username
+  }
+  image_avatar_expanded {
+    _id
+    url
+  }
+  image_cover_expanded {
+    _id
+    url
+  }
+} 

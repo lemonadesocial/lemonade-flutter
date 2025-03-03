@@ -1,4 +1,5 @@
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/router/features/space/space_routes.dart';
 import 'package:auto_route/auto_route.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
@@ -120,18 +121,19 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           page: EventVotingDetailRoute.page,
         ),
-        ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
         eventDetailRoutes,
+        vaultRoutes,
+        collaboratorRoutes,
+        questRoutes,
+        createDuplicatedSubEventsRoutes,
+        ...chatRoutes,
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
-        vaultRoutes,
-        collaboratorRoutes,
         ...farcasterRoutes,
-        questRoutes,
-        createDuplicatedSubEventsRoutes,
+        ...spaceRoutes,
       ];
 }
 

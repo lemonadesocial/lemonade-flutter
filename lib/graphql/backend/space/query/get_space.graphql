@@ -1,0 +1,5 @@
+query GetSpace($id: MongoID, $slug: String) {
+  getSpace(_id: $id, slug: $slug) {
+    ...SpaceFragment
+  }
+} 
