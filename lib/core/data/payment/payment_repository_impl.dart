@@ -13,6 +13,7 @@ import 'package:app/core/domain/payment/input/create_stripe_card_input/create_st
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/input/get_payment_input/get_payment_input.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
+import 'package:app/core/domain/payment/input/update_payment_account_input/update_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
@@ -167,6 +168,32 @@ class PaymentRepositoryImpl extends PaymentRepository {
       ),
     );
     if (result.hasException) return Left(Failure());
+    return Right(result.parsedData!);
+  }
+
+  @override
+  Future<Either<Failure, PaymentAccount>> updatePaymentAccount({
+    required UpdatePaymentAccountInput input,
+  }) async {
+    final result = await _client.mutate(
+      MutationOptions(
+        document: updatePaymentAccountMutation,
+        fetchPolicy: FetchPolicy.networkOnly,
+        variables: {
+          'input': input.toJson(),
+        },
+        parserFn: (data) => PaymentAccount.fromDto(
+          PaymentAccountDto.fromJson(data['updateNewPaymentAccount']),
+        ),
+      ),
+    );
+    if (result.hasException || result.parsedData == null) {
+      return Left(
+        Failure(
+          message: result.exception.toString(),
+        ),
+      );
+    }
     return Right(result.parsedData!);
   }
 

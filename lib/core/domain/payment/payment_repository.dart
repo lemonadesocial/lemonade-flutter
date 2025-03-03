@@ -6,6 +6,7 @@ import 'package:app/core/domain/payment/input/create_stripe_card_input/create_st
 import 'package:app/core/domain/payment/input/get_payment_accounts_input/get_payment_accounts_input.dart';
 import 'package:app/core/domain/payment/input/get_payment_input/get_payment_input.dart';
 import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_cards_input.dart';
+import 'package:app/core/domain/payment/input/update_payment_account_input/update_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
@@ -36,6 +37,10 @@ abstract class PaymentRepository {
 
   Future<Either<Failure, PaymentAccount>> createPaymentAccount({
     required CreatePaymentAccountInput input,
+  });
+
+  Future<Either<Failure, PaymentAccount>> updatePaymentAccount({
+    required UpdatePaymentAccountInput input,
   });
 
   Future<Either<Failure, bool>> mailTicketPaymentReciept({

@@ -3,9 +3,11 @@ import 'package:app/core/domain/payment/entities/payment_account/payment_account
 import 'package:app/core/domain/payment/payment_enums.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_direct_crypto_payment_account_page/event_setup_direct_crypto_payment_account_page.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stake_crypto_payment_account_page/event_setup_stake_crypto_payment_account_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/widgets/get_chains_list_builder.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/service/web3/stake/lemonade_stake_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -28,10 +30,36 @@ class EventActiveCryptoPaymentAccountsPage extends StatefulWidget {
 }
 
 class _EventActiveCryptoPaymentAccountsPageState
-    extends State<EventActiveCryptoPaymentAccountsPage> {
+    extends State<EventActiveCryptoPaymentAccountsPage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  int _currentTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging ||
+          _tabController.index != _currentTabIndex) {
+        setState(() {
+          _currentTabIndex = _tabController.index;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: LemonAppBar(
@@ -39,36 +67,144 @@ class _EventActiveCryptoPaymentAccountsPageState
       ),
       body: BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
         builder: (context, state) {
-          final directCryptoPaymentAccounts = state.maybeWhen(
+          final paymentAccounts = state.maybeWhen(
             orElse: () => <PaymentAccount>[],
             fetched: (event) =>
-                (event.paymentAccountsExpanded ?? <PaymentAccount>[])
-                    .where(
-                      (element) =>
-                          element.type == PaymentAccountType.ethereumRelay,
-                    )
-                    .toList(),
+                event.paymentAccountsExpanded ?? <PaymentAccount>[],
           );
-          return GetChainsListBuilder(
-            builder: (context, chains) => _ActiveNetworks(
-              chains: chains,
-              getActivatedPaymentAccount: (chain) {
-                return directCryptoPaymentAccounts.firstWhereOrNull(
-                  (item) => item.accountInfo?.network == chain.chainId,
-                );
-              },
-              onTap: (chain) async {
-                await showCupertinoModalBottomSheet<PaymentAccount?>(
-                  context: context,
-                  backgroundColor: LemonColor.atomicBlack,
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  builder: (context) =>
-                      EventSetupDirectCryptoPaymentAccountPage(
-                    chain: chain,
+
+          final directCryptoPaymentAccounts = paymentAccounts
+              .where(
+                (element) => element.type == PaymentAccountType.ethereumRelay,
+              )
+              .toList();
+
+          final stakeCryptoPaymentAccounts = paymentAccounts
+              .where(
+                (element) => element.type == PaymentAccountType.ethereumStake,
+              )
+              .toList();
+
+          return Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(Spacing.small),
+                height: Sizing.large,
+                decoration: BoxDecoration(
+                  color: colorScheme.background,
+                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                  border: Border.all(
+                    color: colorScheme.outline,
                   ),
-                );
-              },
-            ),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  padding: EdgeInsets.symmetric(
+                    vertical: Spacing.superExtraSmall,
+                    horizontal: 0,
+                  ),
+                  indicatorWeight: 0,
+                  labelPadding: EdgeInsets.all(Spacing.superExtraSmall),
+                  indicatorPadding: EdgeInsets.zero,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      LemonRadius.extraSmall,
+                    ),
+                    border: Border.all(
+                      color: colorScheme.outlineVariant,
+                    ),
+                    color: LemonColor.chineseBlack,
+                  ),
+                  tabs: [
+                    Tab(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            t.event.ticketTierSetting.direct,
+                            style: Typo.medium.copyWith(
+                              color: _tabController.index == 0
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            t.event.ticketTierSetting.staking,
+                            style: Typo.medium.copyWith(
+                              color: _tabController.index == 1
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    // Direct Crypto Tab
+                    GetChainsListBuilder(
+                      builder: (context, chains) => _ActiveNetworks(
+                        chains: chains,
+                        getActivatedPaymentAccount: (chain) {
+                          return directCryptoPaymentAccounts.firstWhereOrNull(
+                            (item) =>
+                                item.accountInfo?.network == chain.chainId,
+                          );
+                        },
+                        onTap: (chain, activatedPaymentAccount) async {
+                          await showCupertinoModalBottomSheet<PaymentAccount?>(
+                            context: context,
+                            backgroundColor: LemonColor.atomicBlack,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            builder: (context) =>
+                                EventSetupDirectCryptoPaymentAccountPage(
+                              chain: chain,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // Stake Crypto Tab
+                    GetChainsListBuilder(
+                      builder: (context, chains) => _ActiveNetworks(
+                        chains: chains,
+                        getActivatedPaymentAccount: (chain) {
+                          return stakeCryptoPaymentAccounts.firstWhereOrNull(
+                            (item) =>
+                                item.accountInfo?.network == chain.chainId,
+                          );
+                        },
+                        onTap: (chain, activatedPaymentAccount) async {
+                          await showCupertinoModalBottomSheet<PaymentAccount?>(
+                            context: context,
+                            backgroundColor: LemonColor.atomicBlack,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            builder: (context) =>
+                                EventSetupStakeCryptoPaymentAccountPage(
+                              chain: chain,
+                              activatedPaymentAccount: activatedPaymentAccount,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -79,7 +215,7 @@ class _EventActiveCryptoPaymentAccountsPageState
 class _ActiveNetworks extends StatelessWidget {
   final List<Chain> chains;
   final PaymentAccount? Function(Chain chain) getActivatedPaymentAccount;
-  final Function(Chain chain) onTap;
+  final Function(Chain chain, PaymentAccount? paymentAccount) onTap;
   const _ActiveNetworks({
     required this.chains,
     required this.getActivatedPaymentAccount,
@@ -90,6 +226,21 @@ class _ActiveNetworks extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+
+    // Sort chains - activated networks first
+    final sortedChains = [...chains];
+    sortedChains.sort((a, b) {
+      final aActivated = getActivatedPaymentAccount(a) != null;
+      final bActivated = getActivatedPaymentAccount(b) != null;
+
+      // If a is activated and b is not, a comes first
+      if (aActivated && !bActivated) return -1;
+      // If b is activated and a is not, b comes first
+      if (!aActivated && bActivated) return 1;
+      // Otherwise, maintain original order
+      return 0;
+    });
+
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,15 +248,15 @@ class _ActiveNetworks extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-              itemCount: chains.length,
+              itemCount: sortedChains.length,
               separatorBuilder: (context, index) =>
                   SizedBox(height: Spacing.xSmall),
               itemBuilder: (context, index) {
-                final chain = chains[index];
+                final chain = sortedChains[index];
                 final activatedPaymentAccount =
                     getActivatedPaymentAccount(chain);
                 return InkWell(
-                  onTap: () => onTap(chain),
+                  onTap: () => onTap(chain, activatedPaymentAccount),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: Spacing.small,
@@ -133,25 +284,34 @@ class _ActiveNetworks extends StatelessWidget {
                           SizedBox(width: Spacing.xSmall),
                         ],
                         Expanded(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${chain.name} ',
-                                ),
-                                TextSpan(
-                                  text:
-                                      ' ${Web3Utils.formatIdentifier(activatedPaymentAccount?.accountInfo?.address ?? '')}',
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
-                                  ),
-                                ),
-                              ],
+                          child: FutureBuilder<String>(
+                            future: _getDisplayText(
+                              account: activatedPaymentAccount,
+                              chain: chain,
                             ),
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            builder: (context, snapshot) {
+                              final displayText = snapshot.data ?? '';
+                              return Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '${chain.name} ',
+                                    ),
+                                    if (snapshot.hasData)
+                                      TextSpan(
+                                        text: displayText,
+                                        style: Typo.small.copyWith(
+                                          color: colorScheme.onSecondary,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                style: Typo.medium.copyWith(
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         if (activatedPaymentAccount == null) ...[
@@ -172,5 +332,23 @@ class _ActiveNetworks extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<String> _getDisplayText({
+    required Chain chain,
+    required PaymentAccount? account,
+  }) async {
+    if (account == null) return '';
+
+    if (account.type == PaymentAccountType.ethereumRelay) {
+      return ' ${Web3Utils.formatIdentifier(account.accountInfo?.address ?? '')}';
+    } else if (account.type == PaymentAccountType.ethereumStake) {
+      final payoutAddress = await LemonadeStakeUtils.getPayoutAddress(
+        chain: chain,
+        configId: account.accountInfo?.configId ?? '',
+      );
+      return ' ${Web3Utils.formatIdentifier(payoutAddress)}';
+    }
+    return '';
   }
 }

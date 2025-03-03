@@ -155,7 +155,10 @@ class Web3Utils {
     return txHash;
   }
 
-  static Uint8List hexToBytes(String hex, {bool padTo32Bytes = false}) {
+  static Uint8List hexToBytes(
+    String hex, {
+    bool padTo32Bytes = false,
+  }) {
     // Remove '0x' prefix if present
     hex = hex.startsWith('0x') ? hex.substring(2) : hex;
 
@@ -176,5 +179,14 @@ class Web3Utils {
     );
 
     return bytes;
+  }
+
+  static String bytesToHex(Uint8List bytes, {bool prefix = true}) {
+    final hexString = hex.encode(bytes);
+    return prefix ? '0x$hexString' : hexString;
+  }
+
+  static BigInt percentToPPM(double percentage) {
+    return BigInt.from(percentage * 10000);
   }
 }

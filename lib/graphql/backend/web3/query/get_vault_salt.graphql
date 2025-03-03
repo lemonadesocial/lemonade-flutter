@@ -1,0 +1,5 @@
+# name: some id 
+# type: "stake_vault
+query GetVaultSalt($name: String!, $type: String!) {
+  getVaultSalt(name: $name, type: $type)
+}
