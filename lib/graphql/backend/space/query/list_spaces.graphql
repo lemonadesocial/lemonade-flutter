@@ -1,0 +1,5 @@
+query ListSpaces($with_my_spaces: Boolean, $with_public_spaces: Boolean, $roles: [SpaceRole!]) {
+  listSpaces(with_my_spaces: $with_my_spaces, with_public_spaces: $with_public_spaces, roles: $roles) {
+    ...SpaceFragment
+  }
+} 

@@ -1,0 +1,3 @@
+mutation FollowSpace($space: MongoID!) {
+  followSpace(space: $space)
+} 

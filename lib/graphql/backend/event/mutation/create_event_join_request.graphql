@@ -1,7 +1,0 @@
-# import '../fragment/event_join_request_fragment.graphql'
-
-mutation CreateEventJoinRequest($input: CreateEventJoinRequestInput!) {
-  createEventJoinRequest(input: $input) {
-    ...EventJoinRequest
-  }
-}

@@ -37,7 +37,6 @@ import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.
 import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/cancel_event.graphql.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_story_image.graphql.dart';
-import 'package:app/graphql/backend/event/mutation/create_event_join_request.graphql.dart';
 import 'package:app/graphql/backend/event/query/export_event_tickets.graphql.dart';
 import 'package:app/graphql/backend/event/query/generate_event_invitation_url.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_event_application_answers.graphql.dart';
@@ -364,30 +363,6 @@ class EventRepositoryImpl implements EventRepository {
       EventJoinRequest.fromDto(
         EventJoinRequestDto.fromJson(
           result.parsedData!.getEventJoinRequest.toJson(),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Future<Either<Failure, EventJoinRequest?>> createEventJoinRequest({
-    required String eventId,
-  }) async {
-    final result = await client.mutate$CreateEventJoinRequest(
-      Options$Mutation$CreateEventJoinRequest(
-        variables: Variables$Mutation$CreateEventJoinRequest(
-          input: Input$CreateEventJoinRequestInput(event: eventId),
-        ),
-      ),
-    );
-    if (result.hasException ||
-        result.parsedData?.createEventJoinRequest == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(
-      EventJoinRequest.fromDto(
-        EventJoinRequestDto.fromJson(
-          result.parsedData!.createEventJoinRequest.toJson(),
         ),
       ),
     );
