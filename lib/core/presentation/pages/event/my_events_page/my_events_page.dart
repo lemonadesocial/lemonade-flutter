@@ -59,7 +59,7 @@ class MyEventsPageView extends StatelessWidget {
         title: t.event.events.capitalize(),
       ),
       body: DefaultTabController(
-        initialIndex: 0,
+        initialIndex: 1,
         length: 3,
         child: Column(
           children: [
