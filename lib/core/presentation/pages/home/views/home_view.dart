@@ -28,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:app/core/utils/debouncer.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -75,6 +76,7 @@ class _HomeViewState extends State<_HomeView>
     with WidgetsBindingObserver, AutoRouteAwareStateMixin {
   EventTimeFilter? eventTimeFilter;
   bool _isRefreshing = false;
+  final debouncer = Debouncer(milliseconds: 300);
 
   @override
   void initState() {
@@ -85,6 +87,7 @@ class _HomeViewState extends State<_HomeView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    debouncer.dispose();
     super.dispose();
   }
 
@@ -170,13 +173,13 @@ class _HomeViewState extends State<_HomeView>
                 if (notification is ScrollEndNotification) {
                   if (notification.metrics.pixels >=
                       notification.metrics.maxScrollExtent * 0.8) {
-                    if (!isLoadingHomeEventListing) {
+                    debouncer.run(() {
                       context.read<HomeEventListingBloc>().add(
                             BaseEventsListingEvent.fetch(
                               eventTimeFilter: eventTimeFilter,
                             ),
                           );
-                    }
+                    });
                   }
                 }
                 return true;
