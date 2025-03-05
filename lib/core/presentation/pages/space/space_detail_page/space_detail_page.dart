@@ -1,3 +1,5 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/space_repository.dart';
@@ -10,6 +12,7 @@ import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +54,11 @@ class SpaceDetailPage extends StatelessWidget {
                 ),
               ),
             ),
+        ),
+        BlocProvider(
+          create: (context) => FollowSpaceBloc(
+            getIt<SpaceRepository>(),
+          ),
         ),
       ],
       child: const _View(),
@@ -105,7 +113,21 @@ class _ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return BlocBuilder<GetSpaceDetailBloc, GetSpaceDetailState>(
+    final user = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
+    return BlocConsumer<GetSpaceDetailBloc, GetSpaceDetailState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          orElse: () {},
+          success: (space) {
+            context
+                .read<FollowSpaceBloc>()
+                .add(FollowSpaceEvent.checkFollowed(space: space));
+          },
+        );
+      },
       builder: (context, state) {
         return state.maybeWhen(
           orElse: () => Scaffold(
@@ -153,8 +175,26 @@ class _ViewState extends State<_View> {
                     title: space.title ?? '',
                     showSimpleHeader: _showSimpleHeader,
                   ),
-                  _FloatingSubscribeButton(
-                    showFloatingSubscribe: _showFloatingSubscribe,
+                  BlocBuilder<FollowSpaceBloc, FollowSpaceState>(
+                    builder: (context, state) {
+                      return _FloatingFollowButton(
+                        visible: _showFloatingSubscribe &&
+                            (space.canFollow(userId: user?.userId ?? '') &&
+                                state is! FollowSpaceStateFollowed),
+                        isLoading: state is FollowSpaceStateLoading,
+                        onTap: () {
+                          if (user?.userId == null ||
+                              user?.userId.isEmpty == true) {
+                            context.router.navigate(const LoginRoute());
+                          }
+                          context.read<FollowSpaceBloc>().add(
+                                FollowSpaceEvent.follow(
+                                  spaceId: space.id ?? '',
+                                ),
+                              );
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
@@ -197,12 +237,15 @@ class _FloatingSpaceHeader extends StatelessWidget {
   }
 }
 
-class _FloatingSubscribeButton extends StatelessWidget {
-  const _FloatingSubscribeButton({
-    required this.showFloatingSubscribe,
+class _FloatingFollowButton extends StatelessWidget {
+  const _FloatingFollowButton({
+    required this.isLoading,
+    required this.onTap,
+    required this.visible,
   });
-
-  final bool showFloatingSubscribe;
+  final bool isLoading;
+  final VoidCallback onTap;
+  final bool visible;
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +253,7 @@ class _FloatingSubscribeButton extends StatelessWidget {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      bottom: showFloatingSubscribe ? Spacing.large : -2 * Spacing.large,
+      bottom: visible ? Spacing.large : -2 * Spacing.large,
       left: 0,
       right: 0,
       child: Center(
@@ -220,6 +263,13 @@ class _FloatingSubscribeButton extends StatelessWidget {
             height: 49.w,
             child: LinearGradientButton.primaryButton(
               label: t.common.actions.subscribe,
+              loadingWhen: isLoading,
+              onTap: () {
+                if (isLoading) {
+                  return;
+                }
+                onTap();
+              },
             ),
           ),
         ),

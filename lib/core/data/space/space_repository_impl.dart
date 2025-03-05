@@ -58,4 +58,44 @@ class SpaceRepositoryImpl implements SpaceRepository {
           .toList(),
     );
   }
+
+  @override
+  Future<Either<Failure, bool>> followSpace({
+    required String spaceId,
+  }) async {
+    final result = await _client.mutate$FollowSpace(
+      Options$Mutation$FollowSpace(
+        variables: Variables$Mutation$FollowSpace(
+          space: spaceId,
+        ),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final success = result.parsedData?.followSpace ?? false;
+    return Right(success);
+  }
+
+  @override
+  Future<Either<Failure, bool>> unfollowSpace({
+    required String spaceId,
+  }) async {
+    final result = await _client.mutate$UnfollowSpace(
+      Options$Mutation$UnfollowSpace(
+        variables: Variables$Mutation$UnfollowSpace(
+          space: spaceId,
+        ),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final success = result.parsedData?.unfollowSpace ?? false;
+    return Right(success);
+  }
 }

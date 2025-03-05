@@ -1,16 +1,14 @@
 import 'package:app/core/domain/space/entities/space.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_button_by_role.dart';
 
 class SpaceInfo extends StatelessWidget {
   final Space space;
@@ -23,7 +21,6 @@ class SpaceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
 
     return Container(
       padding: EdgeInsets.all(Spacing.small),
@@ -33,19 +30,7 @@ class SpaceInfo extends StatelessWidget {
           Row(
             children: [
               const Spacer(),
-              SizedBox(
-                width: 100.w,
-                height: Sizing.medium,
-                child: LinearGradientButton.primaryButton(
-                  radius: BorderRadius.circular(LemonRadius.button),
-                  textStyle: Typo.medium.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onPrimary,
-                  ),
-                  label: t.common.actions.subscribe,
-                  onTap: () {},
-                ),
-              ),
+              SpaceButtonByRole(space: space),
             ],
           ),
           SizedBox(height: Spacing.small),

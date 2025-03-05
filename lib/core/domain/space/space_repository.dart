@@ -11,4 +11,12 @@ abstract class SpaceRepository {
   Future<Either<Failure, List<SpaceTag>>> listSpaceTags({
     required String spaceId,
   });
+
+  Future<Either<Failure, bool>> followSpace({
+    required String spaceId,
+  });
+
+  Future<Either<Failure, bool>> unfollowSpace({
+    required String spaceId,
+  });
 }

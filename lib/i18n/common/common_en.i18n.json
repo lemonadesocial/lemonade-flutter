@@ -262,5 +262,6 @@
     },
     "cameraPermissionTitle": "Camera Access Required",
     "cameraPermissionMessage": "Camera permission is needed to scan QR codes. Please enable it in settings.",
-    "draft": "Draft"
+    "draft": "Draft",
+    "subscribed": "Subscribed"
 }
