@@ -554,7 +554,7 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   flutter_local_notifications: ef18f0537538fcd18e9106b3ddc91cc10b4e579a
   flutter_native_splash: 9e672d3818957718ee006a491730c09deeecace9
-  flutter_olm: b2031ebc22485b837e8ee1f200c6c6fe4340da6a
+  flutter_olm: f4330bf6e39eaf8799965f21d1d39a947c943ba9
   flutter_openssl_crypto: 73dcefff7611c3ac324d82726047d8335d0b6e57
   flutter_secure_storage: 2c2ff13db9e0a5647389bff88b0ecac56e3f3418
   flutter_timezone: ee50ce7786b5fde27e2fe5375bbc8c9661ffc13f

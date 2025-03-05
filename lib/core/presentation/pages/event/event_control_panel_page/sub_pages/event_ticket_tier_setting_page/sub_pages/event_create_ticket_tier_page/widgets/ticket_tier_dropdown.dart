@@ -4,7 +4,6 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -34,12 +33,12 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(Spacing.smMedium),
+        padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.small),
           color: colorScheme.onPrimary.withOpacity(0.06),
         ),
-        height: Sizing.xLarge,
+        height: 56.w,
         child: Row(
           children: [
             if (leadingBuilder != null) ...[
@@ -50,8 +49,8 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
               Expanded(
                 child: Text(
                   placeholder ?? '',
-                  style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.outlineVariant,
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -59,11 +58,13 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
               Expanded(
                 child: Text(
                   getDisplayValue?.call(value) ?? '',
-                  style: Typo.mediumPlus,
+                  style: Typo.mediumPlus.copyWith(
+                    color: colorScheme.onPrimary,
+                  ),
                 ),
               ),
-            Assets.icons.icArrowDown.svg(
-              color: colorScheme.onSurfaceVariant,
+            Assets.icons.icDoubleArrowUpDown.svg(
+              color: colorScheme.onSecondary,
             ),
           ],
         ),
@@ -195,7 +196,8 @@ class TicketTierFeatureDropdownListState<T, V>
             color: LemonColor.atomicBlack,
             padding: EdgeInsets.all(Spacing.smMedium),
             child: SafeArea(
-              child: LinearGradientButton(
+              child: LinearGradientButton.primaryButton(
+                label: t.common.confirm,
                 onTap: () {
                   widget.onConfirm?.call(
                     widget.data.firstWhereOrNull(
@@ -203,13 +205,6 @@ class TicketTierFeatureDropdownListState<T, V>
                     ),
                   );
                 },
-                height: 42.w,
-                radius: BorderRadius.circular(LemonRadius.small * 2),
-                mode: GradientButtonMode.lavenderMode,
-                label: t.common.confirm,
-                textStyle: Typo.medium.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
               ),
             ),
           ),

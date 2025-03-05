@@ -1,4 +1,5 @@
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/router/features/space/space_routes.dart';
 import 'package:auto_route/auto_route.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
@@ -120,18 +121,19 @@ class AppRouter extends $AppRouter {
         AutoRoute(
           page: EventVotingDetailRoute.page,
         ),
-        ...chatRoutes,
         eventBuyTicketsRoutes,
         createEventRoutes,
         eventDetailRoutes,
+        vaultRoutes,
+        collaboratorRoutes,
+        questRoutes,
+        createDuplicatedSubEventsRoutes,
+        ...chatRoutes,
         ...postRoutes,
         ...eventRoutes,
         ...commonRoutes,
-        vaultRoutes,
-        collaboratorRoutes,
         ...farcasterRoutes,
-        questRoutes,
-        createDuplicatedSubEventsRoutes,
+        ...spaceRoutes,
       ];
 }
 
@@ -218,18 +220,20 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: GuestEventRewardUsesRoute.page,
     ),
-    AutoRoute(
-      page: EventTicketTierSettingRoute.page,
-      children: [
-        AutoRoute(
-          initial: true,
-          page: EventTicketTiersListingRoute.page,
-        ),
-        AutoRoute(
-          page: EventCreateTicketTierRoute.page,
-        ),
-      ],
-    ),
+    // TODO: I dont know why we place this route here
+    // should be already child of EventSettingsRoute
+    // AutoRoute(
+    //   page: EventTicketTierSettingRoute.page,
+    //   children: [
+    //     AutoRoute(
+    //       initial: true,
+    //       page: EventTicketTiersListingRoute.page,
+    //     ),
+    //     AutoRoute(
+    //       page: EventCreateTicketTierRoute.page,
+    //     ),
+    //   ],
+    // ),
     AutoRoute(
       page: EventSettingsRoute.page,
       children: [
@@ -276,6 +280,9 @@ final eventDetailRoutes = AutoRoute(
             ),
             AutoRoute(
               page: EventCreateTicketTierRoute.page,
+            ),
+            AutoRoute(
+              page: EventActiveCryptoPaymentAccountsRoute.page,
             ),
           ],
         ),

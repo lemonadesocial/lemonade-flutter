@@ -1,14 +1,7 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/config.dart';
-import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
-import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
-import 'package:app/core/domain/payment/payment_enums.dart';
-import 'package:app/core/domain/payment/payment_repository.dart';
-import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_setup_stripe_payment_account_page/event_setup_stripe_payment_account_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -19,8 +12,6 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/payment/mutation/disconnect_stripe_account_mutation.graphql.dart';
-import 'package:app/graphql/backend/payment/mutation/generate_stripe_account_link_mutation.graphql.dart';
-import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -30,7 +21,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
 import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal_flutter;
 
@@ -43,125 +34,14 @@ class PayoutAccountsWidget extends StatefulWidget {
 
 class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
     with WidgetsBindingObserver {
-  bool stripePaymentAccountCreated = false;
-
-  bool hasStripePaymentAccount(Event? event) {
-    final eventPaymentAccountsExpanded = event?.paymentAccountsExpanded ?? [];
-    final hasStripePaymentAccount = eventPaymentAccountsExpanded.any(
-      (item) => item.provider == PaymentProvider.stripe,
-    );
-    return hasStripePaymentAccount;
-  }
-
-  bool hasStripeConnected(User? loggedInUser) {
-    final hasStripeConnected = loggedInUser?.stripeConnectedAccount != null &&
-        loggedInUser?.stripeConnectedAccount?.connected == true;
-    return hasStripeConnected;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
-            orElse: () => null,
-            authenticated: (user) => user,
-          );
-      final event = context.read<GetEventDetailBloc>().state.maybeWhen(
-            orElse: () => null,
-            fetched: (event) => event,
-          );
-      if (hasStripeConnected(loggedInUser)) {
-        if (!hasStripePaymentAccount(event)) {
-          _createStripePaymentAccount();
-        } else {
-          stripePaymentAccountCreated = true;
-        }
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) return;
-    final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
-          orElse: () => null,
-          authenticated: (user) => user,
-        );
-
-    final hasStripeConnected = loggedInUser?.stripeConnectedAccount != null &&
-        loggedInUser?.stripeConnectedAccount?.connected == true;
-    if (!hasStripeConnected) {
-      context.read<AuthBloc>().add(const AuthEvent.refreshData());
-    }
-  }
-
-  Future<void> _createStripePaymentAccount() async {
-    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
-          fetched: (event) => event,
-          orElse: () => null,
-        );
-
-    final response = await showFutureLoadingDialog(
-      context: context,
-      future: () async {
-        final createPaymentAccountResult =
-            await getIt<PaymentRepository>().createPaymentAccount(
-          input: CreatePaymentAccountInput(
-            type: PaymentAccountType.digital,
-            provider: PaymentProvider.stripe,
-          ),
-        );
-        if (createPaymentAccountResult.isLeft()) {
-          return null;
-        }
-        final newPaymentAccount =
-            createPaymentAccountResult.getOrElse(() => PaymentAccount());
-        final updateEventResult = await getIt<EventRepository>().updateEvent(
-          input: Input$EventInput(
-            payment_accounts_new: [
-              ...event?.paymentAccountsNew ?? [],
-              newPaymentAccount.id ?? '',
-            ],
-          ),
-          id: event?.id ?? '',
-        );
-        return updateEventResult.fold((l) => null, (r) => r);
-      },
-    );
-
-    if (response.result != null) {
-      stripePaymentAccountCreated = true;
-
-      context.read<GetEventDetailBloc>().add(
-            GetEventDetailEvent.replace(event: response.result!),
-          );
-    }
-  }
-
   Future<void> _connectStripe() async {
-    final response = await showFutureLoadingDialog(
+    await showCupertinoModalBottomSheet<PaymentAccount>(
       context: context,
-      future: () => getIt<AppGQL>().client.mutate$GenerateStripeAccountLink(
-            Options$Mutation$GenerateStripeAccountLink(
-              variables: Variables$Mutation$GenerateStripeAccountLink(
-                returnUrl: AppConfig.webUrl,
-                refreshUrl: AppConfig.webUrl,
-              ),
-            ),
-          ),
+      backgroundColor: LemonColor.atomicBlack,
+      barrierColor: Colors.black.withOpacity(0.5),
+      expand: false,
+      builder: (context) => const EventSetupStripePaymentAccountPage(),
     );
-    final url = response.result?.parsedData?.generateStripeAccountLink.url;
-    if (url != null) {
-      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    }
   }
 
   Future<void> _disconnectStripe() async {
@@ -181,25 +61,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (stripePaymentAccountCreated) {
-              return;
-            }
-            final loggedInUser = state.maybeWhen(
-              orElse: () => null,
-              authenticated: (user) => user,
-            );
-            final event = context
-                .read<GetEventDetailBloc>()
-                .state
-                .maybeWhen(orElse: () => null, fetched: (event) => event);
-            if (hasStripeConnected(loggedInUser)) {
-              if (!hasStripePaymentAccount(event)) {
-                _createStripePaymentAccount();
-              }
-            }
-          },
+        BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             final loggedInUser = state.maybeWhen(
               orElse: () => null,
@@ -366,7 +228,8 @@ class PayoutAccountItem extends StatelessWidget {
                 Text(
                   title,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary.withOpacity(0.87),
+                    color: colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 2.w),

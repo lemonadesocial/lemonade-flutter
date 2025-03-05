@@ -7,11 +7,9 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -24,6 +22,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -173,45 +172,51 @@ class TicketTierItem extends StatelessWidget {
                 GetEventCurrenciesBuilder(
                   eventId: eventId,
                   builder: (context, loading, currencies) {
-                    final firstTicketPrice = eventTicketType.prices?.first;
-                    final currencyInfo = EventTicketUtils.getEventCurrency(
-                      currencies: currencies,
-                      currency: firstTicketPrice?.currency ?? '',
-                    );
-                    // TODO: ticket setup
-                    final isERC20 =
-                        eventTicketType.prices?.firstOrNull?.isCrypto ?? false;
+                    return Row(
+                      children: (eventTicketType.prices ?? [])
+                          .asMap()
+                          .entries
+                          .map((entry) {
+                        final price = entry.value;
+                        final index = entry.key;
+                        final currencyInfo = EventTicketUtils.getEventCurrency(
+                          currencies: currencies,
+                          currency: price.currency ?? '',
+                        );
+                        // TODO: ticket setup
+                        final isERC20 = price.isCrypto;
 
-                    final decimals = currencyInfo?.decimals?.toInt() ?? 2;
-                    String displayedAmount = "";
-                    if (isERC20) {
-                      displayedAmount = Web3Utils.formatCryptoCurrency(
-                        BigInt.parse(firstTicketPrice?.cost ?? '0'),
-                        currency: firstTicketPrice?.currency ?? '',
-                        decimals: decimals,
-                        decimalDigits: decimals,
-                      );
-                    } else {
-                      final parsedAmount =
-                          int.parse(firstTicketPrice?.cost ?? '0').toString();
-                      final doubleAmount = NumberUtils.getAmountByDecimals(
-                        BigInt.parse(parsedAmount),
-                        decimals: decimals,
-                      );
-                      displayedAmount =
-                          '$doubleAmount ${firstTicketPrice?.currency}';
-                    }
-                    displayedAmount = isFree ? t.event.free : displayedAmount;
-                    return loading
-                        ? Loading.defaultLoading(context)
-                        : RichText(
-                            text: TextSpan(
-                              text: displayedAmount,
-                              style: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
+                        final decimals = currencyInfo?.decimals?.toInt() ?? 2;
+                        String displayedAmount = "";
+                        if (isERC20) {
+                          displayedAmount = Web3Utils.formatCryptoCurrency(
+                            BigInt.parse(price.cost ?? '0'),
+                            currency: price.currency ?? '',
+                            decimals: decimals,
+                            decimalDigits: decimals,
                           );
+                        } else {
+                          displayedAmount = CurrencyTextInputFormatter(
+                            symbol: price.currency ?? '',
+                            decimalDigits: decimals,
+                          ).format(price.cost ?? '');
+                        }
+                        displayedAmount =
+                            isFree ? t.event.free : displayedAmount;
+                        return RichText(
+                          text: TextSpan(
+                            text: loading
+                                ? '-'
+                                : '${index == 0 ? '' : ' ${t.common.or}'} $displayedAmount',
+                            style: Typo.medium.copyWith(
+                              color: index == 0
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSecondary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
                   },
                 ),
               ],

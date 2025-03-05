@@ -178,6 +178,7 @@ type Query {
   getEventPaymentStatistics(event: MongoID!): EventPaymentStatistics!
   getEventPayment(event: MongoID!, _id: MongoID!): NewPayment
   listEventPayments(skip: Int, limit: Int, event: MongoID!, provider: NewPaymentProvider, networks: [String!], ticket_types: [MongoID!], checked_in: Boolean, search: String): ListEventPaymentsResponse!
+  listDonationVaults: [DonationVault!]!
 }
 
 type Badge {
@@ -504,6 +505,9 @@ type Event {
   accepted: [MongoID!]
   declined: [MongoID!]
   payment_fee: Float!
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
   application_required: Boolean
   rsvp_wallet_platforms: [ApplicationBlokchainPlatform!]
   application_form_url: String
@@ -609,6 +613,7 @@ type Event {
   url: String
   url_go: String
   telegram_channels: [TelegramChannel!]
+  donation_vaults_expanded: [DonationVault!]
   broadcasts: [Broadcast!]
   space_tags: [SpaceTagBase!]
   event_ticket_types: [EventTicketType!]
@@ -751,6 +756,15 @@ type TelegramChannel {
   username: String
   inviteLink: String
   joined: [MongoID!]
+}
+
+type DonationVault {
+  _id: MongoID!
+  title: String!
+  user: MongoID!
+  network: String!
+  address: String!
+  events: [MongoID!]
 }
 
 type Broadcast {
@@ -1858,10 +1872,10 @@ enum EmailTemplateType {
 }
 
 type RecipientDetail {
-  _id: MongoID
   name: String!
   email: String
   image_avatar: String
+  _id: MongoID
 }
 
 type EventFeedbackSummary {
@@ -2369,6 +2383,7 @@ type Chain {
   relay_payment_contract: String
   stake_payment_contract: String
   reward_registry_contract: String
+  donation_registry_contract: String
   eas_event_contract: String
   eas_graphql_url: String
   aragon_network: String
@@ -3847,6 +3862,7 @@ type Mutation {
   createSpace(input: SpaceInput!): Space!
   activatePersonalSpace(input: SpaceInput!): ActivatePersonalSpace!
   updateSpace(input: SpaceInput!, _id: MongoID!): Space
+  deleteSpace(_id: MongoID!): Boolean!
   pinEventsToSpace(tags: [MongoID!], events: [MongoID!]!, space: MongoID!): PinEventsToSpaceResponse!
   unpinEventsFromSpace(events: [MongoID!]!, space: MongoID!): Boolean!
   followSpace(space: MongoID!): Boolean!
@@ -3917,6 +3933,8 @@ type Mutation {
   createTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!): TicketTokenRewardSetting!
   updateCheckinTokenRewardSetting(input: CheckinTokenRewardSettingInput!, _id: MongoID!): CheckinTokenRewardSetting!
   updateTicketTokenRewardSetting(input: TicketTokenRewardSettingInput!, _id: MongoID!): TicketTokenRewardSetting!
+  createDonationVault(input: DonationVaultInput!): DonationVault!
+  updateDonationVault(input: DonationVaultInput!, _id: MongoID!): DonationVault
 }
 
 input CreateBadgeInput {
@@ -3951,6 +3969,9 @@ input EventInput {
   start: DateTimeISO
   end: DateTimeISO
   visible_cohosts: [MongoID!]
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
   application_required: Boolean
   rsvp_wallet_platforms: [ApplicationBlokchainPlatformInput!]
   application_form_url: String
@@ -5084,6 +5105,12 @@ input TicketTokenRewardSettingInput {
   currency_address: String
   event: MongoID
   rewards: [TicketTypeRewardInput!]
+}
+
+input DonationVaultInput {
+  title: String
+  network: String
+  address: String
 }
 
 type Subscription {

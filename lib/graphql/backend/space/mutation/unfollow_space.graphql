@@ -1,0 +1,3 @@
+mutation UnfollowSpace($space: MongoID!) {
+  unfollowSpace(space: $space)
+} 

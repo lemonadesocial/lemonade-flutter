@@ -49,7 +49,9 @@ class PaymentAccount with _$PaymentAccount {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other is PaymentAccount && other.id == id);
+        (other is PaymentAccount &&
+            other.id == id &&
+            other.accountInfo?.toString() == accountInfo?.toString());
   }
 
   @override

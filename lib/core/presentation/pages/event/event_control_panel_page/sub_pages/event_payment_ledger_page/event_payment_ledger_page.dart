@@ -32,10 +32,10 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 @RoutePage()
 class EventPaymentLedgerPage extends StatefulWidget {
-  final Event? event;
+  final Event event;
   const EventPaymentLedgerPage({
     super.key,
-    this.event,
+    required this.event,
   });
 
   @override
@@ -54,7 +54,7 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
   void initState() {
     super.initState();
     _filterVariables = Variables$Query$ListEventPayments(
-      event: widget.event?.id ?? '',
+      event: widget.event.id ?? '',
       skip: 0,
       limit: limit,
     );
@@ -235,7 +235,7 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                           Query$GetTicketStatistics$Widget(
                             options: Options$Query$GetTicketStatistics(
                               variables: Variables$Query$GetTicketStatistics(
-                                event: widget.event?.id ?? '',
+                                event: widget.event.id ?? '',
                               ),
                             ),
                             builder: (result, {fetchMore, refetch}) {
@@ -265,7 +265,7 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                             options: Options$Query$GetEventPaymentStatistics(
                               variables:
                                   Variables$Query$GetEventPaymentStatistics(
-                                event: widget.event?.id ?? '',
+                                event: widget.event.id ?? '',
                               ),
                             ),
                             builder: (result, {fetchMore, refetch}) {

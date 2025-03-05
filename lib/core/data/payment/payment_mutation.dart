@@ -20,3 +20,13 @@ final createPaymentAccountMutation = gql('''
     }
   }
 ''');
+
+final updatePaymentAccountMutation = gql('''
+  $paymentAccountFragment
+
+  mutation UpdateNewPaymentAccount(\$input: UpdateNewPaymentAccountInput!) {
+    updateNewPaymentAccount(input: \$input) {
+      ...paymentAccountFragment
+    }
+  }
+''');
