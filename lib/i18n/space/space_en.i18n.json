@@ -14,5 +14,9 @@
     "enterEventLink": "Enter event link",
     "eventNotFound": "Event not found",
     "eventSubmissionRequested": "Event submission has been requested",
-    "eventSubmitted": "Event submitted to space"
+    "eventSubmitted": "Event submitted to space",
+    "addTags": "Add tags",
+    "applyTags": "Apply tags",
+    "noResults": "No results",
+    "addEventLink": "Add event link"
 }

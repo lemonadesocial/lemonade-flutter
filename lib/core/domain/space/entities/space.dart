@@ -55,6 +55,10 @@ class Space with _$Space {
     return admins!.any((admin) => admin.userId == userId);
   }
 
+  bool canInsertTag({required String userId}) {
+    return isAdmin(userId: userId) || isCreator(userId: userId);
+  }
+
   bool canFollow({required String userId}) {
     return !isCreator(userId: userId) && !isAdmin(userId: userId);
   }

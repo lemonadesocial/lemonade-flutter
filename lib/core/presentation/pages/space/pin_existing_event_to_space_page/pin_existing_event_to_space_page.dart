@@ -1,7 +1,10 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/pin_existing_event_to_space_bloc/pin_existing_event_to_space_bloc.dart';
 import 'package:app/core/domain/space/entities/pin_events_to_space_response.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/domain/space/entities/space_tag.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/presentation/pages/space/widgets/select_space_tags_dropdown.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
@@ -24,7 +27,7 @@ class PinExistingEventToSpacePage extends StatelessWidget {
       context: context,
       backgroundColor: LemonColor.atomicBlack,
       barrierColor: Colors.black.withOpacity(0.5),
-      expand: false,
+      expand: true,
       builder: (context) => PinExistingEventToSpacePage(space: space),
     );
   }
@@ -59,6 +62,7 @@ class _View extends StatefulWidget {
 class __ViewState extends State<_View> {
   final controller = TextEditingController();
   bool hasValue = false;
+  List<SpaceTag> selectedTags = [];
 
   @override
   void initState() {
@@ -74,6 +78,10 @@ class __ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user.userId,
+        );
     return BlocConsumer<PinExistingEventToSpaceBloc,
         PinExistingEventToSpaceState>(
       listener: (context, state) {
@@ -136,11 +144,23 @@ class __ViewState extends State<_View> {
                     ),
                     SizedBox(height: Spacing.medium),
                     LemonTextField(
+                      autofocus: true,
                       controller: controller,
                       filled: true,
                       fillColor: LemonColor.chineseBlack,
                       borderColor: Colors.transparent,
-                      hintText: "Enter event link",
+                      hintText: t.space.addEventLink,
+                    ),
+                    SizedBox(height: Spacing.medium),
+                    SelectSpaceTagsDropdown(
+                      spaceId: widget.space.id!,
+                      onChange: (tags) {
+                        setState(() {
+                          selectedTags = tags;
+                        });
+                      },
+                      canInsertTag: userId != null &&
+                          widget.space.canInsertTag(userId: userId),
                     ),
                     SizedBox(height: Spacing.medium),
                     SafeArea(
@@ -161,6 +181,8 @@ class __ViewState extends State<_View> {
                                   PinExistingEventToSpaceEvent.pinEvent(
                                     eventUrl: controller.text,
                                     spaceId: widget.space.id!,
+                                    tags:
+                                        selectedTags.map((e) => e.id).toList(),
                                   ),
                                 );
                           },
