@@ -3,7 +3,6 @@ import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -20,7 +19,8 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
   String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
   String get _buyerName => eventGuestDetail?.user.name ?? 'Unknown';
   String get _buyerEmail => eventGuestDetail?.user.email ?? 'N/A';
-  DateTime? get _ticketCreatedAt => eventGuestDetail?.ticket.createdAt;
+  DateTime? get _joinRequestCreatedAt =>
+      eventGuestDetail?.joinRequest?.createdAt;
   EventJoinRequest? get _joinRequest => eventGuestDetail?.joinRequest;
 
   @override
@@ -71,9 +71,9 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
           children: [
             _InfoItem(
               title: 'Registered on',
-              value: _ticketCreatedAt != null
+              value: _joinRequestCreatedAt != null
                   ? DateFormatUtils.custom(
-                      _ticketCreatedAt!,
+                      _joinRequestCreatedAt!,
                       pattern: 'dd MMM, HH:mm',
                     )
                   : 'N/A',

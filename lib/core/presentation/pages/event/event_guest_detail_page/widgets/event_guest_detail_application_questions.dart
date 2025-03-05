@@ -23,16 +23,22 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
     if (applications.isEmpty) {
       return const SizedBox.shrink();
     }
+    if (applications.every(
+      (app) =>
+          app.answers == null || app.answers!.every((answer) => answer.isEmpty),
+    )) {
+      return const SizedBox.shrink();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           t.event.eventGuestDetail.applicationQuestions,
-          style: Typo.large.copyWith(
+          style: Typo.mediumPlus.copyWith(
             color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: Spacing.medium),
         ...applications.map(
           (qa) => _QuestionAnswerItem(
             question: qa.question,
@@ -62,7 +68,7 @@ class _QuestionAnswerItem extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.only(bottom: Spacing.medium),
+      padding: EdgeInsets.only(top: Spacing.medium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -12,10 +12,10 @@ part 'event_guest_detail_dto.g.dart';
 class EventGuestDetailDto with _$EventGuestDetailDto {
   factory EventGuestDetailDto({
     required EventGuestUserDto user,
-    required TicketDto ticket,
+    TicketDto? ticket,
     EventGuestPaymentDto? payment,
     List<EventApplicationQuestionAndAnswerDto>? application,
-    EventJoinRequestDto? joinRequest,
+    @JsonKey(name: 'join_request') EventJoinRequestDto? joinRequest,
   }) = _EventGuestDetailDto;
 
   factory EventGuestDetailDto.fromJson(Map<String, dynamic> json) =>

@@ -1,5 +1,6 @@
 import 'package:app/core/data/event/dtos/event_guest_detail_dto/event_guest_detail_dto.dart';
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
+import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_actions_bar.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_application_questions.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_payment_info_widget.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_timeline_info_widget.dart';
@@ -61,8 +62,6 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
               result.parsedData!.getEventGuestDetail!.toJson(),
             ),
           );
-          print(
-              'eventGuestDetail joinRequest: ${eventGuestDetail.joinRequest?.toJson().toString()}');
           final widgets = [
             EventGuestDetailUserInfoWidget(
               eventGuestDetail: eventGuestDetail,
@@ -81,32 +80,51 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
                 eventGuestDetail: eventGuestDetail,
               ),
           ];
-          return CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  left: Spacing.small,
-                  right: Spacing.small,
-                  top: Spacing.small,
+          return Column(
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                        left: Spacing.small,
+                        right: Spacing.small,
+                        top: Spacing.small,
+                      ),
+                      sliver: SliverList.separated(
+                        itemBuilder: (context, index) {
+                          return widgets[index];
+                        },
+                        separatorBuilder: (context, index) {
+                          final hasNoAnswers =
+                              eventGuestDetail.application?.every(
+                                    (app) =>
+                                        app.answers == null ||
+                                        app.answers!
+                                            .every((answer) => answer.isEmpty),
+                                  ) ??
+                                  true;
+                          if (index == 2 && hasNoAnswers) {
+                            return const SizedBox.shrink();
+                          }
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.medium,
+                            ),
+                            child: Divider(
+                              color: colorScheme.outline,
+                              height: 1,
+                            ),
+                          );
+                        },
+                        itemCount: widgets.length,
+                      ),
+                    ),
+                  ],
                 ),
-                sliver: SliverList.separated(
-                  itemBuilder: (context, index) {
-                    return widgets[index];
-                  },
-                  separatorBuilder: (context, index) {
-                    if (index == 1 && eventGuestDetail.payment == null) {
-                      return const SizedBox.shrink();
-                    }
-                    if (index == 2 && eventGuestDetail.application == null) {
-                      return const SizedBox.shrink();
-                    }
-                    return Divider(
-                      color: colorScheme.outline,
-                      height: Spacing.medium * 2,
-                    );
-                  },
-                  itemCount: widgets.length,
-                ),
+              ),
+              EventGuestDetailActionsBar(
+                eventGuestDetail: eventGuestDetail,
               ),
             ],
           );

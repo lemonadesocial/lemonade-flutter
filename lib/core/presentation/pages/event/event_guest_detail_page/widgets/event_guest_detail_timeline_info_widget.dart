@@ -19,7 +19,6 @@ class EventGuestDetailTimelineInfoWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final joinRequest = eventGuestDetail.joinRequest;
-
     if (joinRequest == null) {
       return const SizedBox.shrink();
     }
@@ -29,8 +28,9 @@ class EventGuestDetailTimelineInfoWidget extends StatelessWidget {
       children: [
         Text(
           t.event.eventGuestDetail.timeline,
-          style: Typo.large.copyWith(
+          style: Typo.mediumPlus.copyWith(
             color: colorScheme.onPrimary,
+            fontWeight: FontWeight.w600,
           ),
         ),
         SizedBox(height: Spacing.small),
@@ -93,36 +93,36 @@ class _TimelineItem extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [
-          SizedBox(
-            width: Spacing.medium,
-            child: Column(
-              children: [
-                if (!isFirst)
-                  Expanded(
-                    child: VerticalDivider(
-                      color: colorScheme.outline,
-                      thickness: 1,
-                    ),
-                  ),
-                Container(
-                  width: Spacing.small,
-                  height: Spacing.small,
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                if (!isLast)
-                  Expanded(
-                    child: VerticalDivider(
-                      color: colorScheme.outline,
-                      thickness: 1,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          SizedBox(width: Spacing.small),
+          // SizedBox(
+          //   width: Spacing.medium,
+          //   child: Column(
+          //     children: [
+          //       if (!isFirst)
+          //         Expanded(
+          //           child: VerticalDivider(
+          //             color: colorScheme.outline,
+          //             thickness: 1,
+          //           ),
+          //         ),
+          //       Container(
+          //         width: Spacing.small,
+          //         height: Spacing.small,
+          //         decoration: BoxDecoration(
+          //           color: _getStatusColor(),
+          //           shape: BoxShape.circle,
+          //         ),
+          //       ),
+          //       if (!isLast)
+          //         Expanded(
+          //           child: VerticalDivider(
+          //             color: colorScheme.outline,
+          //             thickness: 1,
+          //           ),
+          //         ),
+          //     ],
+          //   ),
+          // ),
+          // SizedBox(width: Spacing.small),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: Spacing.extraSmall),

@@ -1909,7 +1909,7 @@ type BasicUserInfo {
 
 type EventGuestDetail {
   user: EventGuestUser!
-  ticket: Ticket!
+  ticket: Ticket
   payment: EventGuestPayment
   application: [EventApplicationQuestionAndAnswer!]
   join_request: EventJoinRequest

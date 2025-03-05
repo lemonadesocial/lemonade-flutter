@@ -13,7 +13,7 @@ part 'event_guest_detail.g.dart';
 class EventGuestDetail with _$EventGuestDetail {
   factory EventGuestDetail({
     required EventGuestUser user,
-    required Ticket ticket,
+    Ticket? ticket,
     EventGuestPayment? payment,
     List<EventApplicationQuestionAndAnswer>? application,
     EventJoinRequest? joinRequest,
@@ -21,7 +21,7 @@ class EventGuestDetail with _$EventGuestDetail {
 
   factory EventGuestDetail.fromDto(EventGuestDetailDto dto) => EventGuestDetail(
         user: EventGuestUser.fromDto(dto.user),
-        ticket: Ticket.fromDto(dto.ticket),
+        ticket: dto.ticket != null ? Ticket.fromDto(dto.ticket!) : null,
         payment: dto.payment != null
             ? EventGuestPayment.fromDto(dto.payment!)
             : null,
