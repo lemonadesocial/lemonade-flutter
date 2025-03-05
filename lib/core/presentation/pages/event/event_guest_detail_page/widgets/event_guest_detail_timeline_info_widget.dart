@@ -75,17 +75,6 @@ class _TimelineItem extends StatelessWidget {
     required this.status,
   });
 
-  Color _getStatusColor() {
-    switch (status) {
-      case _TimelineStatus.done:
-        return LemonColor.paleViolet;
-      case _TimelineStatus.approved:
-        return LemonColor.malachiteGreen;
-      case _TimelineStatus.declined:
-        return LemonColor.coralReef;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -93,36 +82,6 @@ class _TimelineItem extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [
-          // SizedBox(
-          //   width: Spacing.medium,
-          //   child: Column(
-          //     children: [
-          //       if (!isFirst)
-          //         Expanded(
-          //           child: VerticalDivider(
-          //             color: colorScheme.outline,
-          //             thickness: 1,
-          //           ),
-          //         ),
-          //       Container(
-          //         width: Spacing.small,
-          //         height: Spacing.small,
-          //         decoration: BoxDecoration(
-          //           color: _getStatusColor(),
-          //           shape: BoxShape.circle,
-          //         ),
-          //       ),
-          //       if (!isLast)
-          //         Expanded(
-          //           child: VerticalDivider(
-          //             color: colorScheme.outline,
-          //             thickness: 1,
-          //           ),
-          //         ),
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(width: Spacing.small),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: Spacing.extraSmall),

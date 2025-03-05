@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
-import 'package:app/core/domain/payment/entities/event_guest_payment/event_guest_payment.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
