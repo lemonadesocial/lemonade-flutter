@@ -1,4 +1,5 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
+import 'package:app/core/domain/payment/entities/event_guest_payment/event_guest_payment.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -25,37 +26,36 @@ class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
     final widgets = [
       _PaymentInfoItem(
         title: t.event.eventGuestDetail.paid,
-        value: '${payment?.formattedTotalAmount} ${payment?.currency}',
+        value: '${payment.formattedTotalAmount} ${payment.currency}',
       ),
-      if (payment?.stripePaymentInfo != null)
+      if (payment.stripePaymentInfo != null)
         _PaymentInfoItem(
           title: t.event.eventGuestDetail.paymentMethod,
           value:
-              '${payment?.stripePaymentInfo?.card?.brand} **** ${payment?.stripePaymentInfo?.card?.last4}',
+              '${payment.stripePaymentInfo?.card?.brand} **** ${payment.stripePaymentInfo?.card?.last4}',
         ),
-      if (payment?.stripePaymentInfo != null)
+      if (payment.stripePaymentInfo != null)
         _PaymentInfoItem(
           title: t.event.eventGuestDetail.stripePaymentId,
-          value: payment?.stripePaymentInfo?.paymentIntent ?? '',
+          value: payment.stripePaymentInfo?.paymentIntent ?? '',
         ),
-      if (payment?.cryptoPaymentInfo != null)
+      if (payment.cryptoPaymentInfo != null)
         _PaymentInfoItem(
           title: t.event.eventGuestDetail.paymentMethod,
           value:
-              Web3Utils.formatIdentifier('${payment?.transferParams?['from']}'),
+              Web3Utils.formatIdentifier('${payment.transferParams?['from']}'),
         ),
-      if (payment?.cryptoPaymentInfo != null)
+      if (payment.cryptoPaymentInfo != null)
         _PaymentInfoItem(
           title: t.event.eventGuestDetail.transactionID,
           value: Web3Utils.formatIdentifier(
-            payment?.cryptoPaymentInfo?.txHash ?? '',
+            payment.cryptoPaymentInfo?.txHash ?? '',
           ),
         ),
-      if (payment?.state != null)
-        _PaymentInfoItem(
-          title: t.event.eventGuestDetail.status,
-          value: PaymentUtils.getPaymentStatus(payment!.state),
-        ),
+      _PaymentInfoItem(
+        title: t.event.eventGuestDetail.status,
+        value: PaymentUtils.getPaymentStatus(payment.state),
+      ),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
