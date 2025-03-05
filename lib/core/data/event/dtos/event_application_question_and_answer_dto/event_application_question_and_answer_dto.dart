@@ -13,6 +13,6 @@ class EventApplicationQuestionAndAnswerDto
   }) = _EventApplicationQuestionAndAnswerDto;
 
   factory EventApplicationQuestionAndAnswerDto.fromJson(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       _$EventApplicationQuestionAndAnswerDtoFromJson(json);
 }

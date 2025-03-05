@@ -1,5 +1,4 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
