@@ -11,7 +11,12 @@ query GetEvents(
   $subevent_parent: MongoID
   $startFrom: DateTimeISO
   $startTo: DateTimeISO
+  $endFrom: DateTimeISO
+  $endTo: DateTimeISO
   $unpublished: Boolean
+  $space: MongoID
+  $spaceTags: [MongoID!]
+  $sort: EventSortInput
 ) {
   events: getEvents(
     highlight: $highlight
@@ -23,7 +28,12 @@ query GetEvents(
     subevent_parent: $subevent_parent
     start_from: $startFrom
     start_to: $startTo
+    end_from: $endFrom
+    end_to: $endTo
     unpublished: $unpublished
+    space: $space
+    space_tags: $spaceTags
+    sort: $sort
   ) {
     ...EventFields
     event_ticket_types {

@@ -1,0 +1,10 @@
+query ListSpaceTags($space: MongoID!) {
+  listSpaceTags(space: $space) {
+    _id
+    space
+    tag
+    color
+    type
+    targets
+  }
+} 

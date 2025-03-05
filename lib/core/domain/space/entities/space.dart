@@ -10,12 +10,12 @@ part 'space.g.dart';
 @freezed
 class Space with _$Space {
   const factory Space({
-    required String id,
-    required String title,
+    String? id,
+    String? title,
     String? description,
-    required String creatorId,
+    String? creatorId,
     bool? private,
-    required Enum$SpaceState state,
+    Enum$SpaceState? state,
     bool? personal,
     List<String>? followers,
     SpaceDao? daos,

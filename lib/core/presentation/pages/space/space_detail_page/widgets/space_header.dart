@@ -1,3 +1,4 @@
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -11,12 +12,16 @@ final _coverHeight = 170.w;
 final _avatarSize = 80.w;
 
 class SpaceHeader extends StatelessWidget {
+  final Space space;
+
   const SpaceHeader({
     super.key,
+    required this.space,
   });
 
   @override
   Widget build(BuildContext context) {
+    final statusBarHeight = MediaQuery.of(context).padding.top;
     return SliverStack(
       insetOnOverlap: true,
       children: [
@@ -26,11 +31,14 @@ class SpaceHeader extends StatelessWidget {
           floating: false,
           stretch: true,
           backgroundColor: Colors.transparent,
-          flexibleSpace: const FlexibleSpaceBar(
-            stretchModes: [
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: const [
               StretchMode.zoomBackground,
             ],
-            background: _CoverPhoto(),
+            background: LemonNetworkImage(
+              imageUrl: space.imageCover?.url ?? '',
+              fit: BoxFit.cover,
+            ),
           ),
           automaticallyImplyLeading: false,
           toolbarHeight: 0,
@@ -49,43 +57,25 @@ class SpaceHeader extends StatelessWidget {
               ),
             ),
             child: LemonNetworkImage(
-              imageUrl: 'https://picsum.photos/id/238/200/300',
+              imageUrl: space.imageAvatar?.url ?? '',
               fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(LemonRadius.small),
             ),
           ),
         ),
-      ],
-    );
-  }
-}
-
-// Widget cho cover photo có thể giãn (không bao gồm avatar)
-class _CoverPhoto extends StatelessWidget {
-  const _CoverPhoto();
-
-  @override
-  Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        const LemonNetworkImage(
-          imageUrl: 'https://picsum.photos/id/237/200/300',
-          fit: BoxFit.cover,
-        ),
-        // Back button - đặt ở vị trí an toàn dưới status bar
-        Positioned(
+        SliverPositioned(
           top: statusBarHeight,
           left: Spacing.small,
           child: Row(
             children: [
-              BlurCircle(
-                child: LemonBackButton(
-                  onPressBack: () {
-                    context.router.pop();
-                  },
-                  color: Theme.of(context).colorScheme.onSecondary,
+              InkWell(
+                onTap: () {
+                  context.router.pop();
+                },
+                child: BlurCircle(
+                  child: LemonBackButton(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
                 ),
               ),
             ],

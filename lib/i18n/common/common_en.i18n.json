@@ -84,7 +84,9 @@
         "addToCalendar": "Add to calendar",
         "close": "Close",
         "checkIn": "Check in",
-        "doItLater": "Do it later"
+        "doItLater": "Do it later",
+        "subscribe": "Subscribe",
+        "manage": "Manage"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

@@ -10,11 +10,11 @@ part 'space_dto.g.dart';
 class SpaceDto with _$SpaceDto {
   const factory SpaceDto({
     @JsonKey(name: '_id') required String id,
-    required String title,
+    String? title,
     String? description,
-    @JsonKey(name: 'creator') required String creatorId,
+    @JsonKey(name: 'creator') String? creatorId,
     bool? private,
-    required Enum$SpaceState state,
+    Enum$SpaceState? state,
     bool? personal,
     List<String>? followers,
     SpaceDaoDto? daos,
