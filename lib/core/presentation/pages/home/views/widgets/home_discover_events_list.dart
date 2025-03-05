@@ -1,11 +1,11 @@
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeDiscoverEventsList extends StatelessWidget {
   final EventTimeFilter? eventTimeFilter;
@@ -21,7 +21,7 @@ class HomeDiscoverEventsList extends StatelessWidget {
       loading: () => const SliverToBoxAdapter(
         child: SizedBox(),
       ),
-      fetched: (_, filteredEvents) {
+      fetched: (events, filteredEvents) {
         if (filteredEvents.isEmpty) {
           return SliverToBoxAdapter(child: _buildEmptyEvents(context));
         }
@@ -29,7 +29,10 @@ class HomeDiscoverEventsList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               if (index == filteredEvents.length) {
-                return SizedBox(height: 80.w);
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: Spacing.medium),
+                  child: Loading.defaultLoading(context),
+                );
               }
               return Padding(
                 padding: EdgeInsets.only(bottom: Spacing.xSmall),

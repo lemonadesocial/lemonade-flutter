@@ -382,11 +382,12 @@ final getHomeEventsQuery = gql('''
         \$latitude: Float,
         \$longitude: Float,
         \$query: String = "",
-        \$skip: Int
+        \$skip: Int,
+        \$limit: Int
     ) {
         getHomeEvents(
             tense: \$tense,
-            limit: 100,
+            limit: \$limit,
             latitude: \$latitude,
             longitude: \$longitude,
             search: \$query,
