@@ -1,4 +1,10 @@
 {
     "submitEvent": "Submit Event",
-    "ambassadorAccess": "Ambassador Access"
+    "submitEventDescription": "Your event will be listed under this community once the admins have approved.",
+    "ambassadorAccess": "Ambassador Access",
+    "submitEventOptions": {
+        "newEvent": "Create New Event",
+        "existingEvent": "Add Existing Lemonade Event",
+        "externalEvent": "Add External Event"
+    }
 }

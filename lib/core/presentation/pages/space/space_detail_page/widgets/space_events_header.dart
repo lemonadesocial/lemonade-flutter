@@ -1,6 +1,7 @@
 import 'package:app/core/data/space/dtos/space_tag_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/submit_event_options_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
@@ -56,7 +57,9 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
               ),
               LemonOutlineButton(
                 leading: Assets.icons.icPlus.svg(),
-                onTap: () {},
+                onTap: () {
+                  SubmitEventOptionsBottomsheet.show(context);
+                },
                 label: t.space.submitEvent,
                 radius: BorderRadius.circular(LemonRadius.button),
                 backgroundColor: LemonColor.chineseBlack,
@@ -103,7 +106,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                           onTap: () {
                             _changeTag(null);
                           },
-                          label: "All",
+                          label: t.common.all,
                           radius: BorderRadius.circular(LemonRadius.button),
                           textStyle: Typo.medium.copyWith(
                             color: colorScheme.onPrimary,

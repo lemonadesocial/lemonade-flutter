@@ -43,9 +43,13 @@ class SelectSubEventTimezoneWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Assets.icons.icGlobe.svg(
-              width: 18.w,
-              height: 18.w,
+            ThemeSvgIcon(
+              color: colorScheme.onSecondary,
+              builder: (colorFilter) => Assets.icons.icGlobe.svg(
+                width: 18.w,
+                height: 18.w,
+                colorFilter: colorFilter,
+              ),
             ),
             SizedBox(
               width: Spacing.xSmall,
