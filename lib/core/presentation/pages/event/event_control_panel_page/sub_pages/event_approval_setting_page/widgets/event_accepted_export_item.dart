@@ -61,6 +61,7 @@ class EventAcceptedExportItem extends StatelessWidget {
             eventId: event?.id ?? '',
             userId: eventAccepted.buyerId ?? '',
             email: eventAccepted.buyerEmail ?? '',
+            onRequestActionComplete: refetch,
           ),
         );
       },

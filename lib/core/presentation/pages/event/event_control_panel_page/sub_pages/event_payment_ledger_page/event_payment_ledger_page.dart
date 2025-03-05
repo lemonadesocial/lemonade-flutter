@@ -335,15 +335,12 @@ class _EventPaymentLedgerPageState extends State<EventPaymentLedgerPage> {
                         final payment = payments[index];
                         return InkWell(
                           onTap: () {
-                            print("......");
-                            print("widget.event : ${widget.event?.id}");
-                            print("payment.user : ${payment.user}");
-                            print("payment.buyerEmail : ${payment.buyerEmail}");
                             context.router.push(
                               EventGuestDetailRoute(
-                                eventId: widget.event?.id ?? '',
+                                eventId: widget.event.id ?? '',
                                 userId: payment.user ?? '',
                                 email: payment.buyerEmail,
+                                onRequestActionComplete: refetch,
                               ),
                             );
                           },

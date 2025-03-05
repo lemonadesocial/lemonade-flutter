@@ -166,36 +166,12 @@ class _EventPendingJoinRequestItemState
   }
 
   Future<void> goToJoinRequestDetail(BuildContext context, Event? event) {
-    // print('---- event: ${event?.id}');
-    // print('---- eventJoinRequest: ${widget.eventJoinRequest}');
-    // print('---- user id : ${widget.eventJoinRequest.user}');
-    // print('---- nonLoginUser: ${widget.eventJoinRequest.nonLoginUser}');
     return AutoRouter.of(context).push(
       EventGuestDetailRoute(
         eventId: event?.id ?? '',
         userId: widget.eventJoinRequest.user ?? '',
         email: widget.eventJoinRequest.nonLoginUser?.email ?? '',
-      ),
-    );
-
-    return AutoRouter.of(context).push(
-      EventJoinRequestDetailRoute(
-        eventJoinRequest: widget.eventJoinRequest,
-        onPressApprove: () async {
-          await _modifyJoinRequest(
-            eventId: event?.id,
-            joinRequest: widget.eventJoinRequest,
-            action: ModifyJoinRequestAction.approve,
-          );
-        },
-        onPressDecline: () async {
-          await _modifyJoinRequest(
-            eventId: event?.id,
-            joinRequest: widget.eventJoinRequest,
-            action: ModifyJoinRequestAction.decline,
-          );
-        },
-        onRefetchList: widget.onRefetch,
+        onRequestActionComplete: widget.onRefetch,
       ),
     );
   }
