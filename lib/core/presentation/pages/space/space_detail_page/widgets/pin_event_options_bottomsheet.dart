@@ -9,46 +9,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-enum SubmitEventOptions {
+enum PinEventOptions {
   newEvent,
   existingEvent,
   externalEvent;
 
   SvgGenImage get icon {
     switch (this) {
-      case SubmitEventOptions.newEvent:
+      case PinEventOptions.newEvent:
         return Assets.icons.icCreate;
-      case SubmitEventOptions.existingEvent:
+      case PinEventOptions.existingEvent:
         return Assets.icons.icHouseParty;
-      case SubmitEventOptions.externalEvent:
+      case PinEventOptions.externalEvent:
         return Assets.icons.icGlobe;
     }
   }
 
   String get contentKey {
     switch (this) {
-      case SubmitEventOptions.newEvent:
-        return t.space.submitEventOptions.newEvent;
-      case SubmitEventOptions.existingEvent:
-        return t.space.submitEventOptions.existingEvent;
-      case SubmitEventOptions.externalEvent:
-        return t.space.submitEventOptions.externalEvent;
+      case PinEventOptions.newEvent:
+        return t.space.pinEventOptions.newEvent;
+      case PinEventOptions.existingEvent:
+        return t.space.pinEventOptions.existingEvent;
+      case PinEventOptions.externalEvent:
+        return t.space.pinEventOptions.externalEvent;
     }
   }
 }
 
-class SubmitEventOptionsBottomsheet extends StatelessWidget {
-  static show(BuildContext context) {
-    showCupertinoModalBottomSheet(
+class PinEventOptionsBottomsheet extends StatelessWidget {
+  static Future<PinEventOptions?> show(BuildContext context) {
+    return showCupertinoModalBottomSheet<PinEventOptions>(
       context: context,
       backgroundColor: LemonColor.atomicBlack,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
-      builder: (context) => const SubmitEventOptionsBottomsheet(),
+      builder: (context) => const PinEventOptionsBottomsheet(),
     );
   }
 
-  const SubmitEventOptionsBottomsheet({
+  const PinEventOptionsBottomsheet({
     super.key,
   });
 
@@ -91,37 +91,42 @@ class SubmitEventOptionsBottomsheet extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final option = SubmitEventOptions.values[index];
-                  return Container(
-                    padding: EdgeInsets.all(Spacing.small),
-                    decoration: BoxDecoration(
-                      color: LemonColor.chineseBlack,
-                      borderRadius: BorderRadius.circular(LemonRadius.small),
-                    ),
-                    child: Row(
-                      children: [
-                        ThemeSvgIcon(
-                          builder: (filter) => option.icon.svg(
-                            colorFilter: filter,
-                            width: 18.w,
-                            height: 18.w,
+                  final option = PinEventOptions.values[index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(Spacing.small),
+                      decoration: BoxDecoration(
+                        color: LemonColor.chineseBlack,
+                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                      ),
+                      child: Row(
+                        children: [
+                          ThemeSvgIcon(
+                            builder: (filter) => option.icon.svg(
+                              colorFilter: filter,
+                              width: 18.w,
+                              height: 18.w,
+                            ),
+                            color: colorScheme.onSecondary,
                           ),
-                          color: colorScheme.onSecondary,
-                        ),
-                        SizedBox(width: Spacing.smMedium),
-                        Text(
-                          option.contentKey,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
+                          SizedBox(width: Spacing.smMedium),
+                          Text(
+                            option.contentKey,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
                 separatorBuilder: (context, index) =>
                     SizedBox(height: Spacing.small),
-                itemCount: SubmitEventOptions.values.length,
+                itemCount: PinEventOptions.values.length,
               ),
             ],
           ),

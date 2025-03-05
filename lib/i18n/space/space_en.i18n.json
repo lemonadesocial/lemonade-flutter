@@ -2,9 +2,17 @@
     "submitEvent": "Submit Event",
     "submitEventDescription": "Your event will be listed under this community once the admins have approved.",
     "ambassadorAccess": "Ambassador Access",
-    "submitEventOptions": {
+    "pinEventOptions": {
         "newEvent": "Create New Event",
         "existingEvent": "Add Existing Lemonade Event",
         "externalEvent": "Add External Event"
-    }
+    },
+    "existingEvent": {
+        "title": "Existing Lemonade Event",
+        "description": "Enter link of an existing event you want to list in this community"
+    },
+    "enterEventLink": "Enter event link",
+    "eventNotFound": "Event not found",
+    "eventSubmissionRequested": "Event submission has been requested",
+    "eventSubmitted": "Event submitted to space"
 }

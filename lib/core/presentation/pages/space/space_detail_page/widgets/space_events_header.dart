@@ -1,7 +1,8 @@
 import 'package:app/core/data/space/dtos/space_tag_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
-import 'package:app/core/presentation/pages/space/space_detail_page/widgets/submit_event_options_bottomsheet.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/pin_event_options_bottomsheet.dart';
+import 'package:app/core/presentation/pages/space/pin_existing_event_to_space_page/pin_existing_event_to_space_page.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
@@ -57,8 +58,14 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
               ),
               LemonOutlineButton(
                 leading: Assets.icons.icPlus.svg(),
-                onTap: () {
-                  SubmitEventOptionsBottomsheet.show(context);
+                onTap: () async {
+                  final option = await PinEventOptionsBottomsheet.show(context);
+                  if (option == PinEventOptions.existingEvent) {
+                    await PinExistingEventToSpacePage.show(
+                      context,
+                      space: widget.space,
+                    );
+                  }
                 },
                 label: t.space.submitEvent,
                 radius: BorderRadius.circular(LemonRadius.button),

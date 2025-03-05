@@ -3,12 +3,16 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/data/space/dtos/space_event_request_dto.dart';
+import 'package:app/core/domain/space/entities/space_event_request.dart';
+import 'package:app/core/domain/space/entities/pin_events_to_space_response.dart';
 
 @LazySingleton(as: SpaceRepository)
 class SpaceRepositoryImpl implements SpaceRepository {
@@ -97,5 +101,36 @@ class SpaceRepositoryImpl implements SpaceRepository {
 
     final success = result.parsedData?.unfollowSpace ?? false;
     return Right(success);
+  }
+
+  @override
+  Future<Either<Failure, PinEventsToSpaceResponse>> pinEventsToSpace({
+    required List<String> events,
+    required String spaceId,
+    List<String>? tags,
+  }) async {
+    final result = await _client.mutate$PinEventsToSpace(
+      Options$Mutation$PinEventsToSpace(
+        variables: Variables$Mutation$PinEventsToSpace(
+          events: events,
+          space: spaceId,
+          tags: tags,
+        ),
+      ),
+    );
+
+    if (result.hasException) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final requests = result.parsedData?.pinEventsToSpace.requests
+        ?.map(
+          (e) => SpaceEventRequest.fromDto(
+            SpaceEventRequestDto.fromJson(e.toJson()),
+          ),
+        )
+        .toList();
+
+    return Right(PinEventsToSpaceResponse(requests: requests));
   }
 }
