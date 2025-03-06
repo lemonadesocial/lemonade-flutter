@@ -3,6 +3,7 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
 import 'package:app/graphql/backend/space/space.dart';
@@ -132,5 +133,39 @@ class SpaceRepositoryImpl implements SpaceRepository {
         .toList();
 
     return Right(PinEventsToSpaceResponse(requests: requests));
+  }
+
+  @override
+  Future<Either<Failure, List<Space>>> listSpaces({
+    bool? withMySpaces,
+    bool? withPublicSpaces,
+    List<Enum$SpaceRole>? roles,
+  }) async {
+    final result = await _client.query$ListSpaces(
+      Options$Query$ListSpaces(
+        variables: Variables$Query$ListSpaces(
+          with_my_spaces: withMySpaces,
+          with_public_spaces: withPublicSpaces,
+          roles: roles,
+        ),
+      ),
+    );
+
+    if (result.hasException || result.parsedData?.listSpaces == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final spaces = result.parsedData?.listSpaces ?? [];
+    return Right(
+      spaces
+          .map(
+            (space) => Space.fromDto(
+              SpaceDto.fromJson(
+                space.toJson(),
+              ),
+            ),
+          )
+          .toList(),
+    );
   }
 }

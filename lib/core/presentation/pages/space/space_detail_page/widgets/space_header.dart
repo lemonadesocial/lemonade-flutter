@@ -1,5 +1,6 @@
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:auto_route/auto_route.dart';
@@ -38,6 +39,7 @@ class SpaceHeader extends StatelessWidget {
             background: LemonNetworkImage(
               imageUrl: space.imageCover?.url ?? '',
               fit: BoxFit.cover,
+              placeholder: ImagePlaceholder.eventCard(),
             ),
           ),
           automaticallyImplyLeading: false,
@@ -60,6 +62,9 @@ class SpaceHeader extends StatelessWidget {
               imageUrl: space.imageAvatar?.url ?? '',
               fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(LemonRadius.small),
+              placeholder: ImagePlaceholder.spaceThumbnail(
+                iconColor: Theme.of(context).colorScheme.onSecondary,
+              ),
             ),
           ),
         ),

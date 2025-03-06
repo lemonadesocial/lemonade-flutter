@@ -18,5 +18,13 @@
     "addTags": "Add tags",
     "applyTags": "Apply tags",
     "noResults": "No results",
-    "addEventLink": "Add event link"
+    "addEventLink": "Add event link",
+    "communityHub": "Community Hub",
+    "myCommunities": "My Communities",
+    "ambassadorCommunities": "Ambassador Communities",
+    "subscribedCommunities": "Subscribed Communities",
+    "noAmbassadorCommunities": "No ambassador communities",
+    "noAmbassadorCommunitiesDescription": "You have not joined any ambassador communities",
+    "noSubscribedCommunities": "No subscriptions",
+    "noSubscribedCommunitiesDescription": "You have not subscribed to any communities"
 }

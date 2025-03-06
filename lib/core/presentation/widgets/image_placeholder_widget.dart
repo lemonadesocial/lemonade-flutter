@@ -64,4 +64,28 @@ class ImagePlaceholder {
       ),
     );
   }
+
+  static Widget spaceThumbnail({
+    double? iconSize,
+    BorderRadius? radius,
+    Color? backgroundColor,
+    Color? iconColor,
+  }) {
+    return Container(
+      height: Sizing.medium,
+      width: Sizing.medium,
+      decoration: BoxDecoration(
+        color: backgroundColor ?? LemonColor.chineseBlack,
+        borderRadius: radius ?? BorderRadius.circular(LemonRadius.extraSmall),
+      ),
+      child: Center(
+        child: ThemeSvgIcon(
+          color: iconColor,
+          builder: (filter) => Assets.icons.icWorkspace.svg(
+            colorFilter: filter,
+          ),
+        ),
+      ),
+    );
+  }
 }
