@@ -1,0 +1,107 @@
+# import '../../schema.graphql'
+# import '../fragment/user_fragment.graphql'
+# import '../fragment/confidential_user_info_fragment.graphql'
+
+query GetEventGuestDetail($event: MongoID!, $user: MongoID, $email: String) {
+  getEventGuestDetail(event: $event, user: $user, email: $email) {
+    user {
+      _id
+      name
+      email
+      image_avatar
+    }
+    ticket {
+      _id
+      shortid
+      created_at
+      event
+      type
+      accepted
+      acquired_by
+      cancelled_by
+      acquired_by_email
+      assigned_email
+      assigned_to
+      invited_by
+      payment_id
+      metadata
+      assigned_to_info {
+        ...ConfidentialUserInfoFragment
+      }
+      assigned_to_expanded {
+        ...BaseUserFragment
+      }
+      event_expanded {
+        _id
+        title
+      }
+      type_expanded {
+        _id
+        title
+        description
+        position
+      }
+    }
+    payment {
+      _id
+      stamps
+      amount
+      fee
+      currency
+      state
+      user
+      buyer_info {
+        name
+        email
+      }
+      account
+      ref_data
+      billing_info {
+        _id
+        firstname
+        lastname
+        email
+      }
+      transfer_metadata
+      transfer_params
+      failure_reason
+      attempting_refund
+      account_expanded {
+        ...PaymentAccountFragment
+      }
+      due_amount
+      buyer_user {
+        name
+        email
+        display_name
+        image_avatar
+      }
+      formatted_due_amount
+      formatted_total_amount
+      formatted_discount_amount
+      formatted_fee_amount
+      stripe_payment_info {
+        payment_intent
+        card {
+          brand
+          last4
+        }
+      }
+      crypto_payment_info {
+        network
+        tx_hash
+      }
+    }
+    application {
+      question
+      answer
+      answers
+    }
+    join_request {
+      _id
+      created_at
+      email
+      state
+    }
+  }
+} 

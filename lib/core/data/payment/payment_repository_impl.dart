@@ -19,6 +19,7 @@ import 'package:app/core/domain/payment/payment_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/payment/mutation/mail_ticket_payment_receipt.graphql.dart';
+import 'package:app/graphql/backend/payment/query/get_new_payment.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -261,5 +262,29 @@ class PaymentRepositoryImpl extends PaymentRepository {
 
     final dto = ListEventPaymentsResponseDto.fromJson(data.toJson());
     return Right(ListEventPaymentsResponse.fromDto(dto));
+  }
+
+  @override
+  Future<Either<Failure, Payment>> getNewPayment({
+    required Variables$Query$GetNewPayment input,
+  }) async {
+    final result = await _client.query$GetNewPayment(
+      Options$Query$GetNewPayment(
+        variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException || result.parsedData?.getNewPayment == null) {
+      return Left(Failure());
+    }
+
+    return Right(
+      Payment.fromDto(
+        PaymentDto.fromJson(
+          result.parsedData!.getNewPayment!.toJson(),
+        ),
+      ),
+    );
   }
 }

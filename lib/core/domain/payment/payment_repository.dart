@@ -9,6 +9,7 @@ import 'package:app/core/domain/payment/input/get_stripe_cards_input/get_stripe_
 import 'package:app/core/domain/payment/input/update_payment_account_input/update_payment_account_input.dart';
 import 'package:app/core/domain/payment/input/update_payment_input/update_payment_input.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/graphql/backend/payment/query/get_new_payment.graphql.dart';
 import 'package:app/graphql/backend/payment/query/list_event_payments.graphql.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/core/domain/payment/entities/event_payment_statistics/event_payment_statistics.dart';
@@ -53,5 +54,9 @@ abstract class PaymentRepository {
 
   Future<Either<Failure, ListEventPaymentsResponse>> listEventPayments({
     required Variables$Query$ListEventPayments input,
+  });
+
+  Future<Either<Failure, Payment>> getNewPayment({
+    required Variables$Query$GetNewPayment input,
   });
 }

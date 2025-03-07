@@ -424,6 +424,9 @@ final eventDetailRoutes = AutoRoute(
     AutoRoute(
       page: EventPaymentLedgerRoute.page,
     ),
+    AutoRoute(
+      page: EventGuestDetailRoute.page,
+    ),
   ],
 );
 
