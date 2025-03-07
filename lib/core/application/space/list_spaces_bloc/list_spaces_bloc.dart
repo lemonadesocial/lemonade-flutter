@@ -59,8 +59,6 @@ class ListSpacesBloc extends Bloc<ListSpacesEvent, ListSpacesState> {
       withPublicSpaces: event.withPublicSpaces ?? withPublicSpaces,
       roles: event.roles ?? roles,
     );
-
-    print('----> $result');
     result.fold(
       (failure) => emit(ListSpacesState.failure(failure: failure)),
       (spaces) => emit(ListSpacesState.success(spaces: spaces)),
