@@ -1,0 +1,15 @@
+mutation PinEventsToSpace($events: [MongoID!]!, $space: MongoID!, $tags: [MongoID!]) {
+  pinEventsToSpace(events: $events, space: $space, tags: $tags) {
+    requests {
+      _id
+      event
+      space
+      state
+      tags
+      created_at
+      created_by
+      decided_at
+      decided_by
+    }
+  }
+} 

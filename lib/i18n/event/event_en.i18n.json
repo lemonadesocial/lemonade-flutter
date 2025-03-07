@@ -1,5 +1,9 @@
 {
     "events": "Events",
+    "upcomingEvents(ordinal)": {
+        "one": "$n upcoming event",
+        "other": "$n upcoming events"
+    },
     "all": "all",
     "attending": "attending",
     "attended": "attended",

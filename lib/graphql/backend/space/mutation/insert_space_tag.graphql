@@ -1,0 +1,10 @@
+mutation InsertSpaceTag($input: SpaceTagInput!) {
+  insertSpaceTag(input: $input) {
+    _id
+    space
+    tag
+    color
+    type
+    targets
+  }
+} 

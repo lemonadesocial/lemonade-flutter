@@ -9,13 +9,16 @@ part 'space.g.dart';
 
 @freezed
 class Space with _$Space {
+  const Space._();
+
   const factory Space({
-    required String id,
-    required String title,
+    String? id,
+    String? title,
     String? description,
-    required String creatorId,
+    String? creator,
+    User? creatorExpanded,
     bool? private,
-    required Enum$SpaceState state,
+    Enum$SpaceState? state,
     bool? personal,
     List<String>? followers,
     SpaceDao? daos,
@@ -34,10 +37,38 @@ class Space with _$Space {
     bool? followed,
     bool? isAmbassador,
     List<User>? admins,
-    User? creator,
     DbFile? imageAvatar,
     DbFile? imageCover,
   }) = _Space;
+
+  bool isCreator({required String userId}) {
+    if (creator == null) {
+      return false;
+    }
+    return creator == userId;
+  }
+
+  bool isAdmin({required String userId}) {
+    if (admins == null || admins!.isEmpty) {
+      return false;
+    }
+    return admins!.any((admin) => admin.userId == userId);
+  }
+
+  bool isFollower({required String userId}) {
+    if (followers == null || followers!.isEmpty) {
+      return false;
+    }
+    return followers!.contains(userId);
+  }
+
+  bool canInsertTag({required String userId}) {
+    return isAdmin(userId: userId) || isCreator(userId: userId);
+  }
+
+  bool canFollow({required String userId}) {
+    return !isCreator(userId: userId) && !isAdmin(userId: userId);
+  }
 
   factory Space.fromJson(Map<String, dynamic> json) => _$SpaceFromJson(json);
 
@@ -46,7 +77,10 @@ class Space with _$Space {
       id: dto.id,
       title: dto.title,
       description: dto.description,
-      creatorId: dto.creatorId,
+      creator: dto.creator,
+      creatorExpanded: dto.creatorExpanded != null
+          ? User.fromDto(dto.creatorExpanded!)
+          : null,
       private: dto.private,
       state: dto.state,
       personal: dto.personal,
@@ -66,10 +100,7 @@ class Space with _$Space {
       listedEvents: dto.listedEvents,
       followed: dto.followed,
       isAmbassador: dto.isAmbassador,
-      admins: dto.admins?.map((e) => User.fromDto(e)).toList(),
-      creator: dto.creatorExpanded != null
-          ? User.fromDto(dto.creatorExpanded!)
-          : null,
+      admins: (dto.admins ?? []).map((e) => User.fromDto(e)).toList(),
       imageAvatar: dto.imageAvatarExpanded != null
           ? DbFile.fromDto(dto.imageAvatarExpanded!)
           : null,

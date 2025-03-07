@@ -122,7 +122,12 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 2.5.w),
-                        Assets.icons.icGlobe.svg(),
+                        ThemeSvgIcon(
+                          color: colorScheme.onSecondary,
+                          builder: (colorFilter) => Assets.icons.icGlobe.svg(
+                            colorFilter: colorFilter,
+                          ),
+                        ),
                         SizedBox(width: 14.w),
                         Expanded(
                           child: BlocBuilder<EventDateTimeSettingsBloc,

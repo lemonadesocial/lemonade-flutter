@@ -28,8 +28,10 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function()? onPressBack;
   final Color? backButtonColor;
 
+  static double get height => 60.w;
+
   @override
-  Size get preferredSize => Size.fromHeight(60.w);
+  Size get preferredSize => Size.fromHeight(height);
 
   @override
   Widget build(BuildContext context) {

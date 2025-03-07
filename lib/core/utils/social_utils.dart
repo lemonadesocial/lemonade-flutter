@@ -72,7 +72,11 @@ class SocialUtils {
       urlPrefix = AppConfig.lensUrl;
     }
 
-    return '$urlPrefix/$socialUserName';
+    String cleanUsername = socialUserName.startsWith('/')
+        ? socialUserName.substring(1)
+        : socialUserName;
+
+    return '$urlPrefix/$cleanUsername';
   }
 
   static String get farcasterUrl => 'https://warpcast.com';
