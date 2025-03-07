@@ -77,7 +77,6 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-
     return Scaffold(
       appBar: LemonAppBar(
         title: t.event.eventGuestDetail.eventGuestDetail,
