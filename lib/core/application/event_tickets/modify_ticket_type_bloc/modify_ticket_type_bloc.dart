@@ -17,7 +17,9 @@ class ModifyTicketTypeBloc
         ) {
     on<_ModifyTicketTypeEventOnTitleChanged>(_onTitleChanged);
     on<_ModifyTicketTypeEventOnDescriptionChanged>(_onDescriptionChanged);
-    on<_ModifyTicketTypeEventOnGuestsLimitChanged>(_onGuestsLimitChanged);
+    on<_ModifyTicketTypeEventOnTicketTotalLimitChanged>(
+      _onTicketTotalLimitChanged,
+    );
     on<_ModifyTicketTypeEventOnTicketLimitPerChanged>(_onTicketLimitPerChanged);
     on<_ModifyTicketTypeEventOnActiveChanged>(_onActiveChanged);
     on<_ModifyTicketTypeEventOnPrivateChanged>(_onPrivateChanged);
@@ -56,12 +58,12 @@ class ModifyTicketTypeBloc
     emit(_validate(newState));
   }
 
-  void _onGuestsLimitChanged(
-    _ModifyTicketTypeEventOnGuestsLimitChanged event,
+  void _onTicketTotalLimitChanged(
+    _ModifyTicketTypeEventOnTicketTotalLimitChanged event,
     Emitter emit,
   ) {
     final newState = state.copyWith(
-      limit: event.limit,
+      ticketLimit: event.ticketLimit,
     );
     emit(_validate(newState));
   }
@@ -234,7 +236,7 @@ class ModifyTicketTypeBloc
           title: StringFormz.pure(initialTicketType?.title ?? ''),
           description:
               OptionalStringFormz.pure(initialTicketType?.description ?? ''),
-          limit: initialTicketType?.ticketLimit,
+          ticketLimit: initialTicketType?.ticketLimit,
           ticketLimitPer: initialTicketType?.ticketLimitPer,
           active: initialTicketType?.active,
           private: initialTicketType?.private,
@@ -269,9 +271,9 @@ class ModifyTicketTypeEvent with _$ModifyTicketTypeEvent {
   factory ModifyTicketTypeEvent.onDescriptionChanged({
     required String description,
   }) = _ModifyTicketTypeEventOnDescriptionChanged;
-  factory ModifyTicketTypeEvent.onGuestsLimitChanged({
-    double? limit,
-  }) = _ModifyTicketTypeEventOnGuestsLimitChanged;
+  factory ModifyTicketTypeEvent.onTicketTotalLimitChanged({
+    double? ticketLimit,
+  }) = _ModifyTicketTypeEventOnTicketTotalLimitChanged;
   factory ModifyTicketTypeEvent.onTicketLimitPerChanged({
     double? ticketLimitPer,
   }) = _ModifyTicketTypeEventOnTicketLimitPerChanged;
@@ -316,7 +318,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
     required StringFormz title,
     required OptionalStringFormz description,
     double? ticketLimitPer,
-    double? limit,
+    double? ticketLimit,
     bool? active,
     bool? private,
     bool? limited,
@@ -331,7 +333,7 @@ class ModifyTicketTypeState with _$ModifyTicketTypeState {
         title: const StringFormz.pure(),
         description: const OptionalStringFormz.pure(),
         ticketLimitPer: 1,
-        limit: null,
+        ticketLimit: null,
         active: true,
         private: false,
         limited: false,

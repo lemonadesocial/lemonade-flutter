@@ -48,7 +48,15 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
     final t = Translations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          t.event.ticketTierSetting.pricing,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onSecondary,
+          ),
+        ),
+        SizedBox(height: Spacing.xSmall),
         Container(
           height: Sizing.large,
           decoration: BoxDecoration(

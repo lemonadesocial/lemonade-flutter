@@ -2,7 +2,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/sub_pages/event_ticket_tier_whitelist_form_page/event_ticket_tier_whitelist_form_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/sub_pages/event_ticket_tier_whitelist_form_page/widgets/add_email_to_whitelist_bottomsheet.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/ticket_setting_locked_item.dart';
+import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/widgets/ticket_setting_locked_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -67,23 +67,31 @@ class LimitedTicketSetting extends StatelessWidget {
                 ),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => Assets.icons.icLock.svg(
+                          colorFilter: filter,
+                        ),
+                      ),
+                      SizedBox(width: Spacing.xSmall),
                       Text(
                         t.event.ticketTierSetting.lockTicket,
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.87),
+                          color: colorScheme.onPrimary,
                         ),
                       ),
-                      SizedBox(height: 2.w),
+                      SizedBox(width: Spacing.superExtraSmall),
                       Text(
                         state.limited == true
                             ? t.event.ticketTierSetting.onlyWhitelisted
                             : t.event.ticketTierSetting.anyoneCanBuy,
                         style: Typo.small.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                          color: colorScheme.onSecondary,
                         ),
                       ),
                     ],
@@ -92,7 +100,7 @@ class LimitedTicketSetting extends StatelessWidget {
                   FlutterSwitch(
                     inactiveColor: colorScheme.outline,
                     inactiveToggleColor: colorScheme.onSurfaceVariant,
-                    activeColor: LemonColor.switchActive,
+                    activeColor: LemonColor.paleViolet,
                     activeToggleColor: colorScheme.onPrimary,
                     height: Sizing.small,
                     width: 42.w,
