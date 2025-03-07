@@ -4,13 +4,16 @@ import 'package:app/core/application/event/events_listing_bloc/base_events_listi
 import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
+import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_discover_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_hosting_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_list_my_spaces.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
@@ -58,6 +61,12 @@ class HomeView extends StatelessWidget {
           )..add(
               BaseEventsListingEvent.fetch(),
             ),
+        ),
+        BlocProvider(
+          create: (context) => ListSpacesBloc(
+            spaceRepository: getIt<SpaceRepository>(),
+            withMySpaces: true,
+          )..add(const ListSpacesEvent.fetch()),
         ),
       ],
       child: const _HomeView(),
@@ -261,6 +270,7 @@ class _HomeViewState extends State<_HomeView>
                         delegate: SliverChildListDelegate([
                           const HomeHostingEventsList(),
                           const HomeMyEventsList(),
+                          const HomeListMySpaces(),
                           BlocBuilder<UpcomingHostingEventsBloc,
                               UpcomingHostingEventsState>(
                             builder: (context, hostingState) {
@@ -289,7 +299,11 @@ class _HomeViewState extends State<_HomeView>
                       ),
                     ),
                   SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+                    padding: EdgeInsets.only(
+                      top: Spacing.medium,
+                      left: Spacing.small,
+                      right: Spacing.small,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
