@@ -970,6 +970,6 @@
         "timeline": "Timeline",
         "requestSubmitted": "Request submitted",
         "requestApproved": "Request approved",
-        "requestDeclined": "Request declined"
+        "requestDeclined": "Request declined",
     }
 }

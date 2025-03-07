@@ -7,7 +7,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_actions_bar.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_application_questions.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_payment_info_widget.dart';
-import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_timeline_info_widget.dart';
+import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_ticket_widget.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_user_info_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -77,6 +77,7 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+
     return Scaffold(
       appBar: LemonAppBar(
         title: t.event.eventGuestDetail.eventGuestDetail,
@@ -86,7 +87,7 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
           variables: Variables$Query$GetEventGuestDetail(
             event: widget.eventId,
             user: widget.userId.isNotEmpty ? widget.userId : null,
-            email: widget.email,
+            email: widget.email.isNotEmpty ? widget.email : null,
           ),
         ),
         builder: (
@@ -122,6 +123,12 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
               isVisible: eventGuestDetail.payment != null,
             ),
             (
+              widget: EventGuestDetailTicketWidget(
+                eventGuestDetail: eventGuestDetail,
+              ),
+              isVisible: eventGuestDetail.ticket != null,
+            ),
+            (
               widget: EventGuestDetailApplicationQuestionsWidget(
                 eventGuestDetail: eventGuestDetail,
               ),
@@ -132,12 +139,12 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
                   ) ??
                   false,
             ),
-            (
-              widget: EventGuestDetailTimelineInfoWidget(
-                eventGuestDetail: eventGuestDetail,
-              ),
-              isVisible: eventGuestDetail.joinRequest != null,
-            ),
+            // (
+            //   widget: EventGuestDetailTimelineInfoWidget(
+            //     eventGuestDetail: eventGuestDetail,
+            //   ),
+            //   isVisible: eventGuestDetail.joinRequest != null,
+            // ),
           ];
 
           final widgets = <Widget>[];

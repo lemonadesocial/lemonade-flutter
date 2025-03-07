@@ -38,7 +38,7 @@ class PaymentUtils {
         .toList();
   }
 
-  static String getPaymentStatus(Enum$NewPaymentState state) {
+  static String getPaymentStatus(Enum$NewPaymentState? state) {
     return state.toString().split('.').last.replaceAll('_', ' ');
   }
 }
