@@ -1,4 +1,6 @@
 import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modify_ticket_type_bloc.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -24,21 +26,31 @@ class ActivateTicketSetting extends StatelessWidget {
         borderRadius: BorderRadius.circular(LemonRadius.normal),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ThemeSvgIcon(
+                color: colorScheme.onSecondary,
+                builder: (filter) => Assets.icons.icOutlineVerified.svg(
+                  colorFilter: filter,
+                  width: 18.w,
+                  height: 18.w,
+                ),
+              ),
+              SizedBox(width: Spacing.xSmall),
               Text(
                 t.event.ticketTierSetting.activateTicket,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary.withOpacity(0.87),
+                  color: colorScheme.onPrimary,
                 ),
               ),
-              SizedBox(height: 2.w),
+              SizedBox(width: Spacing.superExtraSmall),
               Text(
-                t.event.ticketTierSetting.visibleToGuests,
+                t.event.ticketTierSetting.availableForPurchase,
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSurfaceVariant,
+                  color: colorScheme.onSecondary,
                 ),
               ),
             ],
@@ -48,7 +60,7 @@ class ActivateTicketSetting extends StatelessWidget {
             builder: (context, state) => FlutterSwitch(
               inactiveColor: colorScheme.outline,
               inactiveToggleColor: colorScheme.onSurfaceVariant,
-              activeColor: LemonColor.switchActive,
+              activeColor: LemonColor.paleViolet,
               activeToggleColor: colorScheme.onPrimary,
               height: Sizing.small,
               width: 42.w,

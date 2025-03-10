@@ -9,12 +9,10 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +71,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
             ),
           )
           .toList(),
-      ticket_limit: state.limit,
+      ticket_limit: state.ticketLimit,
       ticket_limit_per: state.ticketLimitPer,
       active: state.active,
       private: state.private,
@@ -105,8 +103,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
     final eventLevelPaymentAccounts = event?.paymentAccountsExpanded ?? [];
     return Scaffold(
       backgroundColor: colorScheme.background,
-      appBar: const LemonAppBar(
-        title: "",
+      appBar: LemonAppBar(
+        title: initialTicketType != null
+            ? t.event.ticketTierSetting.editTicket
+            : t.event.ticketTierSetting.createTicket,
       ),
       body: Stack(
         children: [
@@ -114,23 +114,6 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
             child: CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(
-                  child: Text(
-                    initialTicketType != null
-                        ? t.event.ticketTierSetting.editTicket
-                        : t.event.ticketTierSetting.createTicket,
-                    style: Typo.extraLarge.copyWith(
-                      fontWeight: FontWeight.w800,
-                      fontFamily: FontFamily.nohemiVariable,
-                      color: colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: Spacing.large,
-                  ),
-                ),
                 const SliverToBoxAdapter(
                   child: TicketTierBasicInforForm(),
                 ),
@@ -143,9 +126,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: Spacing.smMedium,
-                  ),
+                  child: SizedBox(height: Spacing.smMedium * 2),
                 ),
                 SliverToBoxAdapter(
                   child: TicketTierSettingForm(

@@ -111,16 +111,16 @@ class TicketCategoryDropdown extends StatelessWidget {
                 customButton: Container(
                   padding: EdgeInsets.all(Spacing.smMedium),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(LemonRadius.small),
-                    color: colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    color: LemonColor.atomicBlack,
                   ),
                   child: _TicketCategoryItem(
                     key: Key(state.category ?? ''),
                     ticketCategory: ticketCategories
                         .firstWhereOrNull((item) => item.id == state.category),
                     trailing: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => Assets.icons.icArrowDown.svg(
+                      color: colorScheme.onPrimary.withOpacity(0.24),
+                      builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
                         width: Sizing.xSmall,
                         height: Sizing.xSmall,
                         colorFilter: filter,
@@ -145,7 +145,7 @@ class TicketCategoryDropdown extends StatelessWidget {
                 dropdownStyleData: DropdownStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(LemonRadius.small),
-                    color: colorScheme.secondaryContainer,
+                    color: LemonColor.atomicBlack,
                   ),
                   offset: Offset(0, -Spacing.superExtraSmall),
                   maxHeight: 200.w,
@@ -219,9 +219,9 @@ class _TicketCategoryItem extends StatelessWidget {
             isPlaceholder
                 ? t.event.ticketTierSetting.categorySetting.selectCategory
                 : ticketCategory?.title ?? '',
-            style: Typo.mediumPlus.copyWith(
+            style: Typo.medium.copyWith(
               color: isPlaceholder
-                  ? colorScheme.onSecondary
+                  ? colorScheme.onPrimary.withOpacity(0.24)
                   : colorScheme.onPrimary,
             ),
             overflow: TextOverflow.ellipsis,
