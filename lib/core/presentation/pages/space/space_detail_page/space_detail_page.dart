@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
+import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/space_repository.dart';
@@ -59,6 +60,17 @@ class SpaceDetailPage extends StatelessWidget {
           create: (context) => FollowSpaceBloc(
             getIt<SpaceRepository>(),
           ),
+        ),
+        BlocProvider(
+          create: (context) => GetMySpaceEventRequestsBloc(
+            spaceRepository: getIt<SpaceRepository>(),
+          )..add(
+              GetMySpaceEventRequestsEvent.fetch(
+                spaceId: spaceId,
+                limit: 20,
+                skip: 0,
+              ),
+            ),
         ),
       ],
       child: const _View(),

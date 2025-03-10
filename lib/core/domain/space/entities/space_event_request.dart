@@ -1,4 +1,5 @@
 import 'package:app/core/data/space/dtos/space_event_request_dto.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,6 +13,7 @@ class SpaceEventRequest with _$SpaceEventRequest {
     Enum$SpaceEventRequestState? state,
     List<String>? tags,
     String? event,
+    Event? eventExpanded,
     String? space,
     DateTime? createdAt,
     String? createdBy,
@@ -29,6 +31,8 @@ class SpaceEventRequest with _$SpaceEventRequest {
       tags: dto.tags,
       space: dto.space,
       event: dto.event,
+      eventExpanded:
+          dto.eventExpanded != null ? Event.fromDto(dto.eventExpanded!) : null,
       createdAt: dto.createdAt,
       createdBy: dto.createdBy,
       decidedAt: dto.decidedAt,
