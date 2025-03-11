@@ -1,0 +1,25 @@
+query GetMySpaceEventRequests($space: MongoID!, $state: EventJoinRequestState, $limit: Int!, $skip: Int!) {
+  getMySpaceEventRequests(space: $space, state: $state, limit: $limit, skip: $skip) {
+    total
+    records {
+      _id
+      state
+      tags
+      event
+      event_expanded {
+        _id
+        title
+        new_new_photos_expanded(limit: 1) {
+          _id
+          url
+          key 
+        }
+      }
+      space
+      created_at
+      created_by
+      decided_at
+      decided_by
+    }
+  }
+}

@@ -42,14 +42,16 @@ class SpaceInfo extends StatelessWidget {
               color: colorScheme.onPrimary,
             ),
           ),
-          SizedBox(height: Spacing.superExtraSmall),
-          // Description
-          Text(
-            space.description ?? '',
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+          if (space.description?.isNotEmpty == true) ...[
+            SizedBox(height: Spacing.superExtraSmall),
+            // Description
+            Text(
+              space.description ?? '',
+              style: Typo.medium.copyWith(
+                color: colorScheme.onSecondary,
+              ),
             ),
-          ),
+          ],
           if (space.address != null) ...[
             SizedBox(height: Spacing.superExtraSmall),
             Row(
@@ -70,45 +72,49 @@ class SpaceInfo extends StatelessWidget {
               ],
             ),
           ],
-          SizedBox(height: Spacing.small),
-          Row(
-            children: <(String?, String, SvgGenImage)>[
-              (space.handleTwitter, 'twitter', Assets.icons.icXLine),
-              (space.handleInstagram, 'instagram', Assets.icons.icInstagram),
-              (space.handleLinkedin, 'linkedin', Assets.icons.icLinkedin),
-            ].where((item) => item.$1 != null).map((item) {
-              return InkWell(
-                onTap: () {
-                  if (item.$1 != null) {
-                    final url = SocialUtils.buildSocialLinkBySocialFieldName(
-                      socialFieldName: item.$2,
-                      socialUserName: item.$1!,
-                    );
-                    launchUrl(Uri.parse(url));
-                  }
-                },
-                child: Container(
-                  width: Sizing.medium,
-                  height: Sizing.medium,
-                  margin: EdgeInsets.only(right: Spacing.superExtraSmall),
-                  decoration: ShapeDecoration(
-                    color: LemonColor.chineseBlack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(LemonRadius.button),
+          if (space.handleTwitter != null ||
+              space.handleInstagram != null ||
+              space.handleLinkedin != null) ...[
+            SizedBox(height: Spacing.small),
+            Row(
+              children: <(String?, String, SvgGenImage)>[
+                (space.handleTwitter, 'twitter', Assets.icons.icXLine),
+                (space.handleInstagram, 'instagram', Assets.icons.icInstagram),
+                (space.handleLinkedin, 'linkedin', Assets.icons.icLinkedin),
+              ].where((item) => item.$1 != null).map((item) {
+                return InkWell(
+                  onTap: () {
+                    if (item.$1 != null) {
+                      final url = SocialUtils.buildSocialLinkBySocialFieldName(
+                        socialFieldName: item.$2,
+                        socialUserName: item.$1!,
+                      );
+                      launchUrl(Uri.parse(url));
+                    }
+                  },
+                  child: Container(
+                    width: Sizing.medium,
+                    height: Sizing.medium,
+                    margin: EdgeInsets.only(right: Spacing.superExtraSmall),
+                    decoration: ShapeDecoration(
+                      color: LemonColor.chineseBlack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(LemonRadius.button),
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (filter) => item.$3.svg(
-                        colorFilter: filter,
+                    child: Center(
+                      child: ThemeSvgIcon(
+                        color: colorScheme.onSecondary,
+                        builder: (filter) => item.$3.svg(
+                          colorFilter: filter,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
+                );
+              }).toList(),
+            ),
+          ],
         ],
       ),
     );

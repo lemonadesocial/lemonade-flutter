@@ -5,7 +5,6 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.dart';
-import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
@@ -14,6 +13,8 @@ import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/data/space/dtos/space_event_request_dto.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/entities/pin_events_to_space_response.dart';
+import 'package:app/core/data/space/dtos/get_space_event_requests_response_dto.dart';
+import 'package:app/core/domain/space/entities/get_space_event_requests_response.dart';
 
 @LazySingleton(as: SpaceRepository)
 class SpaceRepositoryImpl implements SpaceRepository {
@@ -167,5 +168,28 @@ class SpaceRepositoryImpl implements SpaceRepository {
           )
           .toList(),
     );
+  }
+
+  @override
+  Future<Either<Failure, GetSpaceEventRequestsResponse>>
+      getMySpaceEventRequests({
+    required Variables$Query$GetMySpaceEventRequests input,
+  }) async {
+    final result = await _client.query$GetMySpaceEventRequests(
+      Options$Query$GetMySpaceEventRequests(
+        variables: input,
+      ),
+    );
+
+    if (result.hasException ||
+        result.parsedData?.getMySpaceEventRequests == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final responseDto = GetSpaceEventRequestsResponseDto.fromJson(
+      result.parsedData!.getMySpaceEventRequests.toJson(),
+    );
+
+    return Right(GetSpaceEventRequestsResponse.fromDto(responseDto));
   }
 }

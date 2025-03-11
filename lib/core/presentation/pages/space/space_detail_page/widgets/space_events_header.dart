@@ -1,8 +1,10 @@
+import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/data/space/dtos/space_tag_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/pin_event_options_bottomsheet.dart';
 import 'package:app/core/presentation/pages/space/pin_existing_event_to_space_page/pin_existing_event_to_space_page.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_list.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
@@ -12,6 +14,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SpaceEventsHeader extends StatefulWidget {
@@ -29,7 +32,7 @@ class SpaceEventsHeader extends StatefulWidget {
 
 class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
   SpaceTag? selectedTag;
-
+  bool hasTag = false;
   void _changeTag(SpaceTag? tag) {
     setState(() {
       selectedTag = tag;
@@ -80,6 +83,13 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
             options: Options$Query$ListSpaceTags(
               variables:
                   Variables$Query$ListSpaceTags(space: widget.space.id ?? ''),
+              onComplete: (_, result) {
+                if (result?.listSpaceTags.isNotEmpty == true) {
+                  setState(() {
+                    hasTag = true;
+                  });
+                }
+              },
             ),
             builder: (result, {fetchMore, refetch}) {
               if (result.parsedData?.listSpaceTags == null) {
@@ -159,6 +169,30 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                     itemCount: tags.length + 1,
                   ),
                 ),
+              );
+            },
+          ),
+          BlocBuilder<GetMySpaceEventRequestsBloc,
+              GetMySpaceEventRequestsState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                success: (response) => response.records.isEmpty
+                    ? const SizedBox.shrink()
+                    : Column(
+                        children: [
+                          if (!hasTag)
+                            SizedBox(
+                              height: Spacing.smMedium,
+                            ),
+                          SpaceEventRequestsList(requests: response.records),
+                          Divider(
+                            height: Spacing.smMedium * 2,
+                            thickness: 1.w,
+                            color: colorScheme.outline,
+                          ),
+                        ],
+                      ),
+                orElse: () => const SizedBox.shrink(),
               );
             },
           ),

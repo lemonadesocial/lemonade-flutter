@@ -27,5 +27,10 @@
     "noAmbassadorCommunitiesDescription": "You have not joined any ambassador communities",
     "noSubscribedCommunities": "No subscriptions",
     "noSubscribedCommunitiesDescription": "You have not subscribed to any communities",
-    "myCommunityHubs": "My Community Hubs"
+    "myCommunityHubs": "My Community Hubs",
+    "pendingEventsApproval(ordinal)": {
+        "one": "You have $n event pending approval by the community admin",
+        "other": "You have $n events pending approval by the community admin"
+    },
+    "eventWillShowAfterApproval": "It will show up on the schedule once approved"
 }

@@ -1,3 +1,4 @@
+import 'package:app/core/data/event/dtos/event_dtos.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,6 +13,7 @@ class SpaceEventRequestDto with _$SpaceEventRequestDto {
     @JsonKey(name: 'created_by') String? createdBy,
     String? space,
     String? event,
+    @JsonKey(name: 'event_expanded') EventDto? eventExpanded,
     List<String>? tags,
     Enum$SpaceEventRequestState? state,
     @JsonKey(name: 'decided_at') DateTime? decidedAt,
