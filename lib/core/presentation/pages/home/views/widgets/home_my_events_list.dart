@@ -1,6 +1,5 @@
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -18,6 +17,7 @@ class HomeMyEventsList extends StatelessWidget {
 
     return state.maybeWhen(
       fetched: (events) {
+        if (events.isEmpty) return const SizedBox.shrink();
         return Padding(
           padding: EdgeInsets.only(top: Spacing.medium),
           child: Column(
@@ -42,7 +42,7 @@ class HomeMyEventsList extends StatelessWidget {
         );
       },
       loading: () => const SizedBox.shrink(),
-      failure: () => const EmptyList(),
+      failure: () => const SizedBox.shrink(),
       orElse: () => const SizedBox.shrink(),
     );
   }
