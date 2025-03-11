@@ -262,7 +262,6 @@ class _HomeViewState extends State<_HomeView>
                   if (userId.isNotEmpty)
                     SliverPadding(
                       padding: EdgeInsets.only(
-                        top: 30.w,
                         left: Spacing.small,
                         right: Spacing.small,
                       ),
@@ -270,13 +269,24 @@ class _HomeViewState extends State<_HomeView>
                         delegate: SliverChildListDelegate([
                           const HomeHostingEventsList(),
                           const HomeMyEventsList(),
-                          const HomeListMySpaces(),
                           BlocBuilder<UpcomingHostingEventsBloc,
                               UpcomingHostingEventsState>(
                             builder: (context, hostingState) {
                               return BlocBuilder<UpcomingAttendingEventsBloc,
                                   UpcomingAttendingEventsState>(
                                 builder: (context, myEventsState) {
+                                  final isLoading = hostingState.maybeWhen(
+                                        loading: () => true,
+                                        orElse: () => false,
+                                      ) ||
+                                      myEventsState.maybeWhen(
+                                        loading: () => true,
+                                        orElse: () => false,
+                                      );
+                                  if (isLoading) {
+                                    return const SizedBox.shrink();
+                                  }
+
                                   final hostingEvents = hostingState.maybeWhen(
                                     fetched: (events) => events,
                                     orElse: () => [],
@@ -286,6 +296,7 @@ class _HomeViewState extends State<_HomeView>
                                     orElse: () => [],
                                   );
 
+                                  // Only show card when both lists are empty and not loading
                                   if (hostingEvents.isEmpty &&
                                       myEvents.isEmpty) {
                                     return const NoUpcomingEventsCard();
@@ -295,6 +306,7 @@ class _HomeViewState extends State<_HomeView>
                               );
                             },
                           ),
+                          const HomeListMySpaces(),
                         ]),
                       ),
                     ),
