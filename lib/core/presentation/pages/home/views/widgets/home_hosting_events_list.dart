@@ -20,31 +20,34 @@ class HomeHostingEventsList extends StatelessWidget {
     return state.maybeWhen(
       fetched: (events) {
         if (events.isEmpty) return const SizedBox.shrink();
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              t.event.hosting.toUpperCase(),
-              style: Typo.small.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
+        return Padding(
+          padding: EdgeInsets.only(top: Spacing.medium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                t.event.hosting.toUpperCase(),
+                style: Typo.small.copyWith(
+                  color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            SizedBox(height: Spacing.small),
-            ...events.take(2).map(
-                  (event) => Padding(
-                    padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                    child: HomeEventCard(event: event),
+              SizedBox(height: Spacing.small),
+              ...events.take(2).map(
+                    (event) => Padding(
+                      padding: EdgeInsets.only(bottom: Spacing.xSmall),
+                      child: HomeEventCard(event: event),
+                    ),
+                  ),
+              if (events.length > 2)
+                Padding(
+                  padding: EdgeInsets.only(top: Spacing.xSmall),
+                  child: ViewMoreEventsCard(
+                    moreEventsCount: events.length - 2,
                   ),
                 ),
-            if (events.length > 2)
-              Padding(
-                padding: EdgeInsets.only(top: Spacing.xSmall),
-                child: ViewMoreEventsCard(
-                  moreEventsCount: events.length - 2,
-                ),
-              ),
-          ],
+            ],
+          ),
         );
       },
       loading: () => const SizedBox.shrink(),
