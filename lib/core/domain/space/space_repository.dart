@@ -10,6 +10,7 @@ import 'package:app/core/domain/space/entities/get_space_event_requests_response
 abstract class SpaceRepository {
   Future<Either<Failure, Space>> getSpaceDetail({
     required String spaceId,
+    bool refresh = false,
   });
 
   Future<Either<Failure, List<SpaceTag>>> listSpaceTags({

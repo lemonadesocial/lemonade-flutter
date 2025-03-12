@@ -10,6 +10,7 @@ part 'get_space_detail_bloc.freezed.dart';
 class GetSpaceDetailEvent with _$GetSpaceDetailEvent {
   const factory GetSpaceDetailEvent.fetch({
     required String spaceId,
+    @Default(false) bool refresh,
   }) = _Fetch;
 }
 
@@ -36,8 +37,10 @@ class GetSpaceDetailBloc
     }
     emit(const GetSpaceDetailState.loading());
 
-    final result =
-        await _spaceRepository.getSpaceDetail(spaceId: event.spaceId);
+    final result = await _spaceRepository.getSpaceDetail(
+      spaceId: event.spaceId,
+      refresh: event.refresh,
+    );
 
     result.fold(
       (failure) => emit(GetSpaceDetailState.failure(failure)),

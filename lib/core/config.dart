@@ -39,6 +39,8 @@ class AppConfig {
   static get instagramUrl => 'https://www.instagram.com';
   static get facebookUrl => 'https://www.facebook.com';
   static get linkedinUrl => 'https://www.linkedin.com';
+  static get youtubeUrl => 'https://www.youtube.com';
+  static get tiktokUrl => 'https://www.tiktok.com';
   static get githubUrl => 'https://github.com';
   static get mirrorUrl => 'https://mirror.xyz';
   static get farcasterUrl => 'https://www.farcaster.xyz';

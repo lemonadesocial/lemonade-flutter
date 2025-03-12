@@ -1,3 +1,4 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/data/space/dtos/space_tag_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
@@ -44,6 +45,12 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final userId = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (user) => user.userId,
+          orElse: () => null,
+        );
+    final isSpaceAdmin = widget.space.isAdmin(userId: userId ?? '');
+    final isSpaceOwner = widget.space.isCreator(userId: userId ?? '');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -129,7 +136,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                             color: colorScheme.onPrimary,
                           ),
                           backgroundColor: isActive
-                              ? LemonColor.chineseBlack
+                              ? colorScheme.onPrimary.withOpacity(0.18)
                               : Colors.transparent,
                         );
                       }
@@ -143,24 +150,27 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                         radius: BorderRadius.circular(LemonRadius.button),
                         textStyle: Typo.medium.copyWith(
                           color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                         backgroundColor: isActive
-                            ? LemonColor.chineseBlack
+                            ? colorScheme.onPrimary.withOpacity(0.18)
                             : Colors.transparent,
-                        leading: Container(
-                          width: 8.w,
-                          height: 8.w,
-                          decoration: BoxDecoration(
-                            color: tag.color.isNotEmpty == true
-                                ? Color(
-                                    int.parse(
-                                      tag.color.replaceAll('#', '0xFF'),
-                                    ),
-                                  )
-                                : Colors.amber,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
+                        leading: (isSpaceAdmin || isSpaceOwner)
+                            ? Container(
+                                width: 8.w,
+                                height: 8.w,
+                                decoration: BoxDecoration(
+                                  color: tag.color.isNotEmpty == true
+                                      ? Color(
+                                          int.parse(
+                                            tag.color.replaceAll('#', '0xFF'),
+                                          ),
+                                        )
+                                      : Colors.amber,
+                                  shape: BoxShape.circle,
+                                ),
+                              )
+                            : null,
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(

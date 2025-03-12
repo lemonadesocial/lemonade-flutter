@@ -7,6 +7,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_button_by_role.dart';
 
@@ -21,7 +22,6 @@ class SpaceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       child: Column(
@@ -78,17 +78,25 @@ class SpaceInfo extends StatelessWidget {
             SizedBox(height: Spacing.small),
             Row(
               children: <(String?, String, SvgGenImage)>[
-                (space.handleTwitter, 'twitter', Assets.icons.icXLine),
                 (space.handleInstagram, 'instagram', Assets.icons.icInstagram),
+                (space.handleTwitter, 'twitter', Assets.icons.icXLine),
+                (space.handleYoutube, 'youtube', Assets.icons.icYoutube),
                 (space.handleLinkedin, 'linkedin', Assets.icons.icLinkedin),
+                (space.handleTiktok, 'tiktok', Assets.icons.icTiktok),
+                (space.website, 'website', Assets.icons.icGlobe),
               ].where((item) => item.$1 != null).map((item) {
                 return InkWell(
                   onTap: () {
                     if (item.$1 != null) {
-                      final url = SocialUtils.buildSocialLinkBySocialFieldName(
-                        socialFieldName: item.$2,
-                        socialUserName: item.$1!,
-                      );
+                      String url = '';
+                      if (item.$2 == 'website') {
+                        url = item.$1!;
+                      } else {
+                        url = SocialUtils.buildSocialLinkBySocialFieldName(
+                          socialFieldName: item.$2,
+                          socialUserName: item.$1!,
+                        );
+                      }
                       launchUrl(Uri.parse(url));
                     }
                   },
@@ -107,6 +115,8 @@ class SpaceInfo extends StatelessWidget {
                         color: colorScheme.onSecondary,
                         builder: (filter) => item.$3.svg(
                           colorFilter: filter,
+                          width: 16.w,
+                          height: 16.w,
                         ),
                       ),
                     ),

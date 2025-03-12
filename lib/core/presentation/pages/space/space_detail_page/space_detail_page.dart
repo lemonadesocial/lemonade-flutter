@@ -39,6 +39,7 @@ class SpaceDetailPage extends StatelessWidget {
             ..add(
               GetSpaceDetailEvent.fetch(
                 spaceId: spaceId,
+                refresh: true,
               ),
             ),
         ),

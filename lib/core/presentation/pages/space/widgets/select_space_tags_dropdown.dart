@@ -44,6 +44,8 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
   List<SpaceTag> selectedItems = [];
   final TextEditingController searchController = TextEditingController();
   String searchText = '';
+  List<SpaceTag> allTags = [];
+  GlobalKey<DropdownButton2State<SpaceTag>> dropdownKey = GlobalKey();
 
   @override
   void initState() {
@@ -66,26 +68,30 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
         variables: Variables$Query$ListSpaceTags(
           space: widget.spaceId,
         ),
+        onComplete: (_, result) {
+          setState(() {
+            allTags = (result?.listSpaceTags ?? [])
+                .map(
+                  (item) => SpaceTag.fromDto(
+                    SpaceTagDto.fromJson(item.toJson()),
+                  ),
+                )
+                .toList();
+          });
+        },
       ),
       builder: (
         result, {
         refetch,
         fetchMore,
       }) {
-        final tags = (result.parsedData?.listSpaceTags ?? []).map(
-          (item) => SpaceTag.fromDto(
-            SpaceTagDto.fromJson(
-              item.toJson(),
-            ),
-          ),
-        );
-
         return Wrap(
           spacing: Spacing.xSmall,
           runSpacing: Spacing.xSmall,
           children: [
             DropdownButtonHideUnderline(
               child: DropdownButton2<SpaceTag>(
+                key: dropdownKey,
                 value: null,
                 onChanged: (value) {},
                 customButton: FittedBox(
@@ -123,7 +129,7 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
                   },
                 ),
                 items: [
-                  ...tags.map(
+                  ...allTags.map(
                     (tag) => DropdownMenuItem<SpaceTag>(
                       value: tag,
                       child: StatefulBuilder(
@@ -160,13 +166,24 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
                           return _InsertTagItem(
                             controller: searchController,
                             spaceId: widget.spaceId,
-                            onNewTagCreated: (tag) {
+                            onNewTagCreated: (tag) async {
                               setState(() {
                                 selectedItems.add(tag);
+                                allTags = [...allTags, tag];
                               });
                               widget.onChange?.call([...selectedItems]);
-                              menuSetState(() {});
-                              refetch?.call();
+                              // This is tricky way to update the list item
+                              // of dropdown as the lib currently doesn't support
+                              // Regassign new key for dropdown
+                              // so it can rebuild
+                              dropdownKey =
+                                  GlobalKey<DropdownButton2State<SpaceTag>>();
+                              // Delay a bit then open dropdown again
+                              await Future.delayed(
+                                const Duration(milliseconds: 200),
+                              );
+                              searchController.clear();
+                              dropdownKey.currentState?.callTap();
                             },
                           );
                         },
@@ -176,7 +193,7 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
                 dropdownStyleData: DropdownStyleData(
                   padding: EdgeInsets.zero,
                   width: 250.w,
-                  maxHeight: 200.w,
+                  maxHeight: 380.w,
                   scrollbarTheme: ScrollbarThemeData(
                     thickness: MaterialStateProperty.all(0),
                     thumbVisibility: MaterialStateProperty.all(false),
@@ -369,7 +386,7 @@ class _InsertTagItemState extends State<_InsertTagItem> {
       );
 
       widget.onNewTagCreated?.call(tag);
-      widget.controller.clear();
+      // widget.controller.clear();
     } catch (e) {
       setState(() {
         isLoading = false;
