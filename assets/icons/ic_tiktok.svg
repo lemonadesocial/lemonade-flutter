@@ -1,0 +1,13 @@
+<svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"
+    viewBox="1.8628182411193848 0.5 18.27218246459961 21">
+    <g clip-path="url(#ic_tiktok_svg__a)">
+        <path
+            d="M9.415 8.32v3.607a3.14 3.14 0 0 0-3.937 2.908 2.837 2.837 0 0 0 3.033 3.012 2.828 2.828 0 0 0 3.034-3.053V.5h3.568c.606 3.776 2.494 4.652 5.022 5.056v3.618a10.755 10.755 0 0 1-4.922-1.663v7.147c0 3.237-1.916 6.842-6.674 6.842a6.706 6.706 0 0 1-6.674-6.877 6.576 6.576 0 0 1 7.55-6.303Z"
+            fill="#fff"></path>
+    </g>
+    <defs>
+        <clipPath id="ic_tiktok_svg__a">
+            <path fill="var(--icon-fill)" transform="translate(.5 .5)" d="M0 0h21v21H0z"></path>
+        </clipPath>
+    </defs>
+</svg>

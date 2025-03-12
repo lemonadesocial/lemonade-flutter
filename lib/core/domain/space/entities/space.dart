@@ -67,7 +67,9 @@ class Space with _$Space {
   }
 
   bool canFollow({required String userId}) {
-    return !isCreator(userId: userId) && !isAdmin(userId: userId);
+    return !isCreator(userId: userId) &&
+        !isAdmin(userId: userId) &&
+        !(isAmbassador == true);
   }
 
   factory Space.fromJson(Map<String, dynamic> json) => _$SpaceFromJson(json);

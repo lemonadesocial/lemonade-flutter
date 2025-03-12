@@ -19,6 +19,10 @@ class SocialUtils {
 
   static RegExp get calendlyRegx => RegExp(r'calendly', caseSensitive: false);
 
+  static RegExp get youtubeRegx => RegExp(r'youtube', caseSensitive: false);
+
+  static RegExp get tiktokRegx => RegExp(r'tiktok', caseSensitive: false);
+
   static bool isSocialFieldName({
     required String fieldName,
   }) {
@@ -29,7 +33,9 @@ class SocialUtils {
         facebookRegx.hasMatch(fieldName) ||
         mirrorRegx.hasMatch(fieldName) ||
         farcasterRegx.hasMatch(fieldName) ||
-        lensRegx.hasMatch(fieldName);
+        lensRegx.hasMatch(fieldName) ||
+        youtubeRegx.hasMatch(fieldName) ||
+        tiktokRegx.hasMatch(fieldName);
   }
 
   static String buildSocialLinkBySocialFieldName({
@@ -40,6 +46,9 @@ class SocialUtils {
       return '';
     }
     String urlPrefix = '';
+    String cleanUsername = socialUserName.startsWith('/')
+        ? socialUserName.substring(1)
+        : socialUserName;
     if (twitterRegx.hasMatch(socialFieldName)) {
       urlPrefix = AppConfig.twitterUrl;
     }
@@ -72,10 +81,15 @@ class SocialUtils {
       urlPrefix = AppConfig.lensUrl;
     }
 
-    String cleanUsername = socialUserName.startsWith('/')
-        ? socialUserName.substring(1)
-        : socialUserName;
+    if (youtubeRegx.hasMatch(socialFieldName)) {
+      urlPrefix = AppConfig.youtubeUrl;
+      cleanUsername = '@$cleanUsername';
+    }
 
+    if (tiktokRegx.hasMatch(socialFieldName)) {
+      urlPrefix = AppConfig.tiktokUrl;
+      cleanUsername = '@$cleanUsername';
+    }
     return '$urlPrefix/$cleanUsername';
   }
 

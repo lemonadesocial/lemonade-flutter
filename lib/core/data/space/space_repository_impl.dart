@@ -8,6 +8,7 @@ import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.d
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/data/space/dtos/space_event_request_dto.dart';
@@ -22,9 +23,11 @@ class SpaceRepositoryImpl implements SpaceRepository {
   @override
   Future<Either<Failure, Space>> getSpaceDetail({
     required String spaceId,
+    bool refresh = false,
   }) async {
     final result = await _client.query$GetSpace(
       Options$Query$GetSpace(
+        fetchPolicy: refresh ? FetchPolicy.networkOnly : null,
         variables: Variables$Query$GetSpace(
           id: spaceId,
         ),
