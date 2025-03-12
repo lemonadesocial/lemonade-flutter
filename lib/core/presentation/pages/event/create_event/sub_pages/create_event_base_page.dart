@@ -8,6 +8,7 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_space_select_dropdown.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/sub_events_additional_direction_dropdown.dart';
@@ -158,7 +159,9 @@ class CreateEventBasePage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: colorScheme.primary,
           appBar: LemonAppBar(
-            hideLeading: true,
+            leading: CreateEventSpaceSelectDropdown(
+              selectedSpace: null,
+            ),
             title: state.parentEventId != null
                 ? t.event.subEvent.createSubEvent
                 : t.event.eventCreation.createEvent,

@@ -50,5 +50,6 @@
         "public": "Public",
         "privateDescription": "Unlisted. Only people with the link can register.",
         "publicDescription": "Shown on your community & eligible for featuring."
-    }
+    },
+    "chooseCommunity": "Choose the Community of the event:"
 }

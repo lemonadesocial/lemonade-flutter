@@ -39,6 +39,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor ?? background,
       automaticallyImplyLeading: hideLeading ?? true,
+      leadingWidth: 100,
       leading: hideLeading ?? false
           ? null
           : leading ??
