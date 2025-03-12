@@ -28,98 +28,111 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final selectedSpaceImageAvatarUrl = selectedSpace?.imageAvatar?.url ?? '';
+    final selectedSpaceFallbackCreatorImageAvatar =
+        selectedSpace?.creatorExpanded?.imageAvatar ?? '';
     return Padding(
       padding: EdgeInsets.only(left: Spacing.medium),
       child: BlocBuilder<ListSpacesBloc, ListSpacesState>(
         builder: (context, state) {
           return state.maybeWhen(
             loading: () => Loading.defaultLoading(context),
-            success: (spaces) => DropdownButtonHideUnderline(
-              child: DropdownButton2<Space>(
-                isExpanded: false,
-                value: selectedSpace,
-                customButton: Padding(
-                  padding: EdgeInsets.only(
-                    right: Spacing.small,
-                    top: Spacing.xSmall,
-                    bottom: Spacing.xSmall,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(LemonRadius.normal),
-                      border: Border.all(color: colorScheme.outline),
+            success: (spaces) {
+              final sortedSpaces = spaces.toList()
+                ..sort(
+                  (a, b) => a.personal == b.personal
+                      ? (a.title ?? '').compareTo(b.title ?? '')
+                      : (a.personal ?? false ? -1 : 1),
+                );
+              return DropdownButtonHideUnderline(
+                child: DropdownButton2<Space>(
+                  isExpanded: false,
+                  value: selectedSpace,
+                  customButton: Padding(
+                    padding: EdgeInsets.only(
+                      right: Spacing.small,
+                      top: Spacing.xSmall,
+                      bottom: Spacing.xSmall,
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        LemonNetworkImage(
-                          imageUrl: selectedSpace?.imageAvatar?.url ?? '',
-                          width: Sizing.mSmall,
-                          height: Sizing.mSmall,
-                          fit: BoxFit.cover,
-                          borderRadius: BorderRadius.circular(Sizing.mSmall),
-                          placeholder: ImagePlaceholder.defaultPlaceholder(),
-                        ),
-                        SizedBox(width: Spacing.superExtraSmall),
-                        ThemeSvgIcon(
-                          color: colorScheme.onPrimary,
-                          builder: (filter) => Assets.icons.icArrowDown.svg(
-                            colorFilter: filter,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                items: spaces.map((space) {
-                  return DropdownMenuItem<Space>(
-                    value: space,
-                    child: _SpaceItem(
-                      space: space,
-                      isSelected: space.id == selectedSpace?.id,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (space) {
-                  if (space != null) {
-                    onSpaceSelected?.call(space);
-                  }
-                },
-                dropdownStyleData: DropdownStyleData(
-                  padding: EdgeInsets.zero,
-                  width: 250.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(LemonRadius.normal),
-                    color: colorScheme.secondaryContainer,
-                  ),
-                  offset:
-                      Offset(-Spacing.superExtraSmall, Spacing.superExtraSmall),
-                ),
-                dropdownSearchData: DropdownSearchData(
-                  searchInnerWidgetHeight: 50.h,
-                  searchInnerWidget: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Spacing.medium,
-                      vertical: Spacing.small,
-                    ),
-                    child: Text(
-                      t.space.chooseCommunity,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w400,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(LemonRadius.normal),
+                        border: Border.all(color: colorScheme.outline),
                       ),
-                      textAlign: TextAlign.left,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          LemonNetworkImage(
+                            imageUrl: selectedSpaceImageAvatarUrl.isEmpty
+                                ? selectedSpaceFallbackCreatorImageAvatar
+                                : selectedSpaceImageAvatarUrl,
+                            width: Sizing.mSmall,
+                            height: Sizing.mSmall,
+                            fit: BoxFit.cover,
+                            borderRadius: BorderRadius.circular(Sizing.mSmall),
+                            placeholder: ImagePlaceholder.defaultPlaceholder(),
+                          ),
+                          SizedBox(width: Spacing.superExtraSmall),
+                          ThemeSvgIcon(
+                            color: colorScheme.onPrimary,
+                            builder: (filter) => Assets.icons.icArrowDown.svg(
+                              colorFilter: filter,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  items: sortedSpaces.map((space) {
+                    return DropdownMenuItem<Space>(
+                      value: space,
+                      child: _SpaceItem(
+                        space: space,
+                        isSelected: space.id == selectedSpace?.id,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (space) {
+                    if (space != null) {
+                      onSpaceSelected?.call(space);
+                    }
+                  },
+                  dropdownStyleData: DropdownStyleData(
+                    padding: EdgeInsets.zero,
+                    width: 250.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(LemonRadius.normal),
+                      color: colorScheme.secondaryContainer,
+                    ),
+                    offset: Offset(
+                        -Spacing.superExtraSmall, Spacing.superExtraSmall),
+                  ),
+                  dropdownSearchData: DropdownSearchData(
+                    searchInnerWidgetHeight: 50.h,
+                    searchInnerWidget: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.medium,
+                        vertical: Spacing.small,
+                      ),
+                      child: Text(
+                        t.space.chooseCommunity,
+                        style: Typo.small.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ),
+                  menuItemStyleData:
+                      MenuItemStyleData(padding: EdgeInsets.zero, height: 48.w),
                 ),
-                menuItemStyleData:
-                    MenuItemStyleData(padding: EdgeInsets.zero, height: 48.w),
-              ),
-            ),
+              );
+            },
             orElse: () => const SizedBox.shrink(),
           );
         },
@@ -131,17 +144,18 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
 class _SpaceItem extends StatelessWidget {
   final Space? space;
   final bool isSelected;
-  final bool showCheck;
 
   const _SpaceItem({
     required this.space,
     this.isSelected = false,
-    this.showCheck = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final spaceImageAvatarUrl = space?.imageAvatar?.url ?? '';
+    final fallbackCreatorImageAvatar =
+        space?.creatorExpanded?.imageAvatar ?? '';
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.small,
@@ -160,8 +174,10 @@ class _SpaceItem extends StatelessWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: LemonNetworkImage(
-                imageUrl: space?.imageAvatar?.url ?? '',
-                fit: BoxFit.cover,
+                imageUrl: spaceImageAvatarUrl.isEmpty
+                    ? fallbackCreatorImageAvatar
+                    : spaceImageAvatarUrl,
+                fit: BoxFit.contain,
                 placeholder: ImagePlaceholder.avatarPlaceholder(),
               ),
             ),
@@ -178,7 +194,7 @@ class _SpaceItem extends StatelessWidget {
             ),
           ),
           // Selected Check Icon
-          if (showCheck && isSelected)
+          if (isSelected)
             Icon(
               Icons.check,
               color: colorScheme.onPrimary,
