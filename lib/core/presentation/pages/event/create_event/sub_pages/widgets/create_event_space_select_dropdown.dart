@@ -108,7 +108,9 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                       color: colorScheme.secondaryContainer,
                     ),
                     offset: Offset(
-                        -Spacing.superExtraSmall, Spacing.superExtraSmall),
+                      -Spacing.superExtraSmall,
+                      Spacing.superExtraSmall,
+                    ),
                   ),
                   dropdownSearchData: DropdownSearchData(
                     searchInnerWidgetHeight: 50.h,
