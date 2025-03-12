@@ -30,6 +30,10 @@ class GetSpaceDetailBloc
     on<_Fetch>(_onFetch);
   }
   Future<void> _onFetch(_Fetch event, Emitter emit) async {
+    if (event.spaceId.isEmpty) {
+      emit(GetSpaceDetailState.failure(Failure(message: "Space ID is empty")));
+      return;
+    }
     emit(const GetSpaceDetailState.loading());
 
     final result =

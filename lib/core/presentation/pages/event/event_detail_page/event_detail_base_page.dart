@@ -3,9 +3,11 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
+import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/token_reward/get_my_event_token_rewards_bloc/get_my_event_token_rewards_bloc.dart';
 import 'package:app/core/application/token_reward/list_ticket_token_rewards_bloc/list_ticket_token_rewards_bloc.dart';
 import 'package:app/core/domain/event/input/get_tickets_input/get_tickets_input.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/post_guest_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/views/pre_guest_event_detail_view.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/view/host_event_detail_view.dart';
@@ -14,6 +16,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,7 +102,20 @@ class _EventDetailBasePageView extends StatelessWidget {
             //     featureCodes: [Enum$FeatureCode.CheckIn],
             //   ),
             // ).canShowFeature;
-            return const HostEventDetailView();
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => GetSpaceDetailBloc(
+                    getIt<SpaceRepository>(),
+                  )..add(
+                      GetSpaceDetailEvent.fetch(
+                        spaceId: event.space ?? '',
+                      ),
+                    ),
+                ),
+              ],
+              child: const HostEventDetailView(),
+            );
           }
           return isAttending
               ? MultiBlocProvider(
@@ -139,6 +155,11 @@ class _EventDetailBasePageView extends StatelessWidget {
                           ),
                         ),
                     ),
+                    BlocProvider(
+                      create: (context) => GetSpaceDetailBloc(
+                        getIt<SpaceRepository>(),
+                      ),
+                    ),
                   ],
                   child: const PostGuestEventDetailView(),
                 )
@@ -161,6 +182,11 @@ class _EventDetailBasePageView extends StatelessWidget {
                       )..add(
                           GetSubEventsByCalendarEvent.fetch(),
                         ),
+                    ),
+                    BlocProvider(
+                      create: (context) => GetSpaceDetailBloc(
+                        getIt<SpaceRepository>(),
+                      ),
                     ),
                   ],
                   child: const PreGuestEventDetailView(),
