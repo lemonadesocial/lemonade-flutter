@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/host_event_d
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_detail_config_grid.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_location.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_collectibles_section/host_collectibles_section.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/host_event_detail_page/widgets/host_event_manage_space_widget/host_event_manage_space_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/create_sub_side_event_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_floating_menu_button.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/widgets/event_detail_navigation_bar.dart';
@@ -170,10 +171,24 @@ class HostEventDetailView extends StatelessWidget {
                         ),
                       ],
                       SliverPadding(
-                        padding: EdgeInsets.symmetric(vertical: Spacing.medium),
+                        padding: EdgeInsets.only(top: Spacing.smMedium),
                       ),
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: Spacing.xLarge * 2),
+                      if (event.space != null)
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: HostEventManageSpaceWidget(
+                              eventId: event.id ?? "",
+                            ),
+                          ),
+                        ),
+                      const SliverToBoxAdapter(
+                        child: SafeArea(
+                          top: false,
+                          child: SizedBox.shrink(),
+                        ),
                       ),
                     ],
                   ),

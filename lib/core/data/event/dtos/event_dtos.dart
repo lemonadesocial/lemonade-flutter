@@ -99,6 +99,7 @@ class EventDto with _$EventDto {
     List<String>? addressDirectionsRecommendations,
     @JsonKey(name: 'rsvp_wallet_platforms')
     List<ApplicationBlockchainPlatformDto>? rsvpWalletPlatforms,
+    String? space,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>

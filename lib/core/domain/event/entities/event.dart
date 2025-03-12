@@ -89,6 +89,7 @@ class Event with _$Event {
     String? shortId,
     List<String>? addressDirectionsRecommendations,
     List<ApplicationBlockchainPlatform>? rsvpWalletPlatforms,
+    String? space,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -216,6 +217,7 @@ class Event with _$Event {
       rsvpWalletPlatforms: List.from(dto.rsvpWalletPlatforms ?? [])
           .map((item) => ApplicationBlockchainPlatform.fromDto(item))
           .toList(),
+      space: dto.space,
     );
   }
 

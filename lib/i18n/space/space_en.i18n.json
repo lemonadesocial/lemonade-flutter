@@ -32,5 +32,23 @@
         "one": "You have $n event pending approval by the community admin",
         "other": "You have $n events pending approval by the community admin"
     },
-    "eventWillShowAfterApproval": "It will show up on the schedule once approved"
+    "eventWillShowAfterApproval": "It will show up on the schedule once approved",
+    "managingCommunity": "Managing Community",
+    "toBeFeatured": "To be featured, set your event visibility to public on Lemonade pages and communities.",
+    "transferEventSpace": {
+        "eventManagedBy": "This event is managed by",
+        "whenYouTransferEvent": "When you transfer the event:",
+        "transferEventSpaceTitle": "Transfer event space",
+        "transferEventSpaceDescription": "Select the community you want to transfer the event to",
+        "transfer": "Transfer",
+        "transferEventSpaceDescription1": "Admins of the new calendar will be able to manage the event as cohosts.",
+        "transferEventSpaceDescription2": "All future payments still go to the original payout accounts — no setup needed.",
+        "selectCommunity": "Select Community"
+    },
+    "manageSpace": {
+        "private": "Private",
+        "public": "Public",
+        "privateDescription": "Unlisted. Only people with the link can register.",
+        "publicDescription": "Shown on your community & eligible for featuring."
+    }
 }

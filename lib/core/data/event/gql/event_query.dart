@@ -325,6 +325,12 @@ const eventSubEventFragment = '''
   }
 ''';
 
+const eventSpaceFragment = '''
+  fragment eventSpaceFragment on Event {
+    space
+  }
+''';
+
 final getEventDetailQuery = gql('''
   $paymentAccountFragment
   $eventFragment
@@ -337,6 +343,7 @@ final getEventDetailQuery = gql('''
   $eventFrequentQuestionsFragment
   $eventTicketsFragment
   $eventSubEventFragment
+  $eventSpaceFragment
 
   query(\$id: MongoID!) {
     getEvent(_id: \$id) {
@@ -350,6 +357,7 @@ final getEventDetailQuery = gql('''
       ...eventFrequentQuestionsFragment
       ...eventTicketsFragment
       ...eventSubEventFragment
+      ...eventSpaceFragment
     }
   }
 ''');
