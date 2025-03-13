@@ -1,3 +1,4 @@
+import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
@@ -6,15 +7,17 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/list_utils.dart';
-import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
 import 'package:matrix/matrix.dart' as matrix;
@@ -34,11 +37,17 @@ class EventPublishTicketsChecklistItem extends StatelessWidget {
     final t = Translations.of(context);
     final ticketTypes = (event.eventTicketTypes ?? []).asMap().entries;
     return CheckListItemBaseWidget(
-      onTap: () => SnackBarUtils.showComingSoon(),
-      // TODO: Ticket setup
-      // onTap: () => AutoRouter.of(context).push(
-      //   const EventTicketTierSettingRoute(),
-      // ),
+      onTap: () => AutoRouter.of(context).push(
+        EventCreateTicketTierRoute(
+          onRefresh: () {
+            if (event.id != null) {
+              context.read<GetEventDetailBloc>().add(
+                    GetEventDetailEvent.fetch(eventId: event.id!),
+                  );
+            }
+          },
+        ),
+      ),
       title: t.event.eventPublish.addTickets,
       icon: Assets.icons.icTicket,
       fulfilled: fulfilled,

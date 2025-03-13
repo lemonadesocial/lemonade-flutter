@@ -73,6 +73,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
               horizontal: 0,
             ),
             indicatorWeight: 0,
+            dividerColor: Colors.transparent,
             labelPadding: EdgeInsets.all(Spacing.superExtraSmall),
             indicatorPadding: EdgeInsets.zero,
             indicator: BoxDecoration(
@@ -319,13 +320,15 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
     } else {
       _pricingType = TicketTierPricingFormV2Type.staking;
     }
-    _tabbarController.animateTo(
-      _pricingType == TicketTierPricingFormV2Type.free
-          ? 0
-          : _pricingType == TicketTierPricingFormV2Type.direct
-              ? 1
-              : 2,
-    );
+    final targetTabIndex = _pricingType == TicketTierPricingFormV2Type.free
+        ? 0
+        : _pricingType == TicketTierPricingFormV2Type.direct
+            ? 1
+            : 2;
+    _tabbarController.animateTo(targetTabIndex);
+    if (targetTabIndex == 0) {
+      _onTapFree();
+    }
     setState(() {});
   }
 
