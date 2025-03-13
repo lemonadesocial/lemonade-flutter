@@ -7,6 +7,9 @@ fragment SpaceFragment on Space {
   state
   personal
   followers
+  admins {
+    _id
+  }
   daos {
     network
     address
