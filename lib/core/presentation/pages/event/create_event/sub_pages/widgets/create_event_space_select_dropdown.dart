@@ -38,6 +38,7 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
           return state.maybeWhen(
             loading: () => Loading.defaultLoading(context),
             success: (spaces) {
+              // Sort spaces by personal first, then sort by title
               final sortedSpaces = spaces.toList()
                 ..sort(
                   (a, b) => a.personal == b.personal
@@ -185,7 +186,6 @@ class _SpaceItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: Spacing.small),
-          // Space Name
           Expanded(
             child: Text(
               space?.title ?? '',
@@ -195,7 +195,6 @@ class _SpaceItem extends StatelessWidget {
               ),
             ),
           ),
-          // Selected Check Icon
           if (isSelected)
             Icon(
               Icons.check,
