@@ -3,11 +3,14 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
+import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
+import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_space_select_dropdown.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/event_date_time_setting_section.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/sub_events_additional_direction_dropdown.dart';
@@ -20,6 +23,8 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -36,7 +41,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
-  const CreateEventBasePage({super.key});
+  final String? spaceId;
+
+  const CreateEventBasePage({
+    super.key,
+    this.spaceId,
+  });
 
   void _onCreateEventSuccess(
     BuildContext context,
@@ -139,355 +149,399 @@ class CreateEventBasePage extends StatelessWidget {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BlocConsumer<CreateEventBloc, CreateEventState>(
-      listener: (context, state) {
-        if (state.status.isSuccess) {
-          SnackBarUtils.showSuccess(
-            message: t.event.eventCreation.createEventSuccessfully,
-          );
-          if (state.parentEventId != null) {
-            _onCreateSubEventSuccess(context, state);
-          } else {
-            _onCreateEventSuccess(context, state);
+    return BlocProvider(
+      create: (context) => CreateEventBloc(initialSpaceId: spaceId),
+      child: BlocConsumer<CreateEventBloc, CreateEventState>(
+        listener: (context, state) {
+          if (state.status.isSuccess) {
+            SnackBarUtils.showSuccess(
+              message: t.event.eventCreation.createEventSuccessfully,
+            );
+            if (state.parentEventId != null) {
+              _onCreateSubEventSuccess(context, state);
+            } else {
+              _onCreateEventSuccess(context, state);
+            }
+            context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
+            if (spaceId != null) {
+              context.read<GetSpaceEventsBloc>().add(
+                    GetSpaceEventsEvent.fetch(
+                      input: Variables$Query$GetEvents(
+                        space: spaceId,
+                        limit: 50,
+                        sort: Input$EventSortInput(
+                          start: Enum$SortOrder.desc,
+                        ),
+                      ),
+                    ),
+                  );
+            }
           }
-          context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
-        }
-      },
-      builder: (context, state) => GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          backgroundColor: colorScheme.primary,
-          appBar: LemonAppBar(
-            hideLeading: true,
-            title: state.parentEventId != null
-                ? t.event.subEvent.createSubEvent
-                : t.event.eventCreation.createEvent,
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: Spacing.smMedium),
-                child: InkWell(
-                  onTap: () {
-                    Vibrate.feedback(FeedbackType.light);
-                    AutoRouter.of(context).pop();
-                  },
-                  child: Icon(
-                    Icons.close_rounded,
-                    size: Sizing.small,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: CreateEventBannerPhotoCard(),
-                  ),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(top: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: LemonTextField(
-                      hintText: t.event.eventCreation.titleHint,
-                      initialText: state.title.value,
-                      onChange: (value) => context.read<CreateEventBloc>().add(
-                            CreateEventEvent.createEventTitleChanged(
-                              title: value,
-                            ),
-                          ),
-                      errorText: state.title.displayError?.getMessage(
-                        t.event.eventCreation.title,
-                      ),
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      placeholderStyle: Typo.mediumPlus.copyWith(
-                        color: LemonColor.white23,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(top: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
-                  ),
-                  sliver: const SliverToBoxAdapter(
-                    child: EventDateTimeSettingSection(
-                      event: null,
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: SettingTileWidget(
-                      color: LemonColor.chineseBlack,
-                      title: t.event.virtualLinkSetting.virtualLink,
-                      subTitle: state.virtualUrl,
-                      leading: Icon(
-                        Icons.videocam_rounded,
-                        size: 18.w,
-                        color: colorScheme.onSecondary,
-                      ),
-                      leadingCircle: false,
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
-                      radius: LemonRadius.small,
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        showCupertinoModalBottomSheet(
-                          context: context,
-                          useRootNavigator: true,
-                          builder: (mContext) {
-                            return EventVirtualLinkSettingPage(
-                              defaultUrl: state.virtualUrl,
-                              onConfirm: (virtualUrl) {
-                                context.read<CreateEventBloc>().add(
-                                      CreateEventEvent
-                                          .createEventVirtualLinkChanged(
-                                        virtualUrl: virtualUrl,
-                                      ),
-                                    );
-                              },
+        },
+        builder: (context, state) => GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            backgroundColor: colorScheme.primary,
+            appBar: LemonAppBar(
+              leading: BlocBuilder<ListSpacesBloc, ListSpacesState>(
+                builder: (context, spacesState) {
+                  return spacesState.maybeWhen(
+                    success: (spaces) {
+                      if (state.selectedSpaceId == null && spaces.isNotEmpty) {
+                        context.read<CreateEventBloc>().add(
+                              CreateEventEvent.createEventSpaceIdChanged(
+                                spaceId: spaces.first.id,
+                              ),
                             );
-                          },
-                        );
-                      },
+                      }
+                      return CreateEventSpaceSelectDropdown(
+                        selectedSpaceId: state.selectedSpaceId,
+                        onSpaceSelected: (spaceId) {
+                          context.read<CreateEventBloc>().add(
+                                CreateEventEvent.createEventSpaceIdChanged(
+                                  spaceId: spaceId,
+                                ),
+                              );
+                        },
+                      );
+                    },
+                    orElse: () => const SizedBox.shrink(),
+                  );
+                },
+              ),
+              title: state.parentEventId != null
+                  ? t.event.subEvent.createSubEvent
+                  : t.event.eventCreation.createEvent,
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: Spacing.smMedium),
+                  child: InkWell(
+                    onTap: () {
+                      Vibrate.feedback(FeedbackType.light);
+                      AutoRouter.of(context).pop();
+                    },
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: Sizing.small,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
+              ],
+            ),
+            body: SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: CreateEventBannerPhotoCard(),
+                    ),
                   ),
-                  sliver: SliverToBoxAdapter(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: LemonColor.chineseBlack,
-                        borderRadius: BorderRadius.circular(LemonRadius.small),
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: Spacing.xSmall),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: LemonTextField(
+                        hintText: t.event.eventCreation.titleHint,
+                        initialText: state.title.value,
+                        onChange: (value) =>
+                            context.read<CreateEventBloc>().add(
+                                  CreateEventEvent.createEventTitleChanged(
+                                    title: value,
+                                  ),
+                                ),
+                        errorText: state.title.displayError?.getMessage(
+                          t.event.eventCreation.title,
+                        ),
+                        style: Typo.mediumPlus.copyWith(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        placeholderStyle: Typo.mediumPlus.copyWith(
+                          color: LemonColor.white23,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                      child: Column(
-                        children: [
-                          BlocBuilder<EventLocationSettingBloc,
-                              EventLocationSettingState>(
-                            builder: (context, locationState) {
-                              return SettingTileWidget(
-                                color: Colors.transparent,
-                                title: locationState.selectedAddress != null
-                                    ? locationState.selectedAddress?.title ?? ''
-                                    : t.event.locationSetting.chooseLocation,
-                                description: state.parentEventId == null
-                                    ? locationState.selectedAddress
-                                            ?.additionalDirections ??
-                                        ''
-                                    : '',
-                                subTitle:
-                                    locationState.selectedAddress?.street1,
-                                leading: Icon(
-                                  Icons.location_on_outlined,
-                                  size: 18.w,
-                                  color: colorScheme.onSecondary,
-                                ),
-                                leadingCircle: false,
-                                trailing: Assets.icons.icArrowBack.svg(
-                                  width: 18.w,
-                                  height: 18.w,
-                                ),
-                                titleStyle: Typo.medium.copyWith(
-                                  color: colorScheme.onPrimary,
-                                ),
-                                radius: LemonRadius.small,
-                                onTap: () {
-                                  showCupertinoModalBottomSheet(
-                                    useRootNavigator: true,
-                                    context: context,
-                                    backgroundColor: LemonColor.atomicBlack,
-                                    topRadius:
-                                        Radius.circular(LemonRadius.small),
-                                    enableDrag: false,
-                                    builder: (mContext) {
-                                      return BlocProvider.value(
-                                        value: context
-                                            .read<EventLocationSettingBloc>(),
-                                        child: EventLocationSettingPage(
-                                          isSubEvent:
-                                              state.parentEventId != null,
-                                          onConfirmLocation: (address) {
-                                            Navigator.pop(mContext);
-                                          },
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(top: Spacing.xSmall),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: const SliverToBoxAdapter(
+                      child: EventDateTimeSettingSection(
+                        event: null,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.xSmall),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: SettingTileWidget(
+                        color: LemonColor.chineseBlack,
+                        title: t.event.virtualLinkSetting.virtualLink,
+                        subTitle: state.virtualUrl,
+                        leading: Icon(
+                          Icons.videocam_rounded,
+                          size: 18.w,
+                          color: colorScheme.onSecondary,
+                        ),
+                        leadingCircle: false,
+                        trailing: Assets.icons.icArrowBack.svg(
+                          width: 18.w,
+                          height: 18.w,
+                        ),
+                        titleStyle: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
+                        ),
+                        radius: LemonRadius.small,
+                        onTap: () {
+                          Vibrate.feedback(FeedbackType.light);
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            useRootNavigator: true,
+                            builder: (mContext) {
+                              return EventVirtualLinkSettingPage(
+                                defaultUrl: state.virtualUrl,
+                                onConfirm: (virtualUrl) {
+                                  context.read<CreateEventBloc>().add(
+                                        CreateEventEvent
+                                            .createEventVirtualLinkChanged(
+                                          virtualUrl: virtualUrl,
                                         ),
                                       );
-                                    },
-                                  );
                                 },
                               );
                             },
-                          ),
-                          /**
-                           * Only show this additional_direction dropdown for subEvent
-                           */
-                          state.parentEventId != null
-                              ? SubEventsAdditionalDirectionDropdown(
-                                  parentEventId: state.parentEventId,
-                                  onChange: (String selectedInstruction) {
-                                    context
-                                        .read<EventLocationSettingBloc>()
-                                        .add(
-                                          AdditionalDirectionsChanged(
-                                            additionalDirections:
-                                                selectedInstruction,
-                                          ),
-                                        );
-                                  },
-                                )
-                              : const SizedBox.shrink(),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),
-                ),
-                BlocBuilder<EventLocationSettingBloc,
-                    EventLocationSettingState>(
-                  builder: (context, state) {
-                    if (state.selectedAddress == null) {
-                      return const SliverToBoxAdapter(
-                        child: SizedBox.shrink(),
-                      );
-                    }
-                    return SliverPadding(
-                      padding: EdgeInsets.only(
-                        top: Spacing.xSmall,
-                        left: Spacing.smMedium,
-                        right: Spacing.smMedium,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: ClipRRect(
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.xSmall),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: LemonColor.chineseBlack,
                           borderRadius:
                               BorderRadius.circular(LemonRadius.small),
-                          child: CreateEventMapLocationCard(
-                            latitude: state.selectedAddress?.latitude ?? 0,
-                            longitude: state.selectedAddress?.longitude ?? 0,
-                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            BlocBuilder<EventLocationSettingBloc,
+                                EventLocationSettingState>(
+                              builder: (context, locationState) {
+                                return SettingTileWidget(
+                                  color: Colors.transparent,
+                                  title: locationState.selectedAddress != null
+                                      ? locationState.selectedAddress?.title ??
+                                          ''
+                                      : t.event.locationSetting.chooseLocation,
+                                  description: state.parentEventId == null
+                                      ? locationState.selectedAddress
+                                              ?.additionalDirections ??
+                                          ''
+                                      : '',
+                                  subTitle:
+                                      locationState.selectedAddress?.street1,
+                                  leading: Icon(
+                                    Icons.location_on_outlined,
+                                    size: 18.w,
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                  leadingCircle: false,
+                                  trailing: Assets.icons.icArrowBack.svg(
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
+                                  titleStyle: Typo.medium.copyWith(
+                                    color: colorScheme.onPrimary,
+                                  ),
+                                  radius: LemonRadius.small,
+                                  onTap: () {
+                                    showCupertinoModalBottomSheet(
+                                      useRootNavigator: true,
+                                      context: context,
+                                      backgroundColor: LemonColor.atomicBlack,
+                                      topRadius:
+                                          Radius.circular(LemonRadius.small),
+                                      enableDrag: false,
+                                      builder: (mContext) {
+                                        return BlocProvider.value(
+                                          value: context
+                                              .read<EventLocationSettingBloc>(),
+                                          child: EventLocationSettingPage(
+                                            isSubEvent:
+                                                state.parentEventId != null,
+                                            onConfirmLocation: (address) {
+                                              Navigator.pop(mContext);
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            /**
+                             * Only show this additional_direction dropdown for subEvent
+                             */
+                            state.parentEventId != null
+                                ? SubEventsAdditionalDirectionDropdown(
+                                    parentEventId: state.parentEventId,
+                                    onChange: (String selectedInstruction) {
+                                      context
+                                          .read<EventLocationSettingBloc>()
+                                          .add(
+                                            AdditionalDirectionsChanged(
+                                              additionalDirections:
+                                                  selectedInstruction,
+                                            ),
+                                          );
+                                    },
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
+                    ),
                   ),
-                  sliver: SliverToBoxAdapter(
-                    child: SettingTileWidget(
-                      color: LemonColor.chineseBlack,
-                      title: t.event.eventCreation.description,
-                      subTitle: StringUtils.stripHtmlTags(
-                        state.description ?? '',
-                      ),
-                      leading: Assets.icons.icDescription.svg(),
-                      leadingCircle: false,
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      titleStyle: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
-                      radius: LemonRadius.small,
-                      onTap: () {
-                        AutoRouter.of(context).navigate(
-                          EventDescriptionFieldRoute(
-                            description: state.description ?? '',
-                            onSave: (value) async {
-                              context.read<CreateEventBloc>().add(
-                                    CreateEventEvent
-                                        .createEventDescriptionChanged(
-                                      description: value,
-                                    ),
-                                  );
-                            },
-                          ),
+                  BlocBuilder<EventLocationSettingBloc,
+                      EventLocationSettingState>(
+                    builder: (context, state) {
+                      if (state.selectedAddress == null) {
+                        return const SliverToBoxAdapter(
+                          child: SizedBox.shrink(),
                         );
-                      },
-                    ),
+                      }
+                      return SliverPadding(
+                        padding: EdgeInsets.only(
+                          top: Spacing.xSmall,
+                          left: Spacing.smMedium,
+                          right: Spacing.smMedium,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(LemonRadius.small),
+                            child: CreateEventMapLocationCard(
+                              latitude: state.selectedAddress?.latitude ?? 0,
+                              longitude: state.selectedAddress?.longitude ?? 0,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.smMedium,
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.xSmall),
                   ),
-                  sliver: SliverToBoxAdapter(
-                    child: SelectEventTagsDropdown(
-                      onChange: (tags) {
-                        context.read<CreateEventBloc>().add(
-                              CreateEventEvent.createEventTagsChanged(
-                                tags: tags,
-                              ),
-                            );
-                      },
-                      initialSelectedTags: const [],
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.xSmall),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: Spacing.smMedium,
-                      bottom: Spacing.medium,
-                    ),
-                    child: Container(
-                      height: 1.h,
-                      decoration: BoxDecoration(
-                        color: colorScheme.outline,
+                    sliver: SliverToBoxAdapter(
+                      child: SettingTileWidget(
+                        color: LemonColor.chineseBlack,
+                        title: t.event.eventCreation.description,
+                        subTitle: StringUtils.stripHtmlTags(
+                          state.description ?? '',
+                        ),
+                        leading: Assets.icons.icDescription.svg(),
+                        leadingCircle: false,
+                        trailing: Assets.icons.icArrowBack.svg(
+                          width: 18.w,
+                          height: 18.w,
+                        ),
+                        titleStyle: Typo.medium.copyWith(
+                          color: colorScheme.onPrimary,
+                        ),
+                        radius: LemonRadius.small,
+                        onTap: () {
+                          AutoRouter.of(context).navigate(
+                            EventDescriptionFieldRoute(
+                              description: state.description ?? '',
+                              onSave: (value) async {
+                                context.read<CreateEventBloc>().add(
+                                      CreateEventEvent
+                                          .createEventDescriptionChanged(
+                                        description: value,
+                                      ),
+                                    );
+                              },
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
-                ),
-                const SliverToBoxAdapter(
-                  child: CreateEventRegistrationSection(),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildSubmitButton(context),
-                ),
-              ],
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.xSmall),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.smMedium,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: SelectEventTagsDropdown(
+                        onChange: (tags) {
+                          context.read<CreateEventBloc>().add(
+                                CreateEventEvent.createEventTagsChanged(
+                                  tags: tags,
+                                ),
+                              );
+                        },
+                        initialSelectedTags: const [],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.xSmall),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: Spacing.smMedium,
+                        bottom: Spacing.medium,
+                      ),
+                      child: Container(
+                        height: 1.h,
+                        decoration: BoxDecoration(
+                          color: colorScheme.outline,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: CreateEventRegistrationSection(),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _buildSubmitButton(context),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -10,10 +10,12 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -70,6 +72,13 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                 leading: Assets.icons.icPlus.svg(),
                 onTap: () async {
                   final option = await PinEventOptionsBottomsheet.show(context);
+                  if (option == PinEventOptions.newEvent) {
+                    AutoRouter.of(context).push(
+                      CreateEventRoute(
+                        spaceId: widget.space.id,
+                      ),
+                    );
+                  }
                   if (option == PinEventOptions.existingEvent) {
                     await PinExistingEventToSpacePage.show(
                       context,

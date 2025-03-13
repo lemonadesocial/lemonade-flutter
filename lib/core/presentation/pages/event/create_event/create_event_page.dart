@@ -3,10 +3,13 @@ import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_det
 import 'package:app/core/application/event/event_datetime_settings_bloc/event_datetime_settings_bloc.dart';
 import 'package:app/core/application/event/event_guest_settings_bloc/event_guest_settings_bloc.dart';
 import 'package:app/core/application/event/event_location_setting_bloc/event_location_setting_bloc.dart';
+import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +21,14 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
   final DateTime? parentEventStart;
   final DateTime? parentEventEnd;
   final String? parentTimezone;
+  final String? spaceId;
   const CreateEventPage({
     super.key,
     this.parentEventId,
     this.parentEventStart,
     this.parentEventEnd,
     this.parentTimezone,
+    this.spaceId,
   });
 
   @override
@@ -63,6 +68,13 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
         ),
         BlocProvider(
           create: (context) => EventLocationSettingBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ListSpacesBloc(
+            spaceRepository: getIt<SpaceRepository>(),
+            withMySpaces: true,
+            roles: [Enum$SpaceRole.admin, Enum$SpaceRole.creator],
+          )..add(const ListSpacesEvent.fetch()),
         ),
       ],
       child: this,

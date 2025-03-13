@@ -12,11 +12,14 @@ part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   final String? parentEventId;
+  final String? initialSpaceId;
   CreateEventBloc({
     this.parentEventId,
+    this.initialSpaceId,
   }) : super(
           CreateEventState(
             parentEventId: parentEventId,
+            selectedSpaceId: initialSpaceId,
           ),
         ) {
     on<CreateEventTitleChanged>(_onEventTitleChanged);
@@ -31,6 +34,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
+    on<CreateEventSpaceIdChanged>(_onCreateEventSpaceIdChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -137,6 +141,13 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
+  Future<void> _onCreateEventSpaceIdChanged(
+    CreateEventSpaceIdChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(state.copyWith(selectedSpaceId: event.spaceId));
+  }
+
   Future<void> _onCreateEventFormSubmitted(
     CreateEventFormSubmitted event,
     Emitter<CreateEventState> emit,
@@ -190,6 +201,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         ),
         tags: state.tags,
         new_new_photos: state.photoImageId != null ? [state.photoImageId!] : [],
+        space: state.selectedSpaceId,
       ).copyWith(
         guest_limit: state.guestLimit != null
             ? double.parse(state.guestLimit ?? '')
@@ -265,6 +277,10 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.createEventPhotoImageIdChanged({
     required String photoImageId,
   }) = CreateEventPhotoImageIdChanged;
+
+  const factory CreateEventEvent.createEventSpaceIdChanged({
+    required String? spaceId,
+  }) = CreateEventSpaceIdChanged;
 }
 
 @freezed
@@ -282,6 +298,7 @@ class CreateEventState with _$CreateEventState {
     String? guestLimitPer,
     String? eventId,
     String? photoImageId,
+    String? selectedSpaceId,
     // Subevent related
     String? parentEventId,
   }) = _CreateEventState;
