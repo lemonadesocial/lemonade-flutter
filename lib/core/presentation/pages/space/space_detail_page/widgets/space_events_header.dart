@@ -68,7 +68,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                   if (option == PinEventOptions.newEvent) {
                     AutoRouter.of(context).push(
                       CreateEventRoute(
-                        space: widget.space,
+                        spaceId: widget.space.id,
                       ),
                     );
                   }

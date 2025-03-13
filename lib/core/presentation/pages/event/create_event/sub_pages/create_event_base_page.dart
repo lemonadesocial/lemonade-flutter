@@ -7,7 +7,6 @@ import 'package:app/core/application/space/get_space_events_bloc/get_space_event
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
@@ -42,11 +41,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
-  final Space? space;
+  final String? spaceId;
 
   const CreateEventBasePage({
     super.key,
-    this.space,
+    this.spaceId,
   });
 
   void _onCreateEventSuccess(
@@ -151,7 +150,7 @@ class CreateEventBasePage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return BlocProvider(
-      create: (context) => CreateEventBloc(initialSpace: space),
+      create: (context) => CreateEventBloc(initialSpaceId: spaceId),
       child: BlocConsumer<CreateEventBloc, CreateEventState>(
         listener: (context, state) {
           if (state.status.isSuccess) {
@@ -164,11 +163,11 @@ class CreateEventBasePage extends StatelessWidget {
               _onCreateEventSuccess(context, state);
             }
             context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
-            if (space != null) {
+            if (spaceId != null) {
               context.read<GetSpaceEventsBloc>().add(
                     GetSpaceEventsEvent.fetch(
                       input: Variables$Query$GetEvents(
-                        space: space?.id,
+                        space: spaceId,
                         limit: 50,
                         sort: Input$EventSortInput(
                           start: Enum$SortOrder.desc,
@@ -188,19 +187,19 @@ class CreateEventBasePage extends StatelessWidget {
                 builder: (context, spacesState) {
                   return spacesState.maybeWhen(
                     success: (spaces) {
-                      if (state.selectedSpace == null && spaces.isNotEmpty) {
+                      if (state.selectedSpaceId == null && spaces.isNotEmpty) {
                         context.read<CreateEventBloc>().add(
-                              CreateEventEvent.createEventSpaceChanged(
-                                space: spaces.first,
+                              CreateEventEvent.createEventSpaceIdChanged(
+                                spaceId: spaces.first.id,
                               ),
                             );
                       }
                       return CreateEventSpaceSelectDropdown(
-                        selectedSpace: state.selectedSpace,
-                        onSpaceSelected: (space) {
+                        selectedSpaceId: state.selectedSpaceId,
+                        onSpaceSelected: (spaceId) {
                           context.read<CreateEventBloc>().add(
-                                CreateEventEvent.createEventSpaceChanged(
-                                  space: space,
+                                CreateEventEvent.createEventSpaceIdChanged(
+                                  spaceId: spaceId,
                                 ),
                               );
                         },

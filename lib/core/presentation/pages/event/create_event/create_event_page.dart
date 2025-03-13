@@ -7,7 +7,6 @@ import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dar
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_event_detail_input.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -22,14 +21,14 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
   final DateTime? parentEventStart;
   final DateTime? parentEventEnd;
   final String? parentTimezone;
-  final Space? space;
+  final String? spaceId;
   const CreateEventPage({
     super.key,
     this.parentEventId,
     this.parentEventStart,
     this.parentEventEnd,
     this.parentTimezone,
-    this.space,
+    this.spaceId,
   });
 
   @override

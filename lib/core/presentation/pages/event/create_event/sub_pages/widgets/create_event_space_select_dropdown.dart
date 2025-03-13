@@ -14,23 +14,30 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 
-class CreateEventSpaceSelectDropdown extends StatelessWidget {
-  final Space? selectedSpace;
-  final Function(Space space)? onSpaceSelected;
+class CreateEventSpaceSelectDropdown extends StatefulWidget {
+  final String? selectedSpaceId;
+  final Function(String spaceId)? onSpaceSelected;
 
   const CreateEventSpaceSelectDropdown({
     super.key,
-    this.selectedSpace,
+    this.selectedSpaceId,
     this.onSpaceSelected,
   });
+
+  @override
+  State<CreateEventSpaceSelectDropdown> createState() =>
+      _CreateEventSpaceSelectDropdownState();
+}
+
+class _CreateEventSpaceSelectDropdownState
+    extends State<CreateEventSpaceSelectDropdown> {
+  Space? selectedSpace;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final selectedSpaceImageAvatarUrl = selectedSpace?.imageAvatar?.url ?? '';
-    final selectedSpaceFallbackCreatorImageAvatar =
-        selectedSpace?.creatorExpanded?.imageAvatar ?? '';
+
     return Padding(
       padding: EdgeInsets.only(left: Spacing.medium),
       child: BlocBuilder<ListSpacesBloc, ListSpacesState>(
@@ -38,13 +45,24 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
           return state.maybeWhen(
             loading: () => Loading.defaultLoading(context),
             success: (spaces) {
+              // Update selectedSpace if we have a selectedSpaceId
+              if (selectedSpace == null && widget.selectedSpaceId != null) {
+                selectedSpace = spaces.firstWhere(
+                  (space) => space.id == widget.selectedSpaceId,
+                  orElse: () => spaces.first,
+                );
+              }
+
               // Sort spaces by personal first, then sort by title
               final sortedSpaces = spaces.toList()
                 ..sort(
                   (a, b) => a.personal == b.personal
                       ? (a.title ?? '').compareTo(b.title ?? '')
-                      : (a.personal ?? false ? -1 : 1),
+                      : (a.personal ?? false)
+                          ? -1
+                          : 1,
                 );
+
               return DropdownButtonHideUnderline(
                 child: DropdownButton2<Space>(
                   isExpanded: false,
@@ -67,9 +85,9 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           LemonNetworkImage(
-                            imageUrl: selectedSpaceImageAvatarUrl.isEmpty
-                                ? selectedSpaceFallbackCreatorImageAvatar
-                                : selectedSpaceImageAvatarUrl,
+                            imageUrl: selectedSpace?.imageAvatar?.url ??
+                                selectedSpace?.creatorExpanded?.imageAvatar ??
+                                '',
                             width: Sizing.mSmall,
                             height: Sizing.mSmall,
                             fit: BoxFit.cover,
@@ -98,7 +116,10 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                   }).toList(),
                   onChanged: (space) {
                     if (space != null) {
-                      onSpaceSelected?.call(space);
+                      setState(() {
+                        selectedSpace = space;
+                      });
+                      widget.onSpaceSelected?.call(space.id ?? '');
                     }
                   },
                   dropdownStyleData: DropdownStyleData(
@@ -109,9 +130,7 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                       color: colorScheme.secondaryContainer,
                     ),
                     offset: Offset(
-                      -Spacing.superExtraSmall,
-                      Spacing.superExtraSmall,
-                    ),
+                        -Spacing.superExtraSmall, Spacing.superExtraSmall),
                   ),
                   dropdownSearchData: DropdownSearchData(
                     searchInnerWidgetHeight: 50.h,

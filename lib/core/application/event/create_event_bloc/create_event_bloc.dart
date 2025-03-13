@@ -2,7 +2,6 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/form/string_formz.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,14 +12,14 @@ part 'create_event_bloc.freezed.dart';
 
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   final String? parentEventId;
-  final Space? initialSpace;
+  final String? initialSpaceId;
   CreateEventBloc({
     this.parentEventId,
-    this.initialSpace,
+    this.initialSpaceId,
   }) : super(
           CreateEventState(
             parentEventId: parentEventId,
-            selectedSpace: initialSpace,
+            selectedSpaceId: initialSpaceId,
           ),
         ) {
     on<CreateEventTitleChanged>(_onEventTitleChanged);
@@ -35,7 +34,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
-    on<CreateEventSpaceChanged>(_onCreateEventSpaceChanged);
+    on<CreateEventSpaceIdChanged>(_onCreateEventSpaceIdChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -142,11 +141,11 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
-  Future<void> _onCreateEventSpaceChanged(
-    CreateEventSpaceChanged event,
+  Future<void> _onCreateEventSpaceIdChanged(
+    CreateEventSpaceIdChanged event,
     Emitter<CreateEventState> emit,
   ) async {
-    emit(state.copyWith(selectedSpace: event.space));
+    emit(state.copyWith(selectedSpaceId: event.spaceId));
   }
 
   Future<void> _onCreateEventFormSubmitted(
@@ -202,7 +201,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         ),
         tags: state.tags,
         new_new_photos: state.photoImageId != null ? [state.photoImageId!] : [],
-        space: state.selectedSpace?.id != null ? state.selectedSpace!.id : null,
+        space: state.selectedSpaceId,
       ).copyWith(
         guest_limit: state.guestLimit != null
             ? double.parse(state.guestLimit ?? '')
@@ -279,9 +278,9 @@ class CreateEventEvent with _$CreateEventEvent {
     required String photoImageId,
   }) = CreateEventPhotoImageIdChanged;
 
-  const factory CreateEventEvent.createEventSpaceChanged({
-    required Space? space,
-  }) = CreateEventSpaceChanged;
+  const factory CreateEventEvent.createEventSpaceIdChanged({
+    required String? spaceId,
+  }) = CreateEventSpaceIdChanged;
 }
 
 @freezed
@@ -299,7 +298,7 @@ class CreateEventState with _$CreateEventState {
     String? guestLimitPer,
     String? eventId,
     String? photoImageId,
-    Space? selectedSpace,
+    String? selectedSpaceId,
     // Subevent related
     String? parentEventId,
   }) = _CreateEventState;
