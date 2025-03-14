@@ -13,13 +13,16 @@ part 'create_event_bloc.freezed.dart';
 class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
   final String? parentEventId;
   final String? initialSpaceId;
+  final String? submittingToSpaceId;
   CreateEventBloc({
     this.parentEventId,
     this.initialSpaceId,
+    this.submittingToSpaceId,
   }) : super(
           CreateEventState(
             parentEventId: parentEventId,
             selectedSpaceId: initialSpaceId,
+            submittingToSpaceId: submittingToSpaceId,
           ),
         ) {
     on<CreateEventTitleChanged>(_onEventTitleChanged);
@@ -35,6 +38,9 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
     on<CreateEventSpaceIdChanged>(_onCreateEventSpaceIdChanged);
+    on<CreateEventSubmittingToSpaceIdChanged>(
+      _onCreateSubmittingToSpaceIdChanged,
+    );
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -146,6 +152,13 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     Emitter<CreateEventState> emit,
   ) async {
     emit(state.copyWith(selectedSpaceId: event.spaceId));
+  }
+
+  Future<void> _onCreateSubmittingToSpaceIdChanged(
+    CreateEventSubmittingToSpaceIdChanged event,
+    Emitter<CreateEventState> emit,
+  ) async {
+    emit(state.copyWith(submittingToSpaceId: event.spaceId));
   }
 
   Future<void> _onCreateEventFormSubmitted(
@@ -281,6 +294,10 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.createEventSpaceIdChanged({
     required String? spaceId,
   }) = CreateEventSpaceIdChanged;
+
+  const factory CreateEventEvent.createEventSubmittingToSpaceIdChanged({
+    required String? spaceId,
+  }) = CreateEventSubmittingToSpaceIdChanged;
 }
 
 @freezed
@@ -299,6 +316,7 @@ class CreateEventState with _$CreateEventState {
     String? eventId,
     String? photoImageId,
     String? selectedSpaceId,
+    String? submittingToSpaceId,
     // Subevent related
     String? parentEventId,
   }) = _CreateEventState;
