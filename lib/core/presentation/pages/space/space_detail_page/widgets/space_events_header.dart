@@ -76,7 +76,6 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                     AutoRouter.of(context).push(
                       CreateEventRoute(
                         spaceId: widget.space.id,
-                        submittingToSpaceId: "67764071b9f4f0eb95d23b62",
                       ),
                     );
                   }
