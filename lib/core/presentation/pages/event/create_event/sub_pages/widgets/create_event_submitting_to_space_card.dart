@@ -94,8 +94,7 @@ class CreateEventSubmittingToSpaceCard extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       context.read<CreateEventBloc>().add(
-                            const CreateEventEvent
-                                .createEventSubmittingToSpaceIdChanged(
+                            const CreateEventEvent.onSubmittingToSpaceIdChanged(
                               spaceId: null,
                             ),
                           );
