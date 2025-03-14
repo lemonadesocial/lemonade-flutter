@@ -7,6 +7,7 @@ import 'package:app/core/application/space/get_space_events_bloc/get_space_event
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/constants/event/event_constants.dart';
 import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_banner_photo_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_map_location_card.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_registration_section.dart';
@@ -25,6 +26,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -37,6 +39,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_submitting_to_space_card.dart';
 
@@ -148,7 +151,7 @@ class CreateEventBasePage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return BlocConsumer<CreateEventBloc, CreateEventState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status.isSuccess) {
           SnackBarUtils.showSuccess(
             message: t.event.eventCreation.createEventSuccessfully,
@@ -171,6 +174,13 @@ class CreateEventBasePage extends StatelessWidget {
                     ),
                   ),
                 );
+          }
+          // Submitting to space
+          if (state.submittingToSpaceId != null) {
+            await context.read<SpaceRepository>().pinEventsToSpace(
+              events: [state.eventId ?? ''],
+              spaceId: state.submittingToSpaceId ?? '',
+            );
           }
         }
       },
