@@ -37,10 +37,8 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventGuestLimitChanged>(_onCreateEventGuestLimitChanged);
     on<CreateEventGuestLimitPerChanged>(_onCreateEventGuestLimitPerChanged);
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
-    on<CreateEventSpaceIdChanged>(_onCreateEventSpaceIdChanged);
-    on<CreateEventSubmittingToSpaceIdChanged>(
-      _onCreateSubmittingToSpaceIdChanged,
-    );
+    on<OnSpaceIdChanged>(_onSpaceIdChanged);
+    on<OnSubmittingToSpaceIdChanged>(_onSubmittingToSpaceIdChanged);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -147,15 +145,15 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     );
   }
 
-  Future<void> _onCreateEventSpaceIdChanged(
-    CreateEventSpaceIdChanged event,
+  Future<void> _onSpaceIdChanged(
+    OnSpaceIdChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     emit(state.copyWith(selectedSpaceId: event.spaceId));
   }
 
-  Future<void> _onCreateSubmittingToSpaceIdChanged(
-    CreateEventSubmittingToSpaceIdChanged event,
+  Future<void> _onSubmittingToSpaceIdChanged(
+    OnSubmittingToSpaceIdChanged event,
     Emitter<CreateEventState> emit,
   ) async {
     emit(state.copyWith(submittingToSpaceId: event.spaceId));
@@ -291,13 +289,13 @@ class CreateEventEvent with _$CreateEventEvent {
     required String photoImageId,
   }) = CreateEventPhotoImageIdChanged;
 
-  const factory CreateEventEvent.createEventSpaceIdChanged({
+  const factory CreateEventEvent.onSpaceIdChanged({
     required String? spaceId,
-  }) = CreateEventSpaceIdChanged;
+  }) = OnSpaceIdChanged;
 
-  const factory CreateEventEvent.createEventSubmittingToSpaceIdChanged({
+  const factory CreateEventEvent.onSubmittingToSpaceIdChanged({
     required String? spaceId,
-  }) = CreateEventSubmittingToSpaceIdChanged;
+  }) = OnSubmittingToSpaceIdChanged;
 }
 
 @freezed

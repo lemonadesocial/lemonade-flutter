@@ -195,7 +195,7 @@ class CreateEventBasePage extends StatelessWidget {
                   success: (spaces) {
                     if (state.selectedSpaceId == null && spaces.isNotEmpty) {
                       context.read<CreateEventBloc>().add(
-                            CreateEventEvent.createEventSpaceIdChanged(
+                            CreateEventEvent.onSpaceIdChanged(
                               spaceId: spaces.first.id,
                             ),
                           );
@@ -205,7 +205,7 @@ class CreateEventBasePage extends StatelessWidget {
                           context.read<CreateEventBloc>().state.selectedSpaceId,
                       onSpaceSelected: (spaceId) {
                         context.read<CreateEventBloc>().add(
-                              CreateEventEvent.createEventSpaceIdChanged(
+                              CreateEventEvent.onSpaceIdChanged(
                                 spaceId: spaceId,
                               ),
                             );

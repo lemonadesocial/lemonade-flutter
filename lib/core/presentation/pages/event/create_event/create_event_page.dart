@@ -125,14 +125,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
     }
     if (widget.spaceId != null) {
       context.read<CreateEventBloc>().add(
-            CreateEventEvent.createEventSpaceIdChanged(
+            CreateEventEvent.onSpaceIdChanged(
               spaceId: widget.spaceId!,
             ),
           );
     }
     if (widget.submittingToSpaceId != null) {
       context.read<CreateEventBloc>().add(
-            CreateEventEvent.createEventSubmittingToSpaceIdChanged(
+            CreateEventEvent.onSubmittingToSpaceIdChanged(
               spaceId: widget.submittingToSpaceId!,
             ),
           );
