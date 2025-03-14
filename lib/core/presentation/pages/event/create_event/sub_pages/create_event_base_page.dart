@@ -26,7 +26,6 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/graphql/backend/space/mutation/pin_events_to_space.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -39,7 +38,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_submitting_to_space_card.dart';
 

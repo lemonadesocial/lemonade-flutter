@@ -1,4 +1,3 @@
-import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
