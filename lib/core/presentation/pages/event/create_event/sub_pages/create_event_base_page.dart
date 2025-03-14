@@ -183,6 +183,7 @@ class CreateEventBasePage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: colorScheme.primary,
             appBar: LemonAppBar(
+              leadingWidth: 100.w,
               leading: BlocBuilder<ListSpacesBloc, ListSpacesState>(
                 builder: (context, spacesState) {
                   return spacesState.maybeWhen(
