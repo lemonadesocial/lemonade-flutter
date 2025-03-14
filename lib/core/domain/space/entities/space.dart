@@ -56,6 +56,9 @@ class Space with _$Space {
   }
 
   bool isFollower({required String userId}) {
+    if (followed == true) {
+      return true;
+    }
     if (followers == null || followers!.isEmpty) {
       return false;
     }

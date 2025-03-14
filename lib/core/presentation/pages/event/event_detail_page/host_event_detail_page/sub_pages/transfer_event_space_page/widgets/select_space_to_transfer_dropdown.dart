@@ -67,13 +67,17 @@ class __ViewState extends State<_View> {
   Widget build(BuildContext context) {
     return BlocBuilder<ListSpacesBloc, ListSpacesState>(
       builder: (context, state) {
-        final spaces = state.maybeWhen(
-          orElse: () => <Space>[],
-          success: (spaces) => spaces,
-        );
+        final spaces = state
+            .maybeWhen(
+              orElse: () => <Space>[],
+              success: (spaces) => spaces,
+            )
+            .where((space) => space.id != widget.initialSpaceId)
+            .toList();
+
         return DropdownButtonHideUnderline(
           child: DropdownButton2<Space>(
-            alignment: AlignmentDirectional.bottomStart,
+            alignment: AlignmentDirectional.topStart,
             items: spaces.map((Space space) {
               return DropdownMenuItem<Space>(
                 value: space,
@@ -98,9 +102,9 @@ class __ViewState extends State<_View> {
                 borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               maxHeight: 300.w,
-              offset: Offset(0, 210.w),
             ),
-            menuItemStyleData: const MenuItemStyleData(
+            menuItemStyleData: MenuItemStyleData(
+              height: 50.w,
               padding: EdgeInsets.zero,
             ),
           ),
@@ -145,7 +149,7 @@ class _Item extends StatelessWidget {
               imageUrl: space?.imageAvatar?.url ?? '',
               width: 18.w,
               height: 18.w,
-              borderRadius: BorderRadius.circular(4.r),
+              borderRadius: BorderRadius.circular(4),
               placeholder: ImagePlaceholder.spaceThumbnail(),
             ),
           ),
