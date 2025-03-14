@@ -2,7 +2,12 @@ import 'package:app/core/application/event/create_event_bloc/create_event_bloc.d
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/get_space.graphql.dart';
+import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +20,7 @@ class CreateEventSubmittingToSpaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     if (submittingToSpaceId == null) {
       return const SizedBox.shrink();
     }
@@ -43,21 +49,24 @@ class CreateEventSubmittingToSpaceCard extends StatelessWidget {
             final colorScheme = Theme.of(context).colorScheme;
 
             return Container(
-              margin: EdgeInsets.all(Spacing.small),
+              margin: EdgeInsets.only(
+                top: Spacing.xSmall,
+                left: Spacing.small,
+                right: Spacing.small,
+              ),
               padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: colorScheme.outline),
+                color: LemonColor.chineseBlack,
+                borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               child: Row(
                 children: [
                   LemonNetworkImage(
                     imageUrl: space.image_avatar_expanded?.url ?? '',
-                    width: 40.w,
-                    height: 40.w,
+                    width: Sizing.medium,
+                    height: Sizing.medium,
                     fit: BoxFit.cover,
-                    borderRadius: BorderRadius.circular(LemonRadius.normal),
+                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                     placeholder: ImagePlaceholder.avatarPlaceholder(),
                   ),
                   SizedBox(width: Spacing.small),
@@ -66,28 +75,24 @@ class CreateEventSubmittingToSpaceCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Submitting to',
+                          t.space.submittingTo,
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSurfaceVariant,
+                            color: colorScheme.onSecondary,
                           ),
                         ),
+                        SizedBox(height: 2.w),
                         Text(
                           space.title,
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onSurface,
+                            color: colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: colorScheme.onSurface,
-                      size: 20,
-                    ),
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       context.read<CreateEventBloc>().add(
                             const CreateEventEvent
                                 .createEventSubmittingToSpaceIdChanged(
@@ -95,8 +100,14 @@ class CreateEventSubmittingToSpaceCard extends StatelessWidget {
                             ),
                           );
                     },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                    child: ThemeSvgIcon(
+                      color: colorScheme.onSurface,
+                      builder: (filter) => Assets.icons.icClose.svg(
+                        colorFilter: filter,
+                        width: Sizing.mSmall,
+                        height: Sizing.mSmall,
+                      ),
+                    ),
                   ),
                 ],
               ),
