@@ -26,6 +26,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -175,7 +176,7 @@ class CreateEventBasePage extends StatelessWidget {
           }
           // Submitting to space
           if (state.submittingToSpaceId != null) {
-            await context.read<SpaceRepository>().pinEventsToSpace(
+            getIt<SpaceRepository>().pinEventsToSpace(
               events: [state.eventId ?? ''],
               spaceId: state.submittingToSpaceId ?? '',
             );

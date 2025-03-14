@@ -152,6 +152,7 @@ class SpaceRepositoryImpl implements SpaceRepository {
           with_public_spaces: withPublicSpaces,
           roles: roles,
         ),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
 
