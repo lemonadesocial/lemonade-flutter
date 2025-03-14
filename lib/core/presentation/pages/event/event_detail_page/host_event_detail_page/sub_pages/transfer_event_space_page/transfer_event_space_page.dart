@@ -163,7 +163,7 @@ class _TransferEventSpacePageState extends State<TransferEventSpacePage> {
                   ),
                   SizedBox(height: Spacing.medium),
                   SelectSpaceToTransferDropdown(
-                    initialSpaceId: null,
+                    initialSpaceId: widget.spaceId,
                     onChange: (spaceId) {
                       setState(() {
                         selectedSpaceId = spaceId;
