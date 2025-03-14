@@ -22,6 +22,7 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
   final DateTime? parentEventEnd;
   final String? parentTimezone;
   final String? spaceId;
+  final String? submittingToSpaceId;
   const CreateEventPage({
     super.key,
     this.parentEventId,
@@ -29,6 +30,7 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
     this.parentEventEnd,
     this.parentTimezone,
     this.spaceId,
+    this.submittingToSpaceId,
   });
 
   @override
@@ -37,7 +39,9 @@ class CreateEventPage extends StatefulWidget implements AutoRouteWrapper {
       providers: [
         BlocProvider(
           create: (context) => CreateEventBloc(
+            initialSpaceId: spaceId,
             parentEventId: parentEventId,
+            submittingToSpaceId: submittingToSpaceId,
           ),
         ),
         BlocProvider(
@@ -116,6 +120,20 @@ class _CreateEventPageState extends State<CreateEventPage> {
                 longitude: parentEvent?.address?.longitude,
                 recipientName: parentEvent?.address?.recipientName ?? '',
               ),
+            ),
+          );
+    }
+    if (widget.spaceId != null) {
+      context.read<CreateEventBloc>().add(
+            CreateEventEvent.onSpaceIdChanged(
+              spaceId: widget.spaceId!,
+            ),
+          );
+    }
+    if (widget.submittingToSpaceId != null) {
+      context.read<CreateEventBloc>().add(
+            CreateEventEvent.onSubmittingToSpaceIdChanged(
+              spaceId: widget.submittingToSpaceId!,
             ),
           );
     }

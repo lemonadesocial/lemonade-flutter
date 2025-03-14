@@ -28,6 +28,7 @@ class UpcomingAttendingEventsBloc
         skip: 0,
         limit: 50,
         id: userId,
+        host: false,
       ),
     );
     result.fold(

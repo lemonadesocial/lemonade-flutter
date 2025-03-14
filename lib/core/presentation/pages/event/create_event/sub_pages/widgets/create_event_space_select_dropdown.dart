@@ -15,13 +15,13 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 
 class CreateEventSpaceSelectDropdown extends StatefulWidget {
-  final String? selectedSpaceId;
   final Function(String spaceId)? onSpaceSelected;
+  final String? selectedSpaceId;
 
   const CreateEventSpaceSelectDropdown({
     super.key,
-    this.selectedSpaceId,
     this.onSpaceSelected,
+    this.selectedSpaceId,
   });
 
   @override
@@ -37,7 +37,6 @@ class _CreateEventSpaceSelectDropdownState
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-
     return Padding(
       padding: EdgeInsets.only(left: Spacing.medium),
       child: BlocBuilder<ListSpacesBloc, ListSpacesState>(
@@ -45,14 +44,6 @@ class _CreateEventSpaceSelectDropdownState
           return state.maybeWhen(
             loading: () => Loading.defaultLoading(context),
             success: (spaces) {
-              // Update selectedSpace if we have a selectedSpaceId
-              if (selectedSpace == null && widget.selectedSpaceId != null) {
-                selectedSpace = spaces.firstWhere(
-                  (space) => space.id == widget.selectedSpaceId,
-                  orElse: () => spaces.first,
-                );
-              }
-
               // Sort spaces by personal first, then sort by title
               final sortedSpaces = spaces.toList()
                 ..sort(
@@ -62,6 +53,17 @@ class _CreateEventSpaceSelectDropdownState
                           ? -1
                           : 1,
                 );
+
+              if (selectedSpace == null) {
+                if (widget.selectedSpaceId != null) {
+                  selectedSpace = sortedSpaces.firstWhere(
+                    (space) => space.id == widget.selectedSpaceId,
+                    orElse: () => sortedSpaces.first,
+                  );
+                } else {
+                  selectedSpace = sortedSpaces.first;
+                }
+              }
 
               return DropdownButtonHideUnderline(
                 child: DropdownButton2<Space>(
