@@ -9,6 +9,7 @@ import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_typ
 import 'package:app/core/data/event/dtos/reward_dto/reward_dto.dart';
 import 'package:app/core/data/event/dtos/sub_event_settings_dto/sub_event_settings_dto.dart';
 import 'package:app/core/data/payment/dtos/payment_account_dto/payment_account_dto.dart';
+import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/data/web3/dtos/application_blockchain_platform_dto.dart';
 import 'package:app/core/data/user/dtos/user_dtos.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -100,6 +101,7 @@ class EventDto with _$EventDto {
     @JsonKey(name: 'rsvp_wallet_platforms')
     List<ApplicationBlockchainPlatformDto>? rsvpWalletPlatforms,
     String? space,
+    @JsonKey(name: 'space_expanded') SpaceDto? spaceExpanded,
   }) = _EventDto;
 
   factory EventDto.fromJson(Map<String, dynamic> json) =>
