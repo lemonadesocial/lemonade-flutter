@@ -119,6 +119,11 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                           ),
                         ),
                       )
+                      .where(
+                        (element) =>
+                            element.targets != null &&
+                            element.targets!.isNotEmpty,
+                      )
                       .toList() ??
                   [];
 
