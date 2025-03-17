@@ -6,6 +6,7 @@ import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 part 'get_space_events_bloc.freezed.dart';
 
@@ -37,6 +38,7 @@ class GetSpaceEventsBloc
     final result = await getIt<AppGQL>().client.query$GetEvents(
           Options$Query$GetEvents(
             variables: event.input,
+            fetchPolicy: FetchPolicy.networkOnly,
           ),
         );
 

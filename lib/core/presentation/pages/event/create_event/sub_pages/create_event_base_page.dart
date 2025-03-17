@@ -161,19 +161,6 @@ class CreateEventBasePage extends StatelessWidget {
             _onCreateEventSuccess(context, state);
           }
           context.read<RefreshBloc>().add(const RefreshEvent.refreshEvents());
-          if (state.selectedSpaceId != null) {
-            context.read<GetSpaceEventsBloc>().add(
-                  GetSpaceEventsEvent.fetch(
-                    input: Variables$Query$GetEvents(
-                      space: state.selectedSpaceId,
-                      limit: 50,
-                      sort: Input$EventSortInput(
-                        start: Enum$SortOrder.desc,
-                      ),
-                    ),
-                  ),
-                );
-          }
           // Submitting to space
           if (state.submittingToSpaceId != null) {
             getIt<SpaceRepository>().pinEventsToSpace(
