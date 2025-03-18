@@ -1,5 +1,6 @@
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/domain/space/entities/space_tag.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_header.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -9,6 +10,7 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -24,6 +26,22 @@ class SpaceEventsList extends StatefulWidget {
 }
 
 class _SpaceEventsListState extends State<SpaceEventsList> {
+  void _onFetchEvents(SpaceTag? tag) {
+    context.read<GetSpaceEventsBloc>().add(
+          GetSpaceEventsEvent.fetch(
+            input: Variables$Query$GetEvents(
+              space: widget.space.id,
+              limit: 50,
+              endFrom: DateTime.now().toUtc(),
+              sort: Input$EventSortInput(
+                start: Enum$SortOrder.asc,
+              ),
+              spaceTags: tag?.id != null ? [tag!.id] : null,
+            ),
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -33,19 +51,10 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
           child: SpaceEventsHeader(
             space: widget.space,
             onTagChange: (tag) {
-              context.read<GetSpaceEventsBloc>().add(
-                    GetSpaceEventsEvent.fetch(
-                      input: Variables$Query$GetEvents(
-                        space: widget.space.id,
-                        limit: 50,
-                        endFrom: DateTime.now().toUtc(),
-                        sort: Input$EventSortInput(
-                          start: Enum$SortOrder.asc,
-                        ),
-                        spaceTags: tag?.id != null ? [tag!.id] : null,
-                      ),
-                    ),
-                  );
+              _onFetchEvents(tag);
+            },
+            onRefresh: (tag) {
+              _onFetchEvents(tag);
             },
           ),
         ),
@@ -90,6 +99,12 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
               },
             );
           },
+        ),
+        const SliverToBoxAdapter(
+          child: SafeArea(
+            top: false,
+            child: SizedBox.shrink(),
+          ),
         ),
       ],
     );
