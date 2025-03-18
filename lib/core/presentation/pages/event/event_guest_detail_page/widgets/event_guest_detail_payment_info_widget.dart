@@ -1,4 +1,6 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
+import 'package:app/core/domain/payment/payment_enums.dart';
+import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_tickets_payment_method_page/widgets/payment_card_brand_icon.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/payment_utils.dart';
@@ -10,6 +12,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
   final EventGuestDetail eventGuestDetail;
@@ -36,6 +39,25 @@ class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
           title: t.event.eventGuestDetail.paymentMethod,
           value:
               '${payment.stripePaymentInfo?.card?.brand} **** ${payment.stripePaymentInfo?.card?.last4}',
+          icon: Container(
+            width: Sizing.small,
+            height: Sizing.mSmall,
+            padding: EdgeInsets.all(2.w),
+            decoration: BoxDecoration(
+              color: colorScheme.onPrimary,
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(2.w),
+                child: PaymentCardBrandIcon(
+                  cardBrand: PaymentCardBrand.values.byName(
+                    payment.stripePaymentInfo?.card?.brand ?? '',
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       if (payment.stripePaymentInfo != null)
         _PaymentInfoItem(
