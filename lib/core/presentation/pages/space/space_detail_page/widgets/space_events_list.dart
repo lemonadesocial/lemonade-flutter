@@ -38,7 +38,7 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
                       input: Variables$Query$GetEvents(
                         space: widget.space.id,
                         limit: 50,
-                        startFrom: DateTime.now().toUtc(),
+                        endFrom: DateTime.now().toUtc(),
                         sort: Input$EventSortInput(
                           start: Enum$SortOrder.asc,
                         ),
