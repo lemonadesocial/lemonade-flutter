@@ -58,8 +58,9 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
       _loading = false;
     });
     context.read<GetSpaceDetailBloc>().add(
-          GetSpaceDetailEvent.fetch(
+          GetSpaceDetailEvent.refresh(
             spaceId: spaceId,
+            refresh: true,
           ),
         );
   }
@@ -171,20 +172,22 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                     ),
                 ],
               ),
-              SizedBox(height: Spacing.small),
-              Text(
-                space?.description ?? '',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
+              if (space?.description != null) ...[
+                SizedBox(height: Spacing.small),
+                Text(
+                  space?.description ?? '',
+                  style: Typo.medium.copyWith(
+                    color: colorScheme.onSecondary,
+                  ),
                 ),
-              ),
-              SizedBox(height: Spacing.small),
+              ],
               if (space?.handleTwitter != null ||
                   space?.handleInstagram != null ||
                   space?.handleLinkedin != null ||
                   space?.handleTiktok != null ||
                   space?.handleYoutube != null ||
                   space?.website != null) ...[
+                SizedBox(height: Spacing.small),
                 Row(
                   children: <(String?, String, SvgGenImage)>[
                     (
