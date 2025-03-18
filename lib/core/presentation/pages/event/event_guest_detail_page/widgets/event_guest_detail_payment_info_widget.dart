@@ -1,11 +1,15 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/payment_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
   final EventGuestDetail eventGuestDetail;
@@ -36,11 +40,37 @@ class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
       if (payment.stripePaymentInfo != null)
         _PaymentInfoItem(
           title: t.event.eventGuestDetail.stripePaymentId,
-          value: payment.stripePaymentInfo?.paymentIntent ?? '',
+          value: Web3Utils.formatIdentifier(
+            payment.stripePaymentInfo?.paymentIntent ?? '',
+          ),
+          onTap: () {
+            final paymentId = payment.stripePaymentInfo?.paymentIntent;
+            if (paymentId != null && paymentId.isNotEmpty) {
+              Clipboard.setData(ClipboardData(text: paymentId));
+              SnackBarUtils.showInfo(
+                title: t.common.copied,
+              );
+            }
+          },
+        ),
+      if (payment.cryptoPaymentInfo != null)
+        ChainQuery(
+          chainId: payment.cryptoPaymentInfo?.network ?? '',
+          builder: (chain, {required bool isLoading}) => _PaymentInfoItem(
+            title: t.event.eventGuestDetail.chain,
+            value: chain?.name ?? payment.cryptoPaymentInfo?.network ?? '',
+            icon: chain?.logoUrl != null
+                ? LemonNetworkImage(
+                    imageUrl: chain?.logoUrl ?? '',
+                    width: Sizing.xSmall,
+                    height: Sizing.xSmall,
+                  )
+                : null,
+          ),
         ),
       if (payment.cryptoPaymentInfo != null)
         _PaymentInfoItem(
-          title: t.event.eventGuestDetail.paymentMethod,
+          title: t.event.eventGuestDetail.walletID,
           value:
               Web3Utils.formatIdentifier('${payment.transferParams?['from']}'),
         ),
@@ -92,9 +122,14 @@ class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
 class _PaymentInfoItem extends StatelessWidget {
   final String title;
   final String value;
+  final VoidCallback? onTap;
+  final Widget? icon;
+
   const _PaymentInfoItem({
     required this.title,
     required this.value,
+    this.onTap,
+    this.icon,
   });
 
   @override
@@ -108,9 +143,24 @@ class _PaymentInfoItem extends StatelessWidget {
           title,
           style: Typo.small.copyWith(color: colorScheme.onSecondary),
         ),
-        Text(
-          value,
-          style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+        SizedBox(height: Spacing.superExtraSmall / 2),
+        GestureDetector(
+          onTap: onTap,
+          child: Row(
+            children: [
+              if (icon != null)
+                Padding(
+                  padding: EdgeInsets.only(right: Spacing.superExtraSmall / 2),
+                  child: icon!,
+                ),
+              Text(
+                value,
+                style: Typo.medium.copyWith(
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
