@@ -1,5 +1,6 @@
 # import '../../schema.graphql'
 # import '../fragment/user_fragment.graphql'
+# import '../fragment/confidential_user_info_fragment.graphql'
 
 query GetEventPayment($event: MongoID!, $id: MongoID!) {
   getEventPayment(event: $event, _id: $id) {
@@ -38,6 +39,9 @@ query GetEventPayment($event: MongoID!, $id: MongoID!) {
       type
       assigned_email
       assigned_to
+      assigned_to_info {
+        ...ConfidentialUserInfoFragment
+      }
       invited_by
       cancelled_by
       accepted

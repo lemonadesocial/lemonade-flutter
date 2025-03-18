@@ -1,8 +1,10 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -11,17 +13,42 @@ import 'package:flutter/material.dart';
 
 class EventGuestDetailUserInfoWidget extends StatelessWidget {
   final EventGuestDetail? eventGuestDetail;
+  final List<EventTicket>? eventTickets;
   const EventGuestDetailUserInfoWidget({
     super.key,
     this.eventGuestDetail,
+    this.eventTickets,
   });
 
   String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
-  String get _buyerName => eventGuestDetail?.user.name ?? 'Unknown';
-  String get _buyerEmail => eventGuestDetail?.user.email ?? 'N/A';
+  String get _buyerName => eventGuestDetail?.user.name ?? '';
+  String get _buyerEmail =>
+      eventGuestDetail?.user.email ?? t.event.eventGuestDetail.NA;
   DateTime? get _joinRequestCreatedAt =>
       eventGuestDetail?.joinRequest?.createdAt;
+  Map<String, DateTime>? get _stamps => eventGuestDetail?.payment?.stamps;
+  DateTime? get _paymentStampsCreatedAt => _stamps?['created'];
   EventJoinRequest? get _joinRequest => eventGuestDetail?.joinRequest;
+
+  String _getFormattedTimestamp(BuildContext context) {
+    final t = Translations.of(context);
+
+    if (_joinRequestCreatedAt != null) {
+      return DateFormatUtils.custom(
+        _joinRequestCreatedAt!,
+        pattern: 'dd MMM, HH:mm',
+      );
+    }
+
+    if (_paymentStampsCreatedAt != null) {
+      return DateFormatUtils.custom(
+        _paymentStampsCreatedAt!,
+        pattern: 'dd MMM, HH:mm',
+      );
+    }
+
+    return t.event.eventGuestDetail.NA;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +70,20 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _buyerName,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                  if (_buyerName.isNotEmpty)
+                    Text(
+                      _buyerName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    _buyerEmail,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                  if (_buyerEmail.isNotEmpty)
+                    Text(
+                      _buyerEmail,
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -70,13 +99,21 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
         Row(
           children: [
             _InfoItem(
-              title: 'Registered on',
-              value: _joinRequestCreatedAt != null
-                  ? DateFormatUtils.custom(
-                      _joinRequestCreatedAt!,
-                      pattern: 'dd MMM, HH:mm',
-                    )
-                  : 'N/A',
+              title: t.event.eventGuestDetail.registeredOn,
+              value: _getFormattedTimestamp(context),
+            ),
+            SizedBox(
+              height: Sizing.medium,
+              child: VerticalDivider(
+                color: colorScheme.outline,
+                thickness: 1,
+                width: Spacing.large,
+              ),
+            ),
+            _InfoItem(
+              title: t.event.eventGuestDetail.tickets,
+              value:
+                  '${eventTickets?.length ?? 0} ${t.event.tickets(n: eventTickets?.length ?? 0)}',
             ),
             SizedBox(
               height: Sizing.medium,
@@ -144,13 +181,13 @@ class _ApprovalStatus extends StatelessWidget {
     String displayText;
 
     if (joinRequest.isPending) {
-      displayText = 'Pending';
+      displayText = t.event.eventGuestDetail.pending;
       color = colorScheme.onSecondary;
     } else if (joinRequest.isDeclined) {
-      displayText = 'Declined';
+      displayText = t.event.eventGuestDetail.declined;
       color = LemonColor.coralReef;
     } else {
-      displayText = 'Going';
+      displayText = t.event.eventGuestDetail.going;
       color = LemonColor.malachiteGreen;
     }
 
