@@ -48,12 +48,9 @@ class EventGuestDetailPaymentInfoWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Center(
-              child: Padding(
-                padding: EdgeInsets.all(2.w),
-                child: PaymentCardBrandIcon(
-                  cardBrand: PaymentCardBrand.values.byName(
-                    payment.stripePaymentInfo?.card?.brand ?? '',
-                  ),
+              child: PaymentCardBrandIcon(
+                cardBrand: PaymentCardBrand.values.byName(
+                  payment.stripePaymentInfo?.card?.brand ?? '',
                 ),
               ),
             ),

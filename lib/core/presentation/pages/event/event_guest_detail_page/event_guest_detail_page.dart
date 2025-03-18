@@ -1,7 +1,11 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/data/event/dtos/event_guest_detail_dto/event_guest_detail_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_dto/event_ticket_dto.dart';
+import 'package:app/core/data/event/dtos/event_ticket_types_dto/event_ticket_types_dto.dart';
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/event/entities/event_ticket_types.dart';
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_join_requests_list.dart';
 import 'package:app/core/presentation/pages/event/event_guest_detail_page/widgets/event_guest_detail_actions_bar.dart';
@@ -13,6 +17,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_event_guest_detail.graphql.dart';
+import 'package:app/graphql/backend/payment/query/get_event_payment.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -75,7 +80,6 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
@@ -89,126 +93,170 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
             email: widget.email.isNotEmpty ? widget.email : null,
           ),
         ),
-        builder: (
-          result, {
-          refetch,
-          fetchMore,
-        }) {
-          if (result.isLoading) {
-            return Center(
-              child: Loading.defaultLoading(context),
+        builder: (guestDetailResult, {refetch, fetchMore}) {
+          if (guestDetailResult.isLoading) {
+            return Center(child: Loading.defaultLoading(context));
+          }
+
+          final eventGuestDetail = EventGuestDetail.fromDto(
+            EventGuestDetailDto.fromJson(
+              guestDetailResult.parsedData!.getEventGuestDetail!.toJson(),
+            ),
+          );
+
+          final paymentId =
+              guestDetailResult.parsedData?.getEventGuestDetail?.payment?.$_id;
+
+          if (paymentId == null) {
+            return _buildContent(
+              context: context,
+              eventGuestDetail: eventGuestDetail,
+              applications: guestDetailResult
+                  .parsedData?.getEventGuestDetail?.application,
+              eventTickets: [eventGuestDetail.ticket ?? EventTicket()],
+              eventTicketTypes: [
+                eventGuestDetail.ticket?.typeExpanded ?? EventTicketType()
+              ],
+              refetch: refetch,
             );
           }
 
-          final applications =
-              result.parsedData?.getEventGuestDetail?.application;
-          final eventGuestDetail = EventGuestDetail.fromDto(
-            EventGuestDetailDto.fromJson(
-              result.parsedData!.getEventGuestDetail!.toJson(),
-            ),
-          );
-
-          final sections = [
-            (
-              widget: EventGuestDetailUserInfoWidget(
-                eventGuestDetail: eventGuestDetail,
+          // TODO: Fetch payment details separately due to backend limitations on multiple tickets retrieval, will remove this once the backend is fixed
+          return Query$GetEventPayment$Widget(
+            options: Options$Query$GetEventPayment(
+              variables: Variables$Query$GetEventPayment(
+                event: widget.eventId,
+                id: paymentId,
               ),
-              isVisible: true, // Always visible
             ),
-            (
-              widget: EventGuestDetailPaymentInfoWidget(
-                eventGuestDetail: eventGuestDetail,
-              ),
-              isVisible: eventGuestDetail.payment != null,
-            ),
-            (
-              widget: EventGuestDetailTicketWidget(
-                eventGuestDetail: eventGuestDetail,
-              ),
-              isVisible: eventGuestDetail.ticket != null,
-            ),
-            (
-              widget: EventGuestDetailApplicationQuestionsWidget(
-                eventGuestDetail: eventGuestDetail,
-              ),
-              isVisible: applications?.any(
-                    (app) =>
-                        app.answers != null &&
-                        app.answers!.any((answer) => answer.isNotEmpty),
-                  ) ??
-                  false,
-            ),
-            // (
-            //   widget: EventGuestDetailTimelineInfoWidget(
-            //     eventGuestDetail: eventGuestDetail,
-            //   ),
-            //   isVisible: eventGuestDetail.joinRequest != null,
-            // ),
-          ];
+            builder: (paymentResult, {refetch, fetchMore}) {
+              final eventTickets = paymentResult
+                      .parsedData?.getEventPayment?.tickets
+                      ?.map((e) => EventTicket.fromDto(
+                          EventTicketDto.fromJson(e.toJson())))
+                      .toList() ??
+                  [];
+              final eventTicketTypes = paymentResult
+                      .parsedData?.getEventPayment?.ticket_types_expanded
+                      ?.map((e) => EventTicketType.fromDto(
+                          EventTicketTypeDto.fromJson(e?.toJson() ?? {})))
+                      .toList() ??
+                  [];
 
-          final widgets = <Widget>[];
-          final visibleSections = sections.where((s) => s.isVisible).toList();
-
-          for (var i = 0; i < visibleSections.length; i++) {
-            widgets.add(visibleSections[i].widget);
-
-            // Add divider if not the last section
-            if (i < visibleSections.length - 1) {
-              widgets.add(
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: Spacing.medium),
-                  child: Divider(
-                    color: colorScheme.outline,
-                    height: 1,
-                  ),
-                ),
+              return _buildContent(
+                context: context,
+                eventGuestDetail: eventGuestDetail,
+                applications: guestDetailResult
+                    .parsedData?.getEventGuestDetail?.application,
+                eventTickets: eventTickets,
+                eventTicketTypes: eventTicketTypes,
+                refetch: refetch,
               );
-            }
-          }
-
-          return Column(
-            children: [
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: EdgeInsets.only(
-                        left: Spacing.small,
-                        right: Spacing.small,
-                        top: Spacing.small,
-                      ),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(widgets),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              EventGuestDetailActionsBar(
-                eventGuestDetail: eventGuestDetail,
-                onPressApprove: () async {
-                  await _modifyJoinRequest(
-                    eventId: widget.eventId,
-                    joinRequest: eventGuestDetail.joinRequest!,
-                    action: ModifyJoinRequestAction.approve,
-                  );
-                  refetch?.call();
-                  widget.onRequestActionComplete?.call();
-                },
-                onPressDecline: () async {
-                  await _modifyJoinRequest(
-                    eventId: widget.eventId,
-                    joinRequest: eventGuestDetail.joinRequest!,
-                    action: ModifyJoinRequestAction.decline,
-                  );
-                  refetch?.call();
-                  widget.onRequestActionComplete?.call();
-                },
-              ),
-            ],
+            },
           );
         },
       ),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required EventGuestDetail eventGuestDetail,
+    required List<Query$GetEventGuestDetail$getEventGuestDetail$application>?
+        applications,
+    List<EventTicket>? eventTickets,
+    List<EventTicketType>? eventTicketTypes,
+    Function()? refetch,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final sections = [
+      (
+        widget: EventGuestDetailUserInfoWidget(
+          eventGuestDetail: eventGuestDetail,
+          eventTickets: eventTickets,
+        ),
+        isVisible: true,
+      ),
+      (
+        widget: EventGuestDetailPaymentInfoWidget(
+          eventGuestDetail: eventGuestDetail,
+        ),
+        isVisible: eventGuestDetail.payment != null,
+      ),
+      (
+        widget: EventGuestDetailTicketWidget(
+          eventGuestDetail: eventGuestDetail,
+          eventTickets: eventTickets,
+          eventTicketTypes: eventTicketTypes,
+        ),
+        isVisible: eventTickets?.isNotEmpty ?? false,
+      ),
+      (
+        widget: EventGuestDetailApplicationQuestionsWidget(
+          eventGuestDetail: eventGuestDetail,
+        ),
+        isVisible: applications?.any((app) =>
+                app.answers != null &&
+                app.answers!.any((answer) => answer.isNotEmpty)) ??
+            false,
+      ),
+    ];
+
+    final widgets = <Widget>[];
+    final visibleSections = sections.where((s) => s.isVisible).toList();
+
+    for (var i = 0; i < visibleSections.length; i++) {
+      widgets.add(visibleSections[i].widget);
+      if (i < visibleSections.length - 1) {
+        widgets.add(
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: Spacing.medium),
+            child: Divider(color: colorScheme.outline, height: 1),
+          ),
+        );
+      }
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  left: Spacing.small,
+                  right: Spacing.small,
+                  top: Spacing.small,
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate(widgets),
+                ),
+              ),
+            ],
+          ),
+        ),
+        EventGuestDetailActionsBar(
+          eventGuestDetail: eventGuestDetail,
+          onPressApprove: () async {
+            await _modifyJoinRequest(
+              eventId: widget.eventId,
+              joinRequest: eventGuestDetail.joinRequest!,
+              action: ModifyJoinRequestAction.approve,
+            );
+            refetch?.call();
+            widget.onRequestActionComplete?.call();
+          },
+          onPressDecline: () async {
+            await _modifyJoinRequest(
+              eventId: widget.eventId,
+              joinRequest: eventGuestDetail.joinRequest!,
+              action: ModifyJoinRequestAction.decline,
+            );
+            refetch?.call();
+            widget.onRequestActionComplete?.call();
+          },
+        ),
+      ],
     );
   }
 }

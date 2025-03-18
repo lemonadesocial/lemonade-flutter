@@ -25,6 +25,7 @@ class EventTicket with _$EventTicket {
     String? shortId,
     List<EventTicket>? acquiredTickets,
     EventCheckin? checkin,
+    User? assignedToInfo,
   }) = _EventTicket;
 
   factory EventTicket.fromDto(EventTicketDto dto) => EventTicket(
@@ -49,6 +50,9 @@ class EventTicket with _$EventTicket {
             : [],
         checkin:
             dto.checkin != null ? EventCheckin.fromDto(dto.checkin!) : null,
+        assignedToInfo: dto.assignedToInfo != null
+            ? User.fromDto(dto.assignedToInfo!)
+            : null,
       );
 
   factory EventTicket.fromJson(Map<String, dynamic> json) =>

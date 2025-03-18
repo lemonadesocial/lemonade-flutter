@@ -21,6 +21,7 @@ class EventTicketDto with _$EventTicketDto {
     @JsonKey(name: 'shortid') String? shortId,
     @JsonKey(name: 'acquired_tickets') List<EventTicketDto>? acquiredTickets,
     @JsonKey(name: 'checkin') EventCheckinDto? checkin,
+    @JsonKey(name: 'assigned_to_info') UserDto? assignedToInfo,
   }) = _EventTicketDto;
 
   factory EventTicketDto.fromJson(Map<String, dynamic> json) =>

@@ -1,5 +1,6 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
+import 'package:app/core/domain/event/entities/event_ticket.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
@@ -12,9 +13,11 @@ import 'package:flutter/material.dart';
 
 class EventGuestDetailUserInfoWidget extends StatelessWidget {
   final EventGuestDetail? eventGuestDetail;
+  final List<EventTicket>? eventTickets;
   const EventGuestDetailUserInfoWidget({
     super.key,
     this.eventGuestDetail,
+    this.eventTickets,
   });
 
   String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
@@ -98,6 +101,19 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
             _InfoItem(
               title: t.event.eventGuestDetail.registeredOn,
               value: _getFormattedTimestamp(context),
+            ),
+            SizedBox(
+              height: Sizing.medium,
+              child: VerticalDivider(
+                color: colorScheme.outline,
+                thickness: 1,
+                width: Spacing.large,
+              ),
+            ),
+            _InfoItem(
+              title: t.event.eventGuestDetail.tickets,
+              value:
+                  '${eventTickets?.length ?? 0} ${t.event.tickets(n: eventTickets?.length ?? 0)}',
             ),
             SizedBox(
               height: Sizing.medium,

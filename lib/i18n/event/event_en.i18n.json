@@ -147,7 +147,8 @@
         "ticketUnassigned": "Unassigned",
         "ticketAssignmentPending": "Pending",
         "ticketAssignmentClaimed": "Claimed",
-        "ticketHolderEmail": "Email of ticket holder"
+        "ticketHolderEmail": "Email of ticket holder",
+        "assignTicketForGuest": "Assign this ticket for the guest"
     },
     "tickets(ordinal)": {
         "one": "ticket",
