@@ -79,7 +79,7 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        title: t.event.eventGuestDetail.eventGuestDetail,
+        title: t.event.eventGuestDetail.eventGuestDetails,
       ),
       body: Query$GetEventGuestDetail$Widget(
         options: Options$Query$GetEventGuestDetail(

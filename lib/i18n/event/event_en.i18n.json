@@ -967,7 +967,7 @@
         "notCheckedIn": "Not checked in"
     },
     "eventGuestDetail": {
-        "eventGuestDetail": "Guest detail",
+        "eventGuestDetails": "Guest details",
         "registeredOn": "Registered on",
         "tickets": "Tickets",
         "payment": "Payment",
@@ -983,6 +983,11 @@
         "timeline": "Timeline",
         "requestSubmitted": "Request submitted",
         "requestApproved": "Request approved",
-        "requestDeclined": "Request declined"
+        "requestDeclined": "Request declined",
+        "unknown": "Unknown",
+        "NA": "N/A",
+        "pending": "Pending",
+        "declined": "Declined",
+        "going": "Going"
     }
 }

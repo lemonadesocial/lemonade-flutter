@@ -3,6 +3,7 @@ import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -17,8 +18,10 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
   });
 
   String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
-  String get _buyerName => eventGuestDetail?.user.name ?? 'Unknown';
-  String get _buyerEmail => eventGuestDetail?.user.email ?? 'N/A';
+  String get _buyerName =>
+      eventGuestDetail?.user.name ?? t.event.eventGuestDetail.unknown;
+  String get _buyerEmail =>
+      eventGuestDetail?.user.email ?? t.event.eventGuestDetail.NA;
   DateTime? get _joinRequestCreatedAt =>
       eventGuestDetail?.joinRequest?.createdAt;
   EventJoinRequest? get _joinRequest => eventGuestDetail?.joinRequest;
@@ -70,13 +73,13 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
         Row(
           children: [
             _InfoItem(
-              title: 'Registered on',
+              title: t.event.eventGuestDetail.registeredOn,
               value: _joinRequestCreatedAt != null
                   ? DateFormatUtils.custom(
                       _joinRequestCreatedAt!,
                       pattern: 'dd MMM, HH:mm',
                     )
-                  : 'N/A',
+                  : t.event.eventGuestDetail.NA,
             ),
             SizedBox(
               height: Sizing.medium,
@@ -144,13 +147,13 @@ class _ApprovalStatus extends StatelessWidget {
     String displayText;
 
     if (joinRequest.isPending) {
-      displayText = 'Pending';
+      displayText = t.event.eventGuestDetail.pending;
       color = colorScheme.onSecondary;
     } else if (joinRequest.isDeclined) {
-      displayText = 'Declined';
+      displayText = t.event.eventGuestDetail.declined;
       color = LemonColor.coralReef;
     } else {
-      displayText = 'Going';
+      displayText = t.event.eventGuestDetail.going;
       color = LemonColor.malachiteGreen;
     }
 
