@@ -4,6 +4,7 @@ import 'package:app/core/application/event/get_event_votings_bloc/get_event_voti
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/event_tickets/get_my_tickets_bloc/get_my_tickets_bloc.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_space_info/guest_event_detail_space_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_pending_invites_widget/guest_event_pending_invites_widget.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_basic_info/guest_event_detail_basic_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_dashboard.dart';
@@ -259,9 +260,10 @@ class PostGuestEventDetailView extends StatelessWidget {
                   ),
                 ),
               ),
-              child: GuestEventDetailHosts(
-                event: event,
-              ),
+              child: const GuestEventDetailSpaceInfo(),
+            ),
+            GuestEventDetailHosts(
+              event: event,
             ),
             if (event.description != null && event.description!.isNotEmpty)
               Container(

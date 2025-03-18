@@ -12,6 +12,11 @@ class GetSpaceDetailEvent with _$GetSpaceDetailEvent {
     required String spaceId,
     @Default(false) bool refresh,
   }) = _Fetch;
+
+  const factory GetSpaceDetailEvent.refresh({
+    required String spaceId,
+    @Default(false) bool refresh,
+  }) = _Refresh;
 }
 
 @freezed
@@ -29,7 +34,9 @@ class GetSpaceDetailBloc
   GetSpaceDetailBloc(this._spaceRepository)
       : super(const GetSpaceDetailState.loading()) {
     on<_Fetch>(_onFetch);
+    on<_Refresh>(_onRefresh);
   }
+
   Future<void> _onFetch(_Fetch event, Emitter emit) async {
     if (event.spaceId.isEmpty) {
       emit(GetSpaceDetailState.failure(Failure(message: "Space ID is empty")));
@@ -40,6 +47,23 @@ class GetSpaceDetailBloc
     final result = await _spaceRepository.getSpaceDetail(
       spaceId: event.spaceId,
       refresh: event.refresh,
+    );
+
+    result.fold(
+      (failure) => emit(GetSpaceDetailState.failure(failure)),
+      (space) => emit(GetSpaceDetailState.success(space)),
+    );
+  }
+
+  Future<void> _onRefresh(_Refresh event, Emitter emit) async {
+    if (event.spaceId.isEmpty) {
+      emit(GetSpaceDetailState.failure(Failure(message: "Space ID is empty")));
+      return;
+    }
+
+    final result = await _spaceRepository.getSpaceDetail(
+      spaceId: event.spaceId,
+      refresh: true,
     );
 
     result.fold(

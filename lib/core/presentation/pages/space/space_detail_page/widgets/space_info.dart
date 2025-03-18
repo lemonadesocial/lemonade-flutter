@@ -74,7 +74,10 @@ class SpaceInfo extends StatelessWidget {
           ],
           if (space.handleTwitter != null ||
               space.handleInstagram != null ||
-              space.handleLinkedin != null) ...[
+              space.handleLinkedin != null ||
+              space.handleTiktok != null ||
+              space.handleYoutube != null ||
+              space.website != null) ...[
             SizedBox(height: Spacing.small),
             Row(
               children: <(String?, String, SvgGenImage)>[

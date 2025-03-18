@@ -50,8 +50,9 @@ class SpaceDetailPage extends StatelessWidget {
                 input: Variables$Query$GetEvents(
                   space: spaceId,
                   limit: 50,
+                  startFrom: DateTime.now().toUtc(),
                   sort: Input$EventSortInput(
-                    start: Enum$SortOrder.desc,
+                    start: Enum$SortOrder.asc,
                   ),
                 ),
               ),
