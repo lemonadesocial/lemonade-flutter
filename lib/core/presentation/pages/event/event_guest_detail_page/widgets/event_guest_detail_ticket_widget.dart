@@ -118,7 +118,8 @@ class _EventGuestDetailTicketWidgetState
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           LemonNetworkImage(
                             imageUrl: _buyerAvatar,
@@ -132,20 +133,22 @@ class _EventGuestDetailTicketWidgetState
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _buyerName,
-                                  style: Typo.medium.copyWith(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.w600,
+                                if (_buyerName.isNotEmpty)
+                                  Text(
+                                    _buyerName,
+                                    style: Typo.medium.copyWith(
+                                      color: colorScheme.onPrimary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
                                 SizedBox(height: 2.w),
-                                Text(
-                                  _buyerEmail,
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
+                                if (_buyerEmail.isNotEmpty)
+                                  Text(
+                                    _buyerEmail,
+                                    style: Typo.small.copyWith(
+                                      color: colorScheme.onSecondary,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                           ),

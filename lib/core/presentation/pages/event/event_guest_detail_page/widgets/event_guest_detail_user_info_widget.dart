@@ -18,13 +18,34 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
   });
 
   String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
-  String get _buyerName =>
-      eventGuestDetail?.user.name ?? t.event.eventGuestDetail.unknown;
+  String get _buyerName => eventGuestDetail?.user.name ?? '';
   String get _buyerEmail =>
       eventGuestDetail?.user.email ?? t.event.eventGuestDetail.NA;
   DateTime? get _joinRequestCreatedAt =>
       eventGuestDetail?.joinRequest?.createdAt;
+  Map<String, DateTime>? get _stamps => eventGuestDetail?.payment?.stamps;
+  DateTime? get _paymentStampsCreatedAt => _stamps?['created'];
   EventJoinRequest? get _joinRequest => eventGuestDetail?.joinRequest;
+
+  String _getFormattedTimestamp(BuildContext context) {
+    final t = Translations.of(context);
+
+    if (_joinRequestCreatedAt != null) {
+      return DateFormatUtils.custom(
+        _joinRequestCreatedAt!,
+        pattern: 'dd MMM, HH:mm',
+      );
+    }
+
+    if (_paymentStampsCreatedAt != null) {
+      return DateFormatUtils.custom(
+        _paymentStampsCreatedAt!,
+        pattern: 'dd MMM, HH:mm',
+      );
+    }
+
+    return t.event.eventGuestDetail.NA;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +67,20 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    _buyerName,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                  if (_buyerName.isNotEmpty)
+                    Text(
+                      _buyerName,
+                      style: Typo.medium.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    _buyerEmail,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                  if (_buyerEmail.isNotEmpty)
+                    Text(
+                      _buyerEmail,
+                      style: Typo.small.copyWith(
+                        color: colorScheme.onSecondary,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -74,12 +97,7 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
           children: [
             _InfoItem(
               title: t.event.eventGuestDetail.registeredOn,
-              value: _joinRequestCreatedAt != null
-                  ? DateFormatUtils.custom(
-                      _joinRequestCreatedAt!,
-                      pattern: 'dd MMM, HH:mm',
-                    )
-                  : t.event.eventGuestDetail.NA,
+              value: _getFormattedTimestamp(context),
             ),
             SizedBox(
               height: Sizing.medium,
@@ -174,6 +192,44 @@ class _ApprovalStatus extends StatelessWidget {
           color: color,
         ),
       ),
+    );
+  }
+}
+
+class _PaymentInfoItem extends StatelessWidget {
+  final String title;
+  final String value;
+  const _PaymentInfoItem({
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: Typo.small.copyWith(
+                color: colorScheme.onSecondary,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: Spacing.superExtraSmall),
+        Text(
+          value,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onPrimary,
+          ),
+        ),
+      ],
     );
   }
 }
