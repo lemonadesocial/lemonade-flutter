@@ -90,7 +90,8 @@ class TicketLimitPerSetting extends StatelessWidget {
                     if (value != null) {
                       context.read<ModifyTicketTypeBloc>().add(
                             ModifyTicketTypeEvent.onTicketLimitPerChanged(
-                              ticketLimitPer: value.toDouble(),
+                              ticketLimitPer:
+                                  value == -1 ? 1 : value.toDouble(),
                             ),
                           );
                     }

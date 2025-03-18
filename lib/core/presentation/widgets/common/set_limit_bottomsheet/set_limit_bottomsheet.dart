@@ -13,8 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SetLimitBottomSheet extends StatefulWidget {
-  /// if return null, user close
-  /// if return -1, it means unlimited
+  /// if return null, user close;
+  /// if return -1, it means unlimited;
   /// otherwise, it is the limit
   static Future<int?> show(
     BuildContext context, {
