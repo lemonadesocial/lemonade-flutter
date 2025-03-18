@@ -15,6 +15,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.onPressBack,
     this.backButtonColor,
+    this.leadingWidth,
   });
 
   final Widget? leading;
@@ -27,6 +28,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
   final Function()? onPressBack;
   final Color? backButtonColor;
+  final double? leadingWidth;
 
   static double get height => 60.w;
 
@@ -39,7 +41,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor ?? background,
       automaticallyImplyLeading: hideLeading ?? true,
-      leadingWidth: 100,
+      leadingWidth: leadingWidth,
       leading: hideLeading ?? false
           ? null
           : leading ??

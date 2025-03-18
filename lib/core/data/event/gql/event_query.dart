@@ -328,6 +328,21 @@ const eventSubEventFragment = '''
 const eventSpaceFragment = '''
   fragment eventSpaceFragment on Event {
     space
+    space_expanded {
+      _id
+      title
+      description
+      handle_twitter
+      handle_instagram
+      handle_youtube
+      handle_tiktok
+      handle_linkedin
+      website
+      image_avatar_expanded {
+       _id
+        url
+      }
+    }
   }
 ''';
 

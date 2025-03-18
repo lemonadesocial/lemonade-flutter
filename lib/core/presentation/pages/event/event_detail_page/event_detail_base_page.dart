@@ -158,7 +158,9 @@ class _EventDetailBasePageView extends StatelessWidget {
                     BlocProvider(
                       create: (context) => GetSpaceDetailBloc(
                         getIt<SpaceRepository>(),
-                      ),
+                      )..add(
+                          GetSpaceDetailEvent.fetch(spaceId: event.space ?? ''),
+                        ),
                     ),
                   ],
                   child: const PostGuestEventDetailView(),
@@ -186,7 +188,9 @@ class _EventDetailBasePageView extends StatelessWidget {
                     BlocProvider(
                       create: (context) => GetSpaceDetailBloc(
                         getIt<SpaceRepository>(),
-                      ),
+                      )..add(
+                          GetSpaceDetailEvent.fetch(spaceId: event.space ?? ''),
+                        ),
                     ),
                   ],
                   child: const PreGuestEventDetailView(),

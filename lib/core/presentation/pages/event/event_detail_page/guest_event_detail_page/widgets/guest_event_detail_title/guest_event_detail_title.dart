@@ -24,7 +24,7 @@ class GuestEventDetailTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _HostInfo(event: event),
+        _SpaceInfo(event: event),
         SizedBox(
           height: Spacing.superExtraSmall,
         ),
@@ -40,8 +40,8 @@ class GuestEventDetailTitle extends StatelessWidget {
   }
 }
 
-class _HostInfo extends StatelessWidget {
-  const _HostInfo({
+class _SpaceInfo extends StatelessWidget {
+  const _SpaceInfo({
     required this.event,
   });
 
@@ -52,24 +52,26 @@ class _HostInfo extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () {
-        AutoRouter.of(context).push(
-          ProfileRoute(
-            userId: event.hostExpanded?.userId ?? '',
-          ),
-        );
+        if (event.space?.isNotEmpty == true) {
+          AutoRouter.of(context).push(
+            SpaceDetailRoute(
+              spaceId: event.space ?? '',
+            ),
+          );
+        }
       },
       child: Row(
         children: [
           LemonNetworkImage(
-            imageUrl: event.hostExpanded?.imageAvatar ?? '',
+            imageUrl: event.spaceExpanded?.imageAvatar?.url ?? '',
             width: 18.w,
             height: 18.w,
-            borderRadius: BorderRadius.circular(18.w),
-            placeholder: ImagePlaceholder.avatarPlaceholder(),
+            borderRadius: BorderRadius.circular(4.r),
+            placeholder: ImagePlaceholder.spaceThumbnail(),
           ),
           SizedBox(width: Spacing.extraSmall),
           Text(
-            event.hostExpanded?.name ?? '',
+            event.spaceExpanded?.title ?? '',
             style: Typo.medium.copyWith(
               color: colorScheme.onSecondary,
             ),

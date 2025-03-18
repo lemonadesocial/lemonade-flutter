@@ -11,6 +11,7 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_hosts.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_photos.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_rsvp_status/guest_event_detail_rsvp_status_button.dart';
+import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_space_info/guest_event_detail_space_info.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_title/guest_event_detail_title.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_token_rewards_list/guest_event_detail_token_rewards_list.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_more_actions.dart';
@@ -174,8 +175,9 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                     ),
                   ),
                 ),
-                child: GuestEventDetailHosts(event: event),
+                child: const GuestEventDetailSpaceInfo(),
               ),
+              GuestEventDetailHosts(event: event),
             ];
             return SafeArea(
               top: false,

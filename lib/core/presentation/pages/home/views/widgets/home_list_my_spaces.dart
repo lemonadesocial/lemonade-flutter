@@ -34,20 +34,20 @@ class HomeListMySpaces extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        t.space.myCommunityHubs.toUpperCase(),
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
+                  InkWell(
+                    onTap: () =>
+                        context.router.push(const SpacesListingRoute()),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          t.space.myCommunityHubs.toUpperCase(),
+                          style: Typo.small.copyWith(
+                            color: colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () =>
-                            context.router.push(const SpacesListingRoute()),
-                        child: ThemeSvgIcon(
+                        ThemeSvgIcon(
                           color: colorScheme.onSecondary,
                           builder: (filter) => Assets.icons.icArrowRight.svg(
                             width: Sizing.mSmall,
@@ -55,8 +55,8 @@ class HomeListMySpaces extends StatelessWidget {
                             colorFilter: filter,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SizedBox(height: Spacing.xSmall),
                   SizedBox(

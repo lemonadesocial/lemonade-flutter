@@ -10,6 +10,7 @@ import 'package:app/core/domain/event/entities/reward.dart';
 import 'package:app/core/domain/event/entities/sub_event_settings.dart';
 import 'package:app/core/domain/event/event_enums.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/web3/entities/application_blockchain_platform.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -90,6 +91,7 @@ class Event with _$Event {
     List<String>? addressDirectionsRecommendations,
     List<ApplicationBlockchainPlatform>? rsvpWalletPlatforms,
     String? space,
+    Space? spaceExpanded,
   }) = _Event;
 
   factory Event.fromDto(EventDto dto) {
@@ -218,6 +220,8 @@ class Event with _$Event {
           .map((item) => ApplicationBlockchainPlatform.fromDto(item))
           .toList(),
       space: dto.space,
+      spaceExpanded:
+          dto.spaceExpanded != null ? Space.fromDto(dto.spaceExpanded!) : null,
     );
   }
 
