@@ -95,7 +95,6 @@ class _TicketItemState extends State<_TicketItem> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
     final ticket = widget.ticket;
     final assignedToInfo = widget.assignedToInfo;
     return Container(

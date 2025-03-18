@@ -115,7 +115,7 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
                   .parsedData?.getEventGuestDetail?.application,
               eventTickets: [eventGuestDetail.ticket ?? EventTicket()],
               eventTicketTypes: [
-                eventGuestDetail.ticket?.typeExpanded ?? EventTicketType()
+                eventGuestDetail.ticket?.typeExpanded ?? EventTicketType(),
               ],
               refetch: refetch,
             );
@@ -130,16 +130,24 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
               ),
             ),
             builder: (paymentResult, {refetch, fetchMore}) {
-              final eventTickets = paymentResult
-                      .parsedData?.getEventPayment?.tickets
-                      ?.map((e) => EventTicket.fromDto(
-                          EventTicketDto.fromJson(e.toJson())))
-                      .toList() ??
-                  [];
+              final eventTickets =
+                  paymentResult.parsedData?.getEventPayment?.tickets
+                          ?.map(
+                            (e) => EventTicket.fromDto(
+                              EventTicketDto.fromJson(e.toJson()),
+                            ),
+                          )
+                          .toList() ??
+                      [];
               final eventTicketTypes = paymentResult
                       .parsedData?.getEventPayment?.ticket_types_expanded
-                      ?.map((e) => EventTicketType.fromDto(
-                          EventTicketTypeDto.fromJson(e?.toJson() ?? {})))
+                      ?.map(
+                        (e) => EventTicketType.fromDto(
+                          EventTicketTypeDto.fromJson(
+                            e?.toJson() ?? {},
+                          ),
+                        ),
+                      )
                       .toList() ??
                   [];
 
@@ -195,9 +203,11 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
         widget: EventGuestDetailApplicationQuestionsWidget(
           eventGuestDetail: eventGuestDetail,
         ),
-        isVisible: applications?.any((app) =>
-                app.answers != null &&
-                app.answers!.any((answer) => answer.isNotEmpty)) ??
+        isVisible: applications?.any(
+              (app) =>
+                  app.answers != null &&
+                  app.answers!.any((answer) => answer.isNotEmpty),
+            ) ??
             false,
       ),
     ];
