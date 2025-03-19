@@ -93,10 +93,6 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                       .toList() ??
                   [];
 
-              if (tags.isEmpty) {
-                return const SizedBox.shrink();
-              }
-
               return Column(
                 children: [
                   Row(
@@ -142,70 +138,72 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: Spacing.small),
-                    child: SizedBox(
-                      height: Sizing.medium,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          if (index == 0) {
-                            final isActive = selectedTag == null;
+                  if (tags.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: Spacing.small),
+                      child: SizedBox(
+                        height: Sizing.medium,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              final isActive = selectedTag == null;
+                              return LemonOutlineButton(
+                                onTap: () {
+                                  _changeTag(null);
+                                },
+                                label: t.common.all,
+                                radius:
+                                    BorderRadius.circular(LemonRadius.button),
+                                textStyle: Typo.medium.copyWith(
+                                  color: colorScheme.onPrimary,
+                                ),
+                                backgroundColor: isActive
+                                    ? colorScheme.onPrimary.withOpacity(0.18)
+                                    : Colors.transparent,
+                              );
+                            }
+                            final tag = tags[index - 1];
+                            final isActive = selectedTag?.id == tag.id;
                             return LemonOutlineButton(
                               onTap: () {
-                                _changeTag(null);
+                                _changeTag(tag);
                               },
-                              label: t.common.all,
+                              label: tag.tag,
                               radius: BorderRadius.circular(LemonRadius.button),
                               textStyle: Typo.medium.copyWith(
                                 color: colorScheme.onPrimary,
+                                fontWeight: FontWeight.w600,
                               ),
                               backgroundColor: isActive
                                   ? colorScheme.onPrimary.withOpacity(0.18)
                                   : Colors.transparent,
+                              leading: (isSpaceAdmin || isSpaceOwner)
+                                  ? Container(
+                                      width: 8.w,
+                                      height: 8.w,
+                                      decoration: BoxDecoration(
+                                        color: tag.color.isNotEmpty == true
+                                            ? Color(
+                                                int.parse(
+                                                  tag.color
+                                                      .replaceAll('#', '0xFF'),
+                                                ),
+                                              )
+                                            : Colors.amber,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    )
+                                  : null,
                             );
-                          }
-                          final tag = tags[index - 1];
-                          final isActive = selectedTag?.id == tag.id;
-                          return LemonOutlineButton(
-                            onTap: () {
-                              _changeTag(tag);
-                            },
-                            label: tag.tag,
-                            radius: BorderRadius.circular(LemonRadius.button),
-                            textStyle: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            backgroundColor: isActive
-                                ? colorScheme.onPrimary.withOpacity(0.18)
-                                : Colors.transparent,
-                            leading: (isSpaceAdmin || isSpaceOwner)
-                                ? Container(
-                                    width: 8.w,
-                                    height: 8.w,
-                                    decoration: BoxDecoration(
-                                      color: tag.color.isNotEmpty == true
-                                          ? Color(
-                                              int.parse(
-                                                tag.color
-                                                    .replaceAll('#', '0xFF'),
-                                              ),
-                                            )
-                                          : Colors.amber,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  )
-                                : null,
-                          );
-                        },
-                        separatorBuilder: (context, index) => SizedBox(
-                          width: Spacing.extraSmall,
+                          },
+                          separatorBuilder: (context, index) => SizedBox(
+                            width: Spacing.extraSmall,
+                          ),
+                          itemCount: tags.length + 1,
                         ),
-                        itemCount: tags.length + 1,
                       ),
                     ),
-                  ),
                 ],
               );
             },

@@ -30,8 +30,10 @@ class SpaceListItem extends StatelessWidget {
           orElse: () => null,
           authenticated: (user) => user.userId,
         );
-    final isFollower = space.isFollower(userId: userId ?? '');
     final followersCount = space.followers?.length ?? 0;
+    final isAdmin = space.isAdmin(userId: userId ?? '');
+    final isOwner = space.isCreator(userId: userId ?? '');
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -71,7 +73,7 @@ class SpaceListItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
-                    if (!isFollower)
+                    if (isAdmin || isOwner || space.isAmbassador == true)
                       Text(
                         '$followersCount ${t.common.follower(n: followersCount)}',
                         style: Typo.small.copyWith(
