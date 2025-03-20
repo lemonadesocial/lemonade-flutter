@@ -22,6 +22,7 @@ class SpaceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final spaceAddressTitle = space.address?.title;
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       child: Column(
@@ -52,7 +53,7 @@ class SpaceInfo extends StatelessWidget {
               ),
             ),
           ],
-          if (space.address != null) ...[
+          if (spaceAddressTitle != null) ...[
             SizedBox(height: Spacing.superExtraSmall),
             Row(
               children: [
@@ -64,7 +65,7 @@ class SpaceInfo extends StatelessWidget {
                 ),
                 SizedBox(width: Spacing.superExtraSmall),
                 Text(
-                  space.address?.title ?? '',
+                  spaceAddressTitle,
                   style: Typo.medium.copyWith(
                     color: colorScheme.onSecondary,
                   ),
