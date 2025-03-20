@@ -1,3 +1,4 @@
+import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
@@ -42,6 +43,19 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
         );
   }
 
+  void _onFetchSpaceEventRequests() {
+    if (widget.space.id == null) {
+      return;
+    }
+    context.read<GetMySpaceEventRequestsBloc>().add(
+          GetMySpaceEventRequestsEvent.fetch(
+            spaceId: widget.space.id!,
+            limit: 100,
+            skip: 0,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -55,6 +69,7 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
             },
             onRefresh: (tag) {
               _onFetchEvents(tag);
+              _onFetchSpaceEventRequests();
             },
           ),
         ),

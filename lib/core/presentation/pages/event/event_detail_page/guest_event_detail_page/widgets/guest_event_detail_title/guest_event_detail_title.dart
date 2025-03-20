@@ -24,7 +24,11 @@ class GuestEventDetailTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _SpaceInfo(event: event),
+        event.spaceExpanded != null &&
+                (event.spaceExpanded?.personal != null &&
+                    event.spaceExpanded?.personal == false)
+            ? _SpaceInfo(event: event)
+            : _HostInfo(event: event),
         SizedBox(
           height: Spacing.superExtraSmall,
         ),
@@ -36,6 +40,53 @@ class GuestEventDetailTitle extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _HostInfo extends StatelessWidget {
+  const _HostInfo({
+    required this.event,
+  });
+
+  final Event event;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(
+          ProfileRoute(
+            userId: event.hostExpanded?.userId ?? '',
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          LemonNetworkImage(
+            imageUrl: event.hostExpanded?.imageAvatar ?? '',
+            width: 18.w,
+            height: 18.w,
+            borderRadius: BorderRadius.circular(18.w),
+            placeholder: ImagePlaceholder.avatarPlaceholder(),
+          ),
+          SizedBox(width: Spacing.extraSmall),
+          Text(
+            event.hostExpanded?.name ?? '',
+            style: Typo.medium.copyWith(
+              color: colorScheme.onSecondary,
+            ),
+          ),
+          SizedBox(width: Spacing.superExtraSmall),
+          ThemeSvgIcon(
+            color: colorScheme.onSecondary,
+            builder: (filter) => Assets.icons.icArrowRight.svg(
+              colorFilter: filter,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

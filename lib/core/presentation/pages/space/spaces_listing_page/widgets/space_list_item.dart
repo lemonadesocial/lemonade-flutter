@@ -75,7 +75,7 @@ class SpaceListItem extends StatelessWidget {
                     SizedBox(height: 4.h),
                     if (isAdmin || isOwner || space.isAmbassador == true)
                       Text(
-                        '$followersCount ${t.common.follower(n: followersCount)}',
+                        '$followersCount ${t.common.subscriber(n: followersCount)}',
                         style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
                         ),

@@ -69,7 +69,7 @@ class SpaceDetailPage extends StatelessWidget {
           )..add(
               GetMySpaceEventRequestsEvent.fetch(
                 spaceId: spaceId,
-                limit: 20,
+                limit: 100,
                 skip: 0,
               ),
             ),

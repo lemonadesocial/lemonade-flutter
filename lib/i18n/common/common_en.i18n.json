@@ -22,6 +22,10 @@
         "one": "ticket",
         "other": "tickets"
     },
+    "subscriber(ordinal)": {
+        "one": "subscriber",
+        "other": "subscribers"
+    },
     "actions": {
         "edit": "edit",
         "connect": "connect",
