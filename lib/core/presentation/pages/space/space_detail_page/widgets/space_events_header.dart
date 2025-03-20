@@ -109,11 +109,24 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                           final option =
                               await PinEventOptionsBottomsheet.show(context);
                           if (option == PinEventOptions.newEvent) {
-                            await AutoRouter.of(context).push(
-                              CreateEventRoute(
-                                spaceId: widget.space.id,
-                              ),
-                            );
+                            // Allow create event if space is admin or ambassador
+                            if (widget.space.isAdmin(userId: userId ?? '') ||
+                                widget.space.isAmbassador == true) {
+                              await AutoRouter.of(context).push(
+                                CreateEventRoute(
+                                  spaceId: widget.space.id,
+                                ),
+                              );
+                            }
+                            // Otherwise, need submit to space
+                            else {
+                              await AutoRouter.of(context).push(
+                                CreateEventRoute(
+                                  spaceId: null,
+                                  submittingToSpaceId: widget.space.id,
+                                ),
+                              );
+                            }
                           }
                           if (option == PinEventOptions.existingEvent) {
                             final value =
