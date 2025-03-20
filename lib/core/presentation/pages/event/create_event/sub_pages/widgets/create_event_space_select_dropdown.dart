@@ -127,6 +127,7 @@ class _CreateEventSpaceSelectDropdownState
                   dropdownStyleData: DropdownStyleData(
                     padding: EdgeInsets.zero,
                     width: 250.w,
+                    maxHeight: 300.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(LemonRadius.normal),
                       color: colorScheme.secondaryContainer,
