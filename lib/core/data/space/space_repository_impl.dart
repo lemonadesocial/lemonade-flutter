@@ -182,6 +182,7 @@ class SpaceRepositoryImpl implements SpaceRepository {
     final result = await _client.query$GetMySpaceEventRequests(
       Options$Query$GetMySpaceEventRequests(
         variables: input,
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
 

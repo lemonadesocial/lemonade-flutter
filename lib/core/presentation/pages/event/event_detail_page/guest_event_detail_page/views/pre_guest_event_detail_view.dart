@@ -3,6 +3,7 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/application/event/get_sub_events_by_calendar_bloc/get_sub_events_by_calendar_bloc.dart';
 import 'package:app/core/application/report/report_bloc/report_bloc.dart';
+import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/token_reward/list_ticket_token_rewards_bloc/list_ticket_token_rewards_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
@@ -175,9 +176,30 @@ class PreGuestEventDetailViewState extends State<PreGuestEventDetailView> {
                     ),
                   ),
                 ),
-                child: const GuestEventDetailSpaceInfo(),
+                child: BlocBuilder<GetSpaceDetailBloc, GetSpaceDetailState>(
+                  builder: (context, state) {
+                    final isLoading = state.maybeWhen(
+                      loading: () => true,
+                      orElse: () => false,
+                    );
+                    final space = state.maybeWhen(
+                      success: (space) => space,
+                      orElse: () => null,
+                    );
+                    return Column(
+                      children: [
+                        if (isLoading)
+                          Loading.defaultLoading(context)
+                        else if (space != null && space.personal != true) ...[
+                          const GuestEventDetailSpaceInfo(),
+                          SizedBox(height: Spacing.medium),
+                        ],
+                        GuestEventDetailHosts(event: event),
+                      ],
+                    );
+                  },
+                ),
               ),
-              GuestEventDetailHosts(event: event),
             ];
             return SafeArea(
               top: false,

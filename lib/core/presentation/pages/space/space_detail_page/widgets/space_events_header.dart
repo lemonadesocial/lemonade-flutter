@@ -8,6 +8,7 @@ import 'package:app/core/presentation/pages/space/pin_existing_event_to_space_pa
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_list.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/query/list_space_tags.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -38,7 +39,7 @@ class SpaceEventsHeader extends StatefulWidget {
 
 class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
   SpaceTag? selectedTag;
-  bool hasTag = false;
+
   void _changeTag(SpaceTag? tag) {
     setState(() {
       selectedTag = tag;
@@ -65,15 +66,12 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
             options: Options$Query$ListSpaceTags(
               variables:
                   Variables$Query$ListSpaceTags(space: widget.space.id ?? ''),
-              onComplete: (_, result) {
-                if (result?.listSpaceTags.isNotEmpty == true) {
-                  setState(() {
-                    hasTag = true;
-                  });
-                }
-              },
             ),
-            builder: (result, {fetchMore, refetch}) {
+            builder: (
+              result, {
+              fetchMore,
+              refetch,
+            }) {
               if (result.parsedData?.listSpaceTags == null) {
                 return const SizedBox.shrink();
               }
@@ -140,7 +138,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                   ),
                   if (tags.isNotEmpty)
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: Spacing.small),
+                      padding: EdgeInsets.only(top: Spacing.small),
                       child: SizedBox(
                         height: Sizing.medium,
                         child: ListView.separated(
@@ -212,22 +210,31 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
               GetMySpaceEventRequestsState>(
             builder: (context, state) {
               return state.maybeWhen(
-                success: (response) => response.records.isEmpty
-                    ? const SizedBox.shrink()
-                    : Column(
-                        children: [
-                          if (!hasTag)
-                            SizedBox(
-                              height: Spacing.smMedium,
-                            ),
-                          SpaceEventRequestsList(requests: response.records),
-                          Divider(
-                            height: Spacing.smMedium * 2,
-                            thickness: 1.w,
-                            color: colorScheme.outline,
+                success: (response) {
+                  final filteredRecords = response.records
+                      .where(
+                        (element) =>
+                            element.state ==
+                            Enum$SpaceEventRequestState.pending,
+                      )
+                      .toList();
+
+                  return filteredRecords.isEmpty
+                      ? const SizedBox.shrink()
+                      : Padding(
+                          padding: EdgeInsets.only(top: Spacing.small),
+                          child: Column(
+                            children: [
+                              SpaceEventRequestsList(requests: filteredRecords),
+                              Divider(
+                                height: Spacing.smMedium * 2,
+                                thickness: 1.w,
+                                color: colorScheme.outline,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        );
+                },
                 orElse: () => const SizedBox.shrink(),
               );
             },

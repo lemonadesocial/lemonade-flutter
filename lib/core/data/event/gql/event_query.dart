@@ -338,6 +338,7 @@ const eventSpaceFragment = '''
       handle_tiktok
       handle_linkedin
       website
+      personal
       image_avatar_expanded {
        _id
         url
