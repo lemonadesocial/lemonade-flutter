@@ -20,6 +20,7 @@ import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -176,6 +177,7 @@ class CreateEventBasePage extends StatelessWidget {
             leading: BlocBuilder<ListSpacesBloc, ListSpacesState>(
               builder: (context, spacesState) {
                 return spacesState.maybeWhen(
+                  loading: () => Loading.defaultLoading(context),
                   success: (spaces) {
                     if (state.selectedSpaceId == null && spaces.isNotEmpty) {
                       context.read<CreateEventBloc>().add(
