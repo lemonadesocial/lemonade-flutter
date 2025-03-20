@@ -1,5 +1,45 @@
 # Changelog
 
+## [1.52.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.51.0...v1.52.0) (2025-03-20)
+
+
+### Features
+
+* add my community hubs to home ([#886](https://github.com/lemonadesocial/lemonade-flutter/issues/886)) ([be8f64e](https://github.com/lemonadesocial/lemonade-flutter/commit/be8f64e946b34146a957ed9f5a2e5cd1e2a082dd))
+* add pagination for home discover events ([#884](https://github.com/lemonadesocial/lemonade-flutter/issues/884)) ([c5cecfc](https://github.com/lemonadesocial/lemonade-flutter/commit/c5cecfcb58f07d424dd75c438ed77bcf02584933))
+* add submit to space ([#895](https://github.com/lemonadesocial/lemonade-flutter/issues/895)) ([1e6726a](https://github.com/lemonadesocial/lemonade-flutter/commit/1e6726a3eb6bd96c0b467b55c231bb8043b0b872))
+* create event with space ([#892](https://github.com/lemonadesocial/lemonade-flutter/issues/892)) ([ef04425](https://github.com/lemonadesocial/lemonade-flutter/commit/ef04425131a815f5e34e7764d2d6d1c009e038f0))
+* create stake ticket ([#880](https://github.com/lemonadesocial/lemonade-flutter/issues/880)) ([3ec0122](https://github.com/lemonadesocial/lemonade-flutter/commit/3ec0122489fd9c6ba8b41d395e20bc163902c6ba))
+* create ticket prices - phase 1 ([#878](https://github.com/lemonadesocial/lemonade-flutter/issues/878)) ([edda7f3](https://github.com/lemonadesocial/lemonade-flutter/commit/edda7f392a3dd70d680e4cab16f539ad7c9583ff))
+* event guest detail flow ([#882](https://github.com/lemonadesocial/lemonade-flutter/issues/882)) ([b5f3907](https://github.com/lemonadesocial/lemonade-flutter/commit/b5f39076a73f2d85642cce66324f0334aea3a06e))
+* guest event space info ([#897](https://github.com/lemonadesocial/lemonade-flutter/issues/897)) ([2320bb1](https://github.com/lemonadesocial/lemonade-flutter/commit/2320bb13b712088667ccac72dfb30e634c4033f2))
+* payment ledger ([#870](https://github.com/lemonadesocial/lemonade-flutter/issues/870)) ([8839acd](https://github.com/lemonadesocial/lemonade-flutter/commit/8839acd582371c3679ee1836a5920ea8d540062c))
+* pending space event requests ([#888](https://github.com/lemonadesocial/lemonade-flutter/issues/888)) ([01d85c6](https://github.com/lemonadesocial/lemonade-flutter/commit/01d85c63f4da1704ac9df8e7d41dc21b215c260f))
+* setup space feature dtos, entities, route ([327d2f4](https://github.com/lemonadesocial/lemonade-flutter/commit/327d2f47ee4a4a15e6381a88604825f71d64b41a))
+* setup space feature dtos, entities, route ([#881](https://github.com/lemonadesocial/lemonade-flutter/issues/881)) ([327d2f4](https://github.com/lemonadesocial/lemonade-flutter/commit/327d2f47ee4a4a15e6381a88604825f71d64b41a))
+* space detail ([#885](https://github.com/lemonadesocial/lemonade-flutter/issues/885)) ([d6ba044](https://github.com/lemonadesocial/lemonade-flutter/commit/d6ba0440431084c8a911395eb18d0fe08f118c17))
+* transfer event space for host ([#890](https://github.com/lemonadesocial/lemonade-flutter/issues/890)) ([488f0f2](https://github.com/lemonadesocial/lemonade-flutter/commit/488f0f2bc693001ba69d9aef97a556ba5bc06602))
+
+
+### Bug Fixes
+
+* adjust selected tab index ([#883](https://github.com/lemonadesocial/lemonade-flutter/issues/883)) ([e27f077](https://github.com/lemonadesocial/lemonade-flutter/commit/e27f07729828f9b253827b1a7d413f09018d126b))
+* create ticket tier polish ([#893](https://github.com/lemonadesocial/lemonade-flutter/issues/893)) ([d45bbaa](https://github.com/lemonadesocial/lemonade-flutter/commit/d45bbaa2ab1257479db7b28097774ccbde73fdc5))
+* events not reload after submit event to space ([#902](https://github.com/lemonadesocial/lemonade-flutter/issues/902)) ([3b6c82c](https://github.com/lemonadesocial/lemonade-flutter/commit/3b6c82cbed5026a5a87561d18e3150e889e6bc62))
+* fix space bugs and polish ([#891](https://github.com/lemonadesocial/lemonade-flutter/issues/891)) ([23001a8](https://github.com/lemonadesocial/lemonade-flutter/commit/23001a8ce1030f45458ae1f85baefc196bc3daa5))
+* get space events using endFrom filter ([#901](https://github.com/lemonadesocial/lemonade-flutter/issues/901)) ([ac2e0b0](https://github.com/lemonadesocial/lemonade-flutter/commit/ac2e0b037e7d073c14d4009a2f5db10cd830da98))
+* guest detail bugs ([#900](https://github.com/lemonadesocial/lemonade-flutter/issues/900)) ([9a52add](https://github.com/lemonadesocial/lemonade-flutter/commit/9a52add78eaab224209e4547dbc6fda910435d47))
+* hide empty location icon ([#904](https://github.com/lemonadesocial/lemonade-flutter/issues/904)) ([8dea169](https://github.com/lemonadesocial/lemonade-flutter/commit/8dea169208e886ea375f9a1575c0f70e90feafe2))
+* missing submit event to space button ([#903](https://github.com/lemonadesocial/lemonade-flutter/issues/903)) ([64861f9](https://github.com/lemonadesocial/lemonade-flutter/commit/64861f999f846c176c163b236783c688ab09afa4))
+* polish ticket settings ([#887](https://github.com/lemonadesocial/lemonade-flutter/issues/887)) ([ad78dab](https://github.com/lemonadesocial/lemonade-flutter/commit/ad78dabc1abd7b4f185a7c4cee00a7df0740758e))
+* sort space events, hide space tags ([#898](https://github.com/lemonadesocial/lemonade-flutter/issues/898)) ([a695b91](https://github.com/lemonadesocial/lemonade-flutter/commit/a695b914bd92d7565d6b64fc74a1895cbdb7463d))
+* space bug fixes 2 ([#894](https://github.com/lemonadesocial/lemonade-flutter/issues/894)) ([508c6a6](https://github.com/lemonadesocial/lemonade-flutter/commit/508c6a679173bffe6ca6cd787fd7ce30a307cde3))
+* space event request not reload, hide personal space in guest event ([#905](https://github.com/lemonadesocial/lemonade-flutter/issues/905)) ([e563a4e](https://github.com/lemonadesocial/lemonade-flutter/commit/e563a4e947e7e69d8ba906d2266276198840ef61))
+* space refinement ([#896](https://github.com/lemonadesocial/lemonade-flutter/issues/896)) ([065daa2](https://github.com/lemonadesocial/lemonade-flutter/commit/065daa2563c639637c768bdb32f1d3bb52d1489b))
+* spacing layout & loading state for events home ([#889](https://github.com/lemonadesocial/lemonade-flutter/issues/889)) ([bd387c7](https://github.com/lemonadesocial/lemonade-flutter/commit/bd387c7c39a8edf93dc0a21781a2fe46bce3d6e1))
+* ticket group registration is set to -1 ([#899](https://github.com/lemonadesocial/lemonade-flutter/issues/899)) ([ae70aa2](https://github.com/lemonadesocial/lemonade-flutter/commit/ae70aa25ce187398c90c879e96f266781b14ddf0))
+* update logic create event with space ([#906](https://github.com/lemonadesocial/lemonade-flutter/issues/906)) ([c670e0e](https://github.com/lemonadesocial/lemonade-flutter/commit/c670e0e2f309c9da9328a5b2270e29a06a19fdcf))
+
 ## [1.51.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.50.3...v1.51.0) (2025-02-24)
 
 
