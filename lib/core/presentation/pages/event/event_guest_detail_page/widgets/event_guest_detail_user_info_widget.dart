@@ -20,8 +20,11 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
     this.eventTickets,
   });
 
-  String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
+  String get _nonLoginDisplayName =>
+      eventGuestDetail?.joinRequest?.nonLoginUser?.displayName ?? '';
   String get _buyerName => eventGuestDetail?.user.name ?? '';
+  String get _name => _buyerName.isNotEmpty ? _buyerName : _nonLoginDisplayName;
+  String get _buyerAvatar => eventGuestDetail?.user.imageAvatar ?? '';
   String get _buyerEmail =>
       eventGuestDetail?.user.email ?? t.event.eventGuestDetail.NA;
   DateTime? get _joinRequestCreatedAt =>
@@ -70,9 +73,9 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_buyerName.isNotEmpty)
+                  if (_name.isNotEmpty)
                     Text(
-                      _buyerName,
+                      _name,
                       style: Typo.medium.copyWith(
                         color: colorScheme.onPrimary,
                       ),

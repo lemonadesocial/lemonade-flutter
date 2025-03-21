@@ -29,8 +29,6 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
     )) {
       return const SizedBox.shrink();
     }
-
-    print(">>>>>> applications: ${applications}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,11 +65,6 @@ class _QuestionAnswerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
-    if (answer.isEmpty && answers.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return Padding(
       padding: EdgeInsets.only(top: Spacing.medium),
       child: Column(
@@ -97,8 +90,8 @@ class _QuestionAnswerItem extends StatelessWidget {
               onOpen: (link) async {
                 await launchUrl(Uri.parse(link.url));
               },
-            ),
-          if (answers.isNotEmpty)
+            )
+          else if (answers.isNotEmpty)
             Linkify(
               text: answers.join(', '),
               style: Typo.medium.copyWith(

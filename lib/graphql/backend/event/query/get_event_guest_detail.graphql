@@ -1,6 +1,7 @@
 # import '../../schema.graphql'
 # import '../fragment/user_fragment.graphql'
 # import '../fragment/confidential_user_info_fragment.graphql'
+# import '../fragment/event_join_request_fragment.graphql'
 
 query GetEventGuestDetail($event: MongoID!, $user: MongoID, $email: String) {
   getEventGuestDetail(event: $event, user: $user, email: $email) {
@@ -98,10 +99,7 @@ query GetEventGuestDetail($event: MongoID!, $user: MongoID, $email: String) {
       answers
     }
     join_request {
-      _id
-      created_at
-      email
-      state
+      ...EventJoinRequest
     }
   }
 } 

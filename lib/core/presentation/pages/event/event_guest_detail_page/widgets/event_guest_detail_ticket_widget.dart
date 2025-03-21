@@ -34,7 +34,6 @@ class EventGuestDetailTicketWidget extends StatelessWidget {
         [if (eventGuestDetail?.ticket != null) eventGuestDetail!.ticket!];
 
     if (tickets.isEmpty) return const SizedBox.shrink();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
