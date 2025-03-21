@@ -102,8 +102,8 @@ class _SpaceCard extends StatelessWidget {
 
   const _SpaceCard({
     required this.space,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

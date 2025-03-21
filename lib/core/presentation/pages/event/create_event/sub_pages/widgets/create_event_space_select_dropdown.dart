@@ -83,7 +83,8 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                             borderRadius:
                                 BorderRadius.circular(LemonRadius.normal),
                             border: Border.all(
-                                color: Theme.of(context).colorScheme.outline),
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
