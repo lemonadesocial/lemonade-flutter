@@ -3,6 +3,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -14,6 +15,7 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
+import 'package:app/core/utils/space_utils.dart';
 
 class CreateEventSpaceSelectDropdown extends StatelessWidget {
   final Function(String spaceId)? onSpaceSelected;
@@ -25,145 +27,159 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListSpacesBloc, ListSpacesState>(
-      builder: (context, spacesState) {
-        return spacesState.maybeWhen(
-          loading: () => Loading.defaultLoading(context),
-          success: (spaces) {
-            if (spaces.isEmpty) return const SizedBox.shrink();
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: Spacing.smMedium,
+      ),
+      child: BlocBuilder<ListSpacesBloc, ListSpacesState>(
+        builder: (context, spacesState) {
+          return spacesState.maybeWhen(
+            loading: () => Loading.defaultLoading(context),
+            success: (spaces) {
+              if (spaces.isEmpty) return const SizedBox.shrink();
 
-            final sortedSpaces = spaces.toList()
-              ..sort(
-                (a, b) => a.personal == b.personal
-                    ? (a.title ?? '').compareTo(b.title ?? '')
-                    : (a.personal ?? false)
-                        ? -1
-                        : 1,
-              );
+              final sortedSpaces = spaces.toList()
+                ..sort(
+                  (a, b) => a.personal == b.personal
+                      ? (a.title ?? '').compareTo(b.title ?? '')
+                      : (a.personal ?? false)
+                          ? -1
+                          : 1,
+                );
 
-            return BlocBuilder<CreateEventBloc, CreateEventState>(
-              builder: (context, createEventState) {
-                // Initialize with first personal space if no space is selected
-                if (createEventState.selectedSpaceId == null) {
-                  final defaultSpaceId = sortedSpaces.first.id;
-                  if (defaultSpaceId != null) {
-                    context.read<CreateEventBloc>().add(
-                          CreateEventEvent.onSpaceIdChanged(
-                            spaceId: defaultSpaceId,
+              return BlocBuilder<CreateEventBloc, CreateEventState>(
+                builder: (context, createEventState) {
+                  // Initialize with first personal space if no space is selected
+                  if (createEventState.selectedSpaceId == null) {
+                    final defaultSpaceId = sortedSpaces.first.id;
+                    if (defaultSpaceId != null) {
+                      context.read<CreateEventBloc>().add(
+                            CreateEventEvent.onSpaceIdChanged(
+                              spaceId: defaultSpaceId,
+                            ),
+                          );
+                    }
+                  }
+
+                  final selectedSpace = sortedSpaces.firstWhere(
+                    (space) => space.id == createEventState.selectedSpaceId,
+                    orElse: () => sortedSpaces.first,
+                  );
+
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton2<Space>(
+                      isExpanded: false,
+                      value: selectedSpace,
+                      customButton: Padding(
+                        padding: EdgeInsets.only(
+                          right: Spacing.small,
+                          top: Spacing.xSmall,
+                          bottom: Spacing.xSmall,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius:
+                                BorderRadius.circular(LemonRadius.normal),
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.outline),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              LemonNetworkImage(
+                                imageUrl:
+                                    SpaceUtils.getSpaceImageUrl(selectedSpace),
+                                width: Sizing.mSmall,
+                                height: Sizing.mSmall,
+                                fit: BoxFit.cover,
+                                borderRadius:
+                                    BorderRadius.circular(Sizing.mSmall),
+                                placeholder: ImagePlaceholder.spaceThumbnail(
+                                  iconColor: colorScheme.onSecondary,
+                                  backgroundColor: LemonColor.white06,
+                                  padding: EdgeInsets.all(
+                                    Spacing.superExtraSmall / 2,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: Spacing.superExtraSmall),
+                              ThemeSvgIcon(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                builder: (filter) =>
+                                    Assets.icons.icArrowDown.svg(
+                                  colorFilter: filter,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      items: sortedSpaces.map((space) {
+                        return DropdownMenuItem<Space>(
+                          value: space,
+                          child: _SpaceItem(
+                            space: space,
+                            isSelected: space.id == selectedSpace.id,
                           ),
                         );
-                  }
-                }
-
-                final selectedSpace = sortedSpaces.firstWhere(
-                  (space) => space.id == createEventState.selectedSpaceId,
-                  orElse: () => sortedSpaces.first,
-                );
-
-                return DropdownButtonHideUnderline(
-                  child: DropdownButton2<Space>(
-                    isExpanded: false,
-                    value: selectedSpace,
-                    customButton: Padding(
-                      padding: EdgeInsets.only(
-                        right: Spacing.small,
-                        top: Spacing.xSmall,
-                        bottom: Spacing.xSmall,
-                      ),
-                      child: Container(
+                      }).toList(),
+                      onChanged: (space) {
+                        if (space != null) {
+                          onSpaceSelected?.call(space.id ?? '');
+                        }
+                      },
+                      dropdownStyleData: DropdownStyleData(
+                        padding: EdgeInsets.zero,
+                        width: 250.w,
+                        maxHeight: 300.h,
                         decoration: BoxDecoration(
-                          color: Colors.transparent,
                           borderRadius:
                               BorderRadius.circular(LemonRadius.normal),
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.outline),
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            LemonNetworkImage(
-                              imageUrl: selectedSpace.imageAvatar?.url ??
-                                  selectedSpace.creatorExpanded?.imageAvatar ??
-                                  '',
-                              width: Sizing.mSmall,
-                              height: Sizing.mSmall,
-                              fit: BoxFit.cover,
-                              borderRadius:
-                                  BorderRadius.circular(Sizing.mSmall),
-                              placeholder:
-                                  ImagePlaceholder.defaultPlaceholder(),
-                            ),
-                            SizedBox(width: Spacing.superExtraSmall),
-                            ThemeSvgIcon(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              builder: (filter) => Assets.icons.icArrowDown.svg(
-                                colorFilter: filter,
-                              ),
-                            ),
-                          ],
+                        offset: Offset(
+                          -Spacing.superExtraSmall,
+                          Spacing.superExtraSmall,
                         ),
                       ),
-                    ),
-                    items: sortedSpaces.map((space) {
-                      return DropdownMenuItem<Space>(
-                        value: space,
-                        child: _SpaceItem(
-                          space: space,
-                          isSelected: space.id == selectedSpace.id,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (space) {
-                      if (space != null) {
-                        onSpaceSelected?.call(space.id ?? '');
-                      }
-                    },
-                    dropdownStyleData: DropdownStyleData(
-                      padding: EdgeInsets.zero,
-                      width: 250.w,
-                      maxHeight: 300.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(LemonRadius.normal),
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                      offset: Offset(
-                        -Spacing.superExtraSmall,
-                        Spacing.superExtraSmall,
-                      ),
-                    ),
-                    dropdownSearchData: DropdownSearchData(
-                      searchInnerWidgetHeight: 50.h,
-                      searchInnerWidget: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Spacing.medium,
-                          vertical: Spacing.small,
-                        ),
-                        child: Text(
-                          Translations.of(context).space.chooseCommunity,
-                          style: Typo.small.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w400,
+                      dropdownSearchData: DropdownSearchData(
+                        searchInnerWidgetHeight: 50.h,
+                        searchInnerWidget: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.medium,
+                            vertical: Spacing.small,
                           ),
-                          textAlign: TextAlign.left,
+                          child: Text(
+                            Translations.of(context).space.chooseCommunity,
+                            style: Typo.small.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
                       ),
+                      menuItemStyleData: MenuItemStyleData(
+                        padding: EdgeInsets.zero,
+                        height: 48.w,
+                      ),
                     ),
-                    menuItemStyleData: MenuItemStyleData(
-                      padding: EdgeInsets.zero,
-                      height: 48.w,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          orElse: () => const SizedBox.shrink(),
-        );
-      },
+                  );
+                },
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
+          );
+        },
+      ),
     );
   }
 }
@@ -180,9 +196,8 @@ class _SpaceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final spaceImageAvatarUrl = space?.imageCover?.url ?? '';
-    final fallbackCreatorImageAvatar =
-        space?.creatorExpanded?.imageAvatar ?? '';
+    final imageUrl = SpaceUtils.getSpaceImageUrl(space);
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.small,
@@ -201,11 +216,15 @@ class _SpaceItem extends StatelessWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: LemonNetworkImage(
-                imageUrl: spaceImageAvatarUrl.isEmpty
-                    ? fallbackCreatorImageAvatar
-                    : spaceImageAvatarUrl,
-                fit: BoxFit.cover,
-                placeholder: ImagePlaceholder.avatarPlaceholder(),
+                imageUrl: imageUrl,
+                width: Sizing.medium,
+                height: Sizing.medium,
+                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                placeholder: ImagePlaceholder.spaceThumbnail(
+                  iconColor: colorScheme.onSecondary,
+                  backgroundColor: LemonColor.white06,
+                  padding: EdgeInsets.all(Spacing.superExtraSmall),
+                ),
               ),
             ),
           ),
