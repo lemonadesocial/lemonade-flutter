@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 
 class CreateEventSpaceSelectDropdown extends StatefulWidget {
   final Function(String spaceId)? onSpaceSelected;
@@ -35,135 +36,141 @@ class _CreateEventSpaceSelectDropdownState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
-    return Padding(
-      padding: EdgeInsets.only(left: Spacing.medium),
-      child: BlocBuilder<ListSpacesBloc, ListSpacesState>(
-        builder: (context, state) {
-          return state.maybeWhen(
-            loading: () => Loading.defaultLoading(context),
-            success: (spaces) {
-              // Sort spaces by personal first, then sort by title
-              final sortedSpaces = spaces.toList()
-                ..sort(
-                  (a, b) => a.personal == b.personal
-                      ? (a.title ?? '').compareTo(b.title ?? '')
-                      : (a.personal ?? false)
-                          ? -1
-                          : 1,
+    return BlocBuilder<ListSpacesBloc, ListSpacesState>(
+      builder: (context, spacesState) {
+        return spacesState.maybeWhen(
+          loading: () => Loading.defaultLoading(context),
+          success: (spaces) {
+            if (spaces.isEmpty) return const SizedBox.shrink();
+
+            return BlocBuilder<CreateEventBloc, CreateEventState>(
+              builder: (context, createEventState) {
+                // Initialize default space if needed
+                if (createEventState.selectedSpaceId == null) {
+                  context.read<CreateEventBloc>().add(
+                        const CreateEventEvent.initDefaultSpaceId(),
+                      );
+                }
+
+                final sortedSpaces = spaces.toList()
+                  ..sort(
+                    (a, b) => a.personal == b.personal
+                        ? (a.title ?? '').compareTo(b.title ?? '')
+                        : (a.personal ?? false)
+                            ? -1
+                            : 1,
+                  );
+
+                final selectedSpace = sortedSpaces.firstWhere(
+                  (space) => space.id == createEventState.selectedSpaceId,
+                  orElse: () => sortedSpaces.first,
                 );
 
-              if (selectedSpace == null) {
-                if (widget.selectedSpaceId != null) {
-                  selectedSpace = sortedSpaces.firstWhere(
-                    (space) => space.id == widget.selectedSpaceId,
-                    orElse: () => sortedSpaces.first,
-                  );
-                } else {
-                  selectedSpace = sortedSpaces.first;
-                }
-              }
-
-              return DropdownButtonHideUnderline(
-                child: DropdownButton2<Space>(
-                  isExpanded: false,
-                  value: selectedSpace,
-                  customButton: Padding(
-                    padding: EdgeInsets.only(
-                      right: Spacing.small,
-                      top: Spacing.xSmall,
-                      bottom: Spacing.xSmall,
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(LemonRadius.normal),
-                        border: Border.all(color: colorScheme.outline),
+                return DropdownButtonHideUnderline(
+                  child: DropdownButton2<Space>(
+                    isExpanded: false,
+                    value: selectedSpace,
+                    customButton: Padding(
+                      padding: EdgeInsets.only(
+                        right: Spacing.small,
+                        top: Spacing.xSmall,
+                        bottom: Spacing.xSmall,
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          LemonNetworkImage(
-                            imageUrl: selectedSpace?.imageAvatar?.url ??
-                                selectedSpace?.creatorExpanded?.imageAvatar ??
-                                '',
-                            width: Sizing.mSmall,
-                            height: Sizing.mSmall,
-                            fit: BoxFit.cover,
-                            borderRadius: BorderRadius.circular(Sizing.mSmall),
-                            placeholder: ImagePlaceholder.defaultPlaceholder(),
-                          ),
-                          SizedBox(width: Spacing.superExtraSmall),
-                          ThemeSvgIcon(
-                            color: colorScheme.onPrimary,
-                            builder: (filter) => Assets.icons.icArrowDown.svg(
-                              colorFilter: filter,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  items: sortedSpaces.map((space) {
-                    return DropdownMenuItem<Space>(
-                      value: space,
-                      child: _SpaceItem(
-                        space: space,
-                        isSelected: space.id == selectedSpace?.id,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (space) {
-                    if (space != null) {
-                      setState(() {
-                        selectedSpace = space;
-                      });
-                      widget.onSpaceSelected?.call(space.id ?? '');
-                    }
-                  },
-                  dropdownStyleData: DropdownStyleData(
-                    padding: EdgeInsets.zero,
-                    width: 250.w,
-                    maxHeight: 300.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(LemonRadius.normal),
-                      color: colorScheme.secondaryContainer,
-                    ),
-                    offset: Offset(
-                      -Spacing.superExtraSmall,
-                      Spacing.superExtraSmall,
-                    ),
-                  ),
-                  dropdownSearchData: DropdownSearchData(
-                    searchInnerWidgetHeight: 50.h,
-                    searchInnerWidget: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Spacing.medium,
-                        vertical: Spacing.small,
-                      ),
-                      child: Text(
-                        t.space.chooseCommunity,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w400,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.normal),
+                          border: Border.all(
+                              color: Theme.of(context).colorScheme.outline),
                         ),
-                        textAlign: TextAlign.left,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            LemonNetworkImage(
+                              imageUrl: selectedSpace?.imageAvatar?.url ??
+                                  selectedSpace?.creatorExpanded?.imageAvatar ??
+                                  '',
+                              width: Sizing.mSmall,
+                              height: Sizing.mSmall,
+                              fit: BoxFit.cover,
+                              borderRadius:
+                                  BorderRadius.circular(Sizing.mSmall),
+                              placeholder:
+                                  ImagePlaceholder.defaultPlaceholder(),
+                            ),
+                            SizedBox(width: Spacing.superExtraSmall),
+                            ThemeSvgIcon(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              builder: (filter) => Assets.icons.icArrowDown.svg(
+                                colorFilter: filter,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                    items: sortedSpaces.map((space) {
+                      return DropdownMenuItem<Space>(
+                        value: space,
+                        child: _SpaceItem(
+                          space: space,
+                          isSelected: space.id == selectedSpace?.id,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (space) {
+                      if (space != null) {
+                        setState(() {
+                          selectedSpace = space;
+                        });
+                        widget.onSpaceSelected?.call(space.id ?? '');
+                      }
+                    },
+                    dropdownStyleData: DropdownStyleData(
+                      padding: EdgeInsets.zero,
+                      width: 250.w,
+                      maxHeight: 300.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.normal),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                      offset: Offset(
+                        -Spacing.superExtraSmall,
+                        Spacing.superExtraSmall,
+                      ),
+                    ),
+                    dropdownSearchData: DropdownSearchData(
+                      searchInnerWidgetHeight: 50.h,
+                      searchInnerWidget: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.medium,
+                          vertical: Spacing.small,
+                        ),
+                        child: Text(
+                          Translations.of(context).space.chooseCommunity,
+                          style: Typo.small.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ),
+                    menuItemStyleData: MenuItemStyleData(
+                        padding: EdgeInsets.zero, height: 48.w),
                   ),
-                  menuItemStyleData:
-                      MenuItemStyleData(padding: EdgeInsets.zero, height: 48.w),
-                ),
-              );
-            },
-            orElse: () => const SizedBox.shrink(),
-          );
-        },
-      ),
+                );
+              },
+            );
+          },
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
