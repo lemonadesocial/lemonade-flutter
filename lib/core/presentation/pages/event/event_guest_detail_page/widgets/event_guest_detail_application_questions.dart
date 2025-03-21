@@ -29,6 +29,8 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
     )) {
       return const SizedBox.shrink();
     }
+
+    print(">>>>>> applications: ${applications}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,6 +44,7 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
         ...applications.map(
           (qa) => _QuestionAnswerItem(
             question: qa.question,
+            answer: qa.answer ?? '',
             answers: qa.answers ?? [],
           ),
         ),
@@ -52,10 +55,12 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
 
 class _QuestionAnswerItem extends StatelessWidget {
   final String question;
+  final String answer;
   final List<String> answers;
 
   const _QuestionAnswerItem({
     required this.question,
+    required this.answer,
     required this.answers,
   });
 
@@ -63,7 +68,7 @@ class _QuestionAnswerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (answers.isEmpty) {
+    if (answer.isEmpty && answers.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -79,19 +84,34 @@ class _QuestionAnswerItem extends StatelessWidget {
             ),
           ),
           SizedBox(height: Spacing.superExtraSmall),
-          Linkify(
-            text: answers.join(', '),
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
+          if (answer.isNotEmpty)
+            Linkify(
+              text: answer,
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+              ),
+              linkStyle: Typo.medium.copyWith(
+                color: LemonColor.paleViolet,
+                decoration: TextDecoration.none,
+              ),
+              onOpen: (link) async {
+                await launchUrl(Uri.parse(link.url));
+              },
             ),
-            linkStyle: Typo.medium.copyWith(
-              color: LemonColor.paleViolet,
-              decoration: TextDecoration.none,
+          if (answers.isNotEmpty)
+            Linkify(
+              text: answers.join(', '),
+              style: Typo.medium.copyWith(
+                color: colorScheme.onPrimary,
+              ),
+              linkStyle: Typo.medium.copyWith(
+                color: LemonColor.paleViolet,
+                decoration: TextDecoration.none,
+              ),
+              onOpen: (link) async {
+                await launchUrl(Uri.parse(link.url));
+              },
             ),
-            onOpen: (link) async {
-              await launchUrl(Uri.parse(link.url));
-            },
-          ),
         ],
       ),
     );
