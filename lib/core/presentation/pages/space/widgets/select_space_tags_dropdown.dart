@@ -95,11 +95,14 @@ class _SelectSpaceTagsDropdownState extends State<SelectSpaceTagsDropdown> {
                 value: null,
                 onChanged: (value) {},
                 customButton: FittedBox(
-                  child: LemonOutlineButton(
-                    leading: Assets.icons.icPlus.svg(),
-                    radius: BorderRadius.circular(LemonRadius.button),
-                    backgroundColor: LemonColor.chineseBlack,
-                    label: t.space.addTags,
+                  child: Opacity(
+                    opacity: widget.canInsertTag ? 1 : 0.36,
+                    child: LemonOutlineButton(
+                      leading: Assets.icons.icPlus.svg(),
+                      radius: BorderRadius.circular(LemonRadius.button),
+                      backgroundColor: LemonColor.chineseBlack,
+                      label: t.space.addTags,
+                    ),
                   ),
                 ),
                 dropdownSearchData: DropdownSearchData(
