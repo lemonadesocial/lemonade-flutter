@@ -187,8 +187,6 @@ class CreateEventBasePage extends StatelessWidget {
                           );
                     }
                     return CreateEventSpaceSelectDropdown(
-                      selectedSpaceId:
-                          context.read<CreateEventBloc>().state.selectedSpaceId,
                       onSpaceSelected: (spaceId) {
                         context.read<CreateEventBloc>().add(
                               CreateEventEvent.onSpaceIdChanged(

@@ -39,7 +39,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     on<CreateEventPhotoImageIdChanged>(_onCreateEventPhotoImageIdChanged);
     on<OnSpaceIdChanged>(_onSpaceIdChanged);
     on<OnSubmittingToSpaceIdChanged>(_onSubmittingToSpaceIdChanged);
-    on<InitDefaultSpaceId>(_onInitDefaultSpaceId);
   }
   final _eventRepository = getIt<EventRepository>();
 
@@ -158,31 +157,6 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     Emitter<CreateEventState> emit,
   ) async {
     emit(state.copyWith(submittingToSpaceId: event.spaceId));
-  }
-
-  Future<void> _onInitDefaultSpaceId(
-    InitDefaultSpaceId event,
-    Emitter<CreateEventState> emit,
-  ) async {
-    if (state.selectedSpaceId != null) return;
-
-    final spaces = getIt<ListSpacesBloc>().state.maybeWhen(
-          success: (spaces) => spaces,
-          orElse: () => <Space>[],
-        );
-
-    if (spaces.isEmpty) return;
-
-    final sortedSpaces = spaces.toList()
-      ..sort(
-        (a, b) => a.personal == b.personal
-            ? (a.title ?? '').compareTo(b.title ?? '')
-            : (a.personal ?? false)
-                ? -1
-                : 1,
-      );
-
-    emit(state.copyWith(selectedSpaceId: sortedSpaces.first.id));
   }
 
   Future<void> _onCreateEventFormSubmitted(
@@ -322,8 +296,6 @@ class CreateEventEvent with _$CreateEventEvent {
   const factory CreateEventEvent.onSubmittingToSpaceIdChanged({
     required String? spaceId,
   }) = OnSubmittingToSpaceIdChanged;
-
-  const factory CreateEventEvent.initDefaultSpaceId() = InitDefaultSpaceId;
 }
 
 @freezed

@@ -15,24 +15,13 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 
-class CreateEventSpaceSelectDropdown extends StatefulWidget {
+class CreateEventSpaceSelectDropdown extends StatelessWidget {
   final Function(String spaceId)? onSpaceSelected;
-  final String? selectedSpaceId;
 
   const CreateEventSpaceSelectDropdown({
     super.key,
     this.onSpaceSelected,
-    this.selectedSpaceId,
   });
-
-  @override
-  State<CreateEventSpaceSelectDropdown> createState() =>
-      _CreateEventSpaceSelectDropdownState();
-}
-
-class _CreateEventSpaceSelectDropdownState
-    extends State<CreateEventSpaceSelectDropdown> {
-  Space? selectedSpace;
 
   @override
   Widget build(BuildContext context) {
@@ -43,23 +32,28 @@ class _CreateEventSpaceSelectDropdownState
           success: (spaces) {
             if (spaces.isEmpty) return const SizedBox.shrink();
 
+            final sortedSpaces = spaces.toList()
+              ..sort(
+                (a, b) => a.personal == b.personal
+                    ? (a.title ?? '').compareTo(b.title ?? '')
+                    : (a.personal ?? false)
+                        ? -1
+                        : 1,
+              );
+
             return BlocBuilder<CreateEventBloc, CreateEventState>(
               builder: (context, createEventState) {
-                // Initialize default space if needed
+                // Initialize with first personal space if no space is selected
                 if (createEventState.selectedSpaceId == null) {
-                  context.read<CreateEventBloc>().add(
-                        const CreateEventEvent.initDefaultSpaceId(),
-                      );
+                  final defaultSpaceId = sortedSpaces.first.id;
+                  if (defaultSpaceId != null) {
+                    context.read<CreateEventBloc>().add(
+                          CreateEventEvent.onSpaceIdChanged(
+                            spaceId: defaultSpaceId,
+                          ),
+                        );
+                  }
                 }
-
-                final sortedSpaces = spaces.toList()
-                  ..sort(
-                    (a, b) => a.personal == b.personal
-                        ? (a.title ?? '').compareTo(b.title ?? '')
-                        : (a.personal ?? false)
-                            ? -1
-                            : 1,
-                  );
 
                 final selectedSpace = sortedSpaces.firstWhere(
                   (space) => space.id == createEventState.selectedSpaceId,
@@ -90,8 +84,8 @@ class _CreateEventSpaceSelectDropdownState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             LemonNetworkImage(
-                              imageUrl: selectedSpace?.imageAvatar?.url ??
-                                  selectedSpace?.creatorExpanded?.imageAvatar ??
+                              imageUrl: selectedSpace.imageAvatar?.url ??
+                                  selectedSpace.creatorExpanded?.imageAvatar ??
                                   '',
                               width: Sizing.mSmall,
                               height: Sizing.mSmall,
@@ -117,16 +111,13 @@ class _CreateEventSpaceSelectDropdownState
                         value: space,
                         child: _SpaceItem(
                           space: space,
-                          isSelected: space.id == selectedSpace?.id,
+                          isSelected: space.id == selectedSpace.id,
                         ),
                       );
                     }).toList(),
                     onChanged: (space) {
                       if (space != null) {
-                        setState(() {
-                          selectedSpace = space;
-                        });
-                        widget.onSpaceSelected?.call(space.id ?? '');
+                        onSpaceSelected?.call(space.id ?? '');
                       }
                     },
                     dropdownStyleData: DropdownStyleData(
@@ -162,7 +153,9 @@ class _CreateEventSpaceSelectDropdownState
                       ),
                     ),
                     menuItemStyleData: MenuItemStyleData(
-                        padding: EdgeInsets.zero, height: 48.w),
+                      padding: EdgeInsets.zero,
+                      height: 48.w,
+                    ),
                   ),
                 );
               },
@@ -187,7 +180,7 @@ class _SpaceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final spaceImageAvatarUrl = space?.imageAvatar?.url ?? '';
+    final spaceImageAvatarUrl = space?.imageCover?.url ?? '';
     final fallbackCreatorImageAvatar =
         space?.creatorExpanded?.imageAvatar ?? '';
     return Container(
@@ -211,7 +204,7 @@ class _SpaceItem extends StatelessWidget {
                 imageUrl: spaceImageAvatarUrl.isEmpty
                     ? fallbackCreatorImageAvatar
                     : spaceImageAvatarUrl,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
                 placeholder: ImagePlaceholder.avatarPlaceholder(),
               ),
             ),
