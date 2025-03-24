@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.52.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.52.0...v1.52.1) (2025-03-24)
+
+
+### Bug Fixes
+
+* minor issues about community hub ([#907](https://github.com/lemonadesocial/lemonade-flutter/issues/907)) ([8bc72a6](https://github.com/lemonadesocial/lemonade-flutter/commit/8bc72a68c6e12cd91aa6b38c4b19ae9cea037f8f))
+
 ## [1.52.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.51.0...v1.52.0) (2025-03-20)
 
 

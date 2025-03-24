@@ -1,7 +1,7 @@
 name: app
 description: Lemonade Social App
 publish_to: "none"
-version: 1.53.0
+version: 1.52.1
 
 environment:
   flutter: "3.19.6"
