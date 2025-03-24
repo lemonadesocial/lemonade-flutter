@@ -70,6 +70,7 @@ class ImagePlaceholder {
     BorderRadius? radius,
     Color? backgroundColor,
     Color? iconColor,
+    EdgeInsets? padding,
   }) {
     return Container(
       height: Sizing.medium,
@@ -78,6 +79,7 @@ class ImagePlaceholder {
         color: backgroundColor ?? LemonColor.chineseBlack,
         borderRadius: radius ?? BorderRadius.circular(LemonRadius.extraSmall),
       ),
+      padding: padding,
       child: Center(
         child: ThemeSvgIcon(
           color: iconColor,

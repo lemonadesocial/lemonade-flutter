@@ -25,6 +25,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 @RoutePage()
 class EventGuestDetailPage extends StatefulWidget {
@@ -85,84 +86,91 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
       appBar: LemonAppBar(
         title: t.event.eventGuestDetail.eventGuestDetails,
       ),
-      body: Query$GetEventGuestDetail$Widget(
-        options: Options$Query$GetEventGuestDetail(
-          variables: Variables$Query$GetEventGuestDetail(
-            event: widget.eventId,
-            user: widget.userId.isNotEmpty ? widget.userId : null,
-            email: widget.email.isNotEmpty ? widget.email : null,
+      body: SafeArea(
+        child: Query$GetEventGuestDetail$Widget(
+          options: Options$Query$GetEventGuestDetail(
+            variables: Variables$Query$GetEventGuestDetail(
+              event: widget.eventId,
+              user: widget.userId.isNotEmpty ? widget.userId : null,
+              email: widget.email.isNotEmpty ? widget.email : null,
+            ),
+            fetchPolicy: FetchPolicy.noCache,
           ),
-        ),
-        builder: (guestDetailResult, {refetch, fetchMore}) {
-          if (guestDetailResult.isLoading) {
-            return Center(child: Loading.defaultLoading(context));
-          }
-
-          final eventGuestDetail = EventGuestDetail.fromDto(
-            EventGuestDetailDto.fromJson(
-              guestDetailResult.parsedData!.getEventGuestDetail!.toJson(),
-            ),
-          );
-
-          final paymentId =
-              guestDetailResult.parsedData?.getEventGuestDetail?.payment?.$_id;
-
-          if (paymentId == null) {
-            return _buildContent(
-              context: context,
-              eventGuestDetail: eventGuestDetail,
-              applications: guestDetailResult
-                  .parsedData?.getEventGuestDetail?.application,
-              eventTickets: [eventGuestDetail.ticket ?? EventTicket()],
-              eventTicketTypes: [
-                eventGuestDetail.ticket?.typeExpanded ?? EventTicketType(),
-              ],
-              refetch: refetch,
-            );
-          }
-
-          // TODO: Fetch payment details separately due to backend limitations on multiple tickets retrieval, will remove this once the backend is fixed
-          return Query$GetEventPayment$Widget(
-            options: Options$Query$GetEventPayment(
-              variables: Variables$Query$GetEventPayment(
-                event: widget.eventId,
-                id: paymentId,
+          builder: (guestDetailResult, {refetch, fetchMore}) {
+            if (guestDetailResult.isLoading) {
+              return Center(child: Loading.defaultLoading(context));
+            }
+            final eventGuestDetail = EventGuestDetail.fromDto(
+              EventGuestDetailDto.fromJson(
+                guestDetailResult.parsedData!.getEventGuestDetail!.toJson(),
               ),
-            ),
-            builder: (paymentResult, {refetch, fetchMore}) {
-              final eventTickets =
-                  paymentResult.parsedData?.getEventPayment?.tickets
-                          ?.map(
-                            (e) => EventTicket.fromDto(
-                              EventTicketDto.fromJson(e.toJson()),
-                            ),
-                          )
-                          .toList() ??
-                      [];
-              final eventTicketTypes = paymentResult
-                      .parsedData?.getEventPayment?.ticket_types_expanded
-                      ?.map(
-                        (e) => EventTicketType.fromDto(
-                          EventTicketTypeDto.fromJson(
-                            e?.toJson() ?? {},
-                          ),
-                        ),
-                      )
-                      .toList() ??
-                  [];
+            );
 
+            final paymentId = guestDetailResult
+                .parsedData?.getEventGuestDetail?.payment?.$_id;
+
+            if (paymentId == null) {
               return _buildContent(
                 context: context,
                 eventGuestDetail: eventGuestDetail,
                 applications: guestDetailResult
                     .parsedData?.getEventGuestDetail?.application,
-                eventTickets: eventTickets,
-                eventTicketTypes: eventTicketTypes,
+                eventTickets: eventGuestDetail.ticket != null
+                    ? [eventGuestDetail.ticket!]
+                    : [],
+                eventTicketTypes: eventGuestDetail.ticket?.typeExpanded != null
+                    ? [eventGuestDetail.ticket!.typeExpanded!]
+                    : [],
                 refetch: refetch,
               );
-            },
-          );
-        },
+            }
+
+            return Query$GetEventPayment$Widget(
+              options: Options$Query$GetEventPayment(
+                variables: Variables$Query$GetEventPayment(
+                  event: widget.eventId,
+                  id: paymentId,
+                ),
+                fetchPolicy: FetchPolicy.networkOnly,
+              ),
+              builder: (paymentResult, {refetch, fetchMore}) {
+                final eventTickets = paymentResult
+                        .parsedData?.getEventPayment?.tickets
+                        ?.whereType<
+                            Query$GetEventPayment$getEventPayment$tickets>()
+                        .map(
+                          (e) => EventTicket.fromDto(
+                            EventTicketDto.fromJson(e.toJson()),
+                          ),
+                        )
+                        .toList() ??
+                    [];
+
+                final eventTicketTypes = paymentResult
+                        .parsedData?.getEventPayment?.ticket_types_expanded
+                        ?.whereType<
+                            Query$GetEventPayment$getEventPayment$ticket_types_expanded>()
+                        .map(
+                          (e) => EventTicketType.fromDto(
+                            EventTicketTypeDto.fromJson(e.toJson()),
+                          ),
+                        )
+                        .toList() ??
+                    [];
+
+                return _buildContent(
+                  context: context,
+                  eventGuestDetail: eventGuestDetail,
+                  applications: guestDetailResult
+                      .parsedData?.getEventGuestDetail?.application,
+                  eventTickets: eventTickets,
+                  eventTicketTypes: eventTicketTypes,
+                  refetch: refetch,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
