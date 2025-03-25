@@ -15,7 +15,6 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
-import 'package:app/core/utils/space_utils.dart';
 
 class CreateEventSpaceSelectDropdown extends StatelessWidget {
   final Function(String spaceId)? onSpaceSelected;
@@ -92,8 +91,7 @@ class CreateEventSpaceSelectDropdown extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               LemonNetworkImage(
-                                imageUrl:
-                                    SpaceUtils.getSpaceImageUrl(selectedSpace),
+                                imageUrl: selectedSpace.getSpaceImageUrl(),
                                 width: Sizing.mSmall,
                                 height: Sizing.mSmall,
                                 fit: BoxFit.cover,
@@ -197,7 +195,7 @@ class _SpaceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final imageUrl = SpaceUtils.getSpaceImageUrl(space);
+    final imageUrl = space?.getSpaceImageUrl() ?? '';
 
     return Container(
       padding: EdgeInsets.symmetric(

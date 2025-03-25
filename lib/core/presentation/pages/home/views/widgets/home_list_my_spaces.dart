@@ -110,38 +110,35 @@ class _SpaceCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final imageAvatarUrl = space.imageAvatar?.url ?? '';
 
-    return RepaintBoundary(
-      child: InkWell(
-        onTap: () =>
-            context.router.push(SpaceDetailRoute(spaceId: space.id ?? '')),
-        child: Container(
-          width: 72.w,
-          height: 72.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              LemonRadius.small,
-            ),
-            border: Border.all(
-              color: colorScheme.outline,
-            ),
+    return InkWell(
+      onTap: () =>
+          context.router.push(SpaceDetailRoute(spaceId: space.id ?? '')),
+      child: Container(
+        width: 72.w,
+        height: 72.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            LemonRadius.small,
           ),
-          clipBehavior: Clip.hardEdge,
-          child: imageAvatarUrl.isNotEmpty
-              ? Image.network(
-                  imageAvatarUrl,
-                  fit: BoxFit.cover,
-                  cacheWidth: 144,
-                  cacheHeight: 144,
-                  frameBuilder:
-                      (context, child, frame, wasSynchronouslyLoaded) {
-                    if (frame == null) {
-                      return _buildPlaceholder(colorScheme);
-                    }
-                    return child;
-                  },
-                )
-              : _buildPlaceholder(colorScheme),
+          border: Border.all(
+            color: colorScheme.outline,
+          ),
         ),
+        clipBehavior: Clip.hardEdge,
+        child: imageAvatarUrl.isNotEmpty
+            ? Image.network(
+                imageAvatarUrl,
+                fit: BoxFit.cover,
+                cacheWidth: 144,
+                cacheHeight: 144,
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (frame == null) {
+                    return _buildPlaceholder(colorScheme);
+                  }
+                  return child;
+                },
+              )
+            : _buildPlaceholder(colorScheme),
       ),
     );
   }
