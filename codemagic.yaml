@@ -1,11 +1,11 @@
 definitions:
   instance_mac_mini: &instance_mac_mini
-    instance_type: mac_mini_m2
+    instance_type: mac_mini_m1
     max_build_duration: 75
   env_versions: &env_versions
     flutter: fvm
-    xcode: 16.2
-    cocoapods: 1.16.2
+    xcode: 15.2
+    cocoapods: 1.14.2
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
