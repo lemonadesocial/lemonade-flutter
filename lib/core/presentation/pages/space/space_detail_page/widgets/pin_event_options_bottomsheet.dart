@@ -1,3 +1,4 @@
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_membership_check_button.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -7,7 +8,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 enum PinEventOptions {
   newEvent,
@@ -38,16 +38,6 @@ enum PinEventOptions {
 }
 
 class PinEventOptionsBottomsheet extends StatelessWidget {
-  static Future<PinEventOptions?> show(BuildContext context) {
-    return showCupertinoModalBottomSheet<PinEventOptions>(
-      context: context,
-      backgroundColor: LemonColor.atomicBlack,
-      barrierColor: Colors.black.withOpacity(0.5),
-      expand: false,
-      builder: (context) => const PinEventOptionsBottomsheet(),
-    );
-  }
-
   const PinEventOptionsBottomsheet({
     super.key,
   });
@@ -88,6 +78,7 @@ class PinEventOptionsBottomsheet extends StatelessWidget {
               ),
               SizedBox(height: Spacing.medium),
               ListView.separated(
+                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
@@ -128,6 +119,7 @@ class PinEventOptionsBottomsheet extends StatelessWidget {
                     SizedBox(height: Spacing.small),
                 itemCount: PinEventOptions.values.length,
               ),
+              const SpaceMembershipCheckButton(),
             ],
           ),
         ),

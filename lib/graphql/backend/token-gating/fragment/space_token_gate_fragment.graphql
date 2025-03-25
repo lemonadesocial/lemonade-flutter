@@ -1,0 +1,13 @@
+fragment SpaceTokenGateFragment on SpaceTokenGate {
+  _id
+  name
+  token_address
+  decimals
+  min_value
+  max_value
+  network
+  is_nft
+  space
+  roles
+  passed
+}

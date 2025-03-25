@@ -1,0 +1,9 @@
+{
+    "verifyWallet": "Verify wallet",
+    "verifyWalletDescription": "Please sign a message to verify your ownership of the wallet. This will not incur any cost.",
+    "verifiedWalletDescription": "Your wallet has been verified. Please next to continue.",
+    "verifyWalletMessage": "Make sure the message starts with \"Sign this message to attach your wallet to your Lemonade account...\"",
+    "noTokensFounds": "No tokens found",
+    "noTokensFoundsDescription": "We could not find the necessary tokens in your wallet. Try switching to a different wallet to verify ownership.",
+    "signMessage": "Sign message"
+}

@@ -149,6 +149,10 @@ class LemonColor {
   // voting
   static const blueBerry = Color(0xff4B84FF);
   static const royalOrange = Color(0xffFF8E42);
+
+  // token gating
+  static const fluorescentBlue = Color(0xff19E8E2);
+  static const darkCyan = Color(0xff008F91);
 }
 
 final ColorScheme lemonadeLightThemeColorScheme = ColorScheme.light(

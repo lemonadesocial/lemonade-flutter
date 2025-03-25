@@ -52,5 +52,9 @@
         "publicDescription": "Shown on your community & eligible for featuring."
     },
     "chooseCommunity": "Choose the Community of the event:",
-    "submittingTo": "Submitting to"
+    "submittingTo": "Submitting to",
+    "mayHaveMembershipCheck": "You may have membership access for this community",
+    "ambassadorUnlocked": "Brand Ambassador Unlocked!",
+    "ambassadorUnlockedDescription": "Congratulations, you are now a Brand Ambassador. You can list events without admin approval on this community.",
+    "viewCommunity": "View Community"
 }
