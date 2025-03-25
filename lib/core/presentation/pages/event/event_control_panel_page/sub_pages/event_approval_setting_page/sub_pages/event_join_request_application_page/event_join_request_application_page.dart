@@ -69,6 +69,7 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
         future: _getUserInfo(),
         builder: (context, snapshot) {
           final userInfo = snapshot.data;
+          print('userInfo: $userInfo');
           return Stack(
             children: [
               Padding(
