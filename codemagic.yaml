@@ -1,6 +1,6 @@
 definitions:
   instance_mac_mini: &instance_mac_mini
-    instance_type: mac_mini_m1
+    instance_type: mac_mini_m2
     max_build_duration: 75
   env_versions: &env_versions
     flutter: fvm
