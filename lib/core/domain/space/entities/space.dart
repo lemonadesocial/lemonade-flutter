@@ -75,6 +75,14 @@ class Space with _$Space {
         !(isAmbassador == true);
   }
 
+  String getSpaceImageUrl() {
+    final isPersonal = personal ?? false;
+    if (isPersonal) {
+      return creatorExpanded?.imageAvatar ?? '';
+    }
+    return imageCover?.url ?? imageAvatar?.url ?? '';
+  }
+
   factory Space.fromJson(Map<String, dynamic> json) => _$SpaceFromJson(json);
 
   factory Space.fromDto(SpaceDto dto) {
