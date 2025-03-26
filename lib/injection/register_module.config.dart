@@ -50,11 +50,13 @@ import 'package:app/core/data/report/repository/report_repository_impl.dart'
     as _i55;
 import 'package:app/core/data/reward/reward_repository_impl.dart' as _i57;
 import 'package:app/core/data/space/space_repository_impl.dart' as _i60;
-import 'package:app/core/data/token/token_repository_impl.dart' as _i62;
-import 'package:app/core/data/user/user_repository_impl.dart' as _i64;
-import 'package:app/core/data/vault/vault_repository_impl.dart' as _i66;
-import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i69;
-import 'package:app/core/data/web3/web3_repository_impl.dart' as _i71;
+import 'package:app/core/data/token-gating/token_gating_repository_impl.dart'
+    as _i62;
+import 'package:app/core/data/token/token_repository_impl.dart' as _i64;
+import 'package:app/core/data/user/user_repository_impl.dart' as _i66;
+import 'package:app/core/data/vault/vault_repository_impl.dart' as _i68;
+import 'package:app/core/data/wallet/wallet_repository_impl.dart' as _i71;
+import 'package:app/core/data/web3/web3_repository_impl.dart' as _i73;
 import 'package:app/core/domain/ai/ai_repository.dart' as _i4;
 import 'package:app/core/domain/applicant/applicant_repository.dart' as _i7;
 import 'package:app/core/domain/badge/badge_repository.dart' as _i10;
@@ -83,11 +85,13 @@ import 'package:app/core/domain/quest/quest_repository.dart' as _i52;
 import 'package:app/core/domain/report/report_repository.dart' as _i54;
 import 'package:app/core/domain/reward/reward_repository.dart' as _i56;
 import 'package:app/core/domain/space/space_repository.dart' as _i59;
-import 'package:app/core/domain/token/token_repository.dart' as _i61;
-import 'package:app/core/domain/user/user_repository.dart' as _i63;
-import 'package:app/core/domain/vault/vault_repository.dart' as _i65;
-import 'package:app/core/domain/wallet/wallet_repository.dart' as _i68;
-import 'package:app/core/domain/web3/web3_repository.dart' as _i70;
+import 'package:app/core/domain/token-gating/token_gating_repository.dart'
+    as _i61;
+import 'package:app/core/domain/token/token_repository.dart' as _i63;
+import 'package:app/core/domain/user/user_repository.dart' as _i65;
+import 'package:app/core/domain/vault/vault_repository.dart' as _i67;
+import 'package:app/core/domain/wallet/wallet_repository.dart' as _i70;
+import 'package:app/core/domain/web3/web3_repository.dart' as _i72;
 import 'package:app/core/oauth/oauth.dart' as _i6;
 import 'package:app/core/service/badge/badge_service.dart' as _i12;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i37;
@@ -95,7 +99,7 @@ import 'package:app/core/service/matrix/matrix_service.dart' as _i39;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i58;
 import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
     as _i45;
-import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i67;
+import 'package:app/core/service/wallet/wallet_connect_service.dart' as _i69;
 import 'package:app/core/utils/gql/gql.dart' as _i3;
 import 'package:app/core/utils/location_utils.dart' as _i38;
 import 'package:get_it/get_it.dart' as _i1;
@@ -167,14 +171,16 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i58.ShorebirdCodePushService>(
         () => _i58.ShorebirdCodePushService());
     gh.lazySingleton<_i59.SpaceRepository>(() => _i60.SpaceRepositoryImpl());
-    gh.lazySingleton<_i61.TokenRepository>(() => _i62.TokenRepositoryImpl());
-    gh.lazySingleton<_i63.UserRepository>(() => _i64.UserRepositoryImpl());
-    gh.lazySingleton<_i65.VaultRepository>(() => _i66.VaultRepositoryImpl());
-    gh.lazySingleton<_i67.WalletConnectService>(
-        () => _i67.WalletConnectService());
+    gh.lazySingleton<_i61.TokenGatingRepository>(
+        () => _i62.TokenGatingRepositoryImpl());
+    gh.lazySingleton<_i63.TokenRepository>(() => _i64.TokenRepositoryImpl());
+    gh.lazySingleton<_i65.UserRepository>(() => _i66.UserRepositoryImpl());
+    gh.lazySingleton<_i67.VaultRepository>(() => _i68.VaultRepositoryImpl());
+    gh.lazySingleton<_i69.WalletConnectService>(
+        () => _i69.WalletConnectService());
     gh.lazySingleton<_i3.WalletGQL>(() => _i3.WalletGQL());
-    gh.lazySingleton<_i68.WalletRepository>(() => _i69.WalletRepositoryImpl());
-    gh.lazySingleton<_i70.Web3Repository>(() => _i71.Web3RepositoryIml());
+    gh.lazySingleton<_i70.WalletRepository>(() => _i71.WalletRepositoryImpl());
+    gh.lazySingleton<_i72.Web3Repository>(() => _i73.Web3RepositoryIml());
     return this;
   }
 }

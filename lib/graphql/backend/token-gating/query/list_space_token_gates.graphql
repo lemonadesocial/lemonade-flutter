@@ -1,0 +1,7 @@
+# import SpaceTokenGateFragment from "../fragment/space_token_gate_fragment.graphql"
+
+query ListSpaceTokenGates($space: MongoID!) {
+  listSpaceTokenGates(space: $space) {
+    ...SpaceTokenGateFragment
+  }
+}

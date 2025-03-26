@@ -1,0 +1,5 @@
+mutation SyncSpaceTokenGateAccess($space: MongoID!) {
+  syncSpaceTokenGateAccess(space: $space) {
+    roles
+  }
+} 

@@ -90,7 +90,8 @@
         "checkIn": "Check in",
         "doItLater": "Do it later",
         "subscribe": "Subscribe",
-        "manage": "Manage"
+        "manage": "Manage",
+        "check": "Check"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

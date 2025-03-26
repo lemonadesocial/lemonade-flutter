@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
+import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/data/space/dtos/space_tag_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
@@ -20,6 +21,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SpaceEventsHeader extends StatefulWidget {
   final Space space;
@@ -106,8 +108,23 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                       LemonOutlineButton(
                         leading: Assets.icons.icPlus.svg(),
                         onTap: () async {
-                          final option =
-                              await PinEventOptionsBottomsheet.show(context);
+                          final spaceDetailBloc =
+                              context.read<GetSpaceDetailBloc>();
+                          final option = await showCupertinoModalBottomSheet<
+                              PinEventOptions>(
+                            context: context,
+                            backgroundColor: LemonColor.atomicBlack,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            expand: false,
+                            builder: (innerContext) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: spaceDetailBloc,
+                                ),
+                              ],
+                              child: const PinEventOptionsBottomsheet(),
+                            ),
+                          );
                           if (option == PinEventOptions.newEvent) {
                             // Allow create event if space is admin or ambassador
                             if (widget.space.isAdmin(userId: userId ?? '') ||

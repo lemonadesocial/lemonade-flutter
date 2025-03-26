@@ -16,6 +16,7 @@ class SignWalletBloc extends Bloc<SignWalletEvent, SignWalletState> {
   }
 
   Future<void> _onSignWallet(SignWalletEventSign event, Emitter emit) async {
+    emit(SignWalletState.loading());
     final walletRequestResult = await walletRepository.getUserWalletRequest(
       wallet: event.wallet.toLowerCase(),
     );
@@ -36,7 +37,7 @@ class SignWalletBloc extends Bloc<SignWalletEvent, SignWalletState> {
       wallet: event.wallet,
     );
 
-    if (signature == null) {
+    if (signature == null || signature.isEmpty || !signature.startsWith('0x')) {
       return emit(SignWalletState.failure());
     }
 
