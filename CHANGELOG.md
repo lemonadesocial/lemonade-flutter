@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.53.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.52.1...v1.53.0) (2025-03-26)
+
+
+### Features
+
+* token gating for space ([#909](https://github.com/lemonadesocial/lemonade-flutter/issues/909)) ([e67e60c](https://github.com/lemonadesocial/lemonade-flutter/commit/e67e60c32639e45e9c58955c66ff2f093bd2107a))
+
+
+### Bug Fixes
+
+* improve community hub ([#910](https://github.com/lemonadesocial/lemonade-flutter/issues/910)) ([7b9ada3](https://github.com/lemonadesocial/lemonade-flutter/commit/7b9ada35443696f1f22b64ba1a72bdb65ecf183c))
+
 ## [1.52.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.52.0...v1.52.1) (2025-03-24)
 
 
