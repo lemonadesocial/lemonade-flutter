@@ -19,7 +19,13 @@ class SpaceAmbassadorUnlockedBottomsheet extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      color: LemonColor.atomicBlack,
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(LemonRadius.small),
+          topRight: Radius.circular(LemonRadius.small),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -27,39 +33,39 @@ class SpaceAmbassadorUnlockedBottomsheet extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: BottomSheetGrabber(),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SuccessCircleAnimationWidget(),
-                Text(
-                  t.space.ambassadorUnlocked,
-                  style: Typo.large.copyWith(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onPrimary,
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SuccessCircleAnimationWidget(),
+                  Text(
+                    t.space.ambassadorUnlocked,
+                    style: Typo.large.copyWith(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onPrimary,
+                    ),
                   ),
-                ),
-                SizedBox(height: Spacing.superExtraSmall),
-                Text(
-                  t.space.ambassadorUnlockedDescription,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  SizedBox(height: Spacing.superExtraSmall),
+                  Text(
+                    t.space.ambassadorUnlockedDescription,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
                   ),
-                ),
-                SizedBox(height: Spacing.medium),
-                SafeArea(
-                  child: LinearGradientButton.secondaryButton(
+                  SizedBox(height: Spacing.medium),
+                  LinearGradientButton.secondaryButton(
                     label: t.space.viewCommunity,
                     mode: GradientButtonMode.light,
                     onTap: () {
                       Navigator.pop(context);
                     },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
