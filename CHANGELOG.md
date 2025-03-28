@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.53.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.53.0...v1.53.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* space token gating polishment ([#912](https://github.com/lemonadesocial/lemonade-flutter/issues/912)) ([afd71a1](https://github.com/lemonadesocial/lemonade-flutter/commit/afd71a10f7198445c821d9b1b7a28093336db95b))
+
 ## [1.53.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.52.1...v1.53.0) (2025-03-26)
 
 
