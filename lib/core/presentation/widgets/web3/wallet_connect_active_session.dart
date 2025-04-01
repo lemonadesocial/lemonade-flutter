@@ -82,7 +82,7 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
             ),
             // TODO: FIX WALLET MIGRATION
             // ignore: unnecessary_null_comparison
-            Text(displayAddress),
+            const Text(displayAddress),
           ],
         ),
         const Spacer(),
