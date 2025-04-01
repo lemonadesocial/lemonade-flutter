@@ -194,7 +194,7 @@ class _EventSetupDirectCryptoPaymentAccountPageState
         final colorScheme = Theme.of(context).colorScheme;
         // final userWalletAddress = state.activeSession?.address;
         // TODO: FIX WALLET MIGRATION
-        final userWalletAddress = '';
+        const userWalletAddress = '';
         final event = context.read<GetEventDetailBloc>().state.maybeWhen(
               orElse: () => null,
               fetched: (event) => event,

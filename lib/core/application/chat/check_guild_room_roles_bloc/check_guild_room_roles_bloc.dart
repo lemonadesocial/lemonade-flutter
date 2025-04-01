@@ -25,7 +25,7 @@ class CheckGuildRoomRolesBloc
     // final userWalletAddress =
     //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
     // TODO: FIX WALLET MIGRATION
-    final userWalletAddress = '';
+    const userWalletAddress = '';
     emit(CheckGuildRoomRolesState.loading());
     final guild = await _getGuildDetail();
     List<GuildRolePermission> guildRolePermissions = [];

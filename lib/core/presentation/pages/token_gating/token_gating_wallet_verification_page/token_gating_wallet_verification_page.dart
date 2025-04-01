@@ -1,6 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/sign_wallet_bloc/sign_wallet_bloc.dart';
-import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/pages/token_gating/widget/token_gating_wallet_address_box.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -61,8 +60,8 @@ class _View extends StatelessWidget {
     //     context.watch<WalletBloc>().state.activeSession?.address;
 
     // TODO: FIX WALLET MIGRATION
-    final clientConnectedAddress = '';
-    final isConnected = clientConnectedAddress != null;
+    const clientConnectedAddress = '';
+    const isConnected = clientConnectedAddress != null;
     final isVerified = (isConnected &&
         userVerifiedWalletAddresses.contains(clientConnectedAddress));
 

@@ -147,7 +147,7 @@ class GuildRolesList extends StatelessWidget {
     // final userWalletAddress =
     //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
     // TODO: FIX WALLET MIGRATION
-    final userWalletAddress = '';
+    const userWalletAddress = '';
     if (userWalletAddress.isEmpty) {
       final w3mService = getIt<WalletConnectService>().w3mService;
       w3mService.openModalView();

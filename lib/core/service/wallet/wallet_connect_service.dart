@@ -124,6 +124,8 @@ class WalletConnectService {
     //   await init();
     // }
     // return _w3mService.session;
+    // TODO: FIX WALLET MIGRATION
+    return null;
   }
 
   Future<String?> personalSign({

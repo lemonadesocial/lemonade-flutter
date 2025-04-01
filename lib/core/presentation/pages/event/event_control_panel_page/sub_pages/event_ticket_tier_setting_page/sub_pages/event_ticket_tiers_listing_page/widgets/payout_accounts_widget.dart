@@ -7,7 +7,6 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -123,7 +122,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
             // final userWalletAddress =
             //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
             // TODO: FIX WALLET MIGRATION
-            final userWalletAddress = '';
+            const userWalletAddress = '';
             return PayoutAccountItem(
               radiusTop: false,
               radiusBottom: true,

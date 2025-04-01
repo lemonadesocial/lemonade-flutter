@@ -50,10 +50,10 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
       _isLoading = true;
     });
     try {
-      final walletAddress =
-          // context.read<WalletBloc>().state.activeSession?.address;
-          // TODO: FIX WALLET MIGRATION
-          '';
+      //  final walletAddress =
+      //     context.read<WalletBloc>().state.activeSession?.address;
+      // TODO: FIX WALLET MIGRATION
+      const walletAddress = '';
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: widget.rewardSignatureResponse.signature!,
