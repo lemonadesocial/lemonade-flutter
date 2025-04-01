@@ -17,7 +17,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/modal/widgets/buttons/connect_button.dart';
 
 class GuildRolesList extends StatelessWidget {
   const GuildRolesList({super.key, required this.guildRoom});
@@ -144,11 +144,13 @@ class GuildRolesList extends StatelessWidget {
   }
 
   void _handleGuildRoleTap(BuildContext context, Guild? guild) {
-    final userWalletAddress =
-        getIt<WalletConnectService>().w3mService.session?.address ?? '';
+    // final userWalletAddress =
+    //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
+    // TODO: FIX WALLET MIGRATION
+    final userWalletAddress = '';
     if (userWalletAddress.isEmpty) {
       final w3mService = getIt<WalletConnectService>().w3mService;
-      w3mService.openModal(context);
+      w3mService.openModalView();
     } else {
       AutoRouter.of(context).navigate(
         WebviewRoute(

@@ -4,6 +4,7 @@ import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/edit_profile/sub_pages/edit_profile_social_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -14,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 
 class CollaboratorEditSocialConnect extends StatelessWidget {
   const CollaboratorEditSocialConnect({super.key});

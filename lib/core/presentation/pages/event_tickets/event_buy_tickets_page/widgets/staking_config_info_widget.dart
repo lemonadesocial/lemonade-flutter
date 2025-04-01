@@ -6,7 +6,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 import 'package:http/http.dart' as http;
 
 class StakingConfigInfoWidget extends StatelessWidget {

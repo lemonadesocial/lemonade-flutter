@@ -1,6 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event.dart' as event_entity;
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
@@ -28,7 +28,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
+import 'package:reown_appkit/reown_appkit.dart';
 
 class EventSetupStakeCryptoPaymentAccountPage extends StatefulWidget {
   final Chain chain;
@@ -57,8 +57,10 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   @override
   void initState() {
     super.initState();
-    walletIdController.text =
-        context.read<WalletBloc>().state.activeSession?.address ?? '';
+    // walletIdController.text =
+    //     context.read<WalletBloc>().state.activeSession?.address ?? '';
+    // TODO: FIX WALLET MIGRATION
+    walletIdController.text = '';
     walletIdController.addListener(() {
       setState(() {
         isValid = _validate();
@@ -87,7 +89,9 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   }
 
   String _getUserWalletAddress() =>
-      context.read<WalletBloc>().state.activeSession?.address ?? '';
+      // context.read<WalletBloc>().state.activeSession?.address ?? '';
+      // TODO: FIX WALLET MIGRATION
+      '';
 
   String _getPayeeAddress() => walletIdController.text;
 
@@ -101,7 +105,8 @@ class _EventSetupStakeCryptoPaymentAccountPageState
 
   bool _validatePayeeAddress(String value) {
     try {
-      web3modal.EthereumAddress.fromHex(value);
+      // web3modal.EthereumAddress.fromHex(value);
+      // TODO: FIX WALLET MIGRATION
       return true;
     } catch (e) {
       return false;
@@ -114,7 +119,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   }
 
   Future<void> _onSubmit(
-    Event event,
+    event_entity.Event event,
   ) async {
     setState(() {
       isLoading = true;
@@ -150,7 +155,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   }
 
   Future<PaymentAccount?> _createEthereumStakePaymentAccount({
-    required Event event,
+    required event_entity.Event event,
   }) async {
     final vaultSalt =
         (await getIt<Web3Repository>().getVaultSalt(eventId: event.id ?? ''))
@@ -219,8 +224,8 @@ class _EventSetupStakeCryptoPaymentAccountPageState
     );
   }
 
-  Future<Event?> _updateEventWithNewPaymentAccount({
-    required Event event,
+  Future<event_entity.Event?> _updateEventWithNewPaymentAccount({
+    required event_entity.Event event,
     required PaymentAccount newPaymentAccount,
   }) async {
     final result = await getIt<EventRepository>().updateEvent(
@@ -238,7 +243,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
     );
   }
 
-  Future<void> _onUpdate(Event event) async {
+  Future<void> _onUpdate(event_entity.Event event) async {
     setState(() {
       isLoading = true;
     });
@@ -277,17 +282,20 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   Widget build(BuildContext context) {
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (context, state) {
-        if (state.activeSession?.address != null) {
-          walletIdController.text = state.activeSession?.address ?? '';
-          setState(() {
-            isValid = _validate();
-          });
-        }
+        // TODO: FIX WALLET MIGRATION
+        // if (state.activeSession?.address != null) {
+        //   walletIdController.text = state.activeSession?.address ?? '';
+        //   setState(() {
+        //     isValid = _validate();
+        //   });
+        // }
       },
       builder: (context, state) {
         final t = Translations.of(context);
         final colorScheme = Theme.of(context).colorScheme;
-        final userWalletAddress = state.activeSession?.address;
+        // TODO: FIX WALLET MIGRATION
+        // final userWalletAddress = state.activeSession?.address;
+        final userWalletAddress = '';
         final event = context.read<GetEventDetailBloc>().state.maybeWhen(
               orElse: () => null,
               fetched: (event) => event,

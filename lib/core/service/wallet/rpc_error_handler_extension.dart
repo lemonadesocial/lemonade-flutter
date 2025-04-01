@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 extension RpcErrorHandler on WalletConnectService {
   String? getMessageFromRpcError(JsonRpcError e) {

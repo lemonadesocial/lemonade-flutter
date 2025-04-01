@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
+import 'package:app/core/utils/string_utils.dart';
 
 class HostEventBasicInfoCard extends StatelessWidget {
   const HostEventBasicInfoCard({

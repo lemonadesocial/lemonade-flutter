@@ -10,7 +10,6 @@ import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:convert/convert.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class TokenRewardUtils {

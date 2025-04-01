@@ -196,10 +196,10 @@ class TicketTierItem extends StatelessWidget {
                             decimalDigits: decimals,
                           );
                         } else {
-                          displayedAmount = CurrencyTextInputFormatter(
+                          displayedAmount = CurrencyTextInputFormatter.currency(
                             symbol: price.currency ?? '',
                             decimalDigits: decimals,
-                          ).format(price.cost ?? '');
+                          ).formatString(price.cost ?? '');
                         }
                         displayedAmount =
                             isFree ? t.event.free : displayedAmount;

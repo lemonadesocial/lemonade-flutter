@@ -35,9 +35,9 @@ class _RootPageViewState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appCastConfiguration = AppcastConfiguration(
-      url: AppConfig.appCastUrl,
-      supportedOS: ['android', 'ios'],
+    final storeController = UpgraderStoreController(
+      oniOS: () => UpgraderAppcastStore(appcastURL: AppConfig.appCastUrl),
+      onAndroid: () => UpgraderAppcastStore(appcastURL: AppConfig.appCastUrl),
     );
     final primaryColor = Theme.of(context).colorScheme.primary;
     final authState = BlocProvider.of<AuthBloc>(context).state;
@@ -56,7 +56,7 @@ class _RootPageViewState extends State<RootPage> {
           return UpgradeAlert(
             upgrader: Upgrader(
               durationUntilAlertAgain: const Duration(seconds: 30),
-              appcastConfig: appCastConfiguration,
+              storeController: storeController,
               debugLogging: kDebugMode,
             ),
             child: Stack(

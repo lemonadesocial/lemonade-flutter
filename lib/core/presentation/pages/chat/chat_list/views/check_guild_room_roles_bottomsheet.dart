@@ -11,7 +11,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 class CheckGuildRoomRolesBottomSheet extends StatelessWidget {
   final Function() onEnterChannel;

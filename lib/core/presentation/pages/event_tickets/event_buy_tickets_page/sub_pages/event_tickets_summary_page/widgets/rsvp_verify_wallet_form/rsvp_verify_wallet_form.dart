@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class RSVPVerifyWalletForm extends StatelessWidget {
   const RSVPVerifyWalletForm({
@@ -135,7 +134,9 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                     }
                     context.read<SignWalletBloc>().add(
                           SignWalletEvent.sign(
-                            wallet: state.activeSession?.address ?? '',
+                            // TODO: FIX WALLET MIGRATION
+                            wallet: '',
+                            // wallet: state.activeSession?.address ?? '',
                           ),
                         );
                   },
@@ -146,8 +147,10 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                                   (element) =>
                                       element != userProfile?.walletCustodial,
                                 ) ??
-                                state.activeSession?.address ??
-                                '',
+                                // TODO: FIX WALLET MIGRATION
+                                ''
+                                    // state.activeSession?.address ??
+                                    '',
                           ),
                         )
                       : t.event.eventBuyTickets.verifyWithWallet,

@@ -22,8 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal_flutter;
 
 class PayoutAccountsWidget extends StatefulWidget {
   const PayoutAccountsWidget({super.key});
@@ -122,8 +120,10 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
               ),
             );
             final activeSession = state.activeSession;
-            final userWalletAddress =
-                getIt<WalletConnectService>().w3mService.session?.address ?? '';
+            // final userWalletAddress =
+            //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
+            // TODO: FIX WALLET MIGRATION
+            final userWalletAddress = '';
             return PayoutAccountItem(
               radiusTop: false,
               radiusBottom: true,
@@ -135,14 +135,15 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
                   : t.event.ticketTierSetting.connectWalletDesc,
               icon: activeSession != null
                   ? LemonNetworkImage(
-                      imageUrl: explorerService.instance.getWalletImageUrl(
-                        getIt<WalletConnectService>()
-                                .w3mService
-                                .selectedWallet
-                                ?.listing
-                                .imageId ??
-                            '',
-                      ),
+                      imageUrl: '',
+                      // explorerService.instance.getWalletImageUrl(
+                      //   getIt<WalletConnectService>()
+                      //           .w3mService
+                      //           .selectedWallet
+                      //           ?.listing
+                      //           .imageId ??
+                      // '',
+                      // ),
                       height: Sizing.mSmall,
                       width: Sizing.mSmall,
                       placeholder: fallbackIcon,
@@ -164,8 +165,10 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
                 return ConnectWalletButton(
                   builder: (onPressConnect, connectButtonState) =>
                       LinearGradientButton(
-                    loadingWhen: connectButtonState ==
-                        web3modal_flutter.ConnectButtonState.connecting,
+                    // loadingWhen: connectButtonState ==
+                    //     web3modal_flutter.ConnectButtonState.connecting,
+                    // TODO: FIX WALLET MIGRATION
+                    loadingWhen: false,
                     height: Sizing.medium,
                     radius: BorderRadius.circular(LemonRadius.small * 2),
                     label: t.common.actions.connect,
