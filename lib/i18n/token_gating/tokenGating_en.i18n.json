@@ -5,5 +5,6 @@
     "verifyWalletMessage": "Make sure the message starts with \"Sign this message to attach your wallet to your Lemonade account...\"",
     "noTokensFounds": "No tokens found",
     "noTokensFoundsDescription": "We could not find the necessary tokens in your wallet. Try switching to a different wallet to verify ownership.",
-    "signMessage": "Sign message"
+    "signMessage": "Sign message",
+    "connectYourWallet": "Connect your wallet"
 }

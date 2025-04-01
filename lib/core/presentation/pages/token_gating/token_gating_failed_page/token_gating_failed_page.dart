@@ -15,10 +15,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TokenGatingFailedPage extends StatelessWidget {
   final List<SpaceTokenGate> tokenGates;
+  final Function()? onChangeWalletAddress;
 
   const TokenGatingFailedPage({
     super.key,
     required this.tokenGates,
+    this.onChangeWalletAddress,
   });
 
   @override
@@ -27,7 +29,13 @@ class TokenGatingFailedPage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      color: LemonColor.atomicBlack,
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(LemonRadius.small),
+          topRight: Radius.circular(LemonRadius.small),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -70,9 +78,10 @@ class TokenGatingFailedPage extends StatelessWidget {
                   BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, state) {
                       return TokenGatingWalletAddressBox(
+                        // address: state.activeSession?.address ?? '',
                         // TODO: FIX WALLET MIGRATION
                         address: '',
-                        // address: state.activeSession?.address ?? '',
+                        onTapEdit: onChangeWalletAddress,
                       );
                     },
                   ),

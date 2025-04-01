@@ -16,7 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TokenGatingWalletVerificationPage extends StatelessWidget {
   const TokenGatingWalletVerificationPage({
     super.key,
+    this.onChangeWalletAddress,
   });
+
+  final Function()? onChangeWalletAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +29,19 @@ class TokenGatingWalletVerificationPage extends StatelessWidget {
           create: (context) => SignWalletBloc(),
         ),
       ],
-      child: const _View(),
+      child: _View(
+        onChangeWalletAddress: onChangeWalletAddress,
+      ),
     );
   }
 }
 
 class _View extends StatelessWidget {
-  const _View();
+  const _View({
+    this.onChangeWalletAddress,
+  });
+
+  final Function()? onChangeWalletAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +67,13 @@ class _View extends StatelessWidget {
         userVerifiedWalletAddresses.contains(clientConnectedAddress));
 
     return Container(
-      color: LemonColor.atomicBlack,
+      decoration: BoxDecoration(
+        color: LemonColor.atomicBlack,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(LemonRadius.small),
+          topRight: Radius.circular(LemonRadius.small),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -104,9 +119,7 @@ class _View extends StatelessWidget {
                         TokenGatingWalletAddressBox(
                           address: clientConnectedAddress,
                           onTapEdit: () {
-                            context
-                                .read<WalletBloc>()
-                                .add(const WalletEvent.disconnect());
+                            onChangeWalletAddress?.call();
                           },
                         ),
                         SizedBox(height: Spacing.small),
