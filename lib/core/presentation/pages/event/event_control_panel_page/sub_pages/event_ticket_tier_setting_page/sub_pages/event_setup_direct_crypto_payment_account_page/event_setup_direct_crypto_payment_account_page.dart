@@ -22,7 +22,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reown_appkit/reown_appkit.dart';
 
 class EventSetupDirectCryptoPaymentAccountPage extends StatefulWidget {
   final Chain chain;

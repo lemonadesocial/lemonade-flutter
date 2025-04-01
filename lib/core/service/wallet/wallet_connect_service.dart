@@ -1,11 +1,10 @@
+// ignore_for_file: unused_element
+
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
-import 'package:app/core/domain/web3/web3_repository.dart';
-import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/wc_utils.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:injectable/injectable.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 

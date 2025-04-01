@@ -26,8 +26,10 @@ class WalletSignaturePendingView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
-    final walletAddress =
-        getIt<WalletConnectService>().w3mService.session?.address ?? '';
+    // TODO: FIX WALLET MIGRATION
+    const walletAddress = '';
+    // final walletAddress =
+    //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
     return BlocBuilder<CalculateEventTicketPricingBloc,
         CalculateEventTicketPricingState>(
       builder: (context, state) {

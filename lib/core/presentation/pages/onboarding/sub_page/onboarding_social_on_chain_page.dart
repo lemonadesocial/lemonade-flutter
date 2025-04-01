@@ -22,7 +22,6 @@ import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:reown_appkit/reown_appkit.dart';
 
 @RoutePage()
 class OnboardingSocialOnChainPage extends StatelessWidget {
@@ -89,14 +88,14 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                   SizedBox(height: Spacing.medium),
                   ConnectWalletButton(
                     builder: (onPressConnect, connectButtonState) {
-                      final w3mService =
-                          getIt<WalletConnectService>().w3mService;
+                      // TODO: FIX WALLET MIGRATION
+                      // final w3mService =
+                      //     getIt<WalletConnectService>().w3mService;
                       // final userWalletAddress =
                       //     connectButtonState == ConnectButtonState.connected
                       //         ? w3mService.session?.address
                       //         : null;
-                      // TODO: FIX WALLET MIGRATION
-                      final userWalletAddress = '';
+                      const userWalletAddress = '';
                       return SettingTileWidget(
                         radius: LemonRadius.medium,
                         leadingRadius: LemonRadius.xSmall,
