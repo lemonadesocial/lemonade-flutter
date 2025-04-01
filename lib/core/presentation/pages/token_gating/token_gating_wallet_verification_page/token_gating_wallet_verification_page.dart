@@ -12,7 +12,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class TokenGatingWalletVerificationPage extends StatelessWidget {
   const TokenGatingWalletVerificationPage({
@@ -49,8 +48,11 @@ class _View extends StatelessWidget {
             )
             .toList() ??
         [];
-    final clientConnectedAddress =
-        context.watch<WalletBloc>().state.activeSession?.address;
+    // final clientConnectedAddress =
+    //     context.watch<WalletBloc>().state.activeSession?.address;
+
+    // TODO: FIX WALLET MIGRATION
+    final clientConnectedAddress = '';
     final isConnected = clientConnectedAddress != null;
     final isVerified = (isConnected &&
         userVerifiedWalletAddresses.contains(clientConnectedAddress));

@@ -1,6 +1,6 @@
 extension StringUtil on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
-  
+
   String capitalize() {
     if (this != null && this!.isNotEmpty) {
       return "${this![0].toUpperCase()}${this!.substring(1)}";

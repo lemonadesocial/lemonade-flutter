@@ -12,7 +12,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class DeployVaultIWithWalletAppView extends StatelessWidget {
   const DeployVaultIWithWalletAppView({super.key});
@@ -31,8 +30,10 @@ class DeployVaultIWithWalletAppView extends StatelessWidget {
           );
         }
         final createVaultData = context.read<CreateVaultBloc>().state.data;
-        final userWalletAddress =
-            getIt<WalletConnectService>().w3mService.session?.address ?? '';
+        // final userWalletAddress =
+        //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
+        // TODO: FIX WALLET MIGRATION
+        final userWalletAddress = '';
         final network = createVaultData.selectedChain!;
         return Column(
           children: [

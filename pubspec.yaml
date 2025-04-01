@@ -27,7 +27,7 @@ dependencies:
   json_annotation: ^4.8.1
 
   # injection
-  get_it: ^7.6.0
+  get_it: 8.0.3
   injectable: ^2.1.2
 
   # state management
@@ -52,13 +52,13 @@ dependencies:
 
   # assets
   flutter_svg: ^2.0.7
-  cached_network_image: 3.3.1
+  cached_network_image: 3.4.1
   image_picker: ^1.0.2
   image_cropper: ^5.0.1
 
   # UI
   flutter_portal: 1.1.4
-  intl: 0.19.0
+  intl: 0.20.1
   timeago: ^3.5.0
   sliver_tools: ^0.2.12
   flutter_slidable: ^3.0.0
@@ -100,7 +100,8 @@ dependencies:
   rxdart: 0.28.0
 
   # wallet
-  web3modal_flutter: 3.1.2
+  # web3modal_flutter: 3.1.2
+  reown_appkit: 1.4.1
   web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
@@ -163,6 +164,7 @@ dependencies:
   add_2_calendar: ^3.0.1
   permission_handler: ^11.3.1
   csv: 5.1.1
+  appcheck: 1.5.4+1
 
 dependency_overrides:
   matrix_api_lite:
@@ -176,6 +178,7 @@ dependency_overrides:
   package_info_plus: 7.0.0
   uuid: 4.3.3
   web: 1.0.0
+  intl: any
 
 dev_dependencies:
   flutter_test:

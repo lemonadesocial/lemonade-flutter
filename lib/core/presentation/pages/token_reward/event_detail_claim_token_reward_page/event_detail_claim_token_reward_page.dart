@@ -23,7 +23,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
 @RoutePage()
 class EventDetailClaimTokenRewardPage extends StatefulWidget {
@@ -88,11 +87,13 @@ class _EventDetailClaimTokenRewardPageState
     });
     try {
       final walletAddress =
-          context.read<WalletBloc>().state.activeSession?.address;
+          // context.read<WalletBloc>().state.activeSession?.address;
+          // TODO: FIX WALLET MIGRATION
+          '';
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: rewardSignatureResponse!.signature!,
-        from: walletAddress ?? '',
+        from: walletAddress,
       );
       final chain = (await getIt<Web3Repository>()
               .getChainById(chainId: vault.network ?? ''))

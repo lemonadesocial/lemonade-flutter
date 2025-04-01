@@ -12,7 +12,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class TokenGatingFailedPage extends StatelessWidget {
   final List<SpaceTokenGate> tokenGates;
@@ -71,7 +70,9 @@ class TokenGatingFailedPage extends StatelessWidget {
                   BlocBuilder<WalletBloc, WalletState>(
                     builder: (context, state) {
                       return TokenGatingWalletAddressBox(
-                        address: state.activeSession?.address ?? '',
+                        // TODO: FIX WALLET MIGRATION
+                        address: '',
+                        // address: state.activeSession?.address ?? '',
                       );
                     },
                   ),

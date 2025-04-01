@@ -7,7 +7,7 @@ import 'package:app/core/utils/list/unique_list_extension.dart';
 import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:injectable/injectable.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 enum SupportedSessionEvent {
   accountsChanged,
@@ -45,14 +45,14 @@ class WalletConnectService {
   ];
   static const defaultEvents = SupportedSessionEvent.values;
 
-  late W3MService _w3mService;
-  IWeb3App? _app;
+  late ReownAppKitModal _w3mService;
+  // IWeb3App? _app;
   String? _currentWalletChainId;
   String? _currentWalletAccount;
 
-  W3MService get w3mService => _w3mService;
+  ReownAppKitModal get w3mService => _w3mService;
 
-  bool get initialized => _app != null;
+  // bool get initialized => _app != null;
 
   String? get currentWalletAppAccount => _currentWalletAccount;
 
@@ -60,51 +60,51 @@ class WalletConnectService {
 
   Future<bool> init() async {
     try {
-      if (initialized) return true;
-      final chains =
-          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
-      final supportedChainIds =
-          chains.map((chain) => chain.fullChainId ?? '').toList();
+      // if (initialized) return true;
+      // final chains =
+      //     (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
+      // final supportedChainIds =
+      //     chains.map((chain) => chain.fullChainId ?? '').toList();
 
-      final optionalNamespaces = W3MNamespace(
-        chains: [
-          ...supportedChainIds,
-          ...W3MChainPresets.chains.values.map((e) => e.namespace),
-        ].unique(),
-        methods: MethodsConstants.allMethods,
-        events: EventsConstants.allEvents,
-      );
+      // final optionalNamespaces = W3MNamespace(
+      //   chains: [
+      //     ...supportedChainIds,
+      //     ...W3MChainPresets.chains.values.map((e) => e.namespace),
+      //   ].unique(),
+      //   methods: MethodsConstants.allMethods,
+      //   events: EventsConstants.allEvents,
+      // );
 
-      _w3mService = W3MService(
-        projectId: AppConfig.walletConnectProjectId,
-        metadata: lemonadeDAppMetadata,
-        logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.debug,
-        optionalNamespaces: {
-          defaultNamespace: optionalNamespaces,
-        },
-        featuredWalletIds: {
-          // coinbase option id
-          "fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa",
-        },
-      );
-      await _w3mService.init();
-      _app = _w3mService.web3App;
-      // Register event handler for all chain in active session if available;
-      final activeSession = await getActiveSession();
+      // _w3mService = ReownAppKitModal(
+      //   projectId: AppConfig.walletConnectProjectId,
+      //   metadata: lemonadeDAppMetadata,
+      //   logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.debug,
+      //   optionalNamespaces: {
+      //     defaultNamespace: optionalNamespaces,
+      //   },
+      //   featuredWalletIds: {
+      //     // coinbase option id
+      //     "fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa",
+      //   },
+      // );
+      // await _w3mService.init();
+      // _app = _w3mService.web3App;
+      // // Register event handler for all chain in active session if available;
+      // final activeSession = await getActiveSession();
 
-      _registerEventHandler(
-        WCUtils.getSessionsChains(activeSession?.namespaces),
-      );
+      // _registerEventHandler(
+      //   WCUtils.getSessionsChains(activeSession?.namespaces),
+      // );
 
-      // Register event handler of all supported chains
-      _registerEventHandler(
-        chains.map((chain) => chain.fullChainId ?? '').toList(),
-      );
+      // // Register event handler of all supported chains
+      // _registerEventHandler(
+      //   chains.map((chain) => chain.fullChainId ?? '').toList(),
+      // );
 
-      _app!.onSessionEvent.subscribe(_onSessionEvent);
-      _app!.onSessionUpdate.subscribe(_onSessionUpdate);
-      _app!.onSessionConnect.subscribe(_onSessionConnect);
-      _app!.onSessionDelete.subscribe(_onSessionDelete);
+      // _app!.onSessionEvent.subscribe(_onSessionEvent);
+      // _app!.onSessionUpdate.subscribe(_onSessionUpdate);
+      // _app!.onSessionConnect.subscribe(_onSessionConnect);
+      // _app!.onSessionDelete.subscribe(_onSessionDelete);
 
       return true;
     } catch (e) {
@@ -113,18 +113,18 @@ class WalletConnectService {
   }
 
   close() {
-    if (_app == null) return;
-    _app!.onSessionEvent.unsubscribeAll();
-    _app!.onSessionUpdate.unsubscribeAll();
-    _app!.onSessionConnect.unsubscribeAll();
-    _app!.onSessionDelete.unsubscribeAll();
+    // if (_app == null) return;
+    // _app!.onSessionEvent.unsubscribeAll();
+    // _app!.onSessionUpdate.unsubscribeAll();
+    // _app!.onSessionConnect.unsubscribeAll();
+    // _app!.onSessionDelete.unsubscribeAll();
   }
 
-  Future<W3MSession?> getActiveSession() async {
-    if (!initialized) {
-      await init();
-    }
-    return _w3mService.session;
+  Future<ReownAppKitModalSession?> getActiveSession() async {
+    // if (!initialized) {
+    //   await init();
+    // }
+    // return _w3mService.session;
   }
 
   Future<String?> personalSign({
@@ -175,16 +175,16 @@ class WalletConnectService {
       return;
     }
 
-    await _w3mService.selectChain(
-      W3MChainInfo(
-        chainName: chain.name ?? '',
-        chainId: chain.chainId ?? '',
-        namespace: chain.fullChainId ?? '',
-        tokenName: chain.nativeToken?.name ?? '',
-        rpcUrl: chain.rpcUrl ?? '',
-      ),
-      switchChain: true,
-    );
+    // await _w3mService.selectChain(
+    //   W3MChainInfo(
+    //     chainName: chain.name ?? '',
+    //     chainId: chain.chainId ?? '',
+    //     namespace: chain.fullChainId ?? '',
+    //     tokenName: chain.nativeToken?.name ?? '',
+    //     rpcUrl: chain.rpcUrl ?? '',
+    //   ),
+    //   switchChain: true,
+    // );
   }
 
   _onSessionConnect(SessionConnect? sessionConnect) {
@@ -221,11 +221,11 @@ class WalletConnectService {
   }
 
   _registerEventHandler(List<String> chainIds) {
-    for (final chainId in chainIds) {
-      for (final event in defaultEvents) {
-        _app!.registerEventHandler(chainId: chainId, event: event.name);
-      }
-    }
+    // for (final chainId in chainIds) {
+    //   for (final event in defaultEvents) {
+    //     _app!.registerEventHandler(chainId: chainId, event: event.name);
+    //   }
+    // }
   }
 }
 

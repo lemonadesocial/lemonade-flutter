@@ -42,7 +42,7 @@ class TicketTierAddPriceButton extends StatelessWidget {
   }
 
   CurrencyTextInputFormatter get currencyFormatter {
-    return CurrencyTextInputFormatter(
+    return CurrencyTextInputFormatter.currency(
       symbol: ticketPrice?.currency ?? '',
       decimalDigits: decimals,
     );
@@ -79,7 +79,7 @@ class TicketTierAddPriceButton extends StatelessWidget {
                             currency: ticketPrice!.currency,
                             decimals: decimals,
                           )
-                        : currencyFormatter.format(ticketPrice!.cost);
+                        : currencyFormatter.formatString(ticketPrice!.cost);
                     return Text(
                       displayAmount,
                       style: Typo.medium.copyWith(

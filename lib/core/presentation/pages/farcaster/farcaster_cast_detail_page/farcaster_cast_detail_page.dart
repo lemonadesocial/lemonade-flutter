@@ -12,7 +12,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:web3modal_flutter/utils/debouncer.dart';
+import 'package:app/core/utils/debouncer.dart';
 
 @RoutePage()
 class FarcasterCastDetailPage extends StatefulWidget {
