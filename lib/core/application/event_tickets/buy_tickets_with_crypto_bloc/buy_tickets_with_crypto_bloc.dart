@@ -14,11 +14,11 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 import 'package:app/core/service/wallet/rpc_error_handler_extension.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_relay_transaction_executor.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_transaction_executor.dart';
 import 'package:app/core/application/event_tickets/buy_tickets_with_crypto_bloc/crypto_transaction_executor/executors/ethereum_stake_transaction_executor.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 part 'buy_tickets_with_crypto_bloc.freezed.dart';
 
@@ -118,7 +118,9 @@ class BuyTicketsWithCryptoBloc
           id: _currentPayment?.id ?? '',
           transferParams: UpdatePaymentTransferParams(
             network: _selectedNetwork!,
-            from: walletConnectService.w3mService.session?.address ?? '',
+            // from: walletConnectService.w3mService.session?.address ?? '',
+            // TODO: FIX WALLET MIGRATION
+            from: '',
           ),
         ),
       );
@@ -319,7 +321,9 @@ class BuyTicketsWithCryptoBloc
           // signature: _signature,
           txHash: _txHash,
           network: _selectedNetwork,
-          from: walletConnectService.w3mService.session?.address ?? '',
+          // from: walletConnectService.w3mService.session?.address ?? '',
+          // TODO: FIX WALLET MIGRATION
+          from: '',
         ),
       ),
     );

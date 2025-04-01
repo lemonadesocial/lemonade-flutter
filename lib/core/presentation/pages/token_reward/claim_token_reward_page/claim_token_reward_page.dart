@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 @RoutePage()
 class ClaimTokenRewardPage extends StatefulWidget {
@@ -51,12 +50,14 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
       _isLoading = true;
     });
     try {
-      final walletAddress =
-          context.read<WalletBloc>().state.activeSession?.address;
+      //  final walletAddress =
+      //     context.read<WalletBloc>().state.activeSession?.address;
+      // TODO: FIX WALLET MIGRATION
+      const walletAddress = '';
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: widget.rewardSignatureResponse.signature!,
-        from: walletAddress ?? '',
+        from: walletAddress,
       );
       final chain = (await getIt<Web3Repository>()
               .getChainById(chainId: vault.network ?? ''))

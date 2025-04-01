@@ -35,7 +35,7 @@ import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 class LemonadeApp extends StatefulWidget {
@@ -210,7 +210,7 @@ class _AppState extends State<_App> {
           orElse: () {},
         );
       },
-      child: Web3ModalTheme(
+      child: ReownAppKitModalTheme(
         isDarkMode: true,
         child: StyledToast(
           locale: const Locale('en', 'US'),

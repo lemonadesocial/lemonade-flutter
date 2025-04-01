@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_tile_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -15,7 +16,6 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 
 class LemonDrawer extends StatelessWidget {
   const LemonDrawer({super.key});

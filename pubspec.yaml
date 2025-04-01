@@ -4,8 +4,8 @@ publish_to: "none"
 version: 1.53.0
 
 environment:
-  flutter: "3.19.6"
-  sdk: "3.3.4"
+  flutter: "3.24.0"
+  sdk: "3.5.0"
 
 dependencies:
   flutter:
@@ -27,7 +27,7 @@ dependencies:
   json_annotation: ^4.8.1
 
   # injection
-  get_it: ^7.6.0
+  get_it: 8.0.3
   injectable: ^2.1.2
 
   # state management
@@ -52,13 +52,13 @@ dependencies:
 
   # assets
   flutter_svg: ^2.0.7
-  cached_network_image: 3.3.1
+  cached_network_image: 3.4.1
   image_picker: ^1.0.2
   image_cropper: ^5.0.1
 
   # UI
   flutter_portal: 1.1.4
-  intl: ^0.18.0
+  intl: 0.20.1
   timeago: ^3.5.0
   sliver_tools: ^0.2.12
   flutter_slidable: ^3.0.0
@@ -78,7 +78,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   dotted_border: ^2.0.0+3
   qr_flutter: ^4.1.0
-  upgrader: ^8.1.0
+  upgrader: 11.3.1
   flutter_switch: ^0.3.2
   flutter_keyboard_visibility: ^6.0.0
   animated_text_kit: ^4.2.2
@@ -87,7 +87,7 @@ dependencies:
   scrollable_positioned_list: 0.3.8
 
   # Webview
-  flutter_inappwebview: 6.0.0
+  flutter_inappwebview: 6.1.0
 
   # Firebase
   firebase_core: ^2.16.0
@@ -97,10 +97,11 @@ dependencies:
 
   # location tracking
   geolocator: 9.0.2
-  rxdart: ^0.27.7
+  rxdart: 0.28.0
 
   # wallet
-  web3modal_flutter: ^3.3.0
+  # web3modal_flutter: 3.1.2
+  reown_appkit: 1.4.1
   web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
@@ -121,7 +122,7 @@ dependencies:
   flutter_stripe: 9.4.0
 
   # crash analytics
-  sentry_flutter: ^7.18.0
+  sentry_flutter: 8.14.1
 
   # other
   path_provider: ^2.0.15
@@ -136,7 +137,7 @@ dependencies:
   formz: ^0.6.1
   flutter_app_badger: ^1.5.0
   uuid: 4.3.3
-  flutter_google_places_hoc081098: 2.0.0-beta.1
+  flutter_google_places_hoc081098: 2.0.0
   google_maps_webservice:
     git:
       url: https://github.com/mthinh/google_maps_webservice.git
@@ -159,10 +160,11 @@ dependencies:
   flutter_wallet_card: ^3.0.4
   html_editor_enhanced: 2.6.0
   flutter_widget_from_html: 0.15.3
-  file_picker: 8.0.3
+  file_picker: 8.0.6
   add_2_calendar: ^3.0.1
   permission_handler: ^11.3.1
   csv: 5.1.1
+  appcheck: 1.5.4+1
 
 dependency_overrides:
   matrix_api_lite:
@@ -175,6 +177,8 @@ dependency_overrides:
       ref: main
   package_info_plus: 7.0.0
   uuid: 4.3.3
+  web: 1.0.0
+  intl: any
 
 dev_dependencies:
   flutter_test:

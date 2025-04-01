@@ -4,6 +4,7 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/mutation/update_event_checkin.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -15,7 +16,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:dropdown_button2/dropdown_button2.dart';
 

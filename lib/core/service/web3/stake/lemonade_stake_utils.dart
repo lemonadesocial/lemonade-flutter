@@ -1,6 +1,6 @@
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/service/web3/web3_contract_service.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 import 'package:http/http.dart' as http;
 
 class LemonadeStakeUtils {

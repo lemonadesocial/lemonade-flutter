@@ -26,7 +26,6 @@ import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/payment_processing_view.dart';
 import 'package:app/core/presentation/pages/event_tickets/event_buy_tickets_page/sub_pages/event_buy_tickets_processing_page/views/loaders/transaction_confirming_view.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
@@ -39,7 +38,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
 
 @RoutePage()
 class EventBuyTicketsProcessingPage extends StatelessWidget {
@@ -128,7 +126,9 @@ class _EventBuyTicketsProcessingPageViewState
   Event get event => context.read<EventProviderBloc>().event;
 
   String get userWalletAddress =>
-      getIt<WalletConnectService>().w3mService.session?.address ?? '';
+      // getIt<WalletConnectService>().w3mService.session?.address ?? '';
+      // TODO: FIX WALLET MIGRATION
+      '';
 
   @override
   void initState() {

@@ -64,12 +64,12 @@ class __ViewState extends State<_View> {
                 ?.currencyMap?[initialCurrency]?.decimals ??
             0)
         : 0;
-    final currencyFormatter = CurrencyTextInputFormatter(
+    final currencyFormatter = CurrencyTextInputFormatter.currency(
       symbol: '',
       decimalDigits: initialDecimals,
     );
     final initialValue =
-        currencyFormatter.format(initialTicketPrice?.cost ?? '');
+        currencyFormatter.formatString(initialTicketPrice?.cost ?? '');
     amountController.text = initialValue;
     context.read<ModifyTicketPriceV2Bloc>().add(
           ModifyTicketPriceV2Event.onCurrencyChanged(
@@ -118,7 +118,7 @@ class __ViewState extends State<_View> {
                 ?.decimals ??
             0)
         : 0;
-    final currencyFormatter = CurrencyTextInputFormatter(
+    final currencyFormatter = CurrencyTextInputFormatter.currency(
       symbol: '',
       decimalDigits: decimals,
     );

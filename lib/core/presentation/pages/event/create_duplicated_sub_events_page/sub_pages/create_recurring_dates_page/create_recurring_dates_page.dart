@@ -25,7 +25,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:web3modal_flutter/utils/debouncer.dart';
+import 'package:app/core/utils/debouncer.dart';
 
 enum RecurringEndMode {
   until,

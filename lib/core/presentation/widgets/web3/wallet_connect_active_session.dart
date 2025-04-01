@@ -1,9 +1,6 @@
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -11,12 +8,11 @@ import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/services/explorer_service/explorer_service_singleton.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 class WalletConnectActiveSessionWidget extends StatelessWidget {
   final String? title;
-  final W3MSession? activeSession;
+  final ReownAppKitModalSession? activeSession;
   final Function()? onPressDisconnect;
 
   const WalletConnectActiveSessionWidget({
@@ -29,9 +25,11 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final w3mService = getIt<WalletConnectService>().w3mService;
-    String displayAddress =
-        Web3Utils.formatIdentifier(w3mService.session?.address ?? '');
+    // final w3mService = getIt<WalletConnectService>().w3mService;
+    // String displayAddress =
+    //     Web3Utils.formatIdentifier(w3mService.session?.address ?? '');
+    // TODO: FIX WALLET MIGRATION
+    const displayAddress = '';
     final fallbackIcon = ThemeSvgIcon(
       color: colorScheme.onSurfaceVariant,
       builder: (colorFilter) => Assets.icons.icWalletFilled.svg(
@@ -59,9 +57,11 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
               ),
               child: Center(
                 child: CachedNetworkImage(
-                  imageUrl: explorerService.instance.getWalletImageUrl(
-                    w3mService.selectedWallet?.listing.imageId ?? '',
-                  ),
+                  // TODO: FIX WALLET MIGRATION
+                  imageUrl: '',
+                  // explorerService.instance.getWalletImageUrl(
+                  //   w3mService.selectedWallet?.listing.imageId ?? '',
+                  // ),
                   placeholder: (_, __) => fallbackIcon,
                   errorWidget: (_, __, ___) => fallbackIcon,
                 ),
@@ -80,7 +80,9 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
                 color: colorScheme.onSecondary,
               ),
             ),
-            Text(displayAddress),
+            // TODO: FIX WALLET MIGRATION
+            // ignore: unnecessary_null_comparison
+            const Text(displayAddress),
           ],
         ),
         const Spacer(),

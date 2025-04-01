@@ -12,7 +12,7 @@ Future<void> setupSentry(
       options.dsn = AppConfig.sentryDsn;
       options.beforeSend = (CrashAnalyticsManager().crashAnalyticsService
               as SentryCrashAnalyticsService)
-          .beforeSend;
+          .beforeSend as BeforeSendCallback;
       options.sendDefaultPii = true;
       options.reportSilentFlutterErrors = true;
       options.attachScreenshot = true;

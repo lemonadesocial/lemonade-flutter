@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:web3modal_flutter/widgets/buttons/connect_button.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 class CompleteProfileBottomSheet extends StatelessWidget {
   const CompleteProfileBottomSheet({
@@ -163,7 +163,7 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                       onTap: () {
                         final w3mService =
                             getIt<WalletConnectService>().w3mService;
-                        w3mService.openModal(context);
+                        w3mService.openModalView();
                       },
                       loading: isConnecting,
                     );

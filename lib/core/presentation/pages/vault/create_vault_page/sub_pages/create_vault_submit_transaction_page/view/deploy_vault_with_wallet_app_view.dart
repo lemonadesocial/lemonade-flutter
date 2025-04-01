@@ -5,14 +5,11 @@ import 'package:app/core/domain/vault/input/get_init_safe_transaction_input/get_
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/presentation/widgets/web3/wallet_connect_active_session.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class DeployVaultIWithWalletAppView extends StatelessWidget {
   const DeployVaultIWithWalletAppView({super.key});
@@ -31,8 +28,10 @@ class DeployVaultIWithWalletAppView extends StatelessWidget {
           );
         }
         final createVaultData = context.read<CreateVaultBloc>().state.data;
-        final userWalletAddress =
-            getIt<WalletConnectService>().w3mService.session?.address ?? '';
+        // final userWalletAddress =
+        //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
+        // TODO: FIX WALLET MIGRATION
+        const userWalletAddress = '';
         final network = createVaultData.selectedChain!;
         return Column(
           children: [

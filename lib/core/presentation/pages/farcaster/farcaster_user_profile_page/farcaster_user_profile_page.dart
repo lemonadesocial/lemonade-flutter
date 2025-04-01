@@ -18,7 +18,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:web3modal_flutter/utils/debouncer.dart';
+import 'package:app/core/utils/debouncer.dart';
 
 @RoutePage()
 class FarcasterUserProfilePage extends StatefulWidget {

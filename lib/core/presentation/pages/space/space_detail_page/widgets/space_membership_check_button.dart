@@ -82,7 +82,8 @@ class _ViewState extends State<_View> {
     await getIt<WalletConnectService>().w3mService.disconnect();
     context.read<WalletBloc>().add(const WalletEvent.disconnect());
     await Future.delayed(const Duration(milliseconds: 500));
-    getIt<WalletConnectService>().w3mService.openModal(context);
+    // TODO: FIX WALLET MIGRATION
+    getIt<WalletConnectService>().w3mService.openModalView();
   }
 
   Future<void> _checkAccess({

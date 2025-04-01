@@ -5,7 +5,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 class ConnectWalletButton extends StatelessWidget {
   final Function(
@@ -20,7 +20,7 @@ class ConnectWalletButton extends StatelessWidget {
 
   void _onConnectPressed(BuildContext context) {
     final w3mService = getIt<WalletConnectService>().w3mService;
-    w3mService.openModal(context);
+    w3mService.openModalView();
   }
 
   @override
