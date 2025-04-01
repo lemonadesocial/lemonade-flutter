@@ -80,6 +80,8 @@ class WalletConnectActiveSessionWidget extends StatelessWidget {
                 color: colorScheme.onSecondary,
               ),
             ),
+            // TODO: FIX WALLET MIGRATION
+            // ignore: unnecessary_null_comparison
             Text(displayAddress),
           ],
         ),

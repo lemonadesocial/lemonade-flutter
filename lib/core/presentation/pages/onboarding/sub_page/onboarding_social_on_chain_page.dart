@@ -98,6 +98,8 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                         radius: LemonRadius.medium,
                         leadingRadius: LemonRadius.xSmall,
                         title: t.common.actions.connectWallet,
+                        // TODO: FIX WALLET MIGRATION
+                        // ignore: unnecessary_null_comparison
                         subTitle: userWalletAddress != null
                             ? Web3Utils.formatIdentifier(userWalletAddress)
                             : t.common.status.notConnected,

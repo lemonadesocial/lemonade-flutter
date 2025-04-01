@@ -61,6 +61,8 @@ class _View extends StatelessWidget {
 
     // TODO: FIX WALLET MIGRATION
     const clientConnectedAddress = '';
+    // TODO: FIX WALLET MIGRATION
+    // ignore: unnecessary_null_comparison
     const isConnected = clientConnectedAddress != null;
     final isVerified = (isConnected &&
         userVerifiedWalletAddresses.contains(clientConnectedAddress));

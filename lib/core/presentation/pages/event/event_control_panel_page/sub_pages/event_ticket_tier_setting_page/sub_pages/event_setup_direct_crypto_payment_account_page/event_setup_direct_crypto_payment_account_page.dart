@@ -248,8 +248,12 @@ class _EventSetupDirectCryptoPaymentAccountPageState
                         autofocus: true,
                       ),
                       SizedBox(height: Spacing.medium),
+                      // TODO: FIX WALLET MIGRATION
+                      // ignore: unnecessary_null_comparison
                       if (userWalletAddress == null)
                         const ConnectWalletButton(),
+                      // TODO: FIX WALLET MIGRATION
+                      // ignore: unnecessary_null_comparison
                       if (userWalletAddress != null)
                         Opacity(
                           opacity: (isValid && !isLoading) ? 1 : 0.5,
