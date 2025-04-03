@@ -46,7 +46,6 @@ dependencies:
   # oauth
   oauth2_client: 4.1.0
   flutter_appauth: 8.0.1
-  flutter_web_auth_2: ^5.0.0-alpha.0
 
   #env
   flutter_dotenv: 5.2.0
@@ -101,7 +100,6 @@ dependencies:
   rxdart: 0.28.0
 
   # wallet
-  # web3modal_flutter: 3.1.2
   reown_appkit: 1.4.1
   web3dart: 2.7.3
   convert: ^3.1.1
@@ -178,7 +176,7 @@ dependency_overrides:
       ref: main
   package_info_plus: 7.0.0
   uuid: 4.3.3
-  web: 1.1.0
+  web: 1.1.1
   intl: any
 
 dev_dependencies:
