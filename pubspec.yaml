@@ -101,7 +101,7 @@ dependencies:
 
   # wallet
   # web3modal_flutter: 3.1.2
-  reown_appkit: 1.4.1
+  reown_appkit: 1.4.2
   web3dart: 2.7.3
   convert: ^3.1.1
   bip39: ^1.0.6
@@ -188,7 +188,7 @@ dev_dependencies:
   flutter_lints: 4.0.0
 
   # code generators
-  build_runner: ^2.4.7
+  build_runner: 2.4.13
   json_serializable: ^6.6.2
   freezed: ^2.3.5
   auto_route_generator: ^7.1.1
@@ -203,6 +203,11 @@ dev_dependencies:
 flutter_gen:
   integrations:
     flutter_svg: true
+  assets:
+    exclude:
+      - .env
+      - .env.production
+      - .env.staging
 
 # The following section is specific to Flutter packages.
 flutter:

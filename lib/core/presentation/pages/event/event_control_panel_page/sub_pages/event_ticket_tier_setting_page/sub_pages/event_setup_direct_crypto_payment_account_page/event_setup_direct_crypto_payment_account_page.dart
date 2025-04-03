@@ -12,6 +12,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -22,6 +23,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web3dart/web3dart.dart' as web3dart;
 
 class EventSetupDirectCryptoPaymentAccountPage extends StatefulWidget {
   final Chain chain;
@@ -45,10 +47,8 @@ class _EventSetupDirectCryptoPaymentAccountPageState
   @override
   void initState() {
     super.initState();
-    // textController.text =
-    //     context.read<WalletBloc>().state.activeSession?.address ?? '';
-    // TODO: FIX WALLET MIGRATION
-    textController.text = '';
+    textController.text =
+        context.read<WalletBloc>().state.activeSession?.address ?? '';
     textController.addListener(() {
       setState(() {
         isValid = _validatePayeeAddress(textController.text);
@@ -66,8 +66,7 @@ class _EventSetupDirectCryptoPaymentAccountPageState
 
   bool _validatePayeeAddress(String value) {
     try {
-      // web3modal.EthereumAddress.fromHex(value);
-      // TODO: FIX WALLET MIGRATION
+      web3dart.EthereumAddress.fromHex(value);
       return true;
     } catch (e) {
       return false;
@@ -82,10 +81,8 @@ class _EventSetupDirectCryptoPaymentAccountPageState
     });
     _createdPaymentAccount ??= await _createEthereumRelayPaymentAccount(
       selectedChain: widget.chain,
-      // userWalletAddress:
-      //     context.read<WalletBloc>().state.activeSession?.address ?? '',
-      // TODO: FIX WALLET MIGRATION
-      userWalletAddress: '',
+      userWalletAddress:
+          context.read<WalletBloc>().state.activeSession?.address ?? '',
       payeeAddress: _getPayeeAddress(),
     );
     if (_createdPaymentAccount == null) {
@@ -181,20 +178,17 @@ class _EventSetupDirectCryptoPaymentAccountPageState
   Widget build(BuildContext context) {
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (context, state) {
-        // if (state.activeSession?.address != null) {
-        //   textController.text = state.activeSession?.address ?? '';
-        //   setState(() {
-        //     isValid = _validatePayeeAddress(textController.text);
-        //   });
-        // }
-        // TODO: FIX WALLET MIGRATION
+        if (state.activeSession?.address != null) {
+          textController.text = state.activeSession?.address ?? '';
+          setState(() {
+            isValid = _validatePayeeAddress(textController.text);
+          });
+        }
       },
       builder: (context, state) {
         final t = Translations.of(context);
         final colorScheme = Theme.of(context).colorScheme;
-        // final userWalletAddress = state.activeSession?.address;
-        // TODO: FIX WALLET MIGRATION
-        const userWalletAddress = '';
+        final userWalletAddress = state.activeSession?.address;
         final event = context.read<GetEventDetailBloc>().state.maybeWhen(
               orElse: () => null,
               fetched: (event) => event,
@@ -248,12 +242,8 @@ class _EventSetupDirectCryptoPaymentAccountPageState
                         autofocus: true,
                       ),
                       SizedBox(height: Spacing.medium),
-                      // TODO: FIX WALLET MIGRATION
-                      // ignore: unnecessary_null_comparison
                       if (userWalletAddress == null)
                         const ConnectWalletButton(),
-                      // TODO: FIX WALLET MIGRATION
-                      // ignore: unnecessary_null_comparison
                       if (userWalletAddress != null)
                         Opacity(
                           opacity: (isValid && !isLoading) ? 1 : 0.5,

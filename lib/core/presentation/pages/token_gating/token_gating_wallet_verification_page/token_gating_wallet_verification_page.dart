@@ -1,10 +1,12 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/sign_wallet_bloc/sign_wallet_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/pages/token_gating/widget/token_gating_wallet_address_box.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -56,14 +58,9 @@ class _View extends StatelessWidget {
             )
             .toList() ??
         [];
-    // final clientConnectedAddress =
-    //     context.watch<WalletBloc>().state.activeSession?.address;
-
-    // TODO: FIX WALLET MIGRATION
-    const clientConnectedAddress = '';
-    // TODO: FIX WALLET MIGRATION
-    // ignore: unnecessary_null_comparison
-    const isConnected = clientConnectedAddress != null;
+    final clientConnectedAddress =
+        context.watch<WalletBloc>().state.activeSession?.address;
+    final isConnected = clientConnectedAddress != null;
     final isVerified = (isConnected &&
         userVerifiedWalletAddresses.contains(clientConnectedAddress));
 

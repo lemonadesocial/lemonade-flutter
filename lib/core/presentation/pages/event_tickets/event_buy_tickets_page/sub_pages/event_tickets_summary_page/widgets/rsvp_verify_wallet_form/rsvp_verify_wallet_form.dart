@@ -6,6 +6,7 @@ import 'package:app/core/domain/web3/entities/application_blockchain_platform.da
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/user_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -134,9 +135,7 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                     }
                     context.read<SignWalletBloc>().add(
                           SignWalletEvent.sign(
-                            // TODO: FIX WALLET MIGRATION
-                            wallet: '',
-                            // wallet: state.activeSession?.address ?? '',
+                            wallet: state.activeSession?.address ?? '',
                           ),
                         );
                   },
@@ -147,10 +146,8 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                                   (element) =>
                                       element != userProfile?.walletCustodial,
                                 ) ??
-                                // TODO: FIX WALLET MIGRATION
-                                ''
-                                    // state.activeSession?.address ??
-                                    '',
+                                state.activeSession?.address ??
+                                '',
                           ),
                         )
                       : t.event.eventBuyTickets.verifyWithWallet,

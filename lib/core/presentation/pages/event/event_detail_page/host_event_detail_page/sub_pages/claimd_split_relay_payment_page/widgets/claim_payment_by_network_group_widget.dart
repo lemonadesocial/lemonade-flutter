@@ -8,6 +8,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/dotted_line/dotted_line.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -20,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/injection/register_module.dart';
 
 class ClaimbleRelayPayment {
   final BigInt amount;
@@ -74,9 +77,8 @@ class _ClaimPaymentByNetworkGroupState
                 targetPaymentAccount?.accountInfo?.paymentSplitterContract ??
                     '',
             connectedWalletAddress:
-                // getIt<WalletConnectService>().w3mService.session?.address ?? '',
-                // TODO: FIX WALLET MIGRATION
-                '',
+                getIt<WalletConnectService>().w3mService?.session?.address ??
+                    '',
           ),
         );
   }

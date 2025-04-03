@@ -6,6 +6,8 @@ import 'package:app/core/presentation/pages/token_reward/views/claim_multiple_to
 import 'package:app/core/presentation/pages/token_reward/views/claim_single_token_reward_view.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_token_reward_processing_view.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_token_reward_success_view.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -50,10 +52,8 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
       _isLoading = true;
     });
     try {
-      //  final walletAddress =
-      //     context.read<WalletBloc>().state.activeSession?.address;
-      // TODO: FIX WALLET MIGRATION
-      const walletAddress = '';
+      final walletAddress =
+          getIt<WalletConnectService>().w3mService?.session?.address ?? '';
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: widget.rewardSignatureResponse.signature!,

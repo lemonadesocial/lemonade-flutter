@@ -163,7 +163,7 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                       onTap: () {
                         final w3mService =
                             getIt<WalletConnectService>().w3mService;
-                        w3mService.openModalView();
+                        w3mService?.openModalView();
                       },
                       loading: isConnecting,
                     );

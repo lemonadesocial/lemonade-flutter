@@ -16,6 +16,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/stake/lemonade_stake_vault_factory.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -28,6 +29,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web3dart/web3dart.dart' as web3dart;
 
 class EventSetupStakeCryptoPaymentAccountPage extends StatefulWidget {
   final Chain chain;
@@ -56,10 +58,8 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   @override
   void initState() {
     super.initState();
-    // walletIdController.text =
-    //     context.read<WalletBloc>().state.activeSession?.address ?? '';
-    // TODO: FIX WALLET MIGRATION
-    walletIdController.text = '';
+    walletIdController.text =
+        context.read<WalletBloc>().state.activeSession?.address ?? '';
     walletIdController.addListener(() {
       setState(() {
         isValid = _validate();
@@ -88,9 +88,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   }
 
   String _getUserWalletAddress() =>
-      // context.read<WalletBloc>().state.activeSession?.address ?? '';
-      // TODO: FIX WALLET MIGRATION
-      '';
+      context.read<WalletBloc>().state.activeSession?.address ?? '';
 
   String _getPayeeAddress() => walletIdController.text;
 
@@ -104,8 +102,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
 
   bool _validatePayeeAddress(String value) {
     try {
-      // web3modal.EthereumAddress.fromHex(value);
-      // TODO: FIX WALLET MIGRATION
+      web3dart.EthereumAddress.fromHex(value);
       return true;
     } catch (e) {
       return false;
@@ -281,20 +278,17 @@ class _EventSetupStakeCryptoPaymentAccountPageState
   Widget build(BuildContext context) {
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (context, state) {
-        // TODO: FIX WALLET MIGRATION
-        // if (state.activeSession?.address != null) {
-        //   walletIdController.text = state.activeSession?.address ?? '';
-        //   setState(() {
-        //     isValid = _validate();
-        //   });
-        // }
+        if (state.activeSession?.address != null) {
+          walletIdController.text = state.activeSession?.address ?? '';
+          setState(() {
+            isValid = _validate();
+          });
+        }
       },
       builder: (context, state) {
         final t = Translations.of(context);
         final colorScheme = Theme.of(context).colorScheme;
-        // TODO: FIX WALLET MIGRATION
-        // final userWalletAddress = state.activeSession?.address;
-        const userWalletAddress = '';
+        final userWalletAddress = state.activeSession?.address;
         final event = context.read<GetEventDetailBloc>().state.maybeWhen(
               orElse: () => null,
               fetched: (event) => event,
@@ -416,12 +410,8 @@ class _EventSetupStakeCryptoPaymentAccountPageState
                                   ],
                                 ),
                                 SizedBox(height: Spacing.medium),
-                                // TODO: FIX WALLET MIGRATION
-                                // ignore: unnecessary_null_comparison
                                 if (userWalletAddress == null)
                                   const ConnectWalletButton(),
-                                // TODO: FIX WALLET MIGRATION
-                                // ignore: unnecessary_null_comparison
                                 if (userWalletAddress != null)
                                   Opacity(
                                     opacity: (isValid && !isLoading) ? 1 : 0.5,
