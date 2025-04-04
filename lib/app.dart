@@ -103,10 +103,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
             create: (context) => ConnectivityBloc(),
           ),
           BlocProvider(
-            create: (context) => WalletBloc()
-              ..add(
-                const WalletEvent.getActiveSessions(),
-              ),
+            create: (context) => WalletBloc(),
           ),
           BlocProvider(
             create: (context) => RefreshBloc(),

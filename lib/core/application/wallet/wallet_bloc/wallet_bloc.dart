@@ -18,7 +18,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             state: ConnectButtonState.idle,
           ),
         ) {
-    walletConnectService.w3mService.addListener(_updateState);
+    on<WalletEventInit>(_onInit);
     on<WalletEventGetActiveSessions>(_onGetActiveSessions);
     on<WalletEventDisconnectWallet>(_onDisconnectWallet);
     on<WalletEventOnStateChange>(_onStateChange);
@@ -26,9 +26,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   @override
   close() async {
-    walletConnectService.w3mService.removeListener(_updateState);
+    walletConnectService.w3mService?.removeListener(_updateState);
     walletConnectService.close();
     super.close();
+  }
+
+  void _onInit(WalletEventInit event, Emitter emit) async {
+    walletConnectService.w3mService?.addListener(_updateState);
+    add(const WalletEvent.getActiveSessions());
   }
 
   _onGetActiveSessions(WalletEventGetActiveSessions event, Emitter emit) async {
@@ -46,6 +51,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   void _onStateChange(WalletEventOnStateChange event, Emitter emit) async {
     final w3mService = walletConnectService.w3mService;
+    if (w3mService == null) {
+      return;
+    }
+
     final isConnected = w3mService.isConnected;
     if (!isConnected) {
       return emit(
@@ -108,6 +117,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
 @freezed
 class WalletEvent with _$WalletEvent {
+  const factory WalletEvent.init() = WalletEventInit;
   const factory WalletEvent.getActiveSessions() = WalletEventGetActiveSessions;
   const factory WalletEvent.disconnect() = WalletEventDisconnectWallet;
   const factory WalletEvent.onStateChange() = WalletEventOnStateChange;

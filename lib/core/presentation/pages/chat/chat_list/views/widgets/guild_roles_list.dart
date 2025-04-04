@@ -6,6 +6,7 @@ import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_d
 import 'package:app/core/presentation/pages/chat/chat_list/views/widgets/guild_role_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/guild_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -144,13 +145,11 @@ class GuildRolesList extends StatelessWidget {
   }
 
   void _handleGuildRoleTap(BuildContext context, Guild? guild) {
-    // final userWalletAddress =
-    //     getIt<WalletConnectService>().w3mService.session?.address ?? '';
-    // TODO: FIX WALLET MIGRATION
-    const userWalletAddress = '';
+    final userWalletAddress =
+        getIt<WalletConnectService>().w3mService?.session?.address ?? '';
     if (userWalletAddress.isEmpty) {
       final w3mService = getIt<WalletConnectService>().w3mService;
-      w3mService.openModalView();
+      w3mService?.openModalView();
     } else {
       AutoRouter.of(context).navigate(
         WebviewRoute(
