@@ -26,7 +26,6 @@ void main() async {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
-  await getIt<WalletConnectService>().init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   CrashAnalyticsManager().initialize(CrashAnalyticsProvider.sentry);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
