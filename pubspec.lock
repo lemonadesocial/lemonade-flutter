@@ -367,12 +367,13 @@ packages:
     source: hosted
     version: "4.10.1"
   coinbase_wallet_sdk:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: coinbase_wallet_sdk
-      sha256: c51f3c54c728a6bdaec346de2ce4a3b6498f099a030772b7df22b058a1bad884
-      url: "https://pub.dev"
-    source: hosted
+      path: flutter
+      ref: "2.0"
+      resolved-ref: "8092cb0b40671405754e1515d2770708a82b5bc8"
+      url: "https://github.com/WalletConnect/wallet-mobile-sdk.git"
+    source: git
     version: "1.0.10"
   collection:
     dependency: transitive
