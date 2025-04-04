@@ -20,7 +20,7 @@ class ConnectWalletButton extends StatelessWidget {
 
   void _onConnectPressed(BuildContext context) {
     final w3mService = getIt<WalletConnectService>().w3mService;
-    w3mService.openModalView();
+    w3mService?.openModalView();
   }
 
   @override
@@ -44,7 +44,7 @@ class ConnectWalletButton extends StatelessWidget {
             }
             _onConnectPressed(context);
           },
-          loadingWhen: connecting || w3mService.status.isLoading,
+          loadingWhen: connecting || w3mService?.status.isLoading == true,
           label: t.event.eventCryptoPayment.connectWallet,
         );
       },

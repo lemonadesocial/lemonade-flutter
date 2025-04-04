@@ -11,7 +11,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:graphql_flutter/graphql_flutter.dart' as gql_flutter;
 import 'package:app/injection/register_module.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
@@ -26,7 +25,6 @@ void main() async {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
-  await getIt<WalletConnectService>().init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   CrashAnalyticsManager().initialize(CrashAnalyticsProvider.sentry);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

@@ -1,3 +1,4 @@
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart';
 import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
@@ -11,6 +12,7 @@ import 'package:app/core/presentation/pages/token_reward/widgets/reward_by_vault
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -21,6 +23,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class EventDetailClaimTokenRewardPage extends StatefulWidget {
@@ -84,10 +87,9 @@ class _EventDetailClaimTokenRewardPageState
       _isClaiming = true;
     });
     try {
-      // final walletAddress =
-      //     context.read<WalletBloc>().state.activeSession?.address;
-      // TODO: FIX WALLET MIGRATION
-      const walletAddress = '';
+      final walletAddress =
+          context.read<WalletBloc>().state.activeSession?.address ?? '';
+
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: rewardSignatureResponse!.signature!,

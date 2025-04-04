@@ -100,6 +100,7 @@ dependencies:
   rxdart: 0.28.0
 
   # wallet
+  # web3modal_flutter: 3.1.2
   reown_appkit: 1.4.2
   web3dart: 2.7.3
   convert: ^3.1.1
@@ -202,6 +203,11 @@ dev_dependencies:
 flutter_gen:
   integrations:
     flutter_svg: true
+  assets:
+    exclude:
+      - .env
+      - .env.production
+      - .env.staging
 
 # The following section is specific to Flutter packages.
 flutter:
