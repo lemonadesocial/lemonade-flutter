@@ -3,7 +3,6 @@ import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/setup_sentry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
