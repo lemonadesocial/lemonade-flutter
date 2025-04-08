@@ -9,6 +9,10 @@ abstract class Web3Repository {
     required String chainId,
   });
 
+  Future<Either<Failure, Chain?>> getChainByFullChainId({
+    required String fullChainId,
+  });
+
   Future<Either<Failure, String>> getVaultSalt({
     required String eventId,
   });
