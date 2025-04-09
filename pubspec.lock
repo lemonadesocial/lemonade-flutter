@@ -367,12 +367,13 @@ packages:
     source: hosted
     version: "4.10.1"
   coinbase_wallet_sdk:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: coinbase_wallet_sdk
-      sha256: c51f3c54c728a6bdaec346de2ce4a3b6498f099a030772b7df22b058a1bad884
-      url: "https://pub.dev"
-    source: hosted
+      path: flutter
+      ref: "2.0"
+      resolved-ref: "8092cb0b40671405754e1515d2770708a82b5bc8"
+      url: "https://github.com/WalletConnect/wallet-mobile-sdk.git"
+    source: git
     version: "1.0.10"
   collection:
     dependency: transitive
@@ -1607,10 +1608,10 @@ packages:
     dependency: transitive
     description:
       name: graphql
-      sha256: e15f0cb6299baacff816b844ca103ea0f3e85da30109ea6a0b7c3d58eaafc6ef
+      sha256: b67471ddb954fd538c5930f989c5072e038a9fc910afc85a8a926a7f9b8c56d3
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0-beta.11"
+    version: "5.2.0"
   graphql_codegen:
     dependency: "direct dev"
     description:
@@ -2552,10 +2553,10 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: "077b03f9ee44cfb1eaadbf8af58255e670de62b3f240ca154ce96a5591dc3885"
+      sha256: "3a64dd001bff768ce5ab6fc3608deef4dde22acd4b5d947763557b20db9e2a32"
       url: "https://pub.dev"
     source: hosted
-    version: "8.14.1"
+    version: "8.14.0"
   sentry_dart_plugin:
     dependency: "direct dev"
     description:
@@ -2568,10 +2569,10 @@ packages:
     dependency: "direct main"
     description:
       name: sentry_flutter
-      sha256: a348e2a365a8ad7682dd09db54f50f19f1c87180b8278f088bc393c511aea5e0
+      sha256: "3d361f2d5f805783e2e4ed1bd475ef126b36cf525b359dc3627a765a3fb7424d"
       url: "https://pub.dev"
     source: hosted
-    version: "8.14.1"
+    version: "8.14.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -2973,10 +2974,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: "16a513b6c12bb419304e72ea0ae2ab4fed569920d1c7cb850263fe3acc824626"
+      sha256: "7f2022359d4c099eea7df3fdf739f7d3d3b9faf3166fb1dd390775176e0b76cb"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.2"
+    version: "6.3.3"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -3157,10 +3158,10 @@ packages:
     dependency: "direct overridden"
     description:
       name: web
-      sha256: d43c1d6b787bf0afad444700ae7f4db8827f701bc61c255ac8d328c6f4d52062
+      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.1"
   web3dart:
     dependency: "direct main"
     description:
