@@ -51,6 +51,20 @@ class Web3RepositoryIml implements Web3Repository {
   }
 
   @override
+  Future<Either<Failure, Chain?>> getChainByFullChainId({
+    required String fullChainId,
+  }) async {
+    final getChainsResult = await getChainsList();
+    if (getChainsResult.isLeft()) {
+      return Left(Failure());
+    }
+    final chains = getChainsResult.getOrElse(() => []);
+    return Right(
+      chains.firstWhereOrNull((element) => element.fullChainId == fullChainId),
+    );
+  }
+
+  @override
   Future<Either<Failure, String>> getVaultSalt({
     required String eventId,
   }) async {

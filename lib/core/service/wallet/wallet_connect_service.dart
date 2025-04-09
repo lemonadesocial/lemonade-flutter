@@ -1,7 +1,6 @@
 // ignore_for_file: unused_element
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
-import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/injection/register_module.dart';
@@ -49,7 +48,7 @@ class WalletConnectService {
               chainId: chain.chainId ?? '',
               currency: chain.nativeToken?.symbol ?? '',
               rpcUrl: chain.rpcUrl ?? '',
-              explorerUrl: '',
+              explorerUrl: chain.rpcUrl ?? '',
               isTestNetwork: !AppConfig.isProduction,
             ),
           )
@@ -150,7 +149,11 @@ class WalletConnectService {
     required String chainId,
     required EthereumTransaction transaction,
   }) async {
+    await switchChain(chainId: chainId);
+
+    await Future.delayed(const Duration(milliseconds: 500));
     _w3mService.launchConnectedWallet();
+
     final transactionId = await _w3mService.request(
       topic: _w3mService.session?.topic ?? '',
       chainId: chainId,
@@ -161,6 +164,9 @@ class WalletConnectService {
         ],
       ),
     );
+    if (transactionId is! String) {
+      throw Exception('Failed to send transaction ${transactionId.toString()}');
+    }
     return transactionId;
   }
 
@@ -169,23 +175,42 @@ class WalletConnectService {
   }
 
   Future<void> switchChain({
-    required Chain chain,
+    required String chainId,
   }) async {
     if (_w3mService.session == null) {
       return;
     }
-    if (_w3mService.session?.hasSwitchMethod() != true) {
+    final chain = (await getIt<Web3Repository>().getChainByFullChainId(
+      fullChainId: chainId,
+    ))
+        .fold(
+      (failure) => null,
+      (chain) => chain,
+    );
+
+    if (chain == null) {
       return;
     }
-    _w3mService.selectChain(
-      ReownAppKitModalNetworkInfo(
-        name: chain.name ?? '',
-        chainId: chain.chainId ?? '',
-        currency: chain.nativeToken?.symbol ?? '',
-        rpcUrl: chain.rpcUrl ?? '',
-        explorerUrl: '',
-      ),
+    final namespace =
+        NamespaceUtils.getNamespaceFromChain(chain.fullChainId ?? '');
+    if (namespace != NetworkUtils.eip155) {
+      return;
+    }
+    final targetChain = ReownAppKitModalNetworkInfo(
+      name: chain.name ?? '',
+      chainId: chain.fullChainId ?? '',
+      currency: chain.nativeToken?.symbol ?? '',
+      rpcUrl: chain.rpcUrl ?? '',
+      explorerUrl: chain.rpcUrl ?? '',
     );
+    if (_w3mService.session?.hasSwitchMethod() == true) {
+      _w3mService.launchConnectedWallet();
+      await _w3mService.requestSwitchToChain(targetChain);
+    } else {
+      await _w3mService.selectChain(
+        targetChain,
+      );
+    }
   }
 }
 
