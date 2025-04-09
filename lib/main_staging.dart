@@ -15,7 +15,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env.staging');
+  await dotenv.load(fileName: '.env');
   await gql_flutter.initHiveForFlutter();
 
   registerModule();

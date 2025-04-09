@@ -36,7 +36,7 @@ dependencies:
 
   # local storage
   hive: ^2.2.3
-  flutter_secure_storage: ^8.1.0
+  flutter_secure_storage: ^10.0.0-beta.4
   sqflite: ^2.3.0
   path: ^1.8.3
 
@@ -44,11 +44,11 @@ dependencies:
   auto_route: ^7.4.0
 
   # oauth
-  oauth2_client: ^3.2.1
-  flutter_appauth: ^5.0.0
+  oauth2_client: 4.1.0
+  flutter_appauth: 8.0.1
 
   #env
-  flutter_dotenv: ^5.1.0
+  flutter_dotenv: 5.2.0
 
   # assets
   flutter_svg: ^2.0.7
@@ -87,7 +87,7 @@ dependencies:
   scrollable_positioned_list: 0.3.8
 
   # Webview
-  flutter_inappwebview: 6.1.0
+  flutter_inappwebview: 6.1.5
 
   # Firebase
   firebase_core: ^2.16.0
@@ -198,7 +198,7 @@ dev_dependencies:
   freezed: ^2.3.5
   auto_route_generator: ^7.1.1
   injectable_generator: ^2.1.6
-  flutter_gen_runner: ^5.3.1
+  flutter_gen_runner: 5.10.0
   graphql_codegen: ^0.13.11
 
   # crash analytics
