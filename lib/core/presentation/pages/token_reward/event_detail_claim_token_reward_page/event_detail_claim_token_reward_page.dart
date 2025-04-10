@@ -117,9 +117,13 @@ class _EventDetailClaimTokenRewardPageState
             from_wallet: walletAddress,
             tx_hash: txHash,
           );
-          getIt<RewardRepository>().updateTokenRewardClaim(
-            input: input,
-          );
+          try {
+            await getIt<RewardRepository>().updateTokenRewardClaim(
+              input: input,
+            );
+          } catch (e) {
+            //
+          }
         }
         setState(() {
           _isSuccess = true;
