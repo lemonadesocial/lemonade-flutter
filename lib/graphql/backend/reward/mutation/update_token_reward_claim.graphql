@@ -1,0 +1,3 @@
+mutation UpdateTokenRewardClaim($input: UpdateTokenRewardClaimInput!) {
+  updateTokenRewardClaim(input: $input)
+}

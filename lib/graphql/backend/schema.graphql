@@ -4,6 +4,7 @@ directive @expanded(
   resolve: Boolean
   return_type: String
   include_inactive: Boolean
+  projection: [String!]
 ) on FIELD_DEFINITION
 
 directive @secure(paths: [String!]!) on FIELD_DEFINITION
@@ -122,6 +123,10 @@ type Query {
     limit: Int! = 25
     name: String
   ): ListEventHostsResponse!
+  getSpaceMemberAttendedEvents(_id: MongoID!, space: MongoID!): [Event!]!
+  getSpaceMemberSubmittedEvents(_id: MongoID!, space: MongoID!): [Event!]!
+  getSpaceMemberHostedEvents(_id: MongoID!, space: MongoID!): [Event!]!
+  getSpaceEventSummary(space: MongoID!): SpaceEventSummary!
   getEventApplicationAnswers(
     event: MongoID!
     user: MongoID
@@ -159,11 +164,13 @@ type Query {
     event: MongoID!
     rate_value: Float
   ): [EventFeedback!]!
+  peekEventGuests(limit: Int, _id: MongoID!): PeekEventGuestsResponse!
 
   """
   For guests, return attending guests basic information of an event
   """
   getEventGuestDirectory(_id: MongoID!): [BasicUserInfo!]!
+    @deprecated(reason: "Will be removed in next release")
   getEventGuestDetail(
     event: MongoID!
     user: MongoID
@@ -184,6 +191,9 @@ type Query {
   ): GetEventJoinRequestsResponse!
   getMyEventJoinRequest(event: MongoID!): EventJoinRequest
   getEventJoinRequest(event: MongoID!, _id: MongoID!): EventJoinRequest!
+  getEventJoinRequestStateStatistic(
+    event: MongoID!
+  ): [EventRequestStateStatistic!]!
   getEventPaymentSummary(event: MongoID!): [EventPaymentSummary!]!
   getEventQuestions(input: GetEventQuestionsInput!): [EventQuestion!]!
   generateRecurringDates(input: GenerateRecurringDatesInput!): [DateTimeISO!]!
@@ -260,6 +270,7 @@ type Query {
     active: Boolean
   ): [Site!]!
   listSpaces(
+    featured: Boolean
     with_my_spaces: Boolean
     with_public_spaces: Boolean
     roles: [SpaceRole!]
@@ -492,6 +503,66 @@ type Query {
     sort: SortOrder
   ): ListDonationsResponse!
   listSpaceTokenGates(space: MongoID!): [SpaceTokenGate!]!
+  listSpaceCategories: [SpaceCategory!]!
+  getSpaceStatistics(space: MongoID!): SpaceStatisticResponse!
+  getTopSpaceHosts(space: MongoID!, limit: Float!): [SpaceEventHost!]!
+  getTopSpaceEventAttendees(
+    space: MongoID!
+    limit: Float!
+  ): [SpaceEventAttendee!]!
+  getSpaceEventsInsight(
+    skip: Int! = 0
+    limit: Int! = 25
+    space: MongoID!
+    event_tense: EventTense
+    virtual_event: Boolean
+    irl_event: Boolean
+    search: String
+    sort: SortInput
+  ): SpaceEventInsightResponse!
+  getSpaceMembersLeaderboard(
+    skip: Int! = 0
+    limit: Int! = 25
+    space: MongoID!
+    roles: [SpaceRole!]
+    search: String
+    sort: SortInput
+  ): SpaceMembersLeaderboardResponse!
+  getSpaceEventLocationsLeaderboard(
+    space: MongoID!
+
+    """
+    If true, counts by city; otherwise, counts by country.
+    """
+    city: Boolean
+    limit: Float!
+  ): [SpaceEventLocationLeaderboard!]!
+  getSpaceMemberAmountByDate(
+    space: MongoID!
+    role: SpaceRole!
+    start: DateTimeISO!
+    end: DateTimeISO!
+  ): [SpaceMemberAmountByDate!]!
+  getSpaceRewardStatistics(space: MongoID!): SpaceRewardStatistics!
+  listSpaceRewardVaults(space: MongoID!): [TokenRewardVault!]!
+  listSpaceRewardSettings(
+    space: MongoID!
+    vaults: [MongoID!]
+  ): SpaceRewardSettings!
+  getSpaceRewardSettingClaims(
+    space: MongoID!
+    type: ClaimType!
+    setting: MongoID!
+  ): [SpaceTokenRewardClaim!]!
+  listSpaceTokenRewardClaims(
+    skip: Int
+    limit: Int
+    space: MongoID!
+    vaults: [MongoID!]
+    search: String
+    sort: ListSpaceTokenRewardClaimsSortInput
+  ): SpaceTokenRewardClaims!
+  listGeoRegions: [GeoRegion!]!
 }
 
 type Badge {
@@ -916,6 +987,9 @@ type Event {
   """
   attending_count: Float
   checkin_count: Float
+    @deprecated(
+      reason: "No longer in use and will be removed in a future release."
+    )
   payment_ticket_count: Float
   payment_ticket_unassigned_count: Float
   guest_directory_enabled: Boolean
@@ -1332,9 +1406,10 @@ type EventSession {
 }
 
 type Space {
-  _id: MongoID!
   title: String!
   description: String
+  hostnames: [String!]
+  _id: MongoID!
   creator: MongoID!
 
   """
@@ -1343,6 +1418,11 @@ type Space {
   private: Boolean
   state: SpaceState!
   personal: Boolean
+  featured: Boolean
+
+  """
+  List of registered account followers
+  """
   followers: [MongoID!]
   daos: SpaceDao
   tint_color: String
@@ -1362,8 +1442,8 @@ type Space {
   """
   listed_events: [MongoID!]
   theme_data: JSON
-  hostnames: [String!]
   followed: Boolean
+  followers_count: Float
   is_ambassador: Boolean
   admins: [User!]
   creator_expanded: User
@@ -1752,6 +1832,15 @@ type EventHost {
   name: String!
   events_count: Float
   image_avatar: String
+}
+
+type SpaceEventSummary {
+  all_events: Float
+  virtual_events: Float
+  irl_events: Float
+  live_events: Float
+  upcoming_events: Float
+  past_events: Float
 }
 
 type EventApplicationAnswer {
@@ -2245,6 +2334,18 @@ type EventFeedback {
   user_info: User
 }
 
+type PeekEventGuestsResponse {
+  items: [EventGuestUser!]!
+  total: Int!
+}
+
+type EventGuestUser {
+  _id: MongoID
+  name: String
+  image_avatar: String
+  email: String
+}
+
 type BasicUserInfo {
   _id: MongoID!
   name: String!
@@ -2261,13 +2362,6 @@ type EventGuestDetail {
   payment: EventGuestPayment
   application: [EventApplicationQuestionAndAnswer!]
   join_request: EventJoinRequest
-}
-
-type EventGuestUser {
-  _id: MongoID
-  name: String
-  email: String
-  image_avatar: String
 }
 
 type Ticket {
@@ -2443,6 +2537,11 @@ type EventInvitationUrl {
 type GetEventJoinRequestsResponse {
   total: Int!
   records: [EventJoinRequest!]!
+}
+
+type EventRequestStateStatistic {
+  state: EventJoinRequestState!
+  total: Float!
 }
 
 type EventPaymentSummary {
@@ -2666,6 +2765,7 @@ type NewPayment {
   crypto_payment_info: CryptoPaymentInfo
   application: [EventApplicationQuestionAndAnswer!]
   join_request: EventJoinRequestBase
+  is_latest: Boolean
 }
 
 type EventJoinRequestBase {
@@ -3191,13 +3291,13 @@ input GetInitSafeTransactionInput {
 }
 
 type Site {
+  title: String!
+  description: String
+  hostnames: [String!]
   _id: MongoID!
   active: Boolean!
   client: String!
-  hostnames: [String!]
-  title: String!
   daos: [SiteDao!]
-  description: String!
   access_pass: AccessPass
   header_metas: [SiteHeaderMeta!]
   header_links: [SiteHeaderLink!]
@@ -3363,6 +3463,7 @@ enum FeatureCode {
   Checkin
   ViewSpace
   ManageSpace
+  SpaceStatistic
   ViewSpaceMembership
   ManageSpaceMembership
   ViewSpaceEvent
@@ -4018,6 +4119,7 @@ type TokenRewardVault {
   network: String!
   address: String!
   tokens: [RewardToken!]
+  settings_count: Float
 }
 
 type RewardToken {
@@ -4066,6 +4168,7 @@ type TicketTokenRewardSetting {
 type ClaimCheckinRewardSignatureResponse {
   settings: [CheckinTokenRewardSetting!]!
   signature: TokenRewardSignature
+  claim: TokenRewardClaim
 }
 
 type TokenRewardSignature {
@@ -4078,9 +4181,15 @@ type TokenRewardSignature {
   args: [JSON!]!
 }
 
+type TokenRewardClaim {
+  _id: MongoID!
+  created_at: DateTimeISO!
+}
+
 type ClaimTicketRewardSignatureResponse {
   settings: [TicketTokenRewardSetting!]!
   signature: TokenRewardSignature!
+  claim: TokenRewardClaim
 }
 
 type EventPaymentStatistics {
@@ -4183,6 +4292,501 @@ type SpaceTokenGate {
   space: MongoID!
   roles: [SpaceRole!]
   passed: Boolean
+}
+
+type SpaceCategory {
+  title: String!
+  description: String
+  image_url: String
+  space: MongoID!
+  listed_events_count: Int
+  space_expanded: Space
+}
+
+type SpaceStatisticResponse {
+  admins: Float!
+  ambassadors: Float!
+  subscribers: Float!
+  created_events: Float!
+  submitted_events: Float!
+  event_attendees: Float!
+  avg_event_rating: Float
+}
+
+type SpaceEventHost {
+  user_expanded: UserWithEmail!
+  space_member: SpaceMemberBase
+  hosted_event_count: Float!
+}
+
+type SpaceMemberBase {
+  _id: MongoID!
+  user: MongoID
+  user_name: String
+  email: String
+  space: MongoID!
+  role: SpaceRole!
+  state: SpaceMembershipState!
+  visible: Boolean
+  decided_by: MongoID
+  role_changed_at: DateTimeISO
+  deleted_at: DateTimeISO
+}
+
+type SpaceEventAttendee {
+  user_expanded: UserWithEmail
+  non_login_user: UserWithEmail
+  attended_event_count: Float!
+}
+
+type SpaceEventInsightResponse {
+  items: [SpaceEventInsight!]!
+  total: Int!
+}
+
+type SpaceEventInsight {
+  _id: MongoID
+  shortid: String!
+  active: Boolean!
+  stamp: DateTimeISO!
+  state: EventState!
+  title: String!
+  slug: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  host: MongoID!
+  cohosts: [MongoID!]
+  visible_cohosts: [MongoID!]
+  invited: [MongoID!]
+  invited_emails: [String!]
+  inviters: [MongoID!]
+  pending: [MongoID!]
+  accepted: [MongoID!]
+  declined: [MongoID!]
+  payment_fee: Float!
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
+  application_required: Boolean
+  rsvp_wallet_platforms: [ApplicationBlokchainPlatform!]
+  application_form_url: String
+  application_profile_fields: [ApplicationProfileField!]
+  alert_tickets: JSON
+  alert_payments: [MongoID!]
+  accepted_store_promotion: MongoID
+  accepted_user_fields_required: [String!]
+  access_pass: AccessPass
+  address: Address
+  address_directions: [String!]
+  approved: Boolean
+  broadcast_rooms: [BroadcastRoomBase!]
+  button_icon: String
+  button_text: String
+  button_url: String
+  comments: String
+  cost: Float
+  currency: String
+  cover: String
+  cta_button_text: String
+
+  """
+  Show secondary CTA button text
+  """
+  cta_secondary_visible: Boolean
+  description: String
+  description_plain_text: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  guest_limit: Float
+  guest_limit_per: Float
+  guests: Int
+  hide_chat_action: Boolean
+  hide_cohosts: Boolean
+  hide_creators: Boolean
+  hide_lounge: Boolean
+  hide_invite_action: Boolean
+  hide_question_box: Boolean
+  hide_rooms_action: Boolean
+  hide_session_guests: Boolean
+  hide_speakers: Boolean
+  hide_stories_action: Boolean
+  hide_attending: Boolean
+  highlight: Boolean
+  latitude: Float
+  layout_sections: [LayoutSection!]
+  location: Point
+  longitude: Float
+  new_photos: [FileInline!]
+  new_new_photos: [MongoID!]
+  offers: [EventOffer!]
+  payment_accounts_new: [MongoID!]
+  payment_donation: Boolean
+  payment_donation_amount_includes_tickets: Boolean
+  payment_donation_amount_increment: Float
+  payment_donation_message: String
+  payment_donation_target: Float
+  payment_enabled: Boolean
+  payment_optional: Boolean
+  payment_ticket_external_message: String
+  payment_ticket_external_url: String
+  payment_ticket_purchase_title: String
+  photos: [String!]
+  private: Boolean
+  published: Boolean
+  registration_disabled: Boolean
+  approval_required: Boolean
+  rewards: [EventReward!]
+  reward_uses: JSON
+  sessions: [EventSessionBase!]
+  session_guests: JSON
+  speaker_emails: [String!]
+  speaker_users: [MongoID!]
+  stores: [MongoID!]
+  stories: [MongoID!]
+  stories_eponym: Boolean
+  space: MongoID
+  listing_spaces: [MongoID!]
+  tags: [String!]
+  terms_email_permission_text: Boolean
+  terms_text: String
+  timezone: String
+  unlisted: Boolean
+  videos: [Video!]
+  virtual: Boolean
+  virtual_url: String
+  welcome_text: String
+  welcome_video: Video
+  zones_menu_text: String
+  checkin_menu_text: String
+
+  """
+  Number of users who have tickets
+  """
+  attending_count: Float
+  checkin_count: Float
+    @deprecated(
+      reason: "No longer in use and will be removed in a future release."
+    )
+  payment_ticket_count: Float
+  payment_ticket_unassigned_count: Float
+  guest_directory_enabled: Boolean
+  eventbrite_enabled: Boolean
+  eventbrite_event_id: String
+  eventbrite_tickets_imported: Boolean
+  eventbrite_token: String
+  insider_enabled: Boolean
+  insider_token: String
+  invited_count: Float
+  invited_email_map: JSON
+  invited_phone_map: JSON
+  invited_user_map: JSON
+  inviter_email_map: JSON
+  inviter_phone_map: JSON
+  inviter_user_map: JSON
+  matrix_event_room_id: String
+  inherited_cohosts: [MongoID!]
+  subevent_enabled: Boolean
+  subevent_settings: SubeventSettings
+  subevent_parent: MongoID
+  terms_accepted: [MongoID!]
+  terms_accepted_with_email_permission: [MongoID!]
+  url: String
+  url_go: String
+  telegram_channels: [TelegramChannel!]
+  checkins: Float!
+  tickets_count: Float!
+  reviews: Float
+  rating: Float
+}
+
+type BroadcastRoomBase {
+  _id: MongoID
+  title: String
+  description: String
+  photos: [MongoID!]
+  event_payment_ticket_types: [MongoID!]
+  position: Float
+  iframe_src: String
+}
+
+type EventSessionBase {
+  _id: MongoID
+  title: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  broadcast: MongoID
+  description: String
+  photos: [MongoID!]
+  speaker_users: [MongoID!]
+  votings: [MongoID!]
+}
+
+type SpaceMembersLeaderboardResponse {
+  items: [SpaceMemberLeaderboard!]!
+  total: Int!
+}
+
+type SpaceMemberLeaderboard {
+  _id: MongoID!
+  user: MongoID
+  user_name: String
+  email: String
+  space: MongoID!
+  role: SpaceRole!
+  state: SpaceMembershipState!
+  visible: Boolean
+  decided_by: MongoID
+  role_changed_at: DateTimeISO
+  deleted_at: DateTimeISO
+  user_expanded: UserWithEmail
+  non_user_login: UserWithEmail
+  attended_count: Float!
+  hosted_event_count: Float!
+  submitted_event_count: Float!
+}
+
+type SpaceEventLocationLeaderboard {
+  country: String!
+  city: String
+  total: Float!
+}
+
+type SpaceMemberAmountByDate {
+  _id: String!
+  total: Float!
+}
+
+type SpaceRewardStatistics {
+  events_count: Float!
+  checkin_settings_count: Float!
+  ticket_settings_count: Float!
+  unique_recipients_count: Float!
+}
+
+type SpaceRewardSettings {
+  settings: [SpaceRewardSetting!]!
+}
+
+type SpaceRewardSetting {
+  type: ClaimType!
+  setting: BaseTokenRewardSetting!
+  event: EventBase
+  claims_count: Int
+  recipients_count: Int
+}
+
+enum ClaimType {
+  checkin
+  ticket
+}
+
+type BaseTokenRewardSetting {
+  _id: MongoID!
+  user: MongoID!
+  title: String!
+  photo: MongoID
+  vault: MongoID!
+  currency_address: String!
+  vault_expanded: TokenRewardVault
+  photo_expanded: File
+}
+
+type EventBase {
+  _id: MongoID
+  shortid: String!
+  active: Boolean!
+  stamp: DateTimeISO!
+  state: EventState!
+  title: String!
+  slug: String!
+  start: DateTimeISO!
+  end: DateTimeISO!
+  host: MongoID!
+  cohosts: [MongoID!]
+  visible_cohosts: [MongoID!]
+  invited: [MongoID!]
+  invited_emails: [String!]
+  inviters: [MongoID!]
+  pending: [MongoID!]
+  accepted: [MongoID!]
+  declined: [MongoID!]
+  payment_fee: Float!
+  donation_enabled: Boolean
+  donation_show_history: Boolean
+  donation_vaults: [MongoID!]
+  application_required: Boolean
+  rsvp_wallet_platforms: [ApplicationBlokchainPlatform!]
+  application_form_url: String
+  application_profile_fields: [ApplicationProfileField!]
+  alert_tickets: JSON
+  alert_payments: [MongoID!]
+  accepted_store_promotion: MongoID
+  accepted_user_fields_required: [String!]
+  access_pass: AccessPass
+  address: Address
+  address_directions: [String!]
+  approved: Boolean
+  broadcast_rooms: [BroadcastRoomBase!]
+  button_icon: String
+  button_text: String
+  button_url: String
+  comments: String
+  cost: Float
+  currency: String
+  cover: String
+  cta_button_text: String
+
+  """
+  Show secondary CTA button text
+  """
+  cta_secondary_visible: Boolean
+  description: String
+  description_plain_text: String
+  events: [MongoID!]
+  frequent_questions: [FrequentQuestion!]
+  guest_limit: Float
+  guest_limit_per: Float
+  guests: Int
+  hide_chat_action: Boolean
+  hide_cohosts: Boolean
+  hide_creators: Boolean
+  hide_lounge: Boolean
+  hide_invite_action: Boolean
+  hide_question_box: Boolean
+  hide_rooms_action: Boolean
+  hide_session_guests: Boolean
+  hide_speakers: Boolean
+  hide_stories_action: Boolean
+  hide_attending: Boolean
+  highlight: Boolean
+  latitude: Float
+  layout_sections: [LayoutSection!]
+  location: Point
+  longitude: Float
+  new_photos: [FileInline!]
+  new_new_photos: [MongoID!]
+  offers: [EventOffer!]
+  payment_accounts_new: [MongoID!]
+  payment_donation: Boolean
+  payment_donation_amount_includes_tickets: Boolean
+  payment_donation_amount_increment: Float
+  payment_donation_message: String
+  payment_donation_target: Float
+  payment_enabled: Boolean
+  payment_optional: Boolean
+  payment_ticket_external_message: String
+  payment_ticket_external_url: String
+  payment_ticket_purchase_title: String
+  photos: [String!]
+  private: Boolean
+  published: Boolean
+  registration_disabled: Boolean
+  approval_required: Boolean
+  rewards: [EventReward!]
+  reward_uses: JSON
+  sessions: [EventSessionBase!]
+  session_guests: JSON
+  speaker_emails: [String!]
+  speaker_users: [MongoID!]
+  stores: [MongoID!]
+  stories: [MongoID!]
+  stories_eponym: Boolean
+  space: MongoID
+  listing_spaces: [MongoID!]
+  tags: [String!]
+  terms_email_permission_text: Boolean
+  terms_text: String
+  timezone: String
+  unlisted: Boolean
+  videos: [Video!]
+  virtual: Boolean
+  virtual_url: String
+  welcome_text: String
+  welcome_video: Video
+  zones_menu_text: String
+  checkin_menu_text: String
+
+  """
+  Number of users who have tickets
+  """
+  attending_count: Float
+  checkin_count: Float
+    @deprecated(
+      reason: "No longer in use and will be removed in a future release."
+    )
+  payment_ticket_count: Float
+  payment_ticket_unassigned_count: Float
+  guest_directory_enabled: Boolean
+  eventbrite_enabled: Boolean
+  eventbrite_event_id: String
+  eventbrite_tickets_imported: Boolean
+  eventbrite_token: String
+  insider_enabled: Boolean
+  insider_token: String
+  invited_count: Float
+  invited_email_map: JSON
+  invited_phone_map: JSON
+  invited_user_map: JSON
+  inviter_email_map: JSON
+  inviter_phone_map: JSON
+  inviter_user_map: JSON
+  matrix_event_room_id: String
+  inherited_cohosts: [MongoID!]
+  subevent_enabled: Boolean
+  subevent_settings: SubeventSettings
+  subevent_parent: MongoID
+  terms_accepted: [MongoID!]
+  terms_accepted_with_email_permission: [MongoID!]
+  url: String
+  url_go: String
+  telegram_channels: [TelegramChannel!]
+}
+
+type SpaceTokenRewardClaim {
+  _id: MongoID!
+  created_at: DateTimeISO!
+  user_expanded: User
+  event: EventBase
+  wallet_id: String
+  claimed_tokens: [ClaimedToken!]!
+}
+
+type ClaimedToken {
+  network: String!
+  token_address: String!
+  amount: String!
+  token: RewardToken
+  formatted_amount: String
+}
+
+type SpaceTokenRewardClaims {
+  items: [SpaceTokenRewardClaim!]!
+  total: Int!
+}
+
+input ListSpaceTokenRewardClaimsSortInput {
+  claim_date: Int
+}
+
+type GeoRegion {
+  _id: MongoID!
+  title: String!
+  cities: [GeoCity!]!
+}
+
+type GeoCity {
+  _id: MongoID!
+
+  """
+  Name of the city, unique within region
+  """
+  name: String!
+  hidden: Boolean
+  region: MongoID!
+  icon_url: String
+  space: MongoID!
+  space_expanded: Space
+  listed_events_count: Float
 }
 
 type Mutation {
@@ -4369,7 +4973,7 @@ type Mutation {
   deleteSite(_id: MongoID!): Boolean!
   createSpace(input: SpaceInput!): Space!
   activatePersonalSpace(input: SpaceInput!): ActivatePersonalSpace!
-  updateSpace(input: SpaceInput!, _id: MongoID!): Space
+  updateSpace(set_hostname: Boolean, input: SpaceInput!, _id: MongoID!): Space
   deleteSpace(_id: MongoID!): Boolean!
   pinEventsToSpace(
     tags: [MongoID!]
@@ -4519,6 +5123,7 @@ type Mutation {
     input: TicketTokenRewardSettingInput!
     _id: MongoID!
   ): TicketTokenRewardSetting!
+  updateTokenRewardClaim(input: UpdateTokenRewardClaimInput!): Boolean!
   createDonationVault(input: DonationVaultInput!): DonationVault!
   updateDonationVault(input: DonationVaultInput!, _id: MongoID!): DonationVault
   createDonation(input: CreateDonationInput!): Donation!
@@ -5242,10 +5847,10 @@ input CreateStripeOnrampSessionInput {
 }
 
 input CreateSiteInput {
-  client: String!
-  hostnames: [String!]
   title: String!
-  description: String!
+  description: String
+  hostnames: [String!]
+  client: String!
   access_pass: AccessPassInput
   header_metas: [SiteHeaderMetaInput!]
   header_links: [SiteHeaderLinkInput!]
@@ -5304,10 +5909,10 @@ input SitePassportInput {
 }
 
 input UpdateSiteInput {
-  client: String
-  hostnames: [String!]
   title: String
   description: String
+  hostnames: [String!]
+  client: String
   access_pass: AccessPassInput
   header_metas: [SiteHeaderMetaInput!]
   header_links: [SiteHeaderLinkInput!]
@@ -5333,6 +5938,7 @@ input UpdateSiteInput {
 input SpaceInput {
   title: String
   description: String
+  hostnames: [String!]
 
   """
   Private space requires moderation for membership
@@ -5351,7 +5957,6 @@ input SpaceInput {
   image_avatar: MongoID
   image_cover: MongoID
   theme_data: JSON
-  hostnames: [String!]
 }
 
 type ActivatePersonalSpace {
@@ -5708,6 +6313,13 @@ input TicketTokenRewardSettingInput {
   currency_address: String
   event: MongoID
   rewards: [TicketTypeRewardInput!]
+}
+
+input UpdateTokenRewardClaimInput {
+  _id: MongoID!
+  network: String!
+  from_wallet: String!
+  tx_hash: String!
 }
 
 input DonationVaultInput {

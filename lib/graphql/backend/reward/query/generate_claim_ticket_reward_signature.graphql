@@ -10,5 +10,9 @@ query GenerateClaimTicketRewardSignature($payment: MongoID, $event: MongoID!) {
       signature
       args
     }
+    claim {
+      _id
+      created_at
+    }
   }
 } 
