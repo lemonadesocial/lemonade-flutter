@@ -6,6 +6,8 @@ import 'package:app/core/presentation/pages/token_reward/views/claim_multiple_to
 import 'package:app/core/presentation/pages/token_reward/views/claim_single_token_reward_view.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_token_reward_processing_view.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_token_reward_success_view.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -16,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 @RoutePage()
 class ClaimTokenRewardPage extends StatefulWidget {
@@ -52,11 +53,11 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
     });
     try {
       final walletAddress =
-          context.read<WalletBloc>().state.activeSession?.address;
+          getIt<WalletConnectService>().w3mService?.session?.address ?? '';
       final txHash = await TokenRewardUtils.claimReward(
         vault: vault!,
         signature: widget.rewardSignatureResponse.signature!,
-        from: walletAddress ?? '',
+        from: walletAddress,
       );
       final chain = (await getIt<Web3Repository>()
               .getChainById(chainId: vault.network ?? ''))

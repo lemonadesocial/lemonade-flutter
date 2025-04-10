@@ -3,7 +3,6 @@ import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/setup_sentry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env.production');
+  await dotenv.load(fileName: '.env');
   await gql_flutter.initHiveForFlutter();
 
   registerModule();
@@ -26,7 +25,6 @@ void main() async {
     await getIt<FirebaseService>().initialize();
   }
   await getIt<MatrixService>().init();
-  await getIt<WalletConnectService>().init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   CrashAnalyticsManager().initialize(CrashAnalyticsProvider.sentry);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

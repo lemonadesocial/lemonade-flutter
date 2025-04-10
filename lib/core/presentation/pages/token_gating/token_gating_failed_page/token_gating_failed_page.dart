@@ -3,6 +3,7 @@ import 'package:app/core/domain/token-gating/entities/space_token_gate.dart';
 import 'package:app/core/presentation/pages/token_gating/widget/token_gating_wallet_address_box.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -12,7 +13,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
 
 class TokenGatingFailedPage extends StatelessWidget {
   final List<SpaceTokenGate> tokenGates;

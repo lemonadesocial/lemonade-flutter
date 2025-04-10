@@ -1,11 +1,11 @@
 import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
-import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:app/injection/register_module.dart';
 
 part 'claim_relay_payment_bloc.freezed.dart';
 
@@ -25,7 +25,7 @@ class ClaimRelayPaymentBloc
     final result = await LemonadeRelayUtils.claimSplit(
       paymentSplitterContractAddress: event.paymentSplitterContractAddress,
       connectedWalletAddress:
-          getIt<WalletConnectService>().w3mService.session?.address ?? '',
+          getIt<WalletConnectService>().w3mService?.session?.address ?? '',
       chain: event.chain,
       tokens: event.tokens,
     );

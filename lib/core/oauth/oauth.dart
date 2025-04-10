@@ -76,7 +76,6 @@ class AppOauth {
       final tknRes = await helper.getTokenFromStorage();
       await const FlutterAppAuth().endSession(
         EndSessionRequest(
-          preferEphemeralSession: true,
           idTokenHint: tknRes?.getRespField('id_token'),
           postLogoutRedirectUrl: logoutRedirectUri,
           serviceConfiguration: AuthorizationServiceConfiguration(

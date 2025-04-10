@@ -1,18 +1,12 @@
+// ignore_for_file: unused_element
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
-import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
-import 'package:app/core/utils/list/unique_list_extension.dart';
-import 'package:app/core/utils/wc_utils.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
-
-enum SupportedSessionEvent {
-  accountsChanged,
-  chainChanged,
-}
+import 'package:reown_appkit/reown_appkit.dart';
 
 @lazySingleton
 class WalletConnectService {
@@ -29,83 +23,79 @@ class WalletConnectService {
     ],
     redirect: Redirect(
       native: '${AppConfig.appScheme}://wallet-callback',
+      linkMode: true,
     ),
   );
 
-  static const defaultMethods = [
-    'eth_sign',
-    'personal_sign',
-    'eth_signTypedData',
-    'eth_sendTransaction',
-    'eth_sendRawTransaction',
-  ];
+  late ReownAppKitModal _w3mService;
 
-  static const optionalMethods = [
-    'eth_chainId',
-  ];
-  static const defaultEvents = SupportedSessionEvent.values;
+  IReownAppKit? _app;
 
-  late W3MService _w3mService;
-  IWeb3App? _app;
-  String? _currentWalletChainId;
-  String? _currentWalletAccount;
-
-  W3MService get w3mService => _w3mService;
+  ReownAppKitModal? get w3mService => initialized ? _w3mService : null;
 
   bool get initialized => _app != null;
 
-  String? get currentWalletAppAccount => _currentWalletAccount;
+  Future<Map<String, RequiredNamespace>> _setupChains() async {
+    final chains =
+        (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
+    // add our backend supported chains to reown appkit
+    ReownAppKitModalNetworks.addSupportedNetworks(
+      'eip155',
+      chains
+          .map(
+            (chain) => ReownAppKitModalNetworkInfo(
+              name: chain.name ?? '',
+              chainId: chain.chainId ?? '',
+              currency: chain.nativeToken?.symbol ?? '',
+              rpcUrl: chain.rpcUrl ?? '',
+              explorerUrl: chain.rpcUrl ?? '',
+              isTestNetwork: !AppConfig.isProduction,
+            ),
+          )
+          .toList(),
+    );
+    final supportedEip155Chains =
+        ReownAppKitModalNetworks.getAllSupportedNetworks(
+      namespace: 'eip155',
+    ).map((chain) => chain.chainId).toList();
 
-  String? get currentWalletAppChainId => _currentWalletChainId;
+    // TODO:
+    // final supportedSolanaChains = ReownAppKitModalNetworks.getAllSupportedNetworks(
+    //   namespace: 'solana',
+    // ).map((chain) => chain.chainId).toList();
 
-  Future<bool> init() async {
+    return {
+      'eip155': RequiredNamespace.fromJson({
+        'chains': supportedEip155Chains,
+        'methods': NetworkUtils.defaultNetworkMethods['eip155']!.toList(),
+        'events': NetworkUtils.defaultNetworkEvents['eip155']!.toList(),
+      }),
+      // TODO:
+      // 'solana': RequiredNamespace.fromJson({
+      //   'chains': supportedSolanaChains,
+      //   'methods': NetworkUtils.defaultNetworkMethods['solana']!.toList(),
+      //   'events': [],
+      // }),
+    };
+  }
+
+  Future<bool> init(BuildContext context) async {
     try {
       if (initialized) return true;
-      final chains =
-          (await getIt<Web3Repository>().getChainsList()).getOrElse(() => []);
-      final supportedChainIds =
-          chains.map((chain) => chain.fullChainId ?? '').toList();
 
-      final optionalNamespaces = W3MNamespace(
-        chains: [
-          ...supportedChainIds,
-          ...W3MChainPresets.chains.values.map((e) => e.namespace),
-        ].unique(),
-        methods: MethodsConstants.allMethods,
-        events: EventsConstants.allEvents,
-      );
-
-      _w3mService = W3MService(
+      _w3mService = ReownAppKitModal(
+        context: context,
         projectId: AppConfig.walletConnectProjectId,
         metadata: lemonadeDAppMetadata,
-        logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.debug,
-        optionalNamespaces: {
-          defaultNamespace: optionalNamespaces,
-        },
+        logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.all,
+        optionalNamespaces: await _setupChains(),
         featuredWalletIds: {
           // coinbase option id
           "fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa",
         },
       );
       await _w3mService.init();
-      _app = _w3mService.web3App;
-      // Register event handler for all chain in active session if available;
-      final activeSession = await getActiveSession();
-
-      _registerEventHandler(
-        WCUtils.getSessionsChains(activeSession?.namespaces),
-      );
-
-      // Register event handler of all supported chains
-      _registerEventHandler(
-        chains.map((chain) => chain.fullChainId ?? '').toList(),
-      );
-
-      _app!.onSessionEvent.subscribe(_onSessionEvent);
-      _app!.onSessionUpdate.subscribe(_onSessionUpdate);
-      _app!.onSessionConnect.subscribe(_onSessionConnect);
-      _app!.onSessionDelete.subscribe(_onSessionDelete);
-
+      _app = _w3mService.appKit;
       return true;
     } catch (e) {
       return false;
@@ -118,11 +108,17 @@ class WalletConnectService {
     _app!.onSessionUpdate.unsubscribeAll();
     _app!.onSessionConnect.unsubscribeAll();
     _app!.onSessionDelete.unsubscribeAll();
+
+    _w3mService.onModalConnect.unsubscribeAll();
+    _w3mService.onModalUpdate.unsubscribeAll();
+    _w3mService.onModalNetworkChange.unsubscribeAll();
+    _w3mService.onModalDisconnect.unsubscribeAll();
+    _w3mService.onModalError.unsubscribeAll();
   }
 
-  Future<W3MSession?> getActiveSession() async {
+  Future<ReownAppKitModalSession?> getActiveSession() async {
     if (!initialized) {
-      await init();
+      return null;
     }
     return _w3mService.session;
   }
@@ -132,25 +128,32 @@ class WalletConnectService {
     required String wallet,
     String? chainId,
   }) async {
+    if (chainId == null && _w3mService.selectedChain == null) {
+      throw Exception('No chain selected');
+    }
     _w3mService.launchConnectedWallet();
     final data = await _w3mService.request(
       topic: _w3mService.session?.topic ?? '',
-      chainId: chainId ?? _currentWalletChainId ?? ETHEREUM.chainId,
+      chainId:
+          chainId ?? _w3mService.selectedChain?.chainId ?? ETHEREUM.chainId,
       request: SessionRequestParams(
         method: 'personal_sign',
         params: [message, wallet],
       ),
     );
     if (data is String) return data;
-
-    return null;
+    throw Exception('Failed to sign message');
   }
 
   Future<String> requestTransaction({
     required String chainId,
     required EthereumTransaction transaction,
   }) async {
+    await switchChain(chainId: chainId);
+
+    await Future.delayed(const Duration(milliseconds: 500));
     _w3mService.launchConnectedWallet();
+
     final transactionId = await _w3mService.request(
       topic: _w3mService.session?.topic ?? '',
       chainId: chainId,
@@ -161,6 +164,9 @@ class WalletConnectService {
         ],
       ),
     );
+    if (transactionId is! String) {
+      throw Exception('Failed to send transaction ${transactionId.toString()}');
+    }
     return transactionId;
   }
 
@@ -169,62 +175,41 @@ class WalletConnectService {
   }
 
   Future<void> switchChain({
-    required Chain chain,
+    required String chainId,
   }) async {
     if (_w3mService.session == null) {
       return;
     }
-
-    await _w3mService.selectChain(
-      W3MChainInfo(
-        chainName: chain.name ?? '',
-        chainId: chain.chainId ?? '',
-        namespace: chain.fullChainId ?? '',
-        tokenName: chain.nativeToken?.name ?? '',
-        rpcUrl: chain.rpcUrl ?? '',
-      ),
-      switchChain: true,
+    final chain = (await getIt<Web3Repository>().getChainByFullChainId(
+      fullChainId: chainId,
+    ))
+        .fold(
+      (failure) => null,
+      (chain) => chain,
     );
-  }
 
-  _onSessionConnect(SessionConnect? sessionConnect) {
-    final firstAccount = sessionConnect
-            ?.session.namespaces.values.firstOrNull?.accounts.firstOrNull ??
-        '';
-    _currentWalletAccount = NamespaceUtils.getAccount(firstAccount);
-    _currentWalletChainId = NamespaceUtils.getChainFromAccount(firstAccount);
-  }
-
-  _onSessionDelete(SessionDelete? sessionDelete) {
-    _currentWalletAccount = null;
-    _currentWalletChainId = null;
-  }
-
-  _onSessionEvent(SessionEvent? sessionEvent) {
-    var eventName = sessionEvent?.name;
-    if (eventName == 'accountsChanged') {
-      if (sessionEvent?.data is List) {
-        _currentWalletAccount =
-            NamespaceUtils.getAccount(sessionEvent?.data[0]);
-        _currentWalletChainId =
-            NamespaceUtils.getChainFromAccount(sessionEvent?.data[0]);
-      }
+    if (chain == null) {
+      return;
     }
-    if (eventName == 'chainChanged') {
-      _currentWalletChainId = sessionEvent?.chainId;
+    final namespace =
+        NamespaceUtils.getNamespaceFromChain(chain.fullChainId ?? '');
+    if (namespace != NetworkUtils.eip155) {
+      return;
     }
-  }
-
-  _onSessionUpdate(SessionUpdate? sessionUpdate) {
-    final chains = WCUtils.getSessionsChains(sessionUpdate?.namespaces);
-    _registerEventHandler(chains);
-  }
-
-  _registerEventHandler(List<String> chainIds) {
-    for (final chainId in chainIds) {
-      for (final event in defaultEvents) {
-        _app!.registerEventHandler(chainId: chainId, event: event.name);
-      }
+    final targetChain = ReownAppKitModalNetworkInfo(
+      name: chain.name ?? '',
+      chainId: chain.fullChainId ?? '',
+      currency: chain.nativeToken?.symbol ?? '',
+      rpcUrl: chain.rpcUrl ?? '',
+      explorerUrl: chain.rpcUrl ?? '',
+    );
+    if (_w3mService.session?.hasSwitchMethod() == true) {
+      _w3mService.launchConnectedWallet();
+      await _w3mService.requestSwitchToChain(targetChain);
+    } else {
+      await _w3mService.selectChain(
+        targetChain,
+      );
     }
   }
 }
@@ -242,4 +227,16 @@ enum WCRpcErrorCode {
 
   final int code;
   const WCRpcErrorCode({required this.code});
+}
+
+extension WalletConnectServiceExtension on WalletConnectService {
+  String getWalletImageUrl(String imageId) {
+    if (imageId.isEmpty) {
+      return '';
+    }
+    if (imageId.startsWith('http')) {
+      return imageId;
+    }
+    return 'https://api.web3modal.com/getWalletImage/$imageId';
+  }
 }

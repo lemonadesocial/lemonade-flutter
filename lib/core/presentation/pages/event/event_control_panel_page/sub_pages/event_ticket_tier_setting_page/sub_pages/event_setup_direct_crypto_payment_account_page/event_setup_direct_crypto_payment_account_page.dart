@@ -1,6 +1,6 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/domain/event/entities/event.dart';
+import 'package:app/core/domain/event/entities/event.dart' as event_entity;
 import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/payment/entities/payment_account/payment_account.dart';
 import 'package:app/core/domain/payment/input/create_payment_account_input/create_payment_account_input.dart';
@@ -12,6 +12,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/lemonade_relay/lemonade_relay_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -22,7 +23,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart' as web3modal;
+import 'package:web3dart/web3dart.dart' as web3dart;
 
 class EventSetupDirectCryptoPaymentAccountPage extends StatefulWidget {
   final Chain chain;
@@ -65,7 +66,7 @@ class _EventSetupDirectCryptoPaymentAccountPageState
 
   bool _validatePayeeAddress(String value) {
     try {
-      web3modal.EthereumAddress.fromHex(value);
+      web3dart.EthereumAddress.fromHex(value);
       return true;
     } catch (e) {
       return false;
@@ -73,7 +74,7 @@ class _EventSetupDirectCryptoPaymentAccountPageState
   }
 
   Future<void> _onSubmit(
-    Event event,
+    event_entity.Event event,
   ) async {
     setState(() {
       isLoading = true;
@@ -154,8 +155,8 @@ class _EventSetupDirectCryptoPaymentAccountPageState
     );
   }
 
-  Future<Event?> _updateEventWithNewPaymentAccount({
-    required Event event,
+  Future<event_entity.Event?> _updateEventWithNewPaymentAccount({
+    required event_entity.Event event,
     required PaymentAccount newPaymentAccount,
   }) async {
     final result = await getIt<EventRepository>().updateEvent(

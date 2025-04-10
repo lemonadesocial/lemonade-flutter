@@ -79,10 +79,10 @@ class _View extends StatefulWidget {
 class _ViewState extends State<_View> {
   Future<void> _onChangeWalletAddress() async {
     Navigator.pop(context);
-    await getIt<WalletConnectService>().w3mService.disconnect();
+    await getIt<WalletConnectService>().w3mService?.disconnect();
     context.read<WalletBloc>().add(const WalletEvent.disconnect());
     await Future.delayed(const Duration(milliseconds: 500));
-    getIt<WalletConnectService>().w3mService.openModal(context);
+    getIt<WalletConnectService>().w3mService?.openModalView();
   }
 
   Future<void> _checkAccess({
@@ -158,8 +158,8 @@ class _ViewState extends State<_View> {
               listener: (context, state) async {
                 if (state.activeSession != null) {
                   final w3mService = getIt<WalletConnectService>().w3mService;
-                  if (w3mService.isOpen) {
-                    w3mService.closeModal();
+                  if (w3mService?.isOpen == true) {
+                    w3mService?.closeModal();
                   }
 
                   await Future.delayed(const Duration(milliseconds: 500));

@@ -3,8 +3,8 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:web3modal_flutter/services/w3m_service/i_w3m_service.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/modal/i_appkit_modal_impl.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 part 'wallet_bloc.freezed.dart';
 
@@ -18,7 +18,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
             state: ConnectButtonState.idle,
           ),
         ) {
-    walletConnectService.w3mService.addListener(_updateState);
+    on<WalletEventInit>(_onInit);
     on<WalletEventGetActiveSessions>(_onGetActiveSessions);
     on<WalletEventDisconnectWallet>(_onDisconnectWallet);
     on<WalletEventOnStateChange>(_onStateChange);
@@ -26,9 +26,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   @override
   close() async {
-    walletConnectService.w3mService.removeListener(_updateState);
+    walletConnectService.w3mService?.removeListener(_updateState);
     walletConnectService.close();
     super.close();
+  }
+
+  void _onInit(WalletEventInit event, Emitter emit) async {
+    walletConnectService.w3mService?.addListener(_updateState);
+    add(const WalletEvent.getActiveSessions());
   }
 
   _onGetActiveSessions(WalletEventGetActiveSessions event, Emitter emit) async {
@@ -46,6 +51,10 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
   void _onStateChange(WalletEventOnStateChange event, Emitter emit) async {
     final w3mService = walletConnectService.w3mService;
+    if (w3mService == null) {
+      return;
+    }
+
     final isConnected = w3mService.isConnected;
     if (!isConnected) {
       return emit(
@@ -56,7 +65,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       );
     }
     // Case 0: init error
-    if (w3mService.status == W3MServiceStatus.error) {
+    if (w3mService.status == ReownAppKitModalStatus.error) {
       return emit(
         state.copyWith(
           activeSession: w3mService.session,
@@ -108,6 +117,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
 @freezed
 class WalletEvent with _$WalletEvent {
+  const factory WalletEvent.init() = WalletEventInit;
   const factory WalletEvent.getActiveSessions() = WalletEventGetActiveSessions;
   const factory WalletEvent.disconnect() = WalletEventDisconnectWallet;
   const factory WalletEvent.onStateChange() = WalletEventOnStateChange;
@@ -116,7 +126,7 @@ class WalletEvent with _$WalletEvent {
 @freezed
 class WalletState with _$WalletState {
   const factory WalletState({
-    W3MSession? activeSession,
+    ReownAppKitModalSession? activeSession,
     required ConnectButtonState state,
   }) = _WalletState;
 }

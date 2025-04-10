@@ -1,11 +1,11 @@
 definitions:
   instance_mac_mini: &instance_mac_mini
-    instance_type: mac_mini_m1
+    instance_type: mac_mini_m2
     max_build_duration: 75
   env_versions: &env_versions
     flutter: fvm
-    xcode: 15.2
-    cocoapods: 1.14.2
+    xcode: 16.2
+    cocoapods: 1.16.2
   integrations:
     app_store_connect_integrations: &app_store_connect_integrations
       app_store_connect: Lemonade
@@ -109,6 +109,7 @@ definitions:
     - &build_ipa_staging
       name: Build ipa staging
       script: |
+        cp .env.staging $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
           --build-number=$BUILD_NUMBER \
@@ -118,6 +119,7 @@ definitions:
     - &build_ipa_production
       name: Build ipa production
       script: |
+        cp .env.production $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
           --build-number=$BUILD_NUMBER \
@@ -127,6 +129,7 @@ definitions:
     - &build_apk_staging
       name: Build Android apk staging
       script: |
+        cp .env.staging $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build apk --release \
           --build-number=$BUILD_NUMBER \
@@ -135,6 +138,7 @@ definitions:
     - &build_aab_staging
       name: Build Android appbundle staging
       script: |
+        cp .env.staging $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build appbundle --release \
           --build-number=$BUILD_NUMBER \
@@ -143,6 +147,7 @@ definitions:
     - &build_apk_production
       name: Build Android apk production
       script: |
+        cp .env.production $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build apk --release \
           --build-number=$BUILD_NUMBER \
@@ -151,6 +156,7 @@ definitions:
     - &build_aab_production
       name: Build Android appbundle production
       script: |
+        cp .env.production $CM_BUILD_DIR/.env
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         flutter build appbundle --release \
           --build-number=$BUILD_NUMBER \
@@ -173,7 +179,7 @@ definitions:
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.19.6 --flavor staging -- \
+        shorebird release ios --flutter-version=3.24.0 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
@@ -184,7 +190,7 @@ definitions:
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor staging -- \
+        shorebird release android --artifact apk --flutter-version=3.24.0 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -194,7 +200,7 @@ definitions:
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.19.6 --flavor production -- \
+        shorebird release ios --flutter-version=3.24.0 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
@@ -205,7 +211,7 @@ definitions:
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.19.6 --flavor production -- \
+        shorebird release android --artifact apk --flutter-version=3.24.0 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"

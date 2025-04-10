@@ -10,7 +10,7 @@ import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/web3/web3_contract_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:convert/convert.dart';
-import 'package:web3modal_flutter/web3modal_flutter.dart';
+import 'package:reown_appkit/reown_appkit.dart';
 
 class EthereumTransactionExecutor implements CryptoTransactionExecutor {
   @override
