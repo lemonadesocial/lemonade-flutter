@@ -1097,26 +1097,34 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: "401643a6ea9d8451365f2ec11145335bf130560cfde367bdf8f0be6d60f89479"
+      sha256: d59eeafd6df92174b1d5f68fc9d66634c97ce2e7cfe2293476236547bb19bbbd
       url: "https://pub.dev"
     source: hosted
-    version: "15.1.3"
+    version: "19.0.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
       name: flutter_local_notifications_linux
-      sha256: c49bd06165cad9beeb79090b18cd1eb0296f4bf4b23b84426e37dd7c027fc3af
+      sha256: e3c277b2daab8e36ac5a6820536668d07e83851aeeb79c446e525a70710770a5
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "6.0.0"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
-      sha256: "85f8d07fe708c1bdcf45037f2c0109753b26ae077e9d9e899d55971711a4ea66"
+      sha256: "2569b973fc9d1f63a37410a9f7c1c552081226c597190cb359ef5d5762d1631c"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "9.0.0"
+  flutter_local_notifications_windows:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_windows
+      sha256: f8fc0652a601f83419d623c85723a3e82ad81f92b33eaa9bcc21ea1b94773e6e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -1261,10 +1269,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_stripe
-      sha256: "8ec182c1f14d34dd68d499c8d015d89773aa3d8d149a24c838ff6e5d51e2dd82"
+      sha256: "459c19dfae52ea22a3abb126163598559af606603c369d0257a6704221adeb1f"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "11.4.0"
   flutter_styled_toast:
     dependency: "direct main"
     description:
@@ -2838,26 +2846,26 @@ packages:
     dependency: transitive
     description:
       name: stripe_android
-      sha256: "1de36b35c50f33e538c8e4bd6173f0ab8d7d8e6b9e05388488775e439c29b7d2"
+      sha256: "0b13c730d520378766973f8b417c2cdab6ca30be087e770b84e8fb2bd0df1648"
       url: "https://pub.dev"
     source: hosted
-    version: "9.6.0+2"
+    version: "11.4.0"
   stripe_ios:
     dependency: transitive
     description:
       name: stripe_ios
-      sha256: "4b176f4ee7eaf229815b90c3ff78935da9e01765f4d3153b76fd0d3d64680294"
+      sha256: "465fd72dd46f3d17fbd9817bf4b6ae3c5f8001b467415a2101fd27a51bebd010"
       url: "https://pub.dev"
     source: hosted
-    version: "9.6.0"
+    version: "11.4.0"
   stripe_platform_interface:
     dependency: transitive
     description:
       name: stripe_platform_interface
-      sha256: ac3c6ac938a26674ae8ae691d689e0b949ab1a8d270489f08d35446dd8d5bea0
+      sha256: "84d589925cac4ae666e5d306b0edd3ff83bdd076a832a9eba0fbf9fa5216502d"
       url: "https://pub.dev"
     source: hosted
-    version: "9.6.0"
+    version: "11.4.0"
   synchronized:
     dependency: transitive
     description:
@@ -2910,10 +2918,10 @@ packages:
     dependency: transitive
     description:
       name: timezone
-      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
+      sha256: ffc9d5f4d1193534ef051f9254063fa53d588609418c84299956c3db9383587d
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4"
+    version: "0.10.0"
   timing:
     dependency: transitive
     description:
