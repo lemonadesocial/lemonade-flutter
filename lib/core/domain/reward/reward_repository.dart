@@ -1,6 +1,7 @@
 import 'package:app/core/domain/reward/entities/reward_signature_response.dart';
 import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/failure.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class RewardRepository {
@@ -25,5 +26,9 @@ abstract class RewardRepository {
       generateClaimTicketRewardSignature({
     required String event,
     String? payment,
+  });
+
+  Future<Either<Failure, bool>> updateTokenRewardClaim({
+    required Input$UpdateTokenRewardClaimInput input,
   });
 }

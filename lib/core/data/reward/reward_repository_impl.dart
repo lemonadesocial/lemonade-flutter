@@ -9,6 +9,8 @@ import 'package:app/graphql/backend/reward/query/generate_claim_checkin_reward_s
 import 'package:app/graphql/backend/reward/query/generate_claim_ticket_reward_signature.graphql.dart';
 import 'package:app/graphql/backend/reward/query/list_checkin_token_reward_settings.graphql.dart';
 import 'package:app/graphql/backend/reward/query/list_ticket_token_reward_settings.graphql.dart';
+import 'package:app/graphql/backend/reward/mutation/update_token_reward_claim.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -136,5 +138,22 @@ class RewardRepositoryImpl implements RewardRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTokenRewardClaim({
+    required Input$UpdateTokenRewardClaimInput input,
+  }) async {
+    final result = await _client.mutate$UpdateTokenRewardClaim(
+      Options$Mutation$UpdateTokenRewardClaim(
+        variables: Variables$Mutation$UpdateTokenRewardClaim(input: input),
+      ),
+    );
+
+    if (result.hasException || result.parsedData == null) {
+      return Left(Failure());
+    }
+
+    return Right(result.parsedData!.updateTokenRewardClaim);
   }
 }

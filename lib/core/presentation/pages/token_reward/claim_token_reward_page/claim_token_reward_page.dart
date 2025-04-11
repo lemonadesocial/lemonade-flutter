@@ -1,6 +1,7 @@
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/domain/reward/entities/token_reward_vault.dart';
+import 'package:app/core/domain/reward/reward_repository.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_multiple_token_rewards_view.dart';
 import 'package:app/core/presentation/pages/token_reward/views/claim_single_token_reward_view.dart';
@@ -11,6 +12,7 @@ import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:auto_route/auto_route.dart';
@@ -73,6 +75,21 @@ class _ClaimTokenRewardPageState extends State<ClaimTokenRewardPage> {
         txHash: txHash,
       );
       if (receipt?.status == true) {
+        if (widget.rewardSignatureResponse.claim != null) {
+          final input = Input$UpdateTokenRewardClaimInput(
+            $_id: widget.rewardSignatureResponse.claim?.id ?? '',
+            network: vault.network ?? '',
+            from_wallet: walletAddress,
+            tx_hash: txHash,
+          );
+          try {
+            await getIt<RewardRepository>().updateTokenRewardClaim(
+              input: input,
+            );
+          } catch (e) {
+            //
+          }
+        }
         setState(() {
           _isSuccess = true;
         });

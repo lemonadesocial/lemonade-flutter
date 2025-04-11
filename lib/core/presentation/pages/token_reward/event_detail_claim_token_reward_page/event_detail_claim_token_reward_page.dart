@@ -17,6 +17,7 @@ import 'package:app/core/service/web3/token_reward/token_reward_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/graphql/backend/event/query/get_my_tickets.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
@@ -109,6 +110,21 @@ class _EventDetailClaimTokenRewardPageState
         txHash: txHash,
       );
       if (receipt?.status == true) {
+        if (rewardSignatureResponse.claim != null) {
+          final input = Input$UpdateTokenRewardClaimInput(
+            $_id: rewardSignatureResponse.claim?.id ?? '',
+            network: vault.network ?? '',
+            from_wallet: walletAddress,
+            tx_hash: txHash,
+          );
+          try {
+            await getIt<RewardRepository>().updateTokenRewardClaim(
+              input: input,
+            );
+          } catch (e) {
+            //
+          }
+        }
         setState(() {
           _isSuccess = true;
         });

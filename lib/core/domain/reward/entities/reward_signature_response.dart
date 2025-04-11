@@ -10,6 +10,7 @@ class RewardSignatureResponse with _$RewardSignatureResponse {
   factory RewardSignatureResponse({
     List<TokenRewardSetting>? settings,
     TokenRewardSignature? signature,
+    TokenRewardClaim? claim,
   }) = _RewardSignatureResponse;
 
   factory RewardSignatureResponse.fromDto(
@@ -21,6 +22,7 @@ class RewardSignatureResponse with _$RewardSignatureResponse {
         signature: dto.signature != null
             ? TokenRewardSignature.fromDto(dto.signature!)
             : null,
+        claim: dto.claim != null ? TokenRewardClaim.fromDto(dto.claim!) : null,
       );
 
   factory RewardSignatureResponse.fromJson(Map<String, dynamic> json) =>
@@ -44,4 +46,20 @@ class TokenRewardSignature with _$TokenRewardSignature {
 
   factory TokenRewardSignature.fromJson(Map<String, dynamic> json) =>
       _$TokenRewardSignatureFromJson(json);
+}
+
+@freezed
+class TokenRewardClaim with _$TokenRewardClaim {
+  factory TokenRewardClaim({
+    String? id,
+    DateTime? createdAt,
+  }) = _TokenRewardClaim;
+
+  factory TokenRewardClaim.fromDto(TokenRewardClaimDto dto) => TokenRewardClaim(
+        id: dto.id,
+        createdAt: dto.createdAt,
+      );
+
+  factory TokenRewardClaim.fromJson(Map<String, dynamic> json) =>
+      _$TokenRewardClaimFromJson(json);
 }
