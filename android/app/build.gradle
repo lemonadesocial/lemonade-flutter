@@ -42,7 +42,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "social.lemonade.app"
     // compileSdkVersion flutter.compileSdkVersion
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {

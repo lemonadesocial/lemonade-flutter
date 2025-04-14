@@ -1,5 +1,4 @@
 buildscript {
-    // ext.kotlin_version = '1.8.20'
     ext.kotlin_version = '1.8.0'
     repositories {
         google()
@@ -29,7 +28,7 @@ subprojects {
         if (project.plugins.hasPlugin("com.android.application") ||
                 project.plugins.hasPlugin("com.android.library")) {
             project.android {
-                compileSdkVersion 34                
+                compileSdkVersion 35
             }
         }
     }
