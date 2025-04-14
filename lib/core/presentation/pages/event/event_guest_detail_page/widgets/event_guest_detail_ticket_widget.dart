@@ -12,6 +12,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class EventGuestDetailTicketWidget extends StatelessWidget {
   final EventGuestDetail? eventGuestDetail;
@@ -54,10 +55,10 @@ class EventGuestDetailTicketWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             final ticket = tickets[index];
             // Find matching ticket type
-            final ticketType = eventTicketTypes?.firstWhere(
-              (type) => type.id == ticket.type,
-              orElse: () => ticket.typeExpanded!,
-            );
+            final ticketType = eventTicketTypes?.firstWhereOrNull(
+                  (type) => type.id == ticket.type,
+                ) ??
+                ticket.typeExpanded;
 
             if (ticketType == null) return const SizedBox.shrink();
 
