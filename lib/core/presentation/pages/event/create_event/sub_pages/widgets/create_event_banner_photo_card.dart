@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/core/application/event/create_event_bloc/create_event_bloc.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/file/file_upload_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -101,20 +102,13 @@ class _CreateEventBannerPhotoCardState
                   height: double.infinity,
                   fit: BoxFit.cover,
                 )
-              else if (widget.thumbnailUrl != null)
-                Image.network(
-                  widget.thumbnailUrl!,
+              else
+                LemonNetworkImage(
+                  imageUrl: widget.thumbnailUrl ?? '',
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      ImagePlaceholder.eventCard(),
-                )
-              else
-                Image(
-                  fit: BoxFit.cover,
-                  image: Assets.images.bgNoPhotoEvent.provider(),
-                  height: double.infinity,
+                  placeholder: ImagePlaceholder.eventCard(),
                 ),
               Positioned(
                 right: Spacing.small,
