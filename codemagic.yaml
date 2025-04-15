@@ -179,7 +179,7 @@ definitions:
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.24.0 --flavor staging -- \
+        shorebird release ios --flutter-version=3.24.1 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="staging" \
@@ -190,7 +190,7 @@ definitions:
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.24.0 --flavor staging -- \
+        shorebird release android --artifact apk --flutter-version=3.24.1 --flavor staging -- \
           --build-number=$BUILD_NUMBER \
           --flavor="staging" \
           -t "lib/main_staging.dart"
@@ -200,7 +200,7 @@ definitions:
         BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release ios --flutter-version=3.24.0 --flavor production -- \
+        shorebird release ios --flutter-version=3.24.1 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
           --flavor="production" \
@@ -211,7 +211,7 @@ definitions:
         BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
         chmod +x scripts/set_build_number.sh
         ./scripts/set_build_number.sh "$BUILD_NUMBER"
-        shorebird release android --artifact apk --flutter-version=3.24.0 --flavor production -- \
+        shorebird release android --artifact apk --flutter-version=3.24.1 --flavor production -- \
           --build-number=$BUILD_NUMBER \
           --flavor="production" \
           -t "lib/main_production.dart"
