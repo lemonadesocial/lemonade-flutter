@@ -11,7 +11,6 @@ class LemonEmojiPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return LemonSnapBottomSheet(
       defaultSnapSize: 0.7,
       minSnapSize: 0.7,
@@ -25,12 +24,7 @@ class LemonEmojiPicker extends StatelessWidget {
               onEmojiSelected: (category, emoji) {
                 onEmojiSelected?.call(emoji);
               },
-              config: Config(
-                iconColor: colorScheme.onSurfaceVariant,
-                iconColorSelected: colorScheme.onPrimary,
-                indicatorColor: Colors.transparent,
-                bgColor: colorScheme.surface,
-              ),
+              config: const Config(),
             ),
           ),
         ),
