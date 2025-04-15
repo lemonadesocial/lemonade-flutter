@@ -1,3 +1,10 @@
+plugins {
+    id "com.android.application"
+    id "com.google.gms.google-services"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -41,17 +48,22 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "social.lemonade.app"
-    // compileSdkVersion flutter.compileSdkVersion
-    compileSdkVersion 35
-    ndkVersion flutter.ndkVersion
+    compileSdk = 35
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        jvmToolchain(17)
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "17"
     }
 
     sourceSets {
@@ -60,18 +72,14 @@ android {
 
     defaultConfig {
         applicationId "social.lemonade.app"
+
         // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        
-        // TODO: After upgrading Flutter, switch back to using Flutter's SDK properties instead of hardcoded values:
-        // minSdkVersion flutterMinSdk
-        // targetSdkVersion flutter.targetSdkVersion
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = 23
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
 
-        minSdkVersion 25
-        targetSdkVersion 34
-
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
         manifestPlaceholders += [
                 'appAuthRedirectScheme': 'staging.lemonadesocial://oauth2/logout'
         ]
@@ -108,9 +116,8 @@ android {
         debug {
         }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            // Temporarily use debug signing config for testing
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -146,12 +153,14 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-messaging:19.0.1' // Workaround for https://github.com/microg/android_packages_apps_GmsCore/issues/313#issuecomment-617651698
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.multidex:multidex:2.0.1'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
 }
 
 allprojects {
