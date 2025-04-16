@@ -116,6 +116,7 @@ android {
         debug {
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
