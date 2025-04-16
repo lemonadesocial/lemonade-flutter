@@ -1,5 +1,5 @@
-query GetMySpaceEventRequests($space: MongoID!, $state: EventJoinRequestState, $limit: Int!, $skip: Int!) {
-  getMySpaceEventRequests(space: $space, state: $state, limit: $limit, skip: $skip) {
+query GetSpaceEventRequests($space: MongoID!, $state: EventJoinRequestState, $limit: Int!, $skip: Int!) {
+  getSpaceEventRequests(space: $space, state: $state, limit: $limit, skip: $skip) {
     total
     records {
       _id

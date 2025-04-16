@@ -26,6 +26,10 @@
         "one": "subscriber",
         "other": "subscribers"
     },
+    "guest(ordinal)": {
+        "one": "guest",
+        "other": "guests"
+    },
     "actions": {
         "edit": "edit",
         "connect": "connect",
@@ -181,6 +185,8 @@
     "incorrectPin": "Incorrect PIN code",
     "copiedToClipboard": "Copied to clipboard",
     "pending": "Pending",
+    "approved": "Approved",
+    "declined": "Declined",
     "error": {
         "label": "Error",
         "privateKeyNotFound": "Credential not found"

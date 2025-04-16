@@ -178,6 +178,21 @@ class _ViewState extends State<_View> {
                         child: SpaceInfo(space: space),
                       ),
                       SliverToBoxAdapter(
+                        child: LinearGradientButton.primaryButton(
+                          label: "Check approval",
+                          onTap: () {
+                            if (space.id?.isEmpty == true) {
+                              return;
+                            }
+                            AutoRouter.of(context).push(
+                              SpaceEventRequestsManagementRoute(
+                                spaceId: space.id!,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SliverToBoxAdapter(
                         child: Divider(
                           color: colorScheme.outline,
                         ),
