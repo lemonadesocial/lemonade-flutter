@@ -2,8 +2,11 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
+import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
+import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -11,6 +14,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -21,6 +25,7 @@ import 'package:app/core/presentation/pages/space/space_detail_page/widgets/spac
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 @RoutePage()
 class SpaceDetailPage extends StatelessWidget {
@@ -73,6 +78,11 @@ class SpaceDetailPage extends StatelessWidget {
                 skip: 0,
               ),
             ),
+        ),
+        BlocProvider(
+          create: (context) => GetSpaceEventRequestsBloc(
+            spaceRepository: getIt<SpaceRepository>(),
+          ),
         ),
       ],
       child: const _View(),
@@ -139,6 +149,18 @@ class _ViewState extends State<_View> {
             context
                 .read<FollowSpaceBloc>()
                 .add(FollowSpaceEvent.checkFollowed(space: space));
+            if (space.isAdmin(userId: user?.userId ?? '') ||
+                space.isCreator(userId: user?.userId ?? '')) {
+              context.read<GetSpaceEventRequestsBloc>().add(
+                    GetSpaceEventRequestsEvent.fetch(
+                      input: Variables$Query$GetSpaceEventRequests(
+                        space: space.id ?? '',
+                        limit: 20,
+                        skip: 0,
+                      ),
+                    ),
+                  );
+            }
           },
         );
       },
@@ -166,6 +188,9 @@ class _ViewState extends State<_View> {
             ),
           ),
           success: (space) {
+            final isAdminOrCreator =
+                space.isAdmin(userId: user?.userId ?? '') ||
+                    space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
               body: Stack(
                 children: [
@@ -177,26 +202,64 @@ class _ViewState extends State<_View> {
                       SliverToBoxAdapter(
                         child: SpaceInfo(space: space),
                       ),
-                      SliverToBoxAdapter(
-                        child: LinearGradientButton.primaryButton(
-                          label: "Check approval",
-                          onTap: () {
-                            if (space.id?.isEmpty == true) {
-                              return;
-                            }
-                            AutoRouter.of(context).push(
-                              SpaceEventRequestsManagementRoute(
-                                spaceId: space.id!,
-                              ),
+                      if (!isAdminOrCreator)
+                        SliverToBoxAdapter(
+                          child: Divider(
+                            color: colorScheme.outline,
+                          ),
+                        ),
+                      if (isAdminOrCreator)
+                        BlocBuilder<GetSpaceEventRequestsBloc,
+                            GetSpaceEventRequestsState>(
+                          builder: (context, state) {
+                            final requests = state.maybeWhen(
+                              orElse: () => <SpaceEventRequest>[],
+                              success: (response) => response.records,
+                            );
+                            final hasPending = requests.any(
+                              (request) =>
+                                  request.state ==
+                                  Enum$SpaceEventRequestState.pending,
+                            );
+                            return MultiSliver(
+                              children: [
+                                if (hasPending) ...[
+                                  SliverToBoxAdapter(
+                                    child: Divider(
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                  SizedBox(height: Spacing.small),
+                                ],
+                                SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: Spacing.small,
+                                    ),
+                                    child: SpaceEventRequestsAdminList(
+                                      spaceId: space.id ?? '',
+                                      requests: requests,
+                                    ),
+                                  ),
+                                ),
+                                if (!hasPending) ...[
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(height: Spacing.small),
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: Divider(
+                                      color: colorScheme.outline,
+                                    ),
+                                  ),
+                                ],
+                                if (hasPending)
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(height: Spacing.small),
+                                  ),
+                              ],
                             );
                           },
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Divider(
-                          color: colorScheme.outline,
-                        ),
-                      ),
                       SpaceEventsList(space: space),
                     ],
                   ),

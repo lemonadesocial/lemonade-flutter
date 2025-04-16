@@ -76,6 +76,15 @@ class _ViewState extends State<_View>
     );
   }
 
+  Future<void> _refresh() async {
+    context.read<GetSpaceEventRequestsBloc>().add(
+          GetSpaceEventRequestsEvent.fetch(
+            input: input,
+            refresh: true,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -100,11 +109,7 @@ class _ViewState extends State<_View>
             controller: refreshController,
             onRefresh: () async {
               refreshController.refreshCompleted();
-              context.read<GetSpaceEventRequestsBloc>().add(
-                    GetSpaceEventRequestsEvent.fetch(
-                      input: input,
-                    ),
-                  );
+              await _refresh();
             },
             child: CustomScrollView(
               slivers: [
@@ -127,10 +132,10 @@ class _ViewState extends State<_View>
                       return SpaceEventRequestItem(
                         request: request,
                         onApprove: (request) {
-                          // TODO: Implement approve functionality
+                          _refresh();
                         },
                         onDecline: (request) {
-                          // TODO: Implement decline functionality
+                          _refresh();
                         },
                       );
                     },
