@@ -1,11 +1,15 @@
 import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/space/space_event_requests_management_page/widgets/space_event_request_item.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/space/mutation/decide_space_event_requests.graphql.dart';
 import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -28,7 +32,7 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
 
   void _refreshRequests(BuildContext context) async {
     context.read<GetSpaceEventRequestsBloc>().add(
-          GetSpaceEventRequestsEvent.fetch(
+          GetSpaceEventRequestsEvent.refresh(
             input: Variables$Query$GetSpaceEventRequests(
               space: spaceId,
               limit: 20,
@@ -43,6 +47,26 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
     await AutoRouter.of(context).push(
       SpaceEventRequestsManagementRoute(
         spaceId: spaceId,
+      ),
+    );
+    _refreshRequests(context);
+  }
+
+  Future<void> _decide(
+    BuildContext context, {
+    required SpaceEventRequest request,
+    required Enum$SpaceEventRequestState decision,
+  }) async {
+    await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<SpaceRepository>().decideSpaceEventRequests(
+        input: Variables$Mutation$DecideSpaceEventRequests(
+          input: Input$DecideSpaceEventRequestsInput(
+            space: request.space!,
+            requests: [request.id!],
+            decision: decision,
+          ),
+        ),
       ),
     );
     _refreshRequests(context);
@@ -134,11 +158,19 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
         SizedBox(height: Spacing.small),
         SpaceEventRequestItem(
           request: firstPendingRequest,
-          onApprove: (request) {
-            _refreshRequests(context);
+          onApprove: (request) async {
+            await _decide(
+              context,
+              request: request,
+              decision: Enum$SpaceEventRequestState.approved,
+            );
           },
-          onDecline: (request) {
-            _refreshRequests(context);
+          onDecline: (request) async {
+            await _decide(
+              context,
+              request: request,
+              decision: Enum$SpaceEventRequestState.declined,
+            );
           },
         ),
         SizedBox(height: Spacing.extraSmall),

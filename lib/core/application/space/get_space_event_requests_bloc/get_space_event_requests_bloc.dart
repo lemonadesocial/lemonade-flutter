@@ -13,7 +13,10 @@ class GetSpaceEventRequestsEvent with _$GetSpaceEventRequestsEvent {
     required Variables$Query$GetSpaceEventRequests input,
     @Default(false) bool refresh,
   }) = _GetSpaceEventRequestsEventFetch;
-
+  const factory GetSpaceEventRequestsEvent.refresh({
+    required Variables$Query$GetSpaceEventRequests input,
+    @Default(false) bool refresh,
+  }) = _GetSpaceEventRequestsEventRefresh;
   const factory GetSpaceEventRequestsEvent.reset() =
       _GetSpaceEventRequestsEventReset;
 }
@@ -40,16 +43,30 @@ class GetSpaceEventRequestsBloc
   })  : _spaceRepository = spaceRepository,
         super(const GetSpaceEventRequestsState.initial()) {
     on<_GetSpaceEventRequestsEventFetch>(_onFetch);
+    on<_GetSpaceEventRequestsEventRefresh>(_onRefresh);
   }
 
   Future<void> _onFetch(
     _GetSpaceEventRequestsEventFetch event,
     Emitter<GetSpaceEventRequestsState> emit,
   ) async {
-    if (!event.refresh) {
-      emit(const GetSpaceEventRequestsState.loading());
-    }
+    emit(const GetSpaceEventRequestsState.loading());
 
+    final result = await _spaceRepository.getSpaceEventRequests(
+      input: event.input,
+      refresh: event.refresh,
+    );
+
+    result.fold(
+      (failure) => emit(GetSpaceEventRequestsState.failure(failure)),
+      (response) => emit(GetSpaceEventRequestsState.success(response)),
+    );
+  }
+
+  Future<void> _onRefresh(
+    _GetSpaceEventRequestsEventRefresh event,
+    Emitter<GetSpaceEventRequestsState> emit,
+  ) async {
     final result = await _spaceRepository.getSpaceEventRequests(
       input: event.input,
       refresh: event.refresh,

@@ -158,6 +158,7 @@ class _ViewState extends State<_View> {
                         limit: 20,
                         skip: 0,
                       ),
+                      refresh: true,
                     ),
                   );
             }

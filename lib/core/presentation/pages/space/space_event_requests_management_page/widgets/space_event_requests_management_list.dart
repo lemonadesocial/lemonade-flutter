@@ -5,12 +5,14 @@ import 'package:app/core/presentation/pages/space/space_event_requests_managemen
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/space/mutation/decide_space_event_requests.graphql.dart';
 import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 
 class SpaceEventRequestsManagementList extends StatelessWidget {
   const SpaceEventRequestsManagementList({
@@ -35,6 +37,7 @@ class SpaceEventRequestsManagementList extends StatelessWidget {
               limit: 100,
               skip: 0,
             ),
+            refresh: true,
           ),
         ),
       child: _View(
@@ -78,11 +81,31 @@ class _ViewState extends State<_View>
 
   Future<void> _refresh() async {
     context.read<GetSpaceEventRequestsBloc>().add(
-          GetSpaceEventRequestsEvent.fetch(
+          GetSpaceEventRequestsEvent.refresh(
             input: input,
             refresh: true,
           ),
         );
+  }
+
+  Future<void> _decide(
+    BuildContext context, {
+    required SpaceEventRequest request,
+    required Enum$SpaceEventRequestState decision,
+  }) async {
+    await showFutureLoadingDialog(
+      context: context,
+      future: () => getIt<SpaceRepository>().decideSpaceEventRequests(
+        input: Variables$Mutation$DecideSpaceEventRequests(
+          input: Input$DecideSpaceEventRequestsInput(
+            space: request.space!,
+            requests: [request.id!],
+            decision: decision,
+          ),
+        ),
+      ),
+    );
+    _refresh();
   }
 
   @override
@@ -131,11 +154,19 @@ class _ViewState extends State<_View>
                       final request = requests[index];
                       return SpaceEventRequestItem(
                         request: request,
-                        onApprove: (request) {
-                          _refresh();
+                        onApprove: (request) async {
+                          await _decide(
+                            context,
+                            request: request,
+                            decision: Enum$SpaceEventRequestState.approved,
+                          );
                         },
-                        onDecline: (request) {
-                          _refresh();
+                        onDecline: (request) async {
+                          await _decide(
+                            context,
+                            request: request,
+                            decision: Enum$SpaceEventRequestState.declined,
+                          );
                         },
                       );
                     },
