@@ -750,7 +750,7 @@
     },
     "eventPhotos": {
         "photos": "Photos",
-        "uploadHint": "1920x1080 or 16:9",
+        "uploadHint": "1080x1080 or 1:1",
         "addPhoto": "Add photo",
         "setAsCover": "Set as cover",
         "deletePhoto": "Delete photo",
