@@ -116,8 +116,6 @@ android {
         debug {
         }
         release {
-            // Temporarily use debug signing config for testing
-            signingConfig signingConfigs.debug
         }
     }
 
