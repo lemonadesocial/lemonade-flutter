@@ -8,4 +8,7 @@ final spaceRoutes = [
   AutoRoute(
     page: SpaceDetailRoute.page,
   ),
+  AutoRoute(
+    page: SpaceEventRequestsManagementRoute.page,
+  ),
 ];

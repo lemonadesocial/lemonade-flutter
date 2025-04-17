@@ -56,5 +56,14 @@
     "mayHaveMembershipCheck": "You may have membership access for this community",
     "ambassadorUnlocked": "Brand Ambassador Unlocked!",
     "ambassadorUnlockedDescription": "Congratulations, you are now a Brand Ambassador. You can list events without admin approval on this community.",
-    "viewCommunity": "View Community"
+    "viewCommunity": "View Community",
+    "submittedEvents": "Submitted Events",
+    "approve": "Approve",
+    "decline": "Decline",
+    "approvedBy": "Approved by",
+    "declinedBy": "Declined by",
+    "submittedBy": "Submitted by",
+    "pendingApprovalEvent": "Pending Approval Event",
+    "eventsAreVisibleOnThePageAfterApproval": "Events are visible on the page after approval.",
+    "accessAllCommunityEventListings": "Access all community event listings"
 }

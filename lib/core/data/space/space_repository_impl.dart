@@ -197,4 +197,47 @@ class SpaceRepositoryImpl implements SpaceRepository {
 
     return Right(GetSpaceEventRequestsResponse.fromDto(responseDto));
   }
+
+  @override
+  Future<Either<Failure, GetSpaceEventRequestsResponse>> getSpaceEventRequests({
+    required Variables$Query$GetSpaceEventRequests input,
+    bool refresh = false,
+  }) async {
+    final result = await _client.query$GetSpaceEventRequests(
+      Options$Query$GetSpaceEventRequests(
+        variables: input,
+        fetchPolicy: refresh ? FetchPolicy.networkOnly : null,
+      ),
+    );
+
+    if (result.hasException ||
+        result.parsedData?.getSpaceEventRequests == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final responseDto = GetSpaceEventRequestsResponseDto.fromJson(
+      result.parsedData!.getSpaceEventRequests.toJson(),
+    );
+
+    return Right(GetSpaceEventRequestsResponse.fromDto(responseDto));
+  }
+
+  @override
+  Future<Either<Failure, bool>> decideSpaceEventRequests({
+    required Variables$Mutation$DecideSpaceEventRequests input,
+  }) async {
+    final result = await _client.mutate$DecideSpaceEventRequests(
+      Options$Mutation$DecideSpaceEventRequests(
+        variables: input,
+      ),
+    );
+
+    if (result.hasException ||
+        result.parsedData?.decideSpaceEventRequests == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    final success = result.parsedData!.decideSpaceEventRequests;
+    return Right(success);
+  }
 }
