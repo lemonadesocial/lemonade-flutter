@@ -1,6 +1,8 @@
 import UIKit
 import Flutter
+#if canImport(CoinbaseWalletSDK)
 import CoinbaseWalletSDK
+#endif
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -16,26 +18,26 @@ import CoinbaseWalletSDK
     }
     
     override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        if #available(iOS 13.0, *) {
+        #if canImport(CoinbaseWalletSDK)
+        if #available(iOS 15.5, *) {
             if (try? CoinbaseWalletSDK.shared.handleResponse(url)) == true {
                 return true
             }
-        } else {
-            // Fallback on earlier versions
         }
+        #endif
         // handle other types of deep links
         return false
     }
     
     override func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if #available(iOS 13.0, *) {
+        #if canImport(CoinbaseWalletSDK)
+        if #available(iOS 15.5, *) {
             if let url = userActivity.webpageURL,
                (try? CoinbaseWalletSDK.shared.handleResponse(url)) == true {
                 return true
             }
-        } else {
-            // Fallback on earlier versions
         }
+        #endif
         // handle other types of deep links
         return false
     }
