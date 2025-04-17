@@ -142,7 +142,7 @@ dependencies:
       ref: master
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
-  mobile_scanner: 3.5.5
+  mobile_scanner: 6.0.7
   modal_bottom_sheet: ^3.0.0-pre
   dynamic_color: ^1.7.0
   calendar_date_picker2: ^0.5.5
@@ -170,14 +170,14 @@ dependency_overrides:
     git:
       url: https://github.com/mthinh/dart_matrix_api_lite.git
       ref: main
-  fcm_shared_isolate:
-    git:
-      url: https://github.com/sieuhuflit/fcm_shared_isolate.git
-      ref: main
   flutter_vibrate:
     git:
       url: https://github.com/rodydavis/flutter_vibrate.git
       ref: master
+  fcm_shared_isolate:
+    git:
+      url: https://github.com/sieuhuflit/fcm_shared_isolate.git
+      ref: main
   uuid: 4.3.3
   web: 1.1.1
   intl: any
