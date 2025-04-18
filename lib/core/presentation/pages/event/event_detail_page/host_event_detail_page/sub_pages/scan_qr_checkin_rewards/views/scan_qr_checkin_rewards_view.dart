@@ -70,9 +70,9 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           },
         );
     }
-    if (!widget.controller.isStarting) {
-      widget.controller.start();
-    }
+
+    // Restart scanning after processing
+    widget.controller.start();
   }
 
   @override

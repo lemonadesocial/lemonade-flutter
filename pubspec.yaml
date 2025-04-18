@@ -1,11 +1,11 @@
 name: app
 description: Lemonade Social App
 publish_to: "none"
-version: 1.53.2
+version: 2.0.0
 
 environment:
-  flutter: "3.24.0"
-  sdk: "3.5.0"
+  flutter: "3.24.1"
+  sdk: "3.5.1"
 
 dependencies:
   flutter:
@@ -67,7 +67,7 @@ dependencies:
   flutter_linkify: ^6.0.0
   flutter_html: ^3.0.0-beta.2
   flutter_blurhash: 0.8.2
-  emoji_picker_flutter: ^1.6.1
+  emoji_picker_flutter: 4.3.0
   mime: ^1.0.4
   flutter_screenutil: ^5.9.0
   pull_to_refresh_flutter3: ^2.0.1
@@ -90,10 +90,10 @@ dependencies:
   flutter_inappwebview: 6.1.5
 
   # Firebase
-  firebase_core: ^2.16.0
-  firebase_messaging: ^14.6.8
-  flutter_local_notifications: ^15.1.0+1
-  firebase_analytics: 10.5.1
+  firebase_core: 3.13.0
+  firebase_messaging: 15.2.5
+  flutter_local_notifications: 19.1.0
+  firebase_analytics: 11.4.5
 
   # location tracking
   geolocator: 9.0.2
@@ -109,8 +109,8 @@ dependencies:
 
   # matrix
   matrix: ^0.22.1
-  flutter_olm: ^1.2.0
-  flutter_openssl_crypto: ^0.1.0
+  flutter_olm: 2.0.0
+  flutter_openssl_crypto: 0.5.0
   flutter_chat_bubble: ^2.0.2
   duration: ^3.0.13
 
@@ -119,7 +119,7 @@ dependencies:
   shorebird_code_push: ^1.1.0
 
   # payment
-  flutter_stripe: 9.4.0
+  flutter_stripe: 11.4.0
 
   # crash analytics
   sentry_flutter: 8.14.0
@@ -130,12 +130,10 @@ dependencies:
   url_launcher: ^6.1.12
   share_plus: ^7.0.2
   flutter_native_splash: ^2.3.2
-  package_info_plus: 7.0.0
-  flutter_vibrate: ^1.3.0
-  connectivity_plus: any
-  restart_app: ^1.2.1
+  package_info_plus: 8.3.0
+  connectivity_plus: 6.1.3
+  restart_app: 1.3.2
   formz: ^0.6.1
-  flutter_app_badger: ^1.5.0
   uuid: 4.3.3
   flutter_google_places_hoc081098: 2.0.0
   google_maps_webservice:
@@ -144,7 +142,7 @@ dependencies:
       ref: master
   flutter_timezone: ^1.0.8
   currency_text_input_formatter: ^2.1.10
-  mobile_scanner: 3.5.5
+  mobile_scanner: 6.0.7
   modal_bottom_sheet: ^3.0.0-pre
   dynamic_color: ^1.7.0
   calendar_date_picker2: ^0.5.5
@@ -159,28 +157,28 @@ dependencies:
   html: 0.15.4
   flutter_wallet_card: ^3.0.4
   html_editor_enhanced: 2.6.0
-  flutter_widget_from_html: 0.15.3
+  flutter_widget_from_html: 0.16.0
   file_picker: 8.0.6
-  add_2_calendar: ^3.0.1
+  add_2_calendar: 3.0.1
   permission_handler: ^11.3.1
   csv: 5.1.1
-  appcheck: 1.5.4+1
+  geolocator_android: 4.6.1
+  device_info_plus: 11.3.0
+  coinbase_wallet_sdk: 1.0.10
 
 dependency_overrides:
   matrix_api_lite:
     git:
       url: https://github.com/mthinh/dart_matrix_api_lite.git
       ref: main
+  flutter_vibrate:
+    git:
+      url: https://github.com/rodydavis/flutter_vibrate.git
+      ref: master
   fcm_shared_isolate:
     git:
       url: https://github.com/sieuhuflit/fcm_shared_isolate.git
       ref: main
-  coinbase_wallet_sdk:
-    git:
-      url: https://github.com/WalletConnect/wallet-mobile-sdk.git
-      ref: "2.0"
-      path: flutter
-  package_info_plus: 7.0.0
   uuid: 4.3.3
   web: 1.1.1
   intl: any

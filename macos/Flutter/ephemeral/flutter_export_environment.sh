@@ -1,6 +1,6 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/sieuthai/fvm/versions/3.24.0"
+export "FLUTTER_ROOT=/Users/sieuthai/fvm/versions/3.24.1"
 export "FLUTTER_APPLICATION_PATH=/Users/sieuthai/projects/lemonade/lemonade-flutter"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"

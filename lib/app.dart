@@ -21,7 +21,6 @@ import 'package:app/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -51,7 +50,7 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
   @override
   void initState() {
     super.initState();
-    FlutterAppBadger.removeBadge();
+    // FlutterAppBadger.removeBadge();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getIt<MatrixService>().backgroundPush.setupContextAndRouter(
             router: _appRouter,

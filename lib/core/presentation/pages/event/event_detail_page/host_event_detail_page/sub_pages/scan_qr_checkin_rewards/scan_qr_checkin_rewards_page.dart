@@ -68,18 +68,47 @@ class _ScanQRCheckinRewardsViewState extends State<_ScanQRCheckinRewardsView> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: Spacing.xSmall),
-            child: ValueListenableBuilder<TorchState>(
-              valueListenable: controller.torchState,
-              builder: (context, value, child) {
-                final iconColor =
-                    value == TorchState.on ? Colors.yellow : Colors.white;
-                return IconButton(
-                  onPressed: () => controller.toggleTorch(),
-                  icon: Icon(
-                    Icons.flashlight_on_outlined,
-                    color: iconColor,
-                  ),
-                );
+            child: ValueListenableBuilder(
+              valueListenable: controller,
+              builder: (context, state, child) {
+                if (!state.isInitialized || !state.isRunning) {
+                  return const SizedBox.shrink();
+                }
+
+                switch (state.torchState) {
+                  case TorchState.auto:
+                    return IconButton(
+                      onPressed: () => controller.toggleTorch(),
+                      icon: const Icon(
+                        Icons.flash_auto,
+                        color: Colors.white,
+                      ),
+                    );
+                  case TorchState.off:
+                    return IconButton(
+                      onPressed: () => controller.toggleTorch(),
+                      icon: const Icon(
+                        Icons.flash_off,
+                        color: Colors.white,
+                      ),
+                    );
+                  case TorchState.on:
+                    return IconButton(
+                      onPressed: () => controller.toggleTorch(),
+                      icon: const Icon(
+                        Icons.flash_on,
+                        color: Colors.yellow,
+                      ),
+                    );
+                  case TorchState.unavailable:
+                    return const SizedBox.square(
+                      dimension: 48,
+                      child: Icon(
+                        Icons.no_flash,
+                        color: Colors.grey,
+                      ),
+                    );
+                }
               },
             ),
           ),
