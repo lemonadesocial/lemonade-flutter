@@ -70,7 +70,8 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
           },
         );
     }
-
+    
+    // Restart scanning after processing
     widget.controller.start();
   }
 
@@ -127,32 +128,6 @@ class _ScanQRCheckinRewardsViewState extends State<ScanQRCheckinRewardsView> {
               ),
               CustomPaint(
                 painter: ScannerOverlay(scanWindow: scanWindow),
-              ),
-              Positioned(
-                bottom: 16,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: ValueListenableBuilder(
-                    valueListenable: widget.controller,
-                    builder: (context, state, child) {
-                      if (!state.isInitialized || !state.isRunning) {
-                        return IconButton(
-                          color: Colors.white,
-                          icon: const Icon(Icons.play_arrow),
-                          iconSize: 32.w,
-                          onPressed: () => widget.controller.start(),
-                        );
-                      }
-                      return IconButton(
-                        color: Colors.white,
-                        icon: const Icon(Icons.stop),
-                        iconSize: 32.w,
-                        onPressed: () => widget.controller.stop(),
-                      );
-                    },
-                  ),
-                ),
               ),
             ],
           ),
