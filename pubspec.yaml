@@ -164,6 +164,7 @@ dependencies:
   csv: 5.1.1
   geolocator_android: 4.6.1
   device_info_plus: 11.3.0
+  coinbase_wallet_sdk: 1.0.10
 
 dependency_overrides:
   matrix_api_lite:

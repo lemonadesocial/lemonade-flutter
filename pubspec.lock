@@ -367,7 +367,7 @@ packages:
     source: hosted
     version: "4.10.1"
   coinbase_wallet_sdk:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: coinbase_wallet_sdk
       sha256: c51f3c54c728a6bdaec346de2ce4a3b6498f099a030772b7df22b058a1bad884
