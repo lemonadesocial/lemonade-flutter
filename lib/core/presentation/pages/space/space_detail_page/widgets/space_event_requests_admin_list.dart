@@ -37,6 +37,7 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
               space: spaceId,
               limit: 20,
               skip: 0,
+              state: Enum$EventJoinRequestState.pending,
             ),
             refresh: true,
           ),
@@ -109,14 +110,15 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      t.space.accessAllCommunityEventListings,
+                      t.space.submittedEvents,
                       style: Typo.medium.copyWith(
                         color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                    SizedBox(height: 2.w),
                     Text(
-                      t.space.eventsAreVisibleOnThePageAfterApproval,
+                      t.space.accessAllCommunityEventListings,
                       style: Typo.small.copyWith(
                         color: colorScheme.onSecondary,
                       ),

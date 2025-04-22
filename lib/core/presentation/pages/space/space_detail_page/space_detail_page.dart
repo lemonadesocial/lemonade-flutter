@@ -157,6 +157,7 @@ class _ViewState extends State<_View> {
                         space: space.id ?? '',
                         limit: 20,
                         skip: 0,
+                        state: Enum$EventJoinRequestState.pending,
                       ),
                       refresh: true,
                     ),
@@ -215,13 +216,15 @@ class _ViewState extends State<_View> {
                           builder: (context, state) {
                             final requests = state.maybeWhen(
                               orElse: () => <SpaceEventRequest>[],
-                              success: (response) => response.records,
+                              success: (response) => response.records
+                                  .where(
+                                    (request) =>
+                                        request.state ==
+                                        Enum$SpaceEventRequestState.pending,
+                                  )
+                                  .toList(),
                             );
-                            final hasPending = requests.any(
-                              (request) =>
-                                  request.state ==
-                                  Enum$SpaceEventRequestState.pending,
-                            );
+                            final hasPending = requests.isNotEmpty;
                             return MultiSliver(
                               children: [
                                 if (hasPending) ...[
