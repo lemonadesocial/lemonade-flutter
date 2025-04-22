@@ -12,7 +12,8 @@ query GetMySpaceEventRequests($space: MongoID!, $state: EventJoinRequestState, $
         new_new_photos_expanded(limit: 1) {
           _id
           url
-          key 
+          key
+          bucket 
         }
         start
         address {

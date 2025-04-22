@@ -12,7 +12,8 @@ query GetSpaceEventRequests($space: MongoID!, $state: EventJoinRequestState, $li
         new_new_photos_expanded(limit: 1) {
           _id
           url
-          key 
+          key
+          bucket
         }
         start
         address {
