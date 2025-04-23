@@ -6,6 +6,7 @@ import 'package:app/core/presentation/pages/create_post/widgets/create_post_even
 import 'package:app/core/presentation/pages/event/event_selecting_page.dart';
 import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
@@ -193,7 +194,14 @@ class CreatePostPage extends StatelessWidget {
                               // Assets.icons.icPoll.svg(color: LemonColor.white.withOpacity(0.7)),
                               // SizedBox(width: Spacing.medium),
                               InkWell(
-                                onTap: createPostBloc.onImagePick,
+                                onTap: () async {
+                                  final hasPermission = await PermissionUtils
+                                      .checkPhotosPermission(context);
+                                  if (!hasPermission) {
+                                    return;
+                                  }
+                                  createPostBloc.onImagePick();
+                                },
                                 child: ThemeSvgIcon(
                                   color: colorScheme.onSurface,
                                   builder: (filter) => Assets.icons.icCamera

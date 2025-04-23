@@ -16,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:app/core/utils/permission_utils.dart';
 
 class CreateEventBannerPhotoCard extends StatefulWidget {
   final FileUploadService _uploadService;
@@ -39,6 +40,12 @@ class _CreateEventBannerPhotoCardState
   String? _localImagePath;
 
   Future<String?> _pickAndUploadImage() async {
+    // Check permission first
+    final hasPermission = await PermissionUtils.checkPhotosPermission(context);
+    if (!hasPermission) {
+      return null;
+    }
+
     final localImage = await _imagePicker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,

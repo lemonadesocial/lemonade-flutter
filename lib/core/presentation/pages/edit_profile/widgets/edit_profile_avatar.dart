@@ -4,6 +4,7 @@ import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -62,7 +63,12 @@ class EditProfileAvatar extends StatelessWidget {
                   bottom: 0,
                   right: 0,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      final hasPermission =
+                          await PermissionUtils.checkPhotosPermission(context);
+                      if (!hasPermission) {
+                        return;
+                      }
                       context.read<EditProfileBloc>().add(
                             EditProfileEvent.selectProfileImage(
                               profilePhotos: profilePhotos,
@@ -85,7 +91,12 @@ class EditProfileAvatar extends StatelessWidget {
               ],
             )
           : InkWell(
-              onTap: () {
+              onTap: () async {
+                final hasPermission =
+                    await PermissionUtils.checkPhotosPermission(context);
+                if (!hasPermission) {
+                  return;
+                }
                 context.read<EditProfileBloc>().add(
                       EditProfileEvent.selectProfileImage(
                         profilePhotos: profilePhotos,

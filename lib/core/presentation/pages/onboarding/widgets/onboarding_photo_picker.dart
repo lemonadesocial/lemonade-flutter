@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -74,10 +75,16 @@ class OnboardingPhotoPicker extends StatelessWidget {
                         customColor: LemonColor.menuRed,
                       ),
                     ],
-                    onItemPressed: (item) {
+                    onItemPressed: (item) async {
                       if (item?.value != null) {
                         switch (item!.value!) {
                           case ImageAction.selectImage:
+                            final hasPermission =
+                                await PermissionUtils.checkPhotosPermission(
+                                    context);
+                            if (!hasPermission) {
+                              return;
+                            }
                             bloc.selectProfileImage();
                             break;
                           case ImageAction.deleteImage:
@@ -116,7 +123,14 @@ class OnboardingPhotoPicker extends StatelessWidget {
               ],
             )
           : InkWell(
-              onTap: bloc.selectProfileImage,
+              onTap: () async {
+                final hasPermission =
+                    await PermissionUtils.checkPhotosPermission(context);
+                if (!hasPermission) {
+                  return;
+                }
+                bloc.selectProfileImage;
+              },
               child: Center(
                 child: ThemeSvgIcon(
                   color: theme.colorScheme.onSurfaceVariant,

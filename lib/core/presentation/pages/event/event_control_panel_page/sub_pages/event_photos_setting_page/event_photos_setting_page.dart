@@ -20,6 +20,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:app/core/utils/permission_utils.dart';
 
 @RoutePage()
 class EventPhotosSettingPage extends StatelessWidget {
@@ -63,6 +64,10 @@ class _EventPhotosSettingPageViewState
   }
 
   Future<String?> _pickAndUploadImage() async {
+    final hasPermission = await PermissionUtils.checkPhotosPermission(context);
+    if (!hasPermission) {
+      return null;
+    }
     final localImage = await _imagePicker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
