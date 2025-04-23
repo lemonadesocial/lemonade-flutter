@@ -95,7 +95,8 @@
         "doItLater": "Do it later",
         "subscribe": "Subscribe",
         "manage": "Manage",
-        "check": "Check"
+        "check": "Check",
+        "openSettings": "Open Settings"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -275,5 +276,11 @@
     "cameraPermissionMessage": "Camera permission is needed to scan QR codes. Please enable it in settings.",
     "draft": "Draft",
     "subscribed": "Subscribed",
-    "copied": "Copied"
+    "copied": "Copied",
+    "permissions": {
+        "photos": {
+            "alertTitle": "Photos Permission Required",
+            "alertContent": "Photos permission is required to select images. Please enable it in settings."
+        }
+    }
 }

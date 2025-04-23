@@ -1,24 +1,25 @@
+import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionUtils {
   static Future<void> _showPermissionSettingsDialog(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
+    final t = Translations.of(context);
     final shouldOpenSettings = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Photos Permission Required'),
-        content: const Text(
-          'Photos permission is required to select images. Please enable it in settings.',
-        ),
+        title: Text(t.common.permissions.photos.alertTitle),
+        content: Text(t.common.permissions.photos.alertContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(t.common.actions.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Open Settings'),
+            child: Text(t.common.actions.openSettings),
           ),
         ],
       ),
