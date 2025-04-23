@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/file/file_upload_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
@@ -51,6 +52,10 @@ class _CollaboratorEditPhotosState extends State<CollaboratorEditPhotos> {
   Future<void> addImage({
     required List<String> currentPhotoIds,
   }) async {
+    final hasPermission = await PermissionUtils.checkPhotosPermission(context);
+    if (!hasPermission) {
+      return;
+    }
     final imageFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,

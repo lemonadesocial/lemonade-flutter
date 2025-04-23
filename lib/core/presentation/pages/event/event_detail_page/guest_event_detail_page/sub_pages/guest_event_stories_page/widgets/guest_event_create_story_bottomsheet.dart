@@ -6,6 +6,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
@@ -152,6 +153,13 @@ class _GuestEventCreateStoryBottomsheetState
                         children: [
                           InkWell(
                             onTap: () async {
+                              final hasPermission =
+                                  await PermissionUtils.checkPhotosPermission(
+                                context,
+                              );
+                              if (!hasPermission) {
+                                return;
+                              }
                               final file = await getImageFromGallery();
                               if (file == null) {
                                 return;
