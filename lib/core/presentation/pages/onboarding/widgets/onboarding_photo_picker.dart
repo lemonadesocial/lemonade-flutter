@@ -81,7 +81,8 @@ class OnboardingPhotoPicker extends StatelessWidget {
                           case ImageAction.selectImage:
                             final hasPermission =
                                 await PermissionUtils.checkPhotosPermission(
-                                    context);
+                              context,
+                            );
                             if (!hasPermission) {
                               return;
                             }

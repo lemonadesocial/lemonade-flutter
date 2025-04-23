@@ -155,7 +155,8 @@ class _GuestEventCreateStoryBottomsheetState
                             onTap: () async {
                               final hasPermission =
                                   await PermissionUtils.checkPhotosPermission(
-                                      context);
+                                context,
+                              );
                               if (!hasPermission) {
                                 return;
                               }
