@@ -110,7 +110,7 @@ definitions:
       name: Build ipa staging
       script: |
         cp .env.staging $CM_BUILD_DIR/.env
-        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 2))
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
@@ -120,7 +120,7 @@ definitions:
       name: Build ipa production
       script: |
         cp .env.production $CM_BUILD_DIR/.env
-        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 2))
+        BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1))
         flutter build ipa --release \
           --build-number=$BUILD_NUMBER \
           --export-options-plist=/Users/builder/export_options.plist \
