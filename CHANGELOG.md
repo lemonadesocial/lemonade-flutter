@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.0.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.53.1...v2.0.0) (2025-04-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade flutter versioning ([#916](https://github.com/lemonadesocial/lemonade-flutter/issues/916))
+
+### Features
+
+* add permission handler ([#930](https://github.com/lemonadesocial/lemonade-flutter/issues/930)) ([1d4c40d](https://github.com/lemonadesocial/lemonade-flutter/commit/1d4c40d880f1eb3ae6a49079c393c685fe7672f0))
+* community hub event approval management ([#928](https://github.com/lemonadesocial/lemonade-flutter/issues/928)) ([eb37b38](https://github.com/lemonadesocial/lemonade-flutter/commit/eb37b38324dfe2ec03eaed27326943a9ffcad514))
+* update claim after claim reward token ([#922](https://github.com/lemonadesocial/lemonade-flutter/issues/922)) ([30b3336](https://github.com/lemonadesocial/lemonade-flutter/commit/30b3336961ab1624d079b4e48c347c85dc5ae5f0))
+* upgrade flutter versioning ([#916](https://github.com/lemonadesocial/lemonade-flutter/issues/916)) ([ba1901d](https://github.com/lemonadesocial/lemonade-flutter/commit/ba1901d30c6f99ff39747851cf8528e5abf2204b))
+
+
+### Bug Fixes
+
+* cover photo setting ui ([#926](https://github.com/lemonadesocial/lemonade-flutter/issues/926)) ([a14c498](https://github.com/lemonadesocial/lemonade-flutter/commit/a14c498d9cbdc1714da945cc68ef89c324bb3f6c))
+* fix null pointer in event guest detail ([#925](https://github.com/lemonadesocial/lemonade-flutter/issues/925)) ([7591e93](https://github.com/lemonadesocial/lemonade-flutter/commit/7591e93ec06e79fcd106e240dcb35e2bd3059967))
+* fix upload photo hint text ([#927](https://github.com/lemonadesocial/lemonade-flutter/issues/927)) ([bc03baf](https://github.com/lemonadesocial/lemonade-flutter/commit/bc03baf2dc2d7f2e5a2106156861d9749b1b6b24))
+* hide farcaster in discover page ([#923](https://github.com/lemonadesocial/lemonade-flutter/issues/923)) ([dbf433a](https://github.com/lemonadesocial/lemonade-flutter/commit/dbf433a1766ad874ab7024023db9699a621444b8))
+* space manage approval  ([#929](https://github.com/lemonadesocial/lemonade-flutter/issues/929)) ([a158b45](https://github.com/lemonadesocial/lemonade-flutter/commit/a158b450ce22351449980836f3e76234efc1c6d6))
+* turn off media library permission ([#931](https://github.com/lemonadesocial/lemonade-flutter/issues/931)) ([58ecdda](https://github.com/lemonadesocial/lemonade-flutter/commit/58ecdda62801a8b997117cc11026564c95847ad8))
+* update dependencies & fix build problem of iOS & Android ([#924](https://github.com/lemonadesocial/lemonade-flutter/issues/924)) ([954fc93](https://github.com/lemonadesocial/lemonade-flutter/commit/954fc9374963201cb4c428bf2543535bd8aa389e))
+
 ## [1.53.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.53.0...v1.53.1) (2025-03-28)
 
 
