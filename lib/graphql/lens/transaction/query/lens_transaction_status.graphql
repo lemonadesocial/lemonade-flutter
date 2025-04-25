@@ -1,0 +1,17 @@
+query TransactionStatus($request: TransactionStatusRequest!) {
+  transactionStatus(request: $request) {
+    ... on PendingTransactionStatus {
+      blockTimestamp
+    }
+    ... on FinishedTransactionStatus {
+      blockTimestamp
+    }
+    ... on FailedTransactionStatus {
+      blockTimestamp
+      reason
+    }
+    ... on NotIndexedYetStatus {
+      reason
+    }
+  }
+}

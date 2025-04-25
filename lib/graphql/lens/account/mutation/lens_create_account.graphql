@@ -1,0 +1,37 @@
+mutation LensCreateAccountWithUsername($request: CreateAccountWithUsernameRequest!) {
+  createAccountWithUsername(request: $request) {
+    ... on CreateAccountResponse {
+      hash
+    }
+    ... on UsernameTaken {
+      ownedBy
+      reason
+    }
+    ... on NamespaceOperationValidationFailed {
+      reason
+      unsatisfiedRules {
+        required {
+          reason
+          message
+          rule
+        }
+        anyOf {
+          rule
+          reason
+          message
+        }
+      }
+    }
+    ... on TransactionWillFail {
+      reason
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+      selfFundedReason
+    }
+    ... on SponsoredTransactionRequest {
+      reason
+      sponsoredReason
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/payment/payment_listener/payment_listener.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
@@ -32,6 +33,7 @@ class _RootPageViewState extends State<RootPage> {
   Future<void> initWalletConnect() async {
     await getIt<WalletConnectService>().init(context);
     context.read<WalletBloc>().add(const WalletEvent.init());
+    context.read<LensAuthBloc>().add(const LensAuthEvent.init());
     setState(() {
       isReady = true;
     });

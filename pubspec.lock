@@ -1631,11 +1631,12 @@ packages:
   graphql_flutter:
     dependency: "direct main"
     description:
-      name: graphql_flutter
-      sha256: fad0c3bad7e4aeec9a2eee11de8e4d305e0fbce260a24351b6c688911aea5fc8
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.0-beta.8"
+      path: "packages/graphql_flutter"
+      ref: "v-packages-v5.2.0"
+      resolved-ref: d2d43497e869291b8aea526678edc6381c59ceb1
+      url: "https://github.com/zino-hofmann/graphql-flutter.git"
+    source: git
+    version: "5.2.0"
   graphs:
     dependency: transitive
     description:

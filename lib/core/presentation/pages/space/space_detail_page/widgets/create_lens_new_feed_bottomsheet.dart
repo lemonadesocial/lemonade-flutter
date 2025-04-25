@@ -9,7 +9,6 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class CreateLensNewFeedBottomSheet extends StatefulWidget {
@@ -175,10 +174,28 @@ class CreateLensNewFeedBottomSheetState
                 child: LinearGradientButton.primaryButton(
                   onTap: _isFormValid
                       ? () async {
-                          print('create feed');
-                          print(_nameController.text);
-                          print(_descriptionController.text);
-                          print(_admins);
+                          await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Feed Data'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Name: ${_nameController.text}'),
+                                  Text(
+                                      'Description: ${_descriptionController.text}'),
+                                  Text('Admins: ${_admins.join(", ")}'),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
                         }
                       : null,
                   label: t.space.lens.createFeed,
