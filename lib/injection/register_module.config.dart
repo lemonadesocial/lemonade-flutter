@@ -143,15 +143,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i839.EventSubEventsSettingBloc());
     gh.lazySingleton<_i380.ShorebirdCodePushService>(
         () => _i380.ShorebirdCodePushService());
-    gh.lazySingleton<_i179.LensGroveService>(() => _i179.LensGroveService());
-    gh.lazySingleton<_i548.LensStorageService>(
-        () => _i548.LensStorageService());
     gh.lazySingleton<_i1033.FirebaseService>(() => _i1033.FirebaseService());
     gh.lazySingleton<_i464.WalletConnectService>(
         () => _i464.WalletConnectService());
     gh.lazySingleton<_i407.MatrixService>(() => _i407.MatrixService());
     gh.lazySingleton<_i951.OwnerKeysDatabase>(() => _i951.OwnerKeysDatabase());
     gh.lazySingleton<_i459.BadgeService>(() => _i459.BadgeService());
+    gh.lazySingleton<_i179.LensGroveService>(() => _i179.LensGroveService());
+    gh.lazySingleton<_i548.LensStorageService>(
+        () => _i548.LensStorageService());
     gh.lazySingleton<_i110.EventRewardRepository>(
         () => _i54.EventRewardRepositoryImpl());
     gh.lazySingleton<_i934.BadgeRepository>(() => _i267.BadgeRepositoryImpl());
