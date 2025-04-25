@@ -207,26 +207,27 @@ class _ViewState extends State<_View> {
                       SliverToBoxAdapter(
                         child: SpaceInfo(space: space),
                       ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.all(Spacing.small),
-                          child: LinearGradientButton.primaryButton(
-                            label: t.space.lens.createNewFeed,
-                            onTap: () {
-                              showCupertinoModalBottomSheet(
-                                context: context,
-                                backgroundColor: LemonColor.atomicBlack,
-                                topRadius: Radius.circular(30.r),
-                                builder: (mContext) {
-                                  return CreateLensNewFeedBottomSheet(
-                                    space: space,
-                                  );
-                                },
-                              );
-                            },
+                      if (isAdminOrCreator)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.all(Spacing.small),
+                            child: LinearGradientButton.primaryButton(
+                              label: t.space.lens.createNewFeed,
+                              onTap: () {
+                                showCupertinoModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: LemonColor.atomicBlack,
+                                  topRadius: Radius.circular(30.r),
+                                  builder: (mContext) {
+                                    return CreateLensNewFeedBottomSheet(
+                                      space: space,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
                       if (!isAdminOrCreator)
                         SliverToBoxAdapter(
                           child: Divider(
