@@ -6,6 +6,7 @@ import 'package:app/core/application/space/get_space_event_requests_bloc/get_spa
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/create_lens_new_feed_bottomsheet.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -18,6 +19,7 @@ import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ import 'package:app/core/presentation/pages/space/space_detail_page/widgets/spac
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 @RoutePage()
@@ -203,6 +206,26 @@ class _ViewState extends State<_View> {
                       SpaceHeader(space: space),
                       SliverToBoxAdapter(
                         child: SpaceInfo(space: space),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(Spacing.small),
+                          child: LinearGradientButton.primaryButton(
+                            label: t.space.lens.createNewFeed,
+                            onTap: () {
+                              showCupertinoModalBottomSheet(
+                                context: context,
+                                backgroundColor: LemonColor.atomicBlack,
+                                topRadius: Radius.circular(30.r),
+                                builder: (mContext) {
+                                  return CreateLensNewFeedBottomSheet(
+                                    space: space,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       ),
                       if (!isAdminOrCreator)
                         SliverToBoxAdapter(
