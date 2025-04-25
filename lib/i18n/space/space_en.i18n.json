@@ -71,6 +71,7 @@
         "name": "Name",
         "description": "Description",
         "createFeed": "Create Feed",
-        "admins": "Admins"
+        "admins": "Admins",
+        "adminInputHint": "Lens or Address"
     }
 }
