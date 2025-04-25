@@ -1,0 +1,12 @@
+mutation LensRefreshToken($request: RefreshRequest!) {
+  refresh(request: $request) {
+    ... on AuthenticationTokens {
+      accessToken
+      refreshToken
+      idToken
+    }
+    ... on ForbiddenError {
+      reason
+    }
+  }
+}

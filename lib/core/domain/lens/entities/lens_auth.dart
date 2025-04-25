@@ -41,3 +41,21 @@ sealed class LensAuthenticationResult with _$LensAuthenticationResult {
   factory LensAuthenticationResult.fromJson(Map<String, dynamic> json) =>
       _$LensAuthenticationResultFromJson(json);
 }
+
+@freezed
+sealed class LensRefreshResult with _$LensRefreshResult {
+  @JsonSerializable(explicitToJson: true)
+  const factory LensRefreshResult.tokens({
+    String? accessToken,
+    String? refreshToken,
+    String? idToken,
+  }) = LensRefreshTokens;
+
+  @JsonSerializable(explicitToJson: true)
+  const factory LensRefreshResult.forbiddenError({
+    String? reason,
+  }) = LensRefreshForbiddenError;
+
+  factory LensRefreshResult.fromJson(Map<String, dynamic> json) =>
+      _$LensRefreshResultFromJson(json);
+}

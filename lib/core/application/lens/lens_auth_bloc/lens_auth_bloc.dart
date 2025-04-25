@@ -51,13 +51,15 @@ sealed class LensAuthEvent with _$LensAuthEvent {
   }) = _RequestAvailableAccount;
   const factory LensAuthEvent.walletConnectionChanged() =
       _WalletConnectionChanged;
+  const factory LensAuthEvent.tokenStateChange(LensTokenState tokenState) =
+      _TokenStateChange;
 }
 
 class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
   final WalletConnectService _walletConnectService;
   final LensStorageService _lensStorageService;
   final LensRepository _lensRepository;
-  StreamSubscription? _walletConnectionSubscription;
+  StreamSubscription? _tokenStateSubscription;
 
   LensAuthBloc(
     this._lensRepository,
@@ -65,13 +67,16 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
     this._walletConnectService,
   ) : super(LensAuthState.initial()) {
     on<_Init>(_onInit);
-    on<_WalletConnectionChanged>(_onWalletConnectionChanged);
     on<_RequestAvailableAccount>(_onRequestAvailableAccount);
     on<_Authorized>(_onAuthorized);
     on<_AccountCreated>(_onAccountCreated);
     on<_Unauthorized>(_onUnauthorized);
+    on<_WalletConnectionChanged>(_onWalletConnectionChanged);
+    on<_TokenStateChange>(_onTokenStateChange);
 
     _walletConnectService.w3mService?.addListener(_handleConnectionChange);
+    _tokenStateSubscription =
+        _lensStorageService.tokenStateStream.listen(_handleTokenStateChange);
   }
 
   Future<void> _onInit(_Init event, Emitter<LensAuthState> emit) async {
@@ -108,7 +113,6 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
     }
 
     if (!w3mService.isConnected) {
-      emit(state.copyWith(connected: false));
       add(const LensAuthEvent.unauthorized());
       return;
     }
@@ -127,6 +131,21 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       } else {
         add(const LensAuthEvent.unauthorized());
       }
+    }
+  }
+
+  void _handleTokenStateChange(LensTokenState tokenState) {
+    add(LensAuthEvent.tokenStateChange(tokenState));
+  }
+
+  Future<void> _onTokenStateChange(
+    _TokenStateChange event,
+    Emitter<LensAuthState> emit,
+  ) async {
+    if (event.tokenState == LensTokenState.valid) {
+      emit(state.copyWith(loggedIn: true));
+    } else if (event.tokenState == LensTokenState.invalid) {
+      emit(state.copyWith(loggedIn: false));
     }
   }
 
@@ -220,17 +239,18 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
     _Unauthorized event,
     Emitter<LensAuthState> emit,
   ) async {
-    await _lensStorageService.clearTokens();
     emit(
       state.copyWith(
         loggedIn: false,
+        connected: false,
       ),
     );
+    await _lensStorageService.clearTokens();
   }
 
   @override
   Future<void> close() {
-    _walletConnectionSubscription?.cancel();
+    _tokenStateSubscription?.cancel();
     return super.close();
   }
 }

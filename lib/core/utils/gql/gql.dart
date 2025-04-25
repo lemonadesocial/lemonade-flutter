@@ -300,7 +300,10 @@ class LensGQL {
     );
     _authLink = AuthLink(
       getToken: () async {
-        var token = await getIt<LensStorageService>().getAccessToken();
+        var token = await getIt<LensStorageService>().getAccessTokenForQql();
+        if (token == null) {
+          return null;
+        }
         return 'Bearer $token';
       },
     );
