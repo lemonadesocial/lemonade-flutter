@@ -184,7 +184,8 @@ class CreateLensNewFeedBottomSheetState
                                 children: [
                                   Text('Name: ${_nameController.text}'),
                                   Text(
-                                      'Description: ${_descriptionController.text}'),
+                                    'Description: ${_descriptionController.text}',
+                                  ),
                                   Text('Admins: ${_admins.join(", ")}'),
                                 ],
                               ),
