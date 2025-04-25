@@ -1,0 +1,14 @@
+query LensCurrentSession {
+  currentSession {
+    app
+    authenticationId
+    expiresAt
+    updatedAt
+    os
+    device
+    createdAt
+    browser
+    origin
+    signer
+  }
+}
