@@ -6,6 +6,7 @@ import 'package:app/core/application/space/get_space_event_requests_bloc/get_spa
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -18,13 +19,16 @@ import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_header.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 @RoutePage()
@@ -97,32 +101,38 @@ class _View extends StatefulWidget {
   State<_View> createState() => _ViewState();
 }
 
-class _ViewState extends State<_View> {
+class _ViewState extends State<_View> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   bool _showFloatingSubscribe = false;
   bool _showSimpleHeader = false;
-  final double _subscribeButtonThreshold = 250;
-  final double _headerThreshold = 200;
+  late TabController _tabController;
+  int _selectedTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.addListener(_onScroll);
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_selectedTabIndex != _tabController.index) {
+        setState(() {
+          _selectedTabIndex = _tabController.index;
+        });
+      }
     });
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    final shouldShowFloatingSubscribe =
-        _scrollController.offset >= _subscribeButtonThreshold;
-    final shouldShowSimpleHeader = _scrollController.offset >= _headerThreshold;
+    final shouldShowFloatingSubscribe = _scrollController.offset >= 250;
+    final shouldShowSimpleHeader = _scrollController.offset >= 200;
 
     if (shouldShowFloatingSubscribe != _showFloatingSubscribe ||
         shouldShowSimpleHeader != _showSimpleHeader) {
@@ -184,9 +194,7 @@ class _ViewState extends State<_View> {
           loading: () => Scaffold(
             appBar: const LemonAppBar(title: ""),
             body: Center(
-              child: Loading.defaultLoading(
-                context,
-              ),
+              child: Loading.defaultLoading(context),
             ),
           ),
           success: (space) {
@@ -198,18 +206,11 @@ class _ViewState extends State<_View> {
                 children: [
                   CustomScrollView(
                     controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
                     slivers: [
                       SpaceHeader(space: space),
                       SliverToBoxAdapter(
                         child: SpaceInfo(space: space),
                       ),
-                      if (!isAdminOrCreator)
-                        SliverToBoxAdapter(
-                          child: Divider(
-                            color: colorScheme.outline,
-                          ),
-                        ),
                       if (isAdminOrCreator)
                         BlocBuilder<GetSpaceEventRequestsBloc,
                             GetSpaceEventRequestsState>(
@@ -264,7 +265,59 @@ class _ViewState extends State<_View> {
                             );
                           },
                         ),
-                      SpaceEventsList(space: space),
+                      SliverPersistentHeader(
+                        delegate: _SliverTabBarDelegate(
+                          TabBar(
+                            controller: _tabController,
+                            labelStyle: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            unselectedLabelStyle: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary.withOpacity(0.36),
+                              fontWeight: FontWeight.w500,
+                            ),
+                            indicatorColor: LemonColor.paleViolet,
+                            onTap: (index) {
+                              setState(() {
+                                _selectedTabIndex = index;
+                              });
+                            },
+                            tabs: const [
+                              Tab(text: "Events"),
+                              Tab(text: "Feed"),
+                            ],
+                          ),
+                        ),
+                        pinned: true,
+                      ),
+                      if (_selectedTabIndex == 0) ...[
+                        SpaceEventsList(space: space),
+                      ] else if (_selectedTabIndex == 1) ...[
+                        SliverToBoxAdapter(
+                          child: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.small,
+                              ),
+                              child: LinearGradientButton.primaryButton(
+                                onTap: () {
+                                  showCupertinoModalBottomSheet(
+                                    context: context,
+                                    expand: false,
+                                    isDismissible: true,
+                                    backgroundColor: LemonColor.atomicBlack,
+                                    barrierColor: Colors.black.withOpacity(0.5),
+                                    builder: (context) =>
+                                        const LensOnboardingBottomSheet(),
+                                  );
+                                },
+                                label: "Login/Signup to Lens",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   _FloatingSpaceHeader(
@@ -299,6 +352,31 @@ class _ViewState extends State<_View> {
         );
       },
     );
+  }
+}
+
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverTabBarDelegate(this.tabBar);
+
+  final TabBar tabBar;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return tabBar;
+  }
+
+  @override
+  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+    return tabBar != oldDelegate.tabBar;
   }
 }
 

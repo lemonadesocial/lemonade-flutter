@@ -96,4 +96,9 @@ class AppConfig {
 
   // Sentry DSN
   static get sentryDsn => dotenv.env['SENTRY_DSN'];
+
+  // Lens xyz
+  static get lensApiUrl => dotenv.env['LENS_API_URL'];
+
+  static get lensChainId => 232; // Directly use mainnet
 }

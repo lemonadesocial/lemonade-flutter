@@ -42,6 +42,7 @@ import 'package:app/core/data/event/repository/event_ticket_repository_impl.dart
     as _i907;
 import 'package:app/core/data/farcaster/farcaster_repository_impl.dart'
     as _i987;
+import 'package:app/core/data/lens/lens_repository_impl.dart' as _i197;
 import 'package:app/core/data/notification/repository/notification_repository_impl.dart'
     as _i315;
 import 'package:app/core/data/payment/payment_repository_impl.dart' as _i139;
@@ -78,6 +79,7 @@ import 'package:app/core/domain/event/repository/event_reward_repository.dart'
 import 'package:app/core/domain/event/repository/event_ticket_repository.dart'
     as _i689;
 import 'package:app/core/domain/farcaster/farcaster_repository.dart' as _i143;
+import 'package:app/core/domain/lens/lens_repository.dart' as _i227;
 import 'package:app/core/domain/newsfeed/newsfeed_repository.dart' as _i530;
 import 'package:app/core/domain/notification/notification_repository.dart'
     as _i139;
@@ -98,6 +100,10 @@ import 'package:app/core/domain/web3/web3_repository.dart' as _i347;
 import 'package:app/core/oauth/oauth.dart' as _i505;
 import 'package:app/core/service/badge/badge_service.dart' as _i459;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i1033;
+import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart'
+    as _i179;
+import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart'
+    as _i548;
 import 'package:app/core/service/matrix/matrix_service.dart' as _i407;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i380;
 import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
@@ -125,6 +131,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i136.WalletGQL>(() => _i136.WalletGQL());
     gh.lazySingleton<_i136.AIGQL>(() => _i136.AIGQL());
     gh.lazySingleton<_i136.AirstackGQL>(() => _i136.AirstackGQL());
+    gh.lazySingleton<_i136.LensGQL>(() => _i136.LensGQL());
     gh.lazySingleton<_i139.LocationUtils>(() => _i139.LocationUtils());
     gh.lazySingleton<_i860.NewChatBloc>(() => _i860.NewChatBloc());
     gh.lazySingleton<_i319.AuthBloc>(() => _i319.AuthBloc());
@@ -142,6 +149,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i407.MatrixService>(() => _i407.MatrixService());
     gh.lazySingleton<_i951.OwnerKeysDatabase>(() => _i951.OwnerKeysDatabase());
     gh.lazySingleton<_i459.BadgeService>(() => _i459.BadgeService());
+    gh.lazySingleton<_i179.LensGroveService>(() => _i179.LensGroveService());
+    gh.lazySingleton<_i548.LensStorageService>(
+        () => _i548.LensStorageService());
     gh.lazySingleton<_i110.EventRewardRepository>(
         () => _i54.EventRewardRepositoryImpl());
     gh.lazySingleton<_i934.BadgeRepository>(() => _i267.BadgeRepositoryImpl());
@@ -173,6 +183,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i981.RewardRepositoryImpl());
     gh.lazySingleton<_i1056.QuestRepository>(() => _i859.QuestRepositoryImpl());
     gh.lazySingleton<_i441.EventRepository>(() => _i412.EventRepositoryImpl());
+    gh.lazySingleton<_i227.LensRepository>(() => _i197.LensRepositoryImpl());
     gh.lazySingleton<_i545.CommunityRepository>(
         () => _i394.CommunityRepositoryImpl());
     gh.lazySingleton<_i234.EventPaymentRepository>(

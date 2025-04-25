@@ -18,7 +18,13 @@ dependencies:
   slang_flutter: ^3.18.0
 
   # networking
-  graphql_flutter: ^5.1.2
+  # graphql_flutter: ^5.1.2
+  # old version timeout long request, move to latest version
+  graphql_flutter: 
+    git:
+      url: https://github.com/zino-hofmann/graphql-flutter.git
+      ref: v-packages-v5.2.0
+      path: packages/graphql_flutter
   dio: ^5.3.2
   http: ^1.1.2
 

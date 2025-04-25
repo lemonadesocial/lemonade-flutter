@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/connectivity/connectivity_bloc.dart';
+import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/notification/watch_notifications_bloc/watch_notification_bloc.dart';
 import 'package:app/core/application/profile/block_user_bloc/block_user_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/connectivity/connectivity_service.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
+import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -103,6 +107,13 @@ class _LemonadeAppViewState extends State<LemonadeApp> {
           ),
           BlocProvider(
             create: (context) => WalletBloc(),
+          ),
+          BlocProvider(
+            create: (context) => LensAuthBloc(
+              getIt<LensRepository>(),
+              getIt<LensStorageService>(),
+              getIt<WalletConnectService>(),
+            ),
           ),
           BlocProvider(
             create: (context) => RefreshBloc(),

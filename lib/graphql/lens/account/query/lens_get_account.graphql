@@ -1,0 +1,7 @@
+# import "../fragment/lens_account.graphql"
+
+query Account($request: AccountRequest!) {
+  account(request: $request) {
+    ...LensAccount    
+  }
+}
