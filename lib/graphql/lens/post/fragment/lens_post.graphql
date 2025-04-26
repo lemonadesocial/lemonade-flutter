@@ -1,0 +1,89 @@
+#import "../../account/fragment/lens_account.graphql"
+
+fragment LensPost on Post {
+  id
+  slug
+  contentUri
+  author {
+    ...LensAccount
+  }
+  feed {
+    address
+  }
+  stats {
+    bookmarks
+    comments
+    reposts
+    reactions
+    quotes
+    collects
+    tips
+  }
+  isEdited
+  isDeleted
+  timestamp
+  root {
+    id
+  }
+  quoteOf {
+    id
+  }
+  commentOn {
+    id
+  }
+  mentions {
+    ... on PostMention {
+      ... on AccountMention {
+        account
+        replace {
+          from
+          to
+        }
+        __typename
+      }
+      ... on GroupMention {
+        group
+        replace {
+          from
+          to
+        }
+        __typename
+      }
+    }
+  }
+  metadata {
+    ... on ImageMetadata {
+      id
+      title
+      content
+      tags
+      mainContentFocus
+      contentWarning
+      image {
+        item
+        width
+        height
+        type
+        altTag
+      }
+      __typename
+    }
+    ... on EventMetadata {
+      title
+      id
+      content
+      links
+      position
+      mainContentFocus
+      __typename
+    }
+    ... on TextOnlyMetadata {
+      id
+      content
+      mainContentFocus
+      tags
+      contentWarning
+      __typename
+    }
+  }
+}

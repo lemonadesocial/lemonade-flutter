@@ -38,7 +38,7 @@ type Account {
   metadata: AccountMetadata
 
   """The username linked to the account."""
-  username(request: AccountUsernameOneOf! = {namespace: "0xFBEdC5C278cc01A843D161d5469202Fe4EDC99E4"}): Username
+  username(request: AccountUsernameOneOf! = {namespace: "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"}): Username
 
   """The operations for the account."""
   operations: LoggedInAccountOperations
@@ -294,7 +294,7 @@ input AccountManagerChallengeRequest {
   Note: On the testnet, it will default to the playground app.
   This is to make it easier if you forget to set it. This may change in the future.
   """
-  app: EvmAddress! = "0xC75A89145d765c396fd75CbD16380Eb184Bd2ca7"
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
 
   """The address of the Lens Account."""
   account: EvmAddress!
@@ -351,16 +351,16 @@ input AccountManagersRequest {
 
 type AccountMention {
   """The account that was mentioned."""
-  account: EvmAddress!
+  account: EvmAddress
 
   """The namespace that was used in a mention."""
-  namespace: EvmAddress!
+  namespace: EvmAddress
 
   """
   The replacement information.
   Use to replace mentions in the post content.
   """
-  replace: MentionReplace!
+  replace: MentionReplace
 }
 
 input AccountMentionedNotificationAttributes {
@@ -405,7 +405,7 @@ input AccountOwnerChallengeRequest {
   Note: On the testnet, it will default to the playground app.
   This is to make it easier if you forget to set it. This may change in the future.
   """
-  app: EvmAddress! = "0xC75A89145d765c396fd75CbD16380Eb184Bd2ca7"
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
 
   """The address of the Lens Account."""
   account: EvmAddress!
@@ -470,7 +470,8 @@ input AccountRulesConfigInput {
 
 """
 Used to filter posts based on their author's account score.
-The account score is an integer between 1 and 10000, where 1 is the lowest and 10000 is the highest.
+The account score is an integer between 1 and 10000, where 1 is the lowest and 10000 is the
+highest.
 """
 input AccountScoreFilter {
   atLeast: Int
@@ -493,10 +494,10 @@ input AccountStatsRequest {
   username: UsernameInput
 
   """The feeds to get stats for."""
-  forFeeds: [EvmAddress!]! = ["0x31232Cb7dE0dce17949ffA58E9E38EEeB367C871"]
+  forFeeds: [EvmAddress!]! = ["0xcB5E109FFC0E15565082d78E68dDDf2573703580"]
 
   """The graphs to get stats for."""
-  forGraphs: [EvmAddress!]! = ["0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"]
+  forGraphs: [EvmAddress!]! = ["0x433025d9718302E7B2e1853D712d96F00764513F"]
 }
 
 input AccountUnblockedNotificationAttributes {
@@ -576,6 +577,9 @@ input AccountsBulkRequest {
 
   """The legacy profile IDs to get."""
   legacyProfileIds: [LegacyProfileId!]
+
+  """The accounts that are owned by the addresses"""
+  ownedBy: [EvmAddress!]
 }
 
 input AccountsFilter {
@@ -669,6 +673,12 @@ input AddAppAuthorizationEndpointRequest {
 
   """The app authorization endpoint."""
   endpoint: URL!
+
+  """
+  The bearer token for the app authorization endpoint.
+  This is used in the `Authorization: Bearer <token>` header.
+  """
+  bearerToken: String
 }
 
 input AddAppFeedsRequest {
@@ -1393,7 +1403,7 @@ input CreateFollowRequest {
   """
   The graph to follow the account on. If not provided, the global graph is used.
   """
-  graph: EvmAddress! = "0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
 
   """
   The data required by any follow rules associated with the account being followed.
@@ -1516,7 +1526,7 @@ type CreateNamespaceResponse {
 
 input CreatePostRequest {
   """The feed to post to. If not provided, the global feed is used."""
-  feed: EvmAddress! = "0x31232Cb7dE0dce17949ffA58E9E38EEeB367C871"
+  feed: EvmAddress! = "0xcB5E109FFC0E15565082d78E68dDDf2573703580"
 
   """The URI of the post metadata."""
   contentUri: URI!
@@ -1604,7 +1614,7 @@ input CreateUnfollowRequest {
   The graph where the account is followed and should be unfollowed.
   If not provided, the global graph is used.
   """
-  graph: EvmAddress! = "0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
 
   """The processing params for the graph rules."""
   graphRulesProcessingParams: [GraphRulesProcessingParams!]
@@ -2285,7 +2295,7 @@ type FollowNotification {
 
 input FollowPair {
   """The graph you are checking defaults to global graph."""
-  graph: EvmAddress! = "0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
 
   """The follower."""
   follower: EvmAddress!
@@ -2341,7 +2351,7 @@ input FollowersFilter {
 }
 
 input FollowersOnlyPostRuleConfig {
-  graph: EvmAddress! = "0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
   repliesRestricted: Boolean! = true
   repostRestricted: Boolean! = true
   quotesRestricted: Boolean! = true
@@ -2834,13 +2844,13 @@ input GroupMembershipRequestsRequest {
 
 type GroupMention {
   """The group that was mentioned"""
-  group: EvmAddress!
+  group: EvmAddress
 
   """
   The replacement information.
   Use to replace mentions in the post content.
   """
-  replace: MentionReplace!
+  replace: MentionReplace
 }
 
 type GroupMetadata {
@@ -4742,7 +4752,7 @@ input OnboardingUserChallengeRequest {
   Note: On the testnet, it will default to the playground app.
   This is to make it easier if you forget to set it. This may change in the future.
   """
-  app: EvmAddress! = "0xC75A89145d765c396fd75CbD16380Eb184Bd2ca7"
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
 
   """The address of the EOA that needs to create their Lens Account."""
   wallet: EvmAddress!
@@ -5000,7 +5010,7 @@ type Post {
   actions(request: PostActionsParams! = {includeDisabled: false}): [PostAction!]!
   operations: LoggedInPostOperations
   stats: PostStats!
-  mentions: [PostMention!]!
+  mentions: [PostMention]
   rules: PostRules!
   collectibleMetadata: NftMetadata!
   contentUri(request: PostContentUriRequest! = {useSnapshot: false}): URI!
@@ -5473,7 +5483,7 @@ enum PostVisibilityFilter {
 
 input PostsExploreFilter {
   """Only return posts after this timestamp, defaults to 3 days ago."""
-  since: Int! = 1745081370
+  since: Int! = 1745341597
 
   """Metadata filters to apply to posts"""
   metadata: PostMetadataFilter! = {mainContentFocus: null, tags: null, contentWarning: null}
@@ -5487,7 +5497,7 @@ input PostsExploreRequest {
   cursor: Cursor
 
   """Filter for posts"""
-  filter: PostsExploreFilter! = {since: 1745081370, metadata: {mainContentFocus: null, tags: null, contentWarning: null}}
+  filter: PostsExploreFilter! = {since: 1745341597, metadata: {mainContentFocus: null, tags: null, contentWarning: null}}
 
   """
   Shuffle the results, defaults to false. Causes performance issues so is ignored for now.
@@ -5501,6 +5511,9 @@ input PostsFilter {
 
   """The authors of the posts."""
   authors: [EvmAddress!]
+
+  """The post IDs to search for. You can also use the post slug."""
+  posts: [PostId!]
 
   """The types of the posts."""
   postTypes: [PostType!]
@@ -5518,7 +5531,8 @@ input PostsFilter {
   collectedBy: CollectedBy
 
   """
-  A filter that returns only posts from authors with `Account Score` either `AtLeast` or `LessThan` the specified value.
+  A filter that returns only posts from authors with `Account Score` either `AtLeast` or
+  `LessThan` the specified value.
   """
   accountScore: AccountScoreFilter
 }
@@ -7548,7 +7562,7 @@ entities without requiring a central allocating authority.
 scalar UUID
 
 input UnassignUsernameFromAccountRequest {
-  namespace: EvmAddress! = "0xFBEdC5C278cc01A843D161d5469202Fe4EDC99E4"
+  namespace: EvmAddress! = "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"
 
   """The processing params for the unassign rules."""
   rulesProcessingParams: [NamespaceRulesProcessingParams!]
@@ -7739,7 +7753,7 @@ union UnwrapTokensResult = SponsoredTransactionRequest | SelfFundedTransactionRe
 
 input UpdateAccountFollowRulesRequest {
   """The graph to update account follow rules for."""
-  graph: EvmAddress! = "0x4d97287FF1A0e030cA4604EcDa9be355dd8A8BaC"
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
 
   """The rules to add"""
   toAdd: AccountRulesConfigInput! = {required: [], anyOf: []}
@@ -7929,7 +7943,7 @@ input UsernameInput {
   localName: String!
 
   """The namespace. Defaults to lens namespace"""
-  namespace: EvmAddress! = "0xFBEdC5C278cc01A843D161d5469202Fe4EDC99E4"
+  namespace: EvmAddress! = "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"
 }
 
 input UsernameLengthNamespaceRuleConfig {
@@ -8043,7 +8057,7 @@ input UsernameSearchInput {
   """
   The namespaces to search for local name in. Defaults to global namespace
   """
-  namespaces: [EvmAddress!]! = ["0xFBEdC5C278cc01A843D161d5469202Fe4EDC99E4"]
+  namespaces: [EvmAddress!]! = ["0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"]
 }
 
 type UsernameTaken {

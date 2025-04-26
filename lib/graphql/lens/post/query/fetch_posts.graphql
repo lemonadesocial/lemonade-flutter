@@ -1,134 +1,18 @@
+#import "../fragment/lens_post.graphql"
+
 query LensFetchPosts($request: PostsRequest!) {
   posts(request: $request) {
     items {
       ... on Post {
-        id
-        metadata {
-          ... on ArticleMetadata {
-            title
-            content
-            tags
-            locale
-            id
-            contentWarning
-            attributes {
-              value
-              type
-              key
-            }
-            attachments {
-              ... on MediaImage {
-                type
-                license
-                item
-                width
-                height
-              }
-            }
-            __typename
-          }
-          ... on AudioMetadata {
-            title
-            id
-            content
-            tags
-            audio {
-              lyrics
-              cover
-              duration
-              credits
-              genre
-              item
-              license
-              recordLabel
-              type
-              attributes {
-                value
-              }
-            }
-            __typename
-          }
-          ... on CheckingInMetadata {
-            id
-            content
-            address {
-              streetAddress
-            }
-            tags
-            position
-            location
-            __typename
-          }
-          ... on EmbedMetadata {
-            content
-            id
-            mainContentFocus
-            locale
-            attributes {
-              value
-            }
-            __typename
-          }
-          ... on EventMetadata {
-            title
-            id
-            content
-            links
-            position
-            mainContentFocus
-            __typename
-          }
-          ... on ImageMetadata {
-            id
-            content
-            __typename
-            image {
-              item
-              height
-              attributes {
-                value
-                type
-                key
-              }
-              license
-              type
-              width
-              altTag
-            }
-            title
-            tags
-            mainContentFocus
-            locale
-            contentWarning
-            attachments {
-              ... on MediaImage {
-                item
-                license
-                type
-                width
-                height
-                attributes {
-                  key
-                  type
-                  value
-                }
-              }
-            }
-          }
+        ...LensPost
+        root {
+          ...LensPost
         }
-        slug
-        feed {
-          address
+        quoteOf {
+          ...LensPost
         }
-        contentUri
-        stats {
-          reactions
-          comments
-        }
-        author {
-          username {
-            value
-          }
+        commentOn {
+          ...LensPost
         }
       }
     }
