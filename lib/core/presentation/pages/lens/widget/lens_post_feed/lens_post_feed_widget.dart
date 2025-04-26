@@ -9,7 +9,7 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
-import 'package:app/graphql/lens/post/query/fetch_posts.graphql.dart';
+import 'package:app/graphql/lens/post/query/lens_fetch_posts.graphql.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 

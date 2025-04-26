@@ -1,0 +1,32 @@
+mutation LensCreatePost($request: CreatePostRequest!) {
+  post(request: $request) {
+    ... on PostResponse {
+      hash
+      __typename
+    }
+    ... on PostOperationValidationFailed {
+      reason
+      unsatisfiedRules {
+        required {
+          reason
+          message
+        }
+      }
+      __typename
+    }
+    ... on SponsoredTransactionRequest {
+      reason
+      sponsoredReason
+      __typename
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+      selfFundedReason
+      __typename
+    }
+    ... on TransactionWillFail {
+      reason
+      __typename
+    }
+  }
+}

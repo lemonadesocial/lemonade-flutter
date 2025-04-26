@@ -1,6 +1,7 @@
 import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
+import 'package:app/core/domain/lens/entities/lens_create_post.dart';
 import 'package:app/core/domain/lens/entities/lens_switch_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
@@ -9,6 +10,7 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
+import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';
@@ -232,6 +234,57 @@ class LensRepositoryImpl implements LensRepository {
       ),
       notIndexedYetStatus: (data) =>
           LensTransactionStatusResult.notIndexedYetStatus(
+        reason: data.reason,
+      ),
+    );
+
+    if (result == null) {
+      return Left(Failure(message: 'Unknown error'));
+    }
+
+    return Right(result);
+  }
+
+  @override
+  Future<Either<Failure, LensPostResult>> createPost({
+    required Variables$Mutation$LensCreatePost input,
+  }) async {
+    final response = await _client.mutate$LensCreatePost(
+      Options$Mutation$LensCreatePost(
+        variables: input,
+      ),
+    );
+    if (response.hasException || response.parsedData?.post == null) {
+      return Left(
+        Failure.withGqlException(
+          response.exception,
+        ),
+      );
+    }
+
+    final result = response.parsedData!.post.maybeWhen(
+      orElse: () => null,
+      postResponse: (data) => LensPostResult.response(
+        hash: data.hash,
+      ),
+      postOperationValidationFailed: (data) =>
+          LensPostResult.operationValidationFailed(
+        reason: data.reason,
+        unsatisfiedRules: data.unsatisfiedRules != null
+            ? LensPostUnsatisfiedRulesList.fromJson(
+                data.unsatisfiedRules!.toJson(),
+              )
+            : null,
+      ),
+      transactionWillFail: (data) => LensPostResult.transactionWillFail(
+        reason: data.reason,
+      ),
+      selfFundedTransactionRequest: (data) =>
+          LensPostResult.selfFundedTransactionRequest(
+        reason: data.reason,
+      ),
+      sponsoredTransactionRequest: (data) =>
+          LensPostResult.sponsoredTransactionRequest(
         reason: data.reason,
       ),
     );
