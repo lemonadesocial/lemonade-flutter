@@ -213,8 +213,8 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                   NotificationListener<ScrollNotification>(
                     onNotification: (notification) {
                       if (notification is ScrollEndNotification) {
-                        if (notification.metrics.pixels ==
-                            notification.metrics.maxScrollExtent) {
+                        if (notification.metrics.pixels >=
+                            notification.metrics.maxScrollExtent - 100) {
                           context.read<ScrollNotificationBloc>().add(
                                 const ScrollNotificationEvent.reachEnd(),
                               );

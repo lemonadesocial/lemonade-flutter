@@ -139,7 +139,9 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                       itemBuilder: (context, index) {
                         if (index == posts.length) {
                           if (result.isLoading) {
-                            return Loading.defaultLoading(context);
+                            return SafeArea(
+                              child: Loading.defaultLoading(context),
+                            );
                           }
                           return const SizedBox.shrink();
                         }
