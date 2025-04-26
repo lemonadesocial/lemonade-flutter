@@ -1,4 +1,5 @@
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/router/features/lens/lens_routes.dart';
 import 'package:app/router/features/space/space_routes.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -134,6 +135,7 @@ class AppRouter extends $AppRouter {
         ...commonRoutes,
         ...farcasterRoutes,
         ...spaceRoutes,
+        ...lensRoutes,
       ];
 }
 

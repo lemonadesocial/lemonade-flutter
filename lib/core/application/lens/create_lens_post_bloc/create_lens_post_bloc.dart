@@ -18,14 +18,18 @@ part 'create_lens_post_bloc.freezed.dart';
 
 @freezed
 class CreateLensPostEvent with _$CreateLensPostEvent {
-  const factory CreateLensPostEvent.createPost() = _CreatePost;
+  const factory CreateLensPostEvent.createPost({
+    required String content,
+  }) = _CreatePost;
 }
 
 @freezed
 sealed class CreateLensPostState with _$CreateLensPostState {
   const factory CreateLensPostState.initial() = CreateLensPostInitial;
   const factory CreateLensPostState.loading() = CreateLensPostLoading;
-  const factory CreateLensPostState.success() = CreateLensPostSuccess;
+  const factory CreateLensPostState.success({
+    required String txHash,
+  }) = CreateLensPostSuccess;
   const factory CreateLensPostState.failed({
     required Failure failure,
   }) = CreateLensPostFailed;
@@ -35,6 +39,12 @@ class CreateLensPostBloc
     extends Bloc<CreateLensPostEvent, CreateLensPostState> {
   final LensRepository _lensRepository;
   final LensGroveService _lensGroveService;
+
+  static final StreamController<bool> _createPostStreamController =
+      StreamController<bool>.broadcast();
+
+  static Stream<bool> get createPostResultStream =>
+      _createPostStreamController.stream;
 
   CreateLensPostBloc(this._lensRepository, this._lensGroveService)
       : super(const CreateLensPostState.initial()) {
@@ -50,7 +60,7 @@ class CreateLensPostBloc
 
       final textOnlyMetadata = LensCreatePostMetadata.textOnly(
         id: const Uuid().v4(),
-        content: "This is post test ${DateTime.now().toIso8601String()}",
+        content: event.content,
       );
 
       Map<String, dynamic> uploadMetadata = {
@@ -115,8 +125,14 @@ class CreateLensPostBloc
         );
       }
 
-      emit(const CreateLensPostState.success());
+      emit(
+        CreateLensPostState.success(
+          txHash: txHash,
+        ),
+      );
+      _createPostStreamController.add(true);
     } catch (error) {
+      _createPostStreamController.add(false);
       emit(
         CreateLensPostState.failed(
           failure: Failure(message: error.toString()),

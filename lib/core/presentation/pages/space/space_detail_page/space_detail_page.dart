@@ -1,12 +1,10 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
-import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
 import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
-import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/lens_add_posts_button.dart';
@@ -17,7 +15,6 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
@@ -209,15 +206,8 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                 space.isAdmin(userId: user?.userId ?? '') ||
                     space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
-              floatingActionButton: _selectedTabIndex == 1
-                  ? BlocProvider(
-                      create: (context) => CreateLensPostBloc(
-                        getIt<LensRepository>(),
-                        getIt<LensGroveService>(),
-                      ),
-                      child: const LensAddPostsButton(),
-                    )
-                  : null,
+              floatingActionButton:
+                  _selectedTabIndex == 1 ? const LensAddPostsButton() : null,
               body: Stack(
                 children: [
                   NotificationListener<ScrollNotification>(

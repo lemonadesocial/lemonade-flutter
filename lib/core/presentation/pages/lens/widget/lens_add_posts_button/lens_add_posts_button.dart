@@ -1,9 +1,11 @@
-import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
+import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -16,9 +18,11 @@ class LensAddPostsButton extends StatelessWidget {
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, state) {
         return InkWell(
-          onTap: () {
-            if (!state.loggedIn || !state.connected) {
-              showCupertinoModalBottomSheet(
+          onTap: () async {
+            if (!state.loggedIn ||
+                !state.connected ||
+                state.accountStatus != LensAccountStatus.accountOwner) {
+              final isAuthorized = await showCupertinoModalBottomSheet(
                 backgroundColor: LemonColor.atomicBlack,
                 context: context,
                 useRootNavigator: true,
@@ -27,10 +31,11 @@ class LensAddPostsButton extends StatelessWidget {
                   return const LensOnboardingBottomSheet();
                 },
               );
+              if (isAuthorized == true) {
+                AutoRouter.of(context).push(const CreateLensPostRoute());
+              }
             } else {
-              context.read<CreateLensPostBloc>().add(
-                    const CreateLensPostEvent.createPost(),
-                  );
+              AutoRouter.of(context).push(const CreateLensPostRoute());
             }
           },
           child: Container(
