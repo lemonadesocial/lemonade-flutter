@@ -19,6 +19,8 @@ part 'create_lens_post_bloc.freezed.dart';
 @freezed
 class CreateLensPostEvent with _$CreateLensPostEvent {
   const factory CreateLensPostEvent.createPost({
+    Input$ReferencingPostInput? quoteOf,
+    Input$ReferencingPostInput? commentOn,
     required String content,
   }) = _CreatePost;
 }
@@ -75,12 +77,16 @@ class CreateLensPostBloc
         throw Exception('Failed to upload metadata');
       }
 
+      final request = Input$CreatePostRequest(
+        contentUri: uploadResult['uri'] ?? '',
+        quoteOf: event.quoteOf,
+        commentOn: event.commentOn,
+        // feed: TODO: add post to specific feed
+      );
+
       final result = await _lensRepository.createPost(
         input: Variables$Mutation$LensCreatePost(
-          request: Input$CreatePostRequest(
-            contentUri: uploadResult['uri'] ?? '',
-            // feed: TODO: add post to specific feed
-          ),
+          request: request,
         ),
       );
 

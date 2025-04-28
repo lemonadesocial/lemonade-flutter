@@ -3,9 +3,11 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -52,7 +54,11 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
           children: [
             InkWell(
               onTap: () {
-                // Go to lens post reply
+                AutoRouter.of(context).push(
+                  CreateLensPostReplyRoute(
+                    post: widget.post,
+                  ),
+                );
               },
               child: ThemeSvgIcon(
                 color: colorScheme.onSecondary,
@@ -65,20 +71,20 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
             ),
             SizedBox(width: Spacing.small),
             // TODO: Lens - requote
-            InkWell(
-              onTap: () async {},
-              child: ThemeSvgIcon(
-                color: localRecasted
-                    ? LemonColor.malachiteGreen
-                    : colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icFarcasterRecast.svg(
-                  colorFilter: filter,
-                  width: 14.w,
-                  height: 14.w,
-                ),
-              ),
-            ),
-            SizedBox(width: Spacing.small),
+            // InkWell(
+            //   onTap: () async {},
+            //   child: ThemeSvgIcon(
+            //     color: localRecasted
+            //         ? LemonColor.malachiteGreen
+            //         : colorScheme.onSecondary,
+            //     builder: (filter) => Assets.icons.icFarcasterRecast.svg(
+            //       colorFilter: filter,
+            //       width: 14.w,
+            //       height: 14.w,
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(width: Spacing.small),
             InkWell(
               onTap: () async {
                 // TODO: Lens - handle add reaction

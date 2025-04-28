@@ -1,0 +1,15 @@
+# import "../fragment/lens_post.graphql;
+
+query LensFetchPostReferences($request: PostReferencesRequest!) {
+  postReferences(request: $request) {
+    items {
+      ... on Post {
+        ...LensPost
+      }
+    }
+    pageInfo {
+      next
+      prev
+    }
+  }
+}

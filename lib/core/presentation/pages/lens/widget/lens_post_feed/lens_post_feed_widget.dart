@@ -1,7 +1,5 @@
-import 'dart:async';
-
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
-import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
+import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -9,7 +7,9 @@ import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
 import 'package:app/graphql/lens/post/query/lens_fetch_posts.graphql.dart';
@@ -82,7 +82,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
 
           return MultiSliver(
             children: [
-              _CreatePostResultListenerWidget(
+              CreateLensPostResultListenerWidget(
                 onSuccess: () {
                   refetch?.call();
                 },
@@ -146,6 +146,13 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                           return const SizedBox.shrink();
                         }
                         return LensPostFeedItemWidget(
+                          onTap: () {
+                            AutoRouter.of(context).push(
+                              LensPostDetailRoute(
+                                post: posts[index],
+                              ),
+                            );
+                          },
                           post: posts[index],
                           showActions: true,
                         );
@@ -165,50 +172,5 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
         },
       ),
     );
-  }
-}
-
-class _CreatePostResultListenerWidget extends StatefulWidget {
-  final Function()? onSuccess;
-  final Function()? onError;
-
-  const _CreatePostResultListenerWidget({
-    this.onSuccess,
-    this.onError,
-  });
-
-  @override
-  State<_CreatePostResultListenerWidget> createState() =>
-      _CreatePostResultListenerWidgetState();
-}
-
-class _CreatePostResultListenerWidgetState
-    extends State<_CreatePostResultListenerWidget> {
-  StreamSubscription<bool>? _createPostResultStreamSubscription;
-
-  void _onCreatePostResult(bool result) {
-    if (result) {
-      widget.onSuccess?.call();
-    } else {
-      widget.onError?.call();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _createPostResultStreamSubscription =
-        CreateLensPostBloc.createPostResultStream.listen(_onCreatePostResult);
-  }
-
-  @override
-  void dispose() {
-    _createPostResultStreamSubscription?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox.shrink();
   }
 }

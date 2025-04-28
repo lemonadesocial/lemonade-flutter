@@ -1,7 +1,7 @@
 import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
-import 'package:app/core/presentation/pages/lens/page/widgets/create_lens_post_bottom_bar.dart';
-import 'package:app/core/presentation/pages/lens/page/widgets/create_lens_post_editor.dart';
+import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_bottom_bar.dart';
+import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
