@@ -86,4 +86,7 @@ fragment LensPost on Post {
       __typename
     }
   }
+  operations {
+    hasReacted(request: { type: UPVOTE })
+  }
 }

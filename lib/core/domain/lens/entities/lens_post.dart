@@ -131,6 +131,16 @@ class LensPostStats with _$LensPostStats {
 }
 
 @freezed
+class LensLoggedInPostOperations with _$LensLoggedInPostOperations {
+  const factory LensLoggedInPostOperations({
+    bool? hasReacted,
+  }) = _LensLoggedInPostOperations;
+
+  factory LensLoggedInPostOperations.fromJson(Map<String, dynamic> json) =>
+      _$LensLoggedInPostOperationsFromJson(json);
+}
+
+@freezed
 class LensPost with _$LensPost {
   const LensPost._();
 
@@ -150,6 +160,7 @@ class LensPost with _$LensPost {
     List<LensPostMention>? mentions,
     LensPostStats? stats,
     String? contentUri,
+    LensLoggedInPostOperations? operations,
   }) = _LensPost;
 
   factory LensPost.fromJson(Map<String, dynamic> json) =>

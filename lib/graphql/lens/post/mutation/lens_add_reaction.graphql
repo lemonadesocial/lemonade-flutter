@@ -1,0 +1,10 @@
+mutation LensAddReaction($request: AddReactionRequest!) {
+  addReaction(request: $request) {
+    ... on AddReactionResponse {
+      success
+    }
+    ... on AddReactionFailure {
+      reason
+    }
+  }
+}
