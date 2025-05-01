@@ -90,7 +90,9 @@ class WalletConnectService {
         logLevel: AppConfig.isProduction ? LogLevel.nothing : LogLevel.all,
         optionalNamespaces: await _setupChains(),
         featuredWalletIds: {
-          // coinbase option id
+          // Family wallet id
+          "445ced0f482742632dfa6684f802eb1a2bb3cb97531bd06e02fb297c6ad21de1",
+          // coinbase wallet id
           "fd20dc426fb37566d803205b19bbc1d4096b248ac04548e3cfb6b3a38bd033aa",
         },
       );

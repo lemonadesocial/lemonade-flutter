@@ -70,7 +70,7 @@ class _View extends StatelessWidget {
                               ),
                             );
                         if (accountStatus == LensAccountStatus.accountOwner) {
-                          // Navigator.of(context).pop();
+                          Navigator.of(context).pop(true);
                           SnackBarUtils.showSuccess(
                             message: "Login to lens successfully",
                           );
@@ -94,7 +94,7 @@ class _View extends StatelessWidget {
                   listener: (context, state) {
                     state.maybeWhen(
                       success: (token, refreshToken, account, idToken) {
-                        // Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                         context.read<LensAuthBloc>().add(
                               LensAuthEvent.accountCreated(
                                 token: token,

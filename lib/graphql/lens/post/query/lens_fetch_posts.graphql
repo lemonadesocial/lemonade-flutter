@@ -1,0 +1,24 @@
+#import "../fragment/lens_post.graphql"
+
+query LensFetchPosts($request: PostsRequest!) {
+  posts(request: $request) {
+    items {
+      ... on Post {
+        ...LensPost
+        root {
+          ...LensPost
+        }
+        quoteOf {
+          ...LensPost
+        }
+        commentOn {
+          ...LensPost
+        }
+      }
+    }
+    pageInfo {
+      prev
+      next
+    }
+  }
+}
