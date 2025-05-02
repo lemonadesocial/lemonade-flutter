@@ -1,4 +1,5 @@
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
+import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/create_lens_new_feed_bottomsheet.dart';
@@ -55,8 +56,11 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                 backgroundColor: LemonColor.atomicBlack,
                 topRadius: Radius.circular(30.r),
                 builder: (mContext) {
-                  return CreateLensNewFeedBottomSheet(
-                    space: widget.space,
+                  return BlocProvider.value(
+                    value: context.read<LensAuthBloc>(),
+                    child: CreateLensNewFeedBottomSheet(
+                      space: widget.space,
+                    ),
                   );
                 },
               );

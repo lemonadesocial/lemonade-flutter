@@ -1,4 +1,5 @@
 import 'package:app/core/application/lens/create_lens_feed_bloc/create_lens_feed_bloc.dart';
+import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
@@ -33,7 +34,8 @@ class CreateLensNewFeedBottomSheetState
     extends State<CreateLensNewFeedBottomSheet> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final List<String> _admins = ['']; // Initialize with one empty field
+  final TextEditingController _adminController = TextEditingController();
+  List<String> _admins = [''];
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class CreateLensNewFeedBottomSheetState
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    _adminController.dispose();
     super.dispose();
   }
 
@@ -83,173 +86,192 @@ class CreateLensNewFeedBottomSheetState
         getIt<LensRepository>(),
         getIt<LensGroveService>(),
       ),
-      child: Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        color: LemonColor.atomicBlack,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const BottomSheetGrabber(),
-            LemonAppBar(
-              title: t.space.lens.createNewFeed,
-              backgroundColor: LemonColor.atomicBlack,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Name field
-                    Text(
-                      t.space.lens.name,
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    LemonTextField(
-                      controller: _nameController,
-                      hintText: t.space.lens.name,
-                      onChange: (_) => setState(() {}),
-                    ),
-                    SizedBox(height: Spacing.medium),
-
-                    // Description field
-                    Text(
-                      t.space.lens.description,
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    LemonTextField(
-                      controller: _descriptionController,
-                      hintText: t.space.lens.description,
-                      maxLines: 3,
-                      onChange: (_) => setState(() {}),
-                    ),
-                    SizedBox(height: Spacing.medium),
-
-                    // Admins section
-                    Text(
-                      t.space.lens.admins,
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    Column(
-                      children: [
-                        ..._admins.asMap().entries.map(
-                              (entry) => Column(
-                                children: [
-                                  _AdminField(
-                                    value: entry.value,
-                                    onChanged: (value) =>
-                                        _updateAdmin(entry.key, value),
-                                    onRemove: () => _removeAdmin(entry.key),
-                                    removable: _admins.length > 1,
-                                  ),
-                                  SizedBox(height: Spacing.xSmall),
-                                ],
-                              ),
-                            ),
-                        SizedBox(height: Spacing.superExtraSmall),
-                        _AddButton(
-                          onPress: _addNewAdmin,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+      child: BlocBuilder<LensAuthBloc, LensAuthState>(
+        builder: (context, lensState) {
+          if (_admins.length == 1 &&
+              _admins[0].isEmpty &&
+              lensState.availableAccounts.isNotEmpty) {
+            _admins = [lensState.availableAccounts.first.address ?? ''];
+            _adminController.text = _admins[0];
+          }
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-            ),
-            BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                  success: (txHash) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Feed Created'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Transaction Hash: $txHash'),
-                            Text('Name: ${_nameController.text}'),
-                            Text('Description: ${_descriptionController.text}'),
-                            Text('Admins: ${_admins.join(", ")}'),
-                          ],
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context); // Close bottom sheet
-                            },
-                            child: const Text('OK'),
+              color: LemonColor.atomicBlack,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const BottomSheetGrabber(),
+                  LemonAppBar(
+                    title: t.space.lens.createNewFeed,
+                    backgroundColor: LemonColor.atomicBlack,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(Spacing.smMedium),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name field
+                          Text(
+                            t.space.lens.name,
+                            style: TextStyle(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.xSmall),
+                          LemonTextField(
+                            controller: _nameController,
+                            hintText: t.space.lens.name,
+                            onChange: (_) => setState(() {}),
+                          ),
+                          SizedBox(height: Spacing.medium),
+
+                          // Description field
+                          Text(
+                            t.space.lens.description,
+                            style: TextStyle(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.xSmall),
+                          LemonTextField(
+                            controller: _descriptionController,
+                            hintText: t.space.lens.description,
+                            maxLines: 3,
+                            onChange: (_) => setState(() {}),
+                          ),
+                          SizedBox(height: Spacing.medium),
+
+                          // Admins section
+                          Text(
+                            t.space.lens.admins,
+                            style: TextStyle(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.xSmall),
+                          Column(
+                            children: [
+                              ..._admins.asMap().entries.map(
+                                    (entry) => Column(
+                                      children: [
+                                        _AdminField(
+                                          value: entry.value,
+                                          onChanged: (value) =>
+                                              _updateAdmin(entry.key, value),
+                                          onRemove: () =>
+                                              _removeAdmin(entry.key),
+                                          removable: _admins.length > 1,
+                                        ),
+                                        SizedBox(height: Spacing.xSmall),
+                                      ],
+                                    ),
+                                  ),
+                              SizedBox(height: Spacing.superExtraSmall),
+                              _AddButton(
+                                onPress: _addNewAdmin,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    );
-                  },
-                  failed: (failure) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(failure.message ?? 'Unknown error'),
-                      ),
-                    );
-                  },
-                  orElse: () {},
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: LemonColor.atomicBlack,
-                  border: Border(
-                    top: BorderSide(color: colorScheme.outline),
-                  ),
-                ),
-                padding: EdgeInsets.all(Spacing.smMedium),
-                child: SafeArea(
-                  child: Opacity(
-                    opacity: _isFormValid ? 1 : 0.5,
-                    child: LinearGradientButton.primaryButton(
-                      onTap: _isFormValid
-                          ? () {
-                              context.read<CreateLensFeedBloc>().add(
-                                    CreateLensFeedEvent.createFeed(
-                                      name: _nameController.text,
-                                      description: _descriptionController.text,
-                                      admins: _admins
-                                          .where((admin) => admin.isNotEmpty)
-                                          .toList(),
-                                    ),
-                                  );
-                            }
-                          : null,
-                      label: t.space.lens.createFeed,
-                      textColor: colorScheme.onPrimary,
                     ),
                   ),
-                ),
+                  BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
+                    listener: (context, state) {
+                      state.maybeWhen(
+                        success: (txHash) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Feed Created'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Transaction Hash: $txHash'),
+                                  Text('Name: ${_nameController.text}'),
+                                  Text(
+                                      'Description: ${_descriptionController.text}'),
+                                  Text('Admins: ${_admins.join(", ")}'),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(
+                                      context,
+                                    ); // Close bottom sheet
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        failed: (failure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(failure.message ?? 'Unknown error'),
+                            ),
+                          );
+                        },
+                        orElse: () {},
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: LemonColor.atomicBlack,
+                        border: Border(
+                          top: BorderSide(color: colorScheme.outline),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(Spacing.smMedium),
+                      child: SafeArea(
+                        child: Opacity(
+                          opacity: _isFormValid ? 1 : 0.5,
+                          child: LinearGradientButton.primaryButton(
+                            onTap: _isFormValid
+                                ? () {
+                                    context.read<CreateLensFeedBloc>().add(
+                                          CreateLensFeedEvent.createFeed(
+                                            name: _nameController.text,
+                                            description:
+                                                _descriptionController.text,
+                                            admins: _admins
+                                                .where(
+                                                    (admin) => admin.isNotEmpty)
+                                                .toList(),
+                                          ),
+                                        );
+                                  }
+                                : null,
+                            label: t.space.lens.createFeed,
+                            textColor: colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class _AdminField extends StatelessWidget {
+class _AdminField extends StatefulWidget {
   final String value;
   final Function(String) onChanged;
   final VoidCallback onRemove;
@@ -263,6 +285,33 @@ class _AdminField extends StatelessWidget {
   });
 
   @override
+  State<_AdminField> createState() => _AdminFieldState();
+}
+
+class _AdminFieldState extends State<_AdminField> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.value);
+  }
+
+  @override
+  void didUpdateWidget(_AdminField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value) {
+      _controller.text = widget.value;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
@@ -274,23 +323,26 @@ class _AdminField extends StatelessWidget {
           Expanded(
             flex: 3,
             child: LemonTextField(
-              initialText: value,
+              controller: _controller,
               hintText: t.space.lens.adminInputHint,
-              onChange: onChanged,
+              onChange: widget.onChanged,
             ),
           ),
           SizedBox(width: Spacing.xSmall),
           InkWell(
-            onTap: removable ? onRemove : null,
+            onTap: widget.removable ? widget.onRemove : null,
             child: Container(
               width: Sizing.large,
               height: Sizing.large,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: removable ? Colors.transparent : colorScheme.outline,
+                  color: widget.removable
+                      ? Colors.transparent
+                      : colorScheme.outline,
                 ),
-                color:
-                    removable ? LemonColor.atomicBlack : colorScheme.background,
+                color: widget.removable
+                    ? LemonColor.atomicBlack
+                    : colorScheme.background,
                 borderRadius: BorderRadius.circular(LemonRadius.large * 2),
               ),
               child: Center(
