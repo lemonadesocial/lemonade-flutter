@@ -11,6 +11,8 @@ import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
+import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
+import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';
@@ -286,6 +288,48 @@ class LensRepositoryImpl implements LensRepository {
       sponsoredTransactionRequest: (data) =>
           LensPostResult.sponsoredTransactionRequest(
         reason: data.reason,
+      ),
+    );
+
+    if (result == null) {
+      return Left(Failure(message: 'Unknown error'));
+    }
+
+    return Right(result);
+  }
+
+  @override
+  Future<Either<Failure, LensTransactionStatusResult>> createFeed({
+    required Map<String, dynamic> input,
+  }) async {
+    final response = await _client.mutate$LensCreateFeed(
+      Options$Mutation$LensCreateFeed(
+        variables: Variables$Mutation$LensCreateFeed(
+          request: Input$CreateFeedRequest(
+            metadataUri: input['metadataUri'],
+            admins: input['admins'].cast<String>(),
+          ),
+        ),
+      ),
+    );
+
+    if (response.hasException || response.parsedData?.createFeed == null) {
+      return Left(Failure.withGqlException(response.exception));
+    }
+
+    final result = response.parsedData!.createFeed.maybeWhen(
+      orElse: () => null,
+      createFeedResponse: (data) =>
+          const LensTransactionStatusResult.pendingTransactionStatus(),
+      selfFundedTransactionRequest: (data) =>
+          LensTransactionStatusResult.failedTransactionStatus(
+        reason: data.reason,
+        blockTimestamp: DateTime.now(),
+      ),
+      transactionWillFail: (data) =>
+          LensTransactionStatusResult.failedTransactionStatus(
+        reason: data.reason,
+        blockTimestamp: DateTime.now(),
       ),
     );
 

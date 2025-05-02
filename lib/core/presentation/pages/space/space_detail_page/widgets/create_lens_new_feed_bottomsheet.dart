@@ -1,15 +1,20 @@
+import 'package:app/core/application/lens/create_lens_feed_bloc/create_lens_feed_bloc.dart';
+import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateLensNewFeedBottomSheet extends StatefulWidget {
   final Space space;
@@ -73,139 +78,172 @@ class CreateLensNewFeedBottomSheetState
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+    return BlocProvider(
+      create: (context) => CreateLensFeedBloc(
+        getIt<LensRepository>(),
+        getIt<LensGroveService>(),
       ),
-      color: LemonColor.atomicBlack,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const BottomSheetGrabber(),
-          LemonAppBar(
-            title: t.space.lens.createNewFeed,
-            backgroundColor: LemonColor.atomicBlack,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(Spacing.smMedium),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name field
-                  Text(
-                    t.space.lens.name,
-                    style: TextStyle(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.xSmall),
-                  LemonTextField(
-                    controller: _nameController,
-                    hintText: t.space.lens.name,
-                    onChange: (_) => setState(() {}),
-                  ),
-                  SizedBox(height: Spacing.medium),
-
-                  // Description field
-                  Text(
-                    t.space.lens.description,
-                    style: TextStyle(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.xSmall),
-                  LemonTextField(
-                    controller: _descriptionController,
-                    hintText: t.space.lens.description,
-                    maxLines: 3,
-                    onChange: (_) => setState(() {}),
-                  ),
-                  SizedBox(height: Spacing.medium),
-
-                  // Admins section
-                  Text(
-                    t.space.lens.admins,
-                    style: TextStyle(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.xSmall),
-                  Column(
-                    children: [
-                      ..._admins.asMap().entries.map(
-                            (entry) => Column(
-                              children: [
-                                _AdminField(
-                                  value: entry.value,
-                                  onChanged: (value) =>
-                                      _updateAdmin(entry.key, value),
-                                  onRemove: () => _removeAdmin(entry.key),
-                                  removable: _admins.length > 1,
-                                ),
-                                SizedBox(height: Spacing.xSmall),
-                              ],
-                            ),
-                          ),
-                      SizedBox(height: Spacing.superExtraSmall),
-                      _AddButton(
-                        onPress: _addNewAdmin,
+      child: Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: LemonColor.atomicBlack,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const BottomSheetGrabber(),
+            LemonAppBar(
+              title: t.space.lens.createNewFeed,
+              backgroundColor: LemonColor.atomicBlack,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(Spacing.smMedium),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name field
+                    Text(
+                      t.space.lens.name,
+                      style: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
-              border: Border(
-                top: BorderSide(color: colorScheme.outline),
-              ),
-            ),
-            padding: EdgeInsets.all(Spacing.smMedium),
-            child: SafeArea(
-              child: Opacity(
-                opacity: _isFormValid ? 1 : 0.5,
-                child: LinearGradientButton.primaryButton(
-                  onTap: _isFormValid
-                      ? () async {
-                          await showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Feed Data'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    SizedBox(height: Spacing.xSmall),
+                    LemonTextField(
+                      controller: _nameController,
+                      hintText: t.space.lens.name,
+                      onChange: (_) => setState(() {}),
+                    ),
+                    SizedBox(height: Spacing.medium),
+
+                    // Description field
+                    Text(
+                      t.space.lens.description,
+                      style: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xSmall),
+                    LemonTextField(
+                      controller: _descriptionController,
+                      hintText: t.space.lens.description,
+                      maxLines: 3,
+                      onChange: (_) => setState(() {}),
+                    ),
+                    SizedBox(height: Spacing.medium),
+
+                    // Admins section
+                    Text(
+                      t.space.lens.admins,
+                      style: TextStyle(
+                        color: colorScheme.onPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: Spacing.xSmall),
+                    Column(
+                      children: [
+                        ..._admins.asMap().entries.map(
+                              (entry) => Column(
                                 children: [
-                                  Text('Name: ${_nameController.text}'),
-                                  Text(
-                                    'Description: ${_descriptionController.text}',
+                                  _AdminField(
+                                    value: entry.value,
+                                    onChanged: (value) =>
+                                        _updateAdmin(entry.key, value),
+                                    onRemove: () => _removeAdmin(entry.key),
+                                    removable: _admins.length > 1,
                                   ),
-                                  Text('Admins: ${_admins.join(", ")}'),
+                                  SizedBox(height: Spacing.xSmall),
                                 ],
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('OK'),
-                                ),
-                              ],
                             ),
-                          );
-                        }
-                      : null,
-                  label: t.space.lens.createFeed,
-                  textColor: colorScheme.onPrimary,
+                        SizedBox(height: Spacing.superExtraSmall),
+                        _AddButton(
+                          onPress: _addNewAdmin,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+            BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  success: (txHash) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Feed Created'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Transaction Hash: $txHash'),
+                            Text('Name: ${_nameController.text}'),
+                            Text('Description: ${_descriptionController.text}'),
+                            Text('Admins: ${_admins.join(", ")}'),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context); // Close bottom sheet
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  failed: (failure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(failure.message ?? 'Unknown error'),
+                      ),
+                    );
+                  },
+                  orElse: () {},
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: LemonColor.atomicBlack,
+                  border: Border(
+                    top: BorderSide(color: colorScheme.outline),
+                  ),
+                ),
+                padding: EdgeInsets.all(Spacing.smMedium),
+                child: SafeArea(
+                  child: Opacity(
+                    opacity: _isFormValid ? 1 : 0.5,
+                    child: LinearGradientButton.primaryButton(
+                      onTap: _isFormValid
+                          ? () {
+                              context.read<CreateLensFeedBloc>().add(
+                                    CreateLensFeedEvent.createFeed(
+                                      name: _nameController.text,
+                                      description: _descriptionController.text,
+                                      admins: _admins
+                                          .where((admin) => admin.isNotEmpty)
+                                          .toList(),
+                                    ),
+                                  );
+                            }
+                          : null,
+                      label: t.space.lens.createFeed,
+                      textColor: colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

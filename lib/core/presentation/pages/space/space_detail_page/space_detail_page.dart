@@ -316,7 +316,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                         if (_selectedTabIndex == 0) ...[
                           SpaceEventsList(space: space),
                         ] else if (_selectedTabIndex == 1) ...[
-                          const LensPostFeedWidget(),
+                          LensPostFeedWidget(space: space),
                         ],
                       ],
                     ),

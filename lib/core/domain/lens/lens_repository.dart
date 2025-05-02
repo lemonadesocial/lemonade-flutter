@@ -48,4 +48,8 @@ abstract class LensRepository {
   Future<Either<Failure, LensPostResult>> createPost({
     required Variables$Mutation$LensCreatePost input,
   });
+
+  Future<Either<Failure, LensTransactionStatusResult>> createFeed({
+    required Map<String, dynamic> input,
+  });
 }

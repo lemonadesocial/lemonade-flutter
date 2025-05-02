@@ -1,0 +1,22 @@
+mutation LensCreateFeed($request: CreateFeedRequest!) {
+  createFeed(request: $request) {
+    ... on CreateFeedResponse {
+      hash
+      __typename
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+      selfFundedReason
+      __typename
+    }
+    ... on SponsoredTransactionRequest {
+      reason
+      sponsoredReason
+      __typename
+    }
+    ... on TransactionWillFail {
+      reason
+      __typename
+    }
+  }
+} 
