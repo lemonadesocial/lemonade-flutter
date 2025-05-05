@@ -94,14 +94,6 @@ class LoginLensAccountBloc
           final challengeId = authChallenge.fold((l) => '', (r) => r.id ?? '');
           final message = authChallenge.fold((l) => '', (r) => r.text ?? '');
 
-          print('--------------------------------');
-          print("challengeId: $challengeId");
-          print("message: $message");
-          print("ownerAddress: ${e.ownerAddress}");
-          print("accountAddress: ${e.accountAddress}");
-          print("accountStatus: ${e.accountStatus}");
-          print('--------------------------------');
-
           final signedMessage = await _walletConnectService.personalSign(
             wallet: e.ownerAddress,
             message: Web3Utils.toHex(message),
@@ -126,9 +118,6 @@ class LoginLensAccountBloc
 
           final authenticationResult = result.fold((l) => null, (r) => r);
 
-          print('--------------------------------');
-          print(authenticationResult);
-          print('--------------------------------');
           if (authenticationResult is LensAuthenticationTokens) {
             emit(
               LoginLensAccountState.success(
