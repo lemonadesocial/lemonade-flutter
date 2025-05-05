@@ -1,5 +1,7 @@
 import 'package:app/core/application/lens/create_lens_feed_bloc/create_lens_feed_bloc.dart';
+import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
+import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
@@ -8,6 +10,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -16,8 +20,10 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 
-class CreateLensNewFeedBottomSheet extends StatefulWidget {
+class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
 
   const CreateLensNewFeedBottomSheet({
@@ -26,12 +32,37 @@ class CreateLensNewFeedBottomSheet extends StatefulWidget {
   });
 
   @override
-  CreateLensNewFeedBottomSheetState createState() =>
-      CreateLensNewFeedBottomSheetState();
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginLensAccountBloc(
+            lensRepository: getIt<LensRepository>(),
+            walletConnectService: getIt<WalletConnectService>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => CreateLensFeedBloc(
+            getIt<LensRepository>(),
+            getIt<LensGroveService>(),
+          ),
+        ),
+      ],
+      child: _View(space: space),
+    );
+  }
 }
 
-class CreateLensNewFeedBottomSheetState
-    extends State<CreateLensNewFeedBottomSheet> {
+class _View extends StatefulWidget {
+  final Space space;
+
+  const _View({required this.space});
+
+  @override
+  State<_View> createState() => _ViewState();
+}
+
+class _ViewState extends State<_View> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _adminController = TextEditingController();
@@ -42,6 +73,35 @@ class CreateLensNewFeedBottomSheetState
     super.initState();
     _nameController.text = widget.space.title ?? '';
     _descriptionController.text = widget.space.description ?? '';
+    _initLoginLensAccount();
+  }
+
+  Future<void> _initLoginLensAccount() async {
+    final ownerAddress =
+        (await getIt<WalletConnectService>().getActiveSession())?.address;
+    if (ownerAddress == null) return;
+
+    final availableAccounts =
+        context.read<LensAuthBloc>().state.availableAccounts;
+    final accountAddress = availableAccounts.isEmpty
+        ? null
+        : availableAccounts
+            .where(
+              (account) =>
+                  account.owner?.toLowerCase() == ownerAddress.toLowerCase(),
+            )
+            .firstOrNull
+            ?.address;
+
+    if (!mounted) return;
+
+    context.read<LoginLensAccountBloc>().add(
+          LoginLensAccountEvent.login(
+            ownerAddress: ownerAddress,
+            accountAddress: accountAddress ?? ownerAddress,
+            accountStatus: LensAccountStatus.builder,
+          ),
+        );
   }
 
   @override
@@ -81,11 +141,75 @@ class CreateLensNewFeedBottomSheetState
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return BlocProvider(
-      create: (context) => CreateLensFeedBloc(
-        getIt<LensRepository>(),
-        getIt<LensGroveService>(),
-      ),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (token, refreshToken, idToken, accountStatus) {
+                context.read<LensAuthBloc>().add(
+                      LensAuthEvent.authorized(
+                        token: token,
+                        refreshToken: refreshToken,
+                        idToken: idToken,
+                      ),
+                    );
+                if (accountStatus == LensAccountStatus.builder) {
+                  SnackBarUtils.showSuccess(
+                    message: "Login to lens builder successfully",
+                  );
+                }
+              },
+              failed: (failure) {
+                SnackBarUtils.showError(message: failure.message);
+              },
+              orElse: () {},
+            );
+          },
+        ),
+        BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              success: (txHash) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Feed Created'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Transaction Hash: $txHash'),
+                        Text('Name: ${_nameController.text}'),
+                        Text(
+                          'Description: ${_descriptionController.text}',
+                        ),
+                        Text('Admins: ${_admins.join(", ")}'),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              failed: (failure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(failure.message ?? 'Unknown error'),
+                  ),
+                );
+              },
+              orElse: () {},
+            );
+          },
+        ),
+      ],
       child: BlocBuilder<LensAuthBloc, LensAuthState>(
         builder: (context, lensState) {
           if (_admins.length == 1 &&
@@ -184,79 +308,36 @@ class CreateLensNewFeedBottomSheetState
                       ),
                     ),
                   ),
-                  BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
-                    listener: (context, state) {
-                      state.maybeWhen(
-                        success: (txHash) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Feed Created'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Transaction Hash: $txHash'),
-                                  Text('Name: ${_nameController.text}'),
-                                  Text(
-                                      'Description: ${_descriptionController.text}'),
-                                  Text('Admins: ${_admins.join(", ")}'),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(
-                                      context,
-                                    ); // Close bottom sheet
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        failed: (failure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(failure.message ?? 'Unknown error'),
-                            ),
-                          );
-                        },
-                        orElse: () {},
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: LemonColor.atomicBlack,
-                        border: Border(
-                          top: BorderSide(color: colorScheme.outline),
-                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: LemonColor.atomicBlack,
+                      border: Border(
+                        top: BorderSide(color: colorScheme.outline),
                       ),
-                      padding: EdgeInsets.all(Spacing.smMedium),
-                      child: SafeArea(
-                        child: Opacity(
-                          opacity: _isFormValid ? 1 : 0.5,
-                          child: LinearGradientButton.primaryButton(
-                            onTap: _isFormValid
-                                ? () {
-                                    context.read<CreateLensFeedBloc>().add(
-                                          CreateLensFeedEvent.createFeed(
-                                            name: _nameController.text,
-                                            description:
-                                                _descriptionController.text,
-                                            admins: _admins
-                                                .where(
-                                                    (admin) => admin.isNotEmpty)
-                                                .toList(),
-                                          ),
-                                        );
-                                  }
-                                : null,
-                            label: t.space.lens.createFeed,
-                            textColor: colorScheme.onPrimary,
-                          ),
+                    ),
+                    padding: EdgeInsets.all(Spacing.smMedium),
+                    child: SafeArea(
+                      child: Opacity(
+                        opacity: _isFormValid ? 1 : 0.5,
+                        child: LinearGradientButton.primaryButton(
+                          onTap: _isFormValid
+                              ? () {
+                                  context.read<CreateLensFeedBloc>().add(
+                                        CreateLensFeedEvent.createFeed(
+                                          name: _nameController.text,
+                                          description:
+                                              _descriptionController.text,
+                                          admins: _admins
+                                              .where(
+                                                (admin) => admin.isNotEmpty,
+                                              )
+                                              .toList(),
+                                        ),
+                                      );
+                                }
+                              : null,
+                          label: t.space.lens.createFeed,
+                          textColor: colorScheme.onPrimary,
                         ),
                       ),
                     ),

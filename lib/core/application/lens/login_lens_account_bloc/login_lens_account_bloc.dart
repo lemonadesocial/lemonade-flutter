@@ -58,31 +58,49 @@ class LoginLensAccountBloc
       login: (e) async {
         emit(const LoginLensAccountState.loading());
         try {
-          final authChallenge = e.accountStatus == LensAccountStatus.onboarding
-              ? await _lensRepository.challenge(
-                  input: Variables$Mutation$LensAuthenticationChallenge(
-                    request: Input$ChallengeRequest(
-                      onboardingUser: Input$OnboardingUserChallengeRequest(
-                        wallet: e.ownerAddress,
-                      ),
+          final authChallenge = switch (e.accountStatus) {
+            LensAccountStatus.onboarding => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    onboardingUser: Input$OnboardingUserChallengeRequest(
+                      wallet: e.ownerAddress,
                     ),
                   ),
-                )
-              : await _lensRepository.challenge(
-                  input: Variables$Mutation$LensAuthenticationChallenge(
-                    request: Input$ChallengeRequest(
-                      accountOwner: Input$AccountOwnerChallengeRequest(
-                        owner: e.ownerAddress,
-                        account: e.accountAddress,
-                      ),
+                ),
+              ),
+            LensAccountStatus.builder => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    builder: Input$BuilderChallengeRequest(
+                      address: e.ownerAddress,
                     ),
                   ),
-                );
+                ),
+              ),
+            LensAccountStatus.accountOwner => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    accountOwner: Input$AccountOwnerChallengeRequest(
+                      owner: e.ownerAddress,
+                      account: e.accountAddress,
+                    ),
+                  ),
+                ),
+              ),
+          };
           if (authChallenge.isLeft()) {
             throw Exception("Failed to get auth challenge");
           }
           final challengeId = authChallenge.fold((l) => '', (r) => r.id ?? '');
           final message = authChallenge.fold((l) => '', (r) => r.text ?? '');
+
+          print('--------------------------------');
+          print("challengeId: $challengeId");
+          print("message: $message");
+          print("ownerAddress: ${e.ownerAddress}");
+          print("accountAddress: ${e.accountAddress}");
+          print("accountStatus: ${e.accountStatus}");
+          print('--------------------------------');
 
           final signedMessage = await _walletConnectService.personalSign(
             wallet: e.ownerAddress,
@@ -108,6 +126,9 @@ class LoginLensAccountBloc
 
           final authenticationResult = result.fold((l) => null, (r) => r);
 
+          print('--------------------------------');
+          print(authenticationResult);
+          print('--------------------------------');
           if (authenticationResult is LensAuthenticationTokens) {
             emit(
               LoginLensAccountState.success(

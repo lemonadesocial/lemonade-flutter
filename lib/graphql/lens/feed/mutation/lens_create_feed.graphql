@@ -9,14 +9,10 @@ mutation LensCreateFeed($request: CreateFeedRequest!) {
       selfFundedReason
       __typename
     }
-    ... on SponsoredTransactionRequest {
-      reason
-      sponsoredReason
-      __typename
-    }
     ... on TransactionWillFail {
       reason
       __typename
     }
+    __typename
   }
 } 

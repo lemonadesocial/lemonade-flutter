@@ -320,7 +320,9 @@ class LensRepositoryImpl implements LensRepository {
     final result = response.parsedData!.createFeed.maybeWhen(
       orElse: () => null,
       createFeedResponse: (data) =>
-          const LensTransactionStatusResult.pendingTransactionStatus(),
+          LensTransactionStatusResult.notIndexedYetStatus(
+        reason: data.hash,
+      ),
       selfFundedTransactionRequest: (data) =>
           LensTransactionStatusResult.failedTransactionStatus(
         reason: data.reason,
