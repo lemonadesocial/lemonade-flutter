@@ -13,6 +13,8 @@ import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
+import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
@@ -20,7 +22,6 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
@@ -170,33 +171,48 @@ class _ViewState extends State<_View> {
         BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
           listener: (context, state) {
             state.maybeWhen(
-              success: (txHash) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Feed Created'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Transaction Hash: $txHash'),
-                        Text('Name: ${_nameController.text}'),
-                        Text(
-                          'Description: ${_descriptionController.text}',
-                        ),
-                        Text('Admins: ${_admins.join(", ")}'),
-                      ],
+              success: (txHash) async {
+                final feed = await getIt<LensRepository>().getFeed(
+                  input: Variables$Query$LensGetFeed(
+                    request: Input$FeedRequest(
+                      txHash: txHash,
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
                   ),
                 );
+                if (feed.isRight()) {
+                  final feedData = feed.fold((l) => null, (r) => r);
+                  if (feedData != null) {
+                    print("----------------");
+                    print(feedData);
+                    print("----------------");
+                  }
+                }
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => AlertDialog(
+                //     title: const Text('Feed Created'),
+                //     content: Column(
+                //       mainAxisSize: MainAxisSize.min,
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text('Transaction Hash: $txHash'),
+                //         Text('Name: ${_nameController.text}'),
+                //         Text(
+                //           'Description: ${_descriptionController.text}',
+                //         ),
+                //         Text('Admins: ${_admins.join(", ")}'),
+                //       ],
+                //     ),
+                //     actions: [
+                //       TextButton(
+                //         onPressed: () {
+                //           Navigator.pop(context);
+                //         },
+                //         child: const Text('OK'),
+                //       ),
+                //     ],
+                //   ),
+                // );
               },
               failed: (failure) {
                 ScaffoldMessenger.of(context).showSnackBar(

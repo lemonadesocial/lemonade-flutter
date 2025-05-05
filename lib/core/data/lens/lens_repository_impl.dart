@@ -2,6 +2,7 @@ import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post.dart';
+import 'package:app/core/domain/lens/entities/lens_feed.dart';
 import 'package:app/core/domain/lens/entities/lens_switch_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
@@ -10,6 +11,7 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
+import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
 import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
@@ -340,5 +342,23 @@ class LensRepositoryImpl implements LensRepository {
     }
 
     return Right(result);
+  }
+
+  @override
+  Future<Either<Failure, LensFeed>> getFeed({
+    required Variables$Query$LensGetFeed input,
+  }) async {
+    final response = await _client.query$LensGetFeed(
+      Options$Query$LensGetFeed(variables: input),
+    );
+    if (response.hasException || response.parsedData?.feed == null) {
+      return Left(Failure.withGqlException(response.exception));
+    }
+
+    return Right(
+      LensFeed.fromJson(
+        response.parsedData!.feed!.toJson(),
+      ),
+    );
   }
 }

@@ -56,7 +56,7 @@ class CreateLensFeedBloc
     try {
       emit(const CreateLensFeedState.loading());
 
-      final feedMetadata = LensFeed(
+      final feedMetadata = LensFeedMetadata(
         id: const Uuid().v4(),
         name: event.name,
         description: event.description,

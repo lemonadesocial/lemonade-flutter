@@ -6,19 +6,25 @@ part 'lens_feed.g.dart';
 @freezed
 class LensFeed with _$LensFeed {
   const factory LensFeed({
-    /// A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI
-    required String id,
-
-    /// The name of the Feed
-    required String name,
-
-    /// Optional markdown formatted description of the Feed
-    String? description,
-
-    /// A cryptographic signature of the Lens metadata
-    String? signature,
+    String? address,
+    String? owner,
+    String? createdAt,
+    LensFeedMetadata? metadata,
   }) = _LensFeed;
 
   factory LensFeed.fromJson(Map<String, dynamic> json) =>
       _$LensFeedFromJson(json);
+}
+
+@freezed
+class LensFeedMetadata with _$LensFeedMetadata {
+  @JsonSerializable(explicitToJson: true)
+  const factory LensFeedMetadata({
+    String? id,
+    String? name,
+    String? description,
+  }) = _LensFeedMetadata;
+
+  factory LensFeedMetadata.fromJson(Map<String, dynamic> json) =>
+      _$LensFeedMetadataFromJson(json);
 }
