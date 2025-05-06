@@ -1,0 +1,5 @@
+{
+    "signMessageDescription": "Please sign a message to verify your ownership of the wallet. This will not incur any cost.",
+    "claimUsernameDescription": "Usernames with 6 or more characters are free to claim.",
+    "usernameValidationRules": "Usernames must not be longer than 26 characters and can only contain letters, numbers, _ and -"
+}

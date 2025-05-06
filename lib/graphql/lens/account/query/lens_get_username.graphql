@@ -1,0 +1,10 @@
+query LensUsername($request: UsernameRequest!) {
+  username(request: $request) {
+    id
+    value
+    namespace
+    localName
+    ownedBy
+    linkedTo
+  }
+}

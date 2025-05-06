@@ -121,7 +121,10 @@ class OnboardingUsernamePage extends StatelessWidget {
     );
   }
 
-  Widget statusWidget(BuildContext context, bool usernameExisted) {
+  Widget statusWidget(
+    BuildContext context,
+    bool usernameExisted,
+  ) {
     final color =
         usernameExisted ? LemonColor.errorRedBg : LemonColor.usernameApproved;
     final t = Translations.of(context);

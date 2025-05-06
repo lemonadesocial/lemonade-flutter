@@ -96,7 +96,8 @@
         "subscribe": "Subscribe",
         "manage": "Manage",
         "check": "Check",
-        "openSettings": "Open Settings"
+        "openSettings": "Open Settings",
+        "sign": "Sign"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -282,5 +283,6 @@
             "alertTitle": "Photos Permission Required",
             "alertContent": "Photos permission is required to select images. Please enable it in settings."
         }
-    }
+    },
+    "poweredBy": "powered by"
 }
