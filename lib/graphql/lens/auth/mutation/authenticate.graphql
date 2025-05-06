@@ -1,0 +1,18 @@
+mutation LensAuthenticate($request: SignedAuthChallenge!) {
+  authenticate(request: $request) {
+    ... on AuthenticationTokens {
+      accessToken
+      idToken
+      refreshToken
+    }
+    ... on WrongSignerError {
+      reason
+    }
+    ... on ExpiredChallengeError {
+      reason
+    }
+    ... on ForbiddenError {
+      reason
+    }
+  }
+}

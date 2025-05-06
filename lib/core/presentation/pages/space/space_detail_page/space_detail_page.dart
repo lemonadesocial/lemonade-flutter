@@ -1,4 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:app/core/application/space/get_space_event_requests_bloc/get_spa
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/lens_add_posts_button.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/lens_post_feed_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -18,7 +21,9 @@ import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_header.dart';
@@ -39,6 +44,9 @@ class SpaceDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => ScrollNotificationBloc(),
+        ),
         BlocProvider(
           create: (context) => GetSpaceDetailBloc(getIt<SpaceRepository>())
             ..add(
@@ -97,32 +105,38 @@ class _View extends StatefulWidget {
   State<_View> createState() => _ViewState();
 }
 
-class _ViewState extends State<_View> {
+class _ViewState extends State<_View> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   bool _showFloatingSubscribe = false;
   bool _showSimpleHeader = false;
-  final double _subscribeButtonThreshold = 250;
-  final double _headerThreshold = 200;
+  late TabController _tabController;
+  int _selectedTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.addListener(_onScroll);
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_selectedTabIndex != _tabController.index) {
+        setState(() {
+          _selectedTabIndex = _tabController.index;
+        });
+      }
     });
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    final shouldShowFloatingSubscribe =
-        _scrollController.offset >= _subscribeButtonThreshold;
-    final shouldShowSimpleHeader = _scrollController.offset >= _headerThreshold;
+    final shouldShowFloatingSubscribe = _scrollController.offset >= 250;
+    final shouldShowSimpleHeader = _scrollController.offset >= 200;
 
     if (shouldShowFloatingSubscribe != _showFloatingSubscribe ||
         shouldShowSimpleHeader != _showSimpleHeader) {
@@ -184,9 +198,7 @@ class _ViewState extends State<_View> {
           loading: () => Scaffold(
             appBar: const LemonAppBar(title: ""),
             body: Center(
-              child: Loading.defaultLoading(
-                context,
-              ),
+              child: Loading.defaultLoading(context),
             ),
           ),
           success: (space) {
@@ -194,78 +206,120 @@ class _ViewState extends State<_View> {
                 space.isAdmin(userId: user?.userId ?? '') ||
                     space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
+              floatingActionButton:
+                  _selectedTabIndex == 1 ? const LensAddPostsButton() : null,
               body: Stack(
                 children: [
-                  CustomScrollView(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      SpaceHeader(space: space),
-                      SliverToBoxAdapter(
-                        child: SpaceInfo(space: space),
-                      ),
-                      if (!isAdminOrCreator)
+                  NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is ScrollEndNotification) {
+                        if (notification.metrics.pixels >=
+                            notification.metrics.maxScrollExtent - 100) {
+                          context.read<ScrollNotificationBloc>().add(
+                                const ScrollNotificationEvent.reachEnd(),
+                              );
+                        } else {
+                          context.read<ScrollNotificationBloc>().add(
+                                const ScrollNotificationEvent.scroll(),
+                              );
+                        }
+                      }
+                      return false;
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        SpaceHeader(space: space),
                         SliverToBoxAdapter(
-                          child: Divider(
-                            color: colorScheme.outline,
+                          child: SpaceInfo(space: space),
+                        ),
+                        if (isAdminOrCreator)
+                          BlocBuilder<GetSpaceEventRequestsBloc,
+                              GetSpaceEventRequestsState>(
+                            builder: (context, state) {
+                              final requests = state.maybeWhen(
+                                orElse: () => <SpaceEventRequest>[],
+                                success: (response) => response.records
+                                    .where(
+                                      (request) =>
+                                          request.state ==
+                                          Enum$SpaceEventRequestState.pending,
+                                    )
+                                    .toList(),
+                              );
+                              final hasPending = requests.isNotEmpty;
+                              return MultiSliver(
+                                children: [
+                                  if (hasPending) ...[
+                                    SliverToBoxAdapter(
+                                      child: Divider(
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                    SizedBox(height: Spacing.small),
+                                  ],
+                                  SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: Spacing.small,
+                                      ),
+                                      child: SpaceEventRequestsAdminList(
+                                        spaceId: space.id ?? '',
+                                        requests: requests,
+                                      ),
+                                    ),
+                                  ),
+                                  if (!hasPending) ...[
+                                    SliverToBoxAdapter(
+                                      child: SizedBox(height: Spacing.small),
+                                    ),
+                                    SliverToBoxAdapter(
+                                      child: Divider(
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                  ],
+                                  if (hasPending)
+                                    SliverToBoxAdapter(
+                                      child: SizedBox(height: Spacing.small),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
-                        ),
-                      if (isAdminOrCreator)
-                        BlocBuilder<GetSpaceEventRequestsBloc,
-                            GetSpaceEventRequestsState>(
-                          builder: (context, state) {
-                            final requests = state.maybeWhen(
-                              orElse: () => <SpaceEventRequest>[],
-                              success: (response) => response.records
-                                  .where(
-                                    (request) =>
-                                        request.state ==
-                                        Enum$SpaceEventRequestState.pending,
-                                  )
-                                  .toList(),
-                            );
-                            final hasPending = requests.isNotEmpty;
-                            return MultiSliver(
-                              children: [
-                                if (hasPending) ...[
-                                  SliverToBoxAdapter(
-                                    child: Divider(
-                                      color: colorScheme.outline,
-                                    ),
-                                  ),
-                                  SizedBox(height: Spacing.small),
-                                ],
-                                SliverToBoxAdapter(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: Spacing.small,
-                                    ),
-                                    child: SpaceEventRequestsAdminList(
-                                      spaceId: space.id ?? '',
-                                      requests: requests,
-                                    ),
-                                  ),
-                                ),
-                                if (!hasPending) ...[
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(height: Spacing.small),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: Divider(
-                                      color: colorScheme.outline,
-                                    ),
-                                  ),
-                                ],
-                                if (hasPending)
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(height: Spacing.small),
-                                  ),
+                        SliverPersistentHeader(
+                          delegate: _SliverTabBarDelegate(
+                            TabBar(
+                              controller: _tabController,
+                              labelStyle: Typo.medium.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              unselectedLabelStyle: Typo.medium.copyWith(
+                                color: colorScheme.onPrimary.withOpacity(0.36),
+                                fontWeight: FontWeight.w500,
+                              ),
+                              indicatorColor: LemonColor.paleViolet,
+                              onTap: (index) {
+                                setState(() {
+                                  _selectedTabIndex = index;
+                                });
+                              },
+                              tabs: const [
+                                Tab(text: "Events"),
+                                Tab(text: "Feed"),
                               ],
-                            );
-                          },
+                            ),
+                          ),
+                          pinned: true,
                         ),
-                      SpaceEventsList(space: space),
-                    ],
+                        if (_selectedTabIndex == 0) ...[
+                          SpaceEventsList(space: space),
+                        ] else if (_selectedTabIndex == 1) ...[
+                          const LensPostFeedWidget(),
+                        ],
+                      ],
+                    ),
                   ),
                   _FloatingSpaceHeader(
                     title: space.title ?? '',
@@ -299,6 +353,31 @@ class _ViewState extends State<_View> {
         );
       },
     );
+  }
+}
+
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverTabBarDelegate(this.tabBar);
+
+  final TabBar tabBar;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return tabBar;
+  }
+
+  @override
+  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+    return tabBar != oldDelegate.tabBar;
   }
 }
 

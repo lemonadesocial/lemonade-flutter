@@ -5,6 +5,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
@@ -275,6 +276,63 @@ class AirstackGQL {
     );
   }
 
+  late final GraphQLClient _client;
+  late final ErrorLink _errorLink;
+  GraphQLClient get client => _client;
+}
+
+@LazySingleton()
+class LensGQL {
+  LensGQL() {
+    _errorLink = ErrorLink(
+      onException: (request, forward, exception) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleExceptionError(request, forward, exception);
+        }
+        return null;
+      },
+      onGraphQLError: (request, forward, response) {
+        if (kDebugMode) {
+          CustomErrorHandler.handleGraphQLError(request, forward, response);
+        }
+        return null;
+      },
+    );
+    _authLink = AuthLink(
+      getToken: () async {
+        var token = await getIt<LensStorageService>().getAccessTokenForQql();
+        if (token == null) {
+          return null;
+        }
+        return 'Bearer $token';
+      },
+    );
+    _client = GraphQLClient(
+      queryRequestTimeout: const Duration(seconds: 30),
+      defaultPolicies: DefaultPolicies(
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+        ),
+      ),
+      link: Link.from([
+        _errorLink,
+        _authLink,
+        HttpLink(
+          AppConfig.lensApiUrl,
+          defaultHeaders: {
+            'Content-Type': 'application/json',
+            'Origin': AppConfig.webUrl,
+          },
+        ),
+      ]),
+      cache: GraphQLCache(
+        partialDataPolicy: PartialDataCachePolicy.accept,
+        store: HiveStore(),
+      ),
+    );
+  }
+
+  late final AuthLink _authLink;
   late final GraphQLClient _client;
   late final ErrorLink _errorLink;
   GraphQLClient get client => _client;

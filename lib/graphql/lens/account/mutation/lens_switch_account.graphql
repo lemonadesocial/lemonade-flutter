@@ -1,0 +1,12 @@
+mutation SwitchAccount($request: SwitchAccountRequest!) {
+  switchAccount(request: $request) {
+    ... on AuthenticationTokens {
+      accessToken
+      idToken
+      refreshToken
+    }
+    ... on ForbiddenError {
+      reason
+    }
+  }
+}

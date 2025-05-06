@@ -1,0 +1,21 @@
+fragment LensAccount on Account {
+  address
+  owner
+  createdAt
+  metadata {
+    id
+    name
+    bio
+    picture
+    coverPicture
+  }
+  username {
+    id
+    linkedTo
+    localName
+    namespace
+    ownedBy
+    timestamp
+    value
+  }
+}

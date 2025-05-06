@@ -1,0 +1,8234 @@
+"""
+Indicates that an Input Object is a OneOf Input Object (and thus requires
+                        exactly one of its field be provided)
+"""
+directive @oneOf on INPUT_OBJECT
+
+input AccessControlRequest {
+  """The access control address"""
+  address: EvmAddress!
+}
+
+type AccessControlResult {
+  address: EvmAddress!
+  createdAt: DateTime!
+}
+
+scalar AccessToken
+
+type Account {
+  address: EvmAddress!
+
+  """
+  The owner of the account - note if the Account is not a lens account this will return the
+  address of the account itself.
+  """
+  owner: EvmAddress!
+
+  """
+  The account created at. Note if they are using a standard EOA this will be genesis block
+  timestamp
+  """
+  createdAt: DateTime!
+
+  """The score of the account."""
+  score: Int!
+
+  """The metadata of the account."""
+  metadata: AccountMetadata
+
+  """The username linked to the account."""
+  username(request: AccountUsernameOneOf! = {namespace: "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"}): Username
+
+  """The operations for the account."""
+  operations: LoggedInAccountOperations
+
+  """Get the rules for the account."""
+  rules: AccountFollowRules!
+  actions: [AccountAction!]!
+}
+
+"""
+The configured actions for an account. All accounts have the TippingAccountAction enabled by
+default which is not listed here.
+"""
+union AccountAction = TippingAccountAction | UnknownAccountAction
+
+input AccountActionConfigInput {
+  unknown: UnknownActionConfigInput
+}
+
+input AccountActionExecuteInput {
+  tipping: AmountInput
+  unknown: UnknownActionExecuteInput
+}
+
+union AccountActionExecuted = TippingAccountActionExecuted | UnknownAccountActionExecuted
+
+type AccountActionExecutedNotification {
+  id: GeneratedNotificationId!
+  actions: [AccountActionExecuted!]!
+}
+
+input AccountActionExecutedNotificationAttributes {
+  account: EvmAddress
+  executingAccount: EvmAddress
+  action: EvmAddress
+  actionType: AccountActionType
+  app: EvmAddress
+}
+
+input AccountActionFilter {
+  address: EvmAddress
+  tipping: AlwaysTrue
+}
+
+enum AccountActionType {
+  TIPPING
+  UNKNOWN
+}
+
+union AccountAvailable = AccountManaged | AccountOwned
+
+input AccountBalancesRequest {
+  """The ERC-20 token addresses to get balances for."""
+  tokens: [EvmAddress!]! = []
+
+  """Whether to include the native token balance."""
+  includeNative: Boolean! = false
+}
+
+type AccountBlocked {
+  account: Account!
+  blockedAt: DateTime!
+}
+
+input AccountBlockedNotificationAttributes {
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+type AccountBlockedResponse {
+  hash: TxHash!
+}
+
+input AccountCreatedNotificationAttributes {
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+type AccountExecutedActions {
+  account: Account!
+  total: Int!
+  lastAt: DateTime!
+  firstAt: DateTime!
+}
+
+type AccountFeedsStats {
+  """The total number of posts."""
+  posts: Int!
+
+  """The total number of comments."""
+  comments: Int!
+
+  """The total number of reposts."""
+  reposts: Int!
+
+  """The total number of quotes."""
+  quotes: Int!
+
+  """The total number of times the account has reacted."""
+  reacted: Int!
+
+  """The total number of reactions."""
+  reactions: Int!
+
+  """The total number of collects."""
+  collects: Int!
+
+  """The total number of tips received."""
+  tips: Int!
+}
+
+input AccountFeedsStatsFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+}
+
+input AccountFeedsStatsRequest {
+  """The account to get stats for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the result."""
+  filter: AccountFeedsStatsFilter
+}
+
+type AccountFollowOperationValidationFailed {
+  unsatisfiedRules: AccountFollowUnsatisfiedRules
+  reason: String!
+}
+
+union AccountFollowOperationValidationOutcome = AccountFollowOperationValidationPassed | AccountFollowOperationValidationUnknown | AccountFollowOperationValidationFailed
+
+type AccountFollowOperationValidationPassed {
+  passed: AlwaysTrue!
+}
+
+union AccountFollowOperationValidationRule = AccountFollowRule | GraphRule
+
+type AccountFollowOperationValidationUnknown {
+  extraChecksRequired: [AccountFollowOperationValidationRule!]!
+}
+
+type AccountFollowRule {
+  id: RuleId!
+  type: AccountFollowRuleType!
+  address: EvmAddress!
+  config: [AnyKeyValue!]!
+}
+
+input AccountFollowRuleConfig {
+  tokenGatedRule: TokenGatedFollowRuleConfig
+  simplePaymentRule: SimplePaymentFollowRuleConfig
+  unknownRule: UnknownAccountRuleConfig
+}
+
+enum AccountFollowRuleType {
+  TOKEN_GATED
+  SIMPLE_PAYMENT
+  UNKNOWN
+}
+
+enum AccountFollowRuleUnsatisfiedReason {
+  GRAPH_TOKEN_GATED_NOT_A_TOKEN_HOLDER
+  GRAPH_ACCOUNT_BLOCKED
+  GRAPH_GROUP_GATED_NOT_A_MEMBER
+  FOLLOW_SIMPLE_PAYMENT_NOT_ENOUGH_BALANCE
+  FOLLOW_TOKEN_GATED_NOT_A_TOKEN_HOLDER
+}
+
+type AccountFollowRules {
+  required: [AccountFollowRule!]!
+  anyOf: [AccountFollowRule!]!
+}
+
+input AccountFollowRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+type AccountFollowUnsatisfiedRule {
+  rule: EvmAddress!
+  reason: AccountFollowRuleUnsatisfiedReason!
+  message: String!
+  config: [AnyKeyValue!]!
+}
+
+type AccountFollowUnsatisfiedRules {
+  required: [AccountFollowUnsatisfiedRule!]!
+  anyOf: [AccountFollowUnsatisfiedRule!]!
+}
+
+input AccountFollowedNotificationAttributes {
+  follower: EvmAddress
+  followedAccount: EvmAddress
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+type AccountGraphsFollowStats {
+  """The total number of followers."""
+  followers: Int!
+
+  """The total number of following."""
+  following: Int!
+}
+
+input AccountGraphsStatsFilter {
+  """The graphs to filter by."""
+  graphs: [GraphOneOf!]
+}
+
+input AccountGraphsStatsRequest {
+  """The account to get stats for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the result."""
+  filter: AccountGraphsStatsFilter
+}
+
+type AccountManaged {
+  """The account you are managing."""
+  account: Account!
+
+  """The permissions you have on the account."""
+  permissions: AccountManagerPermissions!
+
+  """The date the account management was added."""
+  addedAt: DateTime!
+}
+
+type AccountManager {
+  """The address of the account manager."""
+  manager: EvmAddress!
+
+  """Whether the account manager is a Lens manager."""
+  isLensManager: Boolean!
+
+  """The permissions the account manager has."""
+  permissions: AccountManagerPermissions!
+
+  """The date the account manager was added."""
+  addedAt: DateTime!
+}
+
+input AccountManagerAddedNotificationAttributes {
+  managedAccount: EvmAddress
+  manager: EvmAddress
+}
+
+input AccountManagerChallengeRequest {
+  """
+  The App you intend to authenticate with.
+  
+  It MUST be a valid App address.
+  Note: On the testnet, it will default to the playground app.
+  This is to make it easier if you forget to set it. This may change in the future.
+  """
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
+
+  """The address of the Lens Account."""
+  account: EvmAddress!
+
+  """The address of the Account Manager."""
+  manager: EvmAddress!
+}
+
+type AccountManagerPermissions {
+  """Whether the account can execute transactions."""
+  canExecuteTransactions: Boolean!
+
+  """Whether the account can transfer tokens."""
+  canTransferTokens: Boolean!
+
+  """Whether the account can transfer native tokens."""
+  canTransferNative: Boolean!
+
+  """Whether the account can set the metadata URI."""
+  canSetMetadataUri: Boolean!
+}
+
+input AccountManagerPermissionsInput {
+  """Whether the account can execute transactions."""
+  canExecuteTransactions: Boolean!
+
+  """Whether the account can transfer tokens."""
+  canTransferTokens: Boolean!
+
+  """Whether the account can transfer native tokens."""
+  canTransferNative: Boolean!
+
+  """Whether the account can set the metadata URI."""
+  canSetMetadataUri: Boolean!
+}
+
+input AccountManagerRemovedNotificationAttributes {
+  managedAccount: EvmAddress
+  manager: EvmAddress
+}
+
+input AccountManagerUpdatedNotificationAttributes {
+  managedAccount: EvmAddress
+  manager: EvmAddress
+}
+
+input AccountManagersRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type AccountMention {
+  """The account that was mentioned."""
+  account: EvmAddress
+
+  """The namespace that was used in a mention."""
+  namespace: EvmAddress
+
+  """
+  The replacement information.
+  Use to replace mentions in the post content.
+  """
+  replace: MentionReplace
+}
+
+input AccountMentionedNotificationAttributes {
+  author: EvmAddress
+  feed: EvmAddress
+  mentionedAccount: EvmAddress
+  mentionedUsername: UsernameValue
+  app: EvmAddress
+}
+
+type AccountMetadata {
+  attributes: [MetadataAttribute!]!
+
+  """The Account bio as markdown."""
+  bio: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+
+  """The Account display name."""
+  name: String
+  picture(request: MediaImageRequest! = {useOriginal: false}): URI
+  coverPicture(request: MediaImageRequest! = {useOriginal: false}): URI
+}
+
+type AccountOwned {
+  """The account you own."""
+  account: Account!
+
+  """The date the account was created."""
+  addedAt: DateTime!
+}
+
+input AccountOwnerChallengeRequest {
+  """
+  The App you intend to authenticate with.
+  
+  It MUST be a valid App address.
+  Note: On the testnet, it will default to the playground app.
+  This is to make it easier if you forget to set it. This may change in the future.
+  """
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
+
+  """The address of the Lens Account."""
+  account: EvmAddress!
+
+  """The address of the Account Owner."""
+  owner: EvmAddress!
+}
+
+input AccountOwnershipTransferredNotificationAttributes {
+  account: EvmAddress
+}
+
+type AccountPostReaction {
+  account: Account!
+  reactions: [PostReaction!]!
+}
+
+input AccountRecommendationsRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The account to get recommendations for."""
+  account: EvmAddress!
+
+  """Shuffle the recommendations."""
+  shuffle: Boolean! = false
+}
+
+enum AccountReportReason {
+  IMPERSONATION
+  REPETITIVE_SPAM
+  OTHER
+}
+
+input AccountReportedNotificationAttributes {
+  reportedAccount: EvmAddress
+  reporter: EvmAddress
+  app: EvmAddress
+}
+
+input AccountRequest {
+  """The account address."""
+  address: EvmAddress
+
+  """The username."""
+  username: UsernameInput
+
+  """The legacy profile ID."""
+  legacyProfileId: LegacyProfileId
+
+  """The transaction hash you created the account with."""
+  txHash: TxHash
+}
+
+input AccountRulesConfigInput {
+  required: [AccountFollowRuleConfig!]! = []
+  anyOf: [AccountFollowRuleConfig!]! = []
+}
+
+"""
+Used to filter posts based on their author's account score.
+The account score is an integer between 1 and 10000, where 1 is the lowest and 10000 is the
+highest.
+"""
+input AccountScoreFilter {
+  atLeast: Int
+  lessThan: Int
+}
+
+type AccountStats {
+  """The stats for the feeds."""
+  feedStats: AccountFeedsStats!
+
+  """The stats for the graphs."""
+  graphFollowStats: AccountGraphsFollowStats!
+}
+
+input AccountStatsRequest {
+  """The account to get stats for."""
+  account: EvmAddress
+
+  """The username."""
+  username: UsernameInput
+
+  """The feeds to get stats for."""
+  forFeeds: [EvmAddress!]! = ["0xcB5E109FFC0E15565082d78E68dDDf2573703580"]
+
+  """The graphs to get stats for."""
+  forGraphs: [EvmAddress!]! = ["0x433025d9718302E7B2e1853D712d96F00764513F"]
+}
+
+input AccountUnblockedNotificationAttributes {
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+type AccountUnblockedResponse {
+  hash: TxHash!
+}
+
+input AccountUnfollowedNotificationAttributes {
+  unfollower: EvmAddress
+  unfollowedAccount: EvmAddress
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+input AccountUsernameAssignedNotificationAttributes {
+  namespace: EvmAddress
+  account: EvmAddress
+}
+
+input AccountUsernameCreatedNotificationAttributes {
+  namespace: EvmAddress
+  account: EvmAddress
+}
+
+input AccountUsernameOneOf {
+  """The namespace to get account assigned username"""
+  namespace: EvmAddress
+
+  """
+  This will get the last linked username if it exists
+  note that it may not marry up to the app where a post
+  was created if used in that context
+  """
+  autoResolve: AlwaysTrue
+}
+
+input AccountUsernameUnassignedNotificationAttributes {
+  namespace: EvmAddress
+  previousAccount: EvmAddress
+}
+
+input AccountsAvailableRequest {
+  """The account to get managed by."""
+  managedBy: EvmAddress!
+
+  """Whether to include owned accounts. Defaults to true."""
+  includeOwned: Boolean! = true
+
+  """The visibility of hidden accounts."""
+  hiddenFilter: ManagedAccountsVisibility! = ALL
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input AccountsBlockedRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input AccountsBulkRequest {
+  """The addresses to get."""
+  addresses: [EvmAddress!]
+
+  """The usernames to get."""
+  usernames: [UsernameInput!]
+
+  """The legacy profile IDs to get."""
+  legacyProfileIds: [LegacyProfileId!]
+
+  """The accounts that are owned by the addresses"""
+  ownedBy: [EvmAddress!]
+}
+
+input AccountsFilter {
+  """The optional filter to narrow accounts by search query."""
+  searchBy: UsernameSearchInput
+}
+
+enum AccountsOrderBy {
+  ALPHABETICAL
+  ACCOUNT_SCORE
+  BEST_MATCH
+}
+
+input AccountsRequest {
+  """The optional accounts filter"""
+  filter: AccountsFilter
+
+  """The order by."""
+  orderBy: AccountsOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type ActionMetadata {
+  """List of authors email addresses."""
+  authors: [String!]!
+
+  """
+  An optional list of `ContractKeyValuePairDescriptor` that describes the `params` argument
+  of the `configure` function.
+  """
+  configureParams: [KeyValuePair!]!
+
+  """Markdown formatted description of the Action."""
+  description: String!
+
+  """
+  A list of `ContractKeyValuePairDescriptor` that describes the `params` argument of the
+  `execute` function.
+  """
+  executeParams: [KeyValuePair!]!
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+
+  """A short name for the Action."""
+  name: String!
+
+  """
+  An optional list of `ContractKeyValuePairDescriptor` that describes the `params` argument
+  of the `setDisabledParams` function.
+  """
+  setDisabledParams: [KeyValuePair!]!
+
+  """The link to the Action source code. Typically a GitHub repository."""
+  source: URI!
+}
+
+input AddAccountManagerRequest {
+  """The address to add as a manager."""
+  address: EvmAddress!
+
+  """The permissions to give the account manager."""
+  permissions: AccountManagerPermissionsInput!
+}
+
+union AddAccountManagerResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input AddAdminsRequest {
+  """
+  The graph/app/sponsor/feed/username/group address which manages these admins
+  """
+  address: EvmAddress!
+
+  """The addresses to add as admins"""
+  admins: [EvmAddress!]!
+}
+
+union AddAdminsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input AddAppAuthorizationEndpointRequest {
+  """The app."""
+  app: EvmAddress!
+
+  """The app authorization endpoint."""
+  endpoint: URL!
+
+  """
+  The bearer token for the app authorization endpoint.
+  This is used in the `Authorization: Bearer <token>` header.
+  """
+  bearerToken: String
+}
+
+input AddAppFeedsRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app feeds (max 10 per request)"""
+  feeds: [EvmAddress!]!
+}
+
+union AddAppFeedsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input AddAppGroupsRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app groups (max 10 per request)"""
+  groups: [EvmAddress!]!
+}
+
+union AddAppGroupsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input AddAppSignersRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app signers (max 10 per request)"""
+  signers: [EvmAddress!]!
+}
+
+union AddAppSignersResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type AddReactionFailure {
+  reason: String!
+}
+
+input AddReactionRequest {
+  """The reaction to add."""
+  reaction: PostReactionType!
+
+  """The post to react to."""
+  post: PostId!
+}
+
+type AddReactionResponse {
+  success: Boolean!
+}
+
+union AddReactionResult = AddReactionResponse | AddReactionFailure
+
+type AddressKeyValue {
+  key: String!
+  address: EvmAddress!
+}
+
+type Admin {
+  account: Account!
+  addedAt: DateTime!
+}
+
+input AdminsForFilterRequest {
+  """The optional filter to narrow admins query"""
+  searchBy: UsernameSearchInput
+}
+
+enum AdminsForOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+}
+
+input AdminsForRequest {
+  """The graph/app/sponsor/feed/username/group address"""
+  address: EvmAddress!
+  filter: AdminsForFilterRequest
+
+  """The order by."""
+  orderBy: AdminsForOrderBy! = LATEST_FIRST
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+scalar AlwaysTrue
+
+input AmountInput {
+  """
+  The token address. To represent the native token, use the
+  0x000000000000000000000000000000000000800a.
+  """
+  currency: EvmAddress!
+
+  """
+  Token value in its main unit (e.g., 1.5 DAI), not in the smallest fraction (e.g.,
+  wei).
+  """
+  value: BigDecimal!
+}
+
+union AnyAccountBalance = NativeAmount | Erc20Amount | NativeBalanceError | Erc20BalanceError
+
+union AnyKeyValue = IntKeyValue | IntNullableKeyValue | AddressKeyValue | StringKeyValue | BooleanKeyValue | RawKeyValue | BigDecimalKeyValue | DictionaryKeyValue | ArrayKeyValue
+
+input AnyKeyValueInput {
+  raw: RawKeyValueInput
+}
+
+"""AnyMedia"""
+union AnyMedia = MediaAudio | MediaImage | MediaVideo
+
+union AnyPost = Post | Repost
+
+type App {
+  address: EvmAddress!
+  graphAddress: EvmAddress
+  sponsorshipAddress: EvmAddress
+  defaultFeedAddress: EvmAddress
+  namespaceAddress: EvmAddress
+  treasuryAddress: EvmAddress
+  verificationEnabled: Boolean!
+  createdAt: DateTime!
+  metadata: AppMetadata
+  owner: EvmAddress!
+  hasAuthorizationEndpoint: Boolean!
+}
+
+type AppFeed {
+  feed: EvmAddress!
+  timestamp: DateTime!
+}
+
+input AppFeedsRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The app address"""
+  app: EvmAddress!
+}
+
+input AppGroupsRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The app address"""
+  app: EvmAddress!
+}
+
+type AppMetadata {
+  """
+  An optional short and detailed description of the app, explaining its features and purpose.
+  """
+  description: String
+
+  """The Developer of the app."""
+  developer: String!
+
+  """The name of the app."""
+  name: String!
+
+  """The tagline of the app."""
+  tagline: String
+
+  """The platforms supported by the app."""
+  platforms: [AppPlatform!]!
+
+  """The privacy policy for the app."""
+  privacyPolicy: URI
+
+  """The terms of service for the app."""
+  termsOfService: URI
+
+  """The url of the app."""
+  url: URI!
+
+  """The logo of the app."""
+  logo(request: MediaImageRequest! = {useOriginal: false}): URI
+}
+
+enum AppPlatform {
+  WEB
+  IOS
+  ANDROID
+}
+
+input AppRequest {
+  """The app"""
+  app: EvmAddress
+
+  """The transaction hash you created the app with."""
+  txHash: TxHash
+}
+
+input AppServerApiKeyRequest {
+  """The app address."""
+  app: EvmAddress!
+}
+
+type AppSigner {
+  signer: EvmAddress!
+  timestamp: DateTime!
+}
+
+input AppSignersFilterRequest {
+  """
+  The optional filter to narrow signers.
+  Uses fuzzy search on signer address
+  """
+  searchQuery: String
+}
+
+enum AppSignersOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+}
+
+input AppSignersRequest {
+  """The app address"""
+  app: EvmAddress!
+  filter: AppSignersFilterRequest
+
+  """The order by."""
+  orderBy: AppSignersOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type AppUser {
+  account: Account!
+  lastActiveOn: DateTime!
+  firstLoginOn: DateTime!
+}
+
+input AppUsersFilterRequest {
+  """The optional filter to narrow app users query"""
+  searchBy: UsernameSearchInput
+}
+
+enum AppUsersOrderBy {
+  ALPHABETICAL
+  ACCOUNT_SCORE
+  BEST_MATCH
+}
+
+input AppUsersRequest {
+  """The App to get users for."""
+  app: EvmAddress!
+  filter: AppUsersFilterRequest
+
+  """The order by."""
+  orderBy: AppUsersOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input ApproveGroupMembershipRequest {
+  """The group you want to add member to."""
+  group: EvmAddress!
+
+  """The accounts you want to approve membership for."""
+  accounts: [EvmAddress!]!
+
+  """The processing params for the add member rules."""
+  rulesProcessingParams: [GroupRulesProcessingParams!]
+}
+
+type ApproveGroupMembershipRequestsResponse {
+  hash: TxHash!
+}
+
+union ApproveGroupMembershipResult = ApproveGroupMembershipRequestsResponse | GroupOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input AppsFilter {
+  """The optional filter to get apps managed by address"""
+  managedBy: ManagedBy
+
+  """The optional filter to get apps linked to feed"""
+  linkedToFeed: EvmAddress
+
+  """The optional filter to get apps linked to graph"""
+  linkedToGraph: EvmAddress
+
+  """The optional filter to get apps linked to sponsorship"""
+  linkedToSponsorship: EvmAddress
+
+  """
+  The optional filter to narrow apps by search query.
+  Uses fuzzy search on app name
+  """
+  searchQuery: String
+}
+
+enum AppsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input AppsRequest {
+  """The optional apps filter"""
+  filter: AppsFilter
+
+  """The order by."""
+  orderBy: AppsOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type AppsResult {
+  items: [App!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+union ArrayData = IntKeyValue | IntNullableKeyValue | AddressKeyValue | StringKeyValue | BooleanKeyValue | RawKeyValue | BigDecimalKeyValue | DictionaryKeyValue
+
+type ArrayKeyValue {
+  key: String!
+  array: [ArrayData!]!
+}
+
+type ArticleMetadata {
+  """Any attachment you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """The content of the article."""
+  content: String!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The optional article title."""
+  title: String
+}
+
+type AssignUsernameResponse {
+  hash: TxHash!
+}
+
+input AssignUsernameToAccountRequest {
+  username: UsernameInput!
+
+  """The processing params for the namespace assign rules."""
+  assignRulesProcessingParams: [NamespaceRulesProcessingParams!]
+
+  """The processing params for the namespace unassign rules from account"""
+  unassignAccountRulesProcessingParams: [NamespaceRulesProcessingParams!]
+
+  """The processing params for the namespace unassign rules from namespace"""
+  unassignUsernameRulesProcessingParams: [NamespaceRulesProcessingParams!]
+}
+
+union AssignUsernameToAccountResult = AssignUsernameResponse | NamespaceOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type AudioMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+  audio: MediaAudio!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The optional audio title."""
+  title: String
+  content: String!
+}
+
+type AuthenticatedSession {
+  authenticationId: UUID!
+  app: EvmAddress!
+  browser: String
+  device: String
+  os: String
+  origin: URL
+  signer: EvmAddress!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  expiresAt: DateTime!
+}
+
+input AuthenticatedSessionsRequest {
+  """
+  You can optionally filter the authentications by the app that created them.
+  """
+  app: EvmAddress
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+type AuthenticationChallenge {
+  id: UUID!
+  text: String!
+}
+
+union AuthenticationResult = AuthenticationTokens | WrongSignerError | ExpiredChallengeError | ForbiddenError
+
+type AuthenticationTokens {
+  """
+  The Access Token to use as a Bearer token in authenticated Lens API requests.
+  """
+  accessToken: AccessToken!
+
+  """
+  The Refresh Token to use to obtain a new tokens triplet without re-authenticating.
+  """
+  refreshToken: RefreshToken!
+  idToken: IdToken!
+}
+
+input BanGroupAccountsRequest {
+  """The group you want to ban member on."""
+  group: EvmAddress!
+
+  """The accounts you want to ban on the group."""
+  accounts: [EvmAddress!]!
+}
+
+type BanGroupAccountsResponse {
+  hash: TxHash!
+}
+
+union BanGroupAccountsResult = BanGroupAccountsResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar BigDecimal
+
+type BigDecimalKeyValue {
+  key: String!
+  bigDecimal: BigDecimal!
+}
+
+scalar BigInt
+
+input BlockRequest {
+  """The account to block."""
+  account: EvmAddress!
+}
+
+union BlockResult = AccountBlockedResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar BlockchainData
+
+input BookmarkPostRequest {
+  post: PostId!
+}
+
+type BooleanKeyValue {
+  key: String!
+  boolean: Boolean!
+}
+
+type BooleanValue {
+  optimistic: Boolean!
+  onChain: Boolean!
+}
+
+input BuilderChallengeRequest {
+  """The builder's address. Most typically the EOA of their wallet."""
+  address: EvmAddress!
+}
+
+union CanCreateUsernameResult = UsernameTaken | NamespaceOperationValidationPassed | NamespaceOperationValidationUnknown | NamespaceOperationValidationFailed
+
+input CanFollowRequest {
+  graph: EvmAddress!
+}
+
+input CanUnfollowRequest {
+  graph: EvmAddress!
+}
+
+input CancelGroupMembershipRequestRequest {
+  """The group you want cancel your membership request for"""
+  group: EvmAddress!
+}
+
+type CancelGroupMembershipRequestResponse {
+  hash: TxHash!
+}
+
+union CancelGroupMembershipRequestResult = CancelGroupMembershipRequestResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar ChainId
+
+"""
+The request to generate a new authentication challenge.
+
+The optional fields are used to specify the role you are authenticating as.
+You can only specify one role at a time.
+"""
+input ChallengeRequest {
+  """Use this to authenticate as a Builder."""
+  builder: BuilderChallengeRequest
+
+  """Use this to authenticate as an Account Manager."""
+  accountManager: AccountManagerChallengeRequest
+
+  """Use this to authenticate as an Account Owner."""
+  accountOwner: AccountOwnerChallengeRequest
+
+  """Use this to authenticate as an Onboarding User."""
+  onboardingUser: OnboardingUserChallengeRequest
+}
+
+type CheckingInMetadata {
+  """The optional address of the location."""
+  address: PhysicalAddress
+
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """Where you're checking in from (free form text)."""
+  location: String!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """The optional geographic position of the location."""
+  position: GeoUri
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+input CollectedBy {
+  """The address of the account that collected the posts."""
+  account: EvmAddress!
+}
+
+type CommentNotification {
+  id: GeneratedNotificationId!
+  comment: Post!
+}
+
+input ConfigureAccountActionRequest {
+  """The action type and configuration."""
+  action: AccountActionConfigInput!
+}
+
+type ConfigureAccountActionResponse {
+  hash: TxHash!
+}
+
+union ConfigureAccountActionResult = ConfigureAccountActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input ConfigurePostActionRequest {
+  """The post to configure the action for."""
+  post: PostId!
+
+  """The post action configuration parameters."""
+  params: PostActionConfigInput!
+}
+
+type ConfigurePostActionResponse {
+  hash: TxHash!
+}
+
+union ConfigurePostActionResult = ConfigurePostActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+enum ContentWarning {
+  NSFW
+  SENSITIVE
+  SPOILER
+}
+
+type CreateAccountResponse {
+  hash: TxHash!
+}
+
+input CreateAccountWithUsernameRequest {
+  """The account metadata uri"""
+  metadataUri: URI!
+
+  """The username you wish to mint with the account"""
+  username: UsernameInput!
+
+  """
+  If you do not supply this it will use the onboarding or builder address, you can use this
+  if your server is onboarding users
+  """
+  owner: EvmAddress
+
+  """Any account managers you wish to add to the account"""
+  accountManager: [EvmAddress!]
+
+  """
+  Enable signless on creation adding the lens API key to the account manager
+  """
+  enableSignless: Boolean! = true
+
+  """The processing params for the username create rules."""
+  createUsernameRuleProcessingParams: [NamespaceRulesProcessingParams!]
+
+  """The processing params for the username assign rules."""
+  assignUsernameRuleProcessingParams: [NamespaceRulesProcessingParams!]
+}
+
+union CreateAccountWithUsernameResult = CreateAccountResponse | UsernameTaken | NamespaceOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateAppRequest {
+  """The app metadata uri"""
+  metadataUri: URI
+
+  """List of admins who can manage this app"""
+  admins: [EvmAddress!]
+
+  """The app default graph"""
+  graph: GraphChoiceOneOf!
+
+  """The app feeds defaults to use the global feed"""
+  feeds: [EvmAddress!]
+
+  """The app default feed"""
+  defaultFeed: FeedChoiceOneOf!
+
+  """The app username namespace"""
+  namespace: UsernameNamespaceChoiceOneOf!
+
+  """The app groups leave empty if none"""
+  groups: [EvmAddress!]
+
+  """
+  Whether the App Verification workflow is enabled.
+  This gives control to approve or reject transactions involving
+  social interactions (e.g., post, follow, comment, etc.) using the app.
+  """
+  verification: Boolean! = false
+
+  """The app signers leave empty if none"""
+  signers: [EvmAddress!]
+
+  """The app sponsorship leave empty if none"""
+  sponsorship: EvmAddress
+
+  """The app treasury leave empty if none"""
+  treasury: EvmAddress
+}
+
+type CreateAppResponse {
+  hash: TxHash!
+}
+
+union CreateAppResult = CreateAppResponse | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateFeedRequest {
+  """The feed metadata uri"""
+  metadataUri: URI
+
+  """List of admins who can manage this feed"""
+  admins: [EvmAddress!]
+
+  """Rules for the feed"""
+  rules: FeedRulesConfigInput
+}
+
+type CreateFeedResponse {
+  hash: TxHash!
+}
+
+union CreateFeedResult = CreateFeedResponse | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateFollowRequest {
+  """The account to follow."""
+  account: EvmAddress!
+
+  """
+  The graph to follow the account on. If not provided, the global graph is used.
+  """
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
+
+  """
+  The data required by any follow rules associated with the account being followed.
+  """
+  followRuleProcessingParams: [AccountFollowRulesProcessingParams!]
+
+  """
+  The data required by the graph rules associated with the specified graph.
+  """
+  graphRulesProcessingParams: [GraphRulesProcessingParams!]
+}
+
+type CreateFrameEIP712TypedData {
+  """The types"""
+  types: CreateFrameEIP712TypedDataTypes!
+
+  """The domain"""
+  domain: Eip712TypedDataDomain!
+
+  """The value"""
+  value: CreateFrameEIP712TypedDataValue!
+}
+
+input CreateFrameEIP712TypedDataInput {
+  """The typed data types"""
+  types: CreateFrameEIP712TypedDataTypesInput!
+
+  """The typed data domain"""
+  domain: Eip712TypedDataDomainInput!
+
+  """The typed data value"""
+  value: FrameEIP712Request!
+}
+
+type CreateFrameEIP712TypedDataTypes {
+  """The frame data"""
+  frameData: [Eip712TypedDataField!]!
+}
+
+input CreateFrameEIP712TypedDataTypesInput {
+  """The frame data"""
+  frameData: [Eip712TypedDataFieldInput!]!
+}
+
+type CreateFrameEIP712TypedDataValue {
+  """The frame spec version"""
+  specVersion: String!
+
+  """The url"""
+  url: URI!
+
+  """The button index"""
+  buttonIndex: Int!
+
+  """The account address"""
+  account: EvmAddress!
+
+  """The post id"""
+  postId: PostId!
+
+  """The input text"""
+  inputText: String!
+
+  """The state"""
+  state: String!
+
+  """The transaction id"""
+  transactionId: String!
+
+  """The app the frame is being executed from"""
+  app: EvmAddress!
+
+  """The deadline the typed data expires"""
+  deadline: Int!
+}
+
+input CreateGraphRequest {
+  """The graph metadata uri"""
+  metadataUri: URI
+
+  """List of admins who can manage this graph"""
+  admins: [EvmAddress!]
+
+  """Rules for the graph"""
+  rules: GraphRulesConfigInput
+}
+
+type CreateGraphResponse {
+  hash: TxHash!
+}
+
+union CreateGraphResult = CreateGraphResponse | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateGroupRequest {
+  """The group metadata uri"""
+  metadataUri: URI
+
+  """Will default to the person creating it if no owner is supplied"""
+  owner: EvmAddress
+
+  """List of admins who can manage this group"""
+  admins: [EvmAddress!]
+
+  """Rules for the group"""
+  rules: GroupRulesConfigInput
+
+  """The group feed configuration"""
+  feed: GroupFeedParams
+}
+
+type CreateGroupResponse {
+  hash: TxHash!
+}
+
+union CreateGroupResult = CreateGroupResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type CreateNamespaceResponse {
+  hash: TxHash!
+}
+
+input CreatePostRequest {
+  """The feed to post to. If not provided, the global feed is used."""
+  feed: EvmAddress! = "0xcB5E109FFC0E15565082d78E68dDDf2573703580"
+
+  """The URI of the post metadata."""
+  contentUri: URI!
+
+  """The processing params for the feed rules."""
+  feedRulesProcessingParams: [FeedRulesProcessingParams!]
+
+  """The post to quote, if any."""
+  quoteOf: ReferencingPostInput
+
+  """The post to comment on, if any."""
+  commentOn: ReferencingPostInput
+
+  """The actions to attach to the post."""
+  actions: [PostActionConfigInput!]
+
+  """Rules for the post"""
+  rules: PostRulesConfigInput
+}
+
+input CreateRepostRequest {
+  """The post to reference."""
+  post: PostId!
+
+  """The processing params for the post rules."""
+  postRulesProcessingParams: [PostRulesProcessingParams!]
+
+  """The processing params for the feed rules."""
+  feedRulesProcessingParams: [FeedRulesProcessingParams!]
+}
+
+input CreateSnsSubscriptionRequest {
+  """
+  The webhook URL to send notifications to. It must be an HTTP or HTTPS URL that is
+  accessible by the Lens API and is owned by you as it will be used to confirm the
+  subscription.
+  """
+  webhook: String!
+
+  """
+  The topics to subscribe to. You can subscribe to multiple topics at once. This cannot be
+  changed once the subscription is created.
+  """
+  topics: [SnsTopicInput!]!
+
+  """The app to optionally assign this subscription to."""
+  app: EvmAddress
+}
+
+input CreateSponsorshipRequest {
+  """The sponsorship metadata URI"""
+  metadataUri: URI
+
+  """List of admins who can manage this sponsorship."""
+  admins: [EvmAddress!]
+
+  """List of sponsorship signers."""
+  signers: [SponsorshipSignerInput!]
+
+  """
+  Indicates whether the Lens API is authorized as the sponsorship signer
+  to sponsor end-user social operations (e.g., posts, comments, follows)
+  performed through the Lens API for apps associated with this sponsorship.
+  """
+  allowLensAccess: Boolean!
+
+  """The sponsorship usage allowances with the corresponding limits."""
+  rateLimit: SponsorshipRateLimitsInput
+
+  """The list of addresses excluded from the sponsorship rate limits."""
+  exclusionList: [SponsorshipRateLimitsExempt!]
+}
+
+type CreateSponsorshipResponse {
+  hash: TxHash!
+}
+
+union CreateSponsorshipResult = CreateSponsorshipResponse | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateUnfollowRequest {
+  """The account to unfollow."""
+  account: EvmAddress!
+
+  """
+  The graph where the account is followed and should be unfollowed.
+  If not provided, the global graph is used.
+  """
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
+
+  """The processing params for the graph rules."""
+  graphRulesProcessingParams: [GraphRulesProcessingParams!]
+}
+
+input CreateUsernameNamespaceRequest {
+  """The feed metadata uri"""
+  metadataUri: URI
+
+  """List of admins who can manage this feed"""
+  admins: [EvmAddress!]
+
+  """
+  The namespace for example for lens this would be lens, and it means that the usernames will
+  be like lens/username
+  """
+  namespace: String!
+
+  """The namespace NFT collection ERC721 symbol"""
+  symbol: String!
+  rules: NamespaceRulesConfigInput
+}
+
+union CreateUsernameNamespaceResult = CreateNamespaceResponse | SelfFundedTransactionRequest | TransactionWillFail
+
+input CreateUsernameRequest {
+  username: UsernameInput!
+
+  """If you want to auto assign the username to the account default is true"""
+  autoAssign: Boolean! = true
+
+  """The processing params for the namespace create rules."""
+  createUsernameRulesProcessingParams: [NamespaceRulesProcessingParams!]
+
+  """The processing params for the namespace assign rules from account"""
+  assignAccountNamespaceRulesProcessingParams: [NamespaceRulesProcessingParams!]
+
+  """The processing params for the namespace unassign rules from namespace"""
+  unassignUsernameNamespaceRulesProcessingParams: [NamespaceRulesProcessingParams!]
+}
+
+type CreateUsernameResponse {
+  hash: TxHash!
+}
+
+union CreateUsernameResult = CreateUsernameResponse | UsernameTaken | NamespaceOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar Cursor
+
+scalar DateTime
+
+input DebugPostMetadataRequest {
+  rawUri: URI
+  json: String
+  source: EntityType!
+}
+
+type DebugPostMetadataResult {
+  valid: Boolean!
+  reason: String
+}
+
+input DeletePostRequest {
+  """The post to delete."""
+  post: PostId!
+
+  """The processing params for the feed rules."""
+  feedRulesProcessingParams: [FeedRulesProcessingParams!]
+}
+
+type DeletePostResponse {
+  hash: TxHash!
+}
+
+union DeletePostResult = DeletePostResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input DeleteSnsSubscriptionRequest {
+  id: UUID!
+}
+
+input DepositRequest {
+  erc20: AmountInput
+  native: BigDecimal
+}
+
+union DepositResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | InsufficientFunds | TransactionWillFail
+
+type DictionaryKeyValue {
+  key: String!
+  dictionary: [PrimitiveData!]!
+}
+
+input DisableAccountActionRequest {
+  unknown: UnknownActionConfigInput
+}
+
+type DisableAccountActionResponse {
+  hash: TxHash!
+}
+
+union DisableAccountActionResult = DisableAccountActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input DisablePostActionParams {
+  simpleCollect: AlwaysTrue
+  unknown: UnknownActionConfigInput
+}
+
+input DisablePostActionRequest {
+  action: DisablePostActionParams!
+
+  """The target post."""
+  post: PostId!
+}
+
+type DisablePostActionResponse {
+  hash: TxHash!
+}
+
+union DisablePostActionResult = DisablePostActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input DismissRecommendedAccountsRequest {
+  accounts: [EvmAddress!]!
+}
+
+input EditPostRequest {
+  post: PostId!
+  contentUri: URI!
+
+  """The processing params for the feed rules."""
+  feedRulesProcessingParams: [FeedRulesProcessingParams!]
+
+  """
+  The processing params for the parent post (if post edited is a comment or quote)
+  """
+  parentPostRulesProcessingParams: [PostRulesProcessingParams!]
+}
+
+type Eip1559TransactionRequest {
+  """The transaction type: 2 for EIP-1559 transactions."""
+  type: Int!
+
+  """The target of the transaction."""
+  to: EvmAddress!
+
+  """The sender of the transaction."""
+  from: EvmAddress!
+
+  """The nonce of the transaction, used to prevent replay attacks."""
+  nonce: Int!
+
+  """The maximum amount of gas to allow this transaction to consume."""
+  gasLimit: Int!
+
+  """The maximum priority fee to pay per gas."""
+  maxPriorityFeePerGas: BigInt!
+
+  """
+  The maximum total fee to pay per gas. The actual
+  value used is protocol enforced to be the block's base fee.
+  """
+  maxFeePerGas: BigInt!
+
+  """The transaction data."""
+  data: BlockchainData!
+
+  """The transaction value (in wei)."""
+  value: BigInt!
+
+  """The chain ID for the network this transaction is valid on."""
+  chainId: Int!
+}
+
+"""Contains EIP-712 transaction metadata."""
+type Eip712Meta {
+  """
+  The maximum amount of gas the user is willing to pay for a single byte of pubdata.
+  """
+  gasPerPubdata: BigInt!
+
+  """
+  An array of bytes containing the bytecode of the contract being deployed and any related
+  contracts it can deploy.
+  """
+  factoryDeps: [BlockchainData!]!
+
+  """
+  Custom signature used for cases where the signer's account is not an EOA.
+  """
+  customSignature: BlockchainData
+
+  """Parameters for configuring the custom paymaster for the transaction."""
+  paymasterParams: PaymasterParams
+}
+
+type Eip712TransactionRequest {
+  """The transaction type: 113 for EIP-712 transactions."""
+  type: Int!
+
+  """The target of the transaction."""
+  to: EvmAddress!
+
+  """The sender of the transaction."""
+  from: EvmAddress!
+
+  """The nonce of the transaction, used to prevent replay attacks."""
+  nonce: Int!
+
+  """The maximum amount of gas to allow this transaction to consume."""
+  gasLimit: Int!
+
+  """The maximum priority fee to pay per gas."""
+  maxPriorityFeePerGas: BigInt!
+
+  """
+  The maximum total fee to pay per gas. The actual
+  value used is protocol enforced to be the block's base fee.
+  """
+  maxFeePerGas: BigInt!
+
+  """The transaction data."""
+  data: BlockchainData!
+
+  """The transaction value (in wei)."""
+  value: BigInt!
+
+  """The chain ID for the network this transaction is valid on."""
+  chainId: Int!
+
+  """The custom data for EIP-712 transaction metadata."""
+  customData: Eip712Meta!
+}
+
+type Eip712TypedDataDomain {
+  """The name of the domain"""
+  name: String!
+
+  """The chain id"""
+  chainId: Int!
+
+  """The version of the domain"""
+  version: String!
+
+  """The verifying contract"""
+  verifyingContract: EvmAddress!
+}
+
+input Eip712TypedDataDomainInput {
+  """The name of the domain"""
+  name: String!
+
+  """The chain id"""
+  chainId: Int!
+
+  """The version of the domain"""
+  version: String!
+
+  """The verifying contract"""
+  verifyingContract: EvmAddress!
+}
+
+type Eip712TypedDataField {
+  """The name of the field"""
+  name: String!
+
+  """The type of the field"""
+  type: String!
+}
+
+input Eip712TypedDataFieldInput {
+  """The name of the field"""
+  name: String!
+
+  """The type of the field"""
+  type: String!
+}
+
+type EmbedMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+
+  """The embed URL."""
+  embed: URI!
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+input EnableAccountActionRequest {
+  unknown: UnknownActionConfigInput
+}
+
+type EnableAccountActionResponse {
+  hash: TxHash!
+}
+
+union EnableAccountActionResult = EnableAccountActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input EnablePostActionParams {
+  simpleCollect: AlwaysTrue
+  unknown: UnknownActionConfigInput
+}
+
+input EnablePostActionRequest {
+  action: EnablePostActionParams!
+
+  """The target post."""
+  post: PostId!
+}
+
+type EnablePostActionResponse {
+  hash: TxHash!
+}
+
+union EnablePostActionResult = EnablePostActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+union EnableSignlessResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input EntityId {
+  account: EvmAddress
+  graph: EvmAddress
+  feed: EvmAddress
+  usernameNamespace: EvmAddress
+  group: EvmAddress
+  post: PostId
+  app: EvmAddress
+  sponsorship: EvmAddress
+  accountAction: EvmAddress
+  postAction: EvmAddress
+}
+
+enum EntityType {
+  ACCOUNT
+  GRAPH
+  FEED
+  USERNAME_NAMESPACE
+  GROUP
+  POST
+  APP
+  SPONSORSHIP
+  ACCOUNT_ACTION
+  POST_ACTION
+  RULE
+}
+
+type Erc20 {
+  """The name of the token."""
+  name: String!
+
+  """The symbol of the token."""
+  symbol: String!
+
+  """The number of decimals the token uses."""
+  decimals: Int!
+
+  """The contract address of the token."""
+  contract: NetworkAddress!
+}
+
+type Erc20Amount {
+  """The ERC-20 token info."""
+  asset: Erc20!
+
+  """
+  Token value in its main unit (e.g., 1.5 DAI), not in the smallest fraction (e.g.,
+  wei).
+  """
+  value: BigDecimal!
+}
+
+type Erc20BalanceError {
+  """The reason for the failure."""
+  reason: String!
+
+  """The token for which the balance retrieval failed."""
+  token: EvmAddress!
+}
+
+type EventLocation {
+  physical: String
+  virtual: URI
+}
+
+type EventMetadata {
+  """The address of the event."""
+  address: PhysicalAddress
+
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+
+  """The event end time (ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ`)."""
+  endsAt: DateTime!
+  id: MetadataId!
+
+  """The links you want to include with it."""
+  links: [URI!]!
+  locale: Locale!
+
+  """The location of the event."""
+  location: EventLocation!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """The geographic position of the event."""
+  position: GeoUri
+  schedulingAdjustments: EventSchedulingAdjustments
+
+  """The event start time (ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ`)."""
+  startsAt: DateTime!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The title of the event."""
+  title: String
+  content: String!
+}
+
+type EventSchedulingAdjustments {
+  """
+  Indicates a reference timezone for the event start and end times. If physical event, you
+  could use the timezone of the event location. If virtual event, the timezone of the event
+  organizer.
+  """
+  timezoneId: TimezoneId!
+  timezoneOffset: Float!
+}
+
+scalar EvmAddress
+
+input ExecuteAccountActionRequest {
+  """The target account to execute the action on."""
+  account: EvmAddress!
+
+  """The action params."""
+  action: AccountActionExecuteInput!
+}
+
+type ExecuteAccountActionResponse {
+  hash: TxHash!
+}
+
+union ExecuteAccountActionResult = ExecuteAccountActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input ExecutePostActionRequest {
+  """The target post to execute the action on."""
+  post: PostId!
+
+  """The action params."""
+  action: PostActionExecuteInput!
+}
+
+type ExecutePostActionResponse {
+  hash: TxHash!
+}
+
+union ExecutePostActionResult = ExecutePostActionResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input ExecutedUnknownActionRequest {
+  address: EvmAddress!
+}
+
+"""The challenge has expired or was not found."""
+type ExpiredChallengeError {
+  reason: String!
+}
+
+"""
+The transaction has failed to be mined or indexed.
+
+The reason for the failure is provided.
+"""
+type FailedTransactionStatus {
+  reason: String!
+  blockTimestamp: DateTime!
+  summary: [SubOperationStatus!]!
+}
+
+type Feed {
+  address: EvmAddress!
+  createdAt: DateTime!
+  metadata: FeedMetadata
+  owner: EvmAddress!
+  operations: LoggedInFeedPostOperations
+  rules: FeedRules!
+}
+
+input FeedChoiceOneOf {
+  globalFeed: AlwaysTrue
+  custom: EvmAddress
+  none: AlwaysTrue
+}
+
+type FeedMetadata {
+  """Optional markdown formatted description of the Feed."""
+  description: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+
+  """The name of the Feed."""
+  name: String!
+}
+
+input FeedOneOf {
+  globalFeed: AlwaysTrue
+  feed: EvmAddress
+  app: EvmAddress
+}
+
+type FeedOperationValidationFailed {
+  unsatisfiedRules: FeedUnsatisfiedRules
+  reason: String!
+}
+
+union FeedOperationValidationOutcome = FeedOperationValidationPassed | FeedOperationValidationUnknown | FeedOperationValidationFailed
+
+type FeedOperationValidationPassed {
+  passed: AlwaysTrue!
+}
+
+type FeedOperationValidationUnknown {
+  extraChecksRequired: [FeedRule!]!
+}
+
+input FeedRequest {
+  """The feed"""
+  feed: EvmAddress
+
+  """The transaction hash you created the feed with."""
+  txHash: TxHash
+}
+
+type FeedRule {
+  id: RuleId!
+  type: FeedRuleType!
+  address: EvmAddress!
+  executesOn: [FeedRuleExecuteOn!]!
+  config: [AnyKeyValue!]!
+}
+
+input FeedRuleConfig {
+  groupGatedRule: GroupGatedFeedRuleConfig
+  tokenGatedRule: TokenGatedFeedRuleConfig
+  simplePaymentRule: SimplePaymentFeedRuleConfig
+  unknownRule: UnknownFeedRuleConfig
+}
+
+enum FeedRuleExecuteOn {
+  CREATING_POST
+  EDITING_POST
+  DELETING_POST
+  CHANGING_POST_RULE
+}
+
+enum FeedRuleType {
+  TOKEN_GATED
+  RESTRICTED_SIGNERS
+  ACCOUNT_BLOCKING
+  SIMPLE_PAYMENT
+  GROUP_GATED
+  UNKNOWN
+}
+
+enum FeedRuleUnsatisfiedReason {
+  GROUP_GATED_NOT_A_MEMBER
+  TOKEN_GATED_NOT_A_TOKEN_HOLDER
+  ACCOUNT_BLOCKED
+  SIMPLE_PAYMENT_NOT_ENOUGH_BALANCE
+}
+
+type FeedRules {
+  required: [FeedRule!]!
+  anyOf: [FeedRule!]!
+}
+
+input FeedRulesConfigInput {
+  required: [FeedRuleConfig!]! = []
+  anyOf: [FeedRuleConfig!]! = []
+}
+
+input FeedRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+type FeedUnsatisfiedRule {
+  rule: EvmAddress!
+  reason: FeedRuleUnsatisfiedReason!
+  message: String!
+  config: [AnyKeyValue!]!
+}
+
+type FeedUnsatisfiedRules {
+  required: [FeedUnsatisfiedRule!]!
+  anyOf: [FeedUnsatisfiedRule!]!
+}
+
+input FeedsFilter {
+  """The optional filter to get feeds managed by address"""
+  managedBy: ManagedBy
+
+  """
+  The optional filter to narrow feeds by search query.
+  Uses fuzzy search on feed name
+  """
+  searchQuery: String
+}
+
+enum FeedsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input FeedsRequest {
+  filter: FeedsFilter
+
+  """The order by."""
+  orderBy: FeedsOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+"""
+The transaction has been mined and indexed correctly.
+
+If the transaction involves any metadata, the metadata has been snapshotted and indexed.
+"""
+type FinishedTransactionStatus {
+  blockTimestamp: DateTime!
+  summary: [SubOperationStatus!]!
+}
+
+scalar FixedBytes32
+
+input FixedSizeTransform {
+  width: Int!
+  height: Int!
+}
+
+type FollowNotification {
+  id: GeneratedNotificationId!
+  followers: [NotificationAccountFollow!]!
+}
+
+input FollowPair {
+  """The graph you are checking defaults to global graph."""
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
+
+  """The follower."""
+  follower: EvmAddress!
+
+  """The account being followed."""
+  account: EvmAddress!
+}
+
+type FollowResponse {
+  hash: TxHash!
+}
+
+union FollowResult = FollowResponse | AccountFollowOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input FollowStatusRequest {
+  pairs: [FollowPair!]!
+}
+
+type FollowStatusResult {
+  graph: EvmAddress!
+  follower: EvmAddress!
+  account: EvmAddress!
+  isFollowing: BooleanValue!
+}
+
+type Follower {
+  """The account which is following"""
+  follower: Account!
+
+  """The graph the follower is following on"""
+  graph: EvmAddress!
+
+  """The timestamp when the follower was followed"""
+  followedOn: DateTime!
+}
+
+type FollowerOn {
+  globalGraph: Boolean!
+  graph: EvmAddress!
+}
+
+input FollowerOnInput {
+  globalGraph: AlwaysTrue
+  graph: EvmAddress
+}
+
+input FollowersFilter {
+  """
+  The graphs to filter by.
+  The result will come back if they follow on ANY of the supplied graphs
+  """
+  graphs: [GraphOneOf!]
+}
+
+input FollowersOnlyPostRuleConfig {
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
+  repliesRestricted: Boolean! = true
+  repostRestricted: Boolean! = true
+  quotesRestricted: Boolean! = true
+}
+
+enum FollowersOrderBy {
+  DESC
+  ASC
+  ACCOUNT_SCORE
+}
+
+input FollowersRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The account to get followers for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the result."""
+  filter: FollowersFilter
+
+  """The order by."""
+  orderBy: FollowersOrderBy! = ACCOUNT_SCORE
+}
+
+input FollowersYouKnowFilter {
+  """
+  The graphs to get followers you know for
+  The result will come back if they follow on ANY of the supplied graphs
+  """
+  graphs: [GraphOneOf!]
+}
+
+enum FollowersYouKnowOrderBy {
+  DESC
+  ASC
+}
+
+input FollowersYouKnowRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The account to check followers you know."""
+  target: EvmAddress!
+
+  """The account you are looking from."""
+  observer: EvmAddress!
+
+  """An optional filter to apply to the result."""
+  filter: FollowersYouKnowFilter
+
+  """The order by."""
+  orderBy: FollowersYouKnowOrderBy! = DESC
+}
+
+type Following {
+  """The account which is following"""
+  following: Account!
+
+  """The graph the account is following on"""
+  graph: EvmAddress!
+
+  """The timestamp when the following happened"""
+  followedOn: DateTime!
+}
+
+input FollowingFilter {
+  """
+  The graphs to filter by.
+  The result will come back if they are following on ANY of the supplied graphs
+  """
+  graphs: [GraphOneOf!]
+}
+
+enum FollowingOrderBy {
+  DESC
+  ASC
+  ACCOUNT_SCORE
+}
+
+input FollowingRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """The account to get following for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the result."""
+  filter: FollowingFilter
+
+  """The order by."""
+  orderBy: FollowingOrderBy! = DESC
+}
+
+enum ForYouSource {
+  FOLLOWING
+  CURATED
+  POPULAR
+  EXTENDED_NETWORK
+}
+
+type ForbiddenError {
+  reason: String!
+}
+
+input FrameEIP712Request {
+  """The frame spec version"""
+  specVersion: String!
+
+  """The url"""
+  url: URI!
+
+  """The button index"""
+  buttonIndex: Int!
+
+  """The account address"""
+  account: EvmAddress!
+
+  """The post id"""
+  post: PostId!
+
+  """The input text"""
+  inputText: String!
+
+  """The state"""
+  state: String!
+
+  """The transaction id"""
+  transactionId: String!
+
+  """The app the frame is being executed from"""
+  app: EvmAddress!
+
+  """The deadline the typed data expires"""
+  deadline: Int!
+}
+
+type FrameLensManagerSignatureResult {
+  """The signed typed data"""
+  signedTypedData: CreateFrameEIP712TypedData!
+
+  """The signature"""
+  signature: Signature!
+}
+
+input FrameVerifySignature {
+  """The signed typed data"""
+  signedTypedData: CreateFrameEIP712TypedDataInput!
+
+  """The signature"""
+  signature: Signature!
+
+  """The identity token"""
+  identityToken: IdToken!
+}
+
+enum FrameVerifySignatureResult {
+  """The frame was verified"""
+  VERIFIED
+
+  """The post does not exist"""
+  POST_DOESNT_EXIST
+
+  """The identity token is not authorized to use the frame"""
+  IDENTITY_UNAUTHORIZED
+
+  """
+  The identity token is not a valid identity token used with an account authentication
+  """
+  IDENTITY_TOKEN_NOT_VALID
+
+  """The typed data types is not in the correct format"""
+  TYPED_DATA_TYPES_INCORRECT_FIELDS
+
+  """The typed data domain is not in the correct format"""
+  TYPED_DATA_DOMAIN_INCORRECT
+
+  """The typed data account is not matching the identity token account"""
+  TYPED_DATA_ACCOUNT_NOT_MATCHING_IDENTITY_TOKEN
+
+  """The identity token is not a valid identity token"""
+  IDENTITY_CANNOT_USE_ACCOUNT
+
+  """The signature is not valid"""
+  SIGNATURE_NOT_VALID
+
+  """The deadline has expired"""
+  DEADLINE_EXPIRED
+
+  """The signer address cannot use the account"""
+  SIGNER_ADDRESS_CANNOT_USE_ACCOUNT
+}
+
+input GenerateNewAppServerApiKeyRequest {
+  """The app to generate the new server side api key for"""
+  app: EvmAddress!
+}
+
+scalar GeneratedNotificationId
+
+scalar GeoUri
+
+input GetSnsSubscriptionsRequest {
+  """
+  The app to get subscriptions for. If not provided, all subscriptions owned by the logged in
+  account will be returned.
+  """
+  app: EvmAddress
+}
+
+scalar GrantId
+
+type Graph {
+  address: EvmAddress!
+  createdAt: DateTime!
+  metadata: GraphMetadata
+  owner: EvmAddress!
+  rules: GraphRules!
+}
+
+input GraphChoiceOneOf {
+  globalGraph: AlwaysTrue
+  custom: EvmAddress
+  none: AlwaysTrue
+}
+
+type GraphMetadata {
+  """Optional markdown formatted description of the graph."""
+  description: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+
+  """The name of the graph."""
+  name: String!
+}
+
+input GraphOneOf {
+  globalGraph: AlwaysTrue
+  graph: EvmAddress
+  app: EvmAddress
+}
+
+input GraphRequest {
+  """The graph"""
+  graph: EvmAddress
+
+  """The transaction hash you created the graph with."""
+  txHash: TxHash
+}
+
+type GraphRule {
+  id: RuleId!
+  type: GraphRuleType!
+  address: EvmAddress!
+  executesOn: [GraphRuleExecuteOn!]!
+  config: [AnyKeyValue!]!
+}
+
+input GraphRuleConfig {
+  groupGatedRule: GroupGatedGraphRuleConfig
+  tokenGatedRule: TokenGatedGraphRuleConfig
+  unknownRule: UnknownGraphRuleConfig
+}
+
+enum GraphRuleExecuteOn {
+  FOLLOWING
+  UNFOLLOWING
+  CHANGING_FOLLOW_RULES
+}
+
+enum GraphRuleType {
+  TOKEN_GATED
+  ACCOUNT_BLOCKING
+  GROUP_GATED
+  UNKNOWN
+}
+
+type GraphRules {
+  required: [GraphRule!]!
+  anyOf: [GraphRule!]!
+}
+
+input GraphRulesConfigInput {
+  required: [GraphRuleConfig!]! = []
+  anyOf: [GraphRuleConfig!]! = []
+}
+
+input GraphRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+input GraphsFilter {
+  """The optional filter to get graphs managed by address"""
+  managedBy: ManagedBy
+
+  """
+  The optional filter to narrow graphs by search query.
+  Uses fuzzy search on graph name
+  """
+  searchQuery: String
+}
+
+enum GraphsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input GraphsRequest {
+  filter: GraphsFilter
+
+  """The order by."""
+  orderBy: GraphsOrderBy! = LATEST_FIRST
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type Group {
+  address: EvmAddress!
+  timestamp: DateTime!
+  feed: Feed
+  metadata: GroupMetadata
+  owner: EvmAddress!
+  operations: LoggedInGroupOperations
+
+  """Returns true if the group has banning rule enabled"""
+  banningEnabled: Boolean!
+
+  """Returns true if the group has membership approval rule enabled"""
+  membershipApprovalEnabled: Boolean!
+  rules: GroupRules!
+}
+
+type GroupBannedAccount {
+  ruleId: RuleId!
+  account: Account!
+  bannedBy: Account!
+  lastActiveAt: DateTime!
+  bannedAt: DateTime!
+}
+
+input GroupBannedAccountsFilter {
+  """The optional filter to narrow banned accounts by search query."""
+  searchBy: UsernameSearchInput
+}
+
+enum GroupBannedAccountsOrderBy {
+  LAST_BANNED
+  FIRST_BANNED
+  LAST_ACTIVE
+  ACCOUNT_SCORE
+}
+
+input GroupBannedAccountsRequest {
+  """The group"""
+  group: EvmAddress!
+  filter: GroupBannedAccountsFilter
+
+  """The order by."""
+  orderBy: GroupBannedAccountsOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input GroupFeedParams {
+  """The feed metadata uri"""
+  metadataUri: URI
+
+  """
+  Rules for the feed
+  Note: Group feed has GroupGated rule set by default
+  """
+  rules: FeedRulesConfigInput
+
+  """Whether replies are restricted to group members."""
+  repliesRestricted: Boolean! = true
+}
+
+input GroupGatedFeedRuleConfig {
+  """The group one must be a member of to post."""
+  group: EvmAddress!
+
+  """Whether replies are restricted to group members."""
+  repliesRestricted: Boolean! = true
+}
+
+input GroupGatedGraphRuleConfig {
+  group: EvmAddress!
+}
+
+type GroupMember {
+  account: Account!
+  lastActiveAt: DateTime!
+  joinedAt: DateTime!
+}
+
+input GroupMembersFilter {
+  """The optional filter to narrow members by search query."""
+  searchBy: UsernameSearchInput
+}
+
+enum GroupMembersOrderBy {
+  LAST_JOINED
+  FIRST_JOINED
+  LAST_ACTIVE
+  ACCOUNT_SCORE
+}
+
+input GroupMembersRequest {
+  """The group"""
+  group: EvmAddress!
+  filter: GroupMembersFilter
+
+  """The order by."""
+  orderBy: GroupMembersOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type GroupMembershipRequest {
+  ruleId: RuleId!
+  account: Account!
+  lastActiveAt: DateTime!
+  requestedAt: DateTime!
+}
+
+type GroupMembershipRequestApprovedNotification {
+  id: GeneratedNotificationId!
+  group: Group!
+  approvedBy: Account!
+  approvedAt: DateTime!
+}
+
+type GroupMembershipRequestRejectedNotification {
+  id: GeneratedNotificationId!
+  group: Group!
+  rejectedBy: Account!
+  rejectedAt: DateTime!
+}
+
+input GroupMembershipRequestsFilter {
+  """The optional filter to narrow members by search query."""
+  searchBy: UsernameSearchInput
+}
+
+enum GroupMembershipRequestsOrderBy {
+  LAST_REQUESTED
+  FIRST_REQUESTED
+  LAST_ACTIVE
+  ACCOUNT_SCORE
+}
+
+input GroupMembershipRequestsRequest {
+  """The group"""
+  group: EvmAddress!
+  filter: GroupMembershipRequestsFilter
+
+  """The order by."""
+  orderBy: GroupMembershipRequestsOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type GroupMention {
+  """The group that was mentioned"""
+  group: EvmAddress
+
+  """
+  The replacement information.
+  Use to replace mentions in the post content.
+  """
+  replace: MentionReplace
+}
+
+type GroupMetadata {
+  """Optional markdown formatted description of the Community."""
+  description: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+  icon(request: MediaImageRequest! = {useOriginal: false}): URI
+
+  """The name of the Community."""
+  name: String!
+  coverPicture(request: MediaImageRequest! = {useOriginal: false}): URI
+}
+
+type GroupOperationValidationFailed {
+  unsatisfiedRules: GroupUnsatisfiedRules
+  reason: String!
+}
+
+union GroupOperationValidationOutcome = GroupOperationValidationPassed | GroupOperationValidationUnknown | GroupOperationValidationFailed
+
+type GroupOperationValidationPassed {
+  passed: AlwaysTrue!
+}
+
+type GroupOperationValidationUnknown {
+  extraChecksRequired: [GroupRule!]!
+}
+
+input GroupRequest {
+  """The group"""
+  group: EvmAddress
+
+  """The transaction hash you created the group with."""
+  txHash: TxHash
+}
+
+type GroupRule {
+  id: RuleId!
+  type: GroupRuleType!
+  address: EvmAddress!
+  executesOn: [GroupRuleExecuteOn!]!
+  config: [AnyKeyValue!]!
+}
+
+input GroupRuleConfig {
+  membershipApprovalRule: MembershipApprovalGroupRuleConfig
+  tokenGatedRule: TokenGatedGroupRuleConfig
+  simplePaymentRule: SimplePaymentGroupRuleConfig
+  unknownRule: UnknownGroupRuleConfig
+}
+
+enum GroupRuleExecuteOn {
+  ADDING
+  REMOVING
+  JOINING
+  LEAVING
+}
+
+enum GroupRuleType {
+  ADDITION_REMOVAL_PID
+  TOKEN_GATED
+  SIMPLE_PAYMENT
+  MEMBERSHIP_APPROVAL
+  BAN_ACCOUNT
+  UNKNOWN
+}
+
+enum GroupRuleUnsatisfiedReason {
+  TOKEN_GATED_ACCOUNT_JOINING_NOT_A_TOKEN_HOLDER
+  TOKEN_GATED_ACCOUNT_REMOVAL_STILL_TOKEN_HOLDER
+  SIMPLE_PAYMENT_NOT_ENOUGH_BALANCE
+  MEMBERSHIP_APPROVAL_REQUIRED
+  ACCOUNT_BANNED
+}
+
+type GroupRules {
+  required: [GroupRule!]!
+  anyOf: [GroupRule!]!
+}
+
+input GroupRulesConfigInput {
+  required: [GroupRuleConfig!]! = []
+  anyOf: [GroupRuleConfig!]! = []
+}
+
+input GroupRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+input GroupStatsRequest {
+  """The group address to check its total members."""
+  group: EvmAddress!
+}
+
+type GroupStatsResponse {
+  totalMembers: Int!
+}
+
+type GroupUnsatisfiedRule {
+  rule: EvmAddress!
+  reason: GroupRuleUnsatisfiedReason!
+  message: String!
+  config: [AnyKeyValue!]!
+}
+
+type GroupUnsatisfiedRules {
+  required: [GroupUnsatisfiedRule!]!
+  anyOf: [GroupUnsatisfiedRule!]!
+}
+
+input GroupsFilter {
+  """The optional filter to get groups where account is a member"""
+  member: EvmAddress
+
+  """The optional filter to get groups managed by address"""
+  managedBy: ManagedBy
+
+  """
+  The optional filter to narrow groups by search query.
+  Uses fuzzy search on group name
+  """
+  searchQuery: String
+}
+
+enum GroupsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input GroupsRequest {
+  filter: GroupsFilter
+
+  """The order by."""
+  orderBy: GroupsOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input HasReactedRequest {
+  type: PostReactionType
+}
+
+input HeightBasedTransform {
+  height: Int!
+}
+
+input HideManagedAccountRequest {
+  """The account to hide."""
+  account: EvmAddress!
+}
+
+input HideReplyRequest {
+  post: PostId!
+}
+
+scalar IdToken
+
+type ImageMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  image: MediaImage!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The optional image title."""
+  title: String
+  content: String!
+}
+
+"""The image transformation to apply to the image."""
+input ImageTransform {
+  fixedSize: FixedSizeTransform
+  widthBased: WidthBasedTransform
+  heightBased: HeightBasedTransform
+}
+
+enum IndexingStatus {
+  FINISHED
+  PENDING
+  FAILED
+}
+
+type InsufficientFunds {
+  reason: String!
+}
+
+type IntKeyValue {
+  key: String!
+  int: Int!
+}
+
+type IntNullableKeyValue {
+  key: String!
+  optionalInt: Int
+}
+
+input IsFollowedByMeRequest {
+  graph: EvmAddress!
+}
+
+input IsFollowingMeRequest {
+  graph: EvmAddress!
+}
+
+"""A scalar that can represent any JSON value."""
+scalar JSON
+
+input JoinGroupRequest {
+  """The group you want to join"""
+  group: EvmAddress!
+
+  """The processing params for the join rules."""
+  rulesProcessingParams: [GroupRulesProcessingParams!]
+}
+
+type JoinGroupResponse {
+  hash: TxHash!
+}
+
+union JoinGroupResult = JoinGroupResponse | GroupOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar JsonString
+
+type KeyValuePair {
+  """A unique 32 bytes long hexadecimal string key."""
+  key: FixedBytes32!
+
+  """The human-readable name of the parameter."""
+  name: String!
+
+  """The human-readable ABI description of the parameter."""
+  type: String!
+}
+
+input LastLoggedInAccountRequest {
+  """The address to get the last logged in account for."""
+  address: EvmAddress!
+
+  """The app to get the last logged in account for."""
+  app: EvmAddress
+}
+
+input LeaveGroupRequest {
+  """The group you want to leave"""
+  group: EvmAddress!
+
+  """The processing params for the leave rules."""
+  rulesProcessingParams: [GroupRulesProcessingParams!]
+}
+
+type LeaveGroupResponse {
+  hash: TxHash!
+}
+
+union LeaveGroupResult = LeaveGroupResponse | GroupOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar LegacyProfileId
+
+scalar LegacyPublicationId
+
+scalar LegacyRefreshToken
+
+input LengthAmountPair {
+  length: Int!
+  amount: BigDecimal!
+}
+
+type LinkMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """The sharing link url."""
+  sharingLink: URI!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+type LivestreamMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """
+  The data cannot be changed so you can put in an API endpoint to know if it is still live or
+  not for clients to be able to check.
+  """
+  checkLiveApi: URI
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+
+  """The optional stream end time (ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ`)"""
+  endsAt: DateTime
+  id: MetadataId!
+
+  """
+  Some livestream platforms have the live url as a separate url. If not your case make sure
+  `liveUrl` and `playbackUrl` are the same.
+  """
+  liveUrl: URI!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """
+  Some livestream platforms have the playback url as a separate url. If not your case make
+  sure `liveUrl` and `playbackUrl` are the same.
+  """
+  playbackUrl: URI!
+
+  """The stream start time (ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ`)."""
+  startsAt: DateTime!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The livestream title."""
+  title: String
+  content: String!
+}
+
+scalar Locale
+
+type LoggedInAccountOperations {
+  id: ID!
+
+  """
+  Check if the target account is followed by the authenticated account.
+  
+  If a graph is not specified it defaults to using the Global Graph
+  """
+  isFollowedByMe(request: IsFollowedByMeRequest): Boolean!
+
+  """
+  Check if the authenticated account is following the target account.
+  
+  If a graph is not specified it defaults to using the Global Graph
+  """
+  isFollowingMe(request: IsFollowingMeRequest): Boolean!
+
+  """
+  Check if the authenticated account can follow the target account.
+  
+  If a graph is not specified it defaults to using the Global Graph
+  """
+  canFollow(request: CanFollowRequest): AccountFollowOperationValidationOutcome!
+
+  """
+  Check if the authenticated account can unfollow the target account.
+  
+  If a graph is not specified it defaults to using the Global Graph
+  """
+  canUnfollow(request: CanUnfollowRequest): AccountFollowOperationValidationOutcome!
+  isMutedByMe: Boolean!
+  isBlockedByMe: Boolean!
+  hasBlockedMe: Boolean!
+  canBlock: Boolean!
+  canUnblock: Boolean!
+  hasReported: Boolean!
+}
+
+type LoggedInFeedPostOperations {
+  id: ID!
+  canPost: FeedOperationValidationOutcome!
+}
+
+type LoggedInGroupOperations {
+  id: ID!
+  canJoin: GroupOperationValidationOutcome!
+  canLeave: GroupOperationValidationOutcome!
+  canAddMember: GroupOperationValidationOutcome!
+  canRemoveMember: GroupOperationValidationOutcome!
+  isMember: Boolean!
+  isBanned: Boolean!
+  hasRequestedMembership: Boolean!
+}
+
+type LoggedInPostOperations {
+  id: ID!
+  isNotInterested: Boolean!
+  hasBookmarked: Boolean!
+  hasReported: Boolean!
+  hasReacted(request: HasReactedRequest): Boolean!
+  canComment: PostOperationValidationOutcome!
+  canQuote: PostOperationValidationOutcome!
+  canRepost: PostOperationValidationOutcome!
+  hasCommented: BooleanValue!
+  hasQuoted: BooleanValue!
+  hasReposted: BooleanValue!
+  canEdit: PostOperationValidationOutcome!
+  canDelete: PostOperationValidationOutcome!
+  canTip: Boolean!
+  canSimpleCollect: SimpleCollectValidationOutcome!
+  executedUnknownActionCount(request: ExecutedUnknownActionRequest!): Int!
+  hasExecutedUnknownAction(request: ExecutedUnknownActionRequest!): Boolean!
+  simpleCollectCount: Int!
+  hasSimpleCollected: Boolean!
+  postTipCount: Int!
+  hasTipped: Boolean!
+  lastTip: PostTip
+}
+
+type LoggedInUsernameNamespaceOperations {
+  id: ID!
+  canCreate: NamespaceOperationValidationOutcome!
+}
+
+type LoggedInUsernameOperations {
+  id: ID!
+  canRemove: NamespaceOperationValidationOutcome!
+  canAssign: NamespaceOperationValidationOutcome!
+  canUnassign: NamespaceOperationValidationOutcome!
+}
+
+enum MainContentFocus {
+  ARTICLE
+  AUDIO
+  CHECKING_IN
+  EMBED
+  EVENT
+  IMAGE
+  LINK
+  LIVESTREAM
+  MINT
+  SHORT_VIDEO
+  SPACE
+  STORY
+  TEXT_ONLY
+  THREE_D
+  TRANSACTION
+  VIDEO
+}
+
+enum ManagedAccountsVisibility {
+  NONE_HIDDEN
+  HIDDEN_ONLY
+  ALL
+}
+
+input ManagedBy {
+  """The address that is either the owner or an admin of the primitive."""
+  address: EvmAddress!
+
+  """
+  Whether to include the owned primitives or just the ones the address is an admin of.
+  """
+  includeOwners: Boolean! = true
+}
+
+"""MarketplaceMetadataAttribute"""
+type MarketplaceMetadataAttribute {
+  displayType: MarketplaceMetadataAttributeDisplayType
+
+  """The name of the trait."""
+  traitType: String
+  value: MarketplaceMetadataAttributeValue
+}
+
+"""MarketplaceMetadataAttributeDisplayType"""
+enum MarketplaceMetadataAttributeDisplayType {
+  NUMBER
+  STRING
+  DATE
+}
+
+scalar MarketplaceMetadataAttributeValue
+
+type MeResult {
+  """The logged in account."""
+  loggedInAs: AccountAvailable!
+
+  """Whether the account is signless."""
+  isSignless: Boolean!
+
+  """Whether the account is sponsored."""
+  isSponsored: Boolean!
+
+  """The app the account is logged in to."""
+  appLoggedIn: EvmAddress!
+
+  """The sponsorship allowance for the account."""
+  limit: SponsorshipAllowance!
+}
+
+type MediaAudio {
+  """The name of the artist."""
+  artist: String
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """The credits for the audio."""
+  credits: String
+
+  """How long the the audio is in seconds."""
+  duration: Int
+
+  """The genre of the audio"""
+  genre: String
+
+  """The type of audio."""
+  kind: MediaAudioKind
+
+  """The license for the audio."""
+  license: MetadataLicenseType
+
+  """A URI to the lyrics of the audio file."""
+  lyrics: URI
+
+  """The record label for the audio."""
+  recordLabel: String
+
+  """The mime type of the audio file."""
+  type: MediaAudioType!
+
+  """
+  The URI of the audio. You can use the optional `request` argument to choose between
+  the original URI or a snapshotted one on CDN. Returns the snapshotted URI by default.
+  """
+  item(request: MediaAudioRequest! = {useOriginal: false}): URI!
+  cover(request: MediaImageRequest! = {useOriginal: false}): URI
+}
+
+enum MediaAudioKind {
+  MUSIC
+  PODCAST
+  AUDIOBOOK
+  VOICE_NOTE
+  SOUND
+  OTHER
+}
+
+input MediaAudioRequest {
+  useOriginal: Boolean!
+}
+
+"""The mime type of the audio file."""
+enum MediaAudioType {
+  AUDIO_WAV
+  AUDIO_VND_WAVE
+  AUDIO_MPEG
+  AUDIO_OGG
+  AUDIO_MP_4
+  AUDIO_AAC
+  AUDIO_WEBM
+  AUDIO_FLAC
+}
+
+type MediaImage {
+  """The alt tag for accessibility"""
+  altTag: String
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """The license for the image"""
+  license: MetadataLicenseType
+
+  """The mime type of the image"""
+  type: MediaImageType!
+
+  """
+  The URI of the image. You can use the optional `request` argument to choose between
+  the original, snapshotted on CDN, or transformed to a different resolution. Returns the
+  snapshotted URI by default.
+  """
+  item(request: MediaImageRequest! = {useOriginal: false}): URI!
+
+  """The width of the image."""
+  width: Int
+
+  """The height of the image."""
+  height: Int
+}
+
+input MediaImageRequest {
+  useOriginal: Boolean
+  preferTransform: ImageTransform
+}
+
+"""
+The mime type of the image
+
+<details><summary>JSON schema</summary>
+
+```json
+{
+"description": "The mime type of the image",
+"type": "string",
+"enum": [
+"image/bmp",
+"image/gif",
+"image/heic",
+"image/jpeg",
+"image/png",
+"image/svg+xml",
+"image/tiff",
+"image/webp",
+"image/x-ms-bmp"
+]
+}
+```
+</details>
+"""
+enum MediaImageType {
+  BMP
+  GIF
+  HEIC
+  JPEG
+  PNG
+  SVG_XML
+  TIFF
+  WEBP
+  X_MS_BMP
+}
+
+input MediaSnapshotNotificationAttributes {
+  source: PrimitiveId
+}
+
+type MediaVideo {
+  """The alt tag for accessibility"""
+  altTag: String
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """How long the the video is in seconds"""
+  duration: Int
+
+  """The license for the video"""
+  license: MetadataLicenseType
+
+  """The mime type of the video"""
+  type: MediaVideoType!
+  item(request: MediaVideoRequest! = {useOriginal: false}): URI!
+  cover(request: MediaImageRequest! = {useOriginal: false}): URI
+}
+
+input MediaVideoRequest {
+  """Set to `true` to get the original URI of the video."""
+  useOriginal: Boolean!
+}
+
+"""
+The mime type of the video
+
+<details><summary>JSON schema</summary>
+
+```json
+{
+"description": "The mime type of the video",
+"type": "string",
+"enum": [
+"model/gltf+json",
+"model/gltf-binary",
+"video/x-m4v",
+"video/mov",
+"video/mp4",
+"video/mpeg",
+"video/ogg",
+"video/ogv",
+"video/quicktime",
+"video/webm"
+]
+}
+```
+</details>
+"""
+enum MediaVideoType {
+  MODEL_GLTF_JSON
+  MODEL_GLTF_BINARY
+  VIDEO_XM_4V
+  VIDEO_MOV
+  VIDEO_MP_4
+  VIDEO_MPEG
+  VIDEO_OGG
+  VIDEO_OGV
+  VIDEO_QUICKTIME
+  VIDEO_WEBM
+}
+
+input MembershipApprovalGroupRuleConfig {
+  enable: AlwaysTrue
+}
+
+type MentionNotification {
+  id: GeneratedNotificationId!
+  post: Post!
+}
+
+type MentionReplace {
+  from: String!
+  to: String!
+}
+
+type MetadataAttribute {
+  type: MetadataAttributeType!
+  key: String!
+  value: String!
+}
+
+enum MetadataAttributeType {
+  BOOLEAN
+  DATE
+  NUMBER
+  STRING
+  JSON
+}
+
+scalar MetadataId
+
+enum MetadataLicenseType {
+  CCO
+  CC_BY
+  CC_BY_ND
+  CC_BY_NC
+  TBNL_CD_PL_LEGAL
+  TBNL_C_DT_PL_LEGAL
+  TBNL_C_ND_PL_LEGAL
+  TBNL_CD_NPL_LEGAL
+  TBNL_C_DT_NPL_LEGAL
+  TBNL_C_DTSA_PL_LEGAL
+  TBNL_C_DTSA_NPL_LEGAL
+  TBNL_C_ND_NPL_LEGAL
+  TBNL_CD_PL_LEDGER
+  TBNL_C_DT_PL_LEDGER
+  TBNL_C_ND_PL_LEDGER
+  TBNL_CD_NPL_LEDGER
+  TBNL_C_DT_NPL_LEDGER
+  TBNL_C_DTSA_PL_LEDGER
+  TBNL_C_DTSA_NPL_LEDGER
+  TBNL_C_ND_NPL_LEDGER
+  TBNL_NC_D_PL_LEGAL
+  TBNL_NC_DT_PL_LEGAL
+  TBNL_NC_ND_PL_LEGAL
+  TBNL_NC_D_NPL_LEGAL
+  TBNL_NC_DT_NPL_LEGAL
+  TBNL_NC_DTSA_PL_LEGAL
+  TBNL_NC_DTSA_NPL_LEGAL
+  TBNL_NC_ND_NPL_LEGAL
+  TBNL_NC_D_PL_LEDGER
+  TBNL_NC_DT_PL_LEDGER
+  TBNL_NC_ND_PL_LEDGER
+  TBNL_NC_D_NPL_LEDGER
+  TBNL_NC_DT_NPL_LEDGER
+  TBNL_NC_DTSA_PL_LEDGER
+  TBNL_NC_DTSA_NPL_LEDGER
+  TBNL_NC_ND_NPL_LEDGER
+}
+
+input MetadataSnapshotNotificationAttributes {
+  source: PrimitiveId
+}
+
+type MintMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """
+  The mint item it can be a URL of the known provider like opensea https://opensea.io/assets/ethereum/0xfaa2471e93bd1cee3b0ab381c242ada8e1d1a759/299 or https://zora.co/collect/0x9d90669665607f08005cae4a7098143f554c59ef/39626. The Lens API has an allow list of providers and if the domain does not match it will mark it as failed metadata
+  """
+  mintLink: URI!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+input MlinternalForYouRequest {
+  secret: String!
+  account: EvmAddress
+}
+
+type Mutation {
+  """
+  Create a new app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  createApp(request: CreateAppRequest!): CreateAppResult!
+
+  """
+  Add an app authorization endpoint.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  addAppAuthorizationEndpoint(request: AddAppAuthorizationEndpointRequest!): Void!
+
+  """
+  Remove an app authorization endpoint.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  removeAppAuthorizationEndpoint(request: RemoveAppAuthorizationEndpointRequest!): Void!
+
+  """
+  Add feeds to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  addAppFeeds(request: AddAppFeedsRequest!): AddAppFeedsResult!
+
+  """
+  Add groups to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  addAppGroups(request: AddAppGroupsRequest!): AddAppGroupsResult!
+
+  """
+  Add signers to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  addAppSigners(request: AddAppSignersRequest!): AddAppSignersResult!
+
+  """
+  Remove feeds to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  removeAppFeeds(request: RemoveAppFeedsRequest!): RemoveAppFeedsResult!
+
+  """
+  Remove groups to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  removeAppGroups(request: RemoveAppGroupsRequest!): RemoveAppGroupsResult!
+
+  """
+  Remove signers to an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  removeAppSigners(request: RemoveAppSignersRequest!): RemoveAppSignersResult!
+
+  """
+  Set graph for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppGraph(request: SetAppGraphRequest!): SetAppGraphResult!
+
+  """
+  Set default feed for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setDefaultAppFeed(request: SetDefaultAppFeedRequest!): SetDefaultAppFeedResult!
+
+  """
+  Set metadata for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppMetadata(request: SetAppMetadataRequest!): SetAppMetadataResult!
+
+  """
+  Set if the app verification is enabled
+  App needs to have authorization endpoint enabled
+  App needs to return `verification_endpoint` from the authorization endpoint
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppVerification(request: SetAppVerificationRequest!): SetAppVerificationResult!
+
+  """
+  Set sponsorship for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppSponsorship(request: SetAppSponsorshipRequest!): SetAppSponsorshipResult!
+
+  """
+  Set treasury for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppTreasury(request: SetAppTreasuryRequest!): SetAppTreasuryResult!
+
+  """
+  Set username namespace for an app
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setAppUsernameNamespace(request: SetAppUsernameNamespaceRequest!): SetAppUsernameNamespaceResult!
+
+  """
+  Generate a new app server side api key
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  generateNewAppServerApiKey(request: GenerateNewAppServerApiKeyRequest!): ServerAPIKey!
+
+  """
+  Report an account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  reportAccount(request: ReportAccountRequest!): Void!
+
+  """
+  Hides an account from the manager list of managed accounts.
+  
+  You MUST be authenticated as Account Manager to use this mutation.
+  """
+  hideManagedAccount(request: HideManagedAccountRequest!): Void!
+
+  """
+  Undo the hiding of an account from the manager list of managed accounts.
+  
+  You MUST be authenticated as Account Manager to use this mutation.
+  """
+  unhideManagedAccount(request: UnhideManagedAccountRequest!): Void!
+
+  """
+  Set the metadata for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  setAccountMetadata(request: SetAccountMetadataRequest!): SetAccountMetadataResult!
+
+  """
+  Block an account with the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  block(request: BlockRequest!): BlockResult!
+
+  """
+  Unblock an account with the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  unblock(request: UnblockRequest!): UnblockResult!
+
+  """
+  Recommend an account from the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  recommendAccount(request: RecommendAccount!): Void!
+
+  """
+  Undo recommended account from the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  undoRecommendedAccount(request: UndoRecommendedAccount!): Void!
+
+  """
+  Mute an account for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  mute(request: MuteRequest!): Void!
+
+  """
+  Unmute an account for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  unmute(request: MuteRequest!): Void!
+
+  """
+  Create an account with a given username.
+  
+  You MUST be authenticated to use this mutation.
+  """
+  createAccountWithUsername(request: CreateAccountWithUsernameRequest!): CreateAccountWithUsernameResult!
+
+  """
+  Add an account manager to the authenticated account.
+  
+  You MUST be authenticated as Account Owner to use this mutation.
+  """
+  addAccountManager(request: AddAccountManagerRequest!): AddAccountManagerResult!
+
+  """
+  Remove an account manager to the authenticated account.
+  
+  You MUST be authenticated as Account Owner to use this mutation.
+  """
+  removeAccountManager(request: RemoveAccountManagerRequest!): RemoveAccountManagerResult!
+
+  """
+  Enables Signless experience for the authenticated account.
+  
+  You MUST be authenticated as Account Owner to use this mutation.
+  """
+  enableSignless: EnableSignlessResult!
+
+  """
+  Remove Signless experience for the authenticated account.
+  
+  You MUST be authenticated as Account Owner to use this mutation.
+  """
+  removeSignless: RemoveSignlessResult!
+
+  """
+  Update the Account Manager Permissions for a given Account Manager.
+  
+  You MUST be authenticated as Account Owner to use this mutation.
+  """
+  updateAccountManager(request: UpdateAccountManagerRequest!): UpdateAccountManagerResult!
+
+  """
+  Update account follow rules
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  updateAccountFollowRules(request: UpdateAccountFollowRulesRequest!): UpdateAccountFollowRulesResult!
+
+  """
+  Configure the given account action for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  configureAccountAction(request: ConfigureAccountActionRequest!): ConfigureAccountActionResult!
+
+  """
+  Set the given account action for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  disableAccountAction(request: DisableAccountActionRequest!): DisableAccountActionResult!
+
+  """
+  Set the given account action for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  enableAccountAction(request: EnableAccountActionRequest!): EnableAccountActionResult!
+
+  """
+  Execute the given account action for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  executeAccountAction(request: ExecuteAccountActionRequest!): ExecuteAccountActionResult!
+
+  """
+  Creates a withdrawal transaction request for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation
+  """
+  withdraw(request: WithdrawRequest!): WithdrawResult!
+
+  """
+  Creates a deposit transaction request for the authenticated account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation
+  """
+  deposit(request: DepositRequest!): DepositResult!
+
+  """
+  Creates a wrap transaction request to convert tokens held in the authenticated Lens Account
+  to their ERC20 equivalent. For example:
+  - Mainnet: GHO -> WGHO
+  - Testnet: GRASS -> WGRASS
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation
+  """
+  wrapTokens(request: WrapTokensRequest!): WrapTokensResult!
+
+  """
+  Creates an unwrap transaction request to convert wrapped tokens held in the authenticated
+  Lens Account to their unwrapped version. For example:
+  - Mainnet: WGHO -> GHO
+  - Testnet: WGRASS -> GRASS
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation
+  """
+  unwrapTokens(request: UnwrapTokensRequest!): UnwrapTokensResult!
+
+  """Authenticate the user with the signed authentication challenge."""
+  authenticate(request: SignedAuthChallenge!): AuthenticationResult!
+
+  """
+  Generates a new authentication challenge for the specified address and app.
+  
+  Users must sign the challenge to authenticate.
+  
+  The issued challenge can be for authentication credentials for different roles:
+  - AccountOwner: The `address` is a Lens Account, and the `signed_by` is the Account Owner.
+  - AccountManager: The `address` is a Lens Account, and the `signed_by` is an Account Manager
+  for it.
+  - OnboardingUser: The `address` is an EOA that needs to create their Lens Account.
+  - Builder: The `address` is the EOA of a Builder that needs to use configuration and
+  management features.
+  
+  The HTTP Origin header MUST be present and match the app's domain.
+  """
+  challenge(request: ChallengeRequest!): AuthenticationChallenge!
+
+  """
+  Revoke an authentication.
+  
+  You MUST be authenticated to use this mutation.
+  """
+  revokeAuthentication(request: RevokeAuthenticationRequest!): Void!
+
+  """
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  switchAccount(request: SwitchAccountRequest!): SwitchAccountResult!
+
+  """Refreshes the authentication tokens."""
+  refresh(request: RefreshRequest!): RefreshResult!
+
+  """
+  Issue new authentication tokens from a valid Lens API v2 refresh token.
+  
+  Use this to seamlessly transition your users from Lens API v2 to Lens API v3 without
+  requiring them to re-authenticate.
+  
+  The HTTP Origin header MUST be present and match the app's domain.
+  """
+  legacyRolloverRefresh(request: RolloverRefreshRequest!): RefreshResult!
+
+  """Refreshes the metadata for the provided entity."""
+  refreshMetadata(request: RefreshMetadataRequest!): RefreshMetadataResult!
+
+  """
+  Create a new post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  post(request: CreatePostRequest!): PostResult!
+
+  """
+  Repost a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  repost(request: CreateRepostRequest!): PostResult!
+
+  """
+  Delete a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  deletePost(request: DeletePostRequest!): DeletePostResult!
+
+  """
+  Edit a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  editPost(request: EditPostRequest!): PostResult!
+
+  """
+  Bookmark a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  bookmarkPost(request: BookmarkPostRequest!): Void!
+
+  """
+  Undo bookmark.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  undoBookmarkPost(request: BookmarkPostRequest!): Void!
+  hideReply(request: HideReplyRequest!): Void!
+  unhideReply(request: UnhideReplyRequest!): Void!
+
+  """
+  React to a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  addReaction(request: AddReactionRequest!): AddReactionResult!
+
+  """
+  Undo reaction to a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  undoReaction(request: UndoReactionRequest!): UndoReactionResult!
+
+  """
+  Report a post.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  reportPost(request: ReportPostRequest!): Void!
+
+  """
+  Update post rules
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  updatePostRules(request: UpdatePostRulesRequest!): UpdatePostRulesResult!
+
+  """
+  Configure the given post action for the given post.
+  
+  You MUST be authenticated as Account Owner or Account Manager of the Account
+  that authored this Post to use this mutation.
+  """
+  configurePostAction(request: ConfigurePostActionRequest!): ConfigurePostActionResult!
+
+  """
+  Disable the given post action for the given post.
+  
+  You MUST be authenticated as the Owner or Manager of the account that made this post to use
+  this mutation.
+  """
+  disablePostAction(request: DisablePostActionRequest!): DisablePostActionResult!
+
+  """
+  Enable the given post action for the authenticated post.
+  
+  You MUST be authenticated as Account Owner or Account Manager of the Account
+  that authored this Post to use this mutation.
+  """
+  enablePostAction(request: EnablePostActionRequest!): EnablePostActionResult!
+
+  """
+  Execute the given post action.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  executePostAction(request: ExecutePostActionRequest!): ExecutePostActionResult!
+
+  """
+  Add a post not interested.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  addPostNotInterested(request: PostNotInterestedRequest!): Void!
+
+  """
+  Undo a post not interested.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  undoPostNotInterested(request: PostNotInterestedRequest!): Void!
+
+  """
+  Follow an Account on the global Graph or a specific Graph.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  follow(request: CreateFollowRequest!): FollowResult!
+
+  """
+  Unfollow an Account on the global Graph or a specific Graph.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  unfollow(request: CreateUnfollowRequest!): UnfollowResult!
+
+  """
+  Create a new graph
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  createGraph(request: CreateGraphRequest!): CreateGraphResult!
+
+  """
+  Update graph rules
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  updateGraphRules(request: UpdateGraphRulesRequest!): UpdateGraphRulesResult!
+
+  """
+  Set metadata for a graph
+  
+  You MUST be authenticated to use this mutation.
+  """
+  setGraphMetadata(request: SetGraphMetadataRequest!): SetGraphMetadataResult!
+
+  """
+  Create a new username namespace aka deploying a new username contract
+  
+  You MUST be authenticated to use this mutation.
+  """
+  createUsernameNamespace(request: CreateUsernameNamespaceRequest!): CreateUsernameNamespaceResult!
+
+  """
+  Create a username.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  createUsername(request: CreateUsernameRequest!): CreateUsernameResult!
+
+  """
+  Assign a username to an account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  assignUsernameToAccount(request: AssignUsernameToAccountRequest!): AssignUsernameToAccountResult!
+
+  """
+  Unassign a username from the logged-in user's Account.
+  
+  Defaults to the Lens namespace if no request is provided.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  unassignUsernameFromAccount(request: UnassignUsernameFromAccountRequest!): UnassignUsernameToAccountResult!
+
+  """
+  Set metadata for a namespace
+  
+  You MUST be authenticated to use this mutation.
+  """
+  setNamespaceMetadata(request: SetNamespaceMetadataRequest!): SetNamespaceMetadataResult!
+
+  """
+  Update namespace rules
+  
+  You MUST be authenticated to use this mutation.
+  """
+  updateNamespaceRules(request: UpdateNamespaceRulesRequest!): UpdateNamespaceRulesResult!
+
+  """
+  Update reserved usernames
+  
+  You MUST be authenticated to use this mutation.
+  """
+  updateReservedUsernames(request: UpdateReservedUsernamesRequest!): UpdateReservedUsernamesResult!
+
+  """
+  Add admins to a graph/app/sponsor/feed/username/group.
+  
+  You MUST be authenticated as Builder, Account Manager, or Account Owner.
+  In case of Account Manager or Account Owner, the Lens Account needs to be the owner or an
+  admin of the primitive.
+  """
+  addAdmins(request: AddAdminsRequest!): AddAdminsResult!
+
+  """
+  Remove admins from a graph/app/sponsor/feed/username/group.
+  
+  You MUST be authenticated as Builder, Account Manager, or Account Owner.
+  In case of Account Manager or Account Owner, the Lens Account needs to be the owner or an
+  admin of the primitive.
+  """
+  removeAdmins(request: RemoveAdminsRequest!): RemoveAdminsResult!
+
+  """
+  Transfer primitive ownership for the graph/app/sponsor/feed/username/group.
+  
+  You MUST be authenticated as Builder, Account Manager, or Account Owner.
+  In case of Account Manager or Account Owner, the Lens Account needs to be the owner of the
+  primitive.
+  """
+  transferPrimitiveOwnership(request: TransferPrimitiveOwnershipRequest!): TransferPrimitiveOwnershipResult!
+  mlDismissRecommendedAccounts(request: DismissRecommendedAccountsRequest!): Void!
+  mlForYouInternal(request: MlinternalForYouRequest!): Void!
+
+  """
+  sign a frame action with the lens account manager
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  signFrameAction(request: FrameEIP712Request!): FrameLensManagerSignatureResult!
+
+  """
+  Create a new feed
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  createFeed(request: CreateFeedRequest!): CreateFeedResult!
+
+  """
+  Set metadata for a feed
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the feed
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the feed
+  """
+  setFeedMetadata(request: SetFeedMetadataRequest!): SetFeedMetadataResult!
+
+  """
+  Update feed rules
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the feed
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the feed
+  """
+  updateFeedRules(request: UpdateFeedRulesRequest!): UpdateFeedRulesResult!
+
+  """
+  Create a new group
+  
+  You MUST be authenticated as Builder, Account Manager, or Account Owner.
+  In case of Account Manager or Account Owner, the Lens Account becomes the owner of the
+  group.
+  """
+  createGroup(request: CreateGroupRequest!): CreateGroupResult!
+
+  """
+  Update group rules
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  updateGroupRules(request: UpdateGroupRulesRequest!): UpdateGroupRulesResult!
+
+  """
+  Join a group
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  joinGroup(request: JoinGroupRequest!): JoinGroupResult!
+
+  """
+  Leave a group
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  leaveGroup(request: LeaveGroupRequest!): LeaveGroupResult!
+
+  """
+  Set metadata for a group
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  setGroupMetadata(request: SetGroupMetadataRequest!): SetGroupMetadataResult!
+
+  """
+  Remove group members
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  removeGroupMembers(request: RemoveGroupMembersRequest!): RemoveGroupMembersResult!
+
+  """
+  Request to join a group
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  requestGroupMembership(request: RequestGroupMembershipRequest!): RequestGroupMembershipResult!
+
+  """
+  Cancel group membership request
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this mutation.
+  """
+  cancelGroupMembershipRequest(request: CancelGroupMembershipRequestRequest!): CancelGroupMembershipRequestResult!
+
+  """
+  Approve group members
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  approveGroupMembershipRequests(request: ApproveGroupMembershipRequest!): ApproveGroupMembershipResult!
+
+  """
+  Reject group membership requests
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  rejectGroupMembershipRequests(request: RejectGroupMembershipRequest!): RejectGroupMembershipResult!
+
+  """
+  Ban accounts to join a group.
+  If the banned account(s) already joined the group, they will be removed from the group.
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  banGroupAccounts(request: BanGroupAccountsRequest!): BanGroupAccountsResult!
+
+  """
+  Unban accounts
+  
+  You MUST be authenticated as:
+  - Builder and be the owner/admin of the group
+  - Account Manager or Account Owner for a Lens Account that is the owner/admin of the group
+  """
+  unbanGroupAccounts(request: UnbanGroupAccountsRequest!): UnbanGroupAccountsResult!
+  createSnsSubscriptions(request: CreateSnsSubscriptionRequest!): [SnsSubscription!]!
+  deleteSnsSubscription(request: DeleteSnsSubscriptionRequest!): Void!
+
+  """
+  Create a new sponsorship.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  createSponsorship(request: CreateSponsorshipRequest!): CreateSponsorshipResult!
+
+  """
+  Pause a sponsorship.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  pauseSponsorship(request: PausingRequest!): PausingResult!
+
+  """
+  Unpause a sponsorship.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  unpauseSponsorship(request: PausingRequest!): PausingResult!
+
+  """
+  Set metadata for a sponsorship
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  setSponsorshipMetadata(request: SetSponsorshipMetadataRequest!): SetSponsorshipMetadataResult!
+
+  """
+  Update a sponsorship rate limits.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  updateSponsorshipLimits(request: UpdateSponsorshipLimitsRequest!): UpdateSponsorshipLimitsResult!
+
+  """
+  Update a sponsorship exclusion list from the rate limits.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  updateSponsorshipExclusionList(request: UpdateSponsorshipExclusionListRequest!): UpdateSponsorshipExclusionListResult!
+
+  """
+  Update a sponsorship signers list.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  updateSponsorshipSigners(request: UpdateSponsorshipSignersRequest!): UpdateSponsorshipSignersResult!
+}
+
+input MuteRequest {
+  """The account to mute."""
+  account: EvmAddress!
+}
+
+type NamespaceOperationValidationFailed {
+  unsatisfiedRules: NamespaceUnsatisfiedRules
+  reason: String!
+}
+
+union NamespaceOperationValidationOutcome = NamespaceOperationValidationPassed | NamespaceOperationValidationUnknown | NamespaceOperationValidationFailed
+
+type NamespaceOperationValidationPassed {
+  passed: AlwaysTrue!
+}
+
+type NamespaceOperationValidationUnknown {
+  extraChecksRequired: [NamespaceRule!]!
+}
+
+input NamespaceRequest {
+  """The namespace"""
+  namespace: EvmAddress
+
+  """The transaction hash you created the namespace with."""
+  txHash: TxHash
+}
+
+input NamespaceReservedUsernamesRequest {
+  """The namespace to get reserved usernames for"""
+  namespace: EvmAddress!
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type NamespaceRule {
+  id: RuleId!
+  type: NamespaceRuleType!
+  address: EvmAddress!
+  executesOn: [NamespaceRuleExecuteOn!]!
+  config: [AnyKeyValue!]!
+}
+
+input NamespaceRuleConfig {
+  tokenGatedRule: TokenGatedNamespaceRuleConfig
+  usernamePricePerLengthRule: UsernamePricePerLengthNamespaceRuleConfig
+  usernameLengthRule: UsernameLengthNamespaceRuleConfig
+  unknownRule: UnknownNamespaceRuleConfig
+}
+
+enum NamespaceRuleExecuteOn {
+  CREATING
+  REMOVING
+  ASSIGNING
+  UNASSIGNING
+}
+
+enum NamespaceRuleType {
+  TOKEN_GATED
+  PRICE_PER_LENGTH
+  USERNAME_LENGTH
+  USERNAME_RESERVED
+  USERNAME_SIMPLE_CHARSET
+  UNKNOWN
+}
+
+enum NamespaceRuleUnsatisfiedReason {
+  TOKEN_GATED_NOT_A_TOKEN_HOLDER
+  USERNAME_LENGTH_NOT_WITHIN_RANGE
+  USERNAME_NOT_A_SIMPLE_CHARSET
+  USERNAME_RESERVED
+  USERNAME_PRICE_PER_LENGTH_NOT_ENOUGH_BALANCE
+}
+
+type NamespaceRules {
+  required: [NamespaceRule!]!
+  anyOf: [NamespaceRule!]!
+}
+
+input NamespaceRulesConfigInput {
+  required: [NamespaceRuleConfig!]! = []
+  anyOf: [NamespaceRuleConfig!]! = []
+}
+
+input NamespaceRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+type NamespaceUnsatisfiedRule {
+  rule: EvmAddress!
+  reason: NamespaceRuleUnsatisfiedReason!
+  message: String!
+  config: [AnyKeyValue!]!
+}
+
+type NamespaceUnsatisfiedRules {
+  required: [NamespaceUnsatisfiedRule!]!
+  anyOf: [NamespaceUnsatisfiedRule!]!
+}
+
+input NamespacesFilter {
+  """The optional filter to get namespaces managed by address"""
+  managedBy: ManagedBy
+
+  """
+  The optional filter to narrow namespaces by search query.
+  Uses fuzzy search on namespace name
+  """
+  searchQuery: String
+}
+
+enum NamespacesOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input NamespacesRequest {
+  filter: NamespacesFilter
+
+  """The order by."""
+  orderBy: NamespacesOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type NamespacesResult {
+  items: [UsernameNamespace!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type NativeAmount {
+  """The native token info."""
+  asset: NativeToken!
+
+  """Token value in its main unit (e.g., 1.5 GHO)."""
+  value: BigDecimal!
+}
+
+"""A failure to retrieve the balance of the native token."""
+type NativeBalanceError {
+  """The reason for the failure."""
+  reason: String!
+}
+
+type NativeToken {
+  """The name of the token."""
+  name: String!
+
+  """The symbol of the token."""
+  symbol: String!
+
+  """The number of decimals the token uses."""
+  decimals: Int!
+}
+
+type NetworkAddress {
+  address: EvmAddress!
+  chainId: Int!
+}
+
+type NftMetadata {
+  """
+  A URL to a multi-media attachment for the item. The file extensions GLTF, GLB, WEBM, MP4,
+  M4V, OGV, and OGG are supported, along with the audio-only extensions MP3, WAV, and OGA.
+  Animation_url also supports HTML pages, allowing you to build rich experiences and
+  interactive NFTs using JavaScript canvas, WebGL, and more. Scripts and relative paths
+  within the HTML page are now supported. However, access to browser extensions is not
+  supported.
+  """
+  animationUrl: URI
+
+  """
+  These are the attributes for the item, which will show up on the OpenSea and others NFT
+  trading websites on the item.
+  """
+  attributes: [MarketplaceMetadataAttribute!]!
+
+  """
+  A human-readable description of the item. It could be plain text or markdown.
+  """
+  description: String
+
+  """
+  This is the URL that will appear below the asset's image on OpenSea and others etc. and
+  will allow users to leave OpenSea and view the item on the site.
+  """
+  externalUrl: URI
+
+  """NFT will store any image here."""
+  image: URI
+
+  """Name of the NFT item."""
+  name: String
+}
+
+"""The existence of the transaction is not yet indexed. Keep trying."""
+type NotIndexedYetStatus {
+  reason: String!
+
+  """True if the transaction has been mined."""
+  txHasMined: Boolean!
+}
+
+union Notification = PostActionExecutedNotification | AccountActionExecutedNotification | GroupMembershipRequestApprovedNotification | GroupMembershipRequestRejectedNotification | ReactionNotification | CommentNotification | RepostNotification | QuoteNotification | FollowNotification | MentionNotification
+
+type NotificationAccountFollow {
+  followedAt: DateTime!
+  account: Account!
+}
+
+type NotificationAccountPostReaction {
+  account: Account!
+  reactions: [PostReaction!]!
+}
+
+type NotificationAccountRepost {
+  repostId: PostId!
+  repostedAt: DateTime!
+  account: Account!
+}
+
+input NotificationFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+
+  """The graphs to filter by."""
+  graphs: [GraphOneOf!]
+
+  """The apps to filter by."""
+  apps: [EvmAddress!]
+
+  """The notification types to filter by."""
+  notificationTypes: [NotificationType!]
+
+  """Include notification from accounts with low score"""
+  includeLowScore: Boolean! = false
+
+  """Aggregate notifications by time"""
+  timeBasedAggregation: Boolean! = true
+}
+
+enum NotificationOrderBy {
+  DEFAULT
+  ACCOUNT_SCORE
+}
+
+input NotificationRequest {
+  """An optional filter to narrow down the notifications result."""
+  filter: NotificationFilter
+
+  """An optional order to sort the notifications result."""
+  orderBy: NotificationOrderBy! = DEFAULT
+  cursor: Cursor
+}
+
+enum NotificationType {
+  EXECUTED_POST_ACTION
+  EXECUTED_ACCOUNT_ACTION
+  GROUP_MEMBERSHIP_REQUEST_APPROVED
+  GROUP_MEMBERSHIP_REQUEST_REJECTED
+  REPOSTED
+  QUOTED
+  COMMENTED
+  FOLLOWED
+  MENTIONED
+  REACTED
+}
+
+input OnboardingUserChallengeRequest {
+  """
+  The App you intend to authenticate with.
+  
+  It MUST be a valid App address.
+  Note: On the testnet, it will default to the playground app.
+  This is to make it easier if you forget to set it. This may change in the future.
+  """
+  app: EvmAddress! = "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE"
+
+  """The address of the EOA that needs to create their Lens Account."""
+  wallet: EvmAddress!
+}
+
+enum PageSize {
+  TEN
+  FIFTY
+}
+
+type PaginatedAccountExecutedActionsResult {
+  items: [AccountExecutedActions!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAccountManagersResult {
+  """The account managers."""
+  items: [AccountManager!]!
+
+  """The pagination information for the given request."""
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAccountsAvailableResult {
+  """The accounts available to use for the given address"""
+  items: [AccountAvailable!]!
+
+  """The pagination information for the given request."""
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAccountsBlockedResult {
+  items: [AccountBlocked!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAccountsResult {
+  items: [Account!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedActiveAuthenticationsResult {
+  items: [AuthenticatedSession!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAdminsResult {
+  items: [Admin!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAnyPostsResult {
+  items: [AnyPost!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAppFeedsResult {
+  """The feeds"""
+  items: [AppFeed!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAppSignersResult {
+  """The signers"""
+  items: [AppSigner!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedAppUsersResult {
+  items: [AppUser!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedFeedsResult {
+  items: [Feed!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedFollowersResult {
+  items: [Follower!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedFollowingResult {
+  items: [Following!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedGraphsResult {
+  items: [Graph!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedGroupBannedAccountsResult {
+  items: [GroupBannedAccount!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedGroupMembersResult {
+  items: [GroupMember!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedGroupMembershipRequestsResult {
+  items: [GroupMembershipRequest!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedGroupsResult {
+  """The groups"""
+  items: [Group!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedNamespaceReservedUsernamesResult {
+  items: [UsernameReserved!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedNotificationResult {
+  items: [Notification!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostActionContracts {
+  items: [PostActionContract!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostEditsResult {
+  items: [PostEdit!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostExecutedActionsResult {
+  items: [PostExecutedActions!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostReactionsResult {
+  items: [AccountPostReaction!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostTagsResult {
+  items: [PostTag!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostsForYouResult {
+  items: [PostForYou!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedPostsResult {
+  items: [Post!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedResultInfo {
+  """The cursor to the previous page of results, if any."""
+  prev: Cursor
+
+  """The cursor to the next page of results, if any."""
+  next: Cursor
+}
+
+type PaginatedTimelineResult {
+  items: [TimelineItem!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type PaginatedUsernamesResult {
+  items: [Username!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+input PausingRequest {
+  """The sponsorship to update"""
+  sponsorship: EvmAddress!
+}
+
+union PausingResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type PayToCollectConfig {
+  amount: Erc20Amount!
+  recipients: [RecipientPercent!]!
+  referralShare: Float
+}
+
+input PayToCollectInput {
+  amount: AmountInput!
+  recipients: [RecipientPercentInput!]!
+  referralShare: Float
+}
+
+type PaymasterParams {
+  """The address of the paymaster."""
+  paymaster: EvmAddress!
+
+  """The bytestream input for the paymaster."""
+  paymasterInput: BlockchainData!
+}
+
+"""
+The existence of the transaction is known, but its status is not yet known.
+
+The transaction could be:
+- waiting to be included in a block
+- waiting for a block to be mined
+- waiting to be indexed by the Lens Indexer
+- waiting for any associated metadata to be snapshotted and indexed
+"""
+type PendingTransactionStatus {
+  blockTimestamp: DateTime!
+  summary: [SubOperationStatus!]!
+}
+
+"""PhysicalAddress"""
+type PhysicalAddress {
+  """The country name component."""
+  country: String!
+
+  """The full mailing address formatted for display."""
+  formatted: String
+
+  """The city or locality."""
+  locality: String!
+
+  """The zip or postal code."""
+  postalCode: String
+
+  """The state or region."""
+  region: String
+
+  """
+  The street address including house number, street name, P.O. Box, apartment or unit number
+  and extended multi-line address information.
+  """
+  streetAddress: String
+}
+
+type Post {
+  id: PostId!
+  slug: PostId!
+  author: Account!
+  isEdited: Boolean!
+  isDeleted: Boolean!
+  timestamp: DateTime!
+  app: App
+  metadata: PostMetadata!
+  root: Post
+  quoteOf: Post
+  commentOn: Post
+  actions(request: PostActionsParams! = {includeDisabled: false}): [PostAction!]!
+  operations: LoggedInPostOperations
+  stats: PostStats!
+  mentions: [PostMention]
+  rules: PostRules!
+  collectibleMetadata: NftMetadata!
+  contentUri(request: PostContentUriRequest! = {useSnapshot: false}): URI!
+  feed: PostFeedInfo!
+}
+
+input PostAccountPair {
+  post: PostId!
+  account: EvmAddress!
+}
+
+"""
+The configured actions for a post. All posts have the TippingPostAction enabled by default which
+is not listed here.
+"""
+union PostAction = SimpleCollectAction | UnknownPostAction
+
+input PostActionConfigInput {
+  simpleCollect: SimpleCollectActionConfigInput
+  unknown: UnknownActionConfigInput
+}
+
+union PostActionContract = SimpleCollectActionContract | TippingPostActionContract | UnknownPostActionContract
+
+input PostActionContractsRequest {
+  includeUnknown: Boolean! = false
+  onlyCollectActions: Boolean! = false
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+input PostActionExecuteInput {
+  simpleCollect: SimpleCollectExecuteInput
+  tipping: AmountInput
+  unknown: UnknownActionExecuteInput
+}
+
+union PostActionExecuted = TippingPostActionExecuted | SimpleCollectPostActionExecuted | UnknownPostActionExecuted
+
+type PostActionExecutedNotification {
+  id: GeneratedNotificationId!
+  actions: [PostActionExecuted!]!
+  post: Post!
+}
+
+input PostActionExecutedNotificationAttributes {
+  postId: PostId
+  executingAccount: EvmAddress
+  receivingAccount: EvmAddress
+  action: EvmAddress
+  actionType: PostActionType
+  app: EvmAddress
+}
+
+input PostActionFilter {
+  address: EvmAddress
+  simpleCollect: AlwaysTrue
+  tipping: AlwaysTrue
+}
+
+enum PostActionType {
+  SIMPLE_COLLECT
+  TIPPING
+  UNKNOWN
+}
+
+input PostActionsParams {
+  includeDisabled: Boolean!
+}
+
+input PostBookmarksFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+  metadata: PostMetadataFilter
+}
+
+input PostBookmarksRequest {
+  filter: PostBookmarksFilter
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+input PostCollectedNotificationAttributes {
+  postId: PostId
+  postAuthor: EvmAddress
+  collector: EvmAddress
+  app: EvmAddress
+}
+
+input PostContentUriRequest {
+  useSnapshot: Boolean!
+}
+
+input PostCreatedNotificationAttributes {
+  author: EvmAddress
+  parentPostId: PostId
+  postTypes: [PostType!]
+  feed: EvmAddress
+  app: EvmAddress
+}
+
+input PostDeletedNotificationAttributes {
+  author: EvmAddress
+  parentPostId: PostId
+  postTypes: [PostType!]
+  feed: EvmAddress
+  app: EvmAddress
+}
+
+type PostEdit {
+  metadata: PostMetadata!
+  timestamp: DateTime!
+}
+
+input PostEditedNotificationAttributes {
+  author: EvmAddress
+  parentPostId: PostId
+  postTypes: [PostType!]
+  feed: EvmAddress
+  app: EvmAddress
+}
+
+input PostEditsRequest {
+  """The post ID."""
+  post: PostId!
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+type PostExecutedActions {
+  account: Account!
+  total: Int!
+  lastAt: DateTime!
+  firstAt: DateTime!
+}
+
+type PostFeedInfo {
+  address: EvmAddress!
+  metadata: FeedMetadata
+  group: PostGroupInfo
+}
+
+type PostForYou {
+  post: Post!
+  source: ForYouSource!
+}
+
+type PostGroupInfo {
+  address: EvmAddress!
+  metadata: GroupMetadata
+}
+
+scalar PostId
+
+union PostMention = AccountMention | GroupMention
+
+union PostMetadata = ArticleMetadata | AudioMetadata | CheckingInMetadata | EmbedMetadata | EventMetadata | ImageMetadata | LinkMetadata | LivestreamMetadata | MintMetadata | SpaceMetadata | StoryMetadata | TextOnlyMetadata | ThreeDMetadata | TransactionMetadata | VideoMetadata | UnknownPostMetadata
+
+input PostMetadataContentWarningFilter {
+  oneOf: [ContentWarning!]!
+}
+
+input PostMetadataFilter {
+  """The main focus of the post."""
+  mainContentFocus: [MainContentFocus!]
+
+  """The tags to filter by."""
+  tags: PostMetadataTagsFilter
+
+  """The content warning to filter by."""
+  contentWarning: PostMetadataContentWarningFilter
+}
+
+input PostMetadataTagsFilter {
+  oneOf: [String!]
+  all: [String!]
+}
+
+input PostNotInterestedRequest {
+  post: PostId!
+}
+
+type PostOperationValidationFailed {
+  unsatisfiedRules: PostUnsatisfiedRules
+  reason: String!
+}
+
+union PostOperationValidationOutcome = PostOperationValidationPassed | PostOperationValidationUnknown | PostOperationValidationFailed
+
+type PostOperationValidationPassed {
+  passed: AlwaysTrue!
+}
+
+union PostOperationValidationRule = PostRule | FeedRule
+
+type PostOperationValidationUnknown {
+  extraChecksRequired: [PostOperationValidationRule!]!
+}
+
+type PostReaction {
+  reaction: PostReactionType!
+  reactedAt: DateTime!
+
+  """
+  This is the app which it was reacted on - note lens v2 legacy reactions may not have an app
+  linked to it
+  """
+  app: EvmAddress
+}
+
+input PostReactionAddedNotificationAttributes {
+  postId: PostId
+  reactingAccount: EvmAddress
+  reactionType: PostReactionType
+  app: EvmAddress
+}
+
+enum PostReactionOrderBy {
+  DEFAULT
+  ACCOUNT_SCORE
+}
+
+input PostReactionRemovedNotificationAttributes {
+  postId: PostId
+  reactingAccount: EvmAddress
+  reactionType: PostReactionType
+  app: EvmAddress
+}
+
+type PostReactionStatus {
+  postId: PostId!
+  account: EvmAddress!
+  app: EvmAddress
+  result: Boolean!
+}
+
+input PostReactionStatusRequest {
+  pairs: [PostAccountPair!]!
+  filter: PostReactionsFilter
+}
+
+enum PostReactionType {
+  UPVOTE
+  DOWNVOTE
+}
+
+input PostReactionsFilter {
+  """The types of reactions to filter by."""
+  anyOf: [PostReactionType!]
+}
+
+input PostReactionsRequest {
+  """The ID of the post to get reactions for."""
+  post: PostId!
+
+  """An optional filter to narrow down the result."""
+  filter: PostReactionsFilter
+
+  """The order in which to return the results."""
+  orderBy: PostReactionOrderBy
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+enum PostReferenceType {
+  COMMENT_ON
+  REPOST_OF
+  QUOTE_OF
+}
+
+input PostReferencesRequest {
+  """The post to get references for."""
+  referencedPost: PostId!
+
+  """The types of references to get."""
+  referenceTypes: [PostReferenceType!]!
+
+  """
+  The visibility filter to apply by default it will honour the visibility of the post.
+  """
+  visibilityFilter: PostVisibilityFilter! = VISIBLE
+
+  """
+  The relevancy filter to apply.
+  
+  This filter is only applicable for `CommentOn` reference type.
+  """
+  relevancyFilter: ReferenceRelevancyFilter! = ALL
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+enum PostReportReason {
+  ANIMAL_ABUSE
+  HARASSMENT
+  VIOLENCE
+  SELF_HARM
+  DIRECT_THREAT
+  HATE_SPEECH
+  NUDITY
+  OFFENSIVE
+  SCAM
+  UNAUTHORIZED_SALE
+  IMPERSONATION
+  MISLEADING
+  MISUSE_HASHTAGS
+  UNRELATED
+  REPETITIVE
+  FAKE_ENGAGEMENT
+  MANIPULATION_ALGO
+  SOMETHING_ELSE
+}
+
+input PostReportedNotificationAttributes {
+  author: EvmAddress
+  reporter: EvmAddress
+  feed: EvmAddress
+  app: EvmAddress
+}
+
+"""
+You must provide either a txHash or a postId or a legacyId, you can not apply more than one.
+"""
+input PostRequest {
+  """The post ID."""
+  post: PostId
+
+  """The legacy publication ID."""
+  legacyId: LegacyPublicationId
+
+  """The transaction hash you sent the post with."""
+  txHash: TxHash
+}
+
+type PostResponse {
+  hash: TxHash!
+}
+
+union PostResult = PostResponse | PostOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type PostRule {
+  id: RuleId!
+  type: PostRuleType!
+  address: EvmAddress!
+  executesOn: [PostRuleExecuteOn!]!
+  config: [AnyKeyValue!]!
+}
+
+input PostRuleConfig {
+  followersOnlyRule: FollowersOnlyPostRuleConfig
+  unknownRule: UnknownPostRuleConfig
+}
+
+enum PostRuleExecuteOn {
+  CREATING_POST
+  EDITING_POST
+}
+
+enum PostRuleType {
+  FOLLOWERS_ONLY
+  UNKNOWN
+}
+
+enum PostRuleUnsatisfiedReason {
+  POST_NOT_A_FOLLOWER
+  FEED_GROUP_GATED_NOT_A_MEMBER
+  FEED_TOKEN_GATED_NOT_A_TOKEN_HOLDER
+  FEED_ACCOUNT_BLOCKED
+  FEED_SIMPLE_PAYMENT_NOT_ENOUGH_BALANCE
+}
+
+type PostRules {
+  required: [PostRule!]!
+  anyOf: [PostRule!]!
+}
+
+input PostRulesConfigInput {
+  required: [PostRuleConfig!]! = []
+  anyOf: [PostRuleConfig!]! = []
+}
+
+input PostRulesProcessingParams {
+  unknownRule: UnknownRuleProcessingParams
+}
+
+type PostStats {
+  """The total number of bookmarks."""
+  bookmarks: Int!
+
+  """The total number of comments."""
+  comments: Int!
+
+  """The total number of reposts."""
+  reposts: Int!
+
+  """The total number of quotes."""
+  quotes: Int!
+
+  """The total number of collects."""
+  collects: Int!
+
+  """The total number of tips received."""
+  tips: Int!
+
+  """Get the number of reactions for the post."""
+  reactions(request: StatsReactionRequest! = {type: UPVOTE}): Int!
+}
+
+type PostTag {
+  value: String!
+  total: Int!
+}
+
+input PostTagsFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+}
+
+enum PostTagsOrderBy {
+  MOST_POPULAR
+  ALPHABETICAL
+}
+
+input PostTagsRequest {
+  """An optional filter to apply to the tags."""
+  filter: PostTagsFilter
+  orderBy: PostTagsOrderBy! = MOST_POPULAR
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+type PostTip {
+  amount: Erc20Amount!
+  date: DateTime!
+}
+
+enum PostType {
+  ROOT
+  COMMENT
+  REPOST
+  QUOTE
+}
+
+type PostUnsatisfiedRule {
+  rule: EvmAddress!
+  reason: PostRuleUnsatisfiedReason!
+  message: String!
+  config: [AnyKeyValue!]!
+}
+
+type PostUnsatisfiedRules {
+  required: [PostUnsatisfiedRule!]!
+  anyOf: [PostUnsatisfiedRule!]!
+}
+
+enum PostVisibilityFilter {
+  """All posts even if they have been hidden"""
+  ALL
+
+  """Only the posts that are hidden"""
+  HIDDEN
+
+  """Only the posts that are visible"""
+  VISIBLE
+}
+
+input PostsExploreFilter {
+  """Only return posts after this timestamp, defaults to 3 days ago."""
+  since: Int! = 1745341597
+
+  """Metadata filters to apply to posts"""
+  metadata: PostMetadataFilter! = {mainContentFocus: null, tags: null, contentWarning: null}
+}
+
+input PostsExploreRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """Filter for posts"""
+  filter: PostsExploreFilter! = {since: 1745341597, metadata: {mainContentFocus: null, tags: null, contentWarning: null}}
+
+  """
+  Shuffle the results, defaults to false. Causes performance issues so is ignored for now.
+  """
+  shuffle: Boolean! = false
+}
+
+input PostsFilter {
+  """The feeds where the posts are published."""
+  feeds: [FeedOneOf!]
+
+  """The authors of the posts."""
+  authors: [EvmAddress!]
+
+  """The post IDs to search for. You can also use the post slug."""
+  posts: [PostId!]
+
+  """The types of the posts."""
+  postTypes: [PostType!]
+
+  """The metadata filters to apply to the posts."""
+  metadata: PostMetadataFilter
+
+  """The apps used to publish the posts."""
+  apps: [EvmAddress!]
+
+  """The query text to search for in the post content or metadata tags."""
+  searchQuery: String
+
+  """The account that collected the posts."""
+  collectedBy: CollectedBy
+
+  """
+  A filter that returns only posts from authors with `Account Score` either `AtLeast` or
+  `LessThan` the specified value.
+  """
+  accountScore: AccountScoreFilter
+}
+
+input PostsForYouRequest {
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+
+  """
+  The account to get for you for. If not provided, defaults to the authenticated account.
+  """
+  account: EvmAddress
+
+  """Shuffle the for you posts."""
+  shuffle: Boolean! = false
+}
+
+input PostsRequest {
+  filter: PostsFilter
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+union PrimitiveData = IntKeyValue | IntNullableKeyValue | AddressKeyValue | StringKeyValue | BooleanKeyValue | RawKeyValue | BigDecimalKeyValue
+
+input PrimitiveId {
+  account: EvmAddress
+  graph: EvmAddress
+  feed: EvmAddress
+  usernameNamespace: EvmAddress
+  group: EvmAddress
+  post: PostId
+  app: EvmAddress
+  sponsorship: EvmAddress
+  accountAction: EvmAddress
+  postAction: EvmAddress
+}
+
+type Query {
+  health: Boolean!
+  maintenance: Boolean!
+
+  """Get an account by address, username, or legacy profile ID."""
+  account(request: AccountRequest!): Account
+
+  """Get accounts."""
+  accounts(request: AccountsRequest!): PaginatedAccountsResult!
+
+  """
+  Get native and/or ERC20 token balances in bulk for the authenticated Account.
+  
+  You MUST be authenticated as Account Owner or Account Manager to use this query.
+  """
+  accountBalances(request: AccountBalancesRequest!): [AnyAccountBalance!]!
+
+  """
+  Account information for the authenticated account.
+  
+  You MUST be authenticated to use this query.
+  """
+  me: MeResult!
+
+  """Get accounts by address, username, or legacy profile ID."""
+  accountsBulk(request: AccountsBulkRequest!): [Account!]!
+
+  """Get the stats for an account."""
+  accountStats(request: AccountStatsRequest!): AccountStats!
+
+  """Get the account stats for the graphs."""
+  accountGraphsStats(request: AccountGraphsStatsRequest!): AccountGraphsFollowStats!
+
+  """Get the account stats for the feeds."""
+  accountFeedsStats(request: AccountFeedsStatsRequest!): AccountFeedsStats!
+
+  """
+  Accounts blocked for the authenticated account.
+  
+  You MUST be authenticated to use this query.
+  """
+  accountsBlocked(request: AccountsBlockedRequest!): PaginatedAccountsBlockedResult!
+
+  """Get the accounts which are available to use for the given address"""
+  accountsAvailable(request: AccountsAvailableRequest!): PaginatedAccountsAvailableResult!
+
+  """
+  Account manager for the authenticated account.
+  
+  You MUST be authenticated to use this query.
+  """
+  accountManagers(request: AccountManagersRequest!): PaginatedAccountManagersResult!
+
+  """
+  Get the last logged in account for the given address and app if specified.
+  """
+  lastLoggedInAccount(request: LastLoggedInAccountRequest!): Account
+
+  """Get who acted on a post."""
+  whoExecutedActionOnAccount(request: WhoExecutedActionOnAccountRequest!): PaginatedAccountExecutedActionsResult!
+
+  """Get an app"""
+  app(request: AppRequest!): App
+
+  """Get the apps."""
+  apps(request: AppsRequest!): AppsResult!
+
+  """Get the groups for an app"""
+  appGroups(request: AppGroupsRequest!): PaginatedGroupsResult!
+
+  """Get the signers for an app"""
+  appSigners(request: AppSignersRequest!): PaginatedAppSignersResult!
+
+  """Get the feeds for an app"""
+  appFeeds(request: AppFeedsRequest!): PaginatedAppFeedsResult!
+
+  """Get accounts for an app."""
+  appUsers(request: AppUsersRequest!): PaginatedAppUsersResult!
+
+  """
+  Get the server side API key for the app you must be the owner of the app to see it.
+  
+  You MUST be authenticated as a Builder to use this mutation.
+  """
+  appServerApiKey(request: AppServerApiKeyRequest!): String
+
+  """
+  List all active authenticated sessions for the current account.
+  
+  You MUST be authenticated to use this query.
+  """
+  authenticatedSessions(request: AuthenticatedSessionsRequest!): PaginatedActiveAuthenticationsResult!
+
+  """
+  Get the current authenticated session for the current account.
+  
+  You MUST be authenticated to use this query.
+  """
+  currentSession: AuthenticatedSession!
+  feed(request: FeedRequest!): Feed
+
+  """Get the feeds."""
+  feeds(request: FeedsRequest!): PaginatedFeedsResult!
+  post(request: PostRequest!): AnyPost
+  posts(request: PostsRequest!): PaginatedAnyPostsResult!
+
+  """Get any post references for a given post."""
+  postReferences(request: PostReferencesRequest!): PaginatedAnyPostsResult!
+  postTags(request: PostTagsRequest!): PaginatedPostTagsResult!
+  postBookmarks(request: PostBookmarksRequest!): PaginatedAnyPostsResult!
+
+  """Get the reactions added to a post."""
+  postReactions(request: PostReactionsRequest!): PaginatedPostReactionsResult!
+  postReactionStatus(request: PostReactionStatusRequest!): [PostReactionStatus!]!
+
+  """Lists all available Post Action contracts."""
+  postActionContracts(request: PostActionContractsRequest!): PaginatedPostActionContracts!
+
+  """Get accounts who referenced a post"""
+  whoReferencedPost(request: WhoReferencedPostRequest!): PaginatedAccountsResult!
+
+  """Get who acted on a post."""
+  whoExecutedActionOnPost(request: WhoExecutedActionOnPostRequest!): PaginatedPostExecutedActionsResult!
+  postEdits(request: PostEditsRequest!): PaginatedPostEditsResult!
+  following(request: FollowingRequest!): PaginatedFollowingResult!
+  followers(request: FollowersRequest!): PaginatedFollowersResult!
+  followersYouKnow(request: FollowersYouKnowRequest!): PaginatedFollowersResult!
+  followStatus(request: FollowStatusRequest!): [FollowStatusResult!]!
+  graph(request: GraphRequest!): Graph
+
+  """Get the graphs."""
+  graphs(request: GraphsRequest!): PaginatedGraphsResult!
+  group(request: GroupRequest!): Group
+
+  """Get the groups."""
+  groups(request: GroupsRequest!): PaginatedGroupsResult!
+
+  """Get the members of the group"""
+  groupMembers(request: GroupMembersRequest!): PaginatedGroupMembersResult!
+
+  """Get the number of members in a Group"""
+  groupStats(request: GroupStatsRequest!): GroupStatsResponse!
+
+  """Get the group membership requests"""
+  groupMembershipRequests(request: GroupMembershipRequestsRequest!): PaginatedGroupMembershipRequestsResult!
+
+  """Get the banned accounts of a group"""
+  groupBannedAccounts(request: GroupBannedAccountsRequest!): PaginatedGroupBannedAccountsResult!
+
+  """Get admins for a graph/app/sponsor/feed/username/group address"""
+  adminsFor(request: AdminsForRequest!): PaginatedAdminsResult!
+
+  """Get access control information"""
+  accessControl(request: AccessControlRequest!): AccessControlResult
+
+  """
+  Get account timeline.
+  
+  You MUST be authenticated to use this query.
+  """
+  timeline(request: TimelineRequest!): PaginatedTimelineResult!
+
+  """Get most engaged posts for the given account timeline."""
+  timelineHighlights(request: TimelineHighlightsRequest!): PaginatedPostsResult!
+
+  """
+  Get account notifications.
+  
+  You MUST be authenticated to use this query.
+  """
+  notifications(request: NotificationRequest!): PaginatedNotificationResult!
+  getSnsSubscriptions(request: GetSnsSubscriptionsRequest!): [SnsSubscription!]!
+  mlAccountRecommendations(request: AccountRecommendationsRequest!): PaginatedAccountsResult!
+  mlPostsForYou(request: PostsForYouRequest!): PaginatedPostsForYouResult!
+  mlPostsExplore(request: PostsExploreRequest!): PaginatedPostsResult!
+
+  """Get the status of a transaction by its hash."""
+  transactionStatus(request: TransactionStatusRequest!): TransactionStatusResult!
+  debugMetadata(debugMetadataRequest: DebugPostMetadataRequest!): DebugPostMetadataResult!
+
+  """Get the status of a refresh metadata job."""
+  refreshMetadataStatus(request: RefreshMetadataStatusRequest!): RefreshMetadataStatusResult!
+
+  """Create a frame typed data"""
+  createFrameTypedData(request: FrameEIP712Request!): CreateFrameEIP712TypedData!
+  verifyFrameSignature(request: FrameVerifySignature!): FrameVerifySignatureResult!
+
+  """
+  Checks if the given username can be created by the account
+  
+  You MUST be authenticated to use this mutation.
+  """
+  canCreateUsername(request: UsernameInput!): CanCreateUsernameResult!
+  namespace(request: NamespaceRequest!): UsernameNamespace
+  username(request: UsernameRequest!): Username
+
+  """Get the usernames for the account/owner."""
+  usernames(request: UsernamesRequest!): PaginatedUsernamesResult!
+
+  """Get the namespaces."""
+  namespaces(request: NamespacesRequest!): NamespacesResult!
+
+  """Get the banned accounts of a group"""
+  namespaceReservedUsernames(request: NamespaceReservedUsernamesRequest!): PaginatedNamespaceReservedUsernamesResult!
+
+  """Get paginated Sponsorship limits Exclusion list."""
+  sponsorshipLimitsExclusions(request: SponsorshipLimitExclusionsRequest!): SponsorshipLimitsExclusionsResult!
+
+  """Get a Sponsorship"""
+  sponsorship(request: SponsorshipRequest!): Sponsorship
+
+  """Get paginated Sponsorship Signers."""
+  sponsorshipSigners(request: SponsorshipSignersRequest!): SponsorshipSignersResult!
+
+  """Get paginated Sponsorships."""
+  sponsorships(request: SponsorshipsRequest!): SponsorshipsResult!
+
+  """Get paginated Sponsorship Grants."""
+  sponsorshipGrants(request: SponsorshipGrantsRequest!): SponsorshipGrantsResult!
+  _service: _Service!
+}
+
+type QuoteNotification {
+  id: GeneratedNotificationId!
+  quote: Post!
+}
+
+type RawKeyValue {
+  key: BlockchainData!
+  data: BlockchainData!
+}
+
+input RawKeyValueInput {
+  key: BlockchainData!
+  data: BlockchainData!
+}
+
+type ReactionNotification {
+  id: GeneratedNotificationId!
+  reactions: [NotificationAccountPostReaction!]!
+  post: Post!
+}
+
+type RecipientPercent {
+  """Address of the recipient."""
+  address: EvmAddress!
+
+  """Percentage of the fee that will be sent to the recipient."""
+  percent: Float!
+}
+
+input RecipientPercentInput {
+  """Address of the recipient."""
+  address: EvmAddress!
+
+  """Percentage of the fee that will be sent to the recipient."""
+  percent: Float!
+}
+
+input RecommendAccount {
+  """The account to recommend."""
+  account: EvmAddress!
+}
+
+enum ReferenceRelevancyFilter {
+  """All comments."""
+  ALL
+
+  """Only the comments that are relevant"""
+  RELEVANT
+
+  """Only the comments that are not relevant"""
+  NOT_RELEVANT
+}
+
+input ReferencingPostInput {
+  """The post to reference."""
+  post: PostId!
+
+  """The processing params for the post rules."""
+  postRulesProcessingParams: [PostRulesProcessingParams!]
+}
+
+input ReferralCut {
+  """Address of the recipient."""
+  address: EvmAddress!
+
+  """
+  Percentage of the referral share that will be sent to the address specified.
+  """
+  percent: Float!
+}
+
+input RefreshMetadataRequest {
+  """The entity to refresh metadata for."""
+  entity: EntityId!
+
+  """Used only when trying to refresh app-specific account metadata"""
+  app: EvmAddress
+}
+
+type RefreshMetadataResult {
+  """
+  The id of the refresh metadata job. You can use this id to check the status of the job.
+  """
+  id: UUID!
+}
+
+input RefreshMetadataStatusRequest {
+  """The refresh metadata status ID from the refreshMetadata mutation."""
+  id: UUID!
+}
+
+type RefreshMetadataStatusResult {
+  """
+  The id of the refresh metadata job. You can use this id to check the status of the job.
+  """
+  id: UUID!
+
+  """The status of the refresh metadata job."""
+  status: IndexingStatus!
+
+  """An optional reason in case the status is failed."""
+  reason: String
+
+  """The timestamp when the refresh metadata job was updated."""
+  updatedAt: DateTime!
+}
+
+input RefreshRequest {
+  refreshToken: RefreshToken!
+}
+
+union RefreshResult = AuthenticationTokens | ForbiddenError
+
+scalar RefreshToken
+
+input RejectGroupMembershipRequest {
+  """The group you want to reject membership request for."""
+  group: EvmAddress!
+
+  """The accounts you want to reject membership request for."""
+  accounts: [EvmAddress!]!
+}
+
+type RejectGroupMembershipRequestsResponse {
+  hash: TxHash!
+}
+
+union RejectGroupMembershipResult = RejectGroupMembershipRequestsResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveAccountManagerRequest {
+  """The address to remove as a manager."""
+  manager: EvmAddress!
+}
+
+union RemoveAccountManagerResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveAdminsRequest {
+  """
+  The graph/app/sponsor/feed/username/group address which manages these admins
+  """
+  address: EvmAddress!
+
+  """The addresses to remove as admins"""
+  admins: [EvmAddress!]!
+}
+
+union RemoveAdminsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveAppAuthorizationEndpointRequest {
+  """The app."""
+  app: EvmAddress!
+}
+
+input RemoveAppFeedsRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app feeds (max 10 per request)"""
+  feeds: [EvmAddress!]!
+}
+
+union RemoveAppFeedsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveAppGroupsRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app groups (max 10 per request)"""
+  groups: [EvmAddress!]!
+}
+
+union RemoveAppGroupsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveAppSignersRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app signers (max 10 per request)"""
+  signers: [EvmAddress!]!
+}
+
+union RemoveAppSignersResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RemoveGroupMembersRequest {
+  """The group you want to join"""
+  group: EvmAddress!
+
+  """The accounts you want to remove from the group."""
+  accounts: [EvmAddress!]!
+
+  """Ban the account from the joining the group."""
+  ban: Boolean! = false
+
+  """The processing params for the join rules."""
+  rulesProcessingParams: [GroupRulesProcessingParams!]
+}
+
+type RemoveGroupMembersResponse {
+  hash: TxHash!
+}
+
+union RemoveGroupMembersResult = RemoveGroupMembersResponse | GroupOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+union RemoveSignlessResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input ReportAccountRequest {
+  """The account to report."""
+  account: EvmAddress!
+
+  """The reason for the report."""
+  reason: AccountReportReason!
+
+  """An optional comment to add to the report."""
+  additionalComment: String
+
+  """An optional list of posts to reference in the report."""
+  referencePosts: [PostId!]
+}
+
+input ReportPostRequest {
+  post: PostId!
+  reason: PostReportReason!
+  additionalComment: String
+}
+
+type Repost {
+  id: PostId!
+  slug: PostId!
+  author: Account!
+  isDeleted: Boolean!
+  timestamp: DateTime!
+  app: App
+  repostOf: Post!
+}
+
+type RepostNotification {
+  id: GeneratedNotificationId!
+  reposts: [NotificationAccountRepost!]!
+  post: Post!
+}
+
+input RequestGroupMembershipRequest {
+  """The group you want to add member to."""
+  group: EvmAddress!
+}
+
+type RequestGroupMembershipResponse {
+  hash: TxHash!
+}
+
+union RequestGroupMembershipResult = RequestGroupMembershipResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input RevokeAuthenticationRequest {
+  authenticationId: UUID!
+}
+
+input RolloverRefreshRequest {
+  """The app that new tokens will be issued for."""
+  app: EvmAddress!
+
+  """A valid Lens API v2 refresh token for a Profile session."""
+  refreshToken: LegacyRefreshToken!
+}
+
+scalar RuleId
+
+enum SelfFundedFallbackReason {
+  NOT_SPONSORED
+  CANNOT_SPONSOR
+}
+
+type SelfFundedTransactionRequest {
+  """
+  The raw transaction request object.
+  
+  Use this object if your library does not have a parser for the encoded transaction data.
+  """
+  raw: Eip1559TransactionRequest!
+  reason: String!
+  selfFundedReason: SelfFundedFallbackReason
+}
+
+scalar ServerAPIKey
+
+input SetAccountMetadataRequest {
+  """The metadata URI to set."""
+  metadataUri: URI!
+}
+
+type SetAccountMetadataResponse {
+  hash: TxHash!
+}
+
+union SetAccountMetadataResult = SetAccountMetadataResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppGraphRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app graph to set"""
+  graph: GraphChoiceOneOf!
+}
+
+union SetAppGraphResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppMetadataRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app metadata to set"""
+  metadataUri: String!
+}
+
+union SetAppMetadataResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppSponsorshipRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app sponsorship to set"""
+  sponsorship: EvmAddress!
+}
+
+union SetAppSponsorshipResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppTreasuryRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app treasury to set"""
+  treasury: EvmAddress!
+}
+
+union SetAppTreasuryResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppUsernameNamespaceRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app username namespace to set"""
+  usernameNamespace: UsernameNamespaceChoiceOneOf!
+}
+
+union SetAppUsernameNamespaceResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetAppVerificationRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The new verification state"""
+  enabled: Boolean!
+}
+
+union SetAppVerificationResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetDefaultAppFeedRequest {
+  """The app to update"""
+  app: EvmAddress!
+
+  """The app default feed to set"""
+  feed: FeedChoiceOneOf!
+}
+
+union SetDefaultAppFeedResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetFeedMetadataRequest {
+  """The feed to update"""
+  feed: EvmAddress!
+
+  """The feed metadata to set"""
+  metadataUri: String!
+}
+
+type SetFeedMetadataResponse {
+  hash: TxHash!
+}
+
+union SetFeedMetadataResult = SetFeedMetadataResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetGraphMetadataRequest {
+  """The graph to update"""
+  graph: EvmAddress!
+
+  """The graph metadata to set"""
+  metadataUri: String!
+}
+
+union SetGraphMetadataResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetGroupMetadataRequest {
+  """The group to update"""
+  group: EvmAddress!
+
+  """The group metadata to set"""
+  metadataUri: String!
+}
+
+type SetGroupMetadataResponse {
+  hash: TxHash!
+}
+
+union SetGroupMetadataResult = SetGroupMetadataResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetNamespaceMetadataRequest {
+  """The namespace to update"""
+  namespace: EvmAddress!
+
+  """The namespace metadata to set"""
+  metadataUri: String!
+}
+
+union SetNamespaceMetadataResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input SetSponsorshipMetadataRequest {
+  """The sponsorship to update"""
+  sponsorship: EvmAddress!
+
+  """The sponsorship metadata to set"""
+  metadataUri: URI!
+}
+
+union SetSponsorshipMetadataResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar Signature
+
+input SignedAuthChallenge {
+  id: UUID!
+  signature: Signature!
+}
+
+type SimpleCollectAction {
+  address: EvmAddress!
+  payToCollect: PayToCollectConfig
+  collectLimit: Int
+  followerOnGraph: FollowerOn
+  endsAt: DateTime
+  isImmutable: Boolean!
+  collectNftAddress: EvmAddress!
+}
+
+input SimpleCollectActionConfigInput {
+  payToCollect: PayToCollectInput
+  collectLimit: Int
+  followerOnGraph: FollowerOnInput
+  endsAt: DateTime
+  isImmutable: Boolean! = true
+}
+
+type SimpleCollectActionContract {
+  address: EvmAddress!
+}
+
+input SimpleCollectExecuteInput {
+  selected: AlwaysTrue!
+  referrals: [ReferralCut!]
+}
+
+type SimpleCollectPostActionExecuted {
+  executedBy: Account!
+  executedAt: DateTime!
+  action: SimpleCollectAction!
+}
+
+type SimpleCollectValidationFailed {
+  reasonType: SimpleCollectValidationFailedReason!
+  reason: String!
+}
+
+enum SimpleCollectValidationFailedReason {
+  NOT_ENABLED
+  END_DATE_REACHED
+  LIMIT_REACHED
+  NOT_ENOUGH_BALANCE
+  NOT_A_FOLLOWER
+  POST_DELETED
+}
+
+union SimpleCollectValidationOutcome = SimpleCollectValidationPassed | SimpleCollectValidationFailed
+
+type SimpleCollectValidationPassed {
+  passed: AlwaysTrue!
+}
+
+input SimplePaymentFeedRuleConfig {
+  cost: AmountInput!
+  recipient: EvmAddress!
+}
+
+input SimplePaymentFollowRuleConfig {
+  cost: AmountInput!
+  recipient: EvmAddress!
+}
+
+input SimplePaymentGroupRuleConfig {
+  cost: AmountInput!
+  recipient: EvmAddress!
+}
+
+enum SnsNotificationType {
+  MEDIA_SNAPSHOT_SUCCESS
+  MEDIA_SNAPSHOT_ERROR
+  METADATA_SNAPSHOT_SUCCESS
+  METADATA_SNAPSHOT_ERROR
+  REFRESH_METADATA_SUCCESS
+  REFRESH_METADATA_ERROR
+  POST_CREATED
+  POST_EDITED
+  POST_DELETED
+  POST_COLLECTED
+  POST_ACTION_EXECUTED
+  POST_REACTION_ADDED
+  POST_REACTION_REMOVED
+  POST_REPORTED
+  ACCOUNT_CREATED
+  ACCOUNT_MENTIONED
+  ACCOUNT_FOLLOWED
+  ACCOUNT_UNFOLLOWED
+  ACCOUNT_FOLLOW_RULES_UPDATED
+  ACCOUNT_BLOCKED
+  ACCOUNT_UNBLOCKED
+  ACCOUNT_METADATA_UPDATED
+  ACCOUNT_USERNAME_CREATED
+  ACCOUNT_USERNAME_ASSIGNED
+  ACCOUNT_USERNAME_UNASSIGNED
+  ACCOUNT_CONTENT_CONSUMED
+  ACCOUNT_MANAGER_ADDED
+  ACCOUNT_MANAGER_REMOVED
+  ACCOUNT_MANAGER_UPDATED
+  ACCOUNT_OWNERSHIP_TRANSFERRED
+  ACCOUNT_ACTION_EXECUTED
+  ACCOUNT_REPORTED
+  ML_ACCOUNT_SIGNAL
+  ML_RECOMMENDED_ACCOUNT_DISMISSED
+}
+
+type SnsSubscription {
+  id: UUID!
+  account: EvmAddress!
+  webhook: URL!
+  app: EvmAddress
+  topic: SnsNotificationType!
+  topicArn: String!
+  filter: JSON!
+}
+
+input SnsTopicInput {
+  mediaSnapshotSuccess: MediaSnapshotNotificationAttributes
+  mediaSnapshotError: MediaSnapshotNotificationAttributes
+  metadataSnapshotSuccess: MetadataSnapshotNotificationAttributes
+  metadataSnapshotError: MetadataSnapshotNotificationAttributes
+  refreshMetadataSuccess: MetadataSnapshotNotificationAttributes
+  refreshMetadataError: MetadataSnapshotNotificationAttributes
+  postCreated: PostCreatedNotificationAttributes
+  postEdited: PostEditedNotificationAttributes
+  postDeleted: PostDeletedNotificationAttributes
+  postReactionAdded: PostReactionAddedNotificationAttributes
+  postReactionRemoved: PostReactionRemovedNotificationAttributes
+  postReported: PostReportedNotificationAttributes
+  postCollected: PostCollectedNotificationAttributes
+  postActionExecuted: PostActionExecutedNotificationAttributes
+  accountCreated: AccountCreatedNotificationAttributes
+  accountMentioned: AccountMentionedNotificationAttributes
+  accountFollowed: AccountFollowedNotificationAttributes
+  accountUnfollowed: AccountUnfollowedNotificationAttributes
+  accountBlocked: AccountBlockedNotificationAttributes
+  accountUnblocked: AccountUnblockedNotificationAttributes
+  accountUsernameCreated: AccountUsernameCreatedNotificationAttributes
+  accountUsernameAssigned: AccountUsernameAssignedNotificationAttributes
+  accountUsernameUnassigned: AccountUsernameUnassignedNotificationAttributes
+  accountManagerAdded: AccountManagerAddedNotificationAttributes
+  accountManagerRemoved: AccountManagerRemovedNotificationAttributes
+  accountManagerUpdated: AccountManagerUpdatedNotificationAttributes
+  accountOwnershipTransferred: AccountOwnershipTransferredNotificationAttributes
+  accountReported: AccountReportedNotificationAttributes
+  accountActionExecuted: AccountActionExecutedNotificationAttributes
+}
+
+type SpaceMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+
+  """The space join link."""
+  link: URI!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """The space start time (ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ`)."""
+  startsAt: DateTime!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The space title."""
+  title: String!
+  content: String!
+}
+
+enum SponsoredFallbackReason {
+  CANNOT_DELEGATE
+  REQUIRES_SIGNATURE
+  SIGNLESS_DISABLED
+  SIGNLESS_FAILED
+}
+
+type SponsoredTransactionRequest {
+  """
+  The raw transaction request object.
+  
+  Use this object if your library does not have a parser for the encoded transaction data.
+  """
+  raw: Eip712TransactionRequest!
+  reason: String!
+  sponsoredReason: SponsoredFallbackReason
+}
+
+type Sponsorship {
+  address: EvmAddress!
+  isPaused: Boolean!
+  createdAt: DateTime!
+  metadata: SponsorshipMetadata
+  limits: SponsorshipLimits
+  owner: EvmAddress!
+
+  """
+  The native token balance of the sponsorship contract.
+  
+  This value is cached for up to 2 minutes for each sponsorship contract.
+  """
+  balance: BigDecimal!
+
+  """
+  Indicates whether the Lens API is authorized as the sponsorship signer
+  to sponsor end-user social operations (e.g., posts, comments, follows)
+  performed through the Lens API for apps associated with this sponsorship.
+  """
+  allowsLensAccess: Boolean!
+}
+
+type SponsorshipAllowance {
+  """The sponsorship window type."""
+  window: SponsorshipRateLimitWindow!
+
+  """The number of remaining sponsorship allowance."""
+  allowanceLeft: Int!
+
+  """The number of sponsorship allowance used."""
+  allowanceUsed: Int!
+
+  """The total sponsorship allowance."""
+  allowance: Int!
+}
+
+type SponsorshipGrant {
+  id: GrantId!
+  grantedAt: DateTime!
+  amount: NativeAmount!
+}
+
+input SponsorshipGrantsFilter {
+  sponsorship: EvmAddress
+  linkedToApp: EvmAddress
+}
+
+input SponsorshipGrantsRequest {
+  """The filter options."""
+  filter: SponsorshipGrantsFilter!
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type SponsorshipGrantsResult {
+  items: [SponsorshipGrant!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+input SponsorshipLimitExclusionsFilter {
+  """The sponsorship address."""
+  sponsorship: EvmAddress!
+}
+
+enum SponsorshipLimitExclusionsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input SponsorshipLimitExclusionsRequest {
+  """The filter options."""
+  filter: SponsorshipLimitExclusionsFilter!
+
+  """The order by criteria."""
+  orderBy: SponsorshipLimitExclusionsOrderBy! = OLDEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type SponsorshipLimits {
+  global: SponsorshipRateLimit
+  user: SponsorshipRateLimit
+}
+
+type SponsorshipLimitsExclusionsResult {
+  items: [SponsorshipLimitsExempt!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+type SponsorshipLimitsExempt {
+  sponsorship: EvmAddress!
+  label: String!
+  address: EvmAddress!
+  createdAt: DateTime!
+}
+
+type SponsorshipMetadata {
+  """An optional description of the Username collection."""
+  description: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+
+  """The name of the Sponsorship."""
+  name: String!
+}
+
+type SponsorshipRateLimit {
+  window: SponsorshipRateLimitWindow!
+  limit: Int!
+}
+
+input SponsorshipRateLimitInput {
+  """The limit time window."""
+  window: SponsorshipRateLimitWindow!
+
+  """The limit value."""
+  limit: Int!
+}
+
+enum SponsorshipRateLimitWindow {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+input SponsorshipRateLimitsExempt {
+  """The exempt address."""
+  address: EvmAddress!
+
+  """The human-readable label for the exempt address."""
+  label: String!
+}
+
+input SponsorshipRateLimitsInput {
+  """The global rate limit."""
+  global: SponsorshipRateLimitInput
+
+  """The user rate limit."""
+  user: SponsorshipRateLimitInput
+}
+
+input SponsorshipRequest {
+  """The Sponsorship address."""
+  address: EvmAddress
+
+  """The transaction hash you created the Sponsorship with."""
+  txHash: TxHash
+}
+
+type SponsorshipSigner {
+  sponsorship: EvmAddress!
+  label: String!
+  address: EvmAddress!
+  createdAt: DateTime!
+}
+
+input SponsorshipSignerInput {
+  """The signer address"""
+  address: EvmAddress!
+
+  """The human-readable label for the signer"""
+  label: String!
+}
+
+input SponsorshipSignersFilter {
+  """The sponsorship address."""
+  sponsorship: EvmAddress!
+}
+
+enum SponsorshipSignersOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input SponsorshipSignersRequest {
+  """The filter options."""
+  filter: SponsorshipSignersFilter!
+
+  """The order by criteria."""
+  orderBy: SponsorshipSignersOrderBy! = OLDEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type SponsorshipSignersResult {
+  items: [SponsorshipSigner!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+input SponsorshipsFilter {
+  """The filter to get Sponsorships managed by address"""
+  managedBy: ManagedBy!
+}
+
+enum SponsorshipsOrderBy {
+  LATEST_FIRST
+  OLDEST_FIRST
+  ALPHABETICAL
+}
+
+input SponsorshipsRequest {
+  """The filter options."""
+  filter: SponsorshipsFilter!
+
+  """The order by criteria."""
+  orderBy: SponsorshipsOrderBy! = LATEST_FIRST
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type SponsorshipsResult {
+  items: [Sponsorship!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+input StatsReactionRequest {
+  type: PostReactionType!
+}
+
+type StoryMetadata {
+  """The story asset."""
+  asset: AnyMedia!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+type StringKeyValue {
+  key: String!
+  string: String!
+}
+
+type SubOperationStatus {
+  operation: TransactionOperation!
+  status: IndexingStatus!
+}
+
+input SwitchAccountRequest {
+  account: EvmAddress!
+}
+
+union SwitchAccountResult = AuthenticationTokens | ForbiddenError
+
+scalar Tag
+
+type TextOnlyMetadata {
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+  content: String!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+}
+
+type ThreeDAsset {
+  """The 3D format of the asset."""
+  format: ThreeDAssetFormat!
+
+  """The license regulating the use of the 3D asset."""
+  license: MetadataLicenseType
+
+  """
+  The URL of the recommended web based 3D player to use to view the 3D asset.
+  """
+  playerUrl: URI!
+
+  """The URI of the 3D asset zip file."""
+  uri: URI!
+
+  """Path in extracted zip. Relative. 3D start point, MUST be 3D file type."""
+  zipPath: String
+}
+
+enum ThreeDAssetFormat {
+  G_LTF_GLB
+  FBX
+  VRM
+  OBJ
+}
+
+type ThreeDMetadata {
+  """The 3D items for the post"""
+  assets: [ThreeDAsset!]!
+
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+  content: String!
+}
+
+enum TimelineEventItemType {
+  POST
+  COMMENT
+  REPOST
+  QUOTE
+}
+
+input TimelineFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+
+  """The apps to filter by."""
+  apps: [EvmAddress!]
+
+  """The post event types to filter by."""
+  eventType: [TimelineEventItemType!]
+
+  """The optional metadata filter."""
+  metadata: PostMetadataFilter
+}
+
+input TimelineHighlightsFilter {
+  """The feeds to filter by."""
+  feeds: [FeedOneOf!]
+
+  """The apps to filter by."""
+  apps: [EvmAddress!]
+  metadata: PostMetadataFilter
+}
+
+input TimelineHighlightsRequest {
+  """The account to get timeline highlights for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the timeline."""
+  filter: TimelineHighlightsFilter
+  pageSize: PageSize! = FIFTY
+  cursor: Cursor
+}
+
+type TimelineItem {
+  id: UUID!
+  primary: Post!
+  reposts: [Repost!]!
+  comments: [Post!]!
+}
+
+input TimelineRequest {
+  """The account to get timeline for."""
+  account: EvmAddress!
+
+  """An optional filter to apply to the timeline."""
+  filter: TimelineFilter
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+enum TimezoneId {
+  AFRICA_ABIDJAN
+  AFRICA_ACCRA
+  AFRICA_ADDIS_ABABA
+  AFRICA_ALGIERS
+  AFRICA_ASMERA
+  AFRICA_BAMAKO
+  AFRICA_BANGUI
+  AFRICA_BANJUL
+  AFRICA_BISSAU
+  AFRICA_BLANTYRE
+  AFRICA_BRAZZAVILLE
+  AFRICA_BUJUMBURA
+  AFRICA_CAIRO
+  AFRICA_CASABLANCA
+  AFRICA_CEUTA
+  AFRICA_CONAKRY
+  AFRICA_DAKAR
+  AFRICA_DAR_ES_SALAAM
+  AFRICA_DJIBOUTI
+  AFRICA_DOUALA
+  AFRICA_EL_AAIUN
+  AFRICA_FREETOWN
+  AFRICA_GABORONE
+  AFRICA_HARARE
+  AFRICA_JOHANNESBURG
+  AFRICA_JUBA
+  AFRICA_KAMPALA
+  AFRICA_KHARTOUM
+  AFRICA_KIGALI
+  AFRICA_KINSHASA
+  AFRICA_LAGOS
+  AFRICA_LIBREVILLE
+  AFRICA_LOME
+  AFRICA_LUANDA
+  AFRICA_LUBUMBASHI
+  AFRICA_LUSAKA
+  AFRICA_MALABO
+  AFRICA_MAPUTO
+  AFRICA_MASERU
+  AFRICA_MBABANE
+  AFRICA_MOGADISHU
+  AFRICA_MONROVIA
+  AFRICA_NAIROBI
+  AFRICA_NDJAMENA
+  AFRICA_NIAMEY
+  AFRICA_NOUAKCHOTT
+  AFRICA_OUAGADOUGOU
+  AFRICA_PORTO_NOVO
+  AFRICA_SAO_TOME
+  AFRICA_TRIPOLI
+  AFRICA_TUNIS
+  AFRICA_WINDHOEK
+  AMERICA_ADAK
+  AMERICA_ANCHORAGE
+  AMERICA_ANGUILLA
+  AMERICA_ANTIGUA
+  AMERICA_ARAGUAINA
+  AMERICA_ARGENTINA_LA_RIOJA
+  AMERICA_ARGENTINA_RIO_GALLEGOS
+  AMERICA_ARGENTINA_SALTA
+  AMERICA_ARGENTINA_SAN_JUAN
+  AMERICA_ARGENTINA_SAN_LUIS
+  AMERICA_ARGENTINA_TUCUMAN
+  AMERICA_ARGENTINA_USHUAIA
+  AMERICA_ARUBA
+  AMERICA_ASUNCION
+  AMERICA_BAHIA
+  AMERICA_BAHIA_BANDERAS
+  AMERICA_BARBADOS
+  AMERICA_BELEM
+  AMERICA_BELIZE
+  AMERICA_BLANC_SABLON
+  AMERICA_BOA_VISTA
+  AMERICA_BOGOTA
+  AMERICA_BOISE
+  AMERICA_BUENOS_AIRES
+  AMERICA_CAMBRIDGE_BAY
+  AMERICA_CAMPO_GRANDE
+  AMERICA_CANCUN
+  AMERICA_CARACAS
+  AMERICA_CATAMARCA
+  AMERICA_CAYENNE
+  AMERICA_CAYMAN
+  AMERICA_CHICAGO
+  AMERICA_CHIHUAHUA
+  AMERICA_CIUDAD_JUAREZ
+  AMERICA_CORAL_HARBOUR
+  AMERICA_CORDOBA
+  AMERICA_COSTA_RICA
+  AMERICA_CRESTON
+  AMERICA_CUIABA
+  AMERICA_CURACAO
+  AMERICA_DANMARKSHAVN
+  AMERICA_DAWSON
+  AMERICA_DAWSON_CREEK
+  AMERICA_DENVER
+  AMERICA_DETROIT
+  AMERICA_DOMINICA
+  AMERICA_EDMONTON
+  AMERICA_EIRUNEPE
+  AMERICA_EL_SALVADOR
+  AMERICA_FORT_NELSON
+  AMERICA_FORTALEZA
+  AMERICA_GLACE_BAY
+  AMERICA_GODTHAB
+  AMERICA_GOOSE_BAY
+  AMERICA_GRAND_TURK
+  AMERICA_GRENADA
+  AMERICA_GUADELOUPE
+  AMERICA_GUATEMALA
+  AMERICA_GUAYAQUIL
+  AMERICA_GUYANA
+  AMERICA_HALIFAX
+  AMERICA_HAVANA
+  AMERICA_HERMOSILLO
+  AMERICA_INDIANA_KNOX
+  AMERICA_INDIANA_MARENGO
+  AMERICA_INDIANA_PETERSBURG
+  AMERICA_INDIANA_TELL_CITY
+  AMERICA_INDIANA_VEVAY
+  AMERICA_INDIANA_VINCENNES
+  AMERICA_INDIANA_WINAMAC
+  AMERICA_INDIANAPOLIS
+  AMERICA_INUVIK
+  AMERICA_IQALUIT
+  AMERICA_JAMAICA
+  AMERICA_JUJUY
+  AMERICA_JUNEAU
+  AMERICA_KENTUCKY_MONTICELLO
+  AMERICA_KRALENDIJK
+  AMERICA_LA_PAZ
+  AMERICA_LIMA
+  AMERICA_LOS_ANGELES
+  AMERICA_LOUISVILLE
+  AMERICA_LOWER_PRINCES
+  AMERICA_MACEIO
+  AMERICA_MANAGUA
+  AMERICA_MANAUS
+  AMERICA_MARIGOT
+  AMERICA_MARTINIQUE
+  AMERICA_MATAMOROS
+  AMERICA_MAZATLAN
+  AMERICA_MENDOZA
+  AMERICA_MENOMINEE
+  AMERICA_MERIDA
+  AMERICA_METLAKATLA
+  AMERICA_MEXICO_CITY
+  AMERICA_MIQUELON
+  AMERICA_MONCTON
+  AMERICA_MONTERREY
+  AMERICA_MONTEVIDEO
+  AMERICA_MONTSERRAT
+  AMERICA_NASSAU
+  AMERICA_NEW_YORK
+  AMERICA_NIPIGON
+  AMERICA_NOME
+  AMERICA_NORONHA
+  AMERICA_NORTH_DAKOTA_BEULAH
+  AMERICA_NORTH_DAKOTA_CENTER
+  AMERICA_NORTH_DAKOTA_NEW_SALEM
+  AMERICA_OJINAGA
+  AMERICA_PANAMA
+  AMERICA_PANGNIRTUNG
+  AMERICA_PARAMARIBO
+  AMERICA_PHOENIX
+  AMERICA_PORT_AU_PRINCE
+  AMERICA_PORT_OF_SPAIN
+  AMERICA_PORTO_VELHO
+  AMERICA_PUERTO_RICO
+  AMERICA_PUNTA_ARENAS
+  AMERICA_RAINY_RIVER
+  AMERICA_RANKIN_INLET
+  AMERICA_RECIFE
+  AMERICA_REGINA
+  AMERICA_RESOLUTE
+  AMERICA_RIO_BRANCO
+  AMERICA_SANTA_ISABEL
+  AMERICA_SANTAREM
+  AMERICA_SANTIAGO
+  AMERICA_SANTO_DOMINGO
+  AMERICA_SAO_PAULO
+  AMERICA_SCORESBYSUND
+  AMERICA_SITKA
+  AMERICA_ST_BARTHELEMY
+  AMERICA_ST_JOHNS
+  AMERICA_ST_KITTS
+  AMERICA_ST_LUCIA
+  AMERICA_ST_THOMAS
+  AMERICA_ST_VINCENT
+  AMERICA_SWIFT_CURRENT
+  AMERICA_TEGUCIGALPA
+  AMERICA_THULE
+  AMERICA_THUNDER_BAY
+  AMERICA_TIJUANA
+  AMERICA_TORONTO
+  AMERICA_TORTOLA
+  AMERICA_VANCOUVER
+  AMERICA_WHITEHORSE
+  AMERICA_WINNIPEG
+  AMERICA_YAKUTAT
+  AMERICA_YELLOWKNIFE
+  ANTARCTICA_CASEY
+  ANTARCTICA_DAVIS
+  ANTARCTICA_DUMONT_D_URVILLE
+  ANTARCTICA_MACQUARIE
+  ANTARCTICA_MAWSON
+  ANTARCTICA_MC_MURDO
+  ANTARCTICA_PALMER
+  ANTARCTICA_ROTHERA
+  ANTARCTICA_SYOWA
+  ANTARCTICA_TROLL
+  ANTARCTICA_VOSTOK
+  ARCTIC_LONGYEARBYEN
+  ASIA_ADEN
+  ASIA_ALMATY
+  ASIA_AMMAN
+  ASIA_ANADYR
+  ASIA_AQTAU
+  ASIA_AQTOBE
+  ASIA_ASHGABAT
+  ASIA_ATYRAU
+  ASIA_BAGHDAD
+  ASIA_BAHRAIN
+  ASIA_BAKU
+  ASIA_BANGKOK
+  ASIA_BARNAUL
+  ASIA_BEIRUT
+  ASIA_BISHKEK
+  ASIA_BRUNEI
+  ASIA_CALCUTTA
+  ASIA_CHITA
+  ASIA_CHOIBALSAN
+  ASIA_COLOMBO
+  ASIA_DAMASCUS
+  ASIA_DHAKA
+  ASIA_DILI
+  ASIA_DUBAI
+  ASIA_DUSHANBE
+  ASIA_FAMAGUSTA
+  ASIA_GAZA
+  ASIA_HEBRON
+  ASIA_HONG_KONG
+  ASIA_HOVD
+  ASIA_IRKUTSK
+  ASIA_JAKARTA
+  ASIA_JAYAPURA
+  ASIA_JERUSALEM
+  ASIA_KABUL
+  ASIA_KAMCHATKA
+  ASIA_KARACHI
+  ASIA_KATMANDU
+  ASIA_KHANDYGA
+  ASIA_KRASNOYARSK
+  ASIA_KUALA_LUMPUR
+  ASIA_KUCHING
+  ASIA_KUWAIT
+  ASIA_MACAU
+  ASIA_MAGADAN
+  ASIA_MAKASSAR
+  ASIA_MANILA
+  ASIA_MUSCAT
+  ASIA_NICOSIA
+  ASIA_NOVOKUZNETSK
+  ASIA_NOVOSIBIRSK
+  ASIA_OMSK
+  ASIA_ORAL
+  ASIA_PHNOM_PENH
+  ASIA_PONTIANAK
+  ASIA_PYONGYANG
+  ASIA_QATAR
+  ASIA_QOSTANAY
+  ASIA_QYZYLORDA
+  ASIA_RANGOON
+  ASIA_RIYADH
+  ASIA_SAIGON
+  ASIA_SAKHALIN
+  ASIA_SAMARKAND
+  ASIA_SEOUL
+  ASIA_SHANGHAI
+  ASIA_SINGAPORE
+  ASIA_SREDNEKOLYMSK
+  ASIA_TAIPEI
+  ASIA_TASHKENT
+  ASIA_TBILISI
+  ASIA_TEHRAN
+  ASIA_THIMPHU
+  ASIA_TOKYO
+  ASIA_TOMSK
+  ASIA_ULAANBAATAR
+  ASIA_URUMQI
+  ASIA_UST_NERA
+  ASIA_VIENTIANE
+  ASIA_VLADIVOSTOK
+  ASIA_YAKUTSK
+  ASIA_YEKATERINBURG
+  ASIA_YEREVAN
+  ATLANTIC_AZORES
+  ATLANTIC_BERMUDA
+  ATLANTIC_CANARY
+  ATLANTIC_CAPE_VERDE
+  ATLANTIC_FAEROE
+  ATLANTIC_MADEIRA
+  ATLANTIC_REYKJAVIK
+  ATLANTIC_SOUTH_GEORGIA
+  ATLANTIC_ST_HELENA
+  ATLANTIC_STANLEY
+  AUSTRALIA_ADELAIDE
+  AUSTRALIA_BRISBANE
+  AUSTRALIA_BROKEN_HILL
+  AUSTRALIA_CURRIE
+  AUSTRALIA_DARWIN
+  AUSTRALIA_EUCLA
+  AUSTRALIA_HOBART
+  AUSTRALIA_LINDEMAN
+  AUSTRALIA_LORD_HOWE
+  AUSTRALIA_MELBOURNE
+  AUSTRALIA_PERTH
+  AUSTRALIA_SYDNEY
+  EUROPE_AMSTERDAM
+  EUROPE_ANDORRA
+  EUROPE_ASTRAKHAN
+  EUROPE_ATHENS
+  EUROPE_BELGRADE
+  EUROPE_BERLIN
+  EUROPE_BRATISLAVA
+  EUROPE_BRUSSELS
+  EUROPE_BUCHAREST
+  EUROPE_BUDAPEST
+  EUROPE_BUSINGEN
+  EUROPE_CHISINAU
+  EUROPE_COPENHAGEN
+  EUROPE_DUBLIN
+  EUROPE_GIBRALTAR
+  EUROPE_GUERNSEY
+  EUROPE_HELSINKI
+  EUROPE_ISLE_OF_MAN
+  EUROPE_ISTANBUL
+  EUROPE_JERSEY
+  EUROPE_KALININGRAD
+  EUROPE_KIEV
+  EUROPE_KIROV
+  EUROPE_LISBON
+  EUROPE_LJUBLJANA
+  EUROPE_LONDON
+  EUROPE_LUXEMBOURG
+  EUROPE_MADRID
+  EUROPE_MALTA
+  EUROPE_MARIEHAMN
+  EUROPE_MINSK
+  EUROPE_MONACO
+  EUROPE_MOSCOW
+  EUROPE_OSLO
+  EUROPE_PARIS
+  EUROPE_PODGORICA
+  EUROPE_PRAGUE
+  EUROPE_RIGA
+  EUROPE_ROME
+  EUROPE_SAMARA
+  EUROPE_SAN_MARINO
+  EUROPE_SARAJEVO
+  EUROPE_SARATOV
+  EUROPE_SIMFEROPOL
+  EUROPE_SKOPJE
+  EUROPE_SOFIA
+  EUROPE_STOCKHOLM
+  EUROPE_TALLINN
+  EUROPE_TIRANE
+  EUROPE_ULYANOVSK
+  EUROPE_UZHGOROD
+  EUROPE_VADUZ
+  EUROPE_VATICAN
+  EUROPE_VIENNA
+  EUROPE_VILNIUS
+  EUROPE_VOLGOGRAD
+  EUROPE_WARSAW
+  EUROPE_ZAGREB
+  EUROPE_ZAPOROZHYE
+  EUROPE_ZURICH
+  INDIAN_ANTANANARIVO
+  INDIAN_CHAGOS
+  INDIAN_CHRISTMAS
+  INDIAN_COCOS
+  INDIAN_COMORO
+  INDIAN_KERGUELEN
+  INDIAN_MAHE
+  INDIAN_MALDIVES
+  INDIAN_MAURITIUS
+  INDIAN_MAYOTTE
+  INDIAN_REUNION
+  PACIFIC_APIA
+  PACIFIC_AUCKLAND
+  PACIFIC_BOUGAINVILLE
+  PACIFIC_CHATHAM
+  PACIFIC_EASTER
+  PACIFIC_EFATE
+  PACIFIC_ENDERBURY
+  PACIFIC_FAKAOFO
+  PACIFIC_FIJI
+  PACIFIC_FUNAFUTI
+  PACIFIC_GALAPAGOS
+  PACIFIC_GAMBIER
+  PACIFIC_GUADALCANAL
+  PACIFIC_GUAM
+  PACIFIC_HONOLULU
+  PACIFIC_JOHNSTON
+  PACIFIC_KIRITIMATI
+  PACIFIC_KOSRAE
+  PACIFIC_KWAJALEIN
+  PACIFIC_MAJURO
+  PACIFIC_MARQUESAS
+  PACIFIC_MIDWAY
+  PACIFIC_NAURU
+  PACIFIC_NIUE
+  PACIFIC_NORFOLK
+  PACIFIC_NOUMEA
+  PACIFIC_PAGO_PAGO
+  PACIFIC_PALAU
+  PACIFIC_PITCAIRN
+  PACIFIC_PONAPE
+  PACIFIC_PORT_MORESBY
+  PACIFIC_RAROTONGA
+  PACIFIC_SAIPAN
+  PACIFIC_TAHITI
+  PACIFIC_TARAWA
+  PACIFIC_TONGATAPU
+  PACIFIC_TRUK
+  PACIFIC_WAKE
+  PACIFIC_WALLIS
+}
+
+type TippingAccountAction {
+  address: EvmAddress!
+}
+
+type TippingAccountActionExecuted {
+  amount: Erc20Amount!
+  executedBy: Account!
+  executedAt: DateTime!
+}
+
+type TippingPostActionContract {
+  address: EvmAddress!
+}
+
+type TippingPostActionExecuted {
+  amount: Erc20Amount!
+  executedBy: Account!
+  executedAt: DateTime!
+}
+
+input TokenAmountInput {
+  standard: TokenStandard!
+
+  """
+  The token address. To represent the native token, use the
+  0x000000000000000000000000000000000000800a.
+  """
+  currency: EvmAddress!
+
+  """
+  Token value in its main unit (e.g., 1.5 DAI), not in the smallest fraction (e.g.,
+  wei).
+  """
+  value: BigDecimal!
+
+  """Optional, only for ERC-1155 tokens."""
+  typeId: BigInt
+}
+
+input TokenGatedFeedRuleConfig {
+  token: TokenAmountInput!
+}
+
+input TokenGatedFollowRuleConfig {
+  token: TokenAmountInput!
+}
+
+input TokenGatedGraphRuleConfig {
+  token: TokenAmountInput!
+}
+
+input TokenGatedGroupRuleConfig {
+  token: TokenAmountInput!
+}
+
+input TokenGatedNamespaceRuleConfig {
+  token: TokenAmountInput!
+}
+
+enum TokenStandard {
+  ERC20
+  ERC721
+  ERC1155
+}
+
+type TransactionMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """The Chain Id."""
+  chainId: ChainId!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The transaction hash."""
+  txHash: String!
+
+  """The type of transaction."""
+  type: TransactionType!
+  content: String!
+}
+
+enum TransactionOperation {
+  ACCESS_CONTROL_ROLE_GRANTED
+  ACCESS_CONTROL_ROLE_REVOKED
+  ACCESS_CONTROL_FACTORY_OWNER_ADMIN_DEPLOYMENT
+  ACCOUNT_FACTORY_DEPLOYMENT
+  ACCOUNT_MANAGER_ADDED
+  ACCOUNT_MANAGER_REMOVED
+  ACCOUNT_MANAGER_UPDATED
+  ACCOUNT_OWNER_TRANSFERRED
+  ACCOUNT_METADATA_URI_SET
+  ACCOUNT_ACTION_CONFIGURED
+  ACCOUNT_ACTION_RECONFIGURED
+  ACCOUNT_ACTION_DISABLED
+  ACCOUNT_ACTION_ENABLED
+  ACCOUNT_ACTION_EXECUTED
+  POST_ACTION_CONFIGURED
+  POST_ACTION_RECONFIGURED
+  POST_ACTION_DISABLED
+  POST_ACTION_ENABLED
+  POST_ACTION_EXECUTED
+  ACTION_METADATA_URI_SET
+  ACCOUNT_BLOCKED
+  ACCOUNT_UNBLOCKED
+  ACCOUNT_EXTRA_DATA_ADDED
+  ACCOUNT_EXTRA_DATA_REMOVED
+  ACCOUNT_EXTRA_DATA_UPDATED
+  APP_FACTORY_DEPLOYMENT
+  APP_ACCESS_CONTROL_ADDED
+  APP_ACCESS_CONTROL_UPDATED
+  APP_DEFAULT_FEED_SET
+  APP_EXTRA_DATA_ADDED
+  APP_EXTRA_DATA_REMOVED
+  APP_EXTRA_DATA_UPDATED
+  APP_FEED_ADDED
+  APP_FEED_REMOVED
+  APP_GRAPH_ADDED
+  APP_GRAPH_REMOVED
+  APP_GROUP_ADDED
+  APP_GROUP_REMOVED
+  APP_METADATA_URI_SET
+  APP_SIGNER_ADDED
+  APP_SIGNER_REMOVED
+  APP_SOURCE_STAMP_VERIFICATION_SET
+  APP_PAYMASTER_ADDED
+  APP_PAYMASTER_REMOVED
+  APP_TREASURY_SET
+  APP_NAMESPACE_ADDED
+  APP_NAMESPACE_REMOVED
+  FEED_FACTORY_DEPLOYMENT
+  FEED_ACCESS_CONTROL_ADDED
+  FEED_ACCESS_CONTROL_UPDATED
+  FEED_EXTRA_DATA_ADDED
+  FEED_EXTRA_DATA_REMOVED
+  FEED_EXTRA_DATA_UPDATED
+  FEED_METADATA_URI_SET
+  FEED_POST_CREATED
+  FEED_POST_DELETED
+  FEED_POST_EDITED
+  FEED_POST_EXTRA_DATA_ADDED
+  FEED_POST_EXTRA_DATA_REMOVED
+  FEED_POST_EXTRA_DATA_UPDATED
+  FEED_RULE_CONFIGURED
+  FEED_RULE_RECONFIGURED
+  FEED_RULE_SELECTOR_ENABLED
+  FEED_RULE_SELECTOR_DISABLED
+  FEED_POST_RULE_CONFIGURED
+  FEED_POST_RULE_RECONFIGURED
+  FEED_POST_RULE_SELECTOR_ENABLED
+  FEED_POST_RULE_SELECTOR_DISABLED
+  GRAPH_FACTORY_DEPLOYMENT
+  GRAPH_ACCESS_CONTROL_ADDED
+  GRAPH_ACCESS_CONTROL_UPDATED
+  GRAPH_EXTRA_DATA_ADDED
+  GRAPH_EXTRA_DATA_REMOVED
+  GRAPH_EXTRA_DATA_UPDATED
+  GRAPH_FOLLOWED
+  GRAPH_METADATA_URI_SET
+  GRAPH_UNFOLLOWED
+  GRAPH_RULE_CONFIGURED
+  GRAPH_RULE_RECONFIGURED
+  GRAPH_RULE_SELECTOR_ENABLED
+  GRAPH_RULE_SELECTOR_DISABLED
+  GRAPH_FOLLOW_RULE_CONFIGURED
+  GRAPH_FOLLOW_RULE_RECONFIGURED
+  GRAPH_FOLLOW_RULE_SELECTOR_ENABLED
+  GRAPH_FOLLOW_RULE_SELECTOR_DISABLED
+  GROUP_FACTORY_DEPLOYMENT
+  GROUP_MEMBER_JOINED
+  GROUP_MEMBER_LEFT
+  GROUP_MEMBER_REMOVED
+  GROUP_MEMBER_ADDED
+  GROUP_ACCESS_CONTROL_ADDED
+  GROUP_ACCESS_CONTROL_UPDATED
+  GROUP_EXTRA_DATA_ADDED
+  GROUP_EXTRA_DATA_REMOVED
+  GROUP_EXTRA_DATA_UPDATED
+  GROUP_METADATA_URI_SET
+  GROUP_RULE_CONFIGURED
+  GROUP_RULE_RECONFIGURED
+  GROUP_RULE_SELECTOR_ENABLED
+  GROUP_RULE_SELECTOR_DISABLED
+  GROUP_MEMBERSHIP_APPROVAL_REQUESTED
+  GROUP_MEMBERSHIP_APPROVAL_REQUEST_CANCELLED
+  GROUP_MEMBERSHIP_APPROVAL_APPROVED
+  GROUP_MEMBERSHIP_APPROVAL_REJECTED
+  GROUP_ACCOUNT_BANNED
+  GROUP_ACCOUNT_UNBANNED
+  NAMESPACE_FACTORY_DEPLOYMENT
+  NAMESPACE_METADATA_URI_SET
+  NAMESPACE_EXTRA_DATA_ADDED
+  NAMESPACE_EXTRA_DATA_REMOVED
+  NAMESPACE_EXTRA_DATA_UPDATED
+  USERNAME_ASSIGNED
+  USERNAME_CREATED
+  USERNAME_REMOVED
+  USERNAME_UNASSIGNED
+  USERNAME_ACCESS_CONTROL_ADDED
+  USERNAME_ACCESS_CONTROL_UPDATED
+  USERNAME_EXTRA_DATA_ADDED
+  USERNAME_EXTRA_DATA_REMOVED
+  USERNAME_EXTRA_DATA_UPDATED
+  USERNAME_RULE_CONFIGURED
+  USERNAME_RULE_RECONFIGURED
+  USERNAME_RULE_SELECTOR_ENABLED
+  USERNAME_RULE_SELECTOR_DISABLED
+  USERNAME_RESERVED
+  USERNAME_RELEASED
+  USERNAME_RESERVED_CREATED
+  USERNAME_TRANSFER
+  SPONSORSHIP_FACTORY_DEPLOYMENT
+  SPONSORSHIP_ACCESS_CONTROL_ADDED
+  SPONSORSHIP_ACCESS_CONTROL_UPDATED
+  SPONSORSHIP_ADDED_TO_EXCLUSION_LIST
+  SPONSORSHIP_REMOVED_FROM_EXCLUSION_LIST
+  SPONSORSHIP_FUNDS_SPENT
+  SPONSORSHIP_GRANT_REVOKED
+  SPONSORSHIP_GRANTED_FUNDS
+  SPONSORSHIP_METADATA_URI_SET
+  SPONSORSHIP_PAUSED
+  SPONSORSHIP_RATE_LIMITS_CHANGED
+  SPONSORSHIP_UNPAUSED
+  SPONSORSHIP_SIGNER_ADDED
+  SPONSORSHIP_SIGNER_REMOVED
+}
+
+input TransactionStatusRequest {
+  txHash: TxHash!
+}
+
+union TransactionStatusResult = PendingTransactionStatus | FinishedTransactionStatus | FailedTransactionStatus | NotIndexedYetStatus
+
+enum TransactionType {
+  ERC_721
+  ERC_20
+  OTHER
+}
+
+type TransactionWillFail {
+  reason: String!
+}
+
+input TransferPrimitiveOwnershipRequest {
+  """
+  The graph/app/sponsor/feed/username/group address to change ownership for
+  """
+  address: EvmAddress!
+
+  """The address of the new owner"""
+  newOwner: EvmAddress!
+}
+
+union TransferPrimitiveOwnershipResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+scalar TxHash
+
+scalar URI
+
+scalar URL
+
+"""
+A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as
+Strings within GraphQL. UUIDs are used to assign unique identifiers to
+entities without requiring a central allocating authority.
+
+# References
+
+* [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)
+* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
+"""
+scalar UUID
+
+input UnassignUsernameFromAccountRequest {
+  namespace: EvmAddress! = "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"
+
+  """The processing params for the unassign rules."""
+  rulesProcessingParams: [NamespaceRulesProcessingParams!]
+}
+
+type UnassignUsernameResponse {
+  hash: TxHash!
+}
+
+union UnassignUsernameToAccountResult = UnassignUsernameResponse | NamespaceOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UnbanGroupAccountsRequest {
+  """The group you want to unban member on."""
+  group: EvmAddress!
+
+  """The accounts you want to unban on the group."""
+  accounts: [EvmAddress!]!
+}
+
+type UnbanGroupAccountsResponse {
+  hash: TxHash!
+}
+
+union UnbanGroupAccountsResult = UnbanGroupAccountsResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UnblockRequest {
+  """The account to unblock."""
+  account: EvmAddress!
+}
+
+union UnblockResult = AccountUnblockedResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type UndoReactionFailure {
+  reason: String!
+}
+
+input UndoReactionRequest {
+  """The reaction to add."""
+  reaction: PostReactionType!
+
+  """The post to react to."""
+  post: PostId!
+}
+
+type UndoReactionResponse {
+  success: Boolean!
+}
+
+union UndoReactionResult = UndoReactionResponse | UndoReactionFailure
+
+input UndoRecommendedAccount {
+  """The account to remove as a recommendation."""
+  account: EvmAddress!
+}
+
+type UnfollowResponse {
+  hash: TxHash!
+}
+
+union UnfollowResult = UnfollowResponse | AccountFollowOperationValidationFailed | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UnhideManagedAccountRequest {
+  """The account to unhide."""
+  account: EvmAddress!
+}
+
+input UnhideReplyRequest {
+  post: PostId!
+}
+
+type UnknownAccountAction {
+  address: EvmAddress!
+  config: [RawKeyValue!]!
+  metadata: ActionMetadata
+}
+
+type UnknownAccountActionExecuted {
+  params: [RawKeyValue!]!
+  executedBy: Account!
+  executedAt: DateTime!
+  action: UnknownAccountAction!
+}
+
+input UnknownAccountRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnknownActionConfigInput {
+  """The unknown action's contract address"""
+  address: EvmAddress!
+
+  """Optional action configuration params"""
+  params: [AnyKeyValueInput!]! = []
+}
+
+input UnknownActionExecuteInput {
+  """The unknown action's contract address"""
+  address: EvmAddress!
+
+  """Optional action execution params"""
+  params: [RawKeyValueInput!]! = []
+}
+
+input UnknownFeedRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+  executeOn: [FeedRuleExecuteOn!]!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnknownGraphRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+  executeOn: [GraphRuleExecuteOn!]!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnknownGroupRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+  executeOn: [GroupRuleExecuteOn!]!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnknownNamespaceRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+  executeOn: [NamespaceRuleExecuteOn!]!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+type UnknownPostAction {
+  address: EvmAddress!
+  config: [RawKeyValue!]!
+  metadata: ActionMetadata
+}
+
+type UnknownPostActionContract {
+  address: EvmAddress!
+  metadata: ActionMetadata
+}
+
+type UnknownPostActionExecuted {
+  params: [RawKeyValue!]!
+  executedBy: Account!
+  executedAt: DateTime!
+  action: UnknownPostAction!
+}
+
+type UnknownPostMetadata {
+  raw: JsonString!
+}
+
+input UnknownPostRuleConfig {
+  """The rule contract address."""
+  address: EvmAddress!
+  executeOn: [PostRuleExecuteOn!]!
+
+  """Optional rule configuration parameters"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnknownRuleProcessingParams {
+  """The rule id"""
+  id: RuleId!
+
+  """The rule processing params"""
+  params: [AnyKeyValueInput!]
+}
+
+input UnwrapTokensRequest {
+  amount: BigDecimal!
+}
+
+union UnwrapTokensResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | InsufficientFunds | TransactionWillFail
+
+input UpdateAccountFollowRulesRequest {
+  """The graph to update account follow rules for."""
+  graph: EvmAddress! = "0x433025d9718302E7B2e1853D712d96F00764513F"
+
+  """The rules to add"""
+  toAdd: AccountRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+}
+
+type UpdateAccountFollowRulesResponse {
+  hash: TxHash!
+}
+
+union UpdateAccountFollowRulesResult = UpdateAccountFollowRulesResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateAccountManagerRequest {
+  """The address to update as a manager."""
+  manager: EvmAddress!
+
+  """The permissions to update for the account manager."""
+  permissions: AccountManagerPermissionsInput!
+}
+
+union UpdateAccountManagerResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateFeedRulesRequest {
+  """The feed to update rules for"""
+  feed: EvmAddress!
+
+  """The rules to add"""
+  toAdd: FeedRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+}
+
+type UpdateFeedRulesResponse {
+  hash: TxHash!
+}
+
+union UpdateFeedRulesResult = UpdateFeedRulesResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateGraphRulesRequest {
+  """The graph to update rules for"""
+  graph: EvmAddress!
+
+  """The rules to add"""
+  toAdd: GraphRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+}
+
+union UpdateGraphRulesResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateGroupRulesRequest {
+  """The group to update rules for"""
+  group: EvmAddress!
+
+  """The rules to add"""
+  toAdd: GroupRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+}
+
+type UpdateGroupRulesResponse {
+  hash: TxHash!
+}
+
+union UpdateGroupRulesResult = UpdateGroupRulesResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateNamespaceRulesRequest {
+  """The namespace to update rules for"""
+  namespace: EvmAddress!
+
+  """The rules to add"""
+  toAdd: NamespaceRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+}
+
+union UpdateNamespaceRulesResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdatePostRulesRequest {
+  """The post to update rules for."""
+  post: PostId!
+
+  """The rules to add"""
+  toAdd: PostRulesConfigInput! = {required: [], anyOf: []}
+
+  """The rules to remove"""
+  toRemove: [RuleId!]! = []
+
+  """The processing params for the feed rules."""
+  feedRulesProcessingParams: [FeedRulesProcessingParams!]! = []
+}
+
+type UpdatePostRulesResponse {
+  hash: TxHash!
+}
+
+union UpdatePostRulesResult = UpdatePostRulesResponse | SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateReservedUsernamesRequest {
+  """The namespace to update reserved usernames for"""
+  namespace: EvmAddress!
+
+  """Usernames to reserve"""
+  toReserve: [String!]! = []
+  toRelease: [String!]! = []
+}
+
+union UpdateReservedUsernamesResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateSponsorshipExclusionListRequest {
+  """The sponsorship to update"""
+  sponsorship: EvmAddress!
+
+  """The new entries to add."""
+  toAdd: [SponsorshipRateLimitsExempt!]! = []
+
+  """The entries to remove."""
+  toRemove: [EvmAddress!]! = []
+}
+
+union UpdateSponsorshipExclusionListResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateSponsorshipLimitsRequest {
+  """The sponsorship to update"""
+  sponsorship: EvmAddress!
+
+  """The new rate limits"""
+  rateLimits: SponsorshipRateLimitsInput
+}
+
+union UpdateSponsorshipLimitsResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+input UpdateSponsorshipSignersRequest {
+  """The sponsorship to update"""
+  sponsorship: EvmAddress!
+
+  """The new entries to add."""
+  toAdd: [SponsorshipSignerInput!]
+
+  """The entries to remove."""
+  toRemove: [EvmAddress!]
+
+  """
+  Indicates whether the Lens API is authorized as the sponsorship signer
+  to sponsor end-user social operations (e.g., posts, comments, follows)
+  performed through the Lens API for apps associated with this sponsorship.
+  
+  If not provided, it won't affect the current configuration.
+  """
+  allowLensAccess: Boolean
+}
+
+union UpdateSponsorshipSignersResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | TransactionWillFail
+
+type Username {
+  """A unique identifier for the username entry."""
+  id: ID!
+
+  """The username value (e.g., lens/bob)."""
+  value: UsernameValue!
+
+  """The address of the namespace that the username is linked to."""
+  namespace: EvmAddress!
+
+  """The local name of the username (e.g., bob)."""
+  localName: String!
+
+  """The address that the username is linked to, if any."""
+  linkedTo: EvmAddress
+
+  """The address that owns the username entry."""
+  ownedBy: EvmAddress!
+
+  """The timestamp when the username was created."""
+  timestamp: DateTime!
+  operations: LoggedInUsernameOperations
+}
+
+input UsernameInput {
+  """The local name, should not include the namespace"""
+  localName: String!
+
+  """The namespace. Defaults to lens namespace"""
+  namespace: EvmAddress! = "0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"
+}
+
+input UsernameLengthNamespaceRuleConfig {
+  maxLength: Int
+  minLength: Int
+}
+
+type UsernameNamespace {
+  """The address of the namespace."""
+  address: EvmAddress!
+
+  """The namespace for example `lens`"""
+  namespace: String!
+  createdAt: DateTime!
+  metadata: UsernameNamespaceMetadata
+  collectionMetadata: UsernameNamespaceMetadataStandard
+  owner: EvmAddress!
+  stats: UsernameNamespaceStats!
+  rules: NamespaceRules!
+  operations: LoggedInUsernameNamespaceOperations
+}
+
+input UsernameNamespaceChoiceOneOf {
+  globalNamespace: AlwaysTrue
+  custom: EvmAddress
+  none: AlwaysTrue
+}
+
+type UsernameNamespaceMetadata {
+  """An optional description of the Username collection."""
+  description: String
+
+  """
+  A unique identifier that in storages like IPFS ensures the uniqueness of the metadata URI.
+  Use a UUID if unsure.
+  """
+  id: String!
+}
+
+type UsernameNamespaceMetadataStandard {
+  """
+  A URI pointing to a resource with mime type image/* that represents the contract, displayed
+  as a banner image for the contract.
+  """
+  bannerImage: URI
+
+  """
+  An array of Ethereum addresses representing collaborators (authorized editors) of the
+  contract.
+  """
+  collaborators: [EvmAddress!]!
+
+  """The description of the contract."""
+  description: String
+
+  """The external link of the contract."""
+  externalLink: URI
+
+  """
+  A URI pointing to a resource with mime type image/* that represents the featured image for
+  the contract, typically used for a highlight section.
+  """
+  featuredImage: URI
+
+  """
+  A URI pointing to a resource with mime type image/* that represents the contract, typically
+  displayed as a profile picture for the contract.
+  """
+  image: URI
+
+  """The name of the contract."""
+  name: String!
+  schema: String!
+
+  """The symbol of the contract."""
+  symbol: String
+}
+
+type UsernameNamespaceStats {
+  totalUsernames: Int!
+}
+
+input UsernamePricePerLengthNamespaceRuleConfig {
+  cost: AmountInput!
+  costOverrides: [LengthAmountPair!]
+  recipient: EvmAddress!
+}
+
+"""You must provide either an id or a username, not both."""
+input UsernameRequest {
+  """The username ID."""
+  id: ID
+
+  """The username namespace and local name."""
+  username: UsernameInput
+}
+
+type UsernameReserved {
+  ruleId: RuleId!
+  namespace: EvmAddress!
+  localName: String!
+}
+
+input UsernameSearchInput {
+  """
+  The local name to search for
+  Uses fuzzy search on username name
+  """
+  localNameQuery: String!
+
+  """
+  The namespaces to search for local name in. Defaults to global namespace
+  """
+  namespaces: [EvmAddress!]! = ["0x1aA55B9042f08f45825dC4b651B64c9F98Af4615"]
+}
+
+type UsernameTaken {
+  ownedBy: EvmAddress!
+  reason: String!
+}
+
+scalar UsernameValue
+
+input UsernamesFilter {
+  """The optional filter to get usernames owned by address"""
+  owner: EvmAddress
+
+  """The optional filter to get usernames linked to an address"""
+  linkedTo: EvmAddress
+
+  """The optional filter to get usernames for a namespace"""
+  namespace: EvmAddress
+
+  """
+  The optional filter to narrow usernames
+  Uses fuzzy search by local name
+  """
+  localNameQuery: String
+}
+
+enum UsernamesOrderBy {
+  LAST_MINTED
+  FIRST_MINTED
+}
+
+input UsernamesRequest {
+  filter: UsernamesFilter
+
+  """The order by."""
+  orderBy: UsernamesOrderBy! = LAST_MINTED
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+type VideoMetadata {
+  """The other attachments you want to include with it."""
+  attachments: [AnyMedia!]!
+
+  """
+  A bag of attributes that can be used to store any kind of metadata that is not currently
+  supported by the standard. Over time, common attributes will be added to the standard and
+  their usage as arbitrary attributes will be discouraged.
+  """
+  attributes: [MetadataAttribute!]!
+
+  """Specify a content warning."""
+  contentWarning: ContentWarning
+  id: MetadataId!
+  locale: Locale!
+
+  """The main focus of the post."""
+  mainContentFocus: MainContentFocus!
+
+  """An arbitrary list of tags."""
+  tags: [Tag!]
+
+  """The optional video title."""
+  title: String
+  video: MediaVideo!
+  content: String!
+}
+
+scalar Void
+
+input WhoExecutedActionOnAccountFilter {
+  anyOf: [AccountActionFilter!]!
+}
+
+enum WhoExecutedActionOnAccountOrderBy {
+  LAST_ACTIONED
+  FIRST_ACTIONED
+  ACCOUNT_SCORE
+}
+
+input WhoExecutedActionOnAccountRequest {
+  """The account on which action were executed."""
+  account: EvmAddress!
+
+  """The optional actions filter"""
+  filter: WhoExecutedActionOnAccountFilter
+
+  """The order by."""
+  orderBy: WhoExecutedActionOnAccountOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input WhoExecutedActionOnPostFilter {
+  anyOf: [PostActionFilter!]!
+}
+
+enum WhoExecutedActionOnPostOrderBy {
+  LAST_ACTIONED
+  FIRST_ACTIONED
+  ACCOUNT_SCORE
+}
+
+input WhoExecutedActionOnPostRequest {
+  """The post on which actions were executed."""
+  post: PostId!
+
+  """The optional actions filter"""
+  filter: WhoExecutedActionOnPostFilter
+
+  """The order by."""
+  orderBy: WhoExecutedActionOnPostOrderBy! = ACCOUNT_SCORE
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+enum WhoReferencedPostOrderBy {
+  MOST_RECENT
+  OLDEST
+  ACCOUNT_SCORE
+}
+
+input WhoReferencedPostRequest {
+  """The post id to get who referenced."""
+  post: PostId!
+
+  """The types of references to get."""
+  referenceTypes: [PostReferenceType!]!
+  orderBy: WhoReferencedPostOrderBy! = MOST_RECENT
+
+  """The page size."""
+  pageSize: PageSize! = FIFTY
+
+  """The cursor."""
+  cursor: Cursor
+}
+
+input WidthBasedTransform {
+  width: Int!
+}
+
+input WithdrawRequest {
+  erc20: AmountInput
+  native: BigDecimal
+}
+
+union WithdrawResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | InsufficientFunds | TransactionWillFail
+
+input WrapTokensRequest {
+  amount: BigDecimal!
+}
+
+union WrapTokensResult = SponsoredTransactionRequest | SelfFundedTransactionRequest | InsufficientFunds | TransactionWillFail
+
+"""The signature was not signed by the expected signer."""
+type WrongSignerError {
+  reason: String!
+}
+
+type _Service {
+  sdl: String
+}

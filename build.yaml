@@ -8,6 +8,7 @@ targets:
             - lib/graphql/backend/**
             - lib/graphql/cubejs/**
             - lib/graphql/farcaster_airstack/**
+            - lib/graphql/lens/**
           scalars:
             DateTimeISO:
               type: DateTime
@@ -21,5 +22,72 @@ targets:
               type: DateTime
             Identity:
               type: String
+            # === Lens Schema Scalars ===
+            AccessToken:
+              type: String
+            AlwaysTrue:
+              type: bool
+            BigDecimal:
+              type: String
+            BigInt:
+              type: String
+            BlockchainData:
+              type: dynamic
+            ChainId:
+              type: String
+            Cursor:
+              type: String
+            DateTime: # Lens specific DateTime
+              type: DateTime
+            EvmAddress:
+              type: String
+            FixedBytes32:
+              type: String
+            GeneratedNotificationId:
+              type: String
+            GeoUri:
+              type: String
+            GrantId:
+              type: String
+            IdToken:
+              type: String
+            JsonString:
+              type: String
+            LegacyProfileId:
+              type: String
+            LegacyPublicationId:
+              type: String
+            LegacyRefreshToken:
+              type: String
+            Locale:
+              type: String
+            MarketplaceMetadataAttributeValue:
+              type: dynamic
+            MetadataId:
+              type: String
+            PostId:
+              type: String
+            RefreshToken:
+              type: String
+            RuleId:
+              type: String
+            ServerAPIKey:
+              type: String
+            Signature:
+              type: String
+            Tag:
+              type: String
+            TxHash:
+              type: String
+            URI:
+              type: String
+            URL:
+              type: String
+            UUID:
+              type: String
+            UsernameValue:
+              type: String
+            Void:
+              type: dynamic
           clients:
             - graphql_flutter

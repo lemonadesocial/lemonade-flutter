@@ -1,0 +1,4 @@
+enum LensAccountStatus {
+  onboarding,
+  accountOwner,
+}

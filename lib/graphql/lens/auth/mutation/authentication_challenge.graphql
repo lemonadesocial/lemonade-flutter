@@ -1,0 +1,6 @@
+mutation LensAuthenticationChallenge($request: ChallengeRequest!) {
+  challenge(request: $request) {
+    id
+    text
+  }
+}

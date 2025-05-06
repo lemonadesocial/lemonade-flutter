@@ -1,0 +1,24 @@
+# import "../../account/fragment/lens_account.graphql"
+
+query LensAccountsAvailable(
+  $accountsAvailableRequest2: AccountsAvailableRequest!
+) {
+  accountsAvailable(request: $accountsAvailableRequest2) {
+    pageInfo {
+      next
+      prev
+    }
+    items {
+      ... on AccountOwned {
+        account {
+          ...LensAccount
+        }
+      }
+      ... on AccountManaged {
+        account {
+          ...LensAccount
+        }
+      }
+    }
+  }
+}
