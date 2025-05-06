@@ -97,7 +97,8 @@
         "manage": "Manage",
         "check": "Check",
         "openSettings": "Open Settings",
-        "sign": "Sign"
+        "sign": "Sign",
+        "verifyWallet": "Verify wallet"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

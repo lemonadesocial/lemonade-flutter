@@ -147,8 +147,11 @@ class _View extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 2.w),
-                        const Text(
-                          "It looks like your wallet is not connected. Connect your wallet to activate the feed",
+                        Text(
+                          t.lens.connectWalletDescription,
+                          style: Typo.medium.copyWith(
+                            color: colorScheme.onSecondary,
+                          ),
                         ),
                         SizedBox(height: Spacing.medium),
                         const ConnectWalletButton(),
@@ -169,7 +172,7 @@ class _View extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           LemonAppBar(
-                            title: "Verify wallet",
+                            title: t.common.actions.verifyWallet,
                             backgroundColor: LemonColor.atomicBlack,
                           ),
                           SizedBox(height: Spacing.small),
