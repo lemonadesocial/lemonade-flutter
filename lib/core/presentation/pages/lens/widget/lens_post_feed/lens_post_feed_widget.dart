@@ -2,6 +2,7 @@ import 'package:app/core/application/common/scroll_notification_bloc/scroll_noti
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
+import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
@@ -118,9 +119,17 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                                   context: context,
                                   backgroundColor: LemonColor.atomicBlack,
                                   topRadius: Radius.circular(30.r),
+                                  enableDrag: false,
                                   builder: (mContext) =>
                                       CreateLensNewFeedBottomSheet(
                                     space: widget.space,
+                                    onSuccess: () {
+                                      context.read<GetSpaceDetailBloc>().add(
+                                            GetSpaceDetailEvent.fetch(
+                                              spaceId: widget.space.id ?? '',
+                                            ),
+                                          );
+                                    },
                                   ),
                                 );
                               }

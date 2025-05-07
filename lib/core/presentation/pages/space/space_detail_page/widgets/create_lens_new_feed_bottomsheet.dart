@@ -30,10 +30,12 @@ import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
+  final VoidCallback onSuccess;
 
   const CreateLensNewFeedBottomSheet({
     super.key,
     required this.space,
+    required this.onSuccess,
   });
 
   @override
@@ -53,15 +55,16 @@ class CreateLensNewFeedBottomSheet extends StatelessWidget {
           ),
         ),
       ],
-      child: _View(space: space),
+      child: _View(space: space, onSuccess: onSuccess),
     );
   }
 }
 
 class _View extends StatefulWidget {
   final Space space;
+  final VoidCallback onSuccess;
 
-  const _View({required this.space});
+  const _View({required this.space, required this.onSuccess});
 
   @override
   State<_View> createState() => _ViewState();
@@ -173,6 +176,7 @@ class _ViewState extends State<_View> {
                         );
                     if (accountStatus == LensAccountStatus.accountOwner) {
                       Navigator.of(context).pop(true);
+                      widget.onSuccess();
                       SnackBarUtils.showSuccess(
                         message: "Relogin to account owner successfully",
                       );
@@ -239,6 +243,9 @@ class _ViewState extends State<_View> {
                   LemonAppBar(
                     title: t.space.lens.createNewFeed,
                     backgroundColor: LemonColor.atomicBlack,
+                    onPressBack: () {
+                      reloginToAccountOwner(context);
+                    },
                   ),
                   Expanded(
                     child: SingleChildScrollView(
