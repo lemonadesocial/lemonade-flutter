@@ -11,4 +11,7 @@ final lensRoutes = [
   AutoRoute(
     page: CreateLensPostReplyRoute.page,
   ),
+  AutoRoute(
+    page: CreateLensAccountRoute.page,
+  ),
 ];
