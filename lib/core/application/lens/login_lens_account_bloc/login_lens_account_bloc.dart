@@ -1,4 +1,5 @@
 import 'package:app/core/application/lens/enums.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/failure.dart';
@@ -63,6 +64,7 @@ class LoginLensAccountBloc
                 input: Variables$Mutation$LensAuthenticationChallenge(
                   request: Input$ChallengeRequest(
                     onboardingUser: Input$OnboardingUserChallengeRequest(
+                      app: AppConfig.lensAppId,
                       wallet: e.ownerAddress,
                     ),
                   ),
@@ -83,6 +85,7 @@ class LoginLensAccountBloc
                     accountOwner: Input$AccountOwnerChallengeRequest(
                       owner: e.ownerAddress,
                       account: e.accountAddress,
+                      app: AppConfig.lensAppId,
                     ),
                   ),
                 ),
