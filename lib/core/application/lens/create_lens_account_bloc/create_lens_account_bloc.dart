@@ -1,7 +1,6 @@
 import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/core/utils/lens_utils.dart';
@@ -19,7 +18,7 @@ part 'create_lens_account_bloc.freezed.dart';
 @freezed
 class CreateLensAccountEvent with _$CreateLensAccountEvent {
   const factory CreateLensAccountEvent.requestCreateLensAccount({
-    required User lemonadeUser,
+    required String username,
   }) = RequestCreateLensAccount;
 }
 
@@ -55,12 +54,10 @@ class CreateLensAccountBloc
     try {
       emit(const CreateLensAccountState.loading());
 
-      final lensUsername = LensUtils.constructLensUsername(
-        user: event.lemonadeUser,
-      );
+      final lensUsername = event.username;
 
       final newAccountMetadata = LensUtils.constructLensAccountMetadata(
-        user: event.lemonadeUser,
+        username: event.username,
       );
 
       // TODO: upload metadata

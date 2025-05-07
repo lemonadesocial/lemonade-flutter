@@ -7,7 +7,4 @@ class LensConstants {
     Enum$MainContentFocus.IMAGE:
         "https://json-schemas.lens.dev/posts/image/3.0.0.json",
   };
-
-  static const String lensJsonSchemaByFeedContent =
-      "https://json-schemas.lens.dev/feed/1.0.0.json";
 }

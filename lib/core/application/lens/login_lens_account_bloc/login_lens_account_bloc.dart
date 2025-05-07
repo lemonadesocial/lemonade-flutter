@@ -64,8 +64,8 @@ class LoginLensAccountBloc
                 input: Variables$Mutation$LensAuthenticationChallenge(
                   request: Input$ChallengeRequest(
                     onboardingUser: Input$OnboardingUserChallengeRequest(
-                      app: AppConfig.lensAppId,
                       wallet: e.ownerAddress,
+                      app: AppConfig.lensAppId,
                     ),
                   ),
                 ),
@@ -89,7 +89,7 @@ class LoginLensAccountBloc
                     ),
                   ),
                 ),
-              ),
+              )
           };
           if (authChallenge.isLeft()) {
             throw Exception("Failed to get auth challenge");

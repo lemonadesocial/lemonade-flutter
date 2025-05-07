@@ -54,14 +54,14 @@ class LensUtils {
   }
 
   static Map<String, dynamic> constructLensAccountMetadata({
-    required User user,
+    required String username,
   }) {
     return {
       "\$schema": "https://json-schemas.lens.dev/account/1.0.0.json",
       "lens": {
         "id": const Uuid().v4(),
-        "name": user.username ?? user.name ?? user.displayName,
-        "bio": user.description ?? "",
+        "name": username,
+        "bio": "",
       },
     };
   }
