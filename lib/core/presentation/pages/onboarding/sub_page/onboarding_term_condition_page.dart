@@ -43,7 +43,9 @@ class _OnboardingTermConditionsPageState
             orElse: () => null,
           );
           if (username == null || username.isEmpty == true) {
-            AutoRouter.of(context).replace(OnboardingUsernameRoute());
+            AutoRouter.of(context).replace(
+              const OnboardingConnectWalletRoute(),
+            );
           } else {
             authBloc.add(const AuthEvent.authenticated());
             context.router.replaceAll([const RootRoute()]);

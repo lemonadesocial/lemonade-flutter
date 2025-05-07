@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 
 class OnboardingUtils {
   static isOnboardingRequired(User user) {
-    return user.username == null ||
-        user.username?.isEmpty == true ||
-        user.termsAcceptedAdult != true ||
+    return user.termsAcceptedAdult != true ||
         user.termsAcceptedConditions != true;
   }
 
@@ -25,7 +23,7 @@ class OnboardingUtils {
             const OnboardingTermConditionsRoute(),
           if (user.termsAcceptedAdult == true &&
               user.termsAcceptedConditions == true)
-            OnboardingUsernameRoute(),
+            const OnboardingConnectWalletRoute(),
         ],
       ),
     );

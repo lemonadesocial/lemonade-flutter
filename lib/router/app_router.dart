@@ -86,6 +86,12 @@ class AppRouter extends $AppRouter {
               page: OnboardingUsernameRoute.page,
             ),
             AutoRoute(
+              page: OnboardingConnectWalletRoute.page,
+            ),
+            AutoRoute(
+              page: CreateLensAccountRoute.page,
+            ),
+            AutoRoute(
               page: OnboardingProfilePhotoRoute.page,
             ),
             AutoRoute(
