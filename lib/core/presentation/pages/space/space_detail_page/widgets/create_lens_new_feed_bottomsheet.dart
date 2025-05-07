@@ -144,9 +144,7 @@ class _ViewState extends State<_View> {
         );
   }
 
-  bool get _isFormValid =>
-      _nameController.text.isNotEmpty &&
-      _admins.any((admin) => admin.isNotEmpty);
+  bool get _isFormValid => _nameController.text.isNotEmpty;
 
   @override
   Widget build(BuildContext context) {

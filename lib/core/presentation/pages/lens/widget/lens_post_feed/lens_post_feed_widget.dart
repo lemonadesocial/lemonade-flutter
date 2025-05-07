@@ -208,6 +208,14 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
 
           return MultiSliver(
             children: [
+              LinearGradientButton.primaryButton(
+                onTap: () {
+                  context.read<LensAuthBloc>().add(
+                        const LensAuthEvent.unauthorized(),
+                      );
+                },
+                label: 'Disconnect',
+              ),
               CreateLensPostResultListenerWidget(
                 onSuccess: () {
                   refetch?.call();
