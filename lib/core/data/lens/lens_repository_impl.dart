@@ -302,16 +302,11 @@ class LensRepositoryImpl implements LensRepository {
 
   @override
   Future<Either<Failure, LensTransactionStatusResult>> createFeed({
-    required Map<String, dynamic> input,
+    required Variables$Mutation$LensCreateFeed input,
   }) async {
     final response = await _client.mutate$LensCreateFeed(
       Options$Mutation$LensCreateFeed(
-        variables: Variables$Mutation$LensCreateFeed(
-          request: Input$CreateFeedRequest(
-            metadataUri: input['metadataUri'],
-            admins: input['admins'].cast<String>(),
-          ),
-        ),
+        variables: input,
       ),
     );
 

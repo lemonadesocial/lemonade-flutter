@@ -5958,6 +5958,7 @@ input SpaceInput {
   image_avatar: MongoID
   image_cover: MongoID
   theme_data: JSON
+  lens_feed_id: String
 }
 
 type ActivatePersonalSpace {

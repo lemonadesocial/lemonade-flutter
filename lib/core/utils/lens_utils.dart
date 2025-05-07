@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/service/lens/constants.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -62,6 +63,20 @@ class LensUtils {
         "id": const Uuid().v4(),
         "name": user.username ?? user.name ?? user.displayName,
         "bio": user.description ?? "",
+      },
+    };
+  }
+
+  static Map<String, dynamic> constructLensFeedMetadata({
+    required String name,
+    required String description,
+  }) {
+    return {
+      "\$schema": "https://json-schemas.lens.dev/feed/1.0.0.json",
+      "lens": {
+        "id": const Uuid().v4(),
+        "name": name,
+        "description": description,
       },
     };
   }

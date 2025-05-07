@@ -1,4 +1,5 @@
 import 'package:app/core/domain/lens/entities/lens_post.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -19,9 +20,11 @@ import 'package:app/core/utils/debouncer.dart';
 @RoutePage()
 class LensPostDetailPage extends StatefulWidget {
   final LensPost post;
+  final Space space;
   const LensPostDetailPage({
     super.key,
     required this.post,
+    required this.space,
   });
 
   @override
@@ -143,6 +146,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                           child: LensPostFeedItemWidget(
                             post: widget.post,
                             showActions: true,
+                            space: widget.space,
                           ),
                         ),
                       ),
@@ -169,6 +173,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               key: ValueKey(posts[index].id),
                               post: posts[index],
                               showActions: true,
+                              space: widget.space,
                             ),
                           );
                         },

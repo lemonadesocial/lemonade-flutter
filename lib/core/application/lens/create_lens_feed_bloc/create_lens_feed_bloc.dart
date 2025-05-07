@@ -1,14 +1,13 @@
-import 'package:app/core/domain/lens/entities/lens_feed.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/failure.dart';
-import 'package:app/core/service/lens/constants.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/core/utils/lens_utils.dart';
+import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
+import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'dart:async';
-import 'package:uuid/uuid.dart';
 
 part 'create_lens_feed_bloc.freezed.dart';
 
@@ -56,17 +55,10 @@ class CreateLensFeedBloc
     try {
       emit(const CreateLensFeedState.loading());
 
-      final feedMetadata = LensFeedMetadata(
-        id: const Uuid().v4(),
+      final uploadMetadata = LensUtils.constructLensFeedMetadata(
         name: event.name,
-        description: event.description,
+        description: event.description ?? "",
       );
-
-      // Prepare metadata following Lens feed schema
-      final Map<String, dynamic> uploadMetadata = {
-        "\$schema": LensConstants.lensJsonSchemaByFeedContent,
-        "lens": feedMetadata.toJson(),
-      };
 
       // Upload metadata to IPFS via Grove
       final uploadResult = await _lensGroveService.uploadJson(uploadMetadata);
@@ -77,10 +69,12 @@ class CreateLensFeedBloc
 
       // Create feed request
       final result = await _lensRepository.createFeed(
-        input: {
-          'metadataURI': uploadResult['uri'],
-          'admins': event.admins.where((admin) => admin.isNotEmpty).toList(),
-        },
+        input: Variables$Mutation$LensCreateFeed(
+          request: Input$CreateFeedRequest(
+            admins: event.admins.where((admin) => admin.isNotEmpty).toList(),
+            metadataUri: uploadResult['uri'] ?? "",
+          ),
+        ),
       );
 
       if (result.isLeft()) {

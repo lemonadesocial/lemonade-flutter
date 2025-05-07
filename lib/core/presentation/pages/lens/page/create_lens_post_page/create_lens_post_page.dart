@@ -1,5 +1,6 @@
 import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_bottom_bar.dart';
 import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -16,7 +17,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CreateLensPostPage extends StatelessWidget {
   const CreateLensPostPage({
     super.key,
+    required this.space,
   });
+
+  final Space space;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class CreateLensPostPage extends StatelessWidget {
         getIt<LensRepository>(),
         getIt<LensGroveService>(),
       ),
-      child: const CreateLensPostPageView(),
+      child: CreateLensPostPageView(space: space),
     );
   }
 }
@@ -33,7 +37,10 @@ class CreateLensPostPage extends StatelessWidget {
 class CreateLensPostPageView extends StatefulWidget {
   const CreateLensPostPageView({
     super.key,
+    required this.space,
   });
+
+  final Space space;
 
   @override
   State<CreateLensPostPageView> createState() => _CreateLensPostPageViewState();
@@ -46,6 +53,7 @@ class _CreateLensPostPageViewState extends State<CreateLensPostPageView> {
     context.read<CreateLensPostBloc>().add(
           CreateLensPostEvent.createPost(
             content: _editorController.text,
+            lensFeedId: widget.space.lensFeedId ?? '',
           ),
         );
   }
@@ -101,6 +109,7 @@ class _CreateLensPostPageViewState extends State<CreateLensPostPageView> {
                   CreateLensPostBottomBar(
                     controller: _editorController,
                     onSubmit: () {
+                      FocusScope.of(context).unfocus();
                       submitCreatePost();
                     },
                   ),

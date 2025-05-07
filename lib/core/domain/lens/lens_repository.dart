@@ -10,6 +10,7 @@ import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';
+import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
 import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
@@ -52,7 +53,7 @@ abstract class LensRepository {
   });
 
   Future<Either<Failure, LensTransactionStatusResult>> createFeed({
-    required Map<String, dynamic> input,
+    required Variables$Mutation$LensCreateFeed input,
   });
 
   Future<Either<Failure, LensFeed>> getFeed({

@@ -57,4 +57,5 @@ fragment SpaceFragment on Space {
     _id
     url
   }
+  lens_feed_id
 } 

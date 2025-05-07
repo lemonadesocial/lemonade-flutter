@@ -2,8 +2,10 @@ import 'package:app/core/application/lens/create_lens_feed_bloc/create_lens_feed
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -13,6 +15,8 @@ import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
+import 'package:app/graphql/backend/space/mutation/update_space.graphql.dart';
 import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -74,35 +78,6 @@ class _ViewState extends State<_View> {
     super.initState();
     _nameController.text = widget.space.title ?? '';
     _descriptionController.text = widget.space.description ?? '';
-    _initLoginLensAccount();
-  }
-
-  Future<void> _initLoginLensAccount() async {
-    final ownerAddress =
-        (await getIt<WalletConnectService>().getActiveSession())?.address;
-    if (ownerAddress == null) return;
-
-    final availableAccounts =
-        context.read<LensAuthBloc>().state.availableAccounts;
-    final accountAddress = availableAccounts.isEmpty
-        ? null
-        : availableAccounts
-            .where(
-              (account) =>
-                  account.owner?.toLowerCase() == ownerAddress.toLowerCase(),
-            )
-            .firstOrNull
-            ?.address;
-
-    if (!mounted) return;
-
-    context.read<LoginLensAccountBloc>().add(
-          LoginLensAccountEvent.login(
-            ownerAddress: ownerAddress,
-            accountAddress: accountAddress ?? ownerAddress,
-            accountStatus: LensAccountStatus.builder,
-          ),
-        );
   }
 
   @override
@@ -133,6 +108,40 @@ class _ViewState extends State<_View> {
     });
   }
 
+  void reloginToAccountOwner(BuildContext context) async {
+    // Get the wallet address
+    final ownerAddress =
+        (await getIt<WalletConnectService>().getActiveSession())?.address;
+    if (ownerAddress == null) {
+      SnackBarUtils.showError(
+        message: "Please connect your wallet first",
+      );
+      return;
+    }
+
+    // Get the lens auth state
+    final lensAuthState = context.read<LensAuthBloc>().state;
+    final availableAccounts = lensAuthState.availableAccounts;
+    final accountAddress = availableAccounts.isEmpty
+        ? null
+        : availableAccounts
+            .where(
+              (account) =>
+                  account.owner?.toLowerCase() == ownerAddress.toLowerCase(),
+            )
+            .firstOrNull
+            ?.address;
+
+    // Use the existing LoginLensAccountBloc from context
+    context.read<LoginLensAccountBloc>().add(
+          LoginLensAccountEvent.login(
+            ownerAddress: ownerAddress,
+            accountAddress: accountAddress ?? ownerAddress,
+            accountStatus: LensAccountStatus.accountOwner,
+          ),
+        );
+  }
+
   bool get _isFormValid =>
       _nameController.text.isNotEmpty &&
       _admins.any((admin) => admin.isNotEmpty);
@@ -141,100 +150,82 @@ class _ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              success: (token, refreshToken, idToken, accountStatus) {
-                context.read<LensAuthBloc>().add(
-                      LensAuthEvent.authorized(
-                        token: token,
-                        refreshToken: refreshToken,
-                        idToken: idToken,
+    return BlocBuilder<LensAuthBloc, LensAuthState>(
+      builder: (context, lensState) {
+        if (_admins.length == 1 &&
+            _admins[0].isEmpty &&
+            lensState.availableAccounts.isNotEmpty) {
+          _admins = [AppConfig.lensLemonadeAdminAddress];
+          _adminController.text = _admins[0];
+        }
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  success: (token, refreshToken, idToken, accountStatus) {
+                    context.read<LensAuthBloc>().add(
+                          LensAuthEvent.authorized(
+                            token: token,
+                            refreshToken: refreshToken,
+                            idToken: idToken,
+                          ),
+                        );
+                    if (accountStatus == LensAccountStatus.accountOwner) {
+                      Navigator.of(context).pop(true);
+                      SnackBarUtils.showSuccess(
+                        message: "Relogin to account owner successfully",
+                      );
+                    }
+                  },
+                  failed: (failure) {
+                    Navigator.of(context).pop();
+                    SnackBarUtils.showError(message: failure.message);
+                  },
+                  orElse: () {},
+                );
+              },
+            ),
+            BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                  success: (txHash) async {
+                    final feed = await getIt<LensRepository>().getFeed(
+                      input: Variables$Query$LensGetFeed(
+                        request: Input$FeedRequest(
+                          txHash: txHash,
+                        ),
                       ),
                     );
-                if (accountStatus == LensAccountStatus.builder) {
-                  SnackBarUtils.showSuccess(
-                    message: "Login to lens builder successfully",
-                  );
-                }
-              },
-              failed: (failure) {
-                SnackBarUtils.showError(message: failure.message);
-              },
-              orElse: () {},
-            );
-          },
-        ),
-        BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              success: (txHash) async {
-                final feed = await getIt<LensRepository>().getFeed(
-                  input: Variables$Query$LensGetFeed(
-                    request: Input$FeedRequest(
-                      txHash: txHash,
-                    ),
-                  ),
-                );
-                if (feed.isRight()) {
-                  final feedData = feed.fold((l) => null, (r) => r);
-                  if (feedData != null) {
-                    print("----------------");
-                    print(feedData);
-                    print("----------------");
-                  }
-                }
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => AlertDialog(
-                //     title: const Text('Feed Created'),
-                //     content: Column(
-                //       mainAxisSize: MainAxisSize.min,
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text('Transaction Hash: $txHash'),
-                //         Text('Name: ${_nameController.text}'),
-                //         Text(
-                //           'Description: ${_descriptionController.text}',
-                //         ),
-                //         Text('Admins: ${_admins.join(", ")}'),
-                //       ],
-                //     ),
-                //     actions: [
-                //       TextButton(
-                //         onPressed: () {
-                //           Navigator.pop(context);
-                //         },
-                //         child: const Text('OK'),
-                //       ),
-                //     ],
-                //   ),
-                // );
-              },
-              failed: (failure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(failure.message ?? 'Unknown error'),
-                  ),
+                    if (feed.isRight()) {
+                      final feedData = feed.fold((l) => null, (r) => r);
+                      if (feedData != null) {
+                        final feedAddress = feedData.address;
+                        await getIt<SpaceRepository>().updateSpace(
+                          input: Variables$Mutation$UpdateSpace(
+                            id: widget.space.id ?? '',
+                            input: Input$SpaceInput(
+                              lens_feed_id: feedAddress,
+                            ),
+                          ),
+                        );
+                        reloginToAccountOwner(context);
+                      }
+                    }
+                  },
+                  failed: (failure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(failure.message ?? 'Unknown error'),
+                      ),
+                    );
+                  },
+                  orElse: () {},
                 );
               },
-              orElse: () {},
-            );
-          },
-        ),
-      ],
-      child: BlocBuilder<LensAuthBloc, LensAuthState>(
-        builder: (context, lensState) {
-          if (_admins.length == 1 &&
-              _admins[0].isEmpty &&
-              lensState.availableAccounts.isNotEmpty) {
-            _admins = [lensState.availableAccounts.first.address ?? ''];
-            _adminController.text = _admins[0];
-          }
-          return GestureDetector(
+            ),
+          ],
+          child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Container(
               padding: EdgeInsets.only(
@@ -335,25 +326,35 @@ class _ViewState extends State<_View> {
                     child: SafeArea(
                       child: Opacity(
                         opacity: _isFormValid ? 1 : 0.5,
-                        child: LinearGradientButton.primaryButton(
-                          onTap: _isFormValid
-                              ? () {
-                                  context.read<CreateLensFeedBloc>().add(
-                                        CreateLensFeedEvent.createFeed(
-                                          name: _nameController.text,
-                                          description:
-                                              _descriptionController.text,
-                                          admins: _admins
-                                              .where(
-                                                (admin) => admin.isNotEmpty,
-                                              )
-                                              .toList(),
-                                        ),
-                                      );
-                                }
-                              : null,
-                          label: t.space.lens.createFeed,
-                          textColor: colorScheme.onPrimary,
+                        child: BlocBuilder<CreateLensFeedBloc,
+                            CreateLensFeedState>(
+                          builder: (context, state) {
+                            return LinearGradientButton.primaryButton(
+                              onTap: _isFormValid
+                                  ? () {
+                                      FocusScope.of(context).unfocus();
+                                      context.read<CreateLensFeedBloc>().add(
+                                            CreateLensFeedEvent.createFeed(
+                                              name: _nameController.text,
+                                              description:
+                                                  _descriptionController.text,
+                                              admins: _admins
+                                                  .where(
+                                                    (admin) => admin.isNotEmpty,
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          );
+                                    }
+                                  : null,
+                              label: t.space.lens.createFeed,
+                              textColor: colorScheme.onPrimary,
+                              loadingWhen: state.maybeWhen(
+                                loading: () => true,
+                                orElse: () => false,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -361,9 +362,9 @@ class _ViewState extends State<_View> {
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

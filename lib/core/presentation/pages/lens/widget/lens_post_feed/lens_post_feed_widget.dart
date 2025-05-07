@@ -2,14 +2,18 @@ import 'package:app/core/application/common/scroll_notification_bloc/scroll_noti
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
+import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/create_lens_new_feed_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -56,13 +60,77 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                 children: [
                   LinearGradientButton.primaryButton(
                     onTap: () async {
-                      showCupertinoModalBottomSheet(
-                        context: context,
-                        backgroundColor: LemonColor.atomicBlack,
-                        topRadius: Radius.circular(30.r),
-                        builder: (mContext) => CreateLensNewFeedBottomSheet(
-                          space: widget.space,
+                      // Get the wallet address
+                      final ownerAddress = (await getIt<WalletConnectService>()
+                              .getActiveSession())
+                          ?.address;
+                      if (ownerAddress == null) {
+                        SnackBarUtils.showError(
+                          message: "Please connect your wallet first",
+                        );
+                        return;
+                      }
+
+                      // Get the lens auth state
+                      final lensAuthState = context.read<LensAuthBloc>().state;
+                      final availableAccounts = lensAuthState.availableAccounts;
+                      final accountAddress = availableAccounts.isEmpty
+                          ? null
+                          : availableAccounts
+                              .where(
+                                (account) =>
+                                    account.owner?.toLowerCase() ==
+                                    ownerAddress.toLowerCase(),
+                              )
+                              .firstOrNull
+                              ?.address;
+
+                      // Initialize builder account
+                      final loginBloc = LoginLensAccountBloc(
+                        lensRepository: getIt<LensRepository>(),
+                        walletConnectService: getIt<WalletConnectService>(),
+                      );
+
+                      loginBloc.add(
+                        LoginLensAccountEvent.login(
+                          ownerAddress: ownerAddress,
+                          accountAddress: accountAddress ?? ownerAddress,
+                          accountStatus: LensAccountStatus.builder,
                         ),
+                      );
+                      loginBloc.stream.listen(
+                        (state) {
+                          state.maybeWhen(
+                            success:
+                                (token, refreshToken, idToken, accountStatus) {
+                              context.read<LensAuthBloc>().add(
+                                    LensAuthEvent.authorized(
+                                      token: token,
+                                      refreshToken: refreshToken,
+                                      idToken: idToken,
+                                    ),
+                                  );
+                              if (accountStatus == LensAccountStatus.builder) {
+                                SnackBarUtils.showSuccess(
+                                  message: "Login to lens builder successfully",
+                                );
+                                showCupertinoModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: LemonColor.atomicBlack,
+                                  topRadius: Radius.circular(30.r),
+                                  builder: (mContext) =>
+                                      CreateLensNewFeedBottomSheet(
+                                    space: widget.space,
+                                  ),
+                                );
+                              }
+                            },
+                            failed: (failure) {
+                              SnackBarUtils.showError(message: failure.message);
+                            },
+                            orElse: () {},
+                          );
+                        },
                       );
                     },
                     label: t.space.lens.createNewFeed,
@@ -98,7 +166,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
         feeds: [
           Input$FeedOneOf(
             feed: spaceLensFeedId,
-            globalFeed: true,
+            // globalFeed: true,
           ),
         ],
       ),
@@ -199,11 +267,13 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                             AutoRouter.of(context).push(
                               LensPostDetailRoute(
                                 post: posts[index],
+                                space: widget.space,
                               ),
                             );
                           },
                           post: posts[index],
                           showActions: true,
+                          space: widget.space,
                         );
                       },
                       separatorBuilder: (context, index) {
