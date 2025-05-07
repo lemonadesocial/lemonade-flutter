@@ -103,9 +103,5 @@ class AppConfig {
   // Lens app id
   static get lensAppId => dotenv.env['LENS_APP_ID'];
 
-  // Lens account owner
-  static get lensLemonadeAdminAddress =>
-      dotenv.env['LENS_LEMONADE_ADMIN_ADDRESS'];
-
   static get lensChainId => 232; // Directly use mainnet
 }

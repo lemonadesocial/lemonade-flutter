@@ -155,12 +155,13 @@ class _ViewState extends State<_View> {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensState) {
-        if (_admins.length == 1 &&
-            _admins[0].isEmpty &&
-            lensState.availableAccounts.isNotEmpty) {
-          _admins = [AppConfig.lensLemonadeAdminAddress];
-          _adminController.text = _admins[0];
-        }
+        // TODO: Remove this once we have a way to set the admin address
+        // if (_admins.length == 1 &&
+        //     _admins[0].isEmpty &&
+        //     lensState.availableAccounts.isNotEmpty) {
+        //   _admins = [AppConfig.lensLemonadeAdminAddress];
+        //   _adminController.text = _admins[0];
+        // }
         return MultiBlocListener(
           listeners: [
             BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
