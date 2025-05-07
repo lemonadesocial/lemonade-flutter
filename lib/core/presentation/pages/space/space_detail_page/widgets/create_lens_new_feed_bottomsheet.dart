@@ -2,7 +2,6 @@ import 'package:app/core/application/lens/create_lens_feed_bloc/create_lens_feed
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/space_repository.dart';
@@ -74,7 +73,7 @@ class _ViewState extends State<_View> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _adminController = TextEditingController();
-  List<String> _admins = [''];
+  final List<String> _admins = [''];
 
   @override
   void initState() {
