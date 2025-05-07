@@ -14,7 +14,6 @@ import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
 import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
 import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
-import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';

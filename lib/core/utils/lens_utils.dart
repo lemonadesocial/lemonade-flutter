@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/service/lens/constants.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
 import 'package:app/injection/register_module.dart';
