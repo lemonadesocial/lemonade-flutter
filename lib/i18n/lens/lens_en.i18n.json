@@ -2,5 +2,8 @@
     "signMessageDescription": "Please sign a message to verify your ownership of the wallet. This will not incur any cost.",
     "claimUsernameDescription": "Usernames with 6 or more characters are free to claim.",
     "usernameValidationRules": "Usernames must not be longer than 26 characters and can only contain letters, numbers, _ and -",
-    "connectWalletDescription": "It looks like your wallet is not connected. Connect your wallet to activate the feed"
+    "connectWalletDescription": "It looks like your wallet is not connected. Connect your wallet to activate the feed",
+    "activateTimeline": "Activate Timeline",
+    "activateTimelineDescription": "Enable the timeline so your community can start posting and engaging here.",
+    "activate": "Activate"
 }

@@ -73,13 +73,28 @@ class _ViewState extends State<_View> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _adminController = TextEditingController();
-  final List<String> _admins = [''];
+  List<String> _admins = [''];
 
   @override
   void initState() {
     super.initState();
     _nameController.text = widget.space.title ?? '';
     _descriptionController.text = widget.space.description ?? '';
+    _initializeAdmins();
+  }
+
+  Future<void> _initializeAdmins() async {
+    final lensState = context.read<LensAuthBloc>().state;
+    // Get the wallet address immediately when the sheet opens
+    final ownerAddress =
+        (await getIt<WalletConnectService>().getActiveSession())?.address;
+
+    if (ownerAddress != null && lensState.availableAccounts.isNotEmpty) {
+      setState(() {
+        _admins = [ownerAddress];
+        _adminController.text = ownerAddress;
+      });
+    }
   }
 
   @override
@@ -152,13 +167,6 @@ class _ViewState extends State<_View> {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensState) {
-        // TODO: Remove this once we have a way to set the admin address
-        // if (_admins.length == 1 &&
-        //     _admins[0].isEmpty &&
-        //     lensState.availableAccounts.isNotEmpty) {
-        //   _admins = [AppConfig.lensLemonadeAdminAddress];
-        //   _adminController.text = _admins[0];
-        // }
         return MultiBlocListener(
           listeners: [
             BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
