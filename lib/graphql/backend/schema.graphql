@@ -1449,6 +1449,7 @@ type Space {
   creator_expanded: User
   image_avatar_expanded: File
   image_cover_expanded: File
+  lens_feed_id: String
 }
 
 enum SpaceState {
@@ -5957,6 +5958,7 @@ input SpaceInput {
   image_avatar: MongoID
   image_cover: MongoID
   theme_data: JSON
+  lens_feed_id: String
 }
 
 type ActivatePersonalSpace {

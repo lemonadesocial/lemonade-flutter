@@ -1,4 +1,5 @@
 import 'package:app/core/domain/lens/entities/lens_post.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_post_item_actions_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -17,11 +18,13 @@ class LensPostFeedItemWidget extends StatefulWidget {
   final LensPost post;
   final Function()? onTap;
   final bool showActions;
+  final Space space;
   const LensPostFeedItemWidget({
     super.key,
     required this.post,
     required this.showActions,
     this.onTap,
+    required this.space,
   });
 
   @override
@@ -95,7 +98,10 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
                   _PostBody(post: widget.post),
                   if (widget.showActions) ...[
                     SizedBox(height: Spacing.xSmall),
-                    LensPostItemActionsWidget(post: widget.post),
+                    LensPostItemActionsWidget(
+                      post: widget.post,
+                      space: widget.space,
+                    ),
                   ],
                 ],
               ),

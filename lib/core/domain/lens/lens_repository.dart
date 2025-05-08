@@ -2,6 +2,7 @@ import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post.dart';
+import 'package:app/core/domain/lens/entities/lens_feed.dart';
 import 'package:app/core/domain/lens/entities/lens_switch_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/failure.dart';
@@ -9,6 +10,8 @@ import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';
+import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
+import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
 import 'package:app/graphql/lens/account/mutation/lens_create_account.graphql.dart';
@@ -47,5 +50,13 @@ abstract class LensRepository {
 
   Future<Either<Failure, LensPostResult>> createPost({
     required Variables$Mutation$LensCreatePost input,
+  });
+
+  Future<Either<Failure, LensTransactionStatusResult>> createFeed({
+    required Variables$Mutation$LensCreateFeed input,
+  });
+
+  Future<Either<Failure, LensFeed>> getFeed({
+    required Variables$Query$LensGetFeed input,
   });
 }

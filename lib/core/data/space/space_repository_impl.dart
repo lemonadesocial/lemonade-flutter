@@ -16,6 +16,7 @@ import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/entities/pin_events_to_space_response.dart';
 import 'package:app/core/data/space/dtos/get_space_event_requests_response_dto.dart';
 import 'package:app/core/domain/space/entities/get_space_event_requests_response.dart';
+import 'package:app/graphql/backend/space/mutation/update_space.graphql.dart';
 
 @LazySingleton(as: SpaceRepository)
 class SpaceRepositoryImpl implements SpaceRepository {
@@ -239,5 +240,26 @@ class SpaceRepositoryImpl implements SpaceRepository {
 
     final success = result.parsedData!.decideSpaceEventRequests;
     return Right(success);
+  }
+
+  @override
+  Future<Either<Failure, Space>> updateSpace({
+    required Variables$Mutation$UpdateSpace input,
+  }) async {
+    final result = await _client.mutate$UpdateSpace(
+      Options$Mutation$UpdateSpace(variables: input),
+    );
+
+    if (result.hasException || result.parsedData?.updateSpace == null) {
+      return Left(Failure.withGqlException(result.exception));
+    }
+
+    return Right(
+      Space.fromDto(
+        SpaceDto.fromJson(
+          result.parsedData!.updateSpace!.toJson(),
+        ),
+      ),
+    );
   }
 }

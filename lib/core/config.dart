@@ -100,5 +100,8 @@ class AppConfig {
   // Lens xyz
   static get lensApiUrl => dotenv.env['LENS_API_URL'];
 
+  // Lens app id
+  static get lensAppId => dotenv.env['LENS_APP_ID'];
+
   static get lensChainId => 232; // Directly use mainnet
 }

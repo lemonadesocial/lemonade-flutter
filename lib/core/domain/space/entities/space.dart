@@ -39,6 +39,7 @@ class Space with _$Space {
     List<User>? admins,
     DbFile? imageAvatar,
     DbFile? imageCover,
+    String? lensFeedId,
   }) = _Space;
 
   bool isCreator({required String userId}) {
@@ -120,6 +121,7 @@ class Space with _$Space {
       imageCover: dto.imageCoverExpanded != null
           ? DbFile.fromDto(dto.imageCoverExpanded!)
           : null,
+      lensFeedId: dto.lensFeedId,
     );
   }
 }

@@ -206,8 +206,9 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                 space.isAdmin(userId: user?.userId ?? '') ||
                     space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
-              floatingActionButton:
-                  _selectedTabIndex == 1 ? const LensAddPostsButton() : null,
+              floatingActionButton: _selectedTabIndex == 1
+                  ? LensAddPostsButton(space: space)
+                  : null,
               body: Stack(
                 children: [
                   NotificationListener<ScrollNotification>(
@@ -316,7 +317,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                         if (_selectedTabIndex == 0) ...[
                           SpaceEventsList(space: space),
                         ] else if (_selectedTabIndex == 1) ...[
-                          const LensPostFeedWidget(),
+                          LensPostFeedWidget(space: space),
                         ],
                       ],
                     ),
