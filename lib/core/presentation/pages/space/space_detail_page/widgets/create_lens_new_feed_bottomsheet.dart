@@ -136,25 +136,10 @@ class _ViewState extends State<_View> {
       return;
     }
 
-    // Get the lens auth state
-    final lensAuthState = context.read<LensAuthBloc>().state;
-    final availableAccounts = lensAuthState.availableAccounts;
-    final accountAddress = availableAccounts.isEmpty
-        ? null
-        : availableAccounts
-            .where(
-              (account) =>
-                  account.owner?.toLowerCase() == ownerAddress.toLowerCase(),
-            )
-            .firstOrNull
-            ?.address;
-
-    // Use the existing LoginLensAccountBloc from context
-    context.read<LoginLensAccountBloc>().add(
-          LoginLensAccountEvent.login(
-            ownerAddress: ownerAddress,
-            accountAddress: accountAddress ?? ownerAddress,
-            accountStatus: LensAccountStatus.accountOwner,
+    // Use the new switching mechanism
+    context.read<LensAuthBloc>().add(
+          const LensAuthEvent.switchAccount(
+            targetStatus: LensAccountStatus.accountOwner,
           ),
         );
   }
@@ -169,31 +154,18 @@ class _ViewState extends State<_View> {
       builder: (context, lensState) {
         return MultiBlocListener(
           listeners: [
-            BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
+            BlocListener<LensAuthBloc, LensAuthState>(
               listener: (context, state) {
-                state.maybeWhen(
-                  success: (token, refreshToken, idToken, accountStatus) {
-                    context.read<LensAuthBloc>().add(
-                          LensAuthEvent.authorized(
-                            token: token,
-                            refreshToken: refreshToken,
-                            idToken: idToken,
-                          ),
-                        );
-                    if (accountStatus == LensAccountStatus.accountOwner) {
-                      Navigator.of(context).pop(true);
-                      widget.onSuccess();
-                      SnackBarUtils.showSuccess(
-                        message: "Relogin to account owner successfully",
-                      );
-                    }
-                  },
-                  failed: (failure) {
-                    Navigator.of(context).pop();
-                    SnackBarUtils.showError(message: failure.message);
-                  },
-                  orElse: () {},
-                );
+                if (state.loggedIn &&
+                    state.accountStatus == LensAccountStatus.accountOwner) {
+                  Navigator.of(context).pop(true);
+                  widget.onSuccess();
+                  SnackBarUtils.showSuccess(
+                    message: "Relogin to account owner successfully",
+                  );
+                } else if (!state.loggedIn && !state.isFetching) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
             BlocListener<CreateLensFeedBloc, CreateLensFeedState>(

@@ -1,16 +1,12 @@
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
-import 'package:app/core/application/lens/login_lens_account_bloc/login_lens_account_bloc.dart';
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
-import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
-import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/presentation/pages/lens/widget/activate_lens_timeline_card_widget/activate_lens_timeline_card_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/create_lens_new_feed_bottomsheet.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
@@ -19,7 +15,6 @@ import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
@@ -91,69 +86,36 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                   return;
                 }
 
-                final availableAccounts = lensAuthState.availableAccounts;
-                final accountAddress = availableAccounts.isEmpty
-                    ? null
-                    : availableAccounts
-                        .where(
-                          (account) =>
-                              account.owner?.toLowerCase() ==
-                              ownerAddress.toLowerCase(),
-                        )
-                        .firstOrNull
-                        ?.address;
-
-                final loginBloc = LoginLensAccountBloc(
-                  lensRepository: getIt<LensRepository>(),
-                  walletConnectService: getIt<WalletConnectService>(),
-                );
-
-                loginBloc.add(
-                  LoginLensAccountEvent.login(
-                    ownerAddress: ownerAddress,
-                    accountAddress: accountAddress ?? ownerAddress,
-                    accountStatus: LensAccountStatus.builder,
-                  ),
-                );
-
-                loginBloc.stream.listen(
-                  (state) {
-                    state.maybeWhen(
-                      success: (token, refreshToken, idToken, accountStatus) {
-                        context.read<LensAuthBloc>().add(
-                              LensAuthEvent.authorized(
-                                token: token,
-                                refreshToken: refreshToken,
-                                idToken: idToken,
-                              ),
-                            );
-                        if (accountStatus == LensAccountStatus.builder) {
-                          SnackBarUtils.showSuccess(
-                            message: "Login to lens builder successfully",
-                          );
-                          showCupertinoModalBottomSheet(
-                            context: context,
-                            backgroundColor: LemonColor.atomicBlack,
-                            topRadius: Radius.circular(30.r),
-                            enableDrag: false,
-                            builder: (mContext) => CreateLensNewFeedBottomSheet(
-                              space: widget.space,
-                              onSuccess: () {
-                                context.read<GetSpaceDetailBloc>().add(
-                                      GetSpaceDetailEvent.fetch(
-                                        spaceId: widget.space.id ?? '',
-                                      ),
-                                    );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                      failed: (failure) {
-                        SnackBarUtils.showError(message: failure.message);
-                      },
-                      orElse: () {},
+                context.read<LensAuthBloc>().add(
+                      const LensAuthEvent.switchAccount(
+                        targetStatus: LensAccountStatus.builder,
+                      ),
                     );
+
+                context.read<LensAuthBloc>().stream.listen(
+                  (state) {
+                    if (state.loggedIn &&
+                        state.accountStatus == LensAccountStatus.builder) {
+                      SnackBarUtils.showSuccess(
+                        message: "Login to lens builder successfully",
+                      );
+                      showCupertinoModalBottomSheet(
+                        context: context,
+                        backgroundColor: LemonColor.atomicBlack,
+                        topRadius: Radius.circular(30.r),
+                        enableDrag: false,
+                        builder: (mContext) => CreateLensNewFeedBottomSheet(
+                          space: widget.space,
+                          onSuccess: () {
+                            context.read<GetSpaceDetailBloc>().add(
+                                  GetSpaceDetailEvent.fetch(
+                                    spaceId: widget.space.id ?? '',
+                                  ),
+                                );
+                          },
+                        ),
+                      );
+                    }
                   },
                 );
               },
