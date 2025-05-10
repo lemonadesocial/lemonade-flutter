@@ -53,8 +53,6 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final spaceLensFeedId = widget.space.lensFeedId;
-    final t = Translations.of(context);
-
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensAuthState) {
         // Case 1: Not authorized to Lens
@@ -80,107 +78,85 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
         // Case 2: Authorized but no lens feed
         if (spaceLensFeedId == null) {
           return SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(Spacing.medium),
-              child: Column(
-                children: [
-                  LinearGradientButton.primaryButton(
-                    onTap: () async {
-                      final ownerAddress = (await getIt<WalletConnectService>()
-                              .getActiveSession())
-                          ?.address;
+            child: ActivateLensTimelineCardWidget(
+              onActivatePressed: () async {
+                final ownerAddress =
+                    (await getIt<WalletConnectService>().getActiveSession())
+                        ?.address;
 
-                      if (ownerAddress == null) {
-                        SnackBarUtils.showError(
-                          message: "Please connect your wallet first",
-                        );
-                        return;
-                      }
+                if (ownerAddress == null) {
+                  SnackBarUtils.showError(
+                    message: "Please connect your wallet first",
+                  );
+                  return;
+                }
 
-                      final availableAccounts = lensAuthState.availableAccounts;
-                      final accountAddress = availableAccounts.isEmpty
-                          ? null
-                          : availableAccounts
-                              .where(
-                                (account) =>
-                                    account.owner?.toLowerCase() ==
-                                    ownerAddress.toLowerCase(),
-                              )
-                              .firstOrNull
-                              ?.address;
+                final availableAccounts = lensAuthState.availableAccounts;
+                final accountAddress = availableAccounts.isEmpty
+                    ? null
+                    : availableAccounts
+                        .where(
+                          (account) =>
+                              account.owner?.toLowerCase() ==
+                              ownerAddress.toLowerCase(),
+                        )
+                        .firstOrNull
+                        ?.address;
 
-                      final loginBloc = LoginLensAccountBloc(
-                        lensRepository: getIt<LensRepository>(),
-                        walletConnectService: getIt<WalletConnectService>(),
-                      );
+                final loginBloc = LoginLensAccountBloc(
+                  lensRepository: getIt<LensRepository>(),
+                  walletConnectService: getIt<WalletConnectService>(),
+                );
 
-                      loginBloc.add(
-                        LoginLensAccountEvent.login(
-                          ownerAddress: ownerAddress,
-                          accountAddress: accountAddress ?? ownerAddress,
-                          accountStatus: LensAccountStatus.builder,
-                        ),
-                      );
-
-                      loginBloc.stream.listen(
-                        (state) {
-                          state.maybeWhen(
-                            success:
-                                (token, refreshToken, idToken, accountStatus) {
-                              context.read<LensAuthBloc>().add(
-                                    LensAuthEvent.authorized(
-                                      token: token,
-                                      refreshToken: refreshToken,
-                                      idToken: idToken,
-                                    ),
-                                  );
-                              if (accountStatus == LensAccountStatus.builder) {
-                                SnackBarUtils.showSuccess(
-                                  message: "Login to lens builder successfully",
-                                );
-                                showCupertinoModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: LemonColor.atomicBlack,
-                                  topRadius: Radius.circular(30.r),
-                                  enableDrag: false,
-                                  builder: (mContext) =>
-                                      CreateLensNewFeedBottomSheet(
-                                    space: widget.space,
-                                    onSuccess: () {
-                                      context.read<GetSpaceDetailBloc>().add(
-                                            GetSpaceDetailEvent.fetch(
-                                              spaceId: widget.space.id ?? '',
-                                            ),
-                                          );
-                                    },
-                                  ),
-                                );
-                              }
-                            },
-                            failed: (failure) {
-                              SnackBarUtils.showError(message: failure.message);
-                            },
-                            orElse: () {},
-                          );
-                        },
-                      );
-                    },
-                    label: t.space.lens.createNewFeed,
+                loginBloc.add(
+                  LoginLensAccountEvent.login(
+                    ownerAddress: ownerAddress,
+                    accountAddress: accountAddress ?? ownerAddress,
+                    accountStatus: LensAccountStatus.builder,
                   ),
-                  SizedBox(height: Spacing.small),
-                  LinearGradientButton.primaryButton(
-                    onTap: () {
-                      context
-                          .read<WalletBloc>()
-                          .add(const WalletEvent.disconnect());
-                      context.read<LensAuthBloc>().add(
-                            const LensAuthEvent.unauthorized(),
+                );
+
+                loginBloc.stream.listen(
+                  (state) {
+                    state.maybeWhen(
+                      success: (token, refreshToken, idToken, accountStatus) {
+                        context.read<LensAuthBloc>().add(
+                              LensAuthEvent.authorized(
+                                token: token,
+                                refreshToken: refreshToken,
+                                idToken: idToken,
+                              ),
+                            );
+                        if (accountStatus == LensAccountStatus.builder) {
+                          SnackBarUtils.showSuccess(
+                            message: "Login to lens builder successfully",
                           );
-                    },
-                    label: 'Disconnect',
-                  ),
-                ],
-              ),
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            backgroundColor: LemonColor.atomicBlack,
+                            topRadius: Radius.circular(30.r),
+                            enableDrag: false,
+                            builder: (mContext) => CreateLensNewFeedBottomSheet(
+                              space: widget.space,
+                              onSuccess: () {
+                                context.read<GetSpaceDetailBloc>().add(
+                                      GetSpaceDetailEvent.fetch(
+                                        spaceId: widget.space.id ?? '',
+                                      ),
+                                    );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      failed: (failure) {
+                        SnackBarUtils.showError(message: failure.message);
+                      },
+                      orElse: () {},
+                    );
+                  },
+                );
+              },
             ),
           );
         }
@@ -232,22 +208,6 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
 
               return MultiSliver(
                 children: [
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(Spacing.medium),
-                      child: LinearGradientButton.primaryButton(
-                        onTap: () {
-                          context
-                              .read<WalletBloc>()
-                              .add(const WalletEvent.disconnect());
-                          context
-                              .read<LensAuthBloc>()
-                              .add(const LensAuthEvent.unauthorized());
-                        },
-                        label: 'Disconnect',
-                      ),
-                    ),
-                  ),
                   CreateLensPostResultListenerWidget(
                     onSuccess: () {
                       refetch?.call();

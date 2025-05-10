@@ -28,7 +28,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LensOnboardingBottomSheet extends StatelessWidget {
-  const LensOnboardingBottomSheet({super.key});
+  const LensOnboardingBottomSheet({super.key, this.isBuilder = false});
+
+  final bool isBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +43,15 @@ class LensOnboardingBottomSheet extends StatelessWidget {
           ),
         ),
       ],
-      child: const _View(),
+      child: _View(isBuilder: isBuilder),
     );
   }
 }
 
 class _View extends StatelessWidget {
-  const _View();
+  const _View({this.isBuilder = false});
+
+  final bool isBuilder;
 
   Future<void> _onChangeWalletAddress(BuildContext context) async {
     Navigator.pop(context);
@@ -227,7 +231,6 @@ class _View extends StatelessWidget {
                                                   ownerAddress.toLowerCase(),
                                             )
                                             ?.address;
-
                                     context.read<LoginLensAccountBloc>().add(
                                           LoginLensAccountEvent.login(
                                             ownerAddress: ownerAddress,

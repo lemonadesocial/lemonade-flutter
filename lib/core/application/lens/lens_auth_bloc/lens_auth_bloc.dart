@@ -243,6 +243,8 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       state.copyWith(
         loggedIn: false,
         connected: false,
+        availableAccounts: [],
+        isFetching: false,
       ),
     );
     await _lensStorageService.clearTokens();
