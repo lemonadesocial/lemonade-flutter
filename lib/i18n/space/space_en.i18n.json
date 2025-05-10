@@ -65,5 +65,13 @@
     "submittedBy": "Submitted by",
     "pendingApprovalEvent": "Pending Approval Event",
     "eventsAreVisibleOnThePageAfterApproval": "Events are visible on the page after approval.",
-    "accessAllCommunityEventListings": "Access all community event listings"
+    "accessAllCommunityEventListings": "Access all community event listings",
+    "lens": {
+        "createNewFeed": "Create New Feed",
+        "name": "Name",
+        "description": "Description",
+        "createFeed": "Create Feed",
+        "admins": "Admins",
+        "adminInputHint": "Lens or Address"
+    }
 }

@@ -1,6 +1,7 @@
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -24,9 +25,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LensPostItemActionsWidget extends StatefulWidget {
   final LensPost post;
+  final Space space;
   const LensPostItemActionsWidget({
     super.key,
     required this.post,
+    required this.space,
   });
 
   @override
@@ -86,6 +89,7 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
                   AutoRouter.of(context).push(
                     CreateLensPostReplyRoute(
                       post: widget.post,
+                      space: widget.space,
                     ),
                   );
                 },

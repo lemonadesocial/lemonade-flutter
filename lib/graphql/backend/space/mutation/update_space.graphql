@@ -1,0 +1,7 @@
+#import "../fragment/space_fragment.graphql"
+
+mutation UpdateSpace($input: SpaceInput!, $id: MongoID!) {
+  updateSpace(input: $input, _id: $id) {
+    ...SpaceFragment
+  }
+}

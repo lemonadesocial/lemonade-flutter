@@ -22,6 +22,7 @@ class CreateLensPostEvent with _$CreateLensPostEvent {
     Input$ReferencingPostInput? quoteOf,
     Input$ReferencingPostInput? commentOn,
     required String content,
+    required String lensFeedId,
   }) = _CreatePost;
 }
 
@@ -81,7 +82,7 @@ class CreateLensPostBloc
         contentUri: uploadResult['uri'] ?? '',
         quoteOf: event.quoteOf,
         commentOn: event.commentOn,
-        // feed: TODO: add post to specific feed
+        feed: event.lensFeedId,
       );
 
       final result = await _lensRepository.createPost(

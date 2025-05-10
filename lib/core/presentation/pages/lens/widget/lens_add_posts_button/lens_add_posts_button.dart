@@ -1,5 +1,6 @@
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
+import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -11,7 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LensAddPostsButton extends StatelessWidget {
-  const LensAddPostsButton({super.key});
+  const LensAddPostsButton({super.key, required this.space});
+
+  final Space space;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +35,10 @@ class LensAddPostsButton extends StatelessWidget {
                 },
               );
               if (isAuthorized == true) {
-                AutoRouter.of(context).push(const CreateLensPostRoute());
+                AutoRouter.of(context).push(CreateLensPostRoute(space: space));
               }
             } else {
-              AutoRouter.of(context).push(const CreateLensPostRoute());
+              AutoRouter.of(context).push(CreateLensPostRoute(space: space));
             }
           },
           child: Container(

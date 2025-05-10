@@ -1,0 +1,542 @@
+query LensGetFeed($request: FeedRequest!) {
+  feed(request: $request) {
+    __typename
+    address
+    createdAt
+    metadata {
+      __typename
+      description
+      id
+      name
+    }
+    owner
+    operations {
+      __typename
+      id
+      canPost {
+        __typename
+        ... on FeedOperationValidationPassed {
+          __typename
+        }
+        ... on FeedOperationValidationUnknown {
+          __typename
+          extraChecksRequired {
+            __typename
+            id
+            type
+            address
+            executesOn
+            config {
+              ... on IntKeyValue {
+                __typename
+                key
+                int
+              }
+              ... on IntNullableKeyValue {
+                __typename
+                key
+                optionalInt
+              }
+              ... on AddressKeyValue {
+                __typename
+                key
+                address
+              }
+              ... on StringKeyValue {
+                __typename
+                key
+                string
+              }
+              ... on BooleanKeyValue {
+                __typename
+                key
+                boolean
+              }
+              ... on RawKeyValue {
+                __typename
+                key
+                data
+              }
+              ... on BigDecimalKeyValue {
+                __typename
+                key
+                bigDecimal
+              }
+              ... on DictionaryKeyValue {
+                __typename
+                key
+                dictionary {
+                  ... on IntKeyValue {
+                    __typename
+                    key
+                    int
+                  }
+                  ... on IntNullableKeyValue {
+                    __typename
+                    key
+                    optionalInt
+                  }
+                  ... on AddressKeyValue {
+                    __typename
+                    key
+                    address
+                  }
+                  ... on StringKeyValue {
+                    __typename
+                    key
+                    string
+                  }
+                  ... on BooleanKeyValue {
+                    __typename
+                    key
+                    boolean
+                  }
+                  ... on RawKeyValue {
+                    __typename
+                    key
+                    data
+                  }
+                  ... on BigDecimalKeyValue {
+                    __typename
+                    key
+                    bigDecimal
+                  }
+                }
+              }
+              ... on ArrayKeyValue {
+                __typename
+                key
+                array {
+                  ... on IntKeyValue {
+                    __typename
+                    key
+                    int
+                  }
+                  ... on IntNullableKeyValue {
+                    __typename
+                    key
+                    optionalInt
+                  }
+                  ... on AddressKeyValue {
+                    __typename
+                    key
+                    address
+                  }
+                  ... on StringKeyValue {
+                    __typename
+                    key
+                    string
+                  }
+                  ... on BooleanKeyValue {
+                    __typename
+                    key
+                    boolean
+                  }
+                  ... on RawKeyValue {
+                    __typename
+                    key
+                    data
+                  }
+                  ... on BigDecimalKeyValue {
+                    __typename
+                    key
+                    bigDecimal
+                  }
+                  ... on DictionaryKeyValue {
+                    __typename
+                    key
+                    dictionary {
+                      ... on IntKeyValue {
+                        __typename
+                        key
+                        int
+                      }
+                      ... on IntNullableKeyValue {
+                        __typename
+                        key
+                        optionalInt
+                      }
+                      ... on AddressKeyValue {
+                        __typename
+                        key
+                        address
+                      }
+                      ... on StringKeyValue {
+                        __typename
+                        key
+                        string
+                      }
+                      ... on BooleanKeyValue {
+                        __typename
+                        key
+                        boolean
+                      }
+                      ... on RawKeyValue {
+                        __typename
+                        key
+                        data
+                      }
+                      ... on BigDecimalKeyValue {
+                        __typename
+                        key
+                        bigDecimal
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        ... on FeedOperationValidationFailed {
+          __typename
+          unsatisfiedRules {
+            __typename
+            required {
+              __typename
+              rule
+              reason
+              message
+              config {
+                ... on IntKeyValue {
+                  __typename
+                  key
+                  int
+                }
+                ... on IntNullableKeyValue {
+                  __typename
+                  key
+                  optionalInt
+                }
+                ... on AddressKeyValue {
+                  __typename
+                  key
+                  address
+                }
+                ... on StringKeyValue {
+                  __typename
+                  key
+                  string
+                }
+                ... on BooleanKeyValue {
+                  __typename
+                  key
+                  boolean
+                }
+                ... on RawKeyValue {
+                  __typename
+                  key
+                  data
+                }
+                ... on BigDecimalKeyValue {
+                  __typename
+                  key
+                  bigDecimal
+                }
+                ... on DictionaryKeyValue {
+                  __typename
+                  key
+                  dictionary {
+                    ... on IntKeyValue {
+                      __typename
+                      key
+                      int
+                    }
+                    ... on IntNullableKeyValue {
+                      __typename
+                      key
+                      optionalInt
+                    }
+                    ... on AddressKeyValue {
+                      __typename
+                      key
+                      address
+                    }
+                    ... on StringKeyValue {
+                      __typename
+                      key
+                      string
+                    }
+                    ... on BooleanKeyValue {
+                      __typename
+                      key
+                      boolean
+                    }
+                    ... on RawKeyValue {
+                      __typename
+                      key
+                      data
+                    }
+                    ... on BigDecimalKeyValue {
+                      __typename
+                      key
+                      bigDecimal
+                    }
+                  }
+                }
+              }
+            }
+            anyOf {
+              __typename
+              rule
+              reason
+              message
+              config {
+                ... on IntKeyValue {
+                  __typename
+                  key
+                  int
+                }
+                ... on IntNullableKeyValue {
+                  __typename
+                  key
+                  optionalInt
+                }
+                ... on AddressKeyValue {
+                  __typename
+                  key
+                  address
+                }
+                ... on StringKeyValue {
+                  __typename
+                  key
+                  string
+                }
+                ... on BooleanKeyValue {
+                  __typename
+                  key
+                  boolean
+                }
+                ... on RawKeyValue {
+                  __typename
+                  key
+                  data
+                }
+                ... on BigDecimalKeyValue {
+                  __typename
+                  key
+                  bigDecimal
+                }
+                ... on DictionaryKeyValue {
+                  __typename
+                  key
+                  dictionary {
+                    ... on IntKeyValue {
+                      __typename
+                      key
+                      int
+                    }
+                    ... on IntNullableKeyValue {
+                      __typename
+                      key
+                      optionalInt
+                    }
+                    ... on AddressKeyValue {
+                      __typename
+                      key
+                      address
+                    }
+                    ... on StringKeyValue {
+                      __typename
+                      key
+                      string
+                    }
+                    ... on BooleanKeyValue {
+                      __typename
+                      key
+                      boolean
+                    }
+                    ... on RawKeyValue {
+                      __typename
+                      key
+                      data
+                    }
+                    ... on BigDecimalKeyValue {
+                      __typename
+                      key
+                      bigDecimal
+                    }
+                  }
+                }
+              }
+            }
+          }
+          reason
+        }
+      }
+    }
+    rules {
+      __typename
+      required {
+        __typename
+        id
+        type
+        address
+        executesOn
+        config {
+          ... on IntKeyValue {
+            __typename
+            key
+            int
+          }
+          ... on IntNullableKeyValue {
+            __typename
+            key
+            optionalInt
+          }
+          ... on AddressKeyValue {
+            __typename
+            key
+            address
+          }
+          ... on StringKeyValue {
+            __typename
+            key
+            string
+          }
+          ... on BooleanKeyValue {
+            __typename
+            key
+            boolean
+          }
+          ... on RawKeyValue {
+            __typename
+            key
+            data
+          }
+          ... on BigDecimalKeyValue {
+            __typename
+            key
+            bigDecimal
+          }
+          ... on DictionaryKeyValue {
+            __typename
+            key
+            dictionary {
+              ... on IntKeyValue {
+                __typename
+                key
+                int
+              }
+              ... on IntNullableKeyValue {
+                __typename
+                key
+                optionalInt
+              }
+              ... on AddressKeyValue {
+                __typename
+                key
+                address
+              }
+              ... on StringKeyValue {
+                __typename
+                key
+                string
+              }
+              ... on BooleanKeyValue {
+                __typename
+                key
+                boolean
+              }
+              ... on RawKeyValue {
+                __typename
+                key
+                data
+              }
+              ... on BigDecimalKeyValue {
+                __typename
+                key
+                bigDecimal
+              }
+            }
+          }
+        }
+      }
+      anyOf {
+        __typename
+        id
+        type
+        address
+        executesOn
+        config {
+          ... on IntKeyValue {
+            __typename
+            key
+            int
+          }
+          ... on IntNullableKeyValue {
+            __typename
+            key
+            optionalInt
+          }
+          ... on AddressKeyValue {
+            __typename
+            key
+            address
+          }
+          ... on StringKeyValue {
+            __typename
+            key
+            string
+          }
+          ... on BooleanKeyValue {
+            __typename
+            key
+            boolean
+          }
+          ... on RawKeyValue {
+            __typename
+            key
+            data
+          }
+          ... on BigDecimalKeyValue {
+            __typename
+            key
+            bigDecimal
+          }
+          ... on DictionaryKeyValue {
+            __typename
+            key
+            dictionary {
+              ... on IntKeyValue {
+                __typename
+                key
+                int
+              }
+              ... on IntNullableKeyValue {
+                __typename
+                key
+                optionalInt
+              }
+              ... on AddressKeyValue {
+                __typename
+                key
+                address
+              }
+              ... on StringKeyValue {
+                __typename
+                key
+                string
+              }
+              ... on BooleanKeyValue {
+                __typename
+                key
+                boolean
+              }
+              ... on RawKeyValue {
+                __typename
+                key
+                data
+              }
+              ... on BigDecimalKeyValue {
+                __typename
+                key
+                bigDecimal
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

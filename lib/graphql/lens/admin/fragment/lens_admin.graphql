@@ -1,0 +1,50 @@
+fragment SponsoredTransactionRequest on SponsoredTransactionRequest {
+  reason
+  sponsoredReason
+  raw {
+    ...Eip712TransactionRequest
+  }
+}
+
+fragment Eip712TransactionRequest on Eip712TransactionRequest {
+  type
+  to
+  from
+  nonce
+  gasLimit
+  maxPriorityFeePerGas
+  maxFeePerGas
+  data
+  value
+  chainId
+  customData {
+    gasPerPubdata
+    factoryDeps
+    customSignature
+    paymasterParams {
+      paymaster
+      paymasterInput
+    }
+  }
+}
+
+fragment SelfFundedTransactionRequest on SelfFundedTransactionRequest {
+  reason
+  selfFundedReason
+  raw {
+    ...Eip1559TransactionRequest
+  }
+}
+
+fragment Eip1559TransactionRequest on Eip1559TransactionRequest {
+  type
+  to
+  from
+  nonce
+  gasLimit
+  maxPriorityFeePerGas
+  maxFeePerGas
+  data
+  value
+  chainId
+}
