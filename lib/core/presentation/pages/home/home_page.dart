@@ -1,5 +1,6 @@
 import 'package:app/core/presentation/pages/home/views/home_view.dart';
 import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
+import 'package:app/core/presentation/widgets/auth/login_view.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
@@ -49,6 +50,9 @@ class _HomePageState extends State<HomePage> {
           orElse: () => false,
           processing: () => true,
         );
+    if (!isLoggedIn && !isProcessingLogin) {
+      return const LoginView(hideBackButton: true);
+    }
     return Scaffold(
       appBar: HomeAppBar(
         title: "",

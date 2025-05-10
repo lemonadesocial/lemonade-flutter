@@ -139,12 +139,16 @@ class BottomBarState extends State<BottomBar>
     if (tabData.tab == AppTab.chat ||
         tabData.tab == AppTab.notification ||
         tabData.tab == AppTab.discover) {
+      _triggerAnimation(tabData);
       if (authState is AuthStateAuthenticated) {
-        _triggerAnimation(tabData);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
-        context.router.navigate(const LoginRoute());
+        if (tabData.tab == AppTab.discover) {
+          context.router.navigate(DiscoverRoute());
+        } else {
+          context.router.navigate(const LoginRoute());
+        }
       }
     } else {
       _triggerAnimation(tabData);
