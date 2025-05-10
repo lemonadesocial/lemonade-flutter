@@ -113,6 +113,7 @@ class _VerticalDiscoverCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -143,6 +144,7 @@ class _VerticalDiscoverCard extends StatelessWidget {
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
                 fontFamily: FontFamily.nohemiVariable,
+                color: colorScheme.onPrimary,
               ),
             ),
             SizedBox(height: 2.h),

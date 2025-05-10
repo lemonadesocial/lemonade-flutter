@@ -13,6 +13,7 @@ class ListSpacesEvent with _$ListSpacesEvent {
     bool? withMySpaces,
     bool? withPublicSpaces,
     List<Enum$SpaceRole>? roles,
+    bool? featured,
   }) = _FetchListSpacesEvent;
 }
 
@@ -37,12 +38,14 @@ class ListSpacesBloc extends Bloc<ListSpacesEvent, ListSpacesState> {
   final bool? withMySpaces;
   final bool? withPublicSpaces;
   final List<Enum$SpaceRole>? roles;
+  final bool? featured;
 
   ListSpacesBloc({
     required SpaceRepository spaceRepository,
     this.withMySpaces,
     this.withPublicSpaces,
     this.roles,
+    this.featured,
   })  : _spaceRepository = spaceRepository,
         super(const ListSpacesState.initial()) {
     on<_FetchListSpacesEvent>(_onFetch);
@@ -58,6 +61,7 @@ class ListSpacesBloc extends Bloc<ListSpacesEvent, ListSpacesState> {
       withMySpaces: event.withMySpaces ?? withMySpaces,
       withPublicSpaces: event.withPublicSpaces ?? withPublicSpaces,
       roles: event.roles ?? roles,
+      featured: event.featured ?? featured,
     );
     result.fold(
       (failure) => emit(ListSpacesState.failure(failure: failure)),

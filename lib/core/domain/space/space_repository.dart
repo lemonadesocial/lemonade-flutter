@@ -39,6 +39,7 @@ abstract class SpaceRepository {
     bool? withMySpaces,
     bool? withPublicSpaces,
     List<Enum$SpaceRole>? roles,
+    bool? featured,
   });
 
   Future<Either<Failure, GetSpaceEventRequestsResponse>>

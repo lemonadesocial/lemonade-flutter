@@ -1,7 +1,4 @@
-import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/widgets/category_card.dart';
-import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -45,17 +42,6 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
     SnackBarUtils.showComingSoon();
   }
 
-  void onAuthenticatedTap({
-    required bool isLoggedIn,
-    required void Function() tapFunc,
-  }) {
-    if (isLoggedIn) {
-      tapFunc();
-    } else {
-      AutoRouter.of(context).push(const LoginRoute());
-    }
-  }
-
   void showCollaboratorAgeValidationPopup() {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
@@ -93,16 +79,11 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     final t = Translations.of(context);
-    User? user = context.watch<AuthBloc>().state.maybeWhen(
-          orElse: () => null,
-          authenticated: (user) => user,
-        );
-    final isLoggedIn = user != null;
-
     return BlocBuilder<ListSpaceCategoriesBloc, ListSpaceCategoriesState>(
       bloc: _listSpaceCategoriesBloc,
       builder: (context, state) {
         return state.maybeWhen(
+          orElse: () => const SliverToBoxAdapter(child: SizedBox()),
           loading: () => const SliverToBoxAdapter(
             child: Center(child: CircularProgressIndicator()),
           ),
@@ -158,13 +139,8 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
                             )
                             .colors,
                         onTap: () {
-                          onAuthenticatedTap(
-                            isLoggedIn: isLoggedIn,
-                            tapFunc: () {
-                              router.push(
-                                SpaceDetailRoute(spaceId: category.space),
-                              );
-                            },
+                          router.push(
+                            SpaceDetailRoute(spaceId: category.space),
                           );
                         },
                       );
@@ -175,7 +151,6 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
               ],
             );
           },
-          orElse: () => const SliverToBoxAdapter(child: SizedBox()),
         );
       },
     );
