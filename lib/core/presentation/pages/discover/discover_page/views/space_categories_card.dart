@@ -6,6 +6,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,51 +107,72 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
             child: Center(child: CircularProgressIndicator()),
           ),
           success: (categories) {
-            return SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 9.w,
-                mainAxisSpacing: 9.w,
-                childAspectRatio: 1.2,
-              ),
-              delegate: SliverChildListDelegate([
-                ...categories.asMap().entries.map((entry) {
-                  final category = entry.value;
-                  return CategoryCard(
-                    title: category.title,
-                    subTitle: category.description ?? '',
-                    icon: SvgPicture.network(
-                      category.imageUrl ?? '',
-                      width: 32.w,
-                      height: 32.w,
+            return SliverMainAxisGroup(
+              slivers: [
+                // Title section
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: Spacing.small,
+                      bottom: Spacing.xSmall,
                     ),
-                    colors: CategoryCardGradient.values
-                        .firstWhere(
-                          (gradient) =>
-                              gradient.name.toLowerCase() ==
-                              category.title
-                                  .toLowerCase()
-                                  .replaceAll(' ', '') // Remove spaces
-                                  .replaceAll('-', '') // Remove hyphens
-                                  .replaceAll('_', '') // Remove underscores
-                                  .replaceAll(
-                                      '/', ''), // Remove forward slashes
-                          orElse: () => CategoryCardGradient.longevity,
-                        )
-                        .colors,
-                    onTap: () {
-                      onAuthenticatedTap(
-                        isLoggedIn: isLoggedIn,
-                        tapFunc: () {
-                          router.push(
-                            SpaceDetailRoute(spaceId: category.space),
+                    child: Text(
+                      t.discover.browseByCategory,
+                      style: Typo.small.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+                // Grid section
+                SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 9.w,
+                    mainAxisSpacing: 9.w,
+                    childAspectRatio: 1.2,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final category = categories[index];
+                      return CategoryCard(
+                        title: category.title,
+                        subTitle: category.description ?? '',
+                        icon: SvgPicture.network(
+                          category.imageUrl ?? '',
+                          width: 32.w,
+                          height: 32.w,
+                        ),
+                        colors: CategoryCardGradient.values
+                            .firstWhere(
+                              (gradient) =>
+                                  gradient.name.toLowerCase() ==
+                                  category.title
+                                      .toLowerCase()
+                                      .replaceAll(' ', '')
+                                      .replaceAll('-', '')
+                                      .replaceAll('_', '')
+                                      .replaceAll('/', ''),
+                              orElse: () => CategoryCardGradient.longevity,
+                            )
+                            .colors,
+                        onTap: () {
+                          onAuthenticatedTap(
+                            isLoggedIn: isLoggedIn,
+                            tapFunc: () {
+                              router.push(
+                                SpaceDetailRoute(spaceId: category.space),
+                              );
+                            },
                           );
                         },
                       );
                     },
-                  );
-                }),
-              ]),
+                    childCount: categories.length,
+                  ),
+                ),
+              ],
             );
           },
           orElse: () => const SliverToBoxAdapter(child: SizedBox()),

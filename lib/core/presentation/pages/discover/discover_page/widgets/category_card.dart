@@ -14,36 +14,36 @@ enum CategoryCardGradient {
   ),
   dacc(
     colors: [
-      Color.fromRGBO(64, 54, 44, 0.647), // Orange-ish background
-      Color.fromRGBO(44, 36, 30, 0.647),
+      Color.fromRGBO(64, 52, 40, 1), // Orange-ish background
+      Color.fromRGBO(45, 35, 28, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   ai(
     colors: [
-      Color.fromRGBO(62, 42, 56, 0.647), // Pink-ish background
-      Color.fromRGBO(47, 32, 42, 0.647),
+      Color.fromRGBO(62, 42, 56, 1), // Pink-ish background
+      Color.fromRGBO(47, 32, 42, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   ethereum(
     colors: [
-      Color.fromRGBO(61, 48, 71, 0.647), // Purple background
-      Color.fromRGBO(45, 34, 51, 0.647),
+      Color.fromRGBO(61, 48, 71, 1), // Purple background
+      Color.fromRGBO(45, 34, 51, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   meetup(
     colors: [
-      Color.fromRGBO(37, 56, 43, 0.647), // Green background
-      Color.fromRGBO(30, 42, 27, 0.647),
+      Color.fromRGBO(37, 56, 43, 1), // Green background
+      Color.fromRGBO(30, 42, 27, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   popupVillage(
     colors: [
-      Color.fromRGBO(70, 57, 45, 0.647), // Olive green background
-      Color.fromRGBO(47, 38, 32, 0.647),
+      Color.fromRGBO(70, 57, 45, 1), // Olive green background
+      Color.fromRGBO(47, 38, 32, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   );
