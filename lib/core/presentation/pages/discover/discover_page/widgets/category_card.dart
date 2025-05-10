@@ -7,43 +7,43 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 enum CategoryCardGradient {
   longevity(
     colors: [
-      Color.fromRGBO(35, 62, 62, 0.65), // Bluish background
-      Color.fromRGBO(27, 44, 45, 0.65),
+      Color.fromRGBO(43, 58, 58, 1), // Bluish background
+      Color.fromRGBO(25, 34, 34, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   dacc(
     colors: [
-      Color.fromRGBO(66, 50, 36, 0.65), // Orange-ish background
-      Color.fromRGBO(48, 36, 26, 0.65),
+      Color.fromRGBO(64, 54, 44, 0.647), // Orange-ish background
+      Color.fromRGBO(44, 36, 30, 0.647),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   ai(
     colors: [
-      Color.fromRGBO(64, 42, 57, 0.65), // Pink-ish background
-      Color.fromRGBO(43, 28, 38, 0.65),
+      Color.fromRGBO(62, 42, 56, 0.647), // Pink-ish background
+      Color.fromRGBO(47, 32, 42, 0.647),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   ethereum(
     colors: [
-      Color.fromRGBO(57, 37, 73, 0.65), // Purple background
-      Color.fromRGBO(42, 26, 52, 0.65),
+      Color.fromRGBO(61, 48, 71, 0.647), // Purple background
+      Color.fromRGBO(45, 34, 51, 0.647),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   meetup(
     colors: [
-      Color.fromRGBO(26, 51, 34, 0.65), // Green background
-      Color.fromRGBO(26, 42, 22, 0.65),
+      Color.fromRGBO(37, 56, 43, 0.647), // Green background
+      Color.fromRGBO(30, 42, 27, 0.647),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   popupVillage(
     colors: [
-      Color.fromRGBO(76, 56, 37, 0.65), // Olive green background
-      Color.fromRGBO(52, 38, 28, 0.65),
+      Color.fromRGBO(70, 57, 45, 0.647), // Olive green background
+      Color.fromRGBO(47, 38, 32, 0.647),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   );
