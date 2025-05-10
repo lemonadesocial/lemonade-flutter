@@ -1,0 +1,7 @@
+fragment SpaceCategoryFragment on SpaceCategory {
+  title
+  description
+  image_url
+  space
+  listed_events_count
+}

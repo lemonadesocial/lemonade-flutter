@@ -1,0 +1,7 @@
+#import "space_category_fragment.graphql"
+
+query listSpaceCategories {
+  listSpaceCategories {
+    ...SpaceCategoryFragment
+  }
+}
