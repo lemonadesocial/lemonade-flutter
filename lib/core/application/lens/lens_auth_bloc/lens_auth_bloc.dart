@@ -43,12 +43,10 @@ class LensAuthState with _$LensAuthState {
 class AuthTokens {
   final String accessToken;
   final String refreshToken;
-  final String? idToken;
 
   AuthTokens({
     required this.accessToken,
     required this.refreshToken,
-    this.idToken,
   });
 }
 
@@ -59,7 +57,6 @@ sealed class LensAuthEvent with _$LensAuthEvent {
   const factory LensAuthEvent.authorized({
     required String token,
     required String refreshToken,
-    String? idToken,
   }) = _Authorized;
   const factory LensAuthEvent.accountCreated({
     required String token,
@@ -219,7 +216,6 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       final tokens = AuthTokens(
         accessToken: event.token,
         refreshToken: event.refreshToken,
-        idToken: event.idToken,
       );
 
       // Store tokens for current account status
@@ -230,7 +226,6 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       await _lensStorageService.saveTokens(
         accessToken: event.token,
         refreshToken: event.refreshToken,
-        idToken: event.idToken,
       );
 
       emit(state.copyWith(
@@ -301,13 +296,14 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       await _lensStorageService.saveTokens(
         accessToken: existingTokens.accessToken,
         refreshToken: existingTokens.refreshToken,
-        idToken: existingTokens.idToken,
       );
 
-      emit(state.copyWith(
-        accountStatus: event.targetStatus,
-        loggedIn: true,
-      ));
+      emit(
+        state.copyWith(
+          accountStatus: event.targetStatus,
+          loggedIn: true,
+        ),
+      );
       return;
     }
 
@@ -388,7 +384,6 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
         add(LensAuthEvent.authorized(
           token: authenticationResult.accessToken ?? '',
           refreshToken: authenticationResult.refreshToken ?? '',
-          idToken: null,
         ));
 
         emit(

@@ -83,6 +83,7 @@ class ActivateLensTimelineCardWidget extends StatelessWidget {
           LinearGradientButton.whiteButton(
             onTap: onActivatePressed,
             label: t.lens.activate,
+            height: 40.h,
           ),
           SizedBox(height: Spacing.extraSmall),
           BlocBuilder<LensAuthBloc, LensAuthState>(
@@ -92,6 +93,7 @@ class ActivateLensTimelineCardWidget extends StatelessWidget {
                   state.accountStatus == LensAccountStatus.accountOwner) {
                 return SizedBox(
                   width: double.infinity,
+                  height: 40.h,
                   child: OutlinedButton(
                     onPressed: () {
                       context

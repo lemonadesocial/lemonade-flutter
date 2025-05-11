@@ -84,7 +84,6 @@ class _View extends StatelessWidget {
                             LensAuthEvent.authorized(
                               token: token,
                               refreshToken: refreshToken,
-                              idToken: idToken,
                             ),
                           );
                       if (accountStatus == LensAccountStatus.accountOwner) {

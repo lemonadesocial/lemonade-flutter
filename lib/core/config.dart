@@ -103,5 +103,15 @@ class AppConfig {
   // Lens app id
   static get lensAppId => dotenv.env['LENS_APP_ID'];
 
+  // Lens lemonade admin addresses
+  static List<String> get lensLemonadeAdminAddresses {
+    final addressesString = dotenv.env['LENS_LEMONADE_ADMIN_ADDRESSES'] ?? '';
+    return addressesString
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
   static get lensChainId => 232; // Directly use mainnet
 }

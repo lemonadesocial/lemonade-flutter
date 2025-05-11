@@ -26,6 +26,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
+import 'package:app/core/config.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
@@ -90,9 +91,14 @@ class _ViewState extends State<_View> {
         (await getIt<WalletConnectService>().getActiveSession())?.address;
 
     if (ownerAddress != null && lensState.availableAccounts.isNotEmpty) {
+      final adminAndOwner = <String>{
+        ownerAddress,
+        ...(AppConfig.lensLemonadeAdminAddresses),
+      }.toList();
+
       setState(() {
-        _admins = [ownerAddress];
-        _adminController.text = ownerAddress;
+        _admins = adminAndOwner;
+        _adminController.text = adminAndOwner.join(', ');
       });
     }
   }
@@ -150,6 +156,8 @@ class _ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    print(
+        "lensLemonadeAdminAddresses: ${AppConfig.lensLemonadeAdminAddresses}");
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensState) {
         return MultiBlocListener(

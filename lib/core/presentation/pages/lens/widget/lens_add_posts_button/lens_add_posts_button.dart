@@ -19,6 +19,9 @@ class LensAddPostsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, state) {
+        if (space.lensFeedId == null) {
+          return const SizedBox.shrink();
+        }
         if (state.loggedIn &&
             state.connected &&
             state.accountStatus == LensAccountStatus.accountOwner) {

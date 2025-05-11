@@ -48,223 +48,229 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final spaceLensFeedId = widget.space.lensFeedId;
-    return BlocBuilder<LensAuthBloc, LensAuthState>(
-      builder: (context, lensAuthState) {
-        // Case 1: Not authorized to Lens
-        if (!lensAuthState.loggedIn || !lensAuthState.connected) {
-          return SliverToBoxAdapter(
-            child: ActivateLensTimelineCardWidget(
-              onActivatePressed: () async {
-                await showCupertinoModalBottomSheet(
-                  backgroundColor: LemonColor.atomicBlack,
-                  context: context,
-                  useRootNavigator: true,
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  builder: (newContext) {
-                    return const LensOnboardingBottomSheet();
+
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<LensAuthBloc, LensAuthState>(
+          listenWhen: (previous, current) =>
+              previous.accountStatus != current.accountStatus ||
+              previous.loggedIn != current.loggedIn,
+          listener: (context, state) {
+            if (state.loggedIn &&
+                state.accountStatus == LensAccountStatus.builder) {
+              SnackBarUtils.showSuccess(
+                message: "Login to lens builder successfully",
+              );
+              showCupertinoModalBottomSheet(
+                context: context,
+                backgroundColor: LemonColor.atomicBlack,
+                topRadius: Radius.circular(30.r),
+                enableDrag: true,
+                builder: (mContext) => CreateLensNewFeedBottomSheet(
+                  space: widget.space,
+                  onSuccess: () {
+                    context.read<GetSpaceDetailBloc>().add(
+                          GetSpaceDetailEvent.fetch(
+                            spaceId: widget.space.id ?? '',
+                          ),
+                        );
                   },
-                );
-                // Handle authorization result if needed
-              },
-            ),
-          );
-        }
-
-        // Case 2: Authorized but no lens feed
-        if (spaceLensFeedId == null) {
-          return SliverToBoxAdapter(
-            child: ActivateLensTimelineCardWidget(
-              onActivatePressed: () async {
-                final ownerAddress =
-                    (await getIt<WalletConnectService>().getActiveSession())
-                        ?.address;
-
-                if (ownerAddress == null) {
-                  SnackBarUtils.showError(
-                    message: "Please connect your wallet first",
+                ),
+              );
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<LensAuthBloc, LensAuthState>(
+        builder: (context, lensAuthState) {
+          // Case 1: Not authorized to Lens
+          if (!lensAuthState.loggedIn || !lensAuthState.connected) {
+            return SliverToBoxAdapter(
+              child: ActivateLensTimelineCardWidget(
+                onActivatePressed: () async {
+                  await showCupertinoModalBottomSheet(
+                    backgroundColor: LemonColor.atomicBlack,
+                    context: context,
+                    useRootNavigator: true,
+                    barrierColor: Colors.black.withOpacity(0.5),
+                    builder: (newContext) {
+                      return const LensOnboardingBottomSheet();
+                    },
                   );
-                  return;
-                }
+                },
+              ),
+            );
+          }
 
-                context.read<LensAuthBloc>().add(
-                      const LensAuthEvent.switchAccount(
-                        targetStatus: LensAccountStatus.builder,
-                      ),
+          // Case 2: Authorized but no lens feed
+          if (spaceLensFeedId == null) {
+            return SliverToBoxAdapter(
+              child: ActivateLensTimelineCardWidget(
+                onActivatePressed: () async {
+                  final ownerAddress =
+                      (await getIt<WalletConnectService>().getActiveSession())
+                          ?.address;
+
+                  if (ownerAddress == null) {
+                    SnackBarUtils.showError(
+                      message: "Please connect your wallet first",
                     );
+                    return;
+                  }
 
-                context.read<LensAuthBloc>().stream.listen(
-                  (state) {
-                    if (state.loggedIn &&
-                        state.accountStatus == LensAccountStatus.builder) {
-                      SnackBarUtils.showSuccess(
-                        message: "Login to lens builder successfully",
-                      );
-                      showCupertinoModalBottomSheet(
-                        context: context,
-                        backgroundColor: LemonColor.atomicBlack,
-                        topRadius: Radius.circular(30.r),
-                        enableDrag: false,
-                        builder: (mContext) => CreateLensNewFeedBottomSheet(
-                          space: widget.space,
-                          onSuccess: () {
-                            context.read<GetSpaceDetailBloc>().add(
-                                  GetSpaceDetailEvent.fetch(
-                                    spaceId: widget.space.id ?? '',
-                                  ),
-                                );
-                          },
+                  context.read<LensAuthBloc>().add(
+                        const LensAuthEvent.switchAccount(
+                          targetStatus: LensAccountStatus.builder,
                         ),
                       );
-                    }
-                  },
-                );
-              },
-            ),
-          );
-        }
+                },
+              ),
+            );
+          }
 
-        // Case 3: Authorized and has lens feed - Show posts
-        queryInput = Input$PostsRequest(
-          cursor: null,
-          filter: Input$PostsFilter(
-            postTypes: [Enum$PostType.ROOT, Enum$PostType.REPOST],
-            metadata: Input$PostMetadataFilter(
-              mainContentFocus: [
-                Enum$MainContentFocus.TEXT_ONLY,
-                Enum$MainContentFocus.IMAGE,
-                Enum$MainContentFocus.EVENT,
+          // Case 3: Authorized and has lens feed - Show posts
+          queryInput = Input$PostsRequest(
+            cursor: null,
+            filter: Input$PostsFilter(
+              postTypes: [Enum$PostType.ROOT, Enum$PostType.REPOST],
+              metadata: Input$PostMetadataFilter(
+                mainContentFocus: [
+                  Enum$MainContentFocus.TEXT_ONLY,
+                  Enum$MainContentFocus.IMAGE,
+                  Enum$MainContentFocus.EVENT,
+                ],
+              ),
+              feeds: [
+                Input$FeedOneOf(
+                  feed: spaceLensFeedId,
+                ),
               ],
             ),
-            feeds: [
-              Input$FeedOneOf(
-                feed: spaceLensFeedId,
-              ),
-            ],
-          ),
-        );
+          );
 
-        return GraphQLProvider(
-          client: ValueNotifier(getIt<LensGQL>().client),
-          child: Query$LensFetchPosts$Widget(
-            options: Options$Query$LensFetchPosts(
-              fetchPolicy: FetchPolicy.networkOnly,
-              onComplete: (raw, result) {
-                cursor = result?.posts.pageInfo.next;
-              },
-              variables: Variables$Query$LensFetchPosts(
-                request: queryInput,
+          return GraphQLProvider(
+            client: ValueNotifier(getIt<LensGQL>().client),
+            child: Query$LensFetchPosts$Widget(
+              options: Options$Query$LensFetchPosts(
+                fetchPolicy: FetchPolicy.networkOnly,
+                onComplete: (raw, result) {
+                  cursor = result?.posts.pageInfo.next;
+                },
+                variables: Variables$Query$LensFetchPosts(
+                  request: queryInput,
+                ),
               ),
-            ),
-            builder: (
-              result, {
-              refetch,
-              fetchMore,
-            }) {
-              final posts = (result.parsedData?.posts.items ?? [])
-                  .map(
-                    (item) => LensPost.fromJson(
-                      item.toJson(),
-                    ),
-                  )
-                  .toList();
-
-              return MultiSliver(
-                children: [
-                  CreateLensPostResultListenerWidget(
-                    onSuccess: () {
-                      refetch?.call();
-                    },
-                    onError: () {
-                      // TODO: Handle error
-                    },
-                  ),
-                  if (result.isLoading && posts.isEmpty)
-                    SliverToBoxAdapter(
-                      child: Center(
-                        child: Loading.defaultLoading(context),
+              builder: (
+                result, {
+                refetch,
+                fetchMore,
+              }) {
+                final posts = (result.parsedData?.posts.items ?? [])
+                    .map(
+                      (item) => LensPost.fromJson(
+                        item.toJson(),
                       ),
                     )
-                  else if (posts.isEmpty || result.hasException)
-                    const SliverToBoxAdapter(
-                      child: EmptyList(),
-                    )
-                  else
-                    BlocListener<ScrollNotificationBloc,
-                        ScrollNotificationState>(
-                      listener: (context, state) {
-                        if (state is ScrollNotificationStateEndReached) {
-                          if (result.isLoading || cursor == null) {
-                            return;
-                          }
+                    .toList();
 
-                          final fetchMoreOptions =
-                              FetchMoreOptions$Query$LensFetchPosts(
-                            variables: Variables$Query$LensFetchPosts(
-                              request: queryInput.copyWith(
-                                cursor: cursor,
-                              ),
-                            ),
-                            updateQuery: (prevResult, nextResult) {
-                              final prevList = prevResult?['posts']['items']
-                                      as List<dynamic>? ??
-                                  [];
-                              final nextList = nextResult?['posts']['items']
-                                      as List<dynamic>? ??
-                                  [];
-                              final newList = [...prevList, ...nextList];
-                              nextResult?['posts']['items'] = newList;
-                              return nextResult;
-                            },
-                          );
-                          debouncer.run(
-                            () => fetchMore?.call(fetchMoreOptions),
-                          );
-                        }
+                return MultiSliver(
+                  children: [
+                    CreateLensPostResultListenerWidget(
+                      onSuccess: () {
+                        refetch?.call();
                       },
-                      child: SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.small),
-                        sliver: SliverList.separated(
-                          itemCount: posts.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == posts.length) {
-                              if (result.isLoading) {
-                                return SafeArea(
-                                  child: Loading.defaultLoading(context),
-                                );
-                              }
-                              return const SizedBox.shrink();
+                      onError: () {
+                        // TODO: Handle error
+                      },
+                    ),
+                    if (result.isLoading && posts.isEmpty)
+                      SliverToBoxAdapter(
+                        child: Center(
+                          child: Loading.defaultLoading(context),
+                        ),
+                      )
+                    else if (posts.isEmpty || result.hasException)
+                      const SliverToBoxAdapter(
+                        child: EmptyList(),
+                      )
+                    else
+                      BlocListener<ScrollNotificationBloc,
+                          ScrollNotificationState>(
+                        listener: (context, state) {
+                          if (state is ScrollNotificationStateEndReached) {
+                            if (result.isLoading || cursor == null) {
+                              return;
                             }
-                            return LensPostFeedItemWidget(
-                              onTap: () {
-                                AutoRouter.of(context).push(
-                                  LensPostDetailRoute(
-                                    post: posts[index],
-                                    space: widget.space,
-                                  ),
-                                );
+
+                            final fetchMoreOptions =
+                                FetchMoreOptions$Query$LensFetchPosts(
+                              variables: Variables$Query$LensFetchPosts(
+                                request: queryInput.copyWith(
+                                  cursor: cursor,
+                                ),
+                              ),
+                              updateQuery: (prevResult, nextResult) {
+                                final prevList = prevResult?['posts']['items']
+                                        as List<dynamic>? ??
+                                    [];
+                                final nextList = nextResult?['posts']['items']
+                                        as List<dynamic>? ??
+                                    [];
+                                final newList = [...prevList, ...nextList];
+                                nextResult?['posts']['items'] = newList;
+                                return nextResult;
                               },
-                              post: posts[index],
-                              showActions: true,
-                              space: widget.space,
                             );
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              thickness: 1,
-                              height: 16,
-                              color: colorScheme.outline,
+                            debouncer.run(
+                              () => fetchMore?.call(fetchMoreOptions),
                             );
-                          },
+                          }
+                        },
+                        child: SliverPadding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: Spacing.small),
+                          sliver: SliverList.separated(
+                            itemCount: posts.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index == posts.length) {
+                                if (result.isLoading) {
+                                  return SafeArea(
+                                    child: Loading.defaultLoading(context),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              }
+                              return LensPostFeedItemWidget(
+                                onTap: () {
+                                  AutoRouter.of(context).push(
+                                    LensPostDetailRoute(
+                                      post: posts[index],
+                                      space: widget.space,
+                                    ),
+                                  );
+                                },
+                                post: posts[index],
+                                showActions: true,
+                                space: widget.space,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider(
+                                thickness: 1,
+                                height: 16,
+                                color: colorScheme.outline,
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
