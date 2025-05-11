@@ -292,12 +292,7 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
     final existingTokens = state.authenticatedAccounts[event.targetStatus];
 
     if (existingTokens != null) {
-      // Already authenticated, just switch
-      await _lensStorageService.saveTokens(
-        accessToken: existingTokens.accessToken,
-        refreshToken: existingTokens.refreshToken,
-      );
-
+      // Already authenticated, just switch and use existing tokens
       emit(
         state.copyWith(
           accountStatus: event.targetStatus,
@@ -380,11 +375,19 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
       final authenticationResult = result.fold((l) => null, (r) => r);
 
       if (authenticationResult is LensAuthenticationTokens) {
-        // Store new tokens and update state
-        add(LensAuthEvent.authorized(
-          token: authenticationResult.accessToken ?? '',
+        // New authentication - save tokens
+        await _lensStorageService.saveTokens(
+          accessToken: authenticationResult.accessToken ?? '',
           refreshToken: authenticationResult.refreshToken ?? '',
-        ));
+        );
+
+        // Store in state and update status
+        add(
+          LensAuthEvent.authorized(
+            token: authenticationResult.accessToken ?? '',
+            refreshToken: authenticationResult.refreshToken ?? '',
+          ),
+        );
 
         emit(
           state.copyWith(

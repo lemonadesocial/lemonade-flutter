@@ -23,10 +23,12 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
@@ -156,8 +158,6 @@ class _ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    print(
-        "lensLemonadeAdminAddresses: ${AppConfig.lensLemonadeAdminAddresses}");
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensState) {
         return MultiBlocListener(
@@ -227,7 +227,7 @@ class _ViewState extends State<_View> {
                 children: [
                   const BottomSheetGrabber(),
                   LemonAppBar(
-                    title: t.space.lens.createNewFeed,
+                    title: '',
                     backgroundColor: LemonColor.atomicBlack,
                     onPressBack: () {
                       reloginToAccountOwner(context);
@@ -235,74 +235,108 @@ class _ViewState extends State<_View> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.all(Spacing.smMedium),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Name field
-                          Text(
-                            t.space.lens.name,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
                             ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          LemonTextField(
-                            controller: _nameController,
-                            hintText: t.space.lens.name,
-                            onChange: (_) => setState(() {}),
-                          ),
-                          SizedBox(height: Spacing.medium),
-
-                          // Description field
-                          Text(
-                            t.space.lens.description,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          LemonTextField(
-                            controller: _descriptionController,
-                            hintText: t.space.lens.description,
-                            maxLines: 3,
-                            onChange: (_) => setState(() {}),
-                          ),
-                          SizedBox(height: Spacing.medium),
-
-                          // Admins section
-                          Text(
-                            t.space.lens.admins,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          Column(
-                            children: [
-                              ..._admins.asMap().entries.map(
-                                    (entry) => Column(
-                                      children: [
-                                        _AdminField(
-                                          value: entry.value,
-                                          onChanged: (value) =>
-                                              _updateAdmin(entry.key, value),
-                                          onRemove: () =>
-                                              _removeAdmin(entry.key),
-                                          removable: _admins.length > 1,
-                                        ),
-                                        SizedBox(height: Spacing.xSmall),
-                                      ],
-                                    ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.lens.setUpYourTimeline,
+                                  style: Typo.large.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontSize: 24.sp,
                                   ),
-                              SizedBox(height: Spacing.superExtraSmall),
-                              _AddButton(
-                                onPress: _addNewAdmin,
-                              ),
-                            ],
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                Text(
+                                  t.lens.fillInTheDetailsBelowToCompleteSetup,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.medium),
+                                // Name field
+                                Text(
+                                  t.lens.nameOfTheFeed,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                LemonTextField(
+                                  controller: _nameController,
+                                  hintText: t.lens.nameOfTheFeed,
+                                  onChange: (_) => setState(() {}),
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                // Description field
+                                Text(
+                                  t.lens.description,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                LemonTextField(
+                                  controller: _descriptionController,
+                                  hintText: t.lens.description,
+                                  maxLines: 5,
+                                  minLines: 5,
+                                  inputHeight: 120.w,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.medium,
+                            ),
+                            child: Divider(
+                              color: colorScheme.outline,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.lens.admins,
+                                  style: Typo.mediumPlus.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                ..._admins.asMap().entries.map(
+                                      (entry) => Column(
+                                        children: [
+                                          _AdminField(
+                                            value: entry.value,
+                                            onChanged: (value) =>
+                                                _updateAdmin(entry.key, value),
+                                            onRemove: () =>
+                                                _removeAdmin(entry.key),
+                                            removable: _admins.length > 1,
+                                          ),
+                                          SizedBox(height: Spacing.extraSmall),
+                                        ],
+                                      ),
+                                    ),
+                                SizedBox(height: Spacing.superExtraSmall),
+                                _AddButton(
+                                  onPress: _addNewAdmin,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
