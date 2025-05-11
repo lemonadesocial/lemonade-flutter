@@ -13,6 +13,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/mutation/update_space.graphql.dart';
@@ -295,7 +296,7 @@ class _ViewState extends State<_View> {
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(
-                              vertical: Spacing.medium,
+                              vertical: Spacing.smMedium,
                             ),
                             child: Divider(
                               color: colorScheme.outline,
@@ -308,33 +309,49 @@ class _ViewState extends State<_View> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  t.lens.admins,
-                                  style: Typo.mediumPlus.copyWith(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(height: Spacing.extraSmall),
-                                ..._admins.asMap().entries.map(
-                                      (entry) => Column(
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          _AdminField(
-                                            value: entry.value,
-                                            onChanged: (value) =>
-                                                _updateAdmin(entry.key, value),
-                                            onRemove: () =>
-                                                _removeAdmin(entry.key),
-                                            removable: _admins.length > 1,
+                                          Text(
+                                            t.lens.admins,
+                                            style: Typo.mediumPlus.copyWith(
+                                              color: colorScheme.onPrimary,
+                                              fontWeight: FontWeight.w800,
+                                            ),
                                           ),
-                                          SizedBox(height: Spacing.extraSmall),
+                                          SizedBox(height: 2.w),
+                                          Text(
+                                            t.lens.defineRulesForYourFeed,
+                                            style: Typo.medium.copyWith(
+                                              color: colorScheme.onSecondary,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                SizedBox(height: Spacing.superExtraSmall),
-                                _AddButton(
-                                  onPress: _addNewAdmin,
+                                    _AddButton(onPress: _addNewAdmin),
+                                  ],
                                 ),
+                                SizedBox(height: Spacing.medium),
+                                ..._admins.asMap().entries.map(
+                                      (entry) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: Spacing.small,
+                                        ),
+                                        child: _AdminField(
+                                          value: entry.value,
+                                          onChanged: (value) =>
+                                              _updateAdmin(entry.key, value),
+                                          onRemove: () =>
+                                              _removeAdmin(entry.key),
+                                          removable: _admins.length > 1,
+                                        ),
+                                      ),
+                                    ),
                               ],
                             ),
                           ),
@@ -431,60 +448,83 @@ class _AdminFieldState extends State<_AdminField> {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            flex: 3,
-            child: LemonTextField(
-              controller: _controller,
-              hintText: t.space.lens.adminInputHint,
-              onChange: widget.onChanged,
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 55.w,
+            decoration: BoxDecoration(
+              color: LemonColor.white06,
+              border: Border.all(color: LemonColor.white03),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: Spacing.small),
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (colorFilter) => Assets.icons.icWalletLine.svg(
+                      width: Sizing.small,
+                      height: Sizing.small,
+                      colorFilter: colorFilter,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: LemonTextField(
+                    inputHeight: 50.w,
+                    controller: _controller,
+                    hintText: t.lens.walletAddress,
+                    placeholderStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                    onChange: widget.onChanged,
+                    borderColor: Colors.transparent,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: Spacing.xSmall),
+        ),
+        if (widget.removable)
           InkWell(
-            onTap: widget.removable ? widget.onRemove : null,
+            onTap: widget.onRemove,
             child: Container(
-              width: Sizing.large,
-              height: Sizing.large,
+              width: 50.w,
+              height: 50.w,
+              margin: const EdgeInsets.only(left: 8),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: widget.removable
-                      ? Colors.transparent
-                      : colorScheme.outline,
-                ),
-                color: widget.removable
-                    ? LemonColor.atomicBlack
-                    : colorScheme.background,
-                borderRadius: BorderRadius.circular(LemonRadius.large * 2),
+                color: LemonColor.white06,
+                border: Border.all(color: LemonColor.white03),
+                borderRadius: BorderRadius.circular(LemonRadius.small),
               ),
               child: Center(
                 child: ThemeSvgIcon(
                   color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icClose.svg(
-                    width: Sizing.xSmall,
-                    height: Sizing.xSmall,
-                    colorFilter: filter,
+                  builder: (colorFilter) => Assets.icons.icClose.svg(
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                    colorFilter: colorFilter,
                   ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -495,33 +535,25 @@ class _AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        InkWell(
-          onTap: onPress,
-          child: Container(
-            width: Sizing.xLarge,
-            height: Sizing.xLarge,
-            decoration: BoxDecoration(
-              color: colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(Sizing.xLarge),
-            ),
-            child: Center(
-              child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icAdd.svg(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                  colorFilter: filter,
-                ),
-              ),
+    return InkWell(
+      onTap: onPress,
+      child: Container(
+        width: 34.w,
+        height: 34.w,
+        decoration: BoxDecoration(
+          color: LemonColor.white06,
+          border: Border.all(color: LemonColor.white03),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+        ),
+        child: Center(
+          child: ThemeSvgIcon(
+            builder: (colorFilter) => Assets.icons.icPlus.svg(
+              width: Sizing.mSmall,
+              height: Sizing.mSmall,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

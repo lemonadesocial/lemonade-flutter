@@ -65,7 +65,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                 context: context,
                 backgroundColor: LemonColor.atomicBlack,
                 topRadius: Radius.circular(30.r),
-                enableDrag: true,
+                enableDrag: false,
                 builder: (mContext) => CreateLensNewFeedBottomSheet(
                   space: widget.space,
                   onSuccess: () {

@@ -12,5 +12,7 @@
     "nameOfTheFeed": "Name of the Feed",
     "description": "Description",
     "admins": "Admins",
-    "activateFeed": "Activate Feed"
+    "activateFeed": "Activate Feed",
+    "defineRulesForYourFeed": "Define rules for your feed.",
+    "walletAddress": "Wallet Address"
 }
