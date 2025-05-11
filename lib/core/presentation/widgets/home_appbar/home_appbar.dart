@@ -68,7 +68,7 @@ class _Leading extends StatelessWidget {
       onTap: () {
         context.read<AuthBloc>().state.maybeWhen(
           orElse: () {
-            AutoRouter.of(context).push(const LoginRoute());
+            AutoRouter.of(context).push(LoginRoute());
           },
           authenticated: (_) {
             context.read<AuthBloc>().add(

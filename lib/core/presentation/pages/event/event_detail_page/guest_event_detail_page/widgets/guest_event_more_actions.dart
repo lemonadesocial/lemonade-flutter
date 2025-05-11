@@ -108,7 +108,7 @@ class GuestEventMoreActions extends StatelessWidget {
                 );
               },
             ),
-            orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
+            orElse: () => AutoRouter.of(context).navigate(LoginRoute()),
           );
         }
       },

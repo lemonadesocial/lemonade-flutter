@@ -89,7 +89,7 @@ class _PostCommentInputState extends State<PostCommentInput> {
             InkWell(
               onTap: () {
                 if (!isLoggedIn) {
-                  AutoRouter.of(context).navigate(const LoginRoute());
+                  AutoRouter.of(context).navigate(LoginRoute());
                   return;
                 }
                 if (!isValid) return;

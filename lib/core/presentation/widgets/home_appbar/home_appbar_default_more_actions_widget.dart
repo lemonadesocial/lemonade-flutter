@@ -50,38 +50,40 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
           authenticated: (_) => true,
         );
     final walletState = context.watch<WalletBloc>().state;
-    const showRedDot = true;
+    final showRedDot = isLoggedIn;
     return FloatingFrostedGlassDropdown(
       items: [
-        DropdownItemDpo(
-          value: CommonMoreActions.viewProfile,
-          label: t.home.appBar.moreActions.myProfile,
-          leadingIcon: getThemeIcon(context, icon: Assets.icons.icProfile),
-          customColor: colorScheme.onPrimary,
-        ),
-        DropdownItemDpo(
-          value: CommonMoreActions.completeProfile,
-          label: t.home.appBar.moreActions.completeProfile,
-          leadingIcon:
-              getThemeIcon(context, icon: Assets.icons.icPersonCelebrate),
-          customColor: colorScheme.onPrimary,
-          showRedDot: OnboardingUtils.showRedDotCompleteProfile(
-            user: loggedInUser,
-            walletState: walletState,
+        if (isLoggedIn) ...[
+          DropdownItemDpo(
+            value: CommonMoreActions.viewProfile,
+            label: t.home.appBar.moreActions.myProfile,
+            leadingIcon: getThemeIcon(context, icon: Assets.icons.icProfile),
+            customColor: colorScheme.onPrimary,
           ),
-        ),
-        DropdownItemDpo(
-          value: CommonMoreActions.viewSettings,
-          label: t.home.appBar.moreActions.setting,
-          leadingIcon: getThemeIcon(context, icon: Assets.icons.icSettings),
-          customColor: colorScheme.onPrimary,
-        ),
-        DropdownItemDpo(
-          value: CommonMoreActions.reportIssue,
-          label: t.home.appBar.moreActions.reportIssue,
-          leadingIcon: getThemeIcon(context, icon: Assets.icons.icReport),
-          customColor: colorScheme.onPrimary,
-        ),
+          DropdownItemDpo(
+            value: CommonMoreActions.completeProfile,
+            label: t.home.appBar.moreActions.completeProfile,
+            leadingIcon:
+                getThemeIcon(context, icon: Assets.icons.icPersonCelebrate),
+            customColor: colorScheme.onPrimary,
+            showRedDot: OnboardingUtils.showRedDotCompleteProfile(
+              user: loggedInUser,
+              walletState: walletState,
+            ),
+          ),
+          DropdownItemDpo(
+            value: CommonMoreActions.viewSettings,
+            label: t.home.appBar.moreActions.setting,
+            leadingIcon: getThemeIcon(context, icon: Assets.icons.icSettings),
+            customColor: colorScheme.onPrimary,
+          ),
+          DropdownItemDpo(
+            value: CommonMoreActions.reportIssue,
+            label: t.home.appBar.moreActions.reportIssue,
+            leadingIcon: getThemeIcon(context, icon: Assets.icons.icReport),
+            customColor: colorScheme.onPrimary,
+          ),
+        ],
         DropdownItemDpo(
           value: CommonMoreActions.rateApp,
           label: t.home.appBar.moreActions.rateApp,
@@ -127,7 +129,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
         }
 
         if (!isLoggedIn) {
-          AutoRouter.of(context).push(const LoginRoute());
+          AutoRouter.of(context).push(LoginRoute());
           return;
         }
 

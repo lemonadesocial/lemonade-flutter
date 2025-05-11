@@ -33,7 +33,7 @@ class BottomBarCreateButton extends StatelessWidget {
               },
             );
           },
-          orElse: () => context.router.navigate(const LoginRoute()),
+          orElse: () => context.router.navigate(LoginRoute()),
         );
       },
       child: Container(

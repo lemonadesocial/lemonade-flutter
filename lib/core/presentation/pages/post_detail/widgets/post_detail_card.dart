@@ -167,7 +167,7 @@ class PostDetailCard extends StatelessWidget {
                                     },
                                   ),
                                   orElse: () => AutoRouter.of(context)
-                                      .navigate(const LoginRoute()),
+                                      .navigate(LoginRoute()),
                                 );
                               }
                             },

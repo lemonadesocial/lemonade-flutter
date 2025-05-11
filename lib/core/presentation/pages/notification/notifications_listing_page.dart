@@ -75,7 +75,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
                       authenticated: (session) => AutoRouter.of(context)
                           .navigate(const ChatListRoute()),
                       orElse: () =>
-                          AutoRouter.of(context).navigate(const LoginRoute()),
+                          AutoRouter.of(context).navigate(LoginRoute()),
                     );
               },
               child: ThemeSvgIcon(

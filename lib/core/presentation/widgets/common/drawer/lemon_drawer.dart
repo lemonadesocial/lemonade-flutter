@@ -84,7 +84,7 @@ class LemonDrawer extends StatelessWidget {
                                 const VaultsListingRoute(),
                               ),
                               orElse: () => context.router.navigate(
-                                const LoginRoute(),
+                                LoginRoute(),
                               ),
                             );
                       },
@@ -115,7 +115,7 @@ class LemonDrawer extends StatelessWidget {
                               authenticated: (authSession) =>
                                   context.router.push(const CommunityRoute()),
                               orElse: () => context.router.navigate(
-                                const LoginRoute(),
+                                LoginRoute(),
                               ),
                             );
                       },
@@ -147,7 +147,7 @@ class LemonDrawer extends StatelessWidget {
                                   AutoRouter.of(context)
                                       .navigate(const MyEventsRoute()),
                               orElse: () => context.router.navigate(
-                                const LoginRoute(),
+                                LoginRoute(),
                               ),
                             );
                       },
@@ -180,7 +180,7 @@ class LemonDrawer extends StatelessWidget {
                                 MyEventTicketsListRoute(),
                               ),
                               orElse: () => context.router.navigate(
-                                const LoginRoute(),
+                                LoginRoute(),
                               ),
                             );
                       },
