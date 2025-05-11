@@ -84,7 +84,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        if (subtitle != null)
+                        if (subtitle != null && subtitle!.isNotEmpty)
                           Padding(
                             padding: EdgeInsets.only(top: 2.h),
                             child: Text(
