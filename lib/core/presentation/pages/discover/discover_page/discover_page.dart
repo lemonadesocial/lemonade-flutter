@@ -1,6 +1,7 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_posts.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -41,6 +42,12 @@ class DiscoverPage extends StatelessWidget {
         child: CustomScrollView(
           controller: newsfeedListingBloc.scrollController,
           slivers: [
+            const SliverToBoxAdapter(
+              child: HomeCollaborators(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.large),
+            ),
             // TODO: Airstack no more support farcaster
             // const DiscoverFarcasterChannels(),
             // SliverPadding(

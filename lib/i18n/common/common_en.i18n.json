@@ -99,7 +99,8 @@
         "openSettings": "Open Settings",
         "sign": "Sign",
         "verifyWallet": "Verify wallet",
-        "getStarted": "Get Started"
+        "getStarted": "Get Started",
+        "explore": "Explore"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

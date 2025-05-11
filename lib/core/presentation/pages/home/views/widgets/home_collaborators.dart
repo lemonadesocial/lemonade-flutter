@@ -25,8 +25,11 @@ class HomeCollaborators extends StatelessWidget {
         .state
         .maybeWhen(orElse: () => '', authenticated: (user) => user.userId);
     if (loggedInUserId.isEmpty) {
-      return const SizedBox.shrink();
+      return const _EmptyCollaboratorLikes(
+        isLoggedIn: false,
+      );
     }
+
     return Query$GetUserDiscoverySwipes$Widget(
       options: Options$Query$GetUserDiscoverySwipes(
         fetchPolicy: FetchPolicy.networkOnly,
@@ -50,7 +53,9 @@ class HomeCollaborators extends StatelessWidget {
             .where((element) => element.user1 != loggedInUserId)
             .toList();
         if (pendingSwipes.isEmpty) {
-          return const _EmptyCollaboratorLikes();
+          return const _EmptyCollaboratorLikes(
+            isLoggedIn: true,
+          );
         }
         return HorizontalCollaboratorLikesList(
           headerVisible: false,
@@ -63,7 +68,11 @@ class HomeCollaborators extends StatelessWidget {
 }
 
 class _EmptyCollaboratorLikes extends StatelessWidget {
-  const _EmptyCollaboratorLikes();
+  const _EmptyCollaboratorLikes({
+    required this.isLoggedIn,
+  });
+
+  final bool isLoggedIn;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +85,10 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
+              if (!isLoggedIn) {
+                AutoRouter.of(context).navigate(LoginRoute());
+                return;
+              }
               AutoRouter.of(context).push(CollaboratorRoute());
             },
             child: const CollaboratorCircleWidget(),
@@ -86,7 +99,9 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                t.collaborator.noMatchesYet,
+                isLoggedIn
+                    ? t.collaborator.noMatchesYet
+                    : t.collaborator.connectAndCreateTogether,
                 style: Typo.small.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -96,7 +111,9 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
               ),
               SizedBox(height: 2.w),
               Text(
-                t.collaborator.noMatchesYetDescription,
+                isLoggedIn
+                    ? t.collaborator.noMatchesYetDescription
+                    : t.collaborator.connectAndCreateTogetherDescription,
                 style: Typo.small.copyWith(
                   color: colorScheme.onSecondary,
                   height: 0,

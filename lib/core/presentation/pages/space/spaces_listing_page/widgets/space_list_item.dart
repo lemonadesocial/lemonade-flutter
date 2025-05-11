@@ -12,15 +12,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SpaceListItem extends StatelessWidget {
+enum SpaceListItemLayout {
+  list,
+  grid,
+}
+
+class SpaceListItem extends StatefulWidget {
   final Space space;
   final VoidCallback? onTap;
+  final SpaceListItemLayout layout;
 
   const SpaceListItem({
     super.key,
     required this.space,
     this.onTap,
+    this.layout = SpaceListItemLayout.list,
   });
+
+  @override
+  State<SpaceListItem> createState() => _SpaceListItemState();
+}
+
+class _SpaceListItemState extends State<SpaceListItem> {
+  Widget get spaceThumbnail => LemonNetworkImage(
+        width: widget.layout == SpaceListItemLayout.grid ? 42.w : Sizing.medium,
+        height:
+            widget.layout == SpaceListItemLayout.grid ? 42.w : Sizing.medium,
+        imageUrl: widget.space.imageAvatar?.url ?? '',
+        fit: BoxFit.cover,
+        borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+        placeholder: ImagePlaceholder.spaceThumbnail(
+          iconColor: Theme.of(context).colorScheme.onSecondary,
+        ),
+        border: Border.all(
+          width: 1,
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +58,12 @@ class SpaceListItem extends StatelessWidget {
           orElse: () => null,
           authenticated: (user) => user.userId,
         );
-    final followersCount = space.followers?.length ?? 0;
-    final isAdmin = space.isAdmin(userId: userId ?? '');
-    final isOwner = space.isCreator(userId: userId ?? '');
+    final followersCount = widget.space.followers?.length ?? 0;
+    final isAdmin = widget.space.isAdmin(userId: userId ?? '');
+    final isOwner = widget.space.isCreator(userId: userId ?? '');
 
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: LemonColor.atomicBlack,
@@ -46,71 +74,82 @@ class SpaceListItem extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.all(Spacing.small),
-          child: Row(
-            children: [
-              LemonNetworkImage(
-                width: Sizing.medium,
-                height: Sizing.medium,
-                imageUrl: space.imageAvatar?.url ?? '',
-                fit: BoxFit.cover,
-                borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                placeholder: ImagePlaceholder.spaceThumbnail(
-                  iconColor: colorScheme.onSecondary,
-                ),
-              ),
-              SizedBox(width: Spacing.small),
-              Expanded(
-                child: Column(
+          child: widget.layout == SpaceListItemLayout.grid
+              ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    spaceThumbnail,
+                    SizedBox(height: Spacing.xSmall),
                     Text(
-                      space.title ?? '',
-                      style: Typo.mediumPlus.copyWith(
+                      widget.space.title ?? '',
+                      style: Typo.medium.copyWith(
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4.h),
-                    if (isAdmin || isOwner || space.isAmbassador == true)
-                      Text(
-                        '$followersCount ${t.common.subscriber(n: followersCount)}',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                        ),
-                      )
-                    else
-                      Query$GetUpcomingEvents$Widget(
-                        options: Options$Query$GetUpcomingEvents(
-                          variables: Variables$Query$GetUpcomingEvents(
-                            space: space.id,
-                            limit: 20,
-                          ),
-                        ),
-                        builder: (
-                          result, {
-                          refetch,
-                          fetchMore,
-                        }) {
-                          final upcomingEvents =
-                              result.parsedData?.getUpcomingEvents ?? [];
-                          return Text(
-                            result.isLoading
-                                ? '--'
-                                : t.event
-                                    .upcomingEvents(n: upcomingEvents.length),
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onSecondary,
+                  ],
+                )
+              : Row(
+                  children: [
+                    spaceThumbnail,
+                    SizedBox(width: Spacing.small),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.space.title ?? '',
+                            style: Typo.mediumPlus.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w600,
                             ),
-                          );
-                        },
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 4.h),
+                          if (isAdmin ||
+                              isOwner ||
+                              widget.space.isAmbassador == true)
+                            Text(
+                              '$followersCount ${t.common.subscriber(n: followersCount)}',
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSecondary,
+                              ),
+                            )
+                          else
+                            Query$GetUpcomingEvents$Widget(
+                              options: Options$Query$GetUpcomingEvents(
+                                variables: Variables$Query$GetUpcomingEvents(
+                                  space: widget.space.id,
+                                  limit: 20,
+                                ),
+                              ),
+                              builder: (
+                                result, {
+                                refetch,
+                                fetchMore,
+                              }) {
+                                final upcomingEvents =
+                                    result.parsedData?.getUpcomingEvents ?? [];
+                                return Text(
+                                  result.isLoading
+                                      ? '--'
+                                      : t.event.upcomingEvents(
+                                          n: upcomingEvents.length,
+                                        ),
+                                  style: Typo.small.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
                       ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
