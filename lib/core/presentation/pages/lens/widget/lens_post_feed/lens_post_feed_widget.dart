@@ -58,9 +58,6 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
           listener: (context, state) {
             if (state.loggedIn &&
                 state.accountStatus == LensAccountStatus.builder) {
-              SnackBarUtils.showSuccess(
-                message: "Login to lens builder successfully",
-              );
               showCupertinoModalBottomSheet(
                 context: context,
                 backgroundColor: LemonColor.atomicBlack,

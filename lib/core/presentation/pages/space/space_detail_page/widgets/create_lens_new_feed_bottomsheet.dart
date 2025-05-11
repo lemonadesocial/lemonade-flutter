@@ -13,7 +13,6 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
-import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/mutation/update_space.graphql.dart';
@@ -169,9 +168,6 @@ class _ViewState extends State<_View> {
                     state.accountStatus == LensAccountStatus.accountOwner) {
                   Navigator.of(context).pop(true);
                   widget.onSuccess();
-                  SnackBarUtils.showSuccess(
-                    message: "Relogin to account owner successfully",
-                  );
                 } else if (!state.loggedIn && !state.isFetching) {
                   Navigator.of(context).pop();
                 }
