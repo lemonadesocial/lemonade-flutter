@@ -145,7 +145,6 @@ class SpaceRepositoryImpl implements SpaceRepository {
     bool? withMySpaces,
     bool? withPublicSpaces,
     List<Enum$SpaceRole>? roles,
-    bool? featured,
   }) async {
     final result = await _client.query$ListSpaces(
       Options$Query$ListSpaces(
@@ -153,7 +152,6 @@ class SpaceRepositoryImpl implements SpaceRepository {
           with_my_spaces: withMySpaces,
           with_public_spaces: withPublicSpaces,
           roles: roles,
-          featured: featured,
         ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),

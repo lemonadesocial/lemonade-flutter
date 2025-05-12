@@ -12,36 +12,36 @@ enum DiscoverCardDirection {
 enum DiscoverCardGradient {
   events(
     colors: [
-      Color.fromRGBO(50, 43, 63, 0.7),
-      Color.fromRGBO(37, 32, 45, 0.7),
+      Color.fromRGBO(50, 43, 63, 1),
+      Color.fromRGBO(37, 32, 45, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   collaborators(
     colors: [
-      Color.fromRGBO(52, 69, 72, 0.7),
-      Color.fromRGBO(40, 52, 53, 0.7),
+      Color.fromRGBO(52, 69, 72, 1),
+      Color.fromRGBO(40, 52, 53, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   badges(
     colors: [
-      Color.fromRGBO(69, 58, 48, 0.7),
-      Color.fromRGBO(51, 43, 37, 0.7),
+      Color.fromRGBO(69, 58, 48, 1),
+      Color.fromRGBO(51, 43, 37, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   music(
     colors: [
-      Color.fromRGBO(66, 66, 57, 0.7),
-      Color.fromRGBO(45, 44, 39, 0.7),
+      Color.fromRGBO(66, 66, 57, 1),
+      Color.fromRGBO(45, 44, 39, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   ),
   channels(
     colors: [
-      Color.fromRGBO(32, 34, 44, 0.7),
-      Color.fromRGBO(32, 34, 44, 0.7),
+      Color.fromRGBO(32, 34, 44, 1),
+      Color.fromRGBO(32, 34, 44, 1),
       Color.fromRGBO(18, 18, 18, 1),
     ],
   );
@@ -113,7 +113,6 @@ class _VerticalDiscoverCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -144,7 +143,6 @@ class _VerticalDiscoverCard extends StatelessWidget {
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
                 fontFamily: FontFamily.nohemiVariable,
-                color: colorScheme.onPrimary,
               ),
             ),
             SizedBox(height: 2.h),
