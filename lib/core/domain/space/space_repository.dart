@@ -59,6 +59,4 @@ abstract class SpaceRepository {
   Future<Either<Failure, Space>> updateSpace({
     required Variables$Mutation$UpdateSpace input,
   });
-
-  Future<Either<Failure, List<SpaceCategory>>> listSpaceCategories();
 }

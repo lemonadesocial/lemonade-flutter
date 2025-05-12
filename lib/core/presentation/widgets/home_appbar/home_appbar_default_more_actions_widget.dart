@@ -79,8 +79,10 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
                   DropdownItemDpo(
                     value: CommonMoreActions.completeProfile,
                     label: t.home.appBar.moreActions.completeProfile,
-                    leadingIcon: getThemeIcon(context,
-                        icon: Assets.icons.icPersonCelebrate),
+                    leadingIcon: getThemeIcon(
+                      context,
+                      icon: Assets.icons.icPersonCelebrate,
+                    ),
                     customColor: colorScheme.onPrimary,
                     showRedDot: OnboardingUtils.showRedDotCompleteProfile(
                       user: loggedInUser,
@@ -157,7 +159,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
                 }
 
                 if (!isLoggedIn) {
-                  AutoRouter.of(context).push(const LoginRoute());
+                  AutoRouter.of(context).push(LoginRoute());
                   return;
                 }
 
