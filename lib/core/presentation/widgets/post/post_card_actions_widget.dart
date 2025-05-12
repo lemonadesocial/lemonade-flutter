@@ -52,7 +52,7 @@ class PostCardActions extends StatelessWidget {
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   if (!isLoggedIn) {
-                    AutoRouter.of(context).navigate(const LoginRoute());
+                    AutoRouter.of(context).navigate(LoginRoute());
                     return;
                   }
                   context.read<TogglePostReactionBloc>().add(

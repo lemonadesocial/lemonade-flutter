@@ -52,7 +52,7 @@ class SpaceFollowButton extends StatelessWidget {
             radius: radius,
             onTap: () {
               if (userId == null || userId.isEmpty == true) {
-                context.router.push(const LoginRoute());
+                context.router.push(LoginRoute());
                 return;
               }
               context.read<FollowSpaceBloc>().add(
@@ -68,7 +68,7 @@ class SpaceFollowButton extends StatelessWidget {
             radius: radius,
             onTap: () {
               if (userId == null || userId.isEmpty == true) {
-                context.router.push(const LoginRoute());
+                context.router.push(LoginRoute());
                 return;
               }
               context.read<FollowSpaceBloc>().add(

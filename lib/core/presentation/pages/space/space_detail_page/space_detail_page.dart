@@ -336,7 +336,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                         onTap: () {
                           if (user?.userId == null ||
                               user?.userId.isEmpty == true) {
-                            context.router.navigate(const LoginRoute());
+                            context.router.navigate(LoginRoute());
                           }
                           context.read<FollowSpaceBloc>().add(
                                 FollowSpaceEvent.follow(

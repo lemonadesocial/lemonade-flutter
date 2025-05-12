@@ -1,5 +1,4 @@
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
-import 'package:app/core/presentation/pages/space/spaces_listing_page/widgets/space_list_item.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';

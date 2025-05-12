@@ -1,7 +1,9 @@
-#import "space_category_fragment.graphql"
-
-query listSpaceCategories {
+query ListSpaceCategories {
   listSpaceCategories {
-    ...SpaceCategoryFragment
+    description
+    imageUrl: image_url
+    listedEventsCount: listed_events_count
+    space
+    title
   }
 }

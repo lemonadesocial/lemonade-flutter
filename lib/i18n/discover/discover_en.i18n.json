@@ -26,6 +26,7 @@
     "upcomingEvents": "Upcoming events",
     "communities": "Communities",
     "emptyCommunities": "There's no communities",
-    "browseByCategory": "BROWSE BY CATEGORY",
-    "featuredCommunities": "FEATURED COMMUNITIES"
+    "browseByCategory": "Browse by Category",
+    "featuredCommunities": "Featured Communities",
+    "exploreLocalEvents": "Explore local events"
 }

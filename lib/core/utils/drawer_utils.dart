@@ -18,7 +18,7 @@ class DrawerUtils {
     if (authSession != null) {
       drawerGlobalKey.currentState?.openDrawer();
     } else {
-      AutoRouter.of(context).navigate(const LoginRoute());
+      AutoRouter.of(context).navigate(LoginRoute());
       return;
     }
   }

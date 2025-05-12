@@ -35,7 +35,7 @@ class CastOnFarcasterButton extends StatelessWidget {
     return InkWell(
       onTap: () async {
         if (loggedInUser == null) {
-          AutoRouter.of(context).push(const LoginRoute());
+          AutoRouter.of(context).push(LoginRoute());
           return;
         }
         if (farcasterConnected) {

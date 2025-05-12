@@ -148,7 +148,7 @@ class _GuestEventDetailBuyButtonView extends StatelessWidget {
                     },
                     orElse: () {
                       AutoRouter.of(context).navigate(
-                        const LoginRoute(),
+                        LoginRoute(),
                       );
                     },
                   );

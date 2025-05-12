@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
-
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
 
 class BottomBar extends StatefulWidget {
@@ -25,11 +24,11 @@ class BottomBar extends StatefulWidget {
 
 class BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
-  AppTab _selectedTab = AppTab.home;
+  AppTab _selectedTab = AppTab.discover;
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isTabChanged = false; // for initial render didn't change any tab yet
-  var _isHomeScreenFocused = true;
+  var _isHomeScreenFocused = false;
 
   @override
   void initState() {
@@ -136,19 +135,15 @@ class BottomBarState extends State<BottomBar>
 
     /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.chat ||
-        tabData.tab == AppTab.notification ||
-        tabData.tab == AppTab.discover) {
-      _triggerAnimation(tabData);
+    if (tabData.tab == AppTab.chat || tabData.tab == AppTab.notification) {
       if (authState is AuthStateAuthenticated) {
+        _triggerAnimation(tabData);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
-        if (tabData.tab == AppTab.discover) {
-          context.router.navigate(DiscoverRoute());
-        } else {
-          context.router.navigate(const LoginRoute());
-        }
+        // If other route is not logged in, navigate to Home Screen
+        _triggerAnimation(tabs[0]);
+        context.router.navigate(const HomeRoute());
       }
     } else {
       _triggerAnimation(tabData);

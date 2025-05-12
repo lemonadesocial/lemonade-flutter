@@ -5,12 +5,10 @@
     },
     "logout": "Logout",
     "lets_get_you_in": "Let's get you in!",
-    "get_started_description": "Sign up or log in to create, collaborate & celebrate! #makelemonade",
+    "get_started_description": "Register for events, subscribe to communities and manage events you are going to ",
     "get_started": "Get Started",
     "signIn": "Sign In",
     "getStarted": "Get Started",
-    "getStartedDescription": "Register for events, subscribe to communities and manage events you are going to ",
     "signInOrCreateAccount": "Sign In or Create Account",
     "explore": "Explore"
-    
 }

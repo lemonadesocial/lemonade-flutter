@@ -17,9 +17,6 @@ import 'package:app/core/domain/space/entities/pin_events_to_space_response.dart
 import 'package:app/core/data/space/dtos/get_space_event_requests_response_dto.dart';
 import 'package:app/core/domain/space/entities/get_space_event_requests_response.dart';
 import 'package:app/graphql/backend/space/mutation/update_space.graphql.dart';
-import 'package:app/core/data/space/dtos/space_category_dto.dart';
-import 'package:app/core/domain/space/entities/space_category.dart';
-import 'package:app/graphql/backend/space/query/list_space_categories.graphql.dart';
 
 @LazySingleton(as: SpaceRepository)
 class SpaceRepositoryImpl implements SpaceRepository {
@@ -265,24 +262,6 @@ class SpaceRepositoryImpl implements SpaceRepository {
           result.parsedData!.updateSpace!.toJson(),
         ),
       ),
-    );
-  }
-
-  @override
-  Future<Either<Failure, List<SpaceCategory>>> listSpaceCategories() async {
-    final result = await _client
-        .query$listSpaceCategories(Options$Query$listSpaceCategories());
-    if (result.hasException || result.parsedData?.listSpaceCategories == null) {
-      return Left(Failure.withGqlException(result.exception));
-    }
-    return Right(
-      result.parsedData!.listSpaceCategories
-          .map(
-            (e) => SpaceCategory.fromDto(
-              SpaceCategoryDto.fromJson(e.toJson()),
-            ),
-          )
-          .toList(),
     );
   }
 }

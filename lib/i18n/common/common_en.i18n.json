@@ -98,7 +98,9 @@
         "check": "Check",
         "openSettings": "Open Settings",
         "sign": "Sign",
-        "verifyWallet": "Verify wallet"
+        "verifyWallet": "Verify wallet",
+        "getStarted": "Get Started",
+        "explore": "Explore"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

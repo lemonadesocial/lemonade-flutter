@@ -228,10 +228,12 @@ class LensAuthBloc extends Bloc<LensAuthEvent, LensAuthState> {
         refreshToken: event.refreshToken,
       );
 
-      emit(state.copyWith(
-        loggedIn: true,
-        authenticatedAccounts: updatedAuthAccounts,
-      ));
+      emit(
+        state.copyWith(
+          loggedIn: true,
+          authenticatedAccounts: updatedAuthAccounts,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(loggedIn: false));
     }
