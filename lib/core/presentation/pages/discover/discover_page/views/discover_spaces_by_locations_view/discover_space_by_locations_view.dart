@@ -14,15 +14,15 @@ import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final List<String> colorPalette = [
-  '#F5A9CB',
-  '#C39BD3',
-  '#9B59B6',
-  '#5499C7',
-  '#75C6D1',
+  '#62B5CA',
+  '#6783F3',
+  '#F39367',
+  '#58B496',
+  '#D59F4F',
   '#7DCEA0',
-  '#F4D03F',
-  '#F0B27A',
-  '#F1948A',
+  '#E96183',
+  '#50A667',
+  '#9F67F3',
 ];
 
 class DiscoverSpacesByLocationsView extends StatefulWidget {
