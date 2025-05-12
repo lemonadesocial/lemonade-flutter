@@ -5,7 +5,6 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/graphql/backend/event/query/get_upcoming_events.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +20,14 @@ class SpaceListItem extends StatefulWidget {
   final Space space;
   final VoidCallback? onTap;
   final SpaceListItemLayout layout;
+  final bool featured;
 
   const SpaceListItem({
     super.key,
     required this.space,
     this.onTap,
     this.layout = SpaceListItemLayout.list,
+    this.featured = false,
   });
 
   @override
@@ -35,9 +36,8 @@ class SpaceListItem extends StatefulWidget {
 
 class _SpaceListItemState extends State<SpaceListItem> {
   Widget get spaceThumbnail => LemonNetworkImage(
-        width: widget.layout == SpaceListItemLayout.grid ? 42.w : Sizing.medium,
-        height:
-            widget.layout == SpaceListItemLayout.grid ? 42.w : Sizing.medium,
+        width: widget.layout == SpaceListItemLayout.grid ? 42.w : 48.w,
+        height: widget.layout == SpaceListItemLayout.grid ? 42.w : 48.w,
         imageUrl: widget.space.imageAvatar?.url ?? '',
         fit: BoxFit.cover,
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
@@ -46,7 +46,7 @@ class _SpaceListItemState extends State<SpaceListItem> {
         ),
         border: Border.all(
           width: 1,
-          color: Theme.of(context).colorScheme.outlineVariant,
+          color: Theme.of(context).colorScheme.outline,
         ),
       );
 
@@ -109,11 +109,22 @@ class _SpaceListItemState extends State<SpaceListItem> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 4.h),
-                          if (isAdmin ||
+                          if (widget.featured)
+                            Text(
+                              widget.space.description ?? '',
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSecondary,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 2,
+                            )
+                          else if (isAdmin ||
                               isOwner ||
                               widget.space.isAmbassador == true)
                             Text(
-                              '$followersCount ${t.common.subscriber(n: followersCount)}',
+                              widget.featured
+                                  ? ''
+                                  : '$followersCount ${t.common.subscriber(n: followersCount)}',
                               style: Typo.small.copyWith(
                                 color: colorScheme.onSecondary,
                               ),

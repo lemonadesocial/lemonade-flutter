@@ -4,6 +4,10 @@
         "one": "$n upcoming event",
         "other": "$n upcoming events"
     },
+    "eventCount(ordinal)": {
+        "one": "$n Event",
+        "other": "$n Events"
+    },
     "all": "all",
     "attending": "attending",
     "attended": "attended",
