@@ -57,7 +57,6 @@ class CategoryCard extends StatelessWidget {
     super.key,
     required this.colors,
     required this.title,
-    required this.subTitle,
     required this.icon,
     required this.onTap,
     this.padding,
@@ -65,7 +64,6 @@ class CategoryCard extends StatelessWidget {
 
   final List<Color> colors;
   final String title;
-  final String subTitle;
   final Widget icon;
   final Function() onTap;
   final EdgeInsets? padding;
@@ -78,7 +76,6 @@ class CategoryCard extends StatelessWidget {
       colors: colors,
       icon: icon,
       title: title,
-      subTitle: subTitle,
     );
   }
 }
@@ -90,7 +87,6 @@ class _VerticalCategoryCard extends StatelessWidget {
     required this.colors,
     required this.icon,
     required this.title,
-    required this.subTitle,
   });
 
   final Function() onTap;
@@ -98,7 +94,6 @@ class _VerticalCategoryCard extends StatelessWidget {
   final List<Color> colors;
   final Widget icon;
   final String title;
-  final String subTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -135,15 +130,6 @@ class _VerticalCategoryCard extends StatelessWidget {
                 style: Typo.small.copyWith(
                   fontWeight: FontWeight.w600,
                   fontFamily: FontFamily.nohemiVariable,
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                subTitle,
-                style: Typo.xSmall.copyWith(
-                  fontSize: 9.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ],

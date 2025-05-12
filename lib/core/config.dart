@@ -113,5 +113,7 @@ class AppConfig {
         .toList();
   }
 
+  static get lensNamespace => dotenv.env['LENS_NAMESPACE'];
+
   static get lensChainId => 232; // Directly use mainnet
 }

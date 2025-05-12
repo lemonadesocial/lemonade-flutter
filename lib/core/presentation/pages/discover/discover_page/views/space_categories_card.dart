@@ -119,7 +119,6 @@ class _SpaceCategoriesCardState extends State<SpaceCategoriesCard> {
                       final category = categories[index];
                       return CategoryCard(
                         title: category.title,
-                        subTitle: category.description ?? '',
                         icon: SvgPicture.network(
                           category.imageUrl ?? '',
                           width: 32.w,
