@@ -1,0 +1,9 @@
+query ListSpaceCategories {
+  listSpaceCategories {
+    description
+    imageUrl: image_url
+    listedEventsCount: listed_events_count
+    space
+    title
+  }
+}

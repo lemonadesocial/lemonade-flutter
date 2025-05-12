@@ -1,6 +1,9 @@
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
-import 'package:app/core/presentation/pages/discover/discover_page/views/discover_cards.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_featured_spaces_view/discover_featured_spaces_view.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_posts.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_space_categories_view/discover_space_categories_view.dart';
+import 'package:app/core/presentation/pages/discover/discover_page/views/discover_spaces_by_locations_view/discover_space_by_locations_view.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
@@ -41,14 +44,32 @@ class DiscoverPage extends StatelessWidget {
         child: CustomScrollView(
           controller: newsfeedListingBloc.scrollController,
           slivers: [
-            // TODO: Airstack no more support farcaster
-            // const DiscoverFarcasterChannels(),
-            // SliverPadding(
-            //   padding: EdgeInsets.symmetric(vertical: Spacing.xSmall),
-            // ),
+            const SliverToBoxAdapter(
+              child: HomeCollaborators(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.large),
+            ),
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-              sliver: const DiscoverCards(),
+              sliver: const DiscoverSpaceCategoriesView(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.medium),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              sliver: const DiscoverFeaturedSpacesView(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.medium),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              sliver: const DiscoverSpacesByLocationsView(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: Spacing.large),
             ),
             const DiscoverPosts(),
           ],

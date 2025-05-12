@@ -1,11 +1,17 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +20,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final bool isHomeScreen;
+  const LoginPage({
+    super.key,
+    this.isHomeScreen = false,
+  });
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -25,13 +35,28 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
+      appBar: LemonAppBar(
+        leading: widget.isHomeScreen
+            ? Padding(
+                padding: EdgeInsets.only(left: Spacing.smMedium),
+                child: Assets.icons.icLemonadeLogo.svg(),
+              )
+            : null,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: const HomeAppBarDefaultMoreActionsWidget(),
+          ),
+        ],
+      ),
       backgroundColor: colorScheme.primary,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeWhen(
             authenticated: (user) {
-              AutoRouter.of(context).pop();
+              if (!widget.isHomeScreen) {
+                AutoRouter.of(context).pop();
+              }
             },
             onBoardingRequired: (user) {
               OnboardingUtils.startOnboarding(context, user: user);
@@ -63,7 +88,7 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 42.w),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -87,12 +112,30 @@ class LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(height: 42.h),
+                  SizedBox(height: Spacing.small),
                   _buildAuthButton(context),
-                  SizedBox(height: 42.h),
+                  SizedBox(height: Spacing.small),
+                  LemonOutlineButton(
+                    onTap: () {
+                      AutoRouter.of(context).navigate(
+                        DiscoverRoute(),
+                      );
+                    },
+                    borderColor: Colors.transparent,
+                    label: t.auth.explore,
+                    textStyle: Typo.medium.copyWith(
+                      color: LemonColor.paleViolet,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: Spacing.small),
                 ],
               ),
             ),
+            if (widget.isHomeScreen)
+              SizedBox(
+                height: BottomBar.bottomBarHeight + Spacing.large,
+              ),
           ],
         ),
       ],
@@ -109,8 +152,9 @@ class LoginPageState extends State<LoginPage> {
           child: Loading.defaultLoading(context),
         );
 
-        final loginButton = LinearGradientButton.primaryButton(
-          label: t.auth.get_started,
+        final loginButton = LinearGradientButton.secondaryButton(
+          mode: GradientButtonMode.light,
+          label: t.auth.signInOrCreateAccount,
           onTap: () => context.read<AuthBloc>().add(
                 const AuthEvent.login(),
               ),

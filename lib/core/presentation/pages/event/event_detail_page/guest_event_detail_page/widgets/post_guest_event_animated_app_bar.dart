@@ -80,7 +80,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
         },
       );
     } else {
-      AutoRouter.of(context).navigate(const LoginRoute());
+      AutoRouter.of(context).navigate(LoginRoute());
     }
   }
 

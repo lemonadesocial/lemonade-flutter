@@ -1,37 +1,23 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
-import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
-import 'package:app/core/application/event/events_listing_bloc/home_events_listing_bloc.dart';
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/domain/event/event_enums.dart';
-import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/domain/space/space_repository.dart';
-import 'package:app/core/presentation/pages/event/widgets/event_time_filter_button_widget.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/home_discover_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_hosting_events_list.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_list_my_spaces.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_list.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/pending_invites_card.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/service/event/event_service.dart';
-import 'package:app/graphql/backend/notification/query/get_notifications.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/debouncer.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -42,6 +28,24 @@ class HomeView extends StatelessWidget {
           authenticated: (authSession) => authSession.userId,
           orElse: () => '',
         );
+    final mySpacesBloc = ListSpacesBloc(
+      spaceRepository: getIt<SpaceRepository>(),
+      withMySpaces: true,
+      roles: [Enum$SpaceRole.admin, Enum$SpaceRole.creator],
+    )..add(const ListSpacesEvent.fetch());
+
+    final ambassadorSpacesBloc = ListSpacesBloc(
+      spaceRepository: getIt<SpaceRepository>(),
+      withMySpaces: false,
+      roles: [Enum$SpaceRole.ambassador],
+    )..add(const ListSpacesEvent.fetch());
+
+    final subscribedSpacesBloc = ListSpacesBloc(
+      spaceRepository: getIt<SpaceRepository>(),
+      withMySpaces: false,
+      roles: [Enum$SpaceRole.subscriber],
+    )..add(const ListSpacesEvent.fetch());
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -52,36 +56,29 @@ class HomeView extends StatelessWidget {
           create: (context) => UpcomingAttendingEventsBloc(userId: userId)
             ..add(UpcomingAttendingEventsEvent.fetch()),
         ),
-        BlocProvider(
-          create: (context) => HomeEventListingBloc(
-            EventService(getIt<EventRepository>()),
-            defaultInput: const GetHomeEventsInput(
-              limit: 10,
-            ),
-          )..add(
-              BaseEventsListingEvent.fetch(),
-            ),
-        ),
-        BlocProvider(
-          create: (context) => ListSpacesBloc(
-            spaceRepository: getIt<SpaceRepository>(),
-            withMySpaces: true,
-            roles: [
-              Enum$SpaceRole.admin,
-              Enum$SpaceRole.creator,
-              Enum$SpaceRole.ambassador,
-              Enum$SpaceRole.subscriber,
-            ],
-          )..add(const ListSpacesEvent.fetch()),
-        ),
+        BlocProvider<ListSpacesBloc>.value(value: mySpacesBloc),
+        BlocProvider<ListSpacesBloc>.value(value: ambassadorSpacesBloc),
+        BlocProvider<ListSpacesBloc>.value(value: subscribedSpacesBloc),
       ],
-      child: const _HomeView(),
+      child: _HomeView(
+        mySpacesBloc: mySpacesBloc,
+        ambassadorSpacesBloc: ambassadorSpacesBloc,
+        subscribedSpacesBloc: subscribedSpacesBloc,
+      ),
     );
   }
 }
 
 class _HomeView extends StatefulWidget {
-  const _HomeView();
+  const _HomeView({
+    required this.mySpacesBloc,
+    required this.ambassadorSpacesBloc,
+    required this.subscribedSpacesBloc,
+  });
+
+  final ListSpacesBloc mySpacesBloc;
+  final ListSpacesBloc ambassadorSpacesBloc;
+  final ListSpacesBloc subscribedSpacesBloc;
 
   @override
   State<_HomeView> createState() => _HomeViewState();
@@ -92,6 +89,7 @@ class _HomeViewState extends State<_HomeView>
   EventTimeFilter? eventTimeFilter;
   bool _isRefreshing = false;
   final debouncer = Debouncer(milliseconds: 300);
+  final refreshController = RefreshController();
 
   @override
   void initState() {
@@ -117,15 +115,6 @@ class _HomeViewState extends State<_HomeView>
     }
   }
 
-  void _selectEventTimeFilter(EventTimeFilter? mEventTimeFilter) {
-    setState(() {
-      eventTimeFilter = mEventTimeFilter;
-    });
-    context.read<HomeEventListingBloc>().add(
-          BaseEventsListingEvent.filter(eventTimeFilter: eventTimeFilter),
-        );
-  }
-
   Future<void> _refreshAllEvents() async {
     if (_isRefreshing) return;
 
@@ -141,9 +130,9 @@ class _HomeViewState extends State<_HomeView>
       context.read<UpcomingAttendingEventsBloc>().add(
             UpcomingAttendingEventsEvent.fetch(),
           );
-      context.read<HomeEventListingBloc>().add(
-            BaseEventsListingEvent.fetch(),
-          );
+      widget.mySpacesBloc.add(const ListSpacesEvent.fetch());
+      widget.ambassadorSpacesBloc.add(const ListSpacesEvent.fetch());
+      widget.subscribedSpacesBloc.add(const ListSpacesEvent.fetch());
     } finally {
       setState(() {
         _isRefreshing = false;
@@ -161,16 +150,10 @@ class _HomeViewState extends State<_HomeView>
       },
       child: Builder(
         builder: (context) {
-          final colorScheme = Theme.of(context).colorScheme;
-          final t = Translations.of(context);
           final userId = context.watch<AuthBloc>().state.maybeWhen(
                 authenticated: (authSession) => authSession.userId,
                 orElse: () => '',
               );
-          final isLoadingHomeEventListing = context
-              .watch<HomeEventListingBloc>()
-              .state
-              .maybeWhen(loading: () => true, orElse: () => false);
           final isLoadingUpcomingAttendingEvents = context
               .watch<UpcomingAttendingEventsBloc>()
               .state
@@ -179,181 +162,60 @@ class _HomeViewState extends State<_HomeView>
               .watch<UpcomingHostingEventsBloc>()
               .state
               .maybeWhen(loading: () => true, orElse: () => false);
-          return RefreshIndicator(
-            color: colorScheme.onPrimary,
-            backgroundColor: LemonColor.chineseBlack,
-            onRefresh: () => _refreshAllEvents(),
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollEndNotification) {
-                  if (notification.metrics.pixels >=
-                      notification.metrics.maxScrollExtent * 0.8) {
-                    debouncer.run(() {
-                      context.read<HomeEventListingBloc>().add(
-                            BaseEventsListingEvent.fetch(
-                              eventTimeFilter: eventTimeFilter,
-                            ),
-                          );
-                    });
-                  }
-                }
-                return true;
-              },
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  if (_isRefreshing)
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      sliver: SliverToBoxAdapter(
-                        child: Loading.defaultLoading(context),
-                      ),
+          return SmartRefresher(
+            controller: refreshController,
+            onRefresh: () {
+              _refreshAllEvents();
+              refreshController.refreshCompleted();
+            },
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                if (isLoadingUpcomingHostingEvents ||
+                    isLoadingUpcomingAttendingEvents)
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
+                    sliver: SliverToBoxAdapter(
+                      child: Loading.defaultLoading(context),
                     ),
-                  const SliverToBoxAdapter(
-                    child: HomeCollaborators(),
                   ),
-                  if (userId.isNotEmpty)
-                    Query$GetNotifications$Widget(
-                      options: Options$Query$GetNotifications(
-                        fetchPolicy: FetchPolicy.networkOnly,
-                        variables: Variables$Query$GetNotifications(
-                          limit: 20,
-                          skip: 0,
-                          type: Input$NotificationTypeFilterInput(
-                            $in: [
-                              Enum$NotificationType.event_cohost_request,
-                              Enum$NotificationType.event_invite,
-                              Enum$NotificationType.user_friendship_request,
-                            ],
-                          ),
-                        ),
-                      ),
-                      builder: (result, {refetch, fetchMore}) {
-                        if (result.hasException ||
-                            result.isLoading ||
-                            result.data == null) {
-                          return const SliverToBoxAdapter();
-                        }
-                        final notifications =
-                            result.parsedData?.getNotifications ?? [];
-                        if (notifications.isEmpty) {
-                          return const SliverToBoxAdapter(
-                            child: SizedBox.shrink(),
-                          );
-                        }
-
-                        return SliverPadding(
-                          padding: EdgeInsets.only(
-                            top: Spacing.medium,
-                            left: Spacing.small,
-                            right: Spacing.small,
-                          ),
-                          sliver: SliverToBoxAdapter(
-                            child: PendingInvitesCard(
-                              count: notifications.length,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  if (isLoadingUpcomingHostingEvents ||
-                      isLoadingUpcomingAttendingEvents ||
-                      isLoadingHomeEventListing)
-                    SliverPadding(
-                      padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
-                      sliver: SliverToBoxAdapter(
-                        child: Loading.defaultLoading(context),
-                      ),
-                    ),
-                  if (userId.isNotEmpty)
-                    SliverPadding(
-                      padding: EdgeInsets.only(
-                        left: Spacing.small,
-                        right: Spacing.small,
-                      ),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate([
-                          const HomeHostingEventsList(),
-                          const HomeMyEventsList(),
-                          BlocBuilder<UpcomingHostingEventsBloc,
-                              UpcomingHostingEventsState>(
-                            builder: (context, hostingState) {
-                              return BlocBuilder<UpcomingAttendingEventsBloc,
-                                  UpcomingAttendingEventsState>(
-                                builder: (context, myEventsState) {
-                                  final isLoading = hostingState.maybeWhen(
-                                        loading: () => true,
-                                        orElse: () => false,
-                                      ) ||
-                                      myEventsState.maybeWhen(
-                                        loading: () => true,
-                                        orElse: () => false,
-                                      );
-                                  if (isLoading) {
-                                    return const SizedBox.shrink();
-                                  }
-
-                                  final hostingEvents = hostingState.maybeWhen(
-                                    fetched: (events) => events,
-                                    orElse: () => [],
-                                  );
-                                  final myEvents = myEventsState.maybeWhen(
-                                    fetched: (events) => events,
-                                    orElse: () => [],
-                                  );
-
-                                  // Only show card when both lists are empty and not loading
-                                  if (hostingEvents.isEmpty &&
-                                      myEvents.isEmpty) {
-                                    return const NoUpcomingEventsCard();
-                                  }
-                                  return const SizedBox.shrink();
-                                },
-                              );
-                            },
-                          ),
-                          const HomeListMySpaces(),
-                        ]),
-                      ),
-                    ),
+                if (userId.isNotEmpty)
                   SliverPadding(
                     padding: EdgeInsets.only(
-                      top: Spacing.medium,
                       left: Spacing.small,
                       right: Spacing.small,
+                      top: Spacing.medium,
                     ),
-                    sliver: SliverToBoxAdapter(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t.discover.discover.toUpperCase(),
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          EventTimeFilterButton(
-                            onSelect: _selectEventTimeFilter,
-                          ),
-                        ],
+                    sliver: SliverList.separated(
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: Spacing.large,
                       ),
+                      itemCount: 2,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return const HomeHostingEventsList();
+                        }
+
+                        return const HomeMyEventsList();
+                      },
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: Spacing.superExtraSmall),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    top: Spacing.large,
                   ),
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-                    sliver: HomeDiscoverEventsList(
-                      eventTimeFilter: eventTimeFilter,
-                    ),
+                  sliver: HomeListMySpaces(
+                    mySpacesBloc: widget.mySpacesBloc,
+                    ambassadorSpacesBloc: widget.ambassadorSpacesBloc,
+                    subscribedSpacesBloc: widget.subscribedSpacesBloc,
                   ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(height: 120.h),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 120.h,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

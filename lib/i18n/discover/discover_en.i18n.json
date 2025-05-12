@@ -25,5 +25,8 @@
     "hotBadgesNearYou": "Hot badges near you",
     "upcomingEvents": "Upcoming events",
     "communities": "Communities",
-    "emptyCommunities": "There's no communities"
+    "emptyCommunities": "There's no communities",
+    "browseByCategory": "Browse by Category",
+    "featuredCommunities": "Featured Communities",
+    "exploreLocalEvents": "Explore local events"
 }
