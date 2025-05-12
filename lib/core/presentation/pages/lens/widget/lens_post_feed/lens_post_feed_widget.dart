@@ -182,9 +182,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                     ),
                     if (result.isLoading && posts.isEmpty)
                       SliverToBoxAdapter(
-                        child: Center(
-                          child: Loading.defaultLoading(context),
-                        ),
+                        child: Loading.defaultLoading(context),
                       )
                     else if (posts.isEmpty || result.hasException)
                       const SliverToBoxAdapter(
