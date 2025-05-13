@@ -57,80 +57,129 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.xSmall),
+              child: SizedBox(height: 14.w),
             ),
             if (spaces.isEmpty)
-              SliverList.separated(
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: Spacing.xSmall);
-                },
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.all(Spacing.small),
-                    width: double.infinity,
-                    height: 91,
-                    decoration: BoxDecoration(
-                      color: LemonColor.atomicBlack,
-                      borderRadius: BorderRadius.circular(Spacing.small),
-                      border: Border.all(
-                        color: colorScheme.outline,
-                        width: 1,
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: Spacing.xSmall,
+                  crossAxisSpacing: Spacing.xSmall,
+                  childAspectRatio: 1.5,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(Spacing.small),
+                      decoration: BoxDecoration(
+                        color: LemonColor.atomicBlack,
+                        borderRadius: BorderRadius.circular(Spacing.small),
+                        border: Border.all(
+                          color: colorScheme.outline,
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [0.3.sw, 0.8.sw, 0.8.sw]
-                          .asMap()
-                          .map((index, width) {
-                            return MapEntry(
-                              index,
-                              Container(
-                                margin: EdgeInsets.only(
-                                  bottom: index == 0
-                                      ? Spacing.xSmall
-                                      : Spacing.extraSmall,
-                                ),
-                                height: Spacing.extraSmall,
-                                width: width.toDouble(),
-                                child: Shimmer.fromColors(
-                                  baseColor: colorScheme.surfaceVariant,
-                                  highlightColor: colorScheme.surface,
-                                  child: Container(
-                                    color: colorScheme.background,
-                                  ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Spacing.xSmall),
+                            ),
+                            child: Shimmer.fromColors(
+                              baseColor: colorScheme.surfaceVariant,
+                              highlightColor: colorScheme.surface,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: colorScheme.background,
+                                  borderRadius:
+                                      BorderRadius.circular(Spacing.xSmall),
                                 ),
                               ),
-                            );
-                          })
-                          .values
-                          .toList(),
-                    ),
-                  );
-                },
+                            ),
+                          ),
+                          SizedBox(height: Spacing.small),
+                          Shimmer.fromColors(
+                            baseColor: colorScheme.surfaceVariant,
+                            highlightColor: colorScheme.surface,
+                            child: Container(
+                              height: 20,
+                              color: colorScheme.background,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: 4,
+                ),
               ),
             if (spaces.isNotEmpty)
-              SliverList.separated(
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: Spacing.xSmall);
-                },
-                itemCount: spaces.length,
-                itemBuilder: (context, index) {
-                  final space = spaces[index];
-                  return SpaceListItem(
-                    space: space,
-                    onTap: () {
-                      if (space.id != null) {
-                        AutoRouter.of(context).navigate(
-                          SpaceDetailRoute(
-                            spaceId: space.id!,
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: Spacing.xSmall,
+                  crossAxisSpacing: Spacing.xSmall,
+                  childAspectRatio: 1.5,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final space = spaces[index];
+                    return GestureDetector(
+                      onTap: () {
+                        if (space.id != null) {
+                          AutoRouter.of(context).navigate(
+                            SpaceDetailRoute(
+                              spaceId: space.id!,
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(14.w),
+                        decoration: BoxDecoration(
+                          color: LemonColor.atomicBlack,
+                          borderRadius: BorderRadius.circular(Spacing.small),
+                          border: Border.all(
+                            color: colorScheme.outline,
+                            width: 1,
                           ),
-                        );
-                      }
-                    },
-                    featured: true,
-                  );
-                },
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 42.w,
+                              width: 42.w,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(Spacing.extraSmall),
+                                image: DecorationImage(
+                                  image: NetworkImage(space.getSpaceImageUrl()),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 14.w),
+                            Text(
+                              space.title ?? '',
+                              style: Typo.medium.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: spaces.length,
+                ),
               ),
           ],
         );

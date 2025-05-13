@@ -5,11 +5,13 @@ import 'package:app/core/presentation/pages/discover/discover_page/views/discove
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_spaces_by_locations_view/discover_space_by_locations_view.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
+import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 @RoutePage()
@@ -48,29 +50,27 @@ class DiscoverPage extends StatelessWidget {
               child: HomeCollaborators(),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
+              child: SizedBox(height: 30.w),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
               sliver: const DiscoverSpaceCategoriesView(),
             ),
             SliverToBoxAdapter(
               child: SizedBox(height: Spacing.medium),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
               sliver: const DiscoverFeaturedSpacesView(),
             ),
             SliverToBoxAdapter(
               child: SizedBox(height: Spacing.medium),
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-              sliver: const DiscoverSpacesByLocationsView(),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.large),
-            ),
+            // TODO: temporary hide
+            // SliverPadding(
+            //   padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+            //   sliver: const DiscoverSpacesByLocationsView(),
+            // ),
             const DiscoverPosts(),
           ],
         ),
