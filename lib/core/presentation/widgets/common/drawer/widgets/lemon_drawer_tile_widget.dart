@@ -10,27 +10,31 @@ class LemonDrawerTileWidget extends StatelessWidget {
   const LemonDrawerTileWidget({
     super.key,
     required this.title,
+    this.subtitle,
     this.leading,
     required this.onTap,
     this.trailing,
     this.featureAvailable = true,
     this.titleColor,
     this.color,
+    this.disabled = false,
   });
 
   final String title;
+  final String? subtitle;
   final Widget? leading;
   final Widget? trailing;
   final VoidCallback onTap;
   final bool featureAvailable;
   final Color? titleColor;
   final Color? color;
-
+  final bool disabled;
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () {
+        if (disabled) return;
         Navigator.of(context, rootNavigator: true).pop();
         onTap();
       },
@@ -80,6 +84,16 @@ class LemonDrawerTileWidget extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        if (subtitle != null && subtitle!.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(top: 2.h),
+                            child: Text(
+                              subtitle!,
+                              style: Typo.small.copyWith(
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

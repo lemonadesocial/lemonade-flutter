@@ -84,7 +84,7 @@ class _DiscoverSpacesByLocationsViewState
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 32,
+                height: 38.w,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: regions.length,
@@ -100,7 +100,7 @@ class _DiscoverSpacesByLocationsViewState
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.all(Spacing.extraSmall),
+                        padding: EdgeInsets.all(Spacing.superExtraSmall),
                         decoration: BoxDecoration(
                           color: selectedRegion == region.$_id
                               ? LemonColor.atomicBlack

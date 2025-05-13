@@ -10,7 +10,9 @@ import 'package:app/core/presentation/widgets/home_appbar/widgets/complete_profi
 import 'package:app/core/presentation/widgets/report_issue_bottom_sheet/report_issue_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -53,6 +55,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
         );
     final walletState = context.watch<WalletBloc>().state;
     final showRedDot = isLoggedIn;
+
     return FloatingFrostedGlassDropdown(
       items: [
         if (isLoggedIn) ...[
@@ -88,7 +91,11 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
         ],
         DropdownItemDpo(
           value: CommonMoreActions.connectWallet,
-          label: t.home.appBar.moreActions.connectWallet,
+          label: walletState.activeSession != null
+              ? Web3Utils.formatIdentifier(
+                  walletState.activeSession?.address ?? '',
+                )
+              : t.home.appBar.moreActions.connectWallet,
           leadingIcon: getThemeIcon(context, icon: Assets.icons.icWallet),
           customColor: colorScheme.onPrimary,
         ),

@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		29148AF1E70DC1896EF6A382 /* Pods_LemonadeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A22E8302337AFD3C892B7805 /* Pods_LemonadeTests.framework */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		58319FCABC599B7C59D94FE7 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FB3C9499FF02E21B5CCEFDD /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
-		785AFA36D68FA69ACB8EA87C /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 365DC59787D6F7DDCC173A24 /* Pods_RunnerTests.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		B9C247A2D63FC41E48661EF7 /* Pods_Lemonade.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC7EB5CD514728CC59D399D5 /* Pods_Lemonade.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,15 +44,23 @@
 /* Begin PBXFileReference section */
 		00E0296EF0D2BDA6ED48FF92 /* Pods-Runner.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-staging.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-staging.xcconfig"; sourceTree = "<group>"; };
 		01AB820E374D586E8A309DBF /* Pods-RunnerTests.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release-production.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release-production.xcconfig"; sourceTree = "<group>"; };
+		05E9E49B4B1E95096940CD15 /* Pods-LemonadeTests.debug-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.debug-development.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.debug-development.xcconfig"; sourceTree = "<group>"; };
+		1037CB8044693D55CA549B60 /* Pods-LemonadeTests.release-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.release-staging.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.release-staging.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		157B54E78661ED0C9D0819D6 /* Pods-RunnerTests.debug-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-staging.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-staging.xcconfig"; sourceTree = "<group>"; };
 		293969BC0525112EB330DDCD /* Pods-RunnerTests.release-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release-development.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release-development.xcconfig"; sourceTree = "<group>"; };
+		2F94CF0020ECD9AD3C705C20 /* Pods-Lemonade.debug-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.debug-staging.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.debug-staging.xcconfig"; sourceTree = "<group>"; };
+		30060F71F4450B72D829C9F6 /* Pods-LemonadeTests.release-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.release-development.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.release-development.xcconfig"; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
-		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		365DC59787D6F7DDCC173A24 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		331C8081294A63A400263BE5 /* LemonadeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LemonadeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		5522BE94465460B2DDA0624A /* Pods-Lemonade.release-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.release-staging.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.release-staging.xcconfig"; sourceTree = "<group>"; };
+		56FD620A5AE3DFD4F41347B2 /* Pods-Lemonade.profile-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.profile-production.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.profile-production.xcconfig"; sourceTree = "<group>"; };
+		5A12B6FDB90C45FC3B0FDB5A /* Pods-Lemonade.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.debug-production.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.debug-production.xcconfig"; sourceTree = "<group>"; };
 		5A550DBDB426804BA5990B39 /* Pods-Runner.debug-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-development.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-development.xcconfig"; sourceTree = "<group>"; };
+		5D9CEFAC3208535E476DC829 /* Pods-Lemonade.profile-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.profile-development.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.profile-development.xcconfig"; sourceTree = "<group>"; };
+		6727AC7C64FFEFC59D590DAD /* Pods-LemonadeTests.profile-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.profile-development.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.profile-development.xcconfig"; sourceTree = "<group>"; };
 		698D443443716A2D6065A032 /* Pods-RunnerTests.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-production.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-production.xcconfig"; sourceTree = "<group>"; };
 		6AE842846064FDB82E094420 /* Pods-Runner.release-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-development.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-development.xcconfig"; sourceTree = "<group>"; };
 		6EAD5BB46BDF36BC6ADA18D3 /* Pods-Runner.debug-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-staging.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-staging.xcconfig"; sourceTree = "<group>"; };
@@ -60,23 +68,33 @@
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7655AA7A2A521CB400C4AC6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		766890842A4CA9E80007F52D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		778BC48F738FA093062B613A /* Pods-Lemonade.debug-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.debug-development.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.debug-development.xcconfig"; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
+		817D45E50EFD71770FDB3174 /* Pods-LemonadeTests.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.profile-staging.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.profile-staging.xcconfig"; sourceTree = "<group>"; };
 		8A559C00AC967D91265F2656 /* Pods-RunnerTests.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-staging.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-staging.xcconfig"; sourceTree = "<group>"; };
-		8FB3C9499FF02E21B5CCEFDD /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		911EDEC3D70C68A91B2454A5 /* Pods-Runner.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-production.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-production.xcconfig"; sourceTree = "<group>"; };
 		936B0707670F3A75D2E9C7BE /* Pods-Runner.profile-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-development.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-development.xcconfig"; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
-		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97C146EE1CF9000F007C117D /* Lemonade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lemonade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C146FB1CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D7910120C8A9373EE34088E /* Pods-RunnerTests.profile-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-production.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-production.xcconfig"; sourceTree = "<group>"; };
+		A22E8302337AFD3C892B7805 /* Pods_LemonadeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LemonadeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A53CBC5CC48EE2A483B5B403 /* Pods-RunnerTests.release-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release-staging.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release-staging.xcconfig"; sourceTree = "<group>"; };
+		A7986143C4C68E026F4B51DF /* Pods-Lemonade.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.release-production.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.release-production.xcconfig"; sourceTree = "<group>"; };
 		A89F9C8E2BBF9D9900D08C3C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A9F4E26F35BA399D08601B80 /* Pods-LemonadeTests.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.release-production.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.release-production.xcconfig"; sourceTree = "<group>"; };
+		BE569F0FABE6A864CC26F277 /* Pods-Lemonade.profile-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.profile-staging.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.profile-staging.xcconfig"; sourceTree = "<group>"; };
+		C14470916723F4D9DEEBE08F /* Pods-Lemonade.release-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Lemonade.release-development.xcconfig"; path = "Target Support Files/Pods-Lemonade/Pods-Lemonade.release-development.xcconfig"; sourceTree = "<group>"; };
+		C8B116D3EEA953E6BD73A18D /* Pods-LemonadeTests.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.debug-production.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.debug-production.xcconfig"; sourceTree = "<group>"; };
 		CB91CDA277338DD4ABC21ADB /* Pods-Runner.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-production.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-production.xcconfig"; sourceTree = "<group>"; };
+		DC3C0B8450FAF9A9328CF21B /* Pods-LemonadeTests.profile-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.profile-production.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.profile-production.xcconfig"; sourceTree = "<group>"; };
+		E45E3D71F3E7728FE0C84FBB /* Pods-LemonadeTests.debug-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LemonadeTests.debug-staging.xcconfig"; path = "Target Support Files/Pods-LemonadeTests/Pods-LemonadeTests.debug-staging.xcconfig"; sourceTree = "<group>"; };
 		EA1CEA64A5AB493589970C9F /* Pods-Runner.profile-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-production.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-production.xcconfig"; sourceTree = "<group>"; };
+		EC7EB5CD514728CC59D399D5 /* Pods_Lemonade.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Lemonade.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F60ACABF0BA0994D3B9C8FBC /* Pods-Runner.release-staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-staging.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-staging.xcconfig"; sourceTree = "<group>"; };
 		FC7A4A2109B4F381A3631955 /* Pods-RunnerTests.profile-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile-development.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile-development.xcconfig"; sourceTree = "<group>"; };
 		FCE815751DF852F3677BCECD /* Pods-RunnerTests.debug-development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-development.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-development.xcconfig"; sourceTree = "<group>"; };
@@ -87,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				785AFA36D68FA69ACB8EA87C /* Pods_RunnerTests.framework in Frameworks */,
+				29148AF1E70DC1896EF6A382 /* Pods_LemonadeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58319FCABC599B7C59D94FE7 /* Pods_Runner.framework in Frameworks */,
+				B9C247A2D63FC41E48661EF7 /* Pods_Lemonade.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +123,8 @@
 		034FD3018D55B539078B0200 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8FB3C9499FF02E21B5CCEFDD /* Pods_Runner.framework */,
-				365DC59787D6F7DDCC173A24 /* Pods_RunnerTests.framework */,
+				EC7EB5CD514728CC59D399D5 /* Pods_Lemonade.framework */,
+				A22E8302337AFD3C892B7805 /* Pods_LemonadeTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -178,8 +196,8 @@
 		97C146EF1CF9000F007C117D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97C146EE1CF9000F007C117D /* Runner.app */,
-				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				97C146EE1CF9000F007C117D /* Lemonade.app */,
+				331C8081294A63A400263BE5 /* LemonadeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -222,6 +240,24 @@
 				9D7910120C8A9373EE34088E /* Pods-RunnerTests.profile-production.xcconfig */,
 				FC7A4A2109B4F381A3631955 /* Pods-RunnerTests.profile-development.xcconfig */,
 				8A559C00AC967D91265F2656 /* Pods-RunnerTests.profile-staging.xcconfig */,
+				5A12B6FDB90C45FC3B0FDB5A /* Pods-Lemonade.debug-production.xcconfig */,
+				778BC48F738FA093062B613A /* Pods-Lemonade.debug-development.xcconfig */,
+				2F94CF0020ECD9AD3C705C20 /* Pods-Lemonade.debug-staging.xcconfig */,
+				A7986143C4C68E026F4B51DF /* Pods-Lemonade.release-production.xcconfig */,
+				C14470916723F4D9DEEBE08F /* Pods-Lemonade.release-development.xcconfig */,
+				5522BE94465460B2DDA0624A /* Pods-Lemonade.release-staging.xcconfig */,
+				56FD620A5AE3DFD4F41347B2 /* Pods-Lemonade.profile-production.xcconfig */,
+				5D9CEFAC3208535E476DC829 /* Pods-Lemonade.profile-development.xcconfig */,
+				BE569F0FABE6A864CC26F277 /* Pods-Lemonade.profile-staging.xcconfig */,
+				C8B116D3EEA953E6BD73A18D /* Pods-LemonadeTests.debug-production.xcconfig */,
+				05E9E49B4B1E95096940CD15 /* Pods-LemonadeTests.debug-development.xcconfig */,
+				E45E3D71F3E7728FE0C84FBB /* Pods-LemonadeTests.debug-staging.xcconfig */,
+				A9F4E26F35BA399D08601B80 /* Pods-LemonadeTests.release-production.xcconfig */,
+				30060F71F4450B72D829C9F6 /* Pods-LemonadeTests.release-development.xcconfig */,
+				1037CB8044693D55CA549B60 /* Pods-LemonadeTests.release-staging.xcconfig */,
+				DC3C0B8450FAF9A9328CF21B /* Pods-LemonadeTests.profile-production.xcconfig */,
+				6727AC7C64FFEFC59D590DAD /* Pods-LemonadeTests.profile-development.xcconfig */,
+				817D45E50EFD71770FDB3174 /* Pods-LemonadeTests.profile-staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -229,9 +265,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		331C8080294A63A400263BE5 /* RunnerTests */ = {
+		331C8080294A63A400263BE5 /* LemonadeTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
+			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "LemonadeTests" */;
 			buildPhases = (
 				3C157984C32D84D31E29CCF2 /* [CP] Check Pods Manifest.lock */,
 				331C807D294A63A400263BE5 /* Sources */,
@@ -243,14 +279,14 @@
 			dependencies = (
 				331C8086294A63A400263BE5 /* PBXTargetDependency */,
 			);
-			name = RunnerTests;
+			name = LemonadeTests;
 			productName = RunnerTests;
-			productReference = 331C8081294A63A400263BE5 /* RunnerTests.xctest */;
+			productReference = 331C8081294A63A400263BE5 /* LemonadeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		97C146ED1CF9000F007C117D /* Runner */ = {
+		97C146ED1CF9000F007C117D /* Lemonade */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
+			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Lemonade" */;
 			buildPhases = (
 				0C1B962C7327396123E6F144 /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
@@ -267,9 +303,9 @@
 			);
 			dependencies = (
 			);
-			name = Runner;
+			name = Lemonade;
 			productName = Runner;
-			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
+			productReference = 97C146EE1CF9000F007C117D /* Lemonade.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -291,7 +327,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
+			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Lemonade" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -304,8 +340,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				97C146ED1CF9000F007C117D /* Runner */,
-				331C8080294A63A400263BE5 /* RunnerTests */,
+				97C146ED1CF9000F007C117D /* Lemonade */,
+				331C8080294A63A400263BE5 /* LemonadeTests */,
 			);
 		};
 /* End PBXProject section */
@@ -347,7 +383,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Lemonade-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -360,15 +396,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		279FE00E4DD27A792D295EA7 /* [CP] Copy Pods Resources */ = {
@@ -377,15 +413,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Lemonade/Pods-Lemonade-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
@@ -419,7 +455,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RunnerTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-LemonadeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -483,7 +519,7 @@
 /* Begin PBXTargetDependency section */
 		331C8086294A63A400263BE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 97C146ED1CF9000F007C117D /* Runner */;
+			target = 97C146ED1CF9000F007C117D /* Lemonade */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -591,7 +627,7 @@
 		};
 		331C8088294A63A400263BE5 /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 698D443443716A2D6065A032 /* Pods-RunnerTests.debug-production.xcconfig */;
+			baseConfigurationReference = C8B116D3EEA953E6BD73A18D /* Pods-LemonadeTests.debug-production.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -603,13 +639,13 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Debug-production";
 		};
 		331C8089294A63A400263BE5 /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 01AB820E374D586E8A309DBF /* Pods-RunnerTests.release-production.xcconfig */;
+			baseConfigurationReference = A9F4E26F35BA399D08601B80 /* Pods-LemonadeTests.release-production.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -619,13 +655,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Release-production";
 		};
 		331C808A294A63A400263BE5 /* Profile-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9D7910120C8A9373EE34088E /* Pods-RunnerTests.profile-production.xcconfig */;
+			baseConfigurationReference = DC3C0B8450FAF9A9328CF21B /* Pods-LemonadeTests.profile-production.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -635,7 +671,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Profile-production";
 		};
@@ -725,7 +761,7 @@
 		};
 		769D99422A4A7ACC00EFCBD5 /* Debug-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 157B54E78661ED0C9D0819D6 /* Pods-RunnerTests.debug-staging.xcconfig */;
+			baseConfigurationReference = E45E3D71F3E7728FE0C84FBB /* Pods-LemonadeTests.debug-staging.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -737,7 +773,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Debug-staging";
 		};
@@ -827,7 +863,7 @@
 		};
 		769D99452A4A7ADB00EFCBD5 /* Debug-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FCE815751DF852F3677BCECD /* Pods-RunnerTests.debug-development.xcconfig */;
+			baseConfigurationReference = 05E9E49B4B1E95096940CD15 /* Pods-LemonadeTests.debug-development.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -839,7 +875,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Debug-development";
 		};
@@ -925,7 +961,7 @@
 		};
 		769D99482A4A7AE500EFCBD5 /* Release-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A53CBC5CC48EE2A483B5B403 /* Pods-RunnerTests.release-staging.xcconfig */;
+			baseConfigurationReference = 1037CB8044693D55CA549B60 /* Pods-LemonadeTests.release-staging.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -935,7 +971,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Release-staging";
 		};
@@ -1021,7 +1057,7 @@
 		};
 		769D994B2A4A7AEC00EFCBD5 /* Release-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 293969BC0525112EB330DDCD /* Pods-RunnerTests.release-development.xcconfig */;
+			baseConfigurationReference = 30060F71F4450B72D829C9F6 /* Pods-LemonadeTests.release-development.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1031,7 +1067,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Release-development";
 		};
@@ -1115,7 +1151,7 @@
 		};
 		769D994E2A4A7AF800EFCBD5 /* Profile-staging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A559C00AC967D91265F2656 /* Pods-RunnerTests.profile-staging.xcconfig */;
+			baseConfigurationReference = 817D45E50EFD71770FDB3174 /* Pods-LemonadeTests.profile-staging.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1125,7 +1161,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Profile-staging";
 		};
@@ -1209,7 +1245,7 @@
 		};
 		769D99512A4A7AFF00EFCBD5 /* Profile-development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC7A4A2109B4F381A3631955 /* Pods-RunnerTests.profile-development.xcconfig */;
+			baseConfigurationReference = 6727AC7C64FFEFC59D590DAD /* Pods-LemonadeTests.profile-development.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1219,7 +1255,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = social.lemonade.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Runner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Runner";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lemonade.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Lemonade";
 			};
 			name = "Profile-development";
 		};
@@ -1396,7 +1432,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */ = {
+		331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "LemonadeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				331C8088294A63A400263BE5 /* Debug-production */,
@@ -1412,7 +1448,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Release-production";
 		};
-		97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */ = {
+		97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Lemonade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				97C147031CF9000F007C117D /* Debug-production */,
@@ -1428,7 +1464,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Release-production";
 		};
-		97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */ = {
+		97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Lemonade" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				97C147061CF9000F007C117D /* Debug-production */,
