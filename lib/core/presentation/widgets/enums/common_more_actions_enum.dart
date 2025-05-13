@@ -2,6 +2,7 @@ enum CommonMoreActions {
   shareEvent,
   shareProfile,
   viewProfile,
+  connectWallet,
   viewSettings,
   completeProfile,
   rateApp,

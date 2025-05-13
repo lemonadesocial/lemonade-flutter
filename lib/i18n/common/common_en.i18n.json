@@ -287,5 +287,6 @@
             "alertContent": "Photos permission is required to select images. Please enable it in settings."
         }
     },
-    "poweredBy": "powered by"
+    "poweredBy": "powered by",
+    "wallet": "Wallet"
 }

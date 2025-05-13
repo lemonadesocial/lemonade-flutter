@@ -23,9 +23,12 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
+import 'package:app/core/config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
@@ -90,9 +93,14 @@ class _ViewState extends State<_View> {
         (await getIt<WalletConnectService>().getActiveSession())?.address;
 
     if (ownerAddress != null && lensState.availableAccounts.isNotEmpty) {
+      final adminAndOwner = <String>{
+        ownerAddress,
+        ...(AppConfig.lensLemonadeAdminAddresses),
+      }.toList();
+
       setState(() {
-        _admins = [ownerAddress];
-        _adminController.text = ownerAddress;
+        _admins = adminAndOwner;
+        _adminController.text = adminAndOwner.join(', ');
       });
     }
   }
@@ -136,25 +144,10 @@ class _ViewState extends State<_View> {
       return;
     }
 
-    // Get the lens auth state
-    final lensAuthState = context.read<LensAuthBloc>().state;
-    final availableAccounts = lensAuthState.availableAccounts;
-    final accountAddress = availableAccounts.isEmpty
-        ? null
-        : availableAccounts
-            .where(
-              (account) =>
-                  account.owner?.toLowerCase() == ownerAddress.toLowerCase(),
-            )
-            .firstOrNull
-            ?.address;
-
-    // Use the existing LoginLensAccountBloc from context
-    context.read<LoginLensAccountBloc>().add(
-          LoginLensAccountEvent.login(
-            ownerAddress: ownerAddress,
-            accountAddress: accountAddress ?? ownerAddress,
-            accountStatus: LensAccountStatus.accountOwner,
+    // Use the new switching mechanism
+    context.read<LensAuthBloc>().add(
+          const LensAuthEvent.switchAccount(
+            targetStatus: LensAccountStatus.accountOwner,
           ),
         );
   }
@@ -169,31 +162,15 @@ class _ViewState extends State<_View> {
       builder: (context, lensState) {
         return MultiBlocListener(
           listeners: [
-            BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
+            BlocListener<LensAuthBloc, LensAuthState>(
               listener: (context, state) {
-                state.maybeWhen(
-                  success: (token, refreshToken, idToken, accountStatus) {
-                    context.read<LensAuthBloc>().add(
-                          LensAuthEvent.authorized(
-                            token: token,
-                            refreshToken: refreshToken,
-                            idToken: idToken,
-                          ),
-                        );
-                    if (accountStatus == LensAccountStatus.accountOwner) {
-                      Navigator.of(context).pop(true);
-                      widget.onSuccess();
-                      SnackBarUtils.showSuccess(
-                        message: "Relogin to account owner successfully",
-                      );
-                    }
-                  },
-                  failed: (failure) {
-                    Navigator.of(context).pop();
-                    SnackBarUtils.showError(message: failure.message);
-                  },
-                  orElse: () {},
-                );
+                if (state.loggedIn &&
+                    state.accountStatus == LensAccountStatus.accountOwner) {
+                  Navigator.of(context).pop(true);
+                  widget.onSuccess();
+                } else if (!state.loggedIn && !state.isFetching) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
             BlocListener<CreateLensFeedBloc, CreateLensFeedState>(
@@ -247,7 +224,7 @@ class _ViewState extends State<_View> {
                 children: [
                   const BottomSheetGrabber(),
                   LemonAppBar(
-                    title: t.space.lens.createNewFeed,
+                    title: '',
                     backgroundColor: LemonColor.atomicBlack,
                     onPressBack: () {
                       reloginToAccountOwner(context);
@@ -255,58 +232,113 @@ class _ViewState extends State<_View> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.all(Spacing.smMedium),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Name field
-                          Text(
-                            t.space.lens.name,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.lens.setUpYourTimeline,
+                                  style: Typo.large.copyWith(
+                                    color: colorScheme.onPrimary,
+                                    fontSize: 24.sp,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                Text(
+                                  t.lens.fillInTheDetailsBelowToCompleteSetup,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.medium),
+                                // Name field
+                                Text(
+                                  t.lens.nameOfTheFeed,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                LemonTextField(
+                                  controller: _nameController,
+                                  hintText: t.lens.nameOfTheFeed,
+                                  onChange: (_) => setState(() {}),
+                                ),
+                                SizedBox(height: Spacing.smMedium),
+                                // Description field
+                                Text(
+                                  t.lens.description,
+                                  style: Typo.medium.copyWith(
+                                    color: colorScheme.onSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: Spacing.extraSmall),
+                                LemonTextField(
+                                  controller: _descriptionController,
+                                  hintText: t.lens.description,
+                                  maxLines: 5,
+                                  minLines: 5,
+                                  inputHeight: 120.w,
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(height: Spacing.xSmall),
-                          LemonTextField(
-                            controller: _nameController,
-                            hintText: t.space.lens.name,
-                            onChange: (_) => setState(() {}),
-                          ),
-                          SizedBox(height: Spacing.medium),
-
-                          // Description field
-                          Text(
-                            t.space.lens.description,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.smMedium,
+                            ),
+                            child: Divider(
+                              color: colorScheme.outline,
                             ),
                           ),
-                          SizedBox(height: Spacing.xSmall),
-                          LemonTextField(
-                            controller: _descriptionController,
-                            hintText: t.space.lens.description,
-                            maxLines: 3,
-                            onChange: (_) => setState(() {}),
-                          ),
-                          SizedBox(height: Spacing.medium),
-
-                          // Admins section
-                          Text(
-                            t.space.lens.admins,
-                            style: TextStyle(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
                             ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          Column(
-                            children: [
-                              ..._admins.asMap().entries.map(
-                                    (entry) => Column(
-                                      children: [
-                                        _AdminField(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            t.lens.admins,
+                                            style: Typo.mediumPlus.copyWith(
+                                              color: colorScheme.onPrimary,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                          SizedBox(height: 2.w),
+                                          Text(
+                                            t.lens.defineRulesForYourFeed,
+                                            style: Typo.medium.copyWith(
+                                              color: colorScheme.onSecondary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    _AddButton(onPress: _addNewAdmin),
+                                  ],
+                                ),
+                                SizedBox(height: Spacing.medium),
+                                ..._admins.asMap().entries.map(
+                                      (entry) => Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: Spacing.small,
+                                        ),
+                                        child: _AdminField(
                                           value: entry.value,
                                           onChanged: (value) =>
                                               _updateAdmin(entry.key, value),
@@ -314,15 +346,10 @@ class _ViewState extends State<_View> {
                                               _removeAdmin(entry.key),
                                           removable: _admins.length > 1,
                                         ),
-                                        SizedBox(height: Spacing.xSmall),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                              SizedBox(height: Spacing.superExtraSmall),
-                              _AddButton(
-                                onPress: _addNewAdmin,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -417,60 +444,83 @@ class _AdminFieldState extends State<_AdminField> {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            flex: 3,
-            child: LemonTextField(
-              controller: _controller,
-              hintText: t.space.lens.adminInputHint,
-              onChange: widget.onChanged,
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 55.w,
+            decoration: BoxDecoration(
+              color: LemonColor.white06,
+              border: Border.all(color: LemonColor.white03),
+              borderRadius: BorderRadius.circular(LemonRadius.medium),
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: Spacing.small),
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onSecondary,
+                    builder: (colorFilter) => Assets.icons.icWalletLine.svg(
+                      width: Sizing.small,
+                      height: Sizing.small,
+                      colorFilter: colorFilter,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: LemonTextField(
+                    inputHeight: 50.w,
+                    controller: _controller,
+                    hintText: t.lens.walletAddress,
+                    placeholderStyle: Typo.medium.copyWith(
+                      color: colorScheme.onSecondary,
+                    ),
+                    onChange: widget.onChanged,
+                    borderColor: Colors.transparent,
+                    style: Typo.medium.copyWith(
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: Spacing.xSmall),
+        ),
+        if (widget.removable)
           InkWell(
-            onTap: widget.removable ? widget.onRemove : null,
+            onTap: widget.onRemove,
             child: Container(
-              width: Sizing.large,
-              height: Sizing.large,
+              width: 50.w,
+              height: 50.w,
+              margin: const EdgeInsets.only(left: 8),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: widget.removable
-                      ? Colors.transparent
-                      : colorScheme.outline,
-                ),
-                color: widget.removable
-                    ? LemonColor.atomicBlack
-                    : colorScheme.background,
-                borderRadius: BorderRadius.circular(LemonRadius.large * 2),
+                color: LemonColor.white06,
+                border: Border.all(color: LemonColor.white03),
+                borderRadius: BorderRadius.circular(LemonRadius.small),
               ),
               child: Center(
                 child: ThemeSvgIcon(
                   color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icClose.svg(
-                    width: Sizing.xSmall,
-                    height: Sizing.xSmall,
-                    colorFilter: filter,
+                  builder: (colorFilter) => Assets.icons.icClose.svg(
+                    width: Sizing.mSmall,
+                    height: Sizing.mSmall,
+                    colorFilter: colorFilter,
                   ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -481,33 +531,25 @@ class _AddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        InkWell(
-          onTap: onPress,
-          child: Container(
-            width: Sizing.xLarge,
-            height: Sizing.xLarge,
-            decoration: BoxDecoration(
-              color: colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(Sizing.xLarge),
-            ),
-            child: Center(
-              child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icAdd.svg(
-                  width: Sizing.xSmall,
-                  height: Sizing.xSmall,
-                  colorFilter: filter,
-                ),
-              ),
+    return InkWell(
+      onTap: onPress,
+      child: Container(
+        width: 34.w,
+        height: 34.w,
+        decoration: BoxDecoration(
+          color: LemonColor.white06,
+          border: Border.all(color: LemonColor.white03),
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+        ),
+        child: Center(
+          child: ThemeSvgIcon(
+            builder: (colorFilter) => Assets.icons.icPlus.svg(
+              width: Sizing.mSmall,
+              height: Sizing.mSmall,
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

@@ -5,5 +5,14 @@
     "connectWalletDescription": "It looks like your wallet is not connected. Connect your wallet to activate the feed",
     "activateTimeline": "Activate Timeline",
     "activateTimelineDescription": "Enable the timeline so your community can start posting and engaging here.",
-    "activate": "Activate"
+    "activate": "Activate",
+    "disconnectWallet": "Disconnect Wallet",
+    "setUpYourTimeline": "Set Up Your Timeline",
+    "fillInTheDetailsBelowToCompleteSetup": "Fill in the details below to complete setup.",
+    "nameOfTheFeed": "Name of the Feed",
+    "description": "Description",
+    "admins": "Admins",
+    "activateFeed": "Activate Feed",
+    "defineRulesForYourFeed": "Define rules for your feed.",
+    "walletAddress": "Wallet Address"
 }
