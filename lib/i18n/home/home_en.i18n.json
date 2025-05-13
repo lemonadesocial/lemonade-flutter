@@ -22,7 +22,9 @@
             "reportIssue": "Report an issue",
             "rateApp": "Rate app",
             "followLemonade": "Follow Lemonade",
-            "signOut": "Sign out"
+            "signOut": "Sign out",
+            "signIn": "Sign in",
+            "connectWallet": "Connect wallet"
         }
     },
     "quickCreate": {

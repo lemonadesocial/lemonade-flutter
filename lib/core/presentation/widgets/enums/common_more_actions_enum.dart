@@ -8,6 +8,8 @@ enum CommonMoreActions {
   reportUser,
   reportEvent,
   reportIssue,
-  signOut,
   followLemonde,
+  signOut,
+  signIn,
+  connectWallet,
 }
