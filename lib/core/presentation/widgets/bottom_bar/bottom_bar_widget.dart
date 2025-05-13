@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:collection/collection.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -159,6 +160,22 @@ class BottomBarState extends State<BottomBar>
     });
     _animationController.reset();
     _animationController.forward();
+  }
+
+  void tabNavigated(TabPageRoute tabRoute) {
+    final tabData = tabs.firstWhereOrNull(
+      (tab) => tab.route.contains(tabRoute.path),
+    );
+
+    if (tabData != null) {
+      // Wrap with addPostFrameCallback to avoid setState during build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Check if the state is still mounted before calling setState
+          _triggerAnimation(tabData);
+        }
+      });
+    }
   }
 
   Widget _buildAnimatedContainer(bool isSelected) {

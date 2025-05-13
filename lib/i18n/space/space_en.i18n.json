@@ -23,9 +23,9 @@
     "myCommunities": "My Communities",
     "ambassadorCommunities": "Ambassador Communities",
     "subscribedCommunities": "Subscribed Communities",
-    "noAmbassadorCommunities": "No ambassador communities",
-    "noAmbassadorCommunitiesDescription": "You have not joined any ambassador communities",
-    "noSubscribedCommunities": "No subscriptions",
+    "noAmbassadorCommunities": "No Ambassador community",
+    "noAmbassadorCommunitiesDescription": "You are not an ambassador in any communities.",
+    "noSubscribedCommunities": "No Subscriptions",
     "noSubscribedCommunitiesDescription": "You have not subscribed to any communities",
     "myCommunityHubs": "My Community Hubs",
     "pendingEventsApproval(ordinal)": {

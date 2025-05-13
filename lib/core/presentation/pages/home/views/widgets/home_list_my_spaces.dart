@@ -73,6 +73,7 @@ class SpaceListingView extends StatelessWidget {
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onPrimary,
+                letterSpacing: 1,
               ),
             ),
           ),
@@ -110,6 +111,7 @@ class SpaceListingView extends StatelessWidget {
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onPrimary,
+                letterSpacing: 1,
               ),
             ),
           ),
@@ -148,6 +150,7 @@ class SpaceListingView extends StatelessWidget {
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
                 color: colorScheme.onPrimary,
+                letterSpacing: 1,
               ),
             ),
           ),
@@ -211,7 +214,7 @@ class _SpacesList extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Spacing.small),
         sliver: SliverToBoxAdapter(
           child: Container(
-            padding: EdgeInsets.all(Spacing.small),
+            padding: EdgeInsets.all(14.w),
             decoration: BoxDecoration(
               color: LemonColor.atomicBlack,
               borderRadius: BorderRadius.circular(
@@ -223,7 +226,10 @@ class _SpacesList extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Assets.icons.icGiftOpen.svg(),
+                Assets.icons.icGiftOpen.svg(
+                  width: 40.w,
+                  height: 40.w,
+                ),
                 SizedBox(width: Spacing.small),
                 Expanded(
                   child: Column(
@@ -231,14 +237,15 @@ class _SpacesList extends StatelessWidget {
                     children: [
                       Text(
                         emptyTitle ?? '',
-                        style: Typo.mediumPlus
-                            .copyWith(color: colorScheme.onPrimary),
+                        style:
+                            Typo.medium.copyWith(color: colorScheme.onPrimary),
                       ),
                       SizedBox(height: 4.w),
                       Text(
                         emptyDescription ?? '',
-                        style: Typo.medium.copyWith(
+                        style: Typo.small.copyWith(
                           color: colorScheme.onSecondary,
+                          letterSpacing: 0,
                         ),
                       ),
                     ],
