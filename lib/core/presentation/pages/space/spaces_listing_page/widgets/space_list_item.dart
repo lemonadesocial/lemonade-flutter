@@ -73,7 +73,7 @@ class _SpaceListItemState extends State<SpaceListItem> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(Spacing.small),
+          padding: EdgeInsets.all(14.w),
           child: widget.layout == SpaceListItemLayout.grid
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

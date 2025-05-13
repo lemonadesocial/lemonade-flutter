@@ -9,7 +9,6 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/typo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/sizing.dart';
 
 enum NoUpcomingEventsCardType {
   hosting,
@@ -44,8 +43,8 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
       : t.common.actions.explore;
 
   SvgGenImage get icon => widget.type == NoUpcomingEventsCardType.hosting
-      ? Assets.icons.icCalendarGradientLight
-      : Assets.icons.icExploreGradient;
+      ? Assets.icons.icCalendarFillGradient
+      : Assets.icons.icTicketGradientDark;
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +59,14 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(Spacing.small),
+        padding: EdgeInsets.all(14.w),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ThemeSvgIcon(
               builder: (colorFilter) => icon.svg(
-                width: Sizing.small,
-                height: Sizing.small,
+                width: 40.w,
+                height: 40.w,
               ),
             ),
             SizedBox(width: Spacing.small),
@@ -78,7 +77,7 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
                 children: [
                   Text(
                     title,
-                    style: Typo.small.copyWith(
+                    style: Typo.medium.copyWith(
                       color: colorScheme.onPrimary,
                       fontWeight: FontWeight.w600,
                     ),
@@ -95,7 +94,7 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
                   LinearGradientButton.secondaryButton(
                     mode: GradientButtonMode.light,
                     label: buttonLabel,
-                    height: Sizing.regular,
+                    height: 38.w,
                     radius: BorderRadius.circular(LemonRadius.small),
                     textStyle: Typo.small.copyWith(
                       color: Colors.black,
