@@ -1,78 +1,137 @@
-# Lemonade Flutter App
-## Build Status
+# Lemonade Mobile Application
 
-### Build Staging iOS
+## Project Overview
 
-| Environment             | Status                                                                                                    |
-|-------------------------|-----------------------------------------------------------------------------------------------------------|
-| Build Staging iOS       | [![iOS Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/latest_build)       |
-| Build Staging Android   | [![Android Staging Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/latest_build)   |
-| Build Production (iOS and Android)       | [![iOS and Android Production Build Status](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/latest_build) |
+Lemonade is a cutting-edge mobile application built with Flutter, designed to create seamless social and event experiences. The platform enables users to discover, host, and participate in events, connect with collaborators, and engage in a vibrant community ecosystem.
 
-## Introduction
+### Key Features
 
-## Installation Guide
+- 🎉 Event Creation and Management
+- 👥 Collaborative Networking
+- 🎫 Ticket Purchasing and Management
+- 💬 Social Interaction and Messaging
+- 🏆 Achievement and Reward Systems
+- 🌐 Web3 and Blockchain Integration
 
-To run the Lemonade Flutter app, you need to set up a `.env` configuration file containing the required variables. Follow the steps below:
+## Supported Platforms
 
-1. Create a `.env` file in the root directory of the project.
-2. Ask team member about `.env` config file
+- **Android**: Fully supported
+- **iOS**: Fully supported
+- Minimum Android SDK version: 21
+- Minimum iOS version: 13.0
 
-## Setup commitlint check in local
+## Prerequisites
 
-Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
+Before getting started, ensure you have the following installed:
 
-1. cd scripts
-2. Execute `./install_dev_env.sh`
-3. After this setup, everytime time you commit code, it's will automate trigger check your commit conventions
+- Flutter SDK (version 3.16.9)
+- Dart SDK (version 3.2.6)
+- [Flutter Version Management (FVM)](https://fvm.app/)
+- Android Studio or Xcode
+- Git
 
-### Build and run the app with Flutter
+## Getting Started
 
-Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.16.9 and Dart 3.2.6
+### 1. Clone the Repository
 
-How to install & use
-
+```bash
+git clone https://github.com/your-organization/lemonade-flutter-app.git
+cd lemonade-flutter-app
 ```
+
+### 2. Install Flutter Version Management (FVM)
+
+```bash
+dart pub global activate fvm
 fvm install 3.16.9
 fvm use 3.16.9
 ```
 
-How to run Staging & Production
+### 3. Configure Environment
+
+1. Create a `.env` file in the root directory
+2. Request the `.env` configuration from your team lead or project manager
+
+### 4. Install Dependencies
+
+```bash
+fvm flutter pub get
 ```
-fvm flutter run --flavor staging  --target lib/main_staging.dart
-fvm flutter run --flavor production  --target lib/main_production.dart
+
+## Running the Application
+
+### Staging Environment
+
+```bash
+fvm flutter run --flavor staging --target lib/main_staging.dart
 ```
 
-With the `.env` file configured and the app built and run via Flutter, you can now successfully use the Lemonade Flutter app.
+### Production Environment
 
-## How to obtain the debug.keystore
-
-The debug.keystore is a crucial file required for Android app development and debugging in Flutter projects. To ensure security, this file should not be publicly shared or included in version control.
-
-If you need access to the debug.keystore for this project, please contact the engineering team responsible for project management. They will provide you with the necessary file for your development purposes.
-
-After obtaining the debug.keystore, move the file to the `android/app`` folder of your Flutter project. This location is where the Android build process expects to find the debug.keystore for signing the app during development and debugging. Placing it there will enable a seamless build process for your Flutter project on Android.
-
-## Check app version
-
-Appcast, in this Flutter package, is used by the upgrader widgets to download app details from an appcast, based on the Sparkle framework by Andy Matuschak. You can read the Sparkle documentation here: https://sparkle-project.org/documentation/publishing/.
-
-An appcast is an RSS feed with one channel that has a collection of items that each describe one app version. The appcast will describe each app version and will provide the latest app version to upgrader that indicates when an upgrade should be recommended.
-
-- Staging : appcast_staging.xml
-- Production : appcast.xml
-
-Uncomment this one to force update app version
-```xml
-<!-- Force update version -->
-<!-- <sparkle:tags> <sparkle:criticalUpdate /> </sparkle:tags> -->
+```bash
+fvm flutter run --flavor production --target lib/main_production.dart
 ```
-## How to test Stripe payment on staging
-- In order to test payment with Stripe properly, you can use one of the demo card provided by Stripe. The card list can be found [here](https://stripe.com/docs/testing#cards)
 
-## How to fix when sign commit gpg stuck
+## Project Structure
 
 ```
-rm -rf ~/.gnupg/*.lock
-rm -rf ~/.gnupg/public-keys.d/*.lock
+lib/
+├── core/
+│   ├── application/   # Business logic and state management
+│   ├── data/          # Data sources and repositories
+│   ├── domain/        # Domain models and entities
+│   ├── presentation/  # UI components and pages
+│   └── service/       # Platform-specific services
+├── graphql/           # GraphQL schemas and operations
+├── i18n/              # Internationalization files
+├── router/            # App navigation configuration
+└── theme/             # Design system and styling
 ```
+
+## Technologies Used
+
+- **Framework**: Flutter
+- **State Management**: BLoC
+- **GraphQL**: Apollo Client
+- **Authentication**: Firebase
+- **Payments**: Stripe
+- **Web3**: WalletConnect, Ethereum
+- **Internationalization**: flutter_localizations
+- **Navigation**: go_router
+
+## Build and Deployment
+
+### iOS
+
+- Use Xcode to build and sign the app
+- Deploy through TestFlight for beta testing
+- App Store Connect for production release
+
+### Android
+
+- Generate signed APK/AAB using Android Studio
+- Deploy through Google Play Console
+- Use Codemagic for CI/CD
+
+## License
+
+[Specify your license type, e.g., MIT, Apache 2.0]
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes following [Conventional Commits](https://www.conventionalcommits.org/)
+4. Open a pull request
+
+## Support
+
+For issues, feature requests, or support, please [open an issue](https://github.com/your-organization/lemonade-flutter-app/issues) on GitHub.
+
+## Build Status
+
+| Environment | Status |
+|------------|--------|
+| Staging iOS | [![iOS Staging Build](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-staging/latest_build) |
+| Staging Android | [![Android Staging Build](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/android-staging/latest_build) |
+| Production (iOS & Android) | [![Production Build](https://api.codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/status_badge.svg)](https://codemagic.io/apps/6493f698db20b1801c5e821b/ios-android-production/latest_build) |
