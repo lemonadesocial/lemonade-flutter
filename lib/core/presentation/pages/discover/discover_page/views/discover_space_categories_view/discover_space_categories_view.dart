@@ -94,7 +94,6 @@ class _DiscoverSpaceCategoriesViewState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
 
     return Query$ListSpaceCategories$Widget(
       options: Options$Query$ListSpaceCategories(),
@@ -210,9 +209,10 @@ class _DiscoverSpaceCategoriesViewState
                               Text(
                                 e.title,
                                 style: Typo.medium.copyWith(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.sp),
+                                  color: colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13.sp,
+                                ),
                               ),
                             ],
                           ),

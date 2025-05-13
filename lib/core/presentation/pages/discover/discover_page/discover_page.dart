@@ -2,10 +2,8 @@ import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_lis
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_featured_spaces_view/discover_featured_spaces_view.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_posts.dart';
 import 'package:app/core/presentation/pages/discover/discover_page/views/discover_space_categories_view/discover_space_categories_view.dart';
-import 'package:app/core/presentation/pages/discover/discover_page/views/discover_spaces_by_locations_view/discover_space_by_locations_view.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
-import 'package:app/core/utils/bottomsheet_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';

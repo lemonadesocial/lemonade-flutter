@@ -1,6 +1,5 @@
 import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
-import 'package:app/core/presentation/pages/space/spaces_listing_page/widgets/space_list_item.dart';
 import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/i18n/i18n.g.dart';

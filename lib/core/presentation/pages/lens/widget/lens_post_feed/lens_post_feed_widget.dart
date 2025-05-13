@@ -6,7 +6,6 @@ import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_empty_list_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/create_lens_new_feed_bottomsheet.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/debouncer.dart';
 import 'package:app/core/utils/gql/gql.dart';
