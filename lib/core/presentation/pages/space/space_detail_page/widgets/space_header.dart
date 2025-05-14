@@ -23,25 +23,28 @@ class SpaceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
+    final hasCover = space.imageCover?.url?.isNotEmpty == true;
     return SliverStack(
       insetOnOverlap: true,
       children: [
         SliverAppBar(
-          expandedHeight: _coverHeight,
+          expandedHeight: hasCover ? _coverHeight : statusBarHeight * 1.8,
           pinned: false,
           floating: false,
           stretch: true,
           backgroundColor: Colors.transparent,
-          flexibleSpace: FlexibleSpaceBar(
-            stretchModes: const [
-              StretchMode.zoomBackground,
-            ],
-            background: LemonNetworkImage(
-              imageUrl: space.imageCover?.url ?? '',
-              fit: BoxFit.cover,
-              placeholder: ImagePlaceholder.eventCard(),
-            ),
-          ),
+          flexibleSpace: hasCover
+              ? FlexibleSpaceBar(
+                  stretchModes: const [
+                    StretchMode.zoomBackground,
+                  ],
+                  background: LemonNetworkImage(
+                    imageUrl: space.imageCover?.url ?? '',
+                    fit: BoxFit.cover,
+                    placeholder: ImagePlaceholder.eventCard(),
+                  ),
+                )
+              : null,
           automaticallyImplyLeading: false,
           toolbarHeight: 0,
         ),
