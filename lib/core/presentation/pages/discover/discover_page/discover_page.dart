@@ -28,7 +28,7 @@ class DiscoverPage extends StatelessWidget {
       appBar: HomeAppBar(title: t.discover.discover),
       body: SmartRefresher(
         controller: refreshController,
-        enablePullUp: true,
+        enablePullUp: false,
         onRefresh: () {
           newsfeedListingBloc.add(NewsfeedListingEvent.refresh());
           refreshController.refreshCompleted();
@@ -62,7 +62,7 @@ class DiscoverPage extends StatelessWidget {
               sliver: const DiscoverFeaturedSpacesView(),
             ),
             SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.medium),
+              child: SizedBox(height: Spacing.xLarge * 4),
             ),
             // TODO: temporary hide
             // SliverPadding(

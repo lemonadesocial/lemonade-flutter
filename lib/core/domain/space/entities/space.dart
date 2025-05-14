@@ -81,7 +81,7 @@ class Space with _$Space {
     if (isPersonal) {
       return creatorExpanded?.imageAvatar ?? '';
     }
-    return imageCover?.url ?? imageAvatar?.url ?? '';
+    return imageAvatar?.url ?? '';
   }
 
   factory Space.fromJson(Map<String, dynamic> json) => _$SpaceFromJson(json);

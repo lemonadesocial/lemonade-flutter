@@ -35,8 +35,8 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
       : t.event.noHostedEvents;
 
   String get description => widget.type == NoUpcomingEventsCardType.hosting
-      ? t.event.noUpcomingEventsDescription
-      : t.event.noHostedEventsDescription;
+      ? t.event.noHostedEventsDescription
+      : t.event.noUpcomingEventsDescription;
 
   String get buttonLabel => widget.type == NoUpcomingEventsCardType.hosting
       ? t.event.eventCreation.createEvent
