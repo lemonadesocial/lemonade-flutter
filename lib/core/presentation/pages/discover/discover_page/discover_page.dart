@@ -69,7 +69,7 @@ class DiscoverPage extends StatelessWidget {
             //   padding: EdgeInsets.symmetric(horizontal: Spacing.small),
             //   sliver: const DiscoverSpacesByLocationsView(),
             // ),
-            const DiscoverPosts(),
+            // const DiscoverPosts(),
           ],
         ),
       ),
