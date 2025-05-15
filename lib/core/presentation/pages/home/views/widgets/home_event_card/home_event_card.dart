@@ -40,7 +40,7 @@ class HomeEventCard extends StatelessWidget {
     final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
     return InkWell(
       onTap: () {
-        AutoRouter.of(context).navigate(
+        AutoRouter.of(context).push(
           EventDetailRoute(
             eventId: event.id ?? '',
           ),
