@@ -14,5 +14,7 @@
     "admins": "Admins",
     "activateFeed": "Activate Feed",
     "defineRulesForYourFeed": "Define rules for your feed.",
-    "walletAddress": "Wallet Address"
+    "walletAddress": "Wallet Address",
+    "noPostsYet": "No posts yet",
+    "postsFromThisCommunityWillAppearHere": "Posts from this community will appear here."
 }

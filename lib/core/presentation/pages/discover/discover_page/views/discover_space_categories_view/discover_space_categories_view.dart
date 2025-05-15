@@ -2,7 +2,6 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_categories.graphql.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
@@ -94,7 +93,6 @@ class _DiscoverSpaceCategoriesViewState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final t = Translations.of(context);
 
     return Query$ListSpaceCategories$Widget(
       options: Options$Query$ListSpaceCategories(),
@@ -107,19 +105,6 @@ class _DiscoverSpaceCategoriesViewState
 
         return MultiSliver(
           children: [
-            SliverToBoxAdapter(
-              child: Text(
-                t.discover.browseByCategory.toUpperCase(),
-                style: Typo.small.copyWith(
-                  color: colorScheme.onPrimary,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: Spacing.xSmall),
-            ),
             if (spaceCategories.isEmpty)
               SliverGrid.count(
                 childAspectRatio: (330 / 320),
@@ -138,34 +123,31 @@ class _DiscoverSpaceCategoriesViewState
                           width: 1,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(Spacing.xSmall),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
-                              builder: (colorFilter) =>
-                                  Assets.icons.icLemonadeLogo.svg(
-                                colorFilter: colorFilter,
-                                width: 32.w,
-                                height: 32.h,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ThemeSvgIcon(
+                            color: colorScheme.onSecondary,
+                            builder: (colorFilter) =>
+                                Assets.icons.icLemonadeLogo.svg(
+                              colorFilter: colorFilter,
+                              width: 32.w,
+                              height: 32.h,
+                            ),
+                          ),
+                          SizedBox(height: Spacing.xSmall),
+                          SizedBox(
+                            height: Spacing.small,
+                            child: Shimmer.fromColors(
+                              baseColor: colorScheme.surfaceVariant,
+                              highlightColor: colorScheme.surface,
+                              child: Container(
+                                color: colorScheme.background,
                               ),
                             ),
-                            SizedBox(height: Spacing.xSmall),
-                            SizedBox(
-                              height: Spacing.small,
-                              child: Shimmer.fromColors(
-                                baseColor: colorScheme.surfaceVariant,
-                                highlightColor: colorScheme.surface,
-                                child: Container(
-                                  color: colorScheme.background,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -228,6 +210,7 @@ class _DiscoverSpaceCategoriesViewState
                                 style: Typo.medium.copyWith(
                                   color: colorScheme.onPrimary,
                                   fontWeight: FontWeight.w600,
+                                  fontSize: 13.sp,
                                 ),
                               ),
                             ],
