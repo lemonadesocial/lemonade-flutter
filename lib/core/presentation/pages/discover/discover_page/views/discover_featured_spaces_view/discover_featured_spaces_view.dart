@@ -122,7 +122,7 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: Spacing.xSmall,
                   crossAxisSpacing: Spacing.xSmall,
-                  childAspectRatio: 1.5,
+                  childAspectRatio: 1.55,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -149,6 +149,7 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               height: 42.w,
