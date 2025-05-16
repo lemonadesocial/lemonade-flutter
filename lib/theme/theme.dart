@@ -4,6 +4,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 final lemonadeAppLightThemeData = ThemeData(
+  fontFamily: FontFamily.generalSans,
   brightness: Brightness.light,
   textTheme: lemonadeTextTheme,
   colorScheme: lemonadeLightThemeColorScheme,
@@ -12,7 +13,7 @@ final lemonadeAppLightThemeData = ThemeData(
 final lemonadeAppDarkThemeData = ThemeData(
   splashColor: Colors.transparent,
   highlightColor: Colors.transparent,
-  fontFamily: FontFamily.switzerVariable,
+  fontFamily: FontFamily.generalSans,
   brightness: Brightness.dark,
   textTheme: lemonadeTextTheme,
   colorScheme: lemonadeDarkThemeColorScheme,
