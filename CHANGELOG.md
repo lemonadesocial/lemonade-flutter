@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.1.0...v2.2.0) (2025-05-16)
+
+
+### Features
+
+* define app new theme ([#944](https://github.com/lemonadesocial/lemonade-flutter/issues/944)) ([5cca889](https://github.com/lemonadesocial/lemonade-flutter/commit/5cca889db6dd2834f4701d2f3cad347ed9cd522e))
+
 ## [2.1.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.0.0...v2.1.0) (2025-05-15)
 
 
