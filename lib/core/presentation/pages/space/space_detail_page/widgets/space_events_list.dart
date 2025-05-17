@@ -2,8 +2,8 @@ import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_header.dart';
+import 'package:app/core/presentation/pages/space/widgets/space_event_card/space_event_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
@@ -88,17 +88,17 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
                 }
                 return SliverPadding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.small,
+                    horizontal: Spacing.s4,
                   ),
                   sliver: SliverList.separated(
-                    addAutomaticKeepAlives: false,
+                    addAutomaticKeepAlives: true,
                     itemBuilder: (context, index) {
-                      return HomeEventCard(
+                      return SpaceEventCard(
                         event: events[index],
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return SizedBox(height: Spacing.small);
+                      return SizedBox(height: Spacing.s2);
                     },
                     itemCount: events.length,
                   ),

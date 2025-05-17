@@ -1,16 +1,16 @@
 import 'package:app/core/domain/space/entities/space.dart';
-import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/widgets/guest_event_detail_appbar.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_button_by_role.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 
-final _coverHeight = 170.w;
-final _avatarSize = 80.w;
+final _avatarSize = 77.w;
+final transformHeight = _avatarSize / 2 + Spacing.s4 / 2;
 
 class SpaceHeader extends StatelessWidget {
   final Space space;
@@ -22,71 +22,86 @@ class SpaceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
     final hasCover = space.imageCover?.url?.isNotEmpty == true;
-    return SliverStack(
-      insetOnOverlap: true,
+    final appColors = context.theme.appColors;
+
+    return MultiSliver(
       children: [
-        SliverAppBar(
-          expandedHeight: hasCover ? _coverHeight : statusBarHeight * 1.8,
-          pinned: false,
-          floating: false,
-          stretch: true,
-          backgroundColor: Colors.transparent,
-          flexibleSpace: hasCover
-              ? FlexibleSpaceBar(
-                  stretchModes: const [
-                    StretchMode.zoomBackground,
-                  ],
-                  background: LemonNetworkImage(
-                    imageUrl: space.imageCover?.url ?? '',
-                    fit: BoxFit.cover,
-                    placeholder: ImagePlaceholder.eventCard(),
+        if (hasCover)
+          SliverToBoxAdapter(
+            child: SizedBox(height: transformHeight),
+          ),
+        SliverToBoxAdapter(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (hasCover)
+                Transform.translate(
+                  offset: Offset(0, -transformHeight),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+                    child: LemonNetworkImage(
+                      width: double.infinity,
+                      height: 98.w,
+                      imageUrl: space.imageCover?.url ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: ImagePlaceholder.eventCard(),
+                      borderRadius: BorderRadius.circular(LemonRadius.md),
+                    ),
                   ),
                 )
-              : null,
-          automaticallyImplyLeading: false,
-          toolbarHeight: 0,
-        ),
-        SliverPositioned(
-          bottom: -_avatarSize / 2,
-          left: Spacing.small,
-          child: Container(
-            width: _avatarSize,
-            height: _avatarSize,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.small),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.background,
-                width: 3.w,
-              ),
-            ),
-            child: LemonNetworkImage(
-              imageUrl: space.imageAvatar?.url ?? '',
-              fit: BoxFit.cover,
-              borderRadius: BorderRadius.circular(LemonRadius.small),
-              placeholder: ImagePlaceholder.spaceThumbnail(
-                iconColor: Theme.of(context).colorScheme.onSecondary,
-              ),
-            ),
-          ),
-        ),
-        SliverPositioned(
-          top: statusBarHeight,
-          left: Spacing.small,
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  context.router.pop();
-                },
-                child: BlurCircle(
-                  child: LemonBackButton(
-                    color: Theme.of(context).colorScheme.onSecondary,
+              else
+                Container(
+                  height: _avatarSize,
+                ),
+              Positioned.fill(
+                bottom: 0,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: _avatarSize,
+                        height: _avatarSize,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.small),
+                          border: Border.all(
+                            color: appColors.cardBorder,
+                            width: 1.w,
+                          ),
+                        ),
+                        child: LemonNetworkImage(
+                          imageUrl: space.imageAvatar?.url ?? '',
+                          fit: BoxFit.cover,
+                          width: _avatarSize,
+                          height: _avatarSize,
+                          borderRadius:
+                              BorderRadius.circular(LemonRadius.small),
+                          placeholder: ImagePlaceholder.spaceThumbnail(
+                            iconColor: appColors.textTertiary,
+                          ),
+                        ),
+                      ),
+                      SpaceButtonByRole(space: space),
+                    ],
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: Spacing.s4),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+            child: SpaceInfo(
+              space: space,
+            ),
           ),
         ),
       ],

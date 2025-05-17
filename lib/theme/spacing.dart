@@ -156,4 +156,6 @@ class LemonRadius {
   static double lg = 16.r;
 
   static double xl = 24.r;
+
+  static double full = 9999;
 }

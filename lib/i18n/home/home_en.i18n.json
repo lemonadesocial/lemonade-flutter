@@ -1,6 +1,6 @@
 {
     "newsfeed": "Newsfeed",
-    "whatOnYourMind": "What's on your mind",
+    "whatOnYourMind": "What's on your mind?",
     "create": "Create",
     "comingSoon": "Coming soon",
     "post": "Post",
@@ -24,8 +24,7 @@
             "rateApp": "Rate app",
             "followLemonade": "Follow Lemonade",
             "signOut": "Sign out",
-            "signIn": "Sign in",
-            "connectWallet": "Connect wallet"
+            "signIn": "Sign in"
         }
     },
     "quickCreate": {

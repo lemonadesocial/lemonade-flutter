@@ -24,6 +24,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class LensPostFeedWidget extends StatefulWidget {
   const LensPostFeedWidget({super.key, required this.space});
@@ -40,10 +41,31 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
   final debouncer = Debouncer(milliseconds: 300);
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final spaceLensFeedId = widget.space.lensFeedId;
+  void initState() {
+    super.initState();
+    queryInput = Input$PostsRequest(
+      cursor: null,
+      filter: Input$PostsFilter(
+        postTypes: [Enum$PostType.ROOT, Enum$PostType.REPOST],
+        metadata: Input$PostMetadataFilter(
+          mainContentFocus: [
+            Enum$MainContentFocus.TEXT_ONLY,
+            Enum$MainContentFocus.IMAGE,
+            Enum$MainContentFocus.EVENT,
+          ],
+        ),
+        feeds: [
+          Input$FeedOneOf(
+            feed: widget.space.lensFeedId,
+          ),
+        ],
+      ),
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return MultiBlocListener(
       listeners: [
         BlocListener<LensAuthBloc, LensAuthState>(
@@ -120,31 +142,11 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
           //   );
           // }
 
-          if (spaceLensFeedId == null) {
+          if (widget.space.lensFeedId == null) {
             return const SliverToBoxAdapter(
               child: LensEmptyList(),
             );
           }
-
-          // Case 3: Authorized and has lens feed - Show posts
-          queryInput = Input$PostsRequest(
-            cursor: null,
-            filter: Input$PostsFilter(
-              postTypes: [Enum$PostType.ROOT, Enum$PostType.REPOST],
-              metadata: Input$PostMetadataFilter(
-                mainContentFocus: [
-                  Enum$MainContentFocus.TEXT_ONLY,
-                  Enum$MainContentFocus.IMAGE,
-                  Enum$MainContentFocus.EVENT,
-                ],
-              ),
-              feeds: [
-                Input$FeedOneOf(
-                  feed: spaceLensFeedId,
-                ),
-              ],
-            ),
-          );
 
           return GraphQLProvider(
             client: ValueNotifier(getIt<LensGQL>().client),
@@ -183,48 +185,53 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                     ),
                     if (result.isLoading && posts.isEmpty)
                       SliverToBoxAdapter(
-                        child: Loading.defaultLoading(context),
+                        child: Center(
+                          child: Loading.defaultLoading(
+                            context,
+                          ),
+                        ),
                       )
                     else if (posts.isEmpty || result.hasException)
                       const SliverToBoxAdapter(
                         child: LensEmptyList(),
                       )
                     else
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.small),
-                        sliver: BlocListener<ScrollNotificationBloc,
-                            ScrollNotificationState>(
-                          listener: (context, state) {
-                            if (state is ScrollNotificationStateEndReached) {
-                              if (result.isLoading || cursor == null) {
-                                return;
-                              }
-
-                              final fetchMoreOptions =
-                                  FetchMoreOptions$Query$LensFetchPosts(
-                                variables: Variables$Query$LensFetchPosts(
-                                  request: queryInput.copyWith(
-                                    cursor: cursor,
-                                  ),
-                                ),
-                                updateQuery: (prevResult, nextResult) {
-                                  final prevList = prevResult?['posts']['items']
-                                          as List<dynamic>? ??
-                                      [];
-                                  final nextList = nextResult?['posts']['items']
-                                          as List<dynamic>? ??
-                                      [];
-                                  final newList = [...prevList, ...nextList];
-                                  nextResult?['posts']['items'] = newList;
-                                  return nextResult;
-                                },
-                              );
-                              debouncer
-                                  .run(() => fetchMore?.call(fetchMoreOptions));
+                      BlocListener<ScrollNotificationBloc,
+                          ScrollNotificationState>(
+                        listener: (context, state) {
+                          if (state is ScrollNotificationStateEndReached) {
+                            if (result.isLoading || cursor == null) {
+                              return;
                             }
-                          },
-                          child: SliverList.separated(
+
+                            final fetchMoreOptions =
+                                FetchMoreOptions$Query$LensFetchPosts(
+                              variables: Variables$Query$LensFetchPosts(
+                                request: queryInput.copyWith(
+                                  cursor: cursor,
+                                ),
+                              ),
+                              updateQuery: (prevResult, nextResult) {
+                                final prevList = prevResult?['posts']['items']
+                                        as List<dynamic>? ??
+                                    [];
+                                final nextList = nextResult?['posts']['items']
+                                        as List<dynamic>? ??
+                                    [];
+                                final newList = [...prevList, ...nextList];
+                                nextResult?['posts']['items'] = newList;
+                                return nextResult;
+                              },
+                            );
+                            debouncer
+                                .run(() => fetchMore?.call(fetchMoreOptions));
+                          }
+                        },
+                        child: SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.s4,
+                          ),
+                          sliver: SliverList.separated(
                             itemCount: posts.length + 1,
                             itemBuilder: (context, index) {
                               if (index == posts.length) {
@@ -251,7 +258,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                               return Divider(
                                 thickness: 1,
                                 height: 16,
-                                color: colorScheme.outline,
+                                color: appColors.pageDivider,
                               );
                             },
                           ),
