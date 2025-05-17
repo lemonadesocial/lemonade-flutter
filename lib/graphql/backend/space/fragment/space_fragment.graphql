@@ -58,4 +58,16 @@ fragment SpaceFragment on Space {
     url
   }
   lens_feed_id
-} 
+  sub_spaces
+  sub_spaces_expanded {
+    _id
+    title
+    description
+    image_avatar_expanded {
+      _id
+      key
+      bucket
+      url
+    }
+  }
+}

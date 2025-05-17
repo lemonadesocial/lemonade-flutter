@@ -13,6 +13,7 @@ import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/lens_post
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_submit_event_button.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/sub_spaces_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/glasskit/glasskit.dart';
@@ -107,11 +108,16 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
   // bool _showSimpleHeader = true;
   late TabController _tabController;
   int _selectedTabIndex = 0;
+  bool hasSubSpaces = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    addListener();
+  }
+
+  void addListener() {
     _tabController.addListener(() {
       if (_selectedTabIndex != _tabController.index) {
         setState(() {
@@ -156,6 +162,11 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
         state.maybeWhen(
           orElse: () {},
           success: (space) {
+            if (space.subSpacesExpanded?.isNotEmpty == true) {
+              _tabController.dispose();
+              _tabController = TabController(length: 3, vsync: this);
+              addListener();
+            }
             context
                 .read<FollowSpaceBloc>()
                 .add(FollowSpaceEvent.checkFollowed(space: space));
@@ -330,11 +341,14 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                                     _selectedTabIndex = index;
                                   });
                                 },
-                                tabs: const [
-                                  Tab(
+                                tabs: [
+                                  const Tab(
                                     text: "Events",
                                   ),
-                                  Tab(text: "Timeline"),
+                                  const Tab(text: "Timeline"),
+                                  if (space.subSpacesExpanded?.isNotEmpty ==
+                                      true)
+                                    const Tab(text: "Hubs"),
                                 ],
                               ),
                             ),
@@ -345,6 +359,10 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                           SpaceEventsList(space: space),
                         if (_selectedTabIndex == 1)
                           LensPostFeedWidget(space: space),
+                        if (_selectedTabIndex == 2)
+                          SubSpacesList(
+                            subSpaces: space.subSpacesExpanded ?? [],
+                          ),
                       ],
                     ),
                   ),

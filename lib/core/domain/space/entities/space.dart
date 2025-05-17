@@ -40,6 +40,8 @@ class Space with _$Space {
     DbFile? imageAvatar,
     DbFile? imageCover,
     String? lensFeedId,
+    List<String>? subSpaces,
+    List<Space>? subSpacesExpanded,
   }) = _Space;
 
   bool isCreator({required String userId}) {
@@ -122,6 +124,9 @@ class Space with _$Space {
           ? DbFile.fromDto(dto.imageCoverExpanded!)
           : null,
       lensFeedId: dto.lensFeedId,
+      subSpaces: dto.subSpaces,
+      subSpacesExpanded:
+          (dto.subSpacesExpanded ?? []).map((e) => Space.fromDto(e)).toList(),
     );
   }
 }
