@@ -3,11 +3,9 @@ import 'dart:ui';
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
-import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,7 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTextTheme = Theme.of(context).appTextTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     final t = Translations.of(context);
 
     return Query$ListSpaces$Widget(
@@ -52,15 +50,18 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
               child: Text(
                 t.discover.featuredCommunities,
                 style: appTextTheme.lg.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
             ),
             SliverToBoxAdapter(
               child: SizedBox(height: 14.w),
             ),
-            if (spaces.isEmpty) _buildLoadingGrid(colorScheme),
-            if (spaces.isNotEmpty)
+            if (spaces.isEmpty)
+              const SliverToBoxAdapter(
+                child: SizedBox(),
+              )
+            else if (spaces.isNotEmpty)
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -195,36 +196,6 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget _buildLoadingGrid(ColorScheme colorScheme) {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: Spacing.xSmall,
-        crossAxisSpacing: Spacing.xSmall,
-        childAspectRatio: 0.85,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) => Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
-            color: LemonColor.atomicBlack,
-          ),
-          child: Shimmer.fromColors(
-            baseColor: colorScheme.surfaceVariant,
-            highlightColor: colorScheme.surface,
-            child: Container(
-              decoration: BoxDecoration(
-                color: colorScheme.background,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-            ),
-          ),
-        ),
-        childCount: 4,
-      ),
     );
   }
 }

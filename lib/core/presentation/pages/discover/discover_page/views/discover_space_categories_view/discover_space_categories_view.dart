@@ -1,16 +1,14 @@
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/app_theme/colors/app_colors_extension.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_categories.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 
 enum CategoryCardGradient {
   longevity(
@@ -73,14 +71,13 @@ class DiscoverSpaceCategoriesView extends StatefulWidget {
 
 class _DiscoverSpaceCategoriesViewState
     extends State<DiscoverSpaceCategoriesView> {
-  Widget getImage(String imageUrl, double size) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget getImage(String imageUrl, double size, AppColorsExtension appColors) {
     return LemonNetworkImage(
       imageUrl: imageUrl,
       width: size,
       height: size,
       placeholder: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
+        color: appColors.textSecondary,
         builder: (colorFilter) => Assets.icons.icLemonadeLogo.svg(
           colorFilter: colorFilter,
           width: size,
@@ -94,7 +91,6 @@ class _DiscoverSpaceCategoriesViewState
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).appColors;
     final appTextTheme = Theme.of(context).appTextTheme;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Query$ListSpaceCategories$Widget(
       options: Options$Query$ListSpaceCategories(),
@@ -108,54 +104,10 @@ class _DiscoverSpaceCategoriesViewState
         return MultiSliver(
           children: [
             if (spaceCategories.isEmpty)
-              SliverGrid.count(
-                childAspectRatio: (330 / 280),
-                crossAxisCount: 3,
-                mainAxisSpacing: Spacing.extraSmall,
-                crossAxisSpacing: Spacing.extraSmall,
-                children: List.generate(
-                  6,
-                  (index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: LemonColor.atomicBlack,
-                        borderRadius: BorderRadius.circular(LemonRadius.md),
-                        border: Border.all(
-                          color: colorScheme.outline,
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
-                            builder: (colorFilter) =>
-                                Assets.icons.icLemonadeLogo.svg(
-                              colorFilter: colorFilter,
-                              width: 32.w,
-                              height: 32.h,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          SizedBox(
-                            height: Spacing.small,
-                            child: Shimmer.fromColors(
-                              baseColor: colorScheme.surfaceVariant,
-                              highlightColor: colorScheme.surface,
-                              child: Container(
-                                color: colorScheme.background,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ).toList(),
-              ),
-            if (spaceCategories.isNotEmpty)
+              const SliverToBoxAdapter(
+                child: SizedBox(),
+              )
+            else if (spaceCategories.isNotEmpty)
               SliverGrid.count(
                 childAspectRatio: (330 / 280),
                 crossAxisCount: 3,
@@ -178,7 +130,7 @@ class _DiscoverSpaceCategoriesViewState
                           color: appColors.cardBg,
                           borderRadius: BorderRadius.circular(LemonRadius.md),
                           border: Border.all(
-                            color: colorScheme.outline,
+                            color: appColors.cardBorder,
                             width: 1,
                           ),
                         ),
@@ -193,12 +145,16 @@ class _DiscoverSpaceCategoriesViewState
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              getImage(e.imageUrl ?? '', Spacing.s8),
+                              getImage(
+                                e.imageUrl ?? '',
+                                Spacing.s8,
+                                appColors,
+                              ),
                               SizedBox(height: Spacing.s2_5),
                               Text(
                                 e.title,
                                 style: appTextTheme.sm.copyWith(
-                                  color: colorScheme.onPrimary,
+                                  color: appColors.textPrimary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
