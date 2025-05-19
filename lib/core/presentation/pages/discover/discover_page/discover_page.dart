@@ -18,9 +18,7 @@ class DiscoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).appColors;
-    final appTextTheme = Theme.of(context).appTextTheme;
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final newsfeedListingBloc = context.read<NewsfeedListingBloc>();
 
     return Scaffold(
