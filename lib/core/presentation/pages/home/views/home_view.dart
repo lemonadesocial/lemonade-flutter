@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
@@ -142,6 +143,7 @@ class _HomeViewState extends State<_HomeView>
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).appColors;
     return BlocListener<RefreshBloc, RefreshState>(
       listener: (context, state) {
         if (state is RefreshStateRefreshingEvents) {
@@ -200,9 +202,15 @@ class _HomeViewState extends State<_HomeView>
                       },
                     ),
                   ),
+                SliverToBoxAdapter(
+                  child: Divider(
+                    color: appColors.pageDividerInverse,
+                    thickness: Spacing.s1_5,
+                  ),
+                ),
                 SliverPadding(
                   padding: EdgeInsets.only(
-                    top: Spacing.large,
+                    top: Spacing.s5,
                   ),
                   sliver: HomeListMySpaces(
                     mySpacesBloc: widget.mySpacesBloc,

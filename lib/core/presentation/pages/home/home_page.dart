@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/pages/home/views/home_view.dart';
 import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => false,
           authenticated: (_) => true,
@@ -69,6 +70,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: HomeAppBar(
         title: "",
+        backgroundColor: appColors.pageBg,
         actions: [
           if (isProcessingLogin) ...[
             Loading.defaultLoading(context),
@@ -82,8 +84,8 @@ class _HomePageState extends State<HomePage> {
                   AutoRouter.of(context).navigate(LoginRoute());
                 },
                 label: t.auth.signIn,
-                backgroundColor: colorScheme.secondaryContainer,
-                borderColor: colorScheme.secondaryContainer,
+                backgroundColor: appColors.buttonSecondary,
+                borderColor: appColors.cardBorder,
                 radius: BorderRadius.circular(LemonRadius.button),
               ),
             ),
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ],
       ),
-      backgroundColor: LemonColor.black,
+      backgroundColor: appColors.pageBg,
       body: const HomeView(),
     );
   }
