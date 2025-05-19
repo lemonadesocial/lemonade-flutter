@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -92,6 +93,8 @@ class _DiscoverSpaceCategoriesViewState
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).appColors;
+    final appTextTheme = Theme.of(context).appTextTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Query$ListSpaceCategories$Widget(
@@ -107,7 +110,7 @@ class _DiscoverSpaceCategoriesViewState
           children: [
             if (spaceCategories.isEmpty)
               SliverGrid.count(
-                childAspectRatio: (330 / 320),
+                childAspectRatio: (330 / 280),
                 crossAxisCount: 3,
                 mainAxisSpacing: Spacing.extraSmall,
                 crossAxisSpacing: Spacing.extraSmall,
@@ -117,7 +120,7 @@ class _DiscoverSpaceCategoriesViewState
                     return Container(
                       decoration: BoxDecoration(
                         color: LemonColor.atomicBlack,
-                        borderRadius: BorderRadius.circular(Spacing.small),
+                        borderRadius: BorderRadius.circular(LemonRadius.md),
                         border: Border.all(
                           color: colorScheme.outline,
                           width: 1,
@@ -155,7 +158,7 @@ class _DiscoverSpaceCategoriesViewState
               ),
             if (spaceCategories.isNotEmpty)
               SliverGrid.count(
-                childAspectRatio: (330 / 320),
+                childAspectRatio: (330 / 280),
                 crossAxisCount: 3,
                 mainAxisSpacing: Spacing.extraSmall,
                 crossAxisSpacing: Spacing.extraSmall,
@@ -173,44 +176,31 @@ class _DiscoverSpaceCategoriesViewState
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          // color: LemonColor.atomicBlack,
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: CategoryCardGradient.values
-                                .firstWhere(
-                                  (gradient) =>
-                                      gradient.name.toLowerCase() ==
-                                      e.title
-                                          .toLowerCase()
-                                          .replaceAll(' ', '')
-                                          .replaceAll('-', '')
-                                          .replaceAll('_', '')
-                                          .replaceAll('/', ''),
-                                  orElse: () => CategoryCardGradient.longevity,
-                                )
-                                .colors,
-                          ),
-                          borderRadius: BorderRadius.circular(Spacing.small),
+                          color: appColors.cardBg,
+                          borderRadius: BorderRadius.circular(LemonRadius.md),
                           border: Border.all(
                             color: colorScheme.outline,
                             width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(Spacing.xSmall),
+                          padding: EdgeInsets.only(
+                            top: Spacing.s4,
+                            bottom: Spacing.s2_5,
+                            left: Spacing.s1,
+                            right: Spacing.s1,
+                          ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              getImage(e.imageUrl ?? '', 32.w),
-                              SizedBox(height: Spacing.xSmall),
+                              getImage(e.imageUrl ?? '', Spacing.s8),
+                              SizedBox(height: Spacing.s2_5),
                               Text(
                                 e.title,
-                                style: Typo.medium.copyWith(
+                                style: appTextTheme.sm.copyWith(
                                   color: colorScheme.onPrimary,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 13.sp,
                                 ),
                               ),
                             ],

@@ -15,10 +15,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
+  final Color? backgroundColor;
   const HomeAppBar({
     super.key,
     required this.title,
     this.actions,
+    this.backgroundColor,
   });
 
   @override
@@ -34,7 +36,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     final colorScheme = Theme.of(context).colorScheme;
     return AppBar(
       leadingWidth: 210.w,
-      backgroundColor: colorScheme.background,
+      backgroundColor: widget.backgroundColor ?? colorScheme.background,
       leading: _Leading(title: widget.title),
       actions: widget.actions ??
           [
