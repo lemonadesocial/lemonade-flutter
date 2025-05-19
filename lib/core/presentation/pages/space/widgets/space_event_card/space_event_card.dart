@@ -10,12 +10,10 @@ import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -159,32 +157,19 @@ class SpaceEventCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: Spacing.s3),
-                  Container(
+                  LemonNetworkImage(
                     width: 94.w,
                     height: 94.w,
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: LemonColor.white09,
-                        ),
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
+                    fit: BoxFit.cover,
+                    border: Border.all(
+                      color: appColors.cardBorder,
                     ),
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(LemonRadius.extraSmall),
-                      child: CachedNetworkImage(
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                        errorWidget: (_, __, ___) =>
-                            ImagePlaceholder.eventCard(),
-                        imageUrl: ImageUtils.generateUrl(
-                          file: event.newNewPhotosExpanded?.firstOrNull,
-                          imageConfig: ImageConfig.eventPhoto,
-                        ),
-                      ),
+                    borderRadius: BorderRadius.circular(6.r),
+                    imageUrl: ImageUtils.generateUrl(
+                      file: event.newNewPhotosExpanded?.firstOrNull,
+                      imageConfig: ImageConfig.eventPhoto,
                     ),
+                    placeholder: ImagePlaceholder.eventCard(),
                   ),
                 ],
               ),

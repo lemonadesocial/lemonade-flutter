@@ -143,8 +143,15 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
           // }
 
           if (widget.space.lensFeedId == null) {
-            return const SliverToBoxAdapter(
-              child: LensEmptyList(),
+            return MultiSliver(
+              children: [
+                const SliverToBoxAdapter(
+                  child: LensEmptyList(),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: Spacing.s18),
+                ),
+              ],
             );
           }
 

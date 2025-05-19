@@ -41,8 +41,10 @@ class DiscoverSpaceListItem extends StatelessWidget {
                 imageUrl: space.imageAvatar?.url ?? '',
                 fit: BoxFit.cover,
                 borderRadius: BorderRadius.circular(LemonRadius.xSmall),
-                placeholder: ImagePlaceholder.spaceThumbnail(
-                  iconColor: colorScheme.onSecondary,
+                placeholder: ImagePlaceholder.dicebearThumbnail(
+                  seed: space.id ?? '',
+                  size: Sizing.large,
+                  radius: BorderRadius.circular(LemonRadius.xSmall),
                 ),
               ),
               SizedBox(width: Spacing.medium),

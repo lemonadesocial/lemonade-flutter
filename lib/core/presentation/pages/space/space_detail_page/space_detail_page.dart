@@ -6,11 +6,9 @@ import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_
 import 'package:app/core/application/space/get_space_detail_bloc/get_space_detail_bloc.dart';
 import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
-import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/lens_add_posts_button.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/lens_post_feed_widget.dart';
-import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_submit_event_button.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/sub_spaces_list.dart';
@@ -23,12 +21,12 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_header.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 @RoutePage()
 class SpaceDetailPage extends StatelessWidget {
@@ -149,7 +147,6 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final user = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -216,9 +213,6 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
           ),
           success: (space) {
             final statusBarHeight = MediaQuery.of(context).padding.top;
-            final isAdminOrCreator =
-                space.isAdmin(userId: user?.userId ?? '') ||
-                    space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
               backgroundColor: appColors.pageBg,
               floatingActionButton: _selectedTabIndex == 0
@@ -258,60 +252,18 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                           floating: true,
                         ),
                         SpaceHeader(space: space),
-                        if (isAdminOrCreator)
-                          BlocBuilder<GetSpaceEventRequestsBloc,
-                              GetSpaceEventRequestsState>(
-                            builder: (context, state) {
-                              final requests = state.maybeWhen(
-                                orElse: () => <SpaceEventRequest>[],
-                                success: (response) => response.records
-                                    .where(
-                                      (request) =>
-                                          request.state ==
-                                          Enum$SpaceEventRequestState.pending,
-                                    )
-                                    .toList(),
-                              );
-                              final hasPending = requests.isNotEmpty;
-                              return MultiSliver(
-                                children: [
-                                  if (hasPending) ...[
-                                    SliverToBoxAdapter(
-                                      child: Divider(
-                                        color: colorScheme.outline,
-                                      ),
-                                    ),
-                                    SizedBox(height: Spacing.small),
-                                  ],
-                                  SliverToBoxAdapter(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: Spacing.small,
-                                      ),
-                                      child: SpaceEventRequestsAdminList(
-                                        spaceId: space.id ?? '',
-                                        requests: requests,
-                                      ),
-                                    ),
-                                  ),
-                                  if (!hasPending) ...[
-                                    SliverToBoxAdapter(
-                                      child: SizedBox(height: Spacing.small),
-                                    ),
-                                    SliverToBoxAdapter(
-                                      child: Divider(
-                                        color: colorScheme.outline,
-                                      ),
-                                    ),
-                                  ],
-                                  if (hasPending)
-                                    SliverToBoxAdapter(
-                                      child: SizedBox(height: Spacing.small),
-                                    ),
-                                ],
-                              );
-                            },
+                        SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: Spacing.s5,
                           ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Divider(
+                            height: Sizing.s1_5,
+                            thickness: Sizing.s1_5,
+                            color: appColors.pageDividerInverse,
+                          ),
+                        ),
                         SliverPersistentHeader(
                           delegate: _SliverTabBarDelegate(
                             GlassContainer(
@@ -333,7 +285,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                                 ),
                                 indicatorColor: appColors.textAccent,
                                 indicatorSize: TabBarIndicatorSize.tab,
-                                padding: EdgeInsets.symmetric(
+                                indicatorPadding: EdgeInsets.symmetric(
                                   horizontal: Spacing.s4,
                                 ),
                                 onTap: (index) {
@@ -363,6 +315,11 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                           SubSpacesList(
                             subSpaces: space.subSpacesExpanded ?? [],
                           ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 300,
+                          ),
+                        ),
                       ],
                     ),
                   ),

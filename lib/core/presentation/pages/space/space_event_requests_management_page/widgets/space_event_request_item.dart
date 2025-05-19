@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -6,12 +7,13 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
+import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -35,6 +37,9 @@ class SpaceEventRequestItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final event = request.eventExpanded;
     if (event == null) {
       return const SizedBox.shrink();
@@ -61,17 +66,17 @@ class SpaceEventRequestItem extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(LemonRadius.medium),
+          color: appColors.cardBg,
+          borderRadius: BorderRadius.circular(LemonRadius.md),
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.cardBorder,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: EdgeInsets.all(Spacing.small),
+              padding: EdgeInsets.all(Spacing.s3),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -84,12 +89,9 @@ class SpaceEventRequestItem extends StatelessWidget {
                           children: [
                             Text(
                               event.title ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary,
-                              ),
+                              style: appText.md,
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: Spacing.s1),
                             FutureBuilder(
                               future: request.createdBy?.isNotEmpty == true
                                   ? getIt<UserRepository>().getUserProfile(
@@ -105,15 +107,15 @@ class SpaceEventRequestItem extends StatelessWidget {
                                 );
                                 return Text(
                                   '${t.space.submittedBy} ${user?.displayName ?? user?.name ?? '--'}',
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
+                                  style: appText.sm.copyWith(
+                                    color: appColors.textTertiary,
                                   ),
                                 );
                               },
                             ),
                           ],
                         ),
-                        SizedBox(height: Spacing.extraSmall),
+                        SizedBox(height: Spacing.s2),
                         // Event info
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,48 +124,48 @@ class SpaceEventRequestItem extends StatelessWidget {
                             Row(
                               children: [
                                 ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
+                                  color: appColors.textTertiary,
                                   builder: (colorFilter) =>
                                       Assets.icons.icCalendar.svg(
                                     colorFilter: colorFilter,
                                   ),
                                 ),
-                                SizedBox(width: Spacing.extraSmall),
+                                SizedBox(width: Spacing.s2),
                                 Expanded(
                                   child: Text(
                                     eventDate,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
+                                    style: appText.sm.copyWith(
+                                      color: appColors.textSecondary,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: Spacing.superExtraSmall),
+                            SizedBox(height: Spacing.s1_5),
                             // Location
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
+                                  color: appColors.textTertiary,
                                   builder: (colorFilter) => isVirtual
                                       ? Assets.icons.icLive.svg(
                                           colorFilter: colorFilter,
-                                          width: 16.w,
-                                          height: 16.w,
+                                          width: Sizing.s5,
+                                          height: Sizing.s5,
                                         )
                                       : Assets.icons.icLocationPin.svg(
                                           colorFilter: colorFilter,
-                                          width: 16.w,
-                                          height: 16.w,
+                                          width: Sizing.s5,
+                                          height: Sizing.s5,
                                         ),
                                 ),
-                                SizedBox(width: Spacing.extraSmall),
+                                SizedBox(width: Spacing.s2),
                                 Expanded(
                                   child: Text(
                                     location,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
+                                    style: appText.sm.copyWith(
+                                      color: appColors.textSecondary,
                                     ),
                                   ),
                                 ),
@@ -175,20 +177,20 @@ class SpaceEventRequestItem extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
+                                  color: appColors.textTertiary,
                                   builder: (colorFilter) =>
                                       Assets.icons.icGuests.svg(
                                     colorFilter: colorFilter,
-                                    width: 16.w,
-                                    height: 16.w,
+                                    width: Sizing.s5,
+                                    height: Sizing.s5,
                                   ),
                                 ),
-                                SizedBox(width: Spacing.extraSmall),
+                                SizedBox(width: Spacing.s2),
                                 Expanded(
                                   child: Text(
                                     attendeeCount,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
+                                    style: appText.sm.copyWith(
+                                      color: appColors.textSecondary,
                                     ),
                                   ),
                                 ),
@@ -199,14 +201,20 @@ class SpaceEventRequestItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(width: Spacing.small),
+                  SizedBox(width: Spacing.s4),
                   LemonNetworkImage(
-                    width: 90.w,
-                    height: 90.w,
-                    imageUrl: EventUtils.getEventThumbnailUrl(event: event),
+                    width: 94.w,
+                    height: 94.w,
                     fit: BoxFit.cover,
+                    border: Border.all(
+                      color: appColors.cardBorder,
+                    ),
+                    borderRadius: BorderRadius.circular(6.r),
+                    imageUrl: ImageUtils.generateUrl(
+                      file: event.newNewPhotosExpanded?.firstOrNull,
+                      imageConfig: ImageConfig.eventPhoto,
+                    ),
                     placeholder: ImagePlaceholder.eventCard(),
-                    borderRadius: BorderRadius.circular(LemonRadius.xSmall),
                   ),
                 ],
               ),
@@ -214,14 +222,14 @@ class SpaceEventRequestItem extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: colorScheme.outlineVariant,
+              color: appColors.cardBorder,
             ),
             if (request.state == Enum$SpaceEventRequestState.approved ||
                 request.state == Enum$SpaceEventRequestState.declined)
               Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: Spacing.xSmall,
-                  horizontal: Spacing.small,
+                  vertical: Spacing.s3,
+                  horizontal: Spacing.s3,
                 ),
                 child: Row(
                   children: [
@@ -273,8 +281,8 @@ class SpaceEventRequestItem extends StatelessWidget {
             if (request.state == Enum$SpaceEventRequestState.pending)
               Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: Spacing.xSmall,
-                  horizontal: Spacing.small,
+                  vertical: Spacing.s3,
+                  horizontal: Spacing.s3,
                 ),
                 child: Row(
                   children: [
@@ -282,7 +290,7 @@ class SpaceEventRequestItem extends StatelessWidget {
                       child: LemonOutlineButton(
                         label: t.space.approve,
                         leading: ThemeSvgIcon(
-                          color: LemonColor.malachiteGreen,
+                          color: appColors.chipSuccess,
                           builder: (colorFilter) => Assets.icons.icDone.svg(
                             colorFilter: colorFilter,
                           ),
@@ -290,19 +298,18 @@ class SpaceEventRequestItem extends StatelessWidget {
                         onTap: onApprove != null
                             ? () => onApprove!(request)
                             : null,
-                        textStyle: Typo.small.copyWith(
-                          color: LemonColor.malachiteGreen,
+                        textStyle: appText.sm.copyWith(
+                          color: appColors.chipSuccess,
                         ),
-                        backgroundColor:
-                            LemonColor.malachiteGreen.withOpacity(0.18),
+                        backgroundColor: appColors.chipSuccessBg,
                       ),
                     ),
-                    SizedBox(width: Spacing.superExtraSmall),
+                    SizedBox(width: Spacing.s1_5),
                     Expanded(
                       child: LemonOutlineButton(
                         label: t.space.decline,
                         leading: ThemeSvgIcon(
-                          color: LemonColor.coralReef,
+                          color: appColors.chipError,
                           builder: (colorFilter) => Assets.icons.icClose.svg(
                             colorFilter: colorFilter,
                           ),
@@ -310,10 +317,10 @@ class SpaceEventRequestItem extends StatelessWidget {
                         onTap: onDecline != null
                             ? () => onDecline!(request)
                             : null,
-                        textStyle: Typo.small.copyWith(
-                          color: LemonColor.coralReef,
+                        textStyle: appText.sm.copyWith(
+                          color: appColors.chipError,
                         ),
-                        backgroundColor: LemonColor.coralReef.withOpacity(0.18),
+                        backgroundColor: appColors.chipErrorBg,
                       ),
                     ),
                   ],

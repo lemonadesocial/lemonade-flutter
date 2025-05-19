@@ -91,70 +91,67 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
               return Column(
                 children: [
                   if (tags.isNotEmpty)
-                    Padding(
-                      padding: EdgeInsets.only(top: Spacing.small),
-                      child: SizedBox(
-                        height: Sizing.medium,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              // final isActive = selectedTag == null;
-                              return LemonOutlineButton(
-                                onTap: () {
-                                  _changeTag(null);
-                                },
-                                label: t.common.all,
-                                radius: BorderRadius.circular(LemonRadius.full),
-                                textStyle: appText.sm.copyWith(
-                                  color: appColors.textSecondary,
-                                ),
-                                borderColor: appColors.pageDivider,
-                                backgroundColor: Colors.transparent,
-                              );
-                            }
-                            final tag = tags[index - 1];
+                    SizedBox(
+                      height: Sizing.medium,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            // final isActive = selectedTag == null;
                             return LemonOutlineButton(
                               onTap: () {
-                                _changeTag(tag);
+                                _changeTag(null);
                               },
-                              label: tag.tag,
+                              label: t.common.all,
                               radius: BorderRadius.circular(LemonRadius.full),
                               textStyle: appText.sm.copyWith(
                                 color: appColors.textSecondary,
                               ),
                               borderColor: appColors.pageDivider,
                               backgroundColor: Colors.transparent,
-                              leading: (isSpaceAdmin || isSpaceOwner)
-                                  ? Container(
-                                      width: 8.w,
-                                      height: 8.w,
-                                      decoration: BoxDecoration(
-                                        color: tag.color.isNotEmpty == true
-                                            ? Color(
-                                                int.parse(
-                                                  tag.color
-                                                      .replaceAll('#', '0xFF'),
-                                                ),
-                                              )
-                                            : Colors.amber,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    )
-                                  : null,
-                              trailing: Text(
-                                tag.targets?.length.toString() ?? '0',
-                                style: appText.sm.copyWith(
-                                  color: appColors.textTertiary,
-                                ),
-                              ),
                             );
-                          },
-                          separatorBuilder: (context, index) => SizedBox(
-                            width: Spacing.extraSmall,
-                          ),
-                          itemCount: tags.length + 1,
+                          }
+                          final tag = tags[index - 1];
+                          return LemonOutlineButton(
+                            onTap: () {
+                              _changeTag(tag);
+                            },
+                            label: tag.tag,
+                            radius: BorderRadius.circular(LemonRadius.full),
+                            textStyle: appText.sm.copyWith(
+                              color: appColors.textSecondary,
+                            ),
+                            borderColor: appColors.pageDivider,
+                            backgroundColor: Colors.transparent,
+                            leading: (isSpaceAdmin || isSpaceOwner)
+                                ? Container(
+                                    width: 8.w,
+                                    height: 8.w,
+                                    decoration: BoxDecoration(
+                                      color: tag.color.isNotEmpty == true
+                                          ? Color(
+                                              int.parse(
+                                                tag.color
+                                                    .replaceAll('#', '0xFF'),
+                                              ),
+                                            )
+                                          : Colors.amber,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  )
+                                : null,
+                            trailing: Text(
+                              tag.targets?.length.toString() ?? '0',
+                              style: appText.sm.copyWith(
+                                color: appColors.textTertiary,
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: Spacing.extraSmall,
                         ),
+                        itemCount: tags.length + 1,
                       ),
                     ),
                 ],

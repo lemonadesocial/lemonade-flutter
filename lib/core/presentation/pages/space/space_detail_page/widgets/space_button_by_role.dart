@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,8 @@ class SpaceButtonByRole extends StatelessWidget {
     if (space.isCreator(userId: userId) || space.isAdmin(userId: userId)) {
       return LinearGradientButton.secondaryButton(
         label: t.common.actions.manage,
+        height: Sizing.s8,
+        mode: GradientButtonMode.light,
         radius: radius,
         onTap: () {
           final spaceWebUrl = AppConfig.webUrl +
