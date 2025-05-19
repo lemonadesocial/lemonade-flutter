@@ -513,7 +513,7 @@ class _FrostedWidget extends StatelessWidget {
             image: ResizeImage(
               height: height?.toInt(),
               width: width?.toInt(),
-              const AssetImage(kNoiseImage, package: 'glass_kit'),
+              const AssetImage(kNoiseImage),
             ),
             excludeFromSemantics: true,
             fit: BoxFit.cover,

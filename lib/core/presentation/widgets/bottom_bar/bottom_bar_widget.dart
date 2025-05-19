@@ -25,11 +25,11 @@ class BottomBar extends StatefulWidget {
 
 class BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
-  AppTab _selectedTab = AppTab.discover;
+  AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isTabChanged = false; // for initial render didn't change any tab yet
-  var _isHomeScreenFocused = false;
+  var _isHomeScreenFocused = true;
 
   @override
   void initState() {

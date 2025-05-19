@@ -8,20 +8,19 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:app/graphql/lens/post/mutation/lens_add_reaction.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_undo_reaction.graphql.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class LensPostItemActionsWidget extends StatefulWidget {
   final LensPost post;
@@ -58,7 +57,8 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     final numberFormat = NumberFormat.compact();
     final repliesCount = widget.post.stats?.comments ?? 0;
     final hasReplies = repliesCount > 0;
@@ -69,56 +69,6 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
       children: [
         Row(
           children: [
-            BlocBuilder<LensAuthBloc, LensAuthState>(
-              builder: (context, state) => InkWell(
-                onTap: () async {
-                  if (!state.loggedIn ||
-                      !state.connected ||
-                      state.accountStatus != LensAccountStatus.accountOwner) {
-                    final isAuthorized = await showCupertinoModalBottomSheet(
-                      backgroundColor: LemonColor.atomicBlack,
-                      context: context,
-                      useRootNavigator: true,
-                      barrierColor: Colors.black.withOpacity(0.5),
-                      builder: (newContext) {
-                        return const LensOnboardingBottomSheet();
-                      },
-                    );
-                    if (!isAuthorized) return;
-                  }
-                  AutoRouter.of(context).push(
-                    CreateLensPostReplyRoute(
-                      post: widget.post,
-                      space: widget.space,
-                    ),
-                  );
-                },
-                child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icFarcasterReply.svg(
-                    colorFilter: filter,
-                    width: 18.w,
-                    height: 18.w,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: Spacing.small),
-            // TODO: Lens - requote
-            // InkWell(
-            //   onTap: () async {},
-            //   child: ThemeSvgIcon(
-            //     color: localRecasted
-            //         ? LemonColor.malachiteGreen
-            //         : colorScheme.onSecondary,
-            //     builder: (filter) => Assets.icons.icFarcasterRecast.svg(
-            //       colorFilter: filter,
-            //       width: 14.w,
-            //       height: 14.w,
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(width: Spacing.small),
             InkWell(
               onTap: () async {
                 // TODO: Lens - handle add reaction
@@ -152,22 +102,124 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
                       );
                 }
               },
-              child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => localLiked
-                    ? ThemeSvgIcon(
-                        color: LemonColor.coralReef,
-                        builder: (filter) => Assets.icons.icHeartFillled.svg(
-                          colorFilter: filter,
-                          width: 18.w,
-                          height: 18.w,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ThemeSvgIcon(
+                    color: localLiked
+                        ? appColors.textError
+                        : appColors.textTertiary,
+                    builder: (filter) => localLiked
+                        ? Assets.icons.icHeartFillled.svg(
+                            colorFilter: filter,
+                            width: Sizing.s6,
+                            height: Sizing.s6,
+                          )
+                        : Assets.icons.icHeart.svg(
+                            colorFilter: filter,
+                            width: Sizing.s6,
+                            height: Sizing.s6,
+                          ),
+                  ),
+                  SizedBox(width: Spacing.s1_5),
+                  if (hasLikes)
+                    InkWell(
+                      onTap: () {
+                        // Go to likes list
+                        // showCupertinoModalBottomSheet(
+                        //   context: context,
+                        //   useRootNavigator: true,
+                        //   expand: true,
+                        //   backgroundColor: LemonColor.atomicBlack,
+                        //   builder: (context) => FarcasterCastLikesList(
+                        //     cast: widget.cast,
+                        //   ),
+                        // );
+                      },
+                      child: Text(
+                        numberFormat.format(reactionsCount),
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
-                      )
-                    : Assets.icons.icHeart.svg(
-                        colorFilter: filter,
-                        width: 18.w,
-                        height: 18.w,
                       ),
+                    ),
+                ],
+              ),
+            ),
+            SizedBox(width: Spacing.s4),
+            BlocBuilder<LensAuthBloc, LensAuthState>(
+              builder: (context, state) => InkWell(
+                onTap: () async {
+                  if (!state.loggedIn ||
+                      !state.connected ||
+                      state.accountStatus != LensAccountStatus.accountOwner) {
+                    final isAuthorized = await showCupertinoModalBottomSheet(
+                      backgroundColor: LemonColor.atomicBlack,
+                      context: context,
+                      useRootNavigator: true,
+                      barrierColor: Colors.black.withOpacity(0.5),
+                      builder: (newContext) {
+                        return const LensOnboardingBottomSheet();
+                      },
+                    );
+                    if (!isAuthorized) return;
+                  }
+                  AutoRouter.of(context).push(
+                    CreateLensPostReplyRoute(
+                      post: widget.post,
+                      space: widget.space,
+                    ),
+                  );
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ThemeSvgIcon(
+                      color: appColors.textTertiary,
+                      builder: (filter) => Assets.icons.icFarcasterReply.svg(
+                        colorFilter: filter,
+                        width: Sizing.s6,
+                        height: Sizing.s6,
+                      ),
+                    ),
+                    SizedBox(width: Spacing.s1_5),
+                    if (hasReplies)
+                      InkWell(
+                        onTap: () {
+                          // Go to replies list
+                          // showCupertinoModalBottomSheet(
+                          //   context: context,
+                          //   useRootNavigator: true,
+                          //   expand: true,
+                          //   backgroundColor: LemonColor.atomicBlack,
+                          //   builder: (context) => FarcasterCastRepliesList(
+                          //     cast: widget.cast,
+                          //   ),
+                          // );
+                        },
+                        child: Text(
+                          numberFormat.format(repliesCount),
+                          style: appText.sm.copyWith(
+                            color: appColors.textTertiary,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: Spacing.s4),
+            InkWell(
+              onTap: () async {},
+              child: ThemeSvgIcon(
+                color: localRecasted
+                    ? appColors.textSuccess
+                    : appColors.textTertiary,
+                builder: (filter) => Assets.icons.icRepost.svg(
+                  colorFilter: filter,
+                  width: Sizing.s6,
+                  height: Sizing.s6,
+                ),
               ),
             ),
             const Spacer(),
@@ -176,69 +228,30 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
                 SnackBarUtils.showComingSoon();
               },
               child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
-                builder: (filter) => Assets.icons.icBookmark.svg(
+                color: appColors.textTertiary,
+                builder: (filter) => Assets.icons.icUpvote.svg(
                   colorFilter: filter,
-                  width: 18.w,
-                  height: 18.w,
+                  width: Sizing.s6,
+                  height: Sizing.s6,
                 ),
               ),
             ),
             SizedBox(width: Spacing.small),
-            // InkWell(
-            //   onTap: () {
-            // Share.shareUri(Uri.parse(widget.post.contentUri ?? ''));
-            //   },
-            //   child: ThemeSvgIcon(
-            //     color: colorScheme.onSecondary,
-            //     builder: (filter) => Assets.icons.icShare.svg(
-            //       colorFilter: filter,
-            //       width: 18.w,
-            //       height: 18.w,
-            //     ),
-            //   ),
-            // ),
+            InkWell(
+              onTap: () {
+                // Share.shareUri(Uri.parse(widget.post.contentUri ?? ''));
+              },
+              child: ThemeSvgIcon(
+                color: appColors.textTertiary,
+                builder: (filter) => Assets.icons.icShare.svg(
+                  colorFilter: filter,
+                  width: Sizing.s6,
+                  height: Sizing.s6,
+                ),
+              ),
+            ),
           ],
         ),
-        if (hasLikes || hasReplies) ...[
-          SizedBox(height: Spacing.xSmall),
-          Row(
-            children: [
-              if (hasReplies) ...[
-                Text(
-                  '${numberFormat.format(repliesCount)} ${t.farcaster.reply(n: repliesCount)}',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-              ],
-              if (hasLikes) ...[
-                InkWell(
-                  onTap: () {
-                    // Go to likes list
-                    // showCupertinoModalBottomSheet(
-                    //   context: context,
-                    //   useRootNavigator: true,
-                    //   expand: true,
-                    //   backgroundColor: LemonColor.atomicBlack,
-                    //   builder: (context) => FarcasterCastLikesList(
-                    //     cast: widget.cast,
-                    //   ),
-                    // );
-                  },
-                  child: Text(
-                    '${numberFormat.format(reactionsCount)} ${t.farcaster.like(n: reactionsCount)}',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
-                  ),
-                ),
-                SizedBox(width: Spacing.xSmall),
-              ],
-            ],
-          ),
-        ],
       ],
     );
   }

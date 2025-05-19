@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/scroll_notification_bloc/scroll_notification_bloc.dart';
 import 'package:app/core/application/space/follow_space_bloc/follow_space_bloc.dart';
@@ -11,25 +12,22 @@ import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/le
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/lens_post_feed_widget.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_list.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_submit_event_button.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/sub_spaces_list.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/core/presentation/widgets/glasskit/glasskit.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_header.dart';
-import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 @RoutePage()
@@ -106,15 +104,20 @@ class _View extends StatefulWidget {
 
 class _ViewState extends State<_View> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  bool _showFloatingSubscribe = false;
-  bool _showSimpleHeader = false;
+  // bool _showFloatingSubscribe = false;
+  // bool _showSimpleHeader = true;
   late TabController _tabController;
   int _selectedTabIndex = 0;
+  bool hasSubSpaces = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    addListener();
+  }
+
+  void addListener() {
     _tabController.addListener(() {
       if (_selectedTabIndex != _tabController.index) {
         setState(() {
@@ -122,29 +125,26 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
         });
       }
     });
-    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    final shouldShowFloatingSubscribe = _scrollController.offset >= 250;
-    final shouldShowSimpleHeader = _scrollController.offset >= 200;
+  // void _onScroll() {
+  //   final shouldShowFloatingSubscribe = _scrollController.offset >= 250;
+  //   final shouldShowSimpleHeader = _scrollController.offset >= 200;
 
-    if (shouldShowFloatingSubscribe != _showFloatingSubscribe ||
-        shouldShowSimpleHeader != _showSimpleHeader) {
-      setState(() {
-        _showFloatingSubscribe = shouldShowFloatingSubscribe;
-        _showSimpleHeader = shouldShowSimpleHeader;
-      });
-    }
-  }
+  //   if (shouldShowFloatingSubscribe != _showFloatingSubscribe || shouldShowSimpleHeader != _showSimpleHeader) {
+  //     setState(() {
+  //       _showFloatingSubscribe = shouldShowFloatingSubscribe;
+  //       _showSimpleHeader = shouldShowSimpleHeader;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,11 +154,19 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
           orElse: () => null,
           authenticated: (user) => user,
         );
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return BlocConsumer<GetSpaceDetailBloc, GetSpaceDetailState>(
       listener: (context, state) {
         state.maybeWhen(
           orElse: () {},
           success: (space) {
+            if (space.subSpacesExpanded?.isNotEmpty == true) {
+              _tabController.dispose();
+              _tabController = TabController(length: 3, vsync: this);
+              addListener();
+            }
             context
                 .read<FollowSpaceBloc>()
                 .add(FollowSpaceEvent.checkFollowed(space: space));
@@ -182,12 +190,14 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
       builder: (context, state) {
         return state.maybeWhen(
           orElse: () => Scaffold(
+            backgroundColor: appColors.pageBg,
             body: Center(
               child: Loading.defaultLoading(context),
             ),
           ),
           failure: (_) {
             return Scaffold(
+              backgroundColor: appColors.pageBg,
               appBar: const LemonAppBar(title: ""),
               body: EmptyList(
                 emptyText: t.common.somethingWrong,
@@ -195,18 +205,24 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
             );
           },
           loading: () => Scaffold(
-            appBar: const LemonAppBar(title: ""),
+            backgroundColor: appColors.pageBg,
+            appBar: LemonAppBar(
+              title: "",
+              backgroundColor: appColors.pageBg,
+            ),
             body: Center(
               child: Loading.defaultLoading(context),
             ),
           ),
           success: (space) {
+            final statusBarHeight = MediaQuery.of(context).padding.top;
             final isAdminOrCreator =
                 space.isAdmin(userId: user?.userId ?? '') ||
                     space.isCreator(userId: user?.userId ?? '');
             return Scaffold(
-              floatingActionButton: _selectedTabIndex == 1
-                  ? LensAddPostsButton(space: space)
+              backgroundColor: appColors.pageBg,
+              floatingActionButton: _selectedTabIndex == 0
+                  ? SpaceSubmitEventButton(space: space)
                   : null,
               body: Stack(
                 children: [
@@ -229,10 +245,19 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                     child: CustomScrollView(
                       controller: _scrollController,
                       slivers: [
-                        SpaceHeader(space: space),
-                        SliverToBoxAdapter(
-                          child: SpaceInfo(space: space),
+                        SliverPersistentHeader(
+                          delegate: _SliverHeaderDelegate(
+                            const _FloatingSpaceHeader(
+                              title: '',
+                              showSimpleHeader: true,
+                            ),
+                            LemonAppBar.height,
+                            statusBarHeight,
+                          ),
+                          pinned: true,
+                          floating: true,
                         ),
+                        SpaceHeader(space: space),
                         if (isAdminOrCreator)
                           BlocBuilder<GetSpaceEventRequestsBloc,
                               GetSpaceEventRequestsState>(
@@ -289,63 +314,83 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                           ),
                         SliverPersistentHeader(
                           delegate: _SliverTabBarDelegate(
-                            TabBar(
-                              controller: _tabController,
-                              labelStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w500,
+                            GlassContainer(
+                              width: double.infinity,
+                              height: LemonAppBar.height + statusBarHeight,
+                              color: appColors.pageBg.withOpacity(0.9),
+                              borderColor: Colors.transparent,
+                              blur: 10,
+                              borderWidth: 0,
+                              isFrostedGlass: false,
+                              elevation: 0,
+                              boxShadow: const [],
+                              shadowColor: Colors.transparent,
+                              child: TabBar(
+                                controller: _tabController,
+                                labelStyle: appText.md,
+                                unselectedLabelStyle: appText.md.copyWith(
+                                  color: appColors.textTertiary,
+                                ),
+                                indicatorColor: appColors.textAccent,
+                                indicatorSize: TabBarIndicatorSize.tab,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Spacing.s4,
+                                ),
+                                onTap: (index) {
+                                  setState(() {
+                                    _selectedTabIndex = index;
+                                  });
+                                },
+                                tabs: [
+                                  const Tab(
+                                    text: "Events",
+                                  ),
+                                  const Tab(text: "Timeline"),
+                                  if (space.subSpacesExpanded?.isNotEmpty ==
+                                      true)
+                                    const Tab(text: "Hubs"),
+                                ],
                               ),
-                              unselectedLabelStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary.withOpacity(0.36),
-                                fontWeight: FontWeight.w500,
-                              ),
-                              indicatorColor: LemonColor.paleViolet,
-                              onTap: (index) {
-                                setState(() {
-                                  _selectedTabIndex = index;
-                                });
-                              },
-                              tabs: const [
-                                Tab(text: "Events"),
-                                Tab(text: "Feed"),
-                              ],
                             ),
                           ),
                           pinned: true,
                         ),
-                        if (_selectedTabIndex == 0) ...[
+                        if (_selectedTabIndex == 0)
                           SpaceEventsList(space: space),
-                        ] else if (_selectedTabIndex == 1) ...[
+                        if (_selectedTabIndex == 1)
                           LensPostFeedWidget(space: space),
-                        ],
+                        if (_selectedTabIndex == 2)
+                          SubSpacesList(
+                            subSpaces: space.subSpacesExpanded ?? [],
+                          ),
                       ],
                     ),
                   ),
-                  _FloatingSpaceHeader(
-                    title: space.title ?? '',
-                    showSimpleHeader: _showSimpleHeader,
-                  ),
-                  BlocBuilder<FollowSpaceBloc, FollowSpaceState>(
-                    builder: (context, state) {
-                      return _FloatingFollowButton(
-                        visible: _showFloatingSubscribe &&
-                            (space.canFollow(userId: user?.userId ?? '') &&
-                                state is! FollowSpaceStateFollowed),
-                        isLoading: state is FollowSpaceStateLoading,
-                        onTap: () {
-                          if (user?.userId == null ||
-                              user?.userId.isEmpty == true) {
-                            context.router.navigate(LoginRoute());
-                          }
-                          context.read<FollowSpaceBloc>().add(
-                                FollowSpaceEvent.follow(
-                                  spaceId: space.id ?? '',
-                                ),
-                              );
-                        },
-                      );
-                    },
-                  ),
+                  // BlocBuilder<FollowSpaceBloc, FollowSpaceState>(
+                  //   builder: (context, state) {
+                  //     return _FloatingFollowButton(
+                  //       visible: _showFloatingSubscribe &&
+                  //           (space.canFollow(userId: user?.userId ?? '') && state is! FollowSpaceStateFollowed),
+                  //       isLoading: state is FollowSpaceStateLoading,
+                  //       onTap: () {
+                  //         if (user?.userId == null || user?.userId.isEmpty == true) {
+                  //           context.router.navigate(LoginRoute());
+                  //         }
+                  //         context.read<FollowSpaceBloc>().add(
+                  //               FollowSpaceEvent.follow(
+                  //                 spaceId: space.id ?? '',
+                  //               ),
+                  //             );
+                  //       },
+                  //     );
+                  // },
+                  // ),
+                  if (_selectedTabIndex == 1) ...[
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: LensAddPostsButton(space: space),
+                    ),
+                  ],
                 ],
               ),
             );
@@ -359,12 +404,12 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
 class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverTabBarDelegate(this.tabBar);
 
-  final TabBar tabBar;
+  final Widget tabBar;
 
   @override
-  double get minExtent => tabBar.preferredSize.height;
+  double get minExtent => 45; //tabBar.preferredSize.height;
   @override
-  double get maxExtent => tabBar.preferredSize.height;
+  double get maxExtent => 45; //tabBar.preferredSize.height;
 
   @override
   Widget build(
@@ -381,6 +426,34 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _SliverHeaderDelegate(this.appBar, this.height, this.statusBarHeight);
+
+  final Widget appBar;
+  final double height;
+  final double statusBarHeight;
+
+  @override
+  double get minExtent => statusBarHeight;
+
+  @override
+  double get maxExtent => height + statusBarHeight;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return appBar;
+  }
+
+  @override
+  bool shouldRebuild(_SliverHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
 class _FloatingSpaceHeader extends StatelessWidget {
   final String title;
   const _FloatingSpaceHeader({
@@ -393,62 +466,64 @@ class _FloatingSpaceHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      top: showSimpleHeader ? 0 : -(LemonAppBar.height + statusBarHeight),
-      left: 0,
-      right: 0,
-      child: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: SafeArea(
-          bottom: false,
-          child: LemonAppBar(
-            title: title,
-          ),
-        ),
+    final appColors = context.theme.appColors;
+    return GlassContainer(
+      width: double.infinity,
+      height: LemonAppBar.height + statusBarHeight,
+      color: appColors.pageBg.withOpacity(0.9),
+      borderColor: Colors.transparent,
+      blur: 10,
+      borderWidth: 0,
+      elevation: 0,
+      isFrostedGlass: false,
+      boxShadow: const [],
+      shadowColor: Colors.transparent,
+      child: LemonAppBar(
+        backButtonColor: Theme.of(context).appColors.textTertiary,
+        backgroundColor: Colors.transparent,
+        title: title,
       ),
     );
   }
 }
 
-class _FloatingFollowButton extends StatelessWidget {
-  const _FloatingFollowButton({
-    required this.isLoading,
-    required this.onTap,
-    required this.visible,
-  });
-  final bool isLoading;
-  final VoidCallback onTap;
-  final bool visible;
+// class _FloatingFollowButton extends StatelessWidget {
+//   const _FloatingFollowButton({
+//     required this.isLoading,
+//     required this.onTap,
+//     required this.visible,
+//   });
+//   final bool isLoading;
+//   final VoidCallback onTap;
+//   final bool visible;
 
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      bottom: visible ? Spacing.large : -2 * Spacing.large,
-      left: 0,
-      right: 0,
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.small),
-          child: SizedBox(
-            height: 49.w,
-            child: LinearGradientButton.primaryButton(
-              label: t.common.actions.subscribe,
-              loadingWhen: isLoading,
-              onTap: () {
-                if (isLoading) {
-                  return;
-                }
-                onTap();
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final t = Translations.of(context);
+//     return AnimatedPositioned(
+//       duration: const Duration(milliseconds: 300),
+//       curve: Curves.easeInOut,
+//       bottom: visible ? Spacing.large : -2 * Spacing.large,
+//       left: 0,
+//       right: 0,
+//       child: Center(
+//         child: Padding(
+//           padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+//           child: SizedBox(
+//             height: 49.w,
+//             child: LinearGradientButton.primaryButton(
+//               label: t.common.actions.subscribe,
+//               loadingWhen: isLoading,
+//               onTap: () {
+//                 if (isLoading) {
+//                   return;
+//                 }
+//                 onTap();
+//               },
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -36,6 +36,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isLoggedIn = context.read<AuthBloc>().state.maybeWhen(
+            orElse: () => false,
+            authenticated: (_) => true,
+          );
+      if (!isLoggedIn) {
+        AutoRouter.of(context).navigate(DiscoverRoute());
+      }
+    });
   }
 
   @override

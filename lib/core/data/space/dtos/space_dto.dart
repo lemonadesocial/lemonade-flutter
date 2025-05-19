@@ -37,6 +37,8 @@ class SpaceDto with _$SpaceDto {
     @JsonKey(name: 'image_avatar_expanded') DbFileDto? imageAvatarExpanded,
     @JsonKey(name: 'image_cover_expanded') DbFileDto? imageCoverExpanded,
     @JsonKey(name: 'lens_feed_id') String? lensFeedId,
+    @JsonKey(name: 'sub_spaces') List<String>? subSpaces,
+    @JsonKey(name: 'sub_spaces_expanded') List<SpaceDto>? subSpacesExpanded,
   }) = _SpaceDto;
 
   factory SpaceDto.fromJson(Map<String, dynamic> json) =>
