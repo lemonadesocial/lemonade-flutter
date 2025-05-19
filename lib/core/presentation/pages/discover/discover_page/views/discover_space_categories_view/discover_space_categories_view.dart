@@ -1,16 +1,14 @@
+import 'package:app/app_theme/app_theme.dart';
+import 'package:app/app_theme/colors/app_colors_extension.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/space/query/list_space_categories.graphql.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 
 enum CategoryCardGradient {
   longevity(
@@ -73,14 +71,13 @@ class DiscoverSpaceCategoriesView extends StatefulWidget {
 
 class _DiscoverSpaceCategoriesViewState
     extends State<DiscoverSpaceCategoriesView> {
-  Widget getImage(String imageUrl, double size) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget getImage(String imageUrl, double size, AppColorsExtension appColors) {
     return LemonNetworkImage(
       imageUrl: imageUrl,
       width: size,
       height: size,
       placeholder: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
+        color: appColors.textSecondary,
         builder: (colorFilter) => Assets.icons.icLemonadeLogo.svg(
           colorFilter: colorFilter,
           width: size,
@@ -92,7 +89,8 @@ class _DiscoverSpaceCategoriesViewState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
+    final appTextTheme = Theme.of(context).appTextTheme;
 
     return Query$ListSpaceCategories$Widget(
       options: Options$Query$ListSpaceCategories(),
@@ -106,56 +104,12 @@ class _DiscoverSpaceCategoriesViewState
         return MultiSliver(
           children: [
             if (spaceCategories.isEmpty)
+              const SliverToBoxAdapter(
+                child: SizedBox(),
+              )
+            else if (spaceCategories.isNotEmpty)
               SliverGrid.count(
-                childAspectRatio: (330 / 320),
-                crossAxisCount: 3,
-                mainAxisSpacing: Spacing.extraSmall,
-                crossAxisSpacing: Spacing.extraSmall,
-                children: List.generate(
-                  6,
-                  (index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: LemonColor.atomicBlack,
-                        borderRadius: BorderRadius.circular(Spacing.small),
-                        border: Border.all(
-                          color: colorScheme.outline,
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
-                            builder: (colorFilter) =>
-                                Assets.icons.icLemonadeLogo.svg(
-                              colorFilter: colorFilter,
-                              width: 32.w,
-                              height: 32.h,
-                            ),
-                          ),
-                          SizedBox(height: Spacing.xSmall),
-                          SizedBox(
-                            height: Spacing.small,
-                            child: Shimmer.fromColors(
-                              baseColor: colorScheme.surfaceVariant,
-                              highlightColor: colorScheme.surface,
-                              child: Container(
-                                color: colorScheme.background,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ).toList(),
-              ),
-            if (spaceCategories.isNotEmpty)
-              SliverGrid.count(
-                childAspectRatio: (330 / 320),
+                childAspectRatio: (330 / 280),
                 crossAxisCount: 3,
                 mainAxisSpacing: Spacing.extraSmall,
                 crossAxisSpacing: Spacing.extraSmall,
@@ -173,44 +127,35 @@ class _DiscoverSpaceCategoriesViewState
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          // color: LemonColor.atomicBlack,
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: CategoryCardGradient.values
-                                .firstWhere(
-                                  (gradient) =>
-                                      gradient.name.toLowerCase() ==
-                                      e.title
-                                          .toLowerCase()
-                                          .replaceAll(' ', '')
-                                          .replaceAll('-', '')
-                                          .replaceAll('_', '')
-                                          .replaceAll('/', ''),
-                                  orElse: () => CategoryCardGradient.longevity,
-                                )
-                                .colors,
-                          ),
-                          borderRadius: BorderRadius.circular(Spacing.small),
+                          color: appColors.cardBg,
+                          borderRadius: BorderRadius.circular(LemonRadius.md),
                           border: Border.all(
-                            color: colorScheme.outline,
+                            color: appColors.cardBorder,
                             width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(Spacing.xSmall),
+                          padding: EdgeInsets.only(
+                            top: Spacing.s4,
+                            bottom: Spacing.s2_5,
+                            left: Spacing.s1,
+                            right: Spacing.s1,
+                          ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              getImage(e.imageUrl ?? '', 32.w),
-                              SizedBox(height: Spacing.xSmall),
+                              getImage(
+                                e.imageUrl ?? '',
+                                Spacing.s8,
+                                appColors,
+                              ),
+                              SizedBox(height: Spacing.s2_5),
                               Text(
                                 e.title,
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onPrimary,
+                                style: appTextTheme.sm.copyWith(
+                                  color: appColors.textPrimary,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 13.sp,
                                 ),
                               ),
                             ],

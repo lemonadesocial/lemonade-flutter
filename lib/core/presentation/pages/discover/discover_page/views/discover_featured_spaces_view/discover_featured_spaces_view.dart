@@ -1,12 +1,12 @@
+import 'dart:ui';
+
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
-import 'package:app/core/presentation/widgets/shimmer/shimmer.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +19,8 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appTextTheme = Theme.of(context).appTextTheme;
+    final appColors = Theme.of(context).appColors;
     final t = Translations.of(context);
 
     return Query$ListSpaces$Widget(
@@ -47,11 +48,9 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
           children: [
             SliverToBoxAdapter(
               child: Text(
-                t.discover.featuredCommunities.toUpperCase(),
-                style: Typo.small.copyWith(
-                  color: colorScheme.onPrimary,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
+                t.discover.featuredCommunities,
+                style: appTextTheme.lg.copyWith(
+                  color: appColors.textPrimary,
                 ),
               ),
             ),
@@ -59,70 +58,17 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
               child: SizedBox(height: 14.w),
             ),
             if (spaces.isEmpty)
+              const SliverToBoxAdapter(
+                child: SizedBox(),
+              )
+            else if (spaces.isNotEmpty)
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: Spacing.xSmall,
                   crossAxisSpacing: Spacing.xSmall,
-                  childAspectRatio: 1.5,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Container(
-                      padding: EdgeInsets.all(Spacing.small),
-                      decoration: BoxDecoration(
-                        color: LemonColor.atomicBlack,
-                        borderRadius: BorderRadius.circular(Spacing.small),
-                        border: Border.all(
-                          color: colorScheme.outline,
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Spacing.xSmall),
-                            ),
-                            child: Shimmer.fromColors(
-                              baseColor: colorScheme.surfaceVariant,
-                              highlightColor: colorScheme.surface,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: colorScheme.background,
-                                  borderRadius:
-                                      BorderRadius.circular(Spacing.xSmall),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: Spacing.small),
-                          Shimmer.fromColors(
-                            baseColor: colorScheme.surfaceVariant,
-                            highlightColor: colorScheme.surface,
-                            child: Container(
-                              height: 20,
-                              color: colorScheme.background,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: 4,
-                ),
-              ),
-            if (spaces.isNotEmpty)
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: Spacing.xSmall,
-                  crossAxisSpacing: Spacing.xSmall,
-                  childAspectRatio: 1.55,
+                  childAspectRatio:
+                      1.0, // Changed to 1.0 for square aspect ratio
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -138,40 +84,105 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.all(14.w),
                         decoration: BoxDecoration(
-                          color: LemonColor.atomicBlack,
-                          borderRadius: BorderRadius.circular(Spacing.small),
-                          border: Border.all(
-                            color: colorScheme.outline,
-                            width: 1,
-                          ),
+                          borderRadius: BorderRadius.circular(16.r),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          fit: StackFit.expand,
                           children: [
-                            Container(
-                              height: 42.w,
-                              width: 42.w,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Spacing.extraSmall),
-                                image: DecorationImage(
-                                  image: NetworkImage(space.getSpaceImageUrl()),
-                                  fit: BoxFit.cover,
-                                ),
+                            // Base image
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: Image.network(
+                                space.getSpaceImageUrl(),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.bottomCenter,
                               ),
                             ),
-                            SizedBox(height: 14.w),
-                            Text(
-                              space.title ?? '',
-                              style: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w600,
+                            // Blur and gradient overlay
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16.r),
+                              child: Stack(
+                                children: [
+                                  ImageFiltered(
+                                    imageFilter: ImageFilter.blur(
+                                      sigmaX: 16.w,
+                                      sigmaY: 16.w,
+                                    ),
+                                    child: ShaderMask(
+                                      shaderCallback: (rect) {
+                                        return const LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.black,
+                                            Colors.black,
+                                            Colors.black,
+                                            Colors.black38,
+                                            Colors.transparent,
+                                          ],
+                                          stops: [0.2, 0.4, 0.6, 0.75, 0.85],
+                                        ).createShader(rect);
+                                      },
+                                      blendMode: BlendMode.dstOut,
+                                      child: Image.network(
+                                        space.getSpaceImageUrl(),
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.bottomCenter,
+                                      ),
+                                    ),
+                                  ),
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              Colors.black.withOpacity(0.3),
+                                            ],
+                                            stops: const [0.3, 0.9],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Colors.black.withOpacity(0.65),
+                                              Colors.transparent,
+                                            ],
+                                            stops: const [0.2, 0.8],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            ),
+                            // Text content
+                            Padding(
+                              padding: EdgeInsets.all(16.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    space.title ?? '',
+                                    style: appTextTheme.sm.copyWith(
+                                      color: appColors.textPrimary,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
