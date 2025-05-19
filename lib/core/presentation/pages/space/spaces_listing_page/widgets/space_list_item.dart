@@ -5,9 +5,7 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/graphql/backend/event/query/get_upcoming_events.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -172,7 +170,6 @@ class _SpaceListItemState extends State<SpaceListItem> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final appColors = Theme.of(context).appColors;
     final appTextTheme = Theme.of(context).appTextTheme;
     final userId = context.watch<AuthBloc>().state.maybeWhen(
