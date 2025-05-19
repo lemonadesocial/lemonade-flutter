@@ -176,8 +176,7 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                                   Text(
                                     space.title ?? '',
                                     style: appTextTheme.sm.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                                      color: appColors.textPrimary,
                                     ),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
