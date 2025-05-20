@@ -4,12 +4,11 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/graphql/backend/event/query/get_upcoming_events.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 enum SpaceListItemLayout {
   list,
@@ -55,7 +54,8 @@ class _SpaceListItemState extends State<SpaceListItem> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final userId = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user.userId,
@@ -68,10 +68,10 @@ class _SpaceListItemState extends State<SpaceListItem> {
       onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.small),
           border: Border.all(
-            color: colorScheme.outline,
+            color: appColors.cardBorder,
           ),
         ),
         child: Padding(
@@ -84,10 +84,7 @@ class _SpaceListItemState extends State<SpaceListItem> {
                     SizedBox(height: Spacing.xSmall),
                     Text(
                       widget.space.title ?? '',
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: appText.md,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -103,10 +100,7 @@ class _SpaceListItemState extends State<SpaceListItem> {
                         children: [
                           Text(
                             widget.space.title ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: appText.md,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -114,9 +108,8 @@ class _SpaceListItemState extends State<SpaceListItem> {
                           if (widget.featured)
                             Text(
                               widget.space.description ?? '',
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
-                                overflow: TextOverflow.ellipsis,
+                              style: appText.sm.copyWith(
+                                color: appColors.textTertiary,
                               ),
                               maxLines: 2,
                             )
@@ -127,8 +120,8 @@ class _SpaceListItemState extends State<SpaceListItem> {
                               widget.featured
                                   ? ''
                                   : '$followersCount ${t.common.subscriber(n: followersCount)}',
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
+                              style: appText.sm.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             )
                           else
@@ -152,8 +145,8 @@ class _SpaceListItemState extends State<SpaceListItem> {
                                       : t.event.upcomingEvents(
                                           n: upcomingEvents.length,
                                         ),
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
+                                  style: appText.sm.copyWith(
+                                    color: appColors.textTertiary,
                                   ),
                                 );
                               },

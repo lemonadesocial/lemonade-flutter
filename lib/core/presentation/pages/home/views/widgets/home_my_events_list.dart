@@ -34,11 +34,18 @@ class HomeMyEventsList extends StatelessWidget {
               style: appText.lg,
             ),
             SizedBox(height: Spacing.s4),
-            ...events.map(
-              (event) => Padding(
-                padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                child: HomeEventCard(event: event),
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => SizedBox(
+                height: Spacing.xSmall,
               ),
+              itemCount: events.length,
+              itemBuilder: (context, index) {
+                final event = events[index];
+                return HomeEventCard(event: event);
+              },
             ),
           ],
         );

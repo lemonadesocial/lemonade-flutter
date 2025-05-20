@@ -26,6 +26,7 @@ class HomeHostingEventsList extends StatelessWidget {
           );
         }
 
+        final eventsList = events.take(2).toList();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,16 +35,25 @@ class HomeHostingEventsList extends StatelessWidget {
               style: appTextTheme.lg,
             ),
             SizedBox(height: Spacing.s4),
-            ...events.take(2).map(
-                  (event) => Padding(
-                    padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                    child: HomeEventCard(event: event),
-                  ),
-                ),
-            if (events.length > 2)
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => SizedBox(
+                height: Spacing.xSmall,
+              ),
+              itemCount: eventsList.length,
+              itemBuilder: (context, index) {
+                final event = eventsList[index];
+                return HomeEventCard(event: event);
+              },
+            ),
+            if (events.length > 2) ...[
+              SizedBox(height: Spacing.xSmall),
               ViewMoreEventsCard(
                 moreEventsCount: events.length - 2,
               ),
+            ],
           ],
         );
       },
