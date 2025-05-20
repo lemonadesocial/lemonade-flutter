@@ -4,6 +4,7 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/space/spaces_listing_page/widgets/space_list_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/space/featured_space_item.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -93,9 +94,25 @@ class SpaceListingView extends StatelessWidget {
                   emptyText: t.common.somethingWrong,
                 ),
               ),
-              success: (spaces) => _SpacesList(
-                spaces: spaces,
-                layout: SpaceListItemLayout.horizontal,
+              success: (spaces) => SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 132.w,
+                  child: ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: spaces.length,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(width: Spacing.s3),
+                    itemBuilder: (context, index) {
+                      final space = spaces[index];
+                      return FeaturedSpaceItem(
+                        space: space,
+                        width: 132.w,
+                        height: 132.w,
+                      );
+                    },
+                  ),
+                ),
               ),
             );
           },
@@ -221,32 +238,6 @@ class _SpacesList extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ),
-      );
-    }
-
-    if (layout == SpaceListItemLayout.horizontal) {
-      return SliverToBoxAdapter(
-        child: SizedBox(
-          height: 132.w,
-          child: ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
-            scrollDirection: Axis.horizontal,
-            itemCount: spaces.length,
-            separatorBuilder: (context, index) => SizedBox(width: Spacing.s3),
-            itemBuilder: (context, index) {
-              final space = spaces[index];
-              return SpaceListItem(
-                space: space,
-                onTap: () => context.router.navigate(
-                  SpaceDetailRoute(
-                    spaceId: space.id!,
-                  ),
-                ),
-                layout: layout,
-              );
-            },
           ),
         ),
       );
