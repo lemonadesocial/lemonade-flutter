@@ -7,16 +7,14 @@ import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_mo
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -34,8 +32,10 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     return Scaffold(
       appBar: LemonAppBar(
+        backButtonColor: appColors.textTertiary,
         leading: widget.isHomeScreen
             ? Padding(
                 padding: EdgeInsets.only(left: Spacing.smMedium),
@@ -71,7 +71,8 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _buildContent(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
+    final appText = context.theme.appTextTheme;
 
     return Stack(
       children: [
@@ -95,21 +96,14 @@ class LoginPageState extends State<LoginPage> {
                   Text(
                     t.auth.lets_get_you_in,
                     textAlign: TextAlign.center,
-                    style: Typo.large.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: FontFamily.spaceGrotesk,
-                    ),
+                    style: appText.xl,
                   ),
                   SizedBox(height: 9.h),
                   Text(
                     t.auth.get_started_description,
                     textAlign: TextAlign.center,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
+                    style: appText.md.copyWith(
+                      color: appColors.textTertiary,
                     ),
                   ),
                   SizedBox(height: Spacing.small),
@@ -123,9 +117,8 @@ class LoginPageState extends State<LoginPage> {
                     },
                     borderColor: Colors.transparent,
                     label: t.auth.explore,
-                    textStyle: Typo.medium.copyWith(
-                      color: LemonColor.paleViolet,
-                      fontWeight: FontWeight.w500,
+                    textStyle: appText.md.copyWith(
+                      color: appColors.textAccent,
                     ),
                   ),
                   SizedBox(height: Spacing.small),
