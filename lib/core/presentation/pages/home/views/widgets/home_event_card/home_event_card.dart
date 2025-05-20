@@ -26,7 +26,6 @@ class HomeEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final appColors = Theme.of(context).appColors;
     final appTextTheme = Theme.of(context).appTextTheme;
     final userId = context.watch<AuthBloc>().state.maybeWhen(
