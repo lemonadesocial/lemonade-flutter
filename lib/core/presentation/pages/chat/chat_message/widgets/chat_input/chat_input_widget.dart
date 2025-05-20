@@ -2,8 +2,8 @@ import 'package:app/core/presentation/pages/chat/chat_message/chat_message_page.
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/input_bar_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class ChatInput extends StatelessWidget {
   final ChatController controller;
@@ -13,9 +13,11 @@ class ChatInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
-      color: colorScheme.primary,
+      color: appColors.pageBg,
       child: Padding(
         padding: EdgeInsets.symmetric(
           vertical: Spacing.xSmall,
@@ -35,13 +37,13 @@ class ChatInput extends StatelessWidget {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(21),
                       borderSide: BorderSide(
-                        color: colorScheme.outline,
+                        color: appColors.inputBorder,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(21),
                       borderSide: BorderSide(
-                        color: colorScheme.outline,
+                        color: appColors.inputBorder,
                       ),
                     ),
                     contentPadding: EdgeInsets.symmetric(
@@ -50,8 +52,8 @@ class ChatInput extends StatelessWidget {
                     ),
                   ),
                   textSelectionTheme: TextSelectionThemeData(
-                    cursorColor: colorScheme.surface,
-                    selectionColor: colorScheme.secondary,
+                    cursorColor: appColors.textTertiary,
+                    selectionColor: appColors.textInverse,
                   ),
                 ),
                 child: InputBar(
@@ -70,8 +72,8 @@ class ChatInput extends StatelessWidget {
                     hintText: t.chat.typeMessage,
                     hintMaxLines: 1,
                     filled: false,
-                    hintStyle: Typo.medium.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
+                    hintStyle: appText.md.copyWith(
+                      color: appColors.textTertiary,
                     ),
                   ),
                   onChanged: controller.onInputBarChanged,
@@ -87,27 +89,21 @@ class ChatInput extends StatelessWidget {
   }
 
   Widget _buildSendButton(BuildContext context) {
+    final appColors = context.theme.appColors;
     return GestureDetector(
       onTap: controller.send,
       child: Container(
         height: 42,
         width: 42,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: const Alignment(0.00, -1.00),
-            end: const Alignment(0, 1),
-            colors: [
-              Theme.of(context).colorScheme.surface,
-              Theme.of(context).colorScheme.surfaceVariant,
-            ],
-          ),
+          color: appColors.buttonTertiaryBg,
           borderRadius: BorderRadius.circular(42 / 2),
         ),
         child: Center(
           child: Icon(
             Icons.send_rounded,
             size: 21,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            color: appColors.buttonTertiary,
           ),
         ),
       ),

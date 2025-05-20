@@ -1,8 +1,7 @@
 import 'package:app/core/utils/chat/matrix_room_extension.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class UnseenMessageCountWidget extends StatelessWidget {
   final Room room;
@@ -10,11 +9,12 @@ class UnseenMessageCountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     int unseenMessageCount = room.notificationCount;
-    var boxColor = room.isMuted ? LemonColor.white12 : LemonColor.paleViolet;
+    var boxColor = room.isMuted ? appColors.cardBg : appColors.buttonPrimaryBg;
     var textColor =
-        room.isMuted ? colorScheme.onSecondary : colorScheme.secondary;
+        room.isMuted ? appColors.textTertiary : appColors.textPrimary;
 
     if (unseenMessageCount == 0) {
       return const SizedBox.shrink();
@@ -30,7 +30,7 @@ class UnseenMessageCountWidget extends StatelessWidget {
       child: Center(
         child: Text(
           unseenMessageCount > 9 ? '9+' : '$unseenMessageCount',
-          style: Typo.small.copyWith(color: textColor),
+          style: appText.sm.copyWith(color: textColor),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:app/app_theme/app_theme.dart';
+import 'package:app/app_theme/typography/app_typography.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/chat_input/reply_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_content_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/message_reaction_widget.dart';
@@ -8,7 +10,6 @@ import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/chat/matrix_date_time_extension.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -168,9 +169,9 @@ class _MessageItemState extends State<MessageItem> {
   }
 
   Row _buildMessageBody(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final textColor =
-        ownMessage ? colorScheme.onPrimary : colorScheme.onSurface;
+        ownMessage ? appColors.buttonPrimary : appColors.buttonTertiary;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: rowMainAxisAlignment,
@@ -191,8 +192,8 @@ class _MessageItemState extends State<MessageItem> {
                       : ChatBubbleClipper3(type: BubbleType.receiverBubble),
                   alignment: alignment,
                   backGroundColor: ownMessage
-                      ? LemonColor.ownMessage
-                      : LemonColor.otherMessage,
+                      ? appColors.buttonPrimaryBg
+                      : appColors.buttonTertiaryBg,
                   child: Container(
                     constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width * 0.7,
@@ -225,7 +226,7 @@ class _MessageItemState extends State<MessageItem> {
                               Flexible(
                                 flex: 2,
                                 child: _buildMessageEditTime(
-                                  colorScheme.onSurfaceVariant,
+                                  appColors.textTertiary,
                                 ),
                               ),
                             ],
@@ -244,17 +245,16 @@ class _MessageItemState extends State<MessageItem> {
   }
 
   Widget _buildMessageReadMarker(BuildContext context) {
+    final appColors = context.theme.appColors;
     return Row(
       children: [
-        Expanded(
-          child: Divider(color: Theme.of(context).colorScheme.primary),
-        ),
+        const Spacer(),
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: Theme.of(context).colorScheme.primary,
+              color: appColors.cardBorder,
             ),
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(4),
           ),
           margin: const EdgeInsets.all(8.0),
@@ -263,12 +263,10 @@ class _MessageItemState extends State<MessageItem> {
           ),
           child: Text(
             'read up to here',
-            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            style: TextStyle(color: appColors.textTertiary),
           ),
         ),
-        Expanded(
-          child: Divider(color: Theme.of(context).colorScheme.primary),
-        ),
+        const Spacer(),
       ],
     );
   }
@@ -290,6 +288,8 @@ class _MessageItemState extends State<MessageItem> {
   }
 
   Widget _buildMessageSentTime(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Padding(
       padding: shouldDisplayTime
           ? EdgeInsets.symmetric(vertical: Spacing.extraSmall)
@@ -298,8 +298,8 @@ class _MessageItemState extends State<MessageItem> {
         child: Container(
           decoration: BoxDecoration(
             color: shouldDisplayTime
-                ? Theme.of(context).colorScheme.background
-                : Theme.of(context).colorScheme.background.withOpacity(0.45),
+                ? appColors.pageBg
+                : appColors.pageBg.withOpacity(0.45),
             borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
           ),
           clipBehavior: Clip.antiAlias,
@@ -307,8 +307,8 @@ class _MessageItemState extends State<MessageItem> {
             padding: EdgeInsets.all(Spacing.superExtraSmall),
             child: Text(
               DateFormatUtils.fullDateWithTime(widget.event.originServerTs),
-              style: Typo.small.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              style: appText.sm.copyWith(
+                color: appColors.textTertiary,
               ),
             ),
           ),
@@ -407,13 +407,13 @@ class _MessageItemState extends State<MessageItem> {
             Icon(
               Icons.edit_outlined,
               color: textColor,
-              size: Typo.small.fontSize!,
+              size: AppTypography.xs.fontSize!,
             ),
             const SizedBox(width: 6),
           ],
           Text(
             DateFormatUtils.timeOnly(displayEvent.originServerTs).toLowerCase(),
-            style: Typo.xSmall.copyWith(color: textColor),
+            style: AppTypography.xs.copyWith(color: textColor),
           ),
         ],
       ),
