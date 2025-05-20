@@ -147,21 +147,15 @@ class LemonRadius {
   /// Represents spacing of 32.0 pixels.
   static double large = 32.r;
 
-  /// 4px
   static double xs = 4.r;
 
-  /// 8px
   static double sm = 8.r;
 
-  /// 12px
   static double md = 12.r;
 
-  /// 16px
   static double lg = 16.r;
 
-  /// 24px
   static double xl = 24.r;
 
-  /// 9999px
   static double full = 9999;
 }

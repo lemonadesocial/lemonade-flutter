@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
@@ -55,13 +54,13 @@ class BottomBarState extends State<BottomBar>
 
   @override
   Widget build(BuildContext context) {
-    final appColors = Theme.of(context).appColors;
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       child: BottomAppBar(
         padding: EdgeInsets.zero,
         elevation: 0.0,
         height: BottomBar.bottomBarHeight,
-        color: appColors.pageBg,
+        color: colorScheme.background,
         child: ClipRect(
           child: Container(
             decoration: BoxDecoration(

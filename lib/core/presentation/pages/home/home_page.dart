@@ -1,4 +1,3 @@
-import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/pages/home/views/home_view.dart';
 import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
@@ -9,6 +8,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final appColors = Theme.of(context).appColors;
+    final colorScheme = Theme.of(context).colorScheme;
     final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => false,
           authenticated: (_) => true,
@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: HomeAppBar(
         title: "",
-        backgroundColor: appColors.pageBg,
         actions: [
           if (isProcessingLogin) ...[
             Loading.defaultLoading(context),
@@ -83,8 +82,8 @@ class _HomePageState extends State<HomePage> {
                   AutoRouter.of(context).navigate(LoginRoute());
                 },
                 label: t.auth.signIn,
-                backgroundColor: appColors.buttonSecondary,
-                borderColor: appColors.cardBorder,
+                backgroundColor: colorScheme.secondaryContainer,
+                borderColor: colorScheme.secondaryContainer,
                 radius: BorderRadius.circular(LemonRadius.button),
               ),
             ),
@@ -100,7 +99,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ],
       ),
-      backgroundColor: appColors.pageBg,
+      backgroundColor: LemonColor.black,
       body: const HomeView(),
     );
   }
