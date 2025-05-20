@@ -1,10 +1,10 @@
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class LemonDrawerTileWidget extends StatelessWidget {
   const LemonDrawerTileWidget({
@@ -31,7 +31,9 @@ class LemonDrawerTileWidget extends StatelessWidget {
   final bool disabled;
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return InkWell(
       onTap: () {
         if (disabled) return;
@@ -41,7 +43,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
       child: Container(
         height: 60.h,
         decoration: BoxDecoration(
-          color: color ?? colorScheme.onPrimary.withOpacity(0.06),
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(12.r),
         ),
         clipBehavior: Clip.hardEdge,
@@ -63,7 +65,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
-                            color: LemonColor.white06,
+                            color: appColors.buttonTertiaryBg,
                             borderRadius: BorderRadius.circular(6.r),
                           ),
                           child: leading,
@@ -79,10 +81,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Typo.medium.copyWith(
-                            color: titleColor ?? colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: appText.md,
                         ),
                         if (subtitle != null && subtitle!.isNotEmpty)
                           Padding(
@@ -90,7 +89,7 @@ class LemonDrawerTileWidget extends StatelessWidget {
                             child: Text(
                               subtitle!,
                               style: Typo.small.copyWith(
-                                color: colorScheme.onSurfaceVariant,
+                                color: appColors.textTertiary,
                               ),
                             ),
                           ),
@@ -112,12 +111,9 @@ class LemonDrawerTileWidget extends StatelessWidget {
 
   _renderComingSoon(BuildContext context) {
     return LemonOutlineButton(
-      height: 32.w,
+      height: Spacing.s8,
       label: t.common.comingSoon,
-      radius: BorderRadius.circular(LemonRadius.button),
-      textStyle: Typo.xSmall.copyWith(
-        color: Theme.of(context).colorScheme.onSecondary,
-      ),
+      radius: BorderRadius.circular(LemonRadius.full),
     );
   }
 }

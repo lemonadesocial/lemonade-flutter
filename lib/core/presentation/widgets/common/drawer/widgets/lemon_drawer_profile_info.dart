@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -8,7 +9,6 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +27,9 @@ class LemonDrawerProfileInfo extends StatelessWidget {
           orElse: () => null,
         );
     final questPoints = authSession?.questPoints;
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Column(
       children: [
         Row(
@@ -44,15 +46,14 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                 children: [
                   Text(
                     authSession.displayName ?? '',
-                    style:
-                        Typo.extraMedium.copyWith(fontWeight: FontWeight.w600),
+                    style: appText.lg,
                   ),
                   SizedBox(
                     height: 6.h,
                   ),
                   Text(
                     '@${authSession.username ?? ''}',
-                    style: Typo.medium.copyWith(color: colorScheme.onSecondary),
+                    style: appText.md.copyWith(color: appColors.textTertiary),
                   ),
                 ],
               ),
@@ -67,9 +68,8 @@ class LemonDrawerProfileInfo extends StatelessWidget {
           children: [
             LemonOutlineButton(
               onTap: () => _onPressQuest(context),
-              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
               leading: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
                 builder: (filter) => Assets.icons.icTargetLine.svg(
                   colorFilter: filter,
                   width: 15.w,
@@ -78,8 +78,6 @@ class LemonDrawerProfileInfo extends StatelessWidget {
               ),
               label: t.quest
                   .pointsCount(n: questPoints ?? 0, count: questPoints ?? 0),
-              textStyle:
-                  Typo.small.copyWith(color: colorScheme.onPrimary, height: 0),
               radius: BorderRadius.circular(LemonRadius.button),
             ),
             SizedBox(
@@ -87,9 +85,8 @@ class LemonDrawerProfileInfo extends StatelessWidget {
             ),
             LemonOutlineButton(
               onTap: () => _onPressEditProfile(context, authSession),
-              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
               leading: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
                 builder: (filter) => Assets.icons.icEdit.svg(
                   colorFilter: filter,
                   width: 15.w,
@@ -97,8 +94,6 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                 ),
               ),
               label: t.common.actions.edit.capitalize(),
-              textStyle:
-                  Typo.small.copyWith(color: colorScheme.onPrimary, height: 0),
               radius: BorderRadius.circular(LemonRadius.button),
             ),
             SizedBox(
@@ -106,9 +101,8 @@ class LemonDrawerProfileInfo extends StatelessWidget {
             ),
             LemonOutlineButton(
               onTap: () => _onPressQRCode(context),
-              padding: EdgeInsets.symmetric(horizontal: Spacing.small),
               leading: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
                 builder: (filter) => Assets.icons.icQr.svg(
                   colorFilter: filter,
                   width: 15.w,
@@ -116,8 +110,6 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                 ),
               ),
               label: t.common.qrCode,
-              textStyle:
-                  Typo.small.copyWith(color: colorScheme.onPrimary, height: 0),
               radius: BorderRadius.circular(LemonRadius.button),
             ),
           ],
