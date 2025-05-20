@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.1.0...v2.2.0) (2025-05-20)
+
+
+### Features
+
+* define app new theme ([#944](https://github.com/lemonadesocial/lemonade-flutter/issues/944)) ([5cca889](https://github.com/lemonadesocial/lemonade-flutter/commit/5cca889db6dd2834f4701d2f3cad347ed9cd522e))
+* improve discover style ([#946](https://github.com/lemonadesocial/lemonade-flutter/issues/946)) ([9309a83](https://github.com/lemonadesocial/lemonade-flutter/commit/9309a83ae43f1df75e83533b2a1ffbe1bff5e181))
+* space detail new theme UI ([#947](https://github.com/lemonadesocial/lemonade-flutter/issues/947)) ([78a3666](https://github.com/lemonadesocial/lemonade-flutter/commit/78a3666b108238724a22e2921e040c367c9b9189))
+
+
+### Bug Fixes
+
+* ui bug in new space detai, dicebear avatar for space  ([#949](https://github.com/lemonadesocial/lemonade-flutter/issues/949)) ([3a843cf](https://github.com/lemonadesocial/lemonade-flutter/commit/3a843cfce38b6b3577b3320934038f4cad7a7835))
+
 ## [2.1.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.0.0...v2.1.0) (2025-05-15)
 
 
