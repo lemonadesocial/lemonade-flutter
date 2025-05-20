@@ -41,8 +41,10 @@ class _SpaceListItemState extends State<SpaceListItem> {
         imageUrl: widget.space.imageAvatar?.url ?? '',
         fit: BoxFit.cover,
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-        placeholder: ImagePlaceholder.spaceThumbnail(
-          iconColor: Theme.of(context).colorScheme.onSecondary,
+        placeholder: ImagePlaceholder.dicebearThumbnail(
+          seed: widget.space.id ?? '',
+          size: widget.layout == SpaceListItemLayout.grid ? 42.w : 48.w,
+          radius: BorderRadius.circular(LemonRadius.extraSmall),
         ),
         border: Border.all(
           width: 1,

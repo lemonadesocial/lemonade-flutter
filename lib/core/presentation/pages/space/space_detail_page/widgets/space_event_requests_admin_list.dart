@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/space_repository.dart';
@@ -11,9 +12,8 @@ import 'package:app/graphql/backend/space/query/get_space_event_requests.graphql
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -79,48 +79,46 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
       (request) => request.state == Enum$SpaceEventRequestState.pending,
     );
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     if (firstPendingRequest == null) {
       return InkWell(
         onTap: () => _viewManagePage(context),
         child: Container(
-          padding: EdgeInsets.all(Spacing.small),
+          padding: EdgeInsets.all(Spacing.s3),
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
-            borderRadius: BorderRadius.circular(LemonRadius.medium),
-            border: Border.all(color: colorScheme.outlineVariant),
+            color: appColors.cardBg,
+            borderRadius: BorderRadius.circular(LemonRadius.md),
+            border: Border.all(color: appColors.cardBorder),
           ),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(Spacing.superExtraSmall),
+                padding: EdgeInsets.all(Spacing.s1),
                 decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                  border: Border.all(color: colorScheme.outlineVariant),
+                  color: appColors.cardBg,
+                  borderRadius: BorderRadius.circular(LemonRadius.xs),
+                  border: Border.all(color: appColors.cardBorder),
                 ),
                 child: Center(
                   child: Assets.icons.icCalendarDoneGradient.svg(),
                 ),
               ),
-              SizedBox(width: Spacing.small),
+              SizedBox(width: Spacing.s3),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       t.space.submittedEvents,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: appText.sm,
                     ),
                     SizedBox(height: 2.w),
                     Text(
                       t.space.accessAllCommunityEventListings,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.xs.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -128,7 +126,7 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
               ),
               SizedBox(width: Spacing.extraSmall),
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icArrowRight.svg(
                   colorFilter: filter,
                   width: 18.w,
@@ -146,18 +144,15 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
       children: [
         Text(
           t.space.pendingApprovalEvent,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: appText.md,
         ),
         Text(
           t.space.eventsAreVisibleOnThePageAfterApproval,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+          style: appText.sm.copyWith(
+            color: appColors.textTertiary,
           ),
         ),
-        SizedBox(height: Spacing.small),
+        SizedBox(height: Spacing.s4),
         SpaceEventRequestItem(
           request: firstPendingRequest,
           onApprove: (request) async {
@@ -175,19 +170,19 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
             );
           },
         ),
-        SizedBox(height: Spacing.extraSmall),
+        SizedBox(height: Spacing.s2),
         InkWell(
           onTap: () => _viewManagePage(context),
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
-              vertical: Spacing.xSmall,
+              horizontal: Spacing.s4,
+              vertical: Spacing.s3,
             ),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.small),
               border: Border.all(
-                color: colorScheme.outlineVariant,
+                color: appColors.cardBorder,
               ),
             ),
             child: Row(
@@ -195,25 +190,25 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
               children: [
                 Text(
                   t.common.actions.viewAll,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.sm.copyWith(
+                    color: appColors.textTertiary,
                   ),
                 ),
                 Row(
                   children: [
                     Text(
                       requests.length.toString(),
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.sm.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                     SizedBox(width: Spacing.extraSmall),
                     ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icArrowRight.svg(
                         colorFilter: filter,
-                        width: 18.w,
-                        height: 18.w,
+                        width: Sizing.s5,
+                        height: Sizing.s5,
                       ),
                     ),
                   ],
