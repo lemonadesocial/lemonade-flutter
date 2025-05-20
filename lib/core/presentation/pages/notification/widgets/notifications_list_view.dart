@@ -154,7 +154,7 @@ class _NotificationListViewState extends State<NotificationListView> {
                           if (hasNextPage) {
                             return Padding(
                               padding: EdgeInsets.symmetric(
-                                vertical: Spacing.smMedium,
+                                vertical: Spacing.s4_5,
                               ),
                               child: Loading.defaultLoading(context),
                             );

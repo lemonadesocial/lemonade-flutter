@@ -2,6 +2,7 @@ import 'package:app/core/presentation/pages/notification/widgets/notification_it
 import 'package:app/core/presentation/pages/notification/widgets/notification_thumbnail.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/image_utils.dart';
@@ -12,11 +13,11 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
+import 'package:app/app_theme/app_theme.dart';
 
 class FriendRequestNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -30,16 +31,17 @@ class FriendRequestNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
+        color: appColors.textTertiary,
         builder: (colorFilter) => Assets.icons.icAddReaction.svg(
           colorFilter: colorFilter,
-          width: Sizing.small,
-          height: Sizing.small,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
       avatar: NotificationThumbnail(
@@ -48,6 +50,7 @@ class FriendRequestNotificationItem extends StatelessWidget {
               ? notification.fromExpanded?.newPhotosExpanded!.first
               : null,
         ),
+        placeholder: ImagePlaceholder.avatarPlaceholder(),
         onTap: () {
           AutoRouter.of(context).push(
             ProfileRoute(
@@ -57,32 +60,27 @@ class FriendRequestNotificationItem extends StatelessWidget {
         },
         radius: BorderRadius.circular(Sizing.medium),
       ),
-      action: SizedBox(
-        height: Sizing.medium,
-        child: LinearGradientButton.primaryButton(
-          onTap: () async {
-            final response = await showFutureLoadingDialog(
-              context: context,
-              future: () async {
-                return await getIt<AppGQL>().client.mutate$createUserFriendship(
-                      Options$Mutation$createUserFriendship(
-                        variables: Variables$Mutation$createUserFriendship(
-                          user: notification.from ?? '',
-                        ),
+      action: LinearGradientButton.primaryButton(
+        radius: BorderRadius.circular(LemonRadius.full),
+        height: Sizing.s8,
+        onTap: () async {
+          final response = await showFutureLoadingDialog(
+            context: context,
+            future: () async {
+              return await getIt<AppGQL>().client.mutate$createUserFriendship(
+                    Options$Mutation$createUserFriendship(
+                      variables: Variables$Mutation$createUserFriendship(
+                        user: notification.from ?? '',
                       ),
-                    );
-              },
-            );
-            if (response.result?.parsedData?.friendship != null) {
-              onRemove?.call();
-            }
-          },
-          textStyle: Typo.small.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
-          label: t.common.actions.accept,
-        ),
+                    ),
+                  );
+            },
+          );
+          if (response.result?.parsedData?.friendship != null) {
+            onRemove?.call();
+          }
+        },
+        label: t.common.actions.accept,
       ),
       extra: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,8 +89,8 @@ class FriendRequestNotificationItem extends StatelessWidget {
           if (notification.fromExpanded?.username != null) ...[
             Text(
               '@${notification.fromExpanded?.username}',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              style: appText.md.copyWith(
+                color: appColors.textSecondary,
               ),
             ),
             SizedBox(height: Spacing.superExtraSmall),
@@ -103,8 +101,8 @@ class FriendRequestNotificationItem extends StatelessWidget {
               notification.fromExpanded?.description ??
                   notification.fromExpanded?.jobTitle ??
                   '',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.sm.copyWith(
+                color: appColors.textTertiary,
               ),
             ),
         ],

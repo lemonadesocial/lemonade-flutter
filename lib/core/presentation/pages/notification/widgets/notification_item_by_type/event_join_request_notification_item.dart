@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
 import 'package:matrix/matrix.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventJoinRequestNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -58,18 +59,18 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final joinRequestId =
         notification.data?.tryGet('event_join_request_id') as String? ?? '';
     final eventId = notification.refEvent ?? '';
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
+        color: appColors.textTertiary,
         builder: (colorFilter) => Assets.icons.icOutlineVerified.svg(
           colorFilter: colorFilter,
-          width: Sizing.small,
-          height: Sizing.small,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
       avatar: notification.fromExpanded != null ||
@@ -178,7 +179,7 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
                     //   }),
                     // ),
                     ThemeSvgIcon(
-                      color: LemonColor.coralReef,
+                      color: appColors.textError,
                       builder: (colorFilter) => _Icon(
                         onTap: () {
                           _decideJoinRequest(
@@ -195,7 +196,7 @@ class EventJoinRequestNotificationItem extends StatelessWidget {
                     ),
                     SizedBox(width: Spacing.extraSmall),
                     ThemeSvgIcon(
-                      color: LemonColor.paleViolet,
+                      color: appColors.textAccent,
                       builder: (colorFilter) => _Icon(
                         onTap: () {
                           _decideJoinRequest(

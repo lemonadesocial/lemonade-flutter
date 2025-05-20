@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/notification_item_base.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_thumbnail.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -12,6 +13,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
+import 'package:app/app_theme/app_theme.dart';
 
 class EventInvitedNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -22,16 +24,16 @@ class EventInvitedNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
-        color: colorScheme.onSecondary,
+        color: appColors.textTertiary,
         builder: (colorFilter) => Assets.icons.icPersonAddOutline.svg(
           colorFilter: colorFilter,
-          width: Sizing.small,
-          height: Sizing.small,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
       avatar: NotificationThumbnail(
@@ -40,6 +42,7 @@ class EventInvitedNotificationItem extends StatelessWidget {
               ? notification.fromExpanded?.newPhotosExpanded!.first
               : null,
         ),
+        placeholder: ImagePlaceholder.avatarPlaceholder(),
         onTap: () {
           AutoRouter.of(context).push(
             ProfileRoute(
@@ -56,6 +59,7 @@ class EventInvitedNotificationItem extends StatelessWidget {
             EventDetailRoute(eventId: notification.refEvent ?? ''),
           );
         },
+        placeholder: ImagePlaceholder.eventCard(),
       ),
       action: LemonOutlineButton(
         onTap: () async {
@@ -63,9 +67,7 @@ class EventInvitedNotificationItem extends StatelessWidget {
             EventDetailRoute(eventId: notification.refEvent ?? ''),
           );
         },
-        backgroundColor: colorScheme.secondaryContainer,
-        radius: BorderRadius.circular(LemonRadius.button),
-        borderColor: Colors.transparent,
+        radius: BorderRadius.circular(LemonRadius.full),
         label: t.common.actions.viewEvent,
       ),
     );

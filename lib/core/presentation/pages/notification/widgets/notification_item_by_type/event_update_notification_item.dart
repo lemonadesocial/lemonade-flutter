@@ -7,13 +7,13 @@ import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
+import 'package:app/app_theme/app_theme.dart';
 
 class EventUpdateNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -24,16 +24,16 @@ class EventUpdateNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
-        color: LemonColor.paleViolet,
+        color: appColors.textAccent,
         builder: (colorFilter) => Assets.icons.icHouseParty.svg(
           colorFilter: colorFilter,
-          width: Sizing.small,
-          height: Sizing.small,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
       cover: NotificationThumbnail(
@@ -55,9 +55,7 @@ class EventUpdateNotificationItem extends StatelessWidget {
             EventDetailRoute(eventId: notification.refEvent ?? ''),
           );
         },
-        backgroundColor: colorScheme.secondaryContainer,
-        radius: BorderRadius.circular(LemonRadius.button),
-        borderColor: Colors.transparent,
+        radius: BorderRadius.circular(LemonRadius.full),
         label: t.common.actions.viewEvent,
       ),
     );

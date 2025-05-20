@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -20,7 +21,8 @@ class NotificationThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     final mRadius = radius ?? BorderRadius.circular(LemonRadius.extraSmall);
     final mPlaceholder = placeholder ??
         ImagePlaceholder.defaultPlaceholder(
@@ -32,7 +34,7 @@ class NotificationThumbnail extends StatelessWidget {
         borderRadius: mRadius,
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: colorScheme.outline),
+            border: Border.all(color: appColors.cardBorder),
             borderRadius: mRadius,
           ),
           width: Sizing.medium,

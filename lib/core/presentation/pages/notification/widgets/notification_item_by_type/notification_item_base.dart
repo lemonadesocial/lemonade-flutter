@@ -1,10 +1,10 @@
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:app/app_theme/app_theme.dart';
 
 class NotificationBaseItem extends StatelessWidget {
   final Widget? icon;
@@ -26,14 +26,15 @@ class NotificationBaseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final widgets =
         [avatar, cover].where((element) => element != null).toList();
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: colorScheme.outline),
+          bottom: BorderSide(color: appColors.pageDivider),
         ),
       ),
       child: Row(
@@ -87,16 +88,13 @@ class NotificationBaseItem extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     text: notification.message?.trim() ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
+                    style: appText.md,
                     children: [
                       TextSpan(
                         text:
                             ' ${timeago.format(notification.createdAt!, locale: 'en_short')}',
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w700,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ],
