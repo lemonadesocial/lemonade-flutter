@@ -1,12 +1,13 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/space/spaces_listing_page/widgets/space_list_item.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/space/featured_space_item.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -59,26 +60,26 @@ class SpaceListingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
+    final appTextTheme = Theme.of(context).appTextTheme;
 
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
+              horizontal: Spacing.s4,
             ),
             child: Text(
-              t.space.myCommunities.toUpperCase(),
-              style: Typo.small.copyWith(
+              t.space.myCommunities,
+              style: appTextTheme.lg.copyWith(
                 fontWeight: FontWeight.w600,
-                color: colorScheme.onPrimary,
-                letterSpacing: 1,
+                color: appColors.textPrimary,
               ),
             ),
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: Spacing.small)),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s4)),
         BlocBuilder<ListSpacesBloc, ListSpacesState>(
           bloc: mySpacesBloc,
           builder: (context, state) {
@@ -93,71 +94,54 @@ class SpaceListingView extends StatelessWidget {
                   emptyText: t.common.somethingWrong,
                 ),
               ),
-              success: (spaces) => _SpacesList(
-                spaces: spaces,
-                layout: SpaceListItemLayout.grid,
-              ),
-            );
-          },
-        ),
-        SliverToBoxAdapter(child: SizedBox(height: Spacing.large)),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
-            ),
-            child: Text(
-              t.space.ambassadorCommunities.toUpperCase(),
-              style: Typo.small.copyWith(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onPrimary,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(child: SizedBox(height: Spacing.small)),
-        BlocBuilder<ListSpacesBloc, ListSpacesState>(
-          bloc: ambassadorSpacesBloc,
-          builder: (context, state) {
-            return state.maybeWhen(
-              initial: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              failure: (failure) => SliverToBoxAdapter(
-                child: EmptyList(
-                  emptyText: t.common.somethingWrong,
+              success: (spaces) => SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 132.w,
+                  child: ListView.separated(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: spaces.length,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(width: Spacing.s3),
+                    itemBuilder: (context, index) {
+                      final space = spaces[index];
+                      return FeaturedSpaceItem(
+                        space: space,
+                        width: 132.w,
+                        height: 132.w,
+                      );
+                    },
+                  ),
                 ),
               ),
-              loading: () => SliverToBoxAdapter(
-                child: Center(child: Loading.defaultLoading(context)),
-              ),
-              success: (spaces) => _SpacesList(
-                spaces: spaces,
-                emptyTitle: t.space.noAmbassadorCommunities,
-                emptyDescription: t.space.noAmbassadorCommunitiesDescription,
-              ),
             );
           },
         ),
-        SliverToBoxAdapter(child: SizedBox(height: Spacing.large)),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s5)),
+        SliverToBoxAdapter(
+          child: Divider(
+            color: appColors.pageDividerInverse,
+            thickness: Spacing.s1_5,
+          ),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s5)),
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: Spacing.small,
+              horizontal: Spacing.s4,
             ),
             child: Text(
-              t.space.subscribedCommunities.toUpperCase(),
-              style: Typo.small.copyWith(
+              t.space.subscribedCommunities,
+              style: appTextTheme.lg.copyWith(
                 fontWeight: FontWeight.w600,
-                color: colorScheme.onPrimary,
-                letterSpacing: 1,
+                color: appColors.textPrimary,
               ),
             ),
           ),
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: Spacing.small,
+            height: Spacing.s4,
           ),
         ),
         BlocBuilder<ListSpacesBloc, ListSpacesState>(
@@ -173,6 +157,7 @@ class SpaceListingView extends StatelessWidget {
                   spaces: spaces,
                   emptyTitle: t.space.noSubscribedCommunities,
                   emptyDescription: t.space.noSubscribedCommunitiesDescription,
+                  layout: SpaceListItemLayout.list,
                 );
               },
               failure: (failure) => SliverToBoxAdapter(
@@ -209,19 +194,20 @@ class _SpacesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     if (spaces.isEmpty) {
       return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+        padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
         sliver: SliverToBoxAdapter(
           child: Container(
             padding: EdgeInsets.all(14.w),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(
                 LemonRadius.small,
               ),
               border: Border.all(
-                color: colorScheme.outline,
+                color: appColors.cardBorder,
               ),
             ),
             child: Row(
@@ -230,7 +216,7 @@ class _SpacesList extends StatelessWidget {
                   width: 40.w,
                   height: 40.w,
                 ),
-                SizedBox(width: Spacing.small),
+                SizedBox(width: Spacing.s4),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +246,7 @@ class _SpacesList extends StatelessWidget {
 
     if (layout == SpaceListItemLayout.grid) {
       return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+        padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
         sliver: SliverGrid.builder(
           itemCount: spaces.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -286,7 +272,7 @@ class _SpacesList extends StatelessWidget {
     }
 
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: Spacing.small),
+      padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
       sliver: SliverList.separated(
         itemCount: spaces.length,
         itemBuilder: (context, index) {
@@ -301,7 +287,7 @@ class _SpacesList extends StatelessWidget {
             layout: layout,
           );
         },
-        separatorBuilder: (context, index) => SizedBox(height: Spacing.xSmall),
+        separatorBuilder: (context, index) => SizedBox(height: Spacing.s3),
       ),
     );
   }
