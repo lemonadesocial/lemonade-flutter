@@ -190,7 +190,7 @@ class _HomeViewState extends State<_HomeView>
                     ),
                     sliver: SliverList.separated(
                       separatorBuilder: (context, index) => SizedBox(
-                        height: Spacing.large,
+                        height: Spacing.s4,
                       ),
                       itemCount: 2,
                       itemBuilder: (context, index) {

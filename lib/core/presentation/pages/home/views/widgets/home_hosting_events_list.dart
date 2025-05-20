@@ -17,7 +17,6 @@ class HomeHostingEventsList extends StatelessWidget {
     final t = Translations.of(context);
     final state = context.watch<UpcomingHostingEventsBloc>().state;
     final appTextTheme = Theme.of(context).appTextTheme;
-    final appColors = Theme.of(context).appColors;
 
     return state.maybeWhen(
       fetched: (events) {
@@ -32,12 +31,9 @@ class HomeHostingEventsList extends StatelessWidget {
           children: [
             Text(
               t.event.hosting.capitalize(),
-              style: appTextTheme.lg.copyWith(
-                color: appColors.textPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: appTextTheme.lg,
             ),
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.s4),
             ...events.take(2).map(
                   (event) => Padding(
                     padding: EdgeInsets.only(bottom: Spacing.xSmall),
@@ -45,11 +41,8 @@ class HomeHostingEventsList extends StatelessWidget {
                   ),
                 ),
             if (events.length > 2)
-              Padding(
-                padding: EdgeInsets.only(top: Spacing.xSmall),
-                child: ViewMoreEventsCard(
-                  moreEventsCount: events.length - 2,
-                ),
+              ViewMoreEventsCard(
+                moreEventsCount: events.length - 2,
               ),
           ],
         );
