@@ -157,6 +157,7 @@ class SpaceListingView extends StatelessWidget {
                   spaces: spaces,
                   emptyTitle: t.space.noSubscribedCommunities,
                   emptyDescription: t.space.noSubscribedCommunitiesDescription,
+                  layout: SpaceListItemLayout.list,
                 );
               },
               failure: (failure) => SliverToBoxAdapter(
