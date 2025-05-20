@@ -70,6 +70,7 @@ class SpaceInfo extends StatelessWidget {
               space.website != null) ...[
             SizedBox(height: Spacing.s3),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <(String?, String, SvgGenImage)>[
                 (space.handleInstagram, 'instagram', Assets.icons.icInstagram),
                 (space.handleTwitter, 'twitter', Assets.icons.icXLine),

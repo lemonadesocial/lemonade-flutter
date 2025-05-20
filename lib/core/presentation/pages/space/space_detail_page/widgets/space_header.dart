@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/core/utils/dice_bear_utils.dart';
 
 final _avatarSize = 77.w;
 final transformHeight = _avatarSize / 2 + Spacing.s4 / 2;
@@ -43,7 +44,9 @@ class SpaceHeader extends StatelessWidget {
                     child: LemonNetworkImage(
                       width: double.infinity,
                       height: 98.w,
-                      imageUrl: space.imageCover?.url ?? '',
+                      imageUrl: space.imageCover?.url?.isNotEmpty == true
+                          ? space.imageCover?.url ?? ''
+                          : DiceBearUtils.getImageUrl(id: space.id ?? ''),
                       fit: BoxFit.cover,
                       placeholder: ImagePlaceholder.eventCard(),
                       borderRadius: BorderRadius.circular(LemonRadius.md),
@@ -66,8 +69,7 @@ class SpaceHeader extends StatelessWidget {
                         width: _avatarSize,
                         height: _avatarSize,
                         decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(LemonRadius.small),
+                          borderRadius: BorderRadius.circular(LemonRadius.md),
                           border: Border.all(
                             color: appColors.cardBorder,
                             width: 1.w,
@@ -78,10 +80,11 @@ class SpaceHeader extends StatelessWidget {
                           fit: BoxFit.cover,
                           width: _avatarSize,
                           height: _avatarSize,
-                          borderRadius:
-                              BorderRadius.circular(LemonRadius.small),
-                          placeholder: ImagePlaceholder.spaceThumbnail(
-                            iconColor: appColors.textTertiary,
+                          borderRadius: BorderRadius.circular(LemonRadius.md),
+                          placeholder: ImagePlaceholder.dicebearThumbnail(
+                            seed: space.id ?? '',
+                            size: _avatarSize,
+                            radius: BorderRadius.circular(LemonRadius.md),
                           ),
                         ),
                       ),

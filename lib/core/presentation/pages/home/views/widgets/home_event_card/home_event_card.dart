@@ -6,7 +6,6 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';

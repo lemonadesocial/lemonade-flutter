@@ -1,5 +1,6 @@
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -19,6 +20,7 @@ class SubSpacesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final paddingBottom = MediaQuery.of(context).padding.bottom;
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
@@ -31,9 +33,15 @@ class SubSpacesList extends StatelessWidget {
             childAspectRatio: 1,
             mainAxisSpacing: Spacing.s3,
             crossAxisSpacing: Spacing.s3,
-            children:
-                subSpaces.map((space) => SubSpaceItem(space: space)).toList(),
+            children: subSpaces
+                .map(
+                  (space) => SubSpaceItem(space: space),
+                )
+                .toList(),
           ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: paddingBottom),
         ),
       ],
     );
@@ -58,56 +66,55 @@ class SubSpaceItem extends StatelessWidget {
           ),
         );
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(LemonRadius.md),
-                child: SoftEdgeBlur(
-                  edges: [
-                    EdgeBlur(
-                      type: EdgeType.bottomEdge,
-                      size: 52.w,
-                      sigma: 50,
-                      tintColor: context.theme.appColors.pageOverlaySecondary
-                          .withOpacity(0.2),
-                      controlPoints: [
-                        ControlPoint(
-                          position: 0.5,
-                          type: ControlPointType.visible,
-                        ),
-                        ControlPoint(
-                          position: 1,
-                          type: ControlPointType.transparent,
-                        ),
-                      ],
-                    ),
-                  ],
-                  child: LemonNetworkImage(
-                    imageUrl: space.imageAvatar?.url ?? '',
-                    borderRadius: BorderRadius.circular(
-                      LemonRadius.md,
-                    ),
-                    border: Border.all(
-                      color: context.theme.appColors.cardBorder,
-                      width: 1,
-                    ),
+          SoftEdgeBlur(
+            edges: [
+              EdgeBlur(
+                type: EdgeType.bottomEdge,
+                size: 52.w,
+                sigma: 50,
+                tintColor: context.theme.appColors.pageOverlaySecondary
+                    .withOpacity(0.2),
+                controlPoints: [
+                  ControlPoint(
+                    position: 0.5,
+                    type: ControlPointType.visible,
                   ),
-                ),
-              ),
-              Positioned(
-                bottom: Spacing.s2,
-                left: Spacing.s3,
-                child: Center(
-                  child: Text(
-                    space.title ?? '',
-                    style: context.theme.appTextTheme.sm,
+                  ControlPoint(
+                    position: 1,
+                    type: ControlPointType.transparent,
                   ),
-                ),
+                ],
               ),
             ],
+            child: LemonNetworkImage(
+              imageUrl: space.imageAvatar?.url ?? '',
+              borderRadius: BorderRadius.circular(
+                LemonRadius.md,
+              ),
+              border: Border.all(
+                color: context.theme.appColors.cardBorder,
+                width: 1,
+              ),
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              placeholder: ImagePlaceholder.dicebearThumbnail(
+                seed: space.id ?? '',
+                size: double.infinity,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: Spacing.s2,
+            left: Spacing.s3,
+            child: Center(
+              child: Text(
+                space.title ?? '',
+                style: context.theme.appTextTheme.sm,
+              ),
+            ),
           ),
         ],
       ),

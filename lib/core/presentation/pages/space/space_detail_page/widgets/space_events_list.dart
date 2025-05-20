@@ -1,7 +1,11 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
+import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_events_bloc/get_space_events_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/space/entities/space_tag.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_admin_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_events_header.dart';
 import 'package:app/core/presentation/pages/space/widgets/space_event_card/space_event_card.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
@@ -58,8 +62,51 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final user = context.watch<AuthBloc>().state.maybeWhen(
+          orElse: () => null,
+          authenticated: (user) => user,
+        );
+    final isAdminOrCreator = widget.space.isAdmin(userId: user?.userId ?? '') ||
+        widget.space.isCreator(userId: user?.userId ?? '');
+
     return MultiSliver(
       children: [
+        if (isAdminOrCreator) ...[
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: Spacing.s5,
+            ),
+          ),
+          BlocBuilder<GetSpaceEventRequestsBloc, GetSpaceEventRequestsState>(
+            builder: (context, state) {
+              final requests = state.maybeWhen(
+                orElse: () => <SpaceEventRequest>[],
+                success: (response) => response.records
+                    .where(
+                      (request) =>
+                          request.state == Enum$SpaceEventRequestState.pending,
+                    )
+                    .toList(),
+              );
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.s4,
+                  ),
+                  child: SpaceEventRequestsAdminList(
+                    spaceId: widget.space.id ?? '',
+                    requests: requests,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.s4,
+          ),
+        ),
         SliverToBoxAdapter(
           child: SpaceEventsHeader(
             space: widget.space,
