@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/data/space/dtos/space_dto.dart';
 import 'package:app/core/domain/space/entities/space.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -98,6 +99,15 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                                 space.getSpaceImageUrl(),
                                 fit: BoxFit.cover,
                                 alignment: Alignment.bottomCenter,
+                                errorBuilder: (
+                                  BuildContext context,
+                                  Object exception,
+                                  StackTrace? stackTrace,
+                                ) {
+                                  return ImagePlaceholder.spaceThumbnail(
+                                    iconColor: appColors.textSecondary,
+                                  );
+                                },
                               ),
                             ),
                             // Blur and gradient overlay
@@ -130,6 +140,16 @@ class DiscoverFeaturedSpacesView extends StatelessWidget {
                                         space.getSpaceImageUrl(),
                                         fit: BoxFit.cover,
                                         alignment: Alignment.bottomCenter,
+                                        errorBuilder: (
+                                          BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace,
+                                        ) {
+                                          return ImagePlaceholder
+                                              .spaceThumbnail(
+                                            iconColor: appColors.textSecondary,
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),

@@ -9,7 +9,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'dart:ui'; // Add this import for ImageFilter
+import 'dart:ui';
 
 enum SpaceListItemLayout {
   list,
@@ -76,6 +76,15 @@ class _SpaceListItemState extends State<SpaceListItem> {
               widget.space.getSpaceImageUrl(),
               fit: BoxFit.cover,
               alignment: Alignment.center,
+              errorBuilder: (
+                BuildContext context,
+                Object exception,
+                StackTrace? stackTrace,
+              ) {
+                return ImagePlaceholder.spaceThumbnail(
+                  iconColor: appColors.textSecondary,
+                );
+              },
             ),
           ),
           // Blur and gradient overlay
@@ -108,6 +117,15 @@ class _SpaceListItemState extends State<SpaceListItem> {
                       widget.space.getSpaceImageUrl(),
                       fit: BoxFit.cover,
                       alignment: Alignment.center,
+                      errorBuilder: (
+                        BuildContext context,
+                        Object exception,
+                        StackTrace? stackTrace,
+                      ) {
+                        return ImagePlaceholder.spaceThumbnail(
+                          iconColor: appColors.textSecondary,
+                        );
+                      },
                     ),
                   ),
                 ),
