@@ -100,7 +100,8 @@
         "sign": "Sign",
         "verifyWallet": "Verify wallet",
         "getStarted": "Get Started",
-        "explore": "Explore"
+        "explore": "Explore",
+        "discover": "Discover"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

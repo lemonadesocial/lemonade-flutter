@@ -3,14 +3,15 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +34,12 @@ class HomeEventCard extends StatelessWidget {
         );
     final isAttending = EventUtils.isAttending(event: event, userId: userId);
     final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
+    final eventAddress = EventUtils.getAddress(
+      event: event,
+      showFullAddress: false,
+      isAttending: isAttending,
+      isOwnEvent: isOwnEvent,
+    );
 
     return InkWell(
       onTap: () {
@@ -47,22 +54,23 @@ class HomeEventCard extends StatelessWidget {
           color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(LemonRadius.md),
+            side: BorderSide(
+              width: 1.w,
+              color: appColors.cardBorder,
+            ),
           ),
         ),
-        padding: EdgeInsets.all(Spacing.s3),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: event.address == null ? 94.w : null,
+        child: Padding(
+          padding: EdgeInsets.all(Spacing.s3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: event.address == null
-                          ? MainAxisAlignment.center
-                          : MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
@@ -86,106 +94,88 @@ class HomeEventCard extends StatelessWidget {
                         SizedBox(height: Spacing.s1),
                         Text(
                           event.title ?? '',
-                          style: appTextTheme.md.copyWith(
-                            color: appColors.textPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: appTextTheme.md,
                         ),
                         SizedBox(height: Spacing.s1),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+                        Row(
                           children: [
-                            // Date row
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_today_outlined,
-                                  size: Spacing.s4,
-                                  color: appColors.textTertiary,
+                            ThemeSvgIcon(
+                              color: appColors.textTertiary,
+                              builder: (filter) =>
+                                  Assets.icons.icAccessTimeOutline.svg(
+                                width: Sizing.s4,
+                                height: Sizing.s4,
+                                colorFilter: filter,
+                              ),
+                            ),
+                            SizedBox(width: Spacing.s2),
+                            Text(
+                              DateFormatUtils.dateWithTimezone(
+                                dateTime: event.start ?? DateTime.now(),
+                                timezone: event.timezone ?? '',
+                                pattern: 'EEE, d MMM, h:mm a',
+                                withTimezoneOffset: false,
+                              ),
+                              style: appTextTheme.sm.copyWith(
+                                color: appColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (eventAddress.isNotEmpty == true) ...[
+                          SizedBox(height: Spacing.s1),
+                          // Location row
+                          Row(
+                            children: [
+                              ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (filter) =>
+                                    Assets.icons.icLocationPinOutline.svg(
+                                  width: Sizing.s4,
+                                  height: Sizing.s4,
+                                  colorFilter: filter,
                                 ),
-                                SizedBox(width: Spacing.s2),
-                                Text(
-                                  DateFormatUtils.dateWithTimezone(
-                                    dateTime: event.start ?? DateTime.now(),
-                                    timezone: event.timezone ?? '',
-                                    pattern: 'EEE, d MMM, h:mm a',
-                                    withTimezoneOffset: false,
-                                  ),
+                              ),
+                              SizedBox(width: Spacing.s2),
+                              Expanded(
+                                child: Text(
+                                  eventAddress,
                                   style: appTextTheme.sm.copyWith(
                                     color: appColors.textSecondary,
                                   ),
                                 ),
-                              ],
-                            ),
-                            if (event.address != null) ...[
-                              SizedBox(height: Spacing.s1),
-                              // Location row
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on_outlined,
-                                    size: Spacing.s4,
-                                    color: appColors.textTertiary,
-                                  ),
-                                  SizedBox(width: Spacing.s2),
-                                  Expanded(
-                                    child: Text(
-                                      EventUtils.getAddress(
-                                        event: event,
-                                        showFullAddress: false,
-                                        isAttending: isAttending,
-                                        isOwnEvent: isOwnEvent,
-                                      ),
-                                      style: appTextTheme.sm.copyWith(
-                                        color: appColors.textSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                ],
                               ),
                             ],
-                          ],
-                        ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
-                ),
-                SizedBox(width: Spacing.s3),
-                Container(
-                  width: 94.w,
-                  height: 94.w,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: LemonColor.white09,
-                      ),
-                      borderRadius: BorderRadius.circular(4.r),
+                  SizedBox(width: Spacing.s3),
+                  LemonNetworkImage(
+                    width: 94.w,
+                    height: 94.w,
+                    fit: BoxFit.cover,
+                    border: Border.all(
+                      color: appColors.cardBorder,
                     ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-                    child: CachedNetworkImage(
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => ImagePlaceholder.eventCard(),
-                      errorWidget: (_, __, ___) => ImagePlaceholder.eventCard(),
-                      imageUrl: ImageUtils.generateUrl(
-                        file: event.newNewPhotosExpanded?.firstOrNull,
-                        imageConfig: ImageConfig.eventPhoto,
-                      ),
+                    borderRadius: BorderRadius.circular(6.r),
+                    imageUrl: ImageUtils.generateUrl(
+                      file: event.newNewPhotosExpanded?.firstOrNull,
+                      imageConfig: ImageConfig.eventPhoto,
                     ),
+                    placeholder: ImagePlaceholder.eventCard(),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: Spacing.s2),
-            HomeEventCardFooter(
-              status: isAttending
-                  ? EventAttendanceStatus.going
-                  : EventAttendanceStatus.hosting,
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: Spacing.s2),
+              HomeEventCardFooter(
+                status: isAttending
+                    ? EventAttendanceStatus.going
+                    : EventAttendanceStatus.hosting,
+              ),
+            ],
+          ),
         ),
       ),
     );

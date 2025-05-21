@@ -10,7 +10,8 @@ enum GradientButtonMode {
   defaultMode,
   lavenderMode,
   lavenderDisableMode,
-  light;
+  light,
+  tertiary;
 
   @Deprecated("")
   List<Color> get gradients {
@@ -109,6 +110,12 @@ class LinearGradientButton extends StatelessWidget {
           appColors.buttonSecondaryBg,
         ];
         textColor = appColors.buttonSecondary;
+      case GradientButtonMode.tertiary:
+        gradients = [
+          appColors.buttonTertiaryBg,
+          appColors.buttonTertiaryBg,
+        ];
+        textColor = appColors.buttonTertiary;
     }
 
     return Container(
@@ -231,6 +238,29 @@ class LinearGradientButton extends StatelessWidget {
         loadingWhen: loadingWhen ?? false,
         textStyle: textStyle,
         mode: GradientButtonMode.light,
+        height: height ?? Sizing.large,
+        radius: radius ?? BorderRadius.circular(LemonRadius.md),
+        leading: leading,
+        trailing: trailing,
+      );
+
+  factory LinearGradientButton.tertiaryButton({
+    required String label,
+    Function()? onTap,
+    bool? loadingWhen,
+    Color? textColor,
+    Widget? leading,
+    Widget? trailing,
+    TextStyle? textStyle,
+    double? height,
+    BorderRadius? radius,
+  }) =>
+      LinearGradientButton(
+        onTap: onTap,
+        label: label,
+        loadingWhen: loadingWhen ?? false,
+        textStyle: textStyle,
+        mode: GradientButtonMode.tertiary,
         height: height ?? Sizing.large,
         radius: radius ?? BorderRadius.circular(LemonRadius.md),
         leading: leading,
