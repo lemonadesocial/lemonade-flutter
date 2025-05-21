@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/application/space/get_space_event_requests_bloc/get_space_event_requests_bloc.dart';
@@ -15,7 +16,6 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -68,6 +68,7 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
         );
     final isAdminOrCreator = widget.space.isAdmin(userId: user?.userId ?? '') ||
         widget.space.isCreator(userId: user?.userId ?? '');
+    final appColors = context.theme.appColors;
 
     return MultiSliver(
       children: [
@@ -104,7 +105,19 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
         ],
         SliverToBoxAdapter(
           child: SizedBox(
-            height: Spacing.s4,
+            height: Spacing.s5,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: Spacing.s1_5,
+            thickness: Spacing.s1_5,
+            color: appColors.pageDividerInverse,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.s5,
           ),
         ),
         SliverToBoxAdapter(

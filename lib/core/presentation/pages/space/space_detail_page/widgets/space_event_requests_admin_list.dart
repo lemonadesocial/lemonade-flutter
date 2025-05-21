@@ -143,9 +143,10 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          t.space.pendingApprovalEvent,
-          style: appText.md,
+          '${requests.length.toString()} ${t.space.pendingApprovalEvent}',
+          style: appText.lg,
         ),
+        SizedBox(height: 2.w),
         Text(
           t.space.eventsAreVisibleOnThePageAfterApproval,
           style: appText.sm.copyWith(
@@ -175,43 +176,33 @@ class SpaceEventRequestsAdminList extends StatelessWidget {
           onTap: () => _viewManagePage(context),
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: Spacing.s4,
-              vertical: Spacing.s3,
+              horizontal: Spacing.s3,
+              vertical: Spacing.s2_5,
             ),
             decoration: BoxDecoration(
-              color: appColors.cardBg,
-              borderRadius: BorderRadius.circular(LemonRadius.small),
+              color: appColors.pageBg,
+              borderRadius: BorderRadius.circular(LemonRadius.md),
               border: Border.all(
-                color: appColors.cardBorder,
+                color: appColors.pageDivider,
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  t.common.actions.viewAll,
-                  style: appText.sm.copyWith(
+                  '${t.common.actions.viewAll} ${requests.length.toString()}',
+                  style: appText.md.copyWith(
                     color: appColors.textTertiary,
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      requests.length.toString(),
-                      style: appText.sm.copyWith(
-                        color: appColors.textTertiary,
-                      ),
-                    ),
-                    SizedBox(width: Spacing.extraSmall),
-                    ThemeSvgIcon(
-                      color: appColors.textTertiary,
-                      builder: (filter) => Assets.icons.icArrowRight.svg(
-                        colorFilter: filter,
-                        width: Sizing.s5,
-                        height: Sizing.s5,
-                      ),
-                    ),
-                  ],
+                SizedBox(width: Spacing.s1),
+                ThemeSvgIcon(
+                  color: appColors.textQuaternary,
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
+                    colorFilter: filter,
+                    width: Sizing.s5,
+                    height: Sizing.s5,
+                  ),
                 ),
               ],
             ),

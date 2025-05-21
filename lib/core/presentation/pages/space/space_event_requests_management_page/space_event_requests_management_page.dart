@@ -2,10 +2,10 @@ import 'package:app/core/presentation/pages/space/space_event_requests_managemen
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/typo.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class SpaceEventRequestsManagementPage extends StatefulWidget {
@@ -32,23 +32,30 @@ class _SpaceEventRequestsManagementPageState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Scaffold(
-      appBar: LemonAppBar(title: t.space.submittedEvents),
+      backgroundColor: appColors.pageBg,
+      appBar: LemonAppBar(
+        title: t.space.submittedEvents,
+        backButtonColor: appColors.textTertiary,
+        backgroundColor: appColors.pageBg,
+      ),
       body: Column(
         children: [
           TabBar(
             controller: controller,
-            labelStyle: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w500,
+            labelStyle: appText.md.copyWith(
+              color: appColors.textPrimary,
             ),
-            unselectedLabelStyle: Typo.medium.copyWith(
-              color: colorScheme.onPrimary.withOpacity(0.36),
-              fontWeight: FontWeight.w500,
+            unselectedLabelStyle: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
-            indicatorColor: LemonColor.paleViolet,
+            indicatorColor: appColors.textAccent,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorPadding: EdgeInsets.symmetric(horizontal: Spacing.s4),
             tabs: [
               Tab(text: t.common.pending),
               Tab(text: t.common.approved),
