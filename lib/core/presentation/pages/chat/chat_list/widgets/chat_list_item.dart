@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/pages/chat/chat_list/widgets/unseen_message_count_widget.dart';
 import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -6,7 +7,6 @@ import 'package:app/core/utils/chat/date_time_extension.dart';
 import 'package:app/core/utils/chat/room_status_extension.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -65,7 +65,9 @@ class ChatListItem extends StatelessWidget {
 
   Widget buildSubtitle(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final typingText = room.getLocalizedTypingText(context);
     final ownMessage =
         room.lastEvent?.senderId == getIt<MatrixService>().client.userID;
@@ -82,7 +84,7 @@ class ChatListItem extends StatelessWidget {
         padding: EdgeInsets.only(top: 2.h),
         child: Text(
           typingText,
-          style: Typo.small.copyWith(color: colorScheme.onSecondary),
+          style: appText.sm.copyWith(color: appColors.textTertiary),
           maxLines: 1,
           softWrap: false,
         ),
@@ -117,9 +119,9 @@ class ChatListItem extends StatelessWidget {
           softWrap: false,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: appText.sm.copyWith(
             fontWeight: unread ? FontWeight.w600 : null,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            color: appColors.textTertiary,
             decoration: room.lastEvent?.redacted ?? false
                 ? TextDecoration.lineThrough
                 : null,
@@ -132,8 +134,10 @@ class ChatListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final color = room.isUnread ? colorScheme.onPrimary : colorScheme.onSurface;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+    final color =
+        room.isUnread ? appColors.textPrimary : appColors.textSecondary;
 
     return InkWell(
       onTap: () => clickAction(context),
@@ -155,10 +159,9 @@ class ChatListItem extends StatelessWidget {
                 children: [
                   Text(
                     roomName,
-                    style: Typo.medium.copyWith(
+                    style: appText.md.copyWith(
                       color: color,
-                      fontWeight:
-                          room.isUnread ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: room.isUnread ? FontWeight.w600 : null,
                     ),
                   ),
                   buildSubtitle(context),
@@ -173,7 +176,7 @@ class ChatListItem extends StatelessWidget {
               children: [
                 Text(
                   room.timeCreated.localizedTimeShort(context),
-                  style: Typo.small.copyWith(color: LemonColor.paleViolet),
+                  style: appText.sm.copyWith(color: appColors.textAccent),
                 ),
                 SizedBox(
                   height: 4.h,

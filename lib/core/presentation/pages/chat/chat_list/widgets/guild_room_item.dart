@@ -3,9 +3,9 @@ import 'package:app/core/presentation/widgets/chat/matrix_avatar.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuildRoomItem extends StatelessWidget {
   const GuildRoomItem({
@@ -18,6 +18,8 @@ class GuildRoomItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return InkWell(
       onTap: () {
         if (onTap != null) {
@@ -36,7 +38,7 @@ class GuildRoomItem extends StatelessWidget {
               mxContent: null,
               size: 42.w,
               name: guildRoom.title ?? '',
-              fontSize: Typo.medium.fontSize!,
+              fontSize: appText.md.fontSize!,
             ),
             SizedBox(
               width: Spacing.xSmall,
@@ -47,6 +49,9 @@ class GuildRoomItem extends StatelessWidget {
                 children: [
                   Text(
                     guildRoom.title ?? '',
+                    style: appText.md.copyWith(
+                      color: appColors.textSecondary,
+                    ),
                   ),
                 ],
               ),

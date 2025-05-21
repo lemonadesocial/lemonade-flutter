@@ -72,10 +72,7 @@ class SpaceListingView extends StatelessWidget {
             ),
             child: Text(
               t.space.myCommunities,
-              style: appTextTheme.lg.copyWith(
-                fontWeight: FontWeight.w600,
-                color: appColors.textPrimary,
-              ),
+              style: appTextTheme.lg,
             ),
           ),
         ),
@@ -132,10 +129,7 @@ class SpaceListingView extends StatelessWidget {
             ),
             child: Text(
               t.space.subscribedCommunities,
-              style: appTextTheme.lg.copyWith(
-                fontWeight: FontWeight.w600,
-                color: appColors.textPrimary,
-              ),
+              style: appTextTheme.lg,
             ),
           ),
         ),

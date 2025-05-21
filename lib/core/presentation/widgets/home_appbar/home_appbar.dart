@@ -5,12 +5,13 @@ import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -33,15 +34,15 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return AppBar(
       leadingWidth: 210.w,
-      backgroundColor: widget.backgroundColor ?? colorScheme.background,
+      backgroundColor: widget.backgroundColor ?? appColors.pageBg,
       leading: _Leading(title: widget.title),
       actions: widget.actions ??
           [
             Padding(
-              padding: EdgeInsets.only(right: Spacing.xSmall),
+              padding: EdgeInsets.only(right: Spacing.s4),
               child: const HomeAppBarDefaultMoreActionsWidget(),
             ),
           ],
@@ -61,7 +62,8 @@ class _Leading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (authSession) => authSession,
@@ -81,27 +83,28 @@ class _Leading extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: Spacing.small),
+        padding: EdgeInsets.only(left: Spacing.s4),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             LemonNetworkImage(
               imageUrl: AvatarUtils.getAvatarUrl(user: loggedInUser),
               placeholder: Assets.icons.icPerson.svg(
-                width: 30.w,
-                height: 30.w,
+                width: Sizing.s7,
+                height: Sizing.s7,
               ),
-              width: 30.w,
-              height: 30.w,
-              borderRadius: BorderRadius.circular(30.w),
+              width: Sizing.s7,
+              height: Sizing.s7,
+              borderRadius: BorderRadius.circular(LemonRadius.full),
+              border: Border.all(
+                color: appColors.cardBorder,
+                width: 1.w,
+              ),
             ),
-            SizedBox(width: Spacing.xSmall),
+            SizedBox(width: Spacing.s3),
             Text(
               title,
-              style: Typo.extraMedium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: appText.lg,
             ),
           ],
         ),

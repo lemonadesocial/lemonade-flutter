@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
@@ -8,6 +9,8 @@ class StateMessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: Spacing.extraSmall,
@@ -20,8 +23,8 @@ class StateMessageItem extends StatelessWidget {
             vertical: Spacing.extraSmall,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.circular(LemonRadius.small),
+            color: appColors.pageBg,
+            borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
           ),
           child: FutureBuilder<String>(
             future: event.calcLocalizedBody(const MatrixDefaultLocalizations()),
@@ -32,8 +35,8 @@ class StateMessageItem extends StatelessWidget {
                       const MatrixDefaultLocalizations(),
                     ),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondary,
+                style: appText.sm.copyWith(
+                  color: appColors.textTertiary,
                   decoration:
                       event.redacted ? TextDecoration.lineThrough : null,
                 ),

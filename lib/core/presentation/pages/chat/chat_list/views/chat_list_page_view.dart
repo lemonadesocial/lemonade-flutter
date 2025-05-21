@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/chat/chat_list_bloc/chat_list_bloc.dart';
 import 'package:app/core/application/chat/chat_space_bloc/chat_space_bloc.dart';
 import 'package:app/core/application/chat/get_guild_rooms_bloc/get_guild_rooms_bloc.dart';
@@ -10,7 +11,6 @@ import 'package:app/core/presentation/widgets/chat/spaces_drawer.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/stream_extension.dart';
 import 'package:app/core/utils/string_utils.dart';
@@ -20,7 +20,6 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,7 +62,9 @@ class _ChatListPageViewState extends State<ChatListPageView>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Scaffold(
       appBar: HomeAppBar(
         title: t.chat.chat,
@@ -84,20 +85,16 @@ class _ChatListPageViewState extends State<ChatListPageView>
                               size: 27.w,
                               mxContent: chatSpaceState.activeSpace?.avatar,
                               name: chatSpaceState.activeSpace?.name,
-                              fontSize: Typo.small.fontSize!,
+                              fontSize: appText.sm.fontSize!,
                             )
                           : Container(
                               width: 27.w,
                               height: 27.w,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: appColors.pageBgInverse,
                                 borderRadius: BorderRadius.circular(5.r),
                               ),
-                              child: ThemeSvgIcon(
-                                color: colorScheme.onSurface,
-                                builder: (filter) =>
-                                    Assets.icons.icLemonadeWhite.svg(),
-                              ),
+                              child: Assets.icons.icLemonadeWhite.svg(),
                             ),
                     ),
                   ),
@@ -108,7 +105,7 @@ class _ChatListPageViewState extends State<ChatListPageView>
         ],
       ),
       endDrawer: const SpacesDrawer(),
-      backgroundColor: colorScheme.primary,
+      backgroundColor: appColors.pageBg,
       body: SafeArea(
         child: StreamBuilder(
           stream: getIt<MatrixService>()
@@ -130,15 +127,11 @@ class _ChatListPageViewState extends State<ChatListPageView>
                       });
                     },
                     controller: _tabController,
-                    labelStyle: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w500,
+                    labelStyle: appText.md,
+                    unselectedLabelStyle: appText.md.copyWith(
+                      color: appColors.textTertiary,
                     ),
-                    unselectedLabelStyle: Typo.medium.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    indicatorColor: LemonColor.paleViolet,
+                    indicatorColor: appColors.textAccent,
                     tabs: [
                       Tab(text: StringUtils.capitalize(t.chat.messages)),
                       Tab(text: StringUtils.capitalize(t.chat.channels)),

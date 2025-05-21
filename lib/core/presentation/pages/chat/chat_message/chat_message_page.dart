@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/view/chat_message_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
@@ -26,7 +27,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final matrixClient = getIt<MatrixService>().client;
 
     return FutureBuilder(
@@ -34,16 +35,20 @@ class ChatPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            backgroundColor: colorScheme.background,
-            appBar: const LemonAppBar(),
+            backgroundColor: appColors.pageBg,
+            appBar: LemonAppBar(
+              backgroundColor: appColors.pageBg,
+            ),
             body: Loading.defaultLoading(context),
           );
         }
         final room = matrixClient.getRoomById(roomId);
         if (room == null) {
           return Scaffold(
-            backgroundColor: colorScheme.background,
-            appBar: const LemonAppBar(),
+            backgroundColor: appColors.pageBg,
+            appBar: LemonAppBar(
+              backgroundColor: appColors.pageBg,
+            ),
             body: Loading.defaultLoading(context),
           );
         }

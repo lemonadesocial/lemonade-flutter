@@ -3,9 +3,9 @@ import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/h
 import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HomeMyEventsList extends StatelessWidget {
   const HomeMyEventsList({
@@ -14,8 +14,8 @@ class HomeMyEventsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appText = context.theme.appTextTheme;
     final state = context.watch<UpcomingAttendingEventsBloc>().state;
 
     return state.maybeWhen(
@@ -30,18 +30,22 @@ class HomeMyEventsList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              t.event.myEvents.toUpperCase(),
-              style: Typo.small.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              t.event.myEvents,
+              style: appText.lg,
             ),
-            SizedBox(height: Spacing.small),
-            ...events.map(
-              (event) => Padding(
-                padding: EdgeInsets.only(bottom: Spacing.xSmall),
-                child: HomeEventCard(event: event),
+            SizedBox(height: Spacing.s4),
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => SizedBox(
+                height: Spacing.xSmall,
               ),
+              itemCount: events.length,
+              itemBuilder: (context, index) {
+                final event = events[index];
+                return HomeEventCard(event: event);
+              },
             ),
           ],
         );

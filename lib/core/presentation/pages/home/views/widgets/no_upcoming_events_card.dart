@@ -1,14 +1,14 @@
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/typo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 enum NoUpcomingEventsCardType {
   hosting,
@@ -48,18 +48,19 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.medium),
+        color: appColors.cardBg,
+        borderRadius: BorderRadius.circular(LemonRadius.md),
         border: Border.all(
           width: 1,
-          color: colorScheme.outlineVariant,
+          color: appColors.cardBorder,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(14.w),
+        padding: EdgeInsets.all(Spacing.s3),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,29 +78,21 @@ class _NoUpcomingEventsCardState extends State<NoUpcomingEventsCard> {
                 children: [
                   Text(
                     title,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: appText.md,
                   ),
                   SizedBox(height: 2.w),
                   Text(
                     description,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                      fontWeight: FontWeight.w400,
+                    style: appText.sm.copyWith(
+                      color: appColors.textTertiary,
                     ),
                   ),
                   SizedBox(height: Spacing.xSmall),
                   LinearGradientButton.secondaryButton(
                     mode: GradientButtonMode.light,
                     label: buttonLabel,
-                    height: 38.w,
-                    radius: BorderRadius.circular(LemonRadius.small),
-                    textStyle: Typo.small.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    height: Sizing.s9,
+                    radius: BorderRadius.circular(LemonRadius.sm),
                     onTap: () {
                       if (widget.type == NoUpcomingEventsCardType.hosting) {
                         AutoRouter.of(context).push(

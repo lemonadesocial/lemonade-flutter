@@ -18,7 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:app/core/utils/debouncer.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -90,7 +89,6 @@ class _HomeViewState extends State<_HomeView>
   EventTimeFilter? eventTimeFilter;
   bool _isRefreshing = false;
   final debouncer = Debouncer(milliseconds: 300);
-  final refreshController = RefreshController();
 
   @override
   void initState() {
@@ -164,14 +162,13 @@ class _HomeViewState extends State<_HomeView>
               .watch<UpcomingHostingEventsBloc>()
               .state
               .maybeWhen(loading: () => true, orElse: () => false);
-          return SmartRefresher(
-            controller: refreshController,
-            onRefresh: () {
+          return RefreshIndicator(
+            color: appColors.buttonTertiary,
+            backgroundColor: appColors.buttonTertiaryBg,
+            onRefresh: () async {
               _refreshAllEvents();
-              refreshController.refreshCompleted();
             },
             child: CustomScrollView(
-              physics: const BouncingScrollPhysics(),
               slivers: [
                 if (isLoadingUpcomingHostingEvents ||
                     isLoadingUpcomingAttendingEvents)
@@ -190,7 +187,7 @@ class _HomeViewState extends State<_HomeView>
                     ),
                     sliver: SliverList.separated(
                       separatorBuilder: (context, index) => SizedBox(
-                        height: Spacing.large,
+                        height: Spacing.s5,
                       ),
                       itemCount: 2,
                       itemBuilder: (context, index) {
@@ -202,6 +199,11 @@ class _HomeViewState extends State<_HomeView>
                       },
                     ),
                   ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: Spacing.s5,
+                  ),
+                ),
                 SliverToBoxAdapter(
                   child: Divider(
                     color: appColors.pageDividerInverse,

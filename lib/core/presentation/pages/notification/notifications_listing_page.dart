@@ -9,12 +9,12 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class NotificationPage extends StatelessWidget {
@@ -50,14 +50,16 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final authBloc = context.watch<AuthBloc>();
     final isLoggedIn = authBloc.state
         .maybeWhen(orElse: () => false, authenticated: (_) => true);
 
     if (!isLoggedIn) {
-      return const Scaffold(
-        body: Center(
+      return Scaffold(
+        backgroundColor: appColors.pageBg,
+        body: const Center(
           child: EmptyList(),
         ),
       );
@@ -68,7 +70,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
         title: t.notification.notifications,
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: Spacing.xSmall),
+            padding: EdgeInsets.only(right: Spacing.s4),
             child: InkWell(
               onTap: () {
                 context.read<AuthBloc>().state.maybeWhen(
@@ -79,16 +81,18 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
                     );
               },
               child: ThemeSvgIcon(
-                color: colorScheme.onPrimary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icChatBubble.svg(
                   colorFilter: filter,
+                  width: Sizing.s6,
+                  height: Sizing.s6,
                 ),
               ),
             ),
           ),
         ],
       ),
-      backgroundColor: colorScheme.primary,
+      backgroundColor: appColors.pageBg,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -96,15 +100,11 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
             indicatorPadding: EdgeInsets.symmetric(horizontal: Spacing.medium),
             indicatorSize: TabBarIndicatorSize.tab,
             controller: _tabController,
-            labelStyle: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w500,
+            labelStyle: appText.md,
+            unselectedLabelStyle: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
-            unselectedLabelStyle: Typo.medium.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w500,
-            ),
-            indicatorColor: LemonColor.paleViolet,
+            indicatorColor: appColors.textAccent,
             tabs: [
               Tab(text: t.notification.tabs.all),
               Tab(text: t.notification.tabs.events),

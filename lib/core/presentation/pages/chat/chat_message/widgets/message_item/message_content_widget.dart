@@ -1,7 +1,7 @@
+import 'package:app/app_theme/typography/app_typography.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/html_message_widget.dart';
 import 'package:app/core/presentation/pages/chat/chat_message/widgets/message_item/image_message_widget.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:matrix/matrix.dart';
@@ -106,7 +106,7 @@ class MessageContent extends StatelessWidget {
   FutureBuilder<String> _buildLinkifyMessage() {
     final bigEmotes =
         event.onlyEmotes && event.numberEmotes > 0 && event.numberEmotes <= 10;
-    final fontSize = Typo.medium.fontSize!;
+    final fontSize = AppTypography.md.fontSize!;
     return FutureBuilder<String>(
       future: event.calcLocalizedBody(
         const MatrixDefaultLocalizations(),
