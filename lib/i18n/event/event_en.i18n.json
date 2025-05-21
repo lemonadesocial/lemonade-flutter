@@ -9,11 +9,13 @@
         "other": "$n Events"
     },
     "all": "all",
+    "allEvents": "All Events",
     "attending": "attending",
     "attended": "attended",
     "created": "created",
     "hosting": "hosting",
     "upcoming": "upcoming",
+    "pending": "pending",
     "draft": "draft",
     "past": "past",
     "buy": "buy",

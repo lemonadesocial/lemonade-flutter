@@ -20,7 +20,7 @@ class ViewMoreEventsCard extends StatelessWidget {
     final appColors = context.theme.appColors;
     return InkWell(
       onTap: () {
-        AutoRouter.of(context).push(const MyEventsRoute());
+        AutoRouter.of(context).push(MyEventsRoute());
       },
       child: Container(
         padding: EdgeInsets.all(Spacing.s3),

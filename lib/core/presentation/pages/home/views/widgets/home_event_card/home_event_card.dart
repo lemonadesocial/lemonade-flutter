@@ -34,6 +34,9 @@ class HomeEventCard extends StatelessWidget {
         );
     final isAttending = EventUtils.isAttending(event: event, userId: userId);
     final isOwnEvent = EventUtils.isOwnEvent(event: event, userId: userId);
+    final isCohost = EventUtils.isCohost(event: event, userId: userId);
+    final canManageEvent = isOwnEvent || isCohost;
+
     final eventAddress = EventUtils.getAddress(
       event: event,
       showFullAddress: false,
@@ -170,9 +173,11 @@ class HomeEventCard extends StatelessWidget {
               ),
               SizedBox(height: Spacing.s2),
               HomeEventCardFooter(
-                status: isAttending
-                    ? EventAttendanceStatus.going
-                    : EventAttendanceStatus.hosting,
+                status: canManageEvent
+                    ? EventAttendanceStatus.hosting
+                    : isAttending
+                        ? EventAttendanceStatus.going
+                        : EventAttendanceStatus.pending,
               ),
             ],
           ),
