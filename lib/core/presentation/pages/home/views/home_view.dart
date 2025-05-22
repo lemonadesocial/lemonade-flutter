@@ -31,7 +31,12 @@ class HomeView extends StatelessWidget {
     final mySpacesBloc = ListSpacesBloc(
       spaceRepository: getIt<SpaceRepository>(),
       withMySpaces: true,
-      roles: [Enum$SpaceRole.admin, Enum$SpaceRole.creator],
+      roles: [
+        Enum$SpaceRole.admin,
+        Enum$SpaceRole.creator,
+        Enum$SpaceRole.subscriber,
+        Enum$SpaceRole.ambassador,
+      ],
     )..add(const ListSpacesEvent.fetch());
 
     final ambassadorSpacesBloc = ListSpacesBloc(

@@ -100,11 +100,13 @@ class _SpaceListItemState extends State<SpaceListItem> {
                         children: [
                           Text(
                             widget.space.title ?? '',
-                            style: appText.md,
+                            style: appText.md.copyWith(
+                              color: appColors.textPrimary,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 4.h),
+                          SizedBox(height: 2.h),
                           if (widget.featured)
                             Text(
                               widget.space.description ?? '',
@@ -142,11 +144,15 @@ class _SpaceListItemState extends State<SpaceListItem> {
                                 return Text(
                                   result.isLoading
                                       ? '--'
-                                      : t.event.upcomingEvents(
-                                          n: upcomingEvents.length,
-                                        ),
+                                      : upcomingEvents.isEmpty
+                                          ? t.event.noUpcomingEvents
+                                          : t.event.upcomingEvents(
+                                              n: upcomingEvents.length,
+                                            ),
                                   style: appText.sm.copyWith(
-                                    color: appColors.textTertiary,
+                                    color: upcomingEvents.isEmpty
+                                        ? appColors.textQuaternary
+                                        : appColors.textSecondary,
                                   ),
                                 );
                               },
