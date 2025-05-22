@@ -1,17 +1,13 @@
 import 'package:app/core/domain/space/entities/space_event_request.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SpaceEventRequestsList extends StatefulWidget {
   final List<SpaceEventRequest> requests;
@@ -79,22 +75,39 @@ class _SpaceEventRequestsListState extends State<SpaceEventRequestsList>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
-        borderRadius: BorderRadius.circular(LemonRadius.normal),
-        border: Border.all(color: colorScheme.outline),
+        color: appColors.cardBg,
+        borderRadius: BorderRadius.circular(
+          LemonRadius.md,
+        ),
+        border: Border.all(color: appColors.cardBorder),
       ),
       child: Column(
         children: [
           InkWell(
             onTap: _toggleExpanded,
-            child: Padding(
-              padding: EdgeInsets.all(Spacing.small),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              decoration: BoxDecoration(
+                color: appColors.cardBg,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(LemonRadius.md),
+                  topRight: Radius.circular(LemonRadius.md),
+                  bottomLeft: _isExpanded
+                      ? Radius.zero
+                      : Radius.circular(LemonRadius.md),
+                  bottomRight: _isExpanded
+                      ? Radius.zero
+                      : Radius.circular(LemonRadius.md),
+                ),
+              ),
+              padding: EdgeInsets.all(Spacing.s2_5),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Column(
@@ -103,17 +116,7 @@ class _SpaceEventRequestsListState extends State<SpaceEventRequestsList>
                         Text(
                           t.space
                               .pendingEventsApproval(n: widget.requests.length),
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(height: 4.w),
-                        Text(
-                          t.space.eventWillShowAfterApproval,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
+                          style: appText.md,
                         ),
                       ],
                     ),
@@ -121,11 +124,11 @@ class _SpaceEventRequestsListState extends State<SpaceEventRequestsList>
                   RotationTransition(
                     turns: _rotationAnimation,
                     child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icArrowDown.svg(
                         colorFilter: filter,
-                        width: 18.w,
-                        height: 18.w,
+                        width: Sizing.s5,
+                        height: Sizing.s5,
                       ),
                     ),
                   ),
@@ -142,7 +145,7 @@ class _SpaceEventRequestsListState extends State<SpaceEventRequestsList>
                 Divider(
                   height: 1,
                   thickness: 1,
-                  color: colorScheme.outline,
+                  color: appColors.pageDivider,
                 ),
                 // Animated List
                 ListView.separated(
@@ -150,10 +153,13 @@ class _SpaceEventRequestsListState extends State<SpaceEventRequestsList>
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: widget.requests.length,
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: colorScheme.outline,
+                  separatorBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Spacing.s3),
+                    child: Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: appColors.pageDivider,
+                    ),
                   ),
                   itemBuilder: (context, index) {
                     final request = widget.requests[index];
@@ -178,7 +184,8 @@ class _EventRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     final eventData = request.eventExpanded;
 
     if (eventData == null) {
@@ -195,43 +202,19 @@ class _EventRequestItem extends StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.all(Spacing.small),
-        child: Row(
-          children: [
-            LemonNetworkImage(
-              imageUrl: EventUtils.getEventThumbnailUrl(event: eventData),
-              width: 24.w,
-              height: 24.w,
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              border: Border.all(color: colorScheme.outline),
-              placeholder: ImagePlaceholder.eventCard(),
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.s3,
+          vertical: Spacing.s2_5,
+        ),
+        child: Expanded(
+          child: Text(
+            eventData.title ?? '',
+            style: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
-            SizedBox(width: Spacing.small),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    eventData.title ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            ThemeSvgIcon(
-              color: colorScheme.onSecondary,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                colorFilter: filter,
-                width: 18.w,
-                height: 18.w,
-              ),
-            ),
-          ],
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );

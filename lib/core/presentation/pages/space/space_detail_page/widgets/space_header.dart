@@ -1,9 +1,13 @@
+import 'package:app/core/application/space/get_my_space_event_requests_bloc/get_my_space_event_requests_bloc.dart';
 import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_button_by_role.dart';
+import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_event_requests_list.dart';
 import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_info.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:app/theme/spacing.dart';
@@ -105,6 +109,37 @@ class SpaceHeader extends StatelessWidget {
             child: SpaceInfo(
               space: space,
             ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: BlocBuilder<GetMySpaceEventRequestsBloc,
+              GetMySpaceEventRequestsState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                success: (response) {
+                  final filteredRecords = response.records
+                      .where(
+                        (element) =>
+                            element.state ==
+                            Enum$SpaceEventRequestState.pending,
+                      )
+                      .toList();
+
+                  return filteredRecords.isEmpty
+                      ? const SizedBox.shrink()
+                      : Padding(
+                          padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
+                          child: Column(
+                            children: [
+                              SizedBox(height: Spacing.s4),
+                              SpaceEventRequestsList(requests: filteredRecords),
+                            ],
+                          ),
+                        );
+                },
+                orElse: () => const SizedBox.shrink(),
+              );
+            },
           ),
         ),
       ],

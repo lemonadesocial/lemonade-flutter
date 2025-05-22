@@ -1,6 +1,7 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const LemonAppBar({
@@ -51,7 +52,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
       actions: actions,
       title: title != null
-          ? buildCenteredTitle(title!)
+          ? buildCenteredTitle(context, title!)
           : (titleBuilder != null ? titleBuilder!(context) : null),
       centerTitle: true,
       elevation: 0,
@@ -60,13 +61,11 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget buildCenteredTitle(String title) {
+  Widget buildCenteredTitle(BuildContext context, String title) {
+    final appText = context.theme.appTextTheme;
     return Text(
       title,
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 18,
-      ),
+      style: appText.lg,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
