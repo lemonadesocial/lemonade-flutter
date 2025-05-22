@@ -128,16 +128,42 @@ class SpaceListingView extends StatelessWidget {
               horizontal: Spacing.s4,
             ),
             child: Text(
-              t.space.subscribedCommunities,
+              t.space.ambassadorCommunities,
               style: appTextTheme.lg,
             ),
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s4)),
+        BlocBuilder<ListSpacesBloc, ListSpacesState>(
+          bloc: ambassadorSpacesBloc,
+          builder: (context, state) {
+            return state.maybeWhen(
+              initial: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              orElse: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              failure: (failure) => SliverToBoxAdapter(
+                child: EmptyList(
+                  emptyText: t.common.somethingWrong,
+                ),
+              ),
+              loading: () => SliverToBoxAdapter(
+                child: Center(child: Loading.defaultLoading(context)),
+              ),
+              success: (spaces) => _SpacesList(
+                spaces: spaces,
+                emptyTitle: t.space.noAmbassadorCommunities,
+                emptyDescription: t.space.noAmbassadorCommunitiesDescription,
+              ),
+            );
+          },
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s5)),
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: Spacing.s4,
+          child: Divider(
+            color: appColors.pageDividerInverse,
+            thickness: Spacing.s1_5,
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: Spacing.s5)),
         BlocBuilder<ListSpacesBloc, ListSpacesState>(
           bloc: subscribedSpacesBloc,
           builder: (context, state) {
@@ -147,11 +173,35 @@ class SpaceListingView extends StatelessWidget {
                 child: Center(child: Loading.defaultLoading(context)),
               ),
               success: (spaces) {
-                return _SpacesList(
-                  spaces: spaces,
-                  emptyTitle: t.space.noSubscribedCommunities,
-                  emptyDescription: t.space.noSubscribedCommunitiesDescription,
-                  layout: SpaceListItemLayout.list,
+                if (spaces.isEmpty) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+                return MultiSliver(
+                  children: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.s4,
+                        ),
+                        child: Text(
+                          t.space.subscribedCommunities,
+                          style: appTextTheme.lg,
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: Spacing.s4,
+                      ),
+                    ),
+                    _SpacesList(
+                      spaces: spaces,
+                      emptyTitle: t.space.noSubscribedCommunities,
+                      emptyDescription:
+                          t.space.noSubscribedCommunitiesDescription,
+                      layout: SpaceListItemLayout.list,
+                    ),
+                  ],
                 );
               },
               failure: (failure) => SliverToBoxAdapter(
