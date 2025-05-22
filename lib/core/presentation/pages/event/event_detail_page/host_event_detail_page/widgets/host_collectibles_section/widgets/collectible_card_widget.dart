@@ -10,9 +10,9 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 final _poapRepository = getIt<PoapRepository>();
 
@@ -22,10 +22,10 @@ class CollectibleCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       decoration: BoxDecoration(
-        color: colorScheme.onPrimary.withOpacity(0.06),
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
       child: FutureBuilder(
@@ -38,7 +38,7 @@ class CollectibleCardWidget extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.onPrimary.withOpacity(0.06),
+                  color: appColors.pageBg,
                   borderRadius: BorderRadius.circular(
                     LemonRadius.medium,
                   ),
@@ -79,7 +79,8 @@ class _ClaimInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Positioned(
       top: Spacing.superExtraSmall,
       right: Spacing.superExtraSmall,
@@ -108,7 +109,7 @@ class _ClaimInfo extends StatelessWidget {
               vertical: Spacing.superExtraSmall,
             ),
             decoration: ShapeDecoration(
-              color: colorScheme.primary.withOpacity(0.36),
+              color: appColors.cardBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
                   LemonRadius.extraSmall,
@@ -122,10 +123,7 @@ class _ClaimInfo extends StatelessWidget {
                   children: [
                     Text(
                       '$claimedQuantity/$quantity ${t.nft.claimed}',
-                      style: Typo.xSmall.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: appText.xs,
                     ),
                   ],
                 ),

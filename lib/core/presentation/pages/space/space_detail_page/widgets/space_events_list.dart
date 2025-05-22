@@ -102,19 +102,19 @@ class _SpaceEventsListState extends State<SpaceEventsList> {
               );
             },
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: Spacing.s5,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Divider(
+              height: Spacing.s1_5,
+              thickness: Spacing.s1_5,
+              color: appColors.pageDividerInverse,
+            ),
+          ),
         ],
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: Spacing.s5,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Divider(
-            height: Spacing.s1_5,
-            thickness: Spacing.s1_5,
-            color: appColors.pageDividerInverse,
-          ),
-        ),
         SliverToBoxAdapter(
           child: SizedBox(
             height: Spacing.s5,

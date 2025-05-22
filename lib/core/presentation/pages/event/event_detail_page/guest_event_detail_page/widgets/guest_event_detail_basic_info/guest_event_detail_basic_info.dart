@@ -19,13 +19,13 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailBasicInfo extends StatelessWidget {
   const GuestEventDetailBasicInfo({
@@ -37,15 +37,15 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(
           LemonRadius.medium,
         ),
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.cardBorder,
           width: 1.w,
         ),
       ),
@@ -57,13 +57,13 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
           Divider(
             height: 1,
             thickness: 1.w,
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
           ),
           const _CheckinButton(),
           Divider(
             height: 1,
             thickness: 1.w,
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
           ),
           BlocBuilder<GetMyEventTokenRewardsBloc, GetMyEventTokenRewardsState>(
             builder: (context, state) {
@@ -84,7 +84,7 @@ class GuestEventDetailBasicInfo extends StatelessWidget {
                       Divider(
                         height: 1,
                         thickness: 1.w,
-                        color: colorScheme.outlineVariant,
+                        color: appColors.pageDivider,
                       ),
                     ],
                   );
@@ -115,7 +115,9 @@ class _EventCountDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
     return Padding(
@@ -137,14 +139,14 @@ class _EventCountDown extends StatelessWidget {
                   LemonRadius.extraSmall,
                 ),
                 border: Border.all(
-                  color: colorScheme.outline,
+                  color: appColors.cardBorder,
                 ),
                 imageUrl: event.newNewPhotosExpanded?.isNotEmpty == true
                     ? ImageUtils.generateUrl(
                         file: event.newNewPhotosExpanded?.firstOrNull,
                       )
                     : '',
-                placeholder: ImagePlaceholder.defaultPlaceholder(),
+                placeholder: ImagePlaceholder.eventCard(),
               ),
               const Spacer(),
               InkWell(
@@ -157,17 +159,17 @@ class _EventCountDown extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: LemonColor.chineseBlack,
+                    color: appColors.cardBg,
                     borderRadius: BorderRadius.circular(Sizing.medium),
                     border: Border.all(
-                      color: colorScheme.outlineVariant,
+                      color: appColors.cardBorder,
                     ),
                   ),
                   width: Sizing.medium,
                   height: Sizing.medium,
                   child: Center(
                     child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icTicket.svg(
                         colorFilter: filter,
                         width: 15.w,
@@ -184,17 +186,17 @@ class _EventCountDown extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: LemonColor.chineseBlack,
+                    color: appColors.cardBg,
                     borderRadius: BorderRadius.circular(Sizing.medium),
                     border: Border.all(
-                      color: colorScheme.outlineVariant,
+                      color: appColors.cardBorder,
                     ),
                   ),
                   width: Sizing.medium,
                   height: Sizing.medium,
                   child: Center(
                     child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icCalendarAddLine.svg(
                         colorFilter: filter,
                         width: 15.w,
@@ -218,17 +220,15 @@ class _EventCountDown extends StatelessWidget {
                 SizedBox(height: 2.w),
                 Text(
                   formattedDate,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                    height: 0,
+                  style: appText.sm.copyWith(
+                    color: appColors.textSecondary,
                   ),
                 ),
                 SizedBox(height: 2.w),
                 Text(
                   formattedTime,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                    height: 0,
+                  style: appText.sm.copyWith(
+                    color: appColors.textSecondary,
                   ),
                 ),
               ],
@@ -240,7 +240,7 @@ class _EventCountDown extends StatelessWidget {
   }
 
   Widget _buildEventStatusText(BuildContext context, Event event) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final now = DateTime.now();
     final durationOnlyText = EventUtils.getDurationToEventText(
@@ -253,10 +253,7 @@ class _EventCountDown extends StatelessWidget {
     if (now.isAfter(end)) {
       return Text(
         t.event.eventEnded,
-        style: Typo.medium.copyWith(
-          color: colorScheme.onPrimary,
-          fontWeight: FontWeight.w600,
-        ),
+        style: appText.md,
       );
     }
 
@@ -267,16 +264,12 @@ class _EventCountDown extends StatelessWidget {
     return Text.rich(
       TextSpan(
         text: '$statusText ',
-        style: Typo.medium.copyWith(
-          color: colorScheme.onPrimary,
-          fontWeight: FontWeight.w600,
-        ),
+        style: appText.md,
         children: [
           TextSpan(
             text: '$durationOnlyText ',
-            style: Typo.medium.copyWith(
+            style: appText.md.copyWith(
               color: LemonColor.rajah,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -290,7 +283,8 @@ class _CheckinButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
     return BlocBuilder<GetMyTicketsBloc, GetMyTicketsState>(
@@ -324,7 +318,7 @@ class _CheckinButton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icCheckin.svg(
                     colorFilter: filter,
                     width: Sizing.mSmall,
@@ -335,14 +329,11 @@ class _CheckinButton extends StatelessWidget {
                 Expanded(
                   child: Text(
                     t.event.configuration.checkIn,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: appText.md,
                   ),
                 ),
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icArrowRight.svg(
                     colorFilter: filter,
                     width: Sizing.mSmall,
@@ -367,7 +358,9 @@ class _AssignTicketsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+    final t = Translations.of(context);
     return InkWell(
       onTap: () {
         AutoRouter.of(context).push(
@@ -391,7 +384,7 @@ class _AssignTicketsButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icTicket.svg(
                 colorFilter: filter,
                 width: Sizing.mSmall,
@@ -402,10 +395,7 @@ class _AssignTicketsButton extends StatelessWidget {
             Expanded(
               child: Text(
                 t.event.eventBuyAdditionalTickets.assignTickets,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: appText.md,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -425,8 +415,8 @@ class _AssignTicketsButton extends StatelessWidget {
                     }
                     return Text(
                       remainingTickets.length.toString(),
-                      style: Typo.medium.copyWith(
-                        color: LemonColor.coralReef,
+                      style: appText.md.copyWith(
+                        color: appColors.textError,
                         fontWeight: FontWeight.w600,
                       ),
                     );
@@ -436,7 +426,7 @@ class _AssignTicketsButton extends StatelessWidget {
             ),
             SizedBox(width: Spacing.extraSmall),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 colorFilter: filter,
                 width: Sizing.mSmall,
@@ -461,7 +451,8 @@ class _ClaimTokenRewardButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     return InkWell(
       onTap: () {
@@ -481,7 +472,7 @@ class _ClaimTokenRewardButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icGift.svg(
                 colorFilter: filter,
                 width: Sizing.mSmall,
@@ -492,22 +483,19 @@ class _ClaimTokenRewardButton extends StatelessWidget {
             Expanded(
               child: Text(
                 t.event.tokenReward.claimRewards,
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: appText.md,
               ),
             ),
             Text(
               rewardResponses.length.toString(),
-              style: Typo.medium.copyWith(
-                color: LemonColor.paleViolet,
+              style: appText.md.copyWith(
+                color: appColors.textAccent,
                 fontWeight: FontWeight.w600,
               ),
             ),
             SizedBox(width: Spacing.extraSmall),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 colorFilter: filter,
                 width: Sizing.mSmall,

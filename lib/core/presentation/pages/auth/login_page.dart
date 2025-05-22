@@ -73,12 +73,8 @@ class LoginPageState extends State<LoginPage> {
     final t = Translations.of(context);
     final appColors = Theme.of(context).appColors;
     final appText = context.theme.appTextTheme;
-
     return Stack(
       children: [
-        Positioned.fill(
-          child: Image(image: Assets.images.bgCircle.provider()),
-        ),
         Column(
           children: [
             Expanded(

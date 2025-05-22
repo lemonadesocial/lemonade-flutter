@@ -2,13 +2,13 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/home/home_quick_create_bottom_sheet.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class BottomBarCreateButton extends StatelessWidget {
   const BottomBarCreateButton({
@@ -18,6 +18,7 @@ class BottomBarCreateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthBloc>().state;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: () {
         authState.maybeWhen(
@@ -27,7 +28,7 @@ class BottomBarCreateButton extends StatelessWidget {
               useRootNavigator: true,
               topRadius: Radius.circular(LemonRadius.button),
               barrierColor: Colors.black.withOpacity(0.5),
-              backgroundColor: LemonColor.atomicBlack,
+              backgroundColor: appColors.pageBg,
               builder: (mContext) {
                 return const HomeQuickCreateBottomSheet();
               },

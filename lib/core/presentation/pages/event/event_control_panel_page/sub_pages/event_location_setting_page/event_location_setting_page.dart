@@ -169,7 +169,6 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                                   t.event.locationSetting.savedLocations,
                                   style: Typo.medium.copyWith(
                                     color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),

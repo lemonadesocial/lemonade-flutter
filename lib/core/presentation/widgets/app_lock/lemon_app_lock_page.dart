@@ -49,7 +49,7 @@ class _LemonAppLockPageState extends State<LemonAppLockPage> {
                 widget.title!,
                 style: Typo.extraLarge.copyWith(
                   fontWeight: FontWeight.w800,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
               ),
             if (widget.description != null) ...[
@@ -123,7 +123,7 @@ class _LemonAppLockPageState extends State<LemonAppLockPage> {
                   mode: GradientButtonMode.lavenderMode,
                   textStyle: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

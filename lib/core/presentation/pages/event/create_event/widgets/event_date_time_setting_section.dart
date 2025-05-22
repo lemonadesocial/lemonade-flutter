@@ -7,7 +7,6 @@ import 'package:app/core/presentation/widgets/common/circle_dot_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:app/app_theme/app_theme.dart';
 
 class EventDateTimeSettingSection extends StatelessWidget {
   const EventDateTimeSettingSection({super.key, this.event});
@@ -23,7 +23,9 @@ class EventDateTimeSettingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final t = Translations.of(context);
 
     return Column(
@@ -32,7 +34,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
           padding: EdgeInsets.all(Spacing.small),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            color: LemonColor.chineseBlack,
+            color: appColors.cardBg,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(LemonRadius.normal),
             ),
@@ -44,7 +46,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _DateTimeRowItem(
-                    color: LemonColor.malachiteGreen,
+                    color: appColors.textSuccess,
                     text: t.event.datetimeSettings.starts,
                     date: date_utils.DateUtils.formatForDateSetting(
                       state.start.value != null
@@ -53,7 +55,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     ),
                     onTap: () {
                       showCupertinoModalBottomSheet(
-                        backgroundColor: LemonColor.atomicBlack,
+                        backgroundColor: appColors.pageBg,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) => EventDatetimeSettingsPage(
@@ -68,14 +70,14 @@ class EventDateTimeSettingSection extends StatelessWidget {
                   Container(
                     height: 1.h,
                     decoration: BoxDecoration(
-                      color: LemonColor.white06,
+                      color: appColors.pageDivider,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
                     margin: EdgeInsets.only(left: 30.w),
                   ),
                   SizedBox(height: Spacing.smMedium),
                   _DateTimeRowItem(
-                    color: LemonColor.coralReef,
+                    color: appColors.textError,
                     text: t.event.datetimeSettings.ends,
                     date: date_utils.DateUtils.formatForDateSetting(
                       state.end.value != null
@@ -84,7 +86,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     ),
                     onTap: () {
                       showCupertinoModalBottomSheet(
-                        backgroundColor: LemonColor.atomicBlack,
+                        backgroundColor: appColors.pageBg,
                         context: context,
                         enableDrag: false,
                         builder: (innerContext) => EventDatetimeSettingsPage(
@@ -99,7 +101,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                   Container(
                     height: 1.h,
                     decoration: BoxDecoration(
-                      color: LemonColor.white06,
+                      color: appColors.pageDivider,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
                     margin: EdgeInsets.only(left: 30.w),
@@ -109,7 +111,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                     onTap: () {
                       showCupertinoModalBottomSheet(
                         bounce: true,
-                        backgroundColor: LemonColor.atomicBlack,
+                        backgroundColor: appColors.pageBg,
                         context: context,
                         enableDrag: false,
                         builder: (newContext) {
@@ -123,7 +125,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                       children: [
                         SizedBox(width: 2.5.w),
                         ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (colorFilter) => Assets.icons.icGlobe.svg(
                             colorFilter: colorFilter,
                           ),
@@ -144,8 +146,8 @@ class EventDateTimeSettingSection extends StatelessWidget {
                                   '';
                               return Text(
                                 timezoneText,
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
+                                style: appText.md.copyWith(
+                                  color: appColors.textTertiary,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -157,7 +159,7 @@ class EventDateTimeSettingSection extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(top: 2.h),
                           child: ThemeSvgIcon(
-                            color: colorScheme.onSurfaceVariant,
+                            color: appColors.textTertiary,
                             builder: (filter) => Assets.icons.icArrowRight.svg(
                               colorFilter: filter,
                               width: 18.w,

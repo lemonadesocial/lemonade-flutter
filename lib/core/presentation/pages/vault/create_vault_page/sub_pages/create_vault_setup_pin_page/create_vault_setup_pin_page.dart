@@ -61,7 +61,7 @@ class _CreateVaultSetupPinPageState extends State<CreateVaultSetupPinPage> {
               widget.title ?? t.vault.createPIN.setPIN,
               style: Typo.extraLarge.copyWith(
                 fontWeight: FontWeight.w800,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
             SizedBox(height: Spacing.small),
@@ -169,7 +169,7 @@ class _CreateVaultSetupPinPageState extends State<CreateVaultSetupPinPage> {
                   mode: GradientButtonMode.lavenderMode,
                   textStyle: Typo.medium.copyWith(
                     color: colorScheme.onPrimary.withOpacity(0.87),
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

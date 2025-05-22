@@ -2,11 +2,10 @@ import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
   final Event event;
@@ -18,7 +17,8 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -26,10 +26,10 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Spacing.small),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               border: Border.all(
-                color: colorScheme.outlineVariant,
+                color: appColors.cardBorder,
                 width: 1.w,
               ),
             ),
@@ -37,7 +37,7 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
               title: t.event.rsvpStatus.approvalRequired,
               subTitle: t.event.rsvpStatus.fromCohostToJoin,
               icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (colorFilter) => Assets.icons.icOutlineVerified.svg(
                   colorFilter: colorFilter,
                   width: 18.w,
@@ -51,10 +51,10 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Spacing.smMedium),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               border: Border.all(
-                color: colorScheme.outlineVariant,
+                color: appColors.cardBorder,
                 width: 1.w,
               ),
             ),
@@ -62,7 +62,7 @@ class GuestEventDetailApprovalRequiredBadge extends StatelessWidget {
               title: t.event.rsvpStatus.limitedSpots,
               subTitle: t.event.rsvpStatus.registerBeforeEventFillsUp,
               icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (colorFilter) => Assets.icons.icClockBurning.svg(
                   colorFilter: colorFilter,
                   width: 18.w,
@@ -89,7 +89,9 @@ class _RowInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -101,16 +103,13 @@ class _RowInfo extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: appText.md,
             ),
             SizedBox(height: 2.w),
             Text(
               subTitle,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.sm.copyWith(
+                color: appColors.textTertiary,
               ),
             ),
           ],

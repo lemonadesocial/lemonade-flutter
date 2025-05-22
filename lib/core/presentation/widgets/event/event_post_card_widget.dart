@@ -162,7 +162,7 @@ class EventPostCard extends StatelessWidget {
             children: [
               Text(
                 '${event.title}',
-                style: Typo.medium.copyWith(fontFamily: FontFamily.circularStd),
+                style: Typo.medium.copyWith(fontFamily: FontFamily.generalSans),
               ),
               Row(
                 children: [
@@ -175,7 +175,7 @@ class EventPostCard extends StatelessWidget {
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,
-                      fontFamily: FontFamily.circularStd,
+                      fontFamily: FontFamily.generalSans,
                     ),
                   ),
                   Padding(
@@ -198,7 +198,7 @@ class EventPostCard extends StatelessWidget {
                     style: Typo.small.copyWith(
                       color: colorScheme.onSecondary,
                       height: 1.5,
-                      fontFamily: FontFamily.circularStd,
+                      fontFamily: FontFamily.generalSans,
                     ),
                   ),
                 ],

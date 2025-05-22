@@ -6,7 +6,6 @@ import 'package:app/core/presentation/pages/space/space_detail_page/widgets/pin_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -41,7 +40,7 @@ class SpaceSubmitEventButton extends StatelessWidget {
         final spaceDetailBloc = context.read<GetSpaceDetailBloc>();
         final option = await showCupertinoModalBottomSheet<PinEventOptions>(
           context: context,
-          backgroundColor: LemonColor.atomicBlack,
+          backgroundColor: appColors.pageBg,
           barrierColor: Colors.black.withOpacity(0.5),
           expand: false,
           builder: (innerContext) => MultiBlocProvider(

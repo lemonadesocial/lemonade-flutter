@@ -53,7 +53,7 @@ class RSVPEventSuccessPopupPage extends StatelessWidget {
                             eventRsvp?.messages?.primary ??
                             t.event.youreIn,
                         style: Typo.extraLarge.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           fontWeight: FontWeight.w900,
                           color: colorScheme.onPrimary,
                           height: 1.2,

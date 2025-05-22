@@ -8,6 +8,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventReservationsListView extends StatelessWidget {
   final List<Event> eventsList;
@@ -24,7 +25,7 @@ class EventReservationsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     if (eventsList.isEmpty) {
       return const Expanded(
@@ -71,7 +72,7 @@ class EventReservationsListView extends StatelessWidget {
           },
           itemCount: eventsList.length + 1,
           separatorBuilder: (context, index) => Divider(
-            color: colorScheme.outline,
+            color: appColors.pageDivider,
             height: 1.w,
             thickness: 1.w,
           ),

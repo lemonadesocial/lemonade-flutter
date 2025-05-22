@@ -6,12 +6,11 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/utils/device_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailAppBar extends StatefulWidget {
   const GuestEventDetailAppBar({
@@ -58,6 +57,8 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     if (cover == null) {
       return SliverToBoxAdapter(
         child: LemonAppBar(
@@ -73,6 +74,7 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
     return SliverAppBar(
       pinned: true,
       stretch: true,
+      backgroundColor: appColors.pageBg,
       leading: const SizedBox.shrink(),
       collapsedHeight: kToolbarHeight,
       expandedHeight: bannerHeight,
@@ -82,9 +84,7 @@ class _GuestEventDetailAppBarState extends State<GuestEventDetailAppBar> {
         opacity: _isSliverAppBarCollapsed ? 1 : 0,
         child: Text(
           widget.event.title ?? '',
-          style: Typo.extraMedium.copyWith(
-            fontFamily: FontFamily.switzerVariable,
-          ),
+          style: appText.md,
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(

@@ -269,7 +269,7 @@ class _EventGuestSettingsPageState extends State<EventGuestSettingsPage> {
           textStyle: MaterialStateProperty.resolveWith(
             (Set<MaterialState> states) {
               return const TextStyle(
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
                 fontWeight: FontWeight.w700,
               );
             },

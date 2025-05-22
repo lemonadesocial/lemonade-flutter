@@ -221,7 +221,7 @@ class _EventJoinRequestDetailPageState
                           textStyle: Typo.medium.copyWith(
                             color: colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                           ),
                           leading: ThemeSvgIcon(
                             color: LemonColor.errorRedBg,
@@ -246,7 +246,7 @@ class _EventJoinRequestDetailPageState
                           textStyle: Typo.medium.copyWith(
                             color: colorScheme.onPrimary,
                             fontWeight: FontWeight.w600,
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                           ),
                           leading: ThemeSvgIcon(
                             color: LemonColor.paleViolet,

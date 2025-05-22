@@ -104,7 +104,7 @@ class EventBuyTicketsCategoryItem extends StatelessWidget {
                       ticketCategory!.title ?? '',
                       style: Typo.extraMedium.copyWith(
                         color: colorScheme.onPrimary,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     if (ticketCategory?.description?.isNotEmpty == true) ...[

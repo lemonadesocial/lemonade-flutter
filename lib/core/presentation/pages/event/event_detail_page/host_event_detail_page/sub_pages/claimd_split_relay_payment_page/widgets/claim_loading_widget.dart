@@ -61,7 +61,7 @@ class _WaitingClaimView extends StatelessWidget {
                 style: Typo.extraLarge.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -120,7 +120,7 @@ class _SuccessClaimView extends StatelessWidget {
                 style: Typo.extraLarge.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -106,7 +106,7 @@ class _ConnectFarcasterBottomsheetState
               style: Typo.extraLarge.copyWith(
                 color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
             SizedBox(height: Spacing.superExtraSmall),

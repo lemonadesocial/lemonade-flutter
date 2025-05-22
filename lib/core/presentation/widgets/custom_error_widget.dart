@@ -108,7 +108,7 @@ class CustomErrorState extends State<CustomError> {
                       Text(
                         t.common.oops,
                         style: Typo.extraLarge.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           color: colorScheme.onPrimary,
                         ),
                       ),

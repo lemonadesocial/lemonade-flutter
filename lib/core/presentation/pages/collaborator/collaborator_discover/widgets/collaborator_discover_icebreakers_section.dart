@@ -109,7 +109,7 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
               style: Typo.extraMedium.copyWith(
                 color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
           ],

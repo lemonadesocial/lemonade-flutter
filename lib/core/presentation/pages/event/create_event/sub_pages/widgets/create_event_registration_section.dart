@@ -19,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CreateEventRegistrationSection extends StatelessWidget {
   final Event? initialEvent;
@@ -31,6 +32,8 @@ class CreateEventRegistrationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     final isEditMode = initialEvent != null;
     final state = isEditMode ? null : context.watch<CreateEventBloc>().state;
 
@@ -140,7 +143,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
             ),
             child: Column(
@@ -183,7 +186,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 Container(
                   height: 1.h,
                   decoration: BoxDecoration(
-                    color: LemonColor.white06,
+                    color: appColors.pageDivider,
                     borderRadius: BorderRadius.circular(30.r),
                   ),
                   margin: EdgeInsets.only(
@@ -201,7 +204,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 Container(
                   height: 1.h,
                   decoration: BoxDecoration(
-                    color: LemonColor.white06,
+                    color: appColors.pageDivider,
                     borderRadius: BorderRadius.circular(30.r),
                   ),
                   margin: EdgeInsets.only(
@@ -242,7 +245,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 Container(
                   height: 1.h,
                   decoration: BoxDecoration(
-                    color: LemonColor.white06,
+                    color: appColors.pageDivider,
                     borderRadius: BorderRadius.circular(30.r),
                   ),
                   margin: EdgeInsets.only(
@@ -258,7 +261,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   onTap: () {
                     showCupertinoModalBottomSheet(
                       bounce: true,
-                      backgroundColor: LemonColor.chineseBlack,
+                      backgroundColor: appColors.pageBg,
                       context: context,
                       enableDrag: false,
                       builder: (newContext) {
@@ -288,7 +291,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               child: Column(
@@ -296,7 +299,6 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: LemonColor.chineseBlack,
                       borderRadius: BorderRadius.circular(LemonRadius.medium),
                     ),
                     child: Column(
@@ -321,7 +323,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   Container(
                     height: 1.h,
                     decoration: BoxDecoration(
-                      color: LemonColor.white06,
+                      color: appColors.pageDivider,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
                     margin: EdgeInsets.only(
@@ -331,7 +333,6 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: LemonColor.chineseBlack,
                       borderRadius: BorderRadius.circular(LemonRadius.medium),
                     ),
                     child: Column(
@@ -360,7 +361,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               child: Column(
@@ -413,7 +414,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: LemonColor.chineseBlack,
+                  color: appColors.cardBg,
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
                 ),
                 child: Column(

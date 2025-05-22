@@ -37,7 +37,7 @@ class WalletConnectPopup extends StatelessWidget {
             Text(
               t.nft.walletConnectPopup.title,
               style: Typo.large.copyWith(
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
             SizedBox(height: Spacing.xSmall),
@@ -92,7 +92,7 @@ class SelectWalletAppButton extends StatelessWidget {
               label,
               style: Typo.mediumPlus.copyWith(
                 fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
             const Spacer(),

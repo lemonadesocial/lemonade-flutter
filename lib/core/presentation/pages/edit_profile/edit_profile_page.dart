@@ -257,7 +257,7 @@ class EditProfileView extends StatelessWidget {
                             },
                             label: t.profile.saveChanges,
                             textStyle: Typo.medium.copyWith(
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                               fontWeight: FontWeight.w600,
                             ),
                             height: Sizing.large,

@@ -83,7 +83,7 @@ class _OnboardingTermConditionsPageState
                               style: Typo.extraLarge.copyWith(
                                 color: colorScheme.onPrimary,
                                 fontWeight: FontWeight.w800,
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                               ),
                             ),
                             SizedBox(height: Spacing.smMedium),
@@ -91,7 +91,7 @@ class _OnboardingTermConditionsPageState
                               t.onboarding.termConditions.description,
                               style: Typo.mediumPlus.copyWith(
                                 color: colorScheme.onSecondary,
-                                fontFamily: FontFamily.switzerVariable,
+                                fontFamily: FontFamily.generalSans,
                               ),
                             ),
                             SizedBox(height: Spacing.smMedium * 2),
@@ -155,7 +155,7 @@ class _OnboardingTermConditionsPageState
                         textStyle: Typo.medium.copyWith(
                           color: colorScheme.onPrimary.withOpacity(0.87),
                           fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                         height: Sizing.large,
                         radius: BorderRadius.circular(24.r),

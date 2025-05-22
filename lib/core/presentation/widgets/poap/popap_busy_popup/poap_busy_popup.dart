@@ -45,7 +45,7 @@ class PoapBusyPopup extends StatelessWidget {
                       StringUtils.capitalize(title),
                       style: Typo.large.copyWith(
                         color: colorScheme.onPrimary,
-                        fontFamily: FontFamily.switzerVariable,
+                        fontFamily: FontFamily.generalSans,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -56,7 +56,7 @@ class PoapBusyPopup extends StatelessWidget {
                   t.nft.waitingForConfirmation,
                   style: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
-                    fontFamily: FontFamily.switzerVariable,
+                    fontFamily: FontFamily.generalSans,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

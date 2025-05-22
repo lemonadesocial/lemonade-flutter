@@ -17,6 +17,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/color.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app/core/utils/permission_utils.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CreateEventBannerPhotoCard extends StatefulWidget {
   final FileUploadService _uploadService;
@@ -79,7 +80,8 @@ class _CreateEventBannerPhotoCardState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     return InkWell(
       onTap: () async {
         await showFutureLoadingDialog(
@@ -123,13 +125,13 @@ class _CreateEventBannerPhotoCardState
                 child: Container(
                   padding: EdgeInsets.all(Sizing.xxSmall),
                   decoration: ShapeDecoration(
-                    color: LemonColor.white,
+                    color: appColors.buttonSecondaryBg,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(LemonRadius.normal),
                     ),
                   ),
                   child: ThemeSvgIcon(
-                    color: colorScheme.surfaceVariant,
+                    color: appColors.buttonSecondary,
                     builder: (filter) => Assets.icons.icUpload.svg(
                       width: Sizing.xSmall,
                       height: Sizing.xSmall,

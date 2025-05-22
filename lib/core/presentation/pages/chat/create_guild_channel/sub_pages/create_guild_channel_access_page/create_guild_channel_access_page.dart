@@ -44,7 +44,7 @@ class CreateGuildChannelAccessPage extends StatelessWidget {
                     style: Typo.large.copyWith(
                       fontSize: 26,
                       color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

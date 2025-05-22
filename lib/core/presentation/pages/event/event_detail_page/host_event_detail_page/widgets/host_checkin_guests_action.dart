@@ -3,13 +3,12 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HostCheckinGuestsAction extends StatelessWidget {
   const HostCheckinGuestsAction({
@@ -23,7 +22,8 @@ class HostCheckinGuestsAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     // final canShowCheckIn = FeatureManager(
     //   EventRoleBasedEventFeatureVisibilityStrategy(
@@ -44,8 +44,12 @@ class HostCheckinGuestsAction extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Spacing.smMedium),
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
+          border: Border.all(
+            color: appColors.cardBorder,
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -54,22 +58,26 @@ class HostCheckinGuestsAction extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Assets.icons.icScanLineGradient.svg(
-                  width: Sizing.medium / 2,
-                  height: Sizing.medium / 2,
+                ThemeSvgIcon(
+                  color: appColors.textAccent,
+                  builder: (filter) => Assets.icons.icScanLineGradient.svg(
+                    colorFilter: filter,
+                    width: Sizing.medium / 2,
+                    height: Sizing.medium / 2,
+                  ),
                 ),
-                SizedBox(width: Spacing.small),
+                SizedBox(width: Spacing.extraSmall),
                 Text(
                   t.event.checkinGuests,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.md.copyWith(
+                    color: appColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 colorFilter: filter,
               ),

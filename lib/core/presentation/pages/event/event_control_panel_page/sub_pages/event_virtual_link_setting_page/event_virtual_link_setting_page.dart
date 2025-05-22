@@ -12,6 +12,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventVirtualLinkSettingPage extends StatefulWidget {
   final String? defaultUrl;
@@ -57,20 +58,22 @@ class _EventVirtualLinkSettingPageState
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom != 0
             ? MediaQuery.of(context).viewInsets.bottom + Spacing.smMedium
             : 0,
       ),
-      color: LemonColor.atomicBlack,
+      color: appColors.pageBg,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const BottomSheetGrabber(),
           LemonAppBar(
-            backgroundColor: LemonColor.atomicBlack,
+            backgroundColor: appColors.pageBg,
             onPressBack: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
           Padding(
@@ -83,7 +86,7 @@ class _EventVirtualLinkSettingPageState
                   style: Typo.extraLarge.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                 ),
                 SizedBox(height: Spacing.superExtraSmall),

@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class ProfilePageView extends StatefulWidget {
   const ProfilePageView({
@@ -60,6 +61,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
   @override
   Widget build(BuildContext context) {
     final isMe = AuthUtils.isMe(context, user: widget.userProfile);
+    final appColors = context.theme.appColors;
     return BlocListener<BlockUserBloc, BlockUserState>(
       listener: (context, state) {
         if (state.status == BlockUserStatus.blockSuccess) {
@@ -144,7 +146,7 @@ class _ProfilePageViewState extends State<ProfilePageView>
                                   }
                                 },
                                 child: ThemeSvgIcon(
-                                  color: colorScheme.onPrimary,
+                                  color: appColors.textTertiary,
                                   builder: (filter) => Assets.icons.icMoreHoriz
                                       .svg(colorFilter: filter),
                                 ),

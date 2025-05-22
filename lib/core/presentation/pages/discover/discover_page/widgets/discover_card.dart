@@ -142,7 +142,7 @@ class _VerticalDiscoverCard extends StatelessWidget {
               title,
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
             SizedBox(height: 2.h),
@@ -205,7 +205,7 @@ class _HorizontalDiscoverCard extends StatelessWidget {
               title,
               style: Typo.small.copyWith(
                 fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
           ],

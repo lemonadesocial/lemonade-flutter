@@ -52,7 +52,7 @@ class LocationRequestPage extends StatelessWidget {
               t.common.locationRequest.title,
               style: Typo.extraLarge.copyWith(
                 fontWeight: FontWeight.w800,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
               textAlign: TextAlign.center,
             ),
@@ -70,7 +70,7 @@ class LocationRequestPage extends StatelessWidget {
                 label: t.common.actions.setLocation,
                 textStyle: Typo.medium.copyWith(
                   fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
                 radius: BorderRadius.circular(LemonRadius.small * 2),
                 height: Sizing.small * 2,

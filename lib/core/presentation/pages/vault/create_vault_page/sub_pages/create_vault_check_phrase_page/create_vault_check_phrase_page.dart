@@ -112,7 +112,7 @@ class CreateVaultCheckPhrasePageView extends StatelessWidget {
                   t.vault.createVault.recoveryPhraseCheck,
                   style: Typo.extraLarge.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                 ),
                 SizedBox(height: Spacing.superExtraSmall),
@@ -164,7 +164,7 @@ class CreateVaultCheckPhrasePageView extends StatelessWidget {
                               mode: GradientButtonMode.lavenderMode,
                               textStyle: Typo.medium.copyWith(
                                 color: colorScheme.onPrimary.withOpacity(0.87),
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

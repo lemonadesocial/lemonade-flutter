@@ -96,7 +96,7 @@ class TicketCardTop extends StatelessWidget {
                             title.toUpperCase(),
                             style: Typo.mediumPlus.copyWith(
                               fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.spaceGrotesk,
+                              fontFamily: FontFamily.clashDisplay,
                             ),
                           );
                         },
@@ -106,7 +106,7 @@ class TicketCardTop extends StatelessWidget {
                         event.title?.toUpperCase() ?? '',
                         style: Typo.mediumPlus.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.spaceGrotesk,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                       SizedBox(

@@ -35,7 +35,7 @@ class ReadMoreWidget extends StatelessWidget {
         Typo.mediumPlus.copyWith(
           fontWeight: FontWeight.w400,
           color: colorScheme.onSurface,
-          fontFamily: FontFamily.switzerVariable,
+          fontFamily: FontFamily.generalSans,
         );
 
     return LayoutBuilder(
@@ -167,6 +167,6 @@ final linkStyle = Typo.mediumPlus.copyWith(
 final moreLessTextStyle = TextStyle(
   color: LemonColor.paleViolet,
   fontSize: 16.sp,
-  fontFamily: FontFamily.switzerVariable,
+  fontFamily: FontFamily.generalSans,
   fontWeight: FontWeight.w400,
 );

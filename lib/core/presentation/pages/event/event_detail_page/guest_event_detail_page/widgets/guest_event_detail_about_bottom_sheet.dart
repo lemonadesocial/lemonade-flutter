@@ -46,7 +46,7 @@ class GuestEventDetailAboutBottomSheet extends StatelessWidget {
                         event.title ?? '',
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           fontWeight: FontWeight.w800,
                         ),
                       ),

@@ -8,9 +8,9 @@ import 'package:app/core/utils/map_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class PostGuestEventLocation extends StatelessWidget {
   const PostGuestEventLocation({
@@ -22,8 +22,9 @@ class PostGuestEventLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,10 +35,7 @@ class PostGuestEventLocation extends StatelessWidget {
           children: [
             Text(
               t.event.eventLocation,
-              style: Typo.extraMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onPrimary,
-              ),
+              style: appText.md,
             ),
             GuestEventDetailExpandButton(
               onTap: () => MapUtils.showMapOptionBottomSheet(
@@ -78,7 +76,7 @@ class PostGuestEventLocation extends StatelessWidget {
                     ),
                     border: Border(
                       top: BorderSide(
-                        color: colorScheme.outline,
+                        color: appColors.pageDivider,
                         width: 0.5.w,
                       ),
                     ),
@@ -98,10 +96,7 @@ class PostGuestEventLocation extends StatelessWidget {
         SizedBox(height: Spacing.smMedium),
         Text(
           event.address?.title ?? t.event.eventLocation,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: appText.md,
         ),
         SizedBox(height: 3.w),
         Text(
@@ -109,8 +104,8 @@ class PostGuestEventLocation extends StatelessWidget {
             event: event,
             showFullAddress: true,
           ),
-          style: Typo.small.copyWith(
-            color: colorScheme.onSecondary,
+          style: appText.sm.copyWith(
+            color: appColors.textTertiary,
           ),
         ),
       ],

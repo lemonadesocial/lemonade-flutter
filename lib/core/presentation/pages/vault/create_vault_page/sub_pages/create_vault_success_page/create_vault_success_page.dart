@@ -47,7 +47,7 @@ class CreateVaultSuccessPage extends StatelessWidget {
                   child: Text(
                     '${t.common.done} 🎉',
                     style: Typo.extraLarge.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w900,
                       height: 1.2,
                     ),
@@ -82,7 +82,7 @@ class CreateVaultSuccessPage extends StatelessWidget {
                           textStyle: Typo.medium.copyWith(
                             fontWeight: FontWeight.w600,
                             color: colorScheme.onPrimary.withOpacity(0.87),
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                           ),
                           radius: BorderRadius.circular(LemonRadius.small * 2),
                           label: t.vault.createVault.enterVault,

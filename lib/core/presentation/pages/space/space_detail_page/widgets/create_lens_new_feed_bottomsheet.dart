@@ -29,6 +29,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CreateLensNewFeedBottomSheet extends StatelessWidget {
   final Space space;
@@ -158,6 +159,7 @@ class _ViewState extends State<_View> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensState) {
         return MultiBlocListener(
@@ -218,14 +220,14 @@ class _ViewState extends State<_View> {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              color: LemonColor.atomicBlack,
+              color: appColors.pageBg,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const BottomSheetGrabber(),
                   LemonAppBar(
                     title: '',
-                    backgroundColor: LemonColor.atomicBlack,
+                    backgroundColor: appColors.pageBg,
                     onPressBack: () {
                       reloginToAccountOwner(context);
                     },
@@ -357,7 +359,7 @@ class _ViewState extends State<_View> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: LemonColor.atomicBlack,
+                      color: appColors.pageBg,
                       border: Border(
                         top: BorderSide(color: colorScheme.outline),
                       ),

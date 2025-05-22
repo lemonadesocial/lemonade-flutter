@@ -7,8 +7,8 @@ import 'package:app/core/domain/event/event_repository.dart';
 import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/presentation/pages/event/my_event_tickets_list_page/views/event_reservations_list_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
 import 'package:app/core/utils/auth_utils.dart';
@@ -21,6 +21,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 enum TicketPageMode {
   tickets,
@@ -80,10 +81,11 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final userId = AuthUtils.getUserId(context);
+
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: appColors.pageBg,
       appBar: LemonAppBar(
         title: StringUtils.capitalize(t.event.tickets(n: 2)),
       ),
@@ -97,24 +99,30 @@ class _MyEventTicketsListViewState extends State<MyEventTicketsListView> {
             ),
             child: Row(
               children: [
-                LemonChip(
+                LinearGradientButton(
                   onTap: () {
                     setState(() {
                       selectedReservationType = ReservationType.upcoming;
                     });
                   },
-                  isActive: selectedReservationType == ReservationType.upcoming,
+                  mode: selectedReservationType == ReservationType.upcoming
+                      ? GradientButtonMode.light
+                      : GradientButtonMode.tertiary,
                   label: t.event.upcoming,
+                  radius: BorderRadius.circular(LemonRadius.full),
                 ),
                 SizedBox(width: Spacing.superExtraSmall),
-                LemonChip(
+                LinearGradientButton(
                   onTap: () {
                     setState(() {
                       selectedReservationType = ReservationType.past;
                     });
                   },
-                  isActive: selectedReservationType == ReservationType.past,
+                  mode: selectedReservationType == ReservationType.past
+                      ? GradientButtonMode.light
+                      : GradientButtonMode.tertiary,
                   label: t.event.past,
+                  radius: BorderRadius.circular(LemonRadius.full),
                 ),
               ],
             ),
