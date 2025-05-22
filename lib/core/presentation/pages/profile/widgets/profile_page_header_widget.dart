@@ -88,11 +88,6 @@ class _ActionButtons extends StatelessWidget {
           child: LinearGradientButton(
             onTap: () => context.router.push(const EditProfileRoute()),
             label: t.common.actions.editProfile,
-            textStyle: Typo.small.copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.24,
-            ),
-            shadowOffset: const Offset(0, 2),
           ),
         ),
         SizedBox(width: Spacing.superExtraSmall),
@@ -100,11 +95,6 @@ class _ActionButtons extends StatelessWidget {
           child: LinearGradientButton(
             onTap: () => _shareProfileLink(context, user: user),
             label: t.common.actions.shareProfile,
-            textStyle: Typo.small.copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.24,
-            ),
-            shadowOffset: const Offset(0, 2),
           ),
         ),
         SizedBox(width: Spacing.superExtraSmall),
