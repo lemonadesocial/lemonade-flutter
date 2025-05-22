@@ -1,8 +1,8 @@
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventDashboardItem extends StatelessWidget {
   const EventDashboardItem({
@@ -18,7 +18,8 @@ class EventDashboardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     return Flexible(
       child: InkWell(
         onTap: onTap,
@@ -30,7 +31,7 @@ class EventDashboardItem extends StatelessWidget {
             bottom: Spacing.superExtraSmall,
           ),
           decoration: ShapeDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(21.r),
             ),
@@ -43,17 +44,18 @@ class EventDashboardItem extends StatelessWidget {
                   height: 52.w,
                   clipBehavior: Clip.antiAlias,
                   decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: const Alignment(0.00, -1.00),
-                      end: const Alignment(0, 1),
-                      colors: [
-                        colorScheme.outlineVariant,
-                        colorScheme.onPrimary.withOpacity(0.06),
-                      ],
-                    ),
+                    color: appColors.cardBg,
+                    // gradient: LinearGradient(
+                    //   begin: const Alignment(0.00, -1.00),
+                    //   end: const Alignment(0, 1),
+                    //   colors: [
+                    //     colorScheme.outlineVariant,
+                    //     colorScheme.onPrimary.withOpacity(0.06),
+                    //   ],
+                    // ),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
-                        color: colorScheme.outlineVariant,
+                        color: appColors.cardBorder,
                       ),
                       borderRadius: BorderRadius.circular(16.r),
                     ),

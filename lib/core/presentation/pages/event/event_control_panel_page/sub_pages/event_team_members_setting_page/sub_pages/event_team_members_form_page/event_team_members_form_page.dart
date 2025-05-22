@@ -112,7 +112,7 @@
 //                             style: Typo.extraLarge.copyWith(
 //                               color: colorScheme.onPrimary,
 //                               fontWeight: FontWeight.w800,
-//                               fontFamily: FontFamily.nohemiVariable,
+//                               fontFamily: FontFamily.clashDisplay,
 //                               height: 0,
 //                             ),
 //                           ),

@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HostEventDetailView extends StatelessWidget {
   const HostEventDetailView({super.key});
@@ -26,7 +27,7 @@ class HostEventDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     // final eventUserRole = context.watch<GetEventUserRoleBloc>().state.maybeWhen(
     //       fetched: (eventUserRole) => eventUserRole,
     //       orElse: () => null,
@@ -35,7 +36,7 @@ class HostEventDetailView extends StatelessWidget {
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, state) => state.when(
         failure: () => Scaffold(
-          backgroundColor: colorScheme.primary,
+          backgroundColor: appColors.pageBg,
           body: Center(
             child: EmptyList(
               emptyText: t.common.somethingWrong,
@@ -43,7 +44,7 @@ class HostEventDetailView extends StatelessWidget {
           ),
         ),
         loading: () => Scaffold(
-          backgroundColor: colorScheme.primary,
+          backgroundColor: appColors.pageBg,
           body: Loading.defaultLoading(context),
         ),
         fetched: (event) {

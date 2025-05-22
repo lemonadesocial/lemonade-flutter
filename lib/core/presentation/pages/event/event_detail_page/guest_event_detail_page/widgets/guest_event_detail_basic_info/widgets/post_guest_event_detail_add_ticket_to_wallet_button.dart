@@ -9,11 +9,11 @@ import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class PostGuestEventDetailAddTicketToWalletButton extends StatelessWidget {
   final Event event;
@@ -24,7 +24,8 @@ class PostGuestEventDetailAddTicketToWalletButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+
     return InkWell(
       onTap: () {
         final userId = AuthUtils.getUserId(context);
@@ -62,10 +63,10 @@ class PostGuestEventDetailAddTicketToWalletButton extends StatelessWidget {
         width: Sizing.medium,
         height: Sizing.medium,
         decoration: BoxDecoration(
-          color: LemonColor.chineseBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(Sizing.medium),
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.cardBorder,
             width: 1.w,
           ),
         ),

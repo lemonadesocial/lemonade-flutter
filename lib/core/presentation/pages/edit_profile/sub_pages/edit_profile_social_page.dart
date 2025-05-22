@@ -52,7 +52,7 @@ class EditProfileSocialDialog extends StatelessWidget with LemonBottomSheet {
                         t.profile.socialHandle,
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

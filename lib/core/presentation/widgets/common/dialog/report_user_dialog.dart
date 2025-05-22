@@ -66,7 +66,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
                     style: Typo.extraLarge.copyWith(
                       color: colorScheme.onPrimary,
                       fontWeight: FontWeight.w800,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                     ),
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
@@ -150,7 +150,7 @@ class ReportUserDialog extends StatelessWidget with LemonBottomSheet {
                         : () => bloc.reportUser(userId: user.userId),
                     label: t.common.actions.report,
                     textStyle: Typo.medium.copyWith(
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w600,
                       color: colorScheme.onPrimary,
                     ),

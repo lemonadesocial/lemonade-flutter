@@ -91,7 +91,7 @@ class _ShorebirdUpdatePageState extends State<ShorebirdUpdatePage>
                         color: colorScheme.onPrimary,
                         fontSize: 26.sp,
                         fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.spaceGrotesk,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     SizedBox(height: 9.h),

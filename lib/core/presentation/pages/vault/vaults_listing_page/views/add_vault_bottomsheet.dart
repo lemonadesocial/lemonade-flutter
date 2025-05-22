@@ -46,7 +46,7 @@ class AddVaultBottomSheet extends StatelessWidget {
                       t.vault.createVaultBottomSheet.title,
                       style: Typo.extraLarge.copyWith(
                         fontWeight: FontWeight.w600,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     SizedBox(height: Spacing.superExtraSmall),

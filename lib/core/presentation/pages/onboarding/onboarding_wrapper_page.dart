@@ -65,7 +65,7 @@ final onBoardingTheme = ThemeData(
       fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: LemonColor.white54,
-      fontFamily: FontFamily.switzerVariable,
+      fontFamily: FontFamily.generalSans,
     ),
   ),
   colorScheme: lemonadeDarkThemeColorScheme,

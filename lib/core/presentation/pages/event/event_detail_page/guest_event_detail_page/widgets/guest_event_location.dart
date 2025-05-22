@@ -101,7 +101,7 @@ class GuestEventLocation extends StatelessWidget {
                     Text(
                       event.address?.title ?? t.event.eventLocation,
                       style: Typo.mediumPlus.copyWith(
-                        fontFamily: FontFamily.switzerVariable,
+                        fontFamily: FontFamily.generalSans,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

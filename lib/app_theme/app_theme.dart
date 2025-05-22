@@ -91,11 +91,10 @@ class AppTheme with ChangeNotifier {
       labelMedium: _darkAppTextTheme.xs,
       labelSmall: _darkAppTextTheme.xs,
     ),
-
-    // scaffoldBackgroundColor: _darkAppColors.pageBg,
+    scaffoldBackgroundColor: _darkAppColors.pageBg,
     colorScheme: lemonadeAppDarkThemeData.colorScheme.copyWith(
-        // background: _darkAppColors.pageBg,
-        ),
+      background: _darkAppColors.pageBg,
+    ),
     extensions: [
       _darkAppColors,
       _darkAppTextTheme,

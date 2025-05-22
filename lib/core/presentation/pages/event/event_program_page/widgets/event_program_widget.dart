@@ -114,7 +114,7 @@ class EventProgramWidget extends StatelessWidget {
                                   : '',
                               style: Typo.small.copyWith(
                                 fontWeight: FontWeight.w600,
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 color: colorScheme.onPrimary,
                               ),
                             ),

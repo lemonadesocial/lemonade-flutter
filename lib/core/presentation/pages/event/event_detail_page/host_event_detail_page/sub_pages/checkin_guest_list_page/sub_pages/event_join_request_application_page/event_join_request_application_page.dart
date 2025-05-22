@@ -153,7 +153,7 @@ class _ActionsBar extends StatelessWidget {
                   textStyle: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                   leading: ThemeSvgIcon(
                     color: LemonColor.errorRedBg,
@@ -175,7 +175,7 @@ class _ActionsBar extends StatelessWidget {
                   textStyle: Typo.medium.copyWith(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                   leading: ThemeSvgIcon(
                     color: LemonColor.paleViolet,

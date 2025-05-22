@@ -102,7 +102,7 @@ class EventCreateRewardPageView extends StatelessWidget {
                             : t.event.rewardSetting.createNewReward,
                         style: Typo.extraLarge.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           color: colorScheme.onPrimary,
                         ),
                       ),

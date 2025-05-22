@@ -74,7 +74,7 @@ class CheckGuildRoomRolesBottomSheetView extends StatelessWidget {
                     t.chat.guild.citizenOnlyAccess,
                     style: Typo.extraLarge.copyWith(
                       color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                     ),
                   ),
                   SizedBox(height: Spacing.superExtraSmall),

@@ -33,7 +33,7 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: colorScheme.onPrimary,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
               ),
               SizedBox(width: Spacing.smMedium / 2),

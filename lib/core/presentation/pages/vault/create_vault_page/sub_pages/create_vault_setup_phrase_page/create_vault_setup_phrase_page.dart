@@ -132,7 +132,7 @@ class CreateVaultSetupPhrasePage extends StatelessWidget {
                           mode: GradientButtonMode.lavenderMode,
                           textStyle: Typo.medium.copyWith(
                             color: colorScheme.onPrimary.withOpacity(0.87),
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

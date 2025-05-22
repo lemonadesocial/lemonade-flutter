@@ -34,7 +34,7 @@ class ReportSubmittedPopup extends StatelessWidget {
                   t.common.submitted,
                   style: Typo.large.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                 ),
               ],

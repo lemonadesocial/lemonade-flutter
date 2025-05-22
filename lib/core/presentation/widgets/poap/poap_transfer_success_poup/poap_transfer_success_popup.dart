@@ -71,7 +71,7 @@ class PoapTransferSuccessPopup extends StatelessWidget {
                           t.nft.transferred,
                           style: Typo.extraLarge.copyWith(
                             fontWeight: FontWeight.w600,
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                           ),
                         ),
                         SizedBox(height: Spacing.extraSmall),

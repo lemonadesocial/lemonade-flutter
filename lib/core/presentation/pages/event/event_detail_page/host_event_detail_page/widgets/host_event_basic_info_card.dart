@@ -22,6 +22,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:app/core/utils/string_utils.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HostEventBasicInfoCard extends StatelessWidget {
   const HostEventBasicInfoCard({
@@ -43,6 +44,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
           (element) => element.type == PaymentAccountType.ethereumRelay,
         ) ??
         false;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
     // final canShowGuestList = FeatureManager(
@@ -62,7 +65,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: colorScheme.onPrimary.withOpacity(0.06),
+            color: appColors.cardBg,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(15.r),
               topLeft: Radius.circular(15.r),
@@ -94,7 +97,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                 height: 42.w,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: colorScheme.outline,
+                                    color: appColors.pageDivider,
                                   ),
                                   borderRadius: BorderRadius.circular(
                                     LemonRadius.extraSmall,
@@ -124,10 +127,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                   children: [
                                     Text(
                                       event.title ?? '',
-                                      style: Typo.small.copyWith(
-                                        color: colorScheme.onSecondary,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: FontFamily.switzerVariable,
+                                      style: appText.md.copyWith(
+                                        color: appColors.textSecondary,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -140,10 +141,10 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                             event,
                                           ) ??
                                           '',
-                                      style: Typo.mediumPlus.copyWith(
-                                        color: colorScheme.onPrimary,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontFamily.nohemiVariable,
+                                      style: appText.md.copyWith(
+                                        color: appColors.textPrimary,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: FontFamily.clashDisplay,
                                       ),
                                     ),
                                     SizedBox(
@@ -198,7 +199,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                   child: Container(
                     height: 73.w,
                     decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      color: appColors.cardBg,
                       borderRadius: BorderRadius.all(
                         Radius.circular(LemonRadius.extraSmall),
                       ),
@@ -211,9 +212,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                         children: [
                           Text(
                             event.checkInCount?.toString() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
+                            style: appText.md.copyWith(
+                              fontFamily: FontFamily.clashDisplay,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -222,8 +222,9 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           ),
                           Text(
                             t.event.checkedIn.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
+                            style: appText.sm.copyWith(
+                              color: appColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -244,7 +245,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                   child: Container(
                     height: 73.w,
                     decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      color: appColors.cardBg,
                       borderRadius: BorderRadius.all(
                         Radius.circular(LemonRadius.extraSmall),
                       ),
@@ -270,9 +271,9 @@ class HostEventBasicInfoCard extends StatelessWidget {
                               if (result.isLoading) {
                                 return Text(
                                   '--',
-                                  style: Typo.mediumPlus.copyWith(
+                                  style: appText.md.copyWith(
                                     color: colorScheme.onPrimary,
-                                    fontFamily: FontFamily.nohemiVariable,
+                                    fontFamily: FontFamily.clashDisplay,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 );
@@ -284,9 +285,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                                     event.attendingCount
                                         ?.toString() ?? // fallback for old events data
                                     '',
-                                style: Typo.mediumPlus.copyWith(
-                                  color: colorScheme.onPrimary,
-                                  fontFamily: FontFamily.nohemiVariable,
+                                style: appText.md.copyWith(
+                                  fontFamily: FontFamily.clashDisplay,
                                   fontWeight: FontWeight.bold,
                                 ),
                               );
@@ -297,8 +297,9 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           ),
                           Text(
                             t.event.registration.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
+                            style: appText.sm.copyWith(
+                              color: appColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -319,7 +320,7 @@ class HostEventBasicInfoCard extends StatelessWidget {
                   child: Container(
                     height: 73.w,
                     decoration: BoxDecoration(
-                      color: colorScheme.onPrimary.withOpacity(0.06),
+                      color: appColors.cardBg,
                       borderRadius: BorderRadius.all(
                         Radius.circular(LemonRadius.extraSmall),
                       ),
@@ -332,9 +333,8 @@ class HostEventBasicInfoCard extends StatelessWidget {
                         children: [
                           Text(
                             event.invitedCount?.toString() ?? '',
-                            style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onPrimary,
-                              fontFamily: FontFamily.nohemiVariable,
+                            style: appText.md.copyWith(
+                              fontFamily: FontFamily.clashDisplay,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -343,8 +343,9 @@ class HostEventBasicInfoCard extends StatelessWidget {
                           ),
                           Text(
                             t.event.invited.capitalize(),
-                            style: Typo.small
-                                .copyWith(color: colorScheme.onSecondary),
+                            style: appText.sm.copyWith(
+                              color: appColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -381,7 +382,9 @@ class _ClaimRelayPaymentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return InkWell(
       onTap: () {
         AutoRouter.of(context).push(
@@ -393,7 +396,7 @@ class _ClaimRelayPaymentButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Spacing.smMedium),
         decoration: BoxDecoration(
-          color: colorScheme.onPrimary.withOpacity(0.06),
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         ),
         child: Row(
@@ -409,13 +412,13 @@ class _ClaimRelayPaymentButton extends StatelessWidget {
             SizedBox(width: Spacing.extraSmall),
             Text(
               t.event.relayPayment.claimSplit.saleSplit,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.md.copyWith(
+                color: appColors.textSecondary,
               ),
             ),
             const Spacer(),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 width: 18.w,
                 height: 18.w,
@@ -439,8 +442,8 @@ class _ViewGuestsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
@@ -456,7 +459,7 @@ class _ViewGuestsButton extends StatelessWidget {
           Spacing.smMedium,
         ),
         decoration: BoxDecoration(
-          color: colorScheme.onPrimary.withOpacity(0.06),
+          color: appColors.cardBg,
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(LemonRadius.medium),
             bottomLeft: Radius.circular(LemonRadius.medium),
@@ -487,14 +490,14 @@ class _ViewGuestsButton extends StatelessWidget {
                       n: event.pendingRequestCount ?? 0,
                     )
                   : t.event.eventApproval.guests,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.md.copyWith(
+                color: appColors.textSecondary,
               ),
               overflow: TextOverflow.ellipsis,
             ),
             const Spacer(),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 width: 18.w,
                 height: 18.w,
@@ -513,7 +516,7 @@ class _EditEventButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Stack(
       children: [
         Padding(
@@ -522,7 +525,7 @@ class _EditEventButton extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: appColors.cardBg,
               borderRadius: BorderRadius.all(Radius.circular(9.r)),
             ),
             width: Sizing.medium,
@@ -534,7 +537,7 @@ class _EditEventButton extends StatelessWidget {
               },
               child: Center(
                 child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icEdit.svg(
                     colorFilter: filter,
                     width: 15.w,
@@ -556,11 +559,13 @@ class _PublishEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(LemonRadius.extraSmall),
           topLeft: Radius.circular(LemonRadius.extraSmall),
@@ -574,16 +579,13 @@ class _PublishEventButton extends StatelessWidget {
         children: [
           Text(
             t.event.eventPublish.eventPublishTitle,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
           SizedBox(height: 2.w),
           Text(
             t.event.eventPublish.eventPublishDescription2,
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.sm.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
           SizedBox(height: Spacing.small),

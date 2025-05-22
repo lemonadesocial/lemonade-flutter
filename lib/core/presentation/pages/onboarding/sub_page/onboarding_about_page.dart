@@ -79,7 +79,7 @@ class OnboardingAboutPage extends StatelessWidget {
                           style: Typo.extraLarge.copyWith(
                             fontWeight: FontWeight.w800,
                             color: LemonColor.onboardingTitle,
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                           ),
                         ),
                         SizedBox(height: Spacing.extraSmall),
@@ -152,7 +152,7 @@ class OnboardingAboutPage extends StatelessWidget {
                               state.gender == null ? null : bloc.updateProfile,
                           label: t.onboarding.next,
                           textStyle: Typo.medium.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.onPrimary,
                           ),

@@ -48,7 +48,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                     '18+',
                     style: TextStyle(
                       fontSize: 48.sp,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       color: colorScheme.onSecondary,
                       fontWeight: FontWeight.w400,
                     ),
@@ -62,7 +62,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                 t.onboarding.termAdult.title,
                 style: Typo.extraLarge.copyWith(
                   fontWeight: FontWeight.w800,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                   color: colorScheme.onPrimary,
                 ),
               ),
@@ -73,7 +73,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                   t.onboarding.termAdult.description,
                   style: Typo.mediumPlus.copyWith(
                     color: colorScheme.onSecondary,
-                    fontFamily: FontFamily.switzerVariable,
+                    fontFamily: FontFamily.generalSans,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -94,7 +94,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                     textStyle: Typo.medium.copyWith(
                       color: colorScheme.onPrimary.withOpacity(0.87),
                       fontWeight: FontWeight.w600,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                     ),
                     height: Sizing.large,
                     radius: BorderRadius.circular(24.r),

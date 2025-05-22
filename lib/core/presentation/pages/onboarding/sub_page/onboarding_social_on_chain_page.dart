@@ -75,7 +75,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                       fontSize: 26.sp,
                       fontWeight: FontWeight.w800,
                       color: LemonColor.onboardingTitle,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                     ),
                   ),
                   SizedBox(height: Spacing.extraSmall),
@@ -152,7 +152,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                         },
                         label: t.onboarding.next,
                         textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           fontWeight: FontWeight.w600,
                           color: theme.colorScheme.onPrimary,
                         ),

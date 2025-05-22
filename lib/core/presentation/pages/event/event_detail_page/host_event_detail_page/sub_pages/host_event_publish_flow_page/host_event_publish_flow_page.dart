@@ -256,7 +256,7 @@ class HostEventPublishFlowPage extends StatelessWidget {
                         t.event.eventPublish.eventPublishTitle,
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                       SizedBox(height: Spacing.superExtraSmall),

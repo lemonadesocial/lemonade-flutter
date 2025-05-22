@@ -109,7 +109,7 @@ class CreatePopUpTile extends StatelessWidget {
                         style: Typo.medium.copyWith(
                           fontWeight: FontWeight.w400,
                           color: colorScheme.onPrimary.withOpacity(0.36),
-                          fontFamily: FontFamily.switzerVariable,
+                          fontFamily: FontFamily.generalSans,
                         ),
                       ),
                     ],

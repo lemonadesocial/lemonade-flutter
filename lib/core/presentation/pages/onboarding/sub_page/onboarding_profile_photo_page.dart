@@ -66,7 +66,7 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                           fontSize: 26.sp,
                           fontWeight: FontWeight.w800,
                           color: LemonColor.onboardingTitle,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                       SizedBox(height: Spacing.extraSmall),
@@ -91,7 +91,7 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                           state.profilePhoto == null ? null : bloc.uploadImage,
                       label: t.onboarding.next,
                       textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onPrimary,
                       ),

@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HostEventDetailConfigGrid extends StatelessWidget {
   const HostEventDetailConfigGrid({
@@ -244,13 +245,13 @@ class GridItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.only(top: 1, left: 1, right: 1, bottom: 6),
         decoration: ShapeDecoration(
-          color: colorScheme.secondaryContainer,
+          color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -259,11 +260,12 @@ class GridItemWidget extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           clipBehavior: Clip.antiAlias,
           decoration: ShapeDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0.00, -1.00),
-              end: const Alignment(0, 1),
-              colors: [colorScheme.secondaryContainer, Colors.black],
-            ),
+            color: appColors.cardBg,
+            // gradient: LinearGradient(
+            //   begin: const Alignment(0.00, -1.00),
+            //   end: const Alignment(0, 1),
+            //   colors: [appColors.cardBg, appColors.pageBg],
+            // ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),

@@ -8,11 +8,11 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CastOnFarcasterButton extends StatelessWidget {
   final Event event;
@@ -24,7 +24,8 @@ class CastOnFarcasterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -70,7 +71,7 @@ class CastOnFarcasterButton extends StatelessWidget {
         padding: EdgeInsets.all(Spacing.smMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.medium),
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +81,7 @@ class CastOnFarcasterButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ThemeSvgIcon(
-                  color: LemonColor.paleViolet,
+                  color: appColors.textAccent,
                   builder: (filter) => Assets.icons.icFarcaster.svg(
                     colorFilter: filter,
                   ),
@@ -88,14 +89,14 @@ class CastOnFarcasterButton extends StatelessWidget {
                 SizedBox(width: Spacing.extraSmall),
                 Text(
                   t.farcaster.shareOnFarcaster,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.md.copyWith(
+                    color: appColors.textSecondary,
                   ),
                 ),
               ],
             ),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icArrowRight.svg(
                 colorFilter: filter,
               ),

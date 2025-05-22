@@ -25,7 +25,7 @@ class AiChatCommandSection extends StatelessWidget {
         Text(
           sectionLabel,
           style: Typo.extraMedium.copyWith(
-            fontFamily: FontFamily.spaceGrotesk,
+            fontFamily: FontFamily.clashDisplay,
             fontWeight: FontWeight.bold,
           ),
         ),

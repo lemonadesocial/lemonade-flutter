@@ -64,7 +64,7 @@ class GenderChipWidget extends StatelessWidget {
                         ? colorScheme.primary
                         : colorScheme.onPrimary.withOpacity(0.36),
                 fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
               ),
             ),
           ],

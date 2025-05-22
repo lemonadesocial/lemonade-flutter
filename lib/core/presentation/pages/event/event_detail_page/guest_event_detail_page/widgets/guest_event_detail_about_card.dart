@@ -65,7 +65,7 @@ class GuestEventDetailAboutCard extends StatelessWidget {
                           Text(
                             t.event.aboutTheEvent,
                             style: Typo.extraMedium.copyWith(
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                               fontWeight: FontWeight.w800,
                             ),
                           ),

@@ -60,7 +60,7 @@ class AddTicketToCalendarButton extends StatelessWidget {
             Text(
               '${t.common.addTo} ${t.common.calendar}'.toUpperCase(),
               style: Typo.medium.copyWith(
-                fontFamily: FontFamily.spaceGrotesk,
+                fontFamily: FontFamily.clashDisplay,
                 color: colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
               ),

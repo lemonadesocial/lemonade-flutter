@@ -75,7 +75,7 @@ class EditProfilePersonalDialogState extends State<EditProfilePersonalDialog> {
                               t.profile.personalInfo,
                               style: Typo.extraLarge.copyWith(
                                 fontWeight: FontWeight.w600,
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 color: colorScheme.onPrimary,
                               ),
                             ),
