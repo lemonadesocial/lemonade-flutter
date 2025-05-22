@@ -249,7 +249,7 @@ class LemonDrawer extends StatelessWidget {
                         context.read<AuthBloc>().state.maybeWhen(
                               authenticated: (authSession) =>
                                   AutoRouter.of(context)
-                                      .navigate(const MyEventsRoute()),
+                                      .navigate(MyEventsRoute()),
                               orElse: () => context.router.navigate(
                                 LoginRoute(),
                               ),

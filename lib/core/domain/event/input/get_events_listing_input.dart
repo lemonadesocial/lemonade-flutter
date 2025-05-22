@@ -61,11 +61,13 @@ abstract class FilterEventInput with _$FilterEventInput {
 
 @freezed
 abstract class GetUpcomingEventsInput with _$GetUpcomingEventsInput {
+  @JsonSerializable(explicitToJson: true)
   const factory GetUpcomingEventsInput({
     @JsonKey(includeIfNull: false) String? id,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
     @JsonKey(includeIfNull: false) bool? host,
+    @JsonKey(includeIfNull: false) GetEventSortInput? sort,
   }) = _GetUpcomingEventsInput;
 
   factory GetUpcomingEventsInput.fromJson(Map<String, dynamic> json) =>
@@ -74,12 +76,25 @@ abstract class GetUpcomingEventsInput with _$GetUpcomingEventsInput {
 
 @freezed
 abstract class GetPastEventsInput with _$GetPastEventsInput {
+  @JsonSerializable(explicitToJson: true)
   const factory GetPastEventsInput({
     @JsonKey(includeIfNull: false) String? id,
     @JsonKey(includeIfNull: false) int? skip,
     @JsonKey(includeIfNull: false) int? limit,
+    @JsonKey(includeIfNull: false, name: 'hosting_only') bool? hostingOnly,
+    @JsonKey(includeIfNull: false) GetEventSortInput? sort,
   }) = _GetPastEventsInput;
 
   factory GetPastEventsInput.fromJson(Map<String, dynamic> json) =>
       _$GetPastEventsInputFromJson(json);
+}
+
+@freezed
+abstract class GetEventSortInput with _$GetEventSortInput {
+  const factory GetEventSortInput({
+    @JsonKey(includeIfNull: false) int? start,
+  }) = _GetEventSortInput;
+
+  factory GetEventSortInput.fromJson(Map<String, dynamic> json) =>
+      _$GetEventSortInputFromJson(json);
 }
