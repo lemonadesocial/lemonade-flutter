@@ -6,10 +6,10 @@ import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventReservationsListItemWidget extends StatelessWidget {
   final Event event;
@@ -21,7 +21,9 @@ class EventReservationsListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.small,
@@ -34,7 +36,7 @@ class EventReservationsListItemWidget extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: colorScheme.outline,
+                color: appColors.pageDivider,
               ),
               borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
             ),
@@ -61,10 +63,7 @@ class EventReservationsListItemWidget extends StatelessWidget {
               children: [
                 Text(
                   event.title ?? '',
-                  style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: appText.md,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -74,10 +73,8 @@ class EventReservationsListItemWidget extends StatelessWidget {
                     dateTime: event.start ?? DateTime.now(),
                     timezone: event.timezone ?? '',
                   ),
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontWeight: FontWeight.w700,
-                    height: 0,
+                  style: appText.sm.copyWith(
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],
@@ -87,7 +84,7 @@ class EventReservationsListItemWidget extends StatelessWidget {
           SizedBox(width: Spacing.xSmall),
           // dot horizontal
           ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
             builder: (filter) =>
                 Assets.icons.icMoreHoriz.svg(colorFilter: filter),
           ),

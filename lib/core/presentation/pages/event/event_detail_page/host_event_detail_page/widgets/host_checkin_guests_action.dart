@@ -46,6 +46,10 @@ class HostCheckinGuestsAction extends StatelessWidget {
         decoration: BoxDecoration(
           color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
+          border: Border.all(
+            color: appColors.cardBorder,
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,

@@ -11,6 +11,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CreateEventContentSection extends StatelessWidget {
   final Event? initialEvent;
@@ -28,6 +29,7 @@ class CreateEventContentSection extends StatelessWidget {
         isEditMode ? initialEvent?.speakerUsersExpanded?.length ?? 0 : 0;
     final photosCount =
         isEditMode ? initialEvent?.newNewPhotos?.length ?? 0 : 0;
+    final appColors = context.theme.appColors;
 
     return Container(
       width: double.infinity,
@@ -47,7 +49,7 @@ class CreateEventContentSection extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
             ),
             child: Column(
@@ -71,7 +73,7 @@ class CreateEventContentSection extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.medium),
             ),
             child: Column(

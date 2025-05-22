@@ -2,8 +2,8 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/wheel_time_picker/wheel_time_picker.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,9 +31,10 @@ class _SelectTimeBottomSheetState extends State<SelectTimeOfDayBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
     return SafeArea(
       child: Container(
-        color: LemonColor.atomicBlack,
+        color: appColors.pageBg,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -16,6 +16,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 
 final DATE_CARD_SIZE = 42.w;
@@ -39,6 +40,7 @@ class EventProgramWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     DbFile? photo = session.photosExpanded?.isNotEmpty == true
         ? session.photosExpanded!.first
         : null;
@@ -75,7 +77,7 @@ class EventProgramWidget extends StatelessWidget {
                           width: DATE_CARD_SIZE,
                           height: 18.h,
                           decoration: BoxDecoration(
-                            color: LemonColor.chineseBlack,
+                            color: appColors.cardBg,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(LemonRadius.extraSmall),
                               topRight: Radius.circular(LemonRadius.extraSmall),
@@ -99,7 +101,7 @@ class EventProgramWidget extends StatelessWidget {
                           width: DATE_CARD_SIZE,
                           height: 24.h,
                           decoration: BoxDecoration(
-                            color: LemonColor.chineseBlack.withOpacity(0.7),
+                            color: appColors.cardBg.withOpacity(0.7),
                             borderRadius: BorderRadius.only(
                               bottomLeft:
                                   Radius.circular(LemonRadius.extraSmall),
@@ -272,13 +274,14 @@ class SpeakersInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Row(
       children: [
         Container(
           height: 30.h,
           padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
           decoration: BoxDecoration(
-            color: LemonColor.chineseBlack,
+            color: appColors.cardBg,
             border: Border.all(color: colorScheme.outline),
             borderRadius: BorderRadius.all(Radius.circular(LemonRadius.normal)),
           ),

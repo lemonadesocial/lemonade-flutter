@@ -72,6 +72,10 @@ class CastOnFarcasterButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.medium),
           color: appColors.cardBg,
+          border: Border.all(
+            color: appColors.cardBorder,
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

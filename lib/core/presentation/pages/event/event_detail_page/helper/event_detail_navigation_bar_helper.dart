@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class FeatureItem {
   final String label;
@@ -47,11 +48,13 @@ class EventDetailNavigationBarHelper {
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
+    final appColors = context.theme.appColors;
+
     final List<FeatureItem> features = [
       FeatureItem(
         label: t.event.configuration.checkIn,
         iconData: ThemeSvgIcon(
-          color: LemonColor.paleViolet,
+          color: appColors.textAccent,
           builder: (filter) => Assets.icons.icCheckin.svg(
             colorFilter: filter,
             width: iconSize,
@@ -80,6 +83,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.rewards,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icReward.svg(
             colorFilter: filter,
             width: iconSize,
@@ -112,6 +116,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.lounge,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icLounge.svg(
             colorFilter: filter,
             width: iconSize,
@@ -127,7 +132,7 @@ class EventDetailNavigationBarHelper {
         FeatureItem(
           label: t.event.configuration.program,
           iconData: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
             builder: (filter) => Assets.icons.icProgram.svg(
               colorFilter: filter,
               width: iconSize,
@@ -175,6 +180,7 @@ class EventDetailNavigationBarHelper {
     bool? isSmallIcon = true,
     // required EventUserRole? eventUserRole,
   }) {
+    final appColors = context.theme.appColors;
     final colorScheme = Theme.of(context).colorScheme;
     final iconSize = isSmallIcon == true ? 18.w : 24.w;
     final shouldShowProgram = (event.sessions ?? []).isNotEmpty;
@@ -217,7 +223,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.checkIn,
         iconData: ThemeSvgIcon(
-          color: LemonColor.paleViolet,
+          color: appColors.textAccent,
           builder: (filter) => Assets.icons.icCheckin.svg(
             colorFilter: filter,
             width: iconSize,
@@ -238,6 +244,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.rewards,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icReward.svg(
             colorFilter: filter,
             width: iconSize,
@@ -255,7 +262,7 @@ class EventDetailNavigationBarHelper {
         FeatureItem(
           label: t.event.subEvent.subEvents,
           iconData: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
             builder: (filter) => Assets.icons.icSessions.svg(
               colorFilter: filter,
               width: iconSize,
@@ -272,6 +279,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.lounge,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icLounge.svg(
             colorFilter: filter,
             width: iconSize,
@@ -286,6 +294,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.guests,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icGuests.svg(
             colorFilter: filter,
             width: iconSize,
@@ -302,7 +311,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.ledger,
         iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icBook.svg(
             colorFilter: filter,
             width: iconSize,
@@ -322,7 +331,7 @@ class EventDetailNavigationBarHelper {
         FeatureItem(
           label: t.event.configuration.program,
           iconData: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
             builder: (filter) => Assets.icons.icProgram.svg(
               colorFilter: filter,
               width: iconSize,
@@ -367,7 +376,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.controlPanel,
         iconData: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icSettings.svg(
             colorFilter: filter,
             width: iconSize,
@@ -385,6 +394,7 @@ class EventDetailNavigationBarHelper {
       FeatureItem(
         label: t.event.configuration.dashboard,
         iconData: ThemeSvgIcon(
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icDashboard.svg(
             colorFilter: filter,
             width: iconSize,

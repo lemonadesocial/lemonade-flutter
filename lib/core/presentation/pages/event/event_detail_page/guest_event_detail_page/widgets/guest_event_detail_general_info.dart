@@ -7,12 +7,11 @@ import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailGeneralInfo extends StatelessWidget {
   const GuestEventDetailGeneralInfo({
@@ -73,6 +72,8 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final (formattedDate, formattedTime) =
         EventUtils.getFormattedEventDateAndTime(event);
@@ -93,10 +94,7 @@ class _InfoCard extends StatelessWidget {
             Flexible(
               child: Text(
                 '$formattedDate, $formattedTime',
-                style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: appText.md,
               ),
             ),
           ],
@@ -125,10 +123,7 @@ class _InfoCard extends StatelessWidget {
                         isAttending: false,
                         isOwnEvent: false,
                       ),
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: appText.md,
                     ),
                   ],
                 ),
@@ -151,10 +146,7 @@ class _InfoCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   hostNames,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: appText.md,
                 ),
               ),
               GuestEventHostsAvatars(event: event),
@@ -166,10 +158,10 @@ class _InfoCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.cardBorder,
           width: 1.w,
         ),
       ),
@@ -181,7 +173,7 @@ class _InfoCard extends StatelessWidget {
         separatorBuilder: (context, index) => Divider(
           height: 1.w,
           thickness: 1.w,
-          color: colorScheme.outlineVariant,
+          color: appColors.pageDivider,
         ),
         itemCount: wigets.length,
       ),

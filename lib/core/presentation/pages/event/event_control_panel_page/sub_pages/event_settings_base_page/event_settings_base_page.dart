@@ -35,6 +35,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_location_setting_page/event_location_setting_page.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventSettingsBasePage extends StatelessWidget {
@@ -44,6 +45,9 @@ class EventSettingsBasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final authUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -70,7 +74,7 @@ class EventSettingsBasePage extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Scaffold(
-                  backgroundColor: LemonColor.atomicBlack,
+                  backgroundColor: appColors.pageBg,
                   appBar: LemonAppBar(
                     title: t.common.settings,
                     leading: Container(
@@ -84,7 +88,7 @@ class EventSettingsBasePage extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: LemonColor.white09,
+                            color: appColors.cardBorder,
                             width: 1,
                           ),
                           borderRadius:
@@ -120,7 +124,7 @@ class EventSettingsBasePage extends StatelessWidget {
                           child: Icon(
                             Icons.close_rounded,
                             size: 24,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ),
@@ -165,13 +169,9 @@ class EventSettingsBasePage extends StatelessWidget {
                                       ),
                                     );
                               },
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              placeholderStyle: Typo.mediumPlus.copyWith(
-                                color: LemonColor.white23,
-                                fontWeight: FontWeight.w500,
+                              style: appText.md,
+                              placeholderStyle: appText.md.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             ),
                           ),
@@ -198,22 +198,25 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              color: LemonColor.chineseBlack,
+                              color: appColors.cardBg,
                               title: t.event.virtualLinkSetting.virtualLink,
                               subTitle: event.virtualUrl,
                               leading: Icon(
                                 Icons.videocam_rounded,
                                 size: 18.w,
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                               ),
                               leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
+                              trailing: ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (filter) =>
+                                    Assets.icons.icArrowBack.svg(
+                                  width: 18.w,
+                                  height: 18.w,
+                                  colorFilter: filter,
+                                ),
                               ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
+                              titleStyle: appText.md,
                               radius: LemonRadius.small,
                               onTap: () {
                                 Vibrate.feedback(FeedbackType.light);
@@ -248,7 +251,6 @@ class EventSettingsBasePage extends StatelessWidget {
                           sliver: SliverToBoxAdapter(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: LemonColor.chineseBlack,
                                 borderRadius:
                                     BorderRadius.circular(LemonRadius.small),
                               ),
@@ -258,7 +260,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                       EventLocationSettingState>(
                                     builder: (context, locationState) {
                                       return SettingTileWidget(
-                                        color: LemonColor.chineseBlack,
+                                        color: appColors.cardBg,
                                         title: event.address != null
                                             ? event.address?.title ?? ''
                                             : t.event.locationSetting
@@ -273,16 +275,19 @@ class EventSettingsBasePage extends StatelessWidget {
                                         leading: Icon(
                                           Icons.location_on_outlined,
                                           size: 18.w,
-                                          color: colorScheme.onSecondary,
+                                          color: appColors.textTertiary,
                                         ),
                                         leadingCircle: false,
-                                        trailing: Assets.icons.icArrowBack.svg(
-                                          width: 18.w,
-                                          height: 18.w,
+                                        trailing: ThemeSvgIcon(
+                                          color: appColors.textTertiary,
+                                          builder: (filter) =>
+                                              Assets.icons.icArrowBack.svg(
+                                            width: 18.w,
+                                            height: 18.w,
+                                            colorFilter: filter,
+                                          ),
                                         ),
-                                        titleStyle: Typo.medium.copyWith(
-                                          color: colorScheme.onPrimary,
-                                        ),
+                                        titleStyle: appText.md,
                                         radius: LemonRadius.small,
                                         onTap: () {
                                           showCupertinoModalBottomSheet(
@@ -378,20 +383,27 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              color: LemonColor.chineseBlack,
+                              color: appColors.cardBg,
                               title: t.event.eventCreation.description,
                               subTitle: StringUtils.stripHtmlTags(
                                 event.description ?? '',
                               ),
-                              leading: Assets.icons.icDescription.svg(),
+                              leading: ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (filter) =>
+                                    Assets.icons.icDescription.svg(
+                                  colorFilter: filter,
+                                ),
+                              ),
                               leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
+                              trailing: ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (filter) =>
+                                    Assets.icons.icArrowBack.svg(
+                                  colorFilter: filter,
+                                ),
                               ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
+                              titleStyle: appText.md,
                               radius: LemonRadius.small,
                               onTap: () {
                                 AutoRouter.of(context).navigate(
@@ -420,23 +432,24 @@ class EventSettingsBasePage extends StatelessWidget {
                           ),
                           sliver: SliverToBoxAdapter(
                             child: SettingTileWidget(
-                              color: LemonColor.chineseBlack,
+                              color: appColors.cardBg,
                               title: t.event.eventCohost.cohosts,
                               leading: ThemeSvgIcon(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                                 builder: (filter) =>
                                     Assets.icons.icHostOutline.svg(
                                   colorFilter: filter,
                                 ),
                               ),
                               leadingCircle: false,
-                              trailing: Assets.icons.icArrowBack.svg(
-                                width: 18.w,
-                                height: 18.w,
+                              trailing: ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (filter) =>
+                                    Assets.icons.icArrowBack.svg(
+                                  colorFilter: filter,
+                                ),
                               ),
-                              titleStyle: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
-                              ),
+                              titleStyle: appText.md,
                               radius: LemonRadius.small,
                               onTap: () {
                                 AutoRouter.of(context).push(
@@ -489,9 +502,14 @@ class EventSettingsBasePage extends StatelessWidget {
                                   ),
                                 ),
                                 leadingCircle: false,
-                                trailing: Assets.icons.icArrowBack.svg(
-                                  width: Sizing.mSmall,
-                                  height: Sizing.mSmall,
+                                trailing: ThemeSvgIcon(
+                                  color: appColors.textTertiary,
+                                  builder: (filter) =>
+                                      Assets.icons.icArrowBack.svg(
+                                    width: Sizing.mSmall,
+                                    height: Sizing.mSmall,
+                                    colorFilter: filter,
+                                  ),
                                 ),
                                 titleStyle: Typo.medium.copyWith(
                                   color: colorScheme.onPrimary,
@@ -565,6 +583,7 @@ class EventSettingsBasePage extends StatelessWidget {
   }
 
   Widget _buildDeleteEventButton(BuildContext context, Event event) {
+    final appColors = context.theme.appColors;
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
       sliver: SliverToBoxAdapter(
@@ -584,7 +603,7 @@ class EventSettingsBasePage extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(LemonRadius.medium),
-              color: LemonColor.coralReef.withOpacity(0.18),
+              color: appColors.chipErrorBg,
             ),
             padding: EdgeInsets.all(Spacing.small),
             child: Row(
@@ -595,7 +614,7 @@ class EventSettingsBasePage extends StatelessWidget {
                     width: Sizing.mSmall,
                     height: Sizing.mSmall,
                     child: ThemeSvgIcon(
-                      color: LemonColor.coralReef,
+                      color: appColors.chipError,
                       builder: (filter) => Assets.icons.icDelete.svg(
                         width: Sizing.mSmall,
                         height: Sizing.mSmall,
@@ -608,7 +627,7 @@ class EventSettingsBasePage extends StatelessWidget {
                 Text(
                   t.event.deleteEvent,
                   style: Typo.medium.copyWith(
-                    color: LemonColor.coralReef,
+                    color: appColors.chipError,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

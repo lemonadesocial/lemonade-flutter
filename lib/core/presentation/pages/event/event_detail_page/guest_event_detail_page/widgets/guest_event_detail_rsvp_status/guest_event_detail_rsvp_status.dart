@@ -11,10 +11,10 @@ import 'package:app/graphql/backend/event/query/get_my_event_join_request.graphq
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailRSVPStatus extends StatelessWidget {
   final Event event;
@@ -139,18 +139,20 @@ class _JoinRequestStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
       padding: EdgeInsets.all(
         Spacing.small,
       ),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(
           LemonRadius.medium,
         ),
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.cardBorder,
           width: 1.w,
         ),
       ),
@@ -165,16 +167,13 @@ class _JoinRequestStatusCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: appText.md,
                 ),
                 SizedBox(height: 2.w),
                 Text(
                   subTitle,
-                  style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.sm.copyWith(
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],

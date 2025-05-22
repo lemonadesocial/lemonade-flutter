@@ -17,15 +17,17 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class PinExistingEventToSpacePage extends StatelessWidget {
   static Future<PinEventsToSpaceResponse?> show(
     BuildContext context, {
     required Space space,
   }) {
+    final appColors = context.theme.appColors;
     return showCupertinoModalBottomSheet<PinEventsToSpaceResponse?>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: true,
       builder: (context) => PinExistingEventToSpacePage(space: space),

@@ -5,7 +5,7 @@ import 'package:app/core/presentation/pages/profile/views/list/profile_nft_creat
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_on_sale_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/list/profile_nft_sold_list_view.dart';
 import 'package:app/core/presentation/pages/profile/views/tabs/base_sliver_tab_view.dart';
-import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
@@ -46,13 +46,15 @@ class _ProfileCollectibleTabViewState extends State<ProfileCollectibleTabView> {
               color: colorScheme.primary,
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: Spacing.small),
-                itemBuilder: (context, index) => LemonChip(
+                itemBuilder: (context, index) => LinearGradientButton(
                   onTap: () => setState(() {
                     tokensListingType = TokensListingType.values[index];
                   }),
                   label: t['nft.${TokensListingType.values[index].name}'],
-                  isActive:
-                      tokensListingType == TokensListingType.values[index],
+                  mode: tokensListingType == TokensListingType.values[index]
+                      ? GradientButtonMode.light
+                      : GradientButtonMode.tertiary,
+                  radius: BorderRadius.circular(LemonRadius.full),
                 ),
                 separatorBuilder: (_, __) =>
                     SizedBox(width: Spacing.superExtraSmall),

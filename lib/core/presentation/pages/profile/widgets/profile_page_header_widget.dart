@@ -23,6 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class ProfilePageHeader extends StatelessWidget {
   final User user;
@@ -34,7 +35,9 @@ class ProfilePageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final appColors = context.theme.appColors;
+    return Container(
+      color: appColors.pageBg,
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
       child: Column(
         children: [

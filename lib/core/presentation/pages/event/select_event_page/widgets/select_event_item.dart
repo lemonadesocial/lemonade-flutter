@@ -5,12 +5,12 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SelectEventItem extends StatelessWidget {
   final Event event;
@@ -22,10 +22,11 @@ class SelectEventItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: LemonColor.chineseBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.small),
       ),
       child: Row(

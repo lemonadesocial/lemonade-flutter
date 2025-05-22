@@ -21,7 +21,7 @@ class CreateSubSideEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
+    final appColors = context.theme.appColors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -40,10 +40,10 @@ class CreateSubSideEventButton extends StatelessWidget {
           title: t.event.subEvent.createSubEvent,
           subTitle: t.event.subEvent.createSubEventDescription,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
-          // border: Border.all(
-          //   color: appColors.cardBorder,
-          //   width: 1.w,
-          // ),
+          border: Border.all(
+            color: appColors.cardBorder,
+            width: 1.w,
+          ),
         ),
         // TODO: Coming soon feature
         // SizedBox(height: Spacing.superExtraSmall),
