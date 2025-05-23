@@ -3,8 +3,6 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
 import 'package:app/core/application/event/events_listing_bloc/upcoming_events_listing_bloc.dart';
-import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
-import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
@@ -140,11 +138,8 @@ class _HomeViewState extends State<_HomeView>
     try {
       // Simulate a delay to show the loading state
       await Future.delayed(const Duration(milliseconds: 1000));
-      context.read<UpcomingHostingEventsBloc>().add(
-            UpcomingHostingEventsEvent.fetch(),
-          );
-      context.read<UpcomingAttendingEventsBloc>().add(
-            UpcomingAttendingEventsEvent.fetch(),
+      context.read<UpcomingEventsListingBloc>().add(
+            BaseEventsListingEvent.fetch(),
           );
       widget.mySpacesBloc.add(const ListSpacesEvent.fetch());
       widget.ambassadorSpacesBloc.add(const ListSpacesEvent.fetch());
