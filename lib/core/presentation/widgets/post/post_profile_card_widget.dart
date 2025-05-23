@@ -101,7 +101,7 @@ class PostProfileCardView extends StatelessWidget {
               togglePostReactionBloc: togglePostReactionBloc,
             ),
           ),
-          orElse: () => AutoRouter.of(context).navigate(const LoginRoute()),
+          orElse: () => AutoRouter.of(context).navigate(LoginRoute()),
         );
       },
       child: Row(
@@ -206,7 +206,7 @@ class PostProfileCardView extends StatelessWidget {
                                       },
                                     ),
                                     orElse: () => AutoRouter.of(context)
-                                        .navigate(const LoginRoute()),
+                                        .navigate(LoginRoute()),
                                   );
                                 }
                               },

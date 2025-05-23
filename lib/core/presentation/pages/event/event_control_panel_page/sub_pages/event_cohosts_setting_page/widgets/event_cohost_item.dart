@@ -96,7 +96,7 @@ class EventCohostItem extends StatelessWidget {
                     mode: GradientButtonMode.defaultMode,
                     textStyle: Typo.small.copyWith(
                       color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

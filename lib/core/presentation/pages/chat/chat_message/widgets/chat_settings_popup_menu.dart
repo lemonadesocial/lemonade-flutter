@@ -14,6 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:matrix/matrix.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 enum ChatOptions { chatDetails, leave }
 
@@ -50,7 +51,7 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return FloatingFrostedGlassDropdown(
       items: <DropdownItemDpo<ChatOptions>>[
@@ -104,7 +105,7 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
         padding: EdgeInsets.symmetric(horizontal: 15.w),
         alignment: Alignment.centerRight,
         child: ThemeSvgIcon(
-          color: colorScheme.onSurface,
+          color: appColors.textTertiary,
           builder: (filter) => Assets.icons.icMoreHoriz.svg(
             colorFilter: filter,
           ),

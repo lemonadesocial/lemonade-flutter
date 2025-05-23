@@ -450,41 +450,19 @@ final getUpcomingEventsQuery = gql('''
     \$limit: Int = 100, 
     \$skip: Int = 0, 
     \$host: Boolean
+    \$sort: JSON
   ) {
-    getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host) {
+    getUpcomingEvents(user: \$id, limit: \$limit, skip: \$skip, host: \$host, sort: \$sort) {
       ...eventFields
     }
   }
 ''');
 
 final getPastEventsQuery = gql('''
-  $eventAddressFragment
-  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0) {
-  events: getPastEvents(user: \$id, limit: \$limit, skip: \$skip) {
-    _id
-    title
-    slug
-    host
-    host_expanded {
-      _id
-      name
-      image_avatar
-      new_photos_expanded {
-        _id
-        key
-        bucket
-      }
-    }
-    new_new_photos_expanded(limit: 1) {
-      _id
-      key
-      bucket
-    }
-    start
-    end
-    address {
-      ...eventAddressFragment
-    }
+  $eventFragment
+  query (\$id: MongoID!, \$limit: Int = 100, \$skip: Int = 0, \$sort: JSON, \$hosting_only: Boolean) {
+  events: getPastEvents(user: \$id, limit: \$limit, skip: \$skip, hosting_only: \$hosting_only, sort: \$sort) {
+    ...eventFields
   }
 }
 ''');

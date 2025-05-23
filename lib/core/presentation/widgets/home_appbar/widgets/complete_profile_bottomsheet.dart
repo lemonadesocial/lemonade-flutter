@@ -80,7 +80,7 @@ class CompleteProfileBottomSheet extends StatelessWidget {
                 Text(
                   t.profile.completeProfile.label,
                   style: Typo.extraLarge.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w800,
                   ),

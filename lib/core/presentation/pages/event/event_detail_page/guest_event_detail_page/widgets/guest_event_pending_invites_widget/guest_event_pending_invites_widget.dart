@@ -1,7 +1,8 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/application/event/get_event_pending_invites_bloc/get_event_pending_invites_bloc.dart';
 import 'package:app/core/domain/event/entities/event_invite.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -10,9 +11,7 @@ import 'package:app/graphql/backend/event/mutation/decide_event_cohost_request.g
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
@@ -109,12 +108,14 @@ class PendingCohostRequestItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appColors = Theme.of(context).appColors;
+    final appText = context.theme.appTextTheme;
     return Card(
       margin: EdgeInsets.zero,
-      color: LemonColor.atomicBlack,
+      color: appColors.cardBg,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: colorScheme.outlineVariant,
+          color: appColors.cardBorder,
         ),
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
@@ -136,30 +137,24 @@ class PendingCohostRequestItem extends StatelessWidget {
                 children: [
                   Text(
                     t.event.eventPendingInvites.pendingCohostRequestTitle,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: appText.md,
                   ),
                   SizedBox(height: 2.w),
                   Text(
                     t.event.eventPendingInvites.pendingCohostRequestDescription(
                       name: eventInvite.inviterExpanded?.name ?? '',
                     ),
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                    style: appText.sm.copyWith(
+                      color: appColors.textTertiary,
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(width: Spacing.small),
-            LemonOutlineButton(
-              borderColor: Colors.transparent,
-              backgroundColor: LemonColor.raisinBlack,
-              radius: BorderRadius.circular(LemonRadius.button),
+            LinearGradientButton.tertiaryButton(
+              radius: BorderRadius.circular(LemonRadius.full),
               label: t.common.actions.accept,
-              textColor: colorScheme.onPrimary,
               onTap: () {
                 onDecide(true);
               },

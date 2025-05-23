@@ -1,36 +1,35 @@
 import 'package:app/core/domain/event/entities/event.dart';
-import 'package:app/core/presentation/pages/event/my_events_page/widgets/my_events_list_item.dart';
-import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/i18n/i18n.g.dart';
+import 'package:app/core/presentation/pages/event/my_events_page/widgets/my_events_empty_widget.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class MyEventsListView extends StatelessWidget {
   final List<Event> events;
+  final MyEventsEmptyWidgetType emptyType;
 
   const MyEventsListView({
     super.key,
     required this.events,
+    required this.emptyType,
   });
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     if (events.isEmpty) {
-      return EmptyList(
-        emptyText: t.event.empty.myEvents,
-      );
+      return MyEventsEmptyWidget(type: emptyType);
     }
 
     return ListView.separated(
       padding: EdgeInsets.all(Spacing.smMedium),
       itemBuilder: (context, index) {
-        return MyEventsListItem(
-          event: events[index],
-        );
+        // TODO: Gonna replace soon
+        return HomeEventCard(event: events[index]);
+        // return MyEventsListItem(
+        //   event: events[index],
+        // );
       },
-      separatorBuilder: (context, index) =>
-          SizedBox(height: Spacing.superExtraSmall),
+      separatorBuilder: (context, index) => SizedBox(height: Spacing.s2),
       itemCount: events.length,
     );
   }

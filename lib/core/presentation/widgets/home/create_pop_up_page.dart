@@ -41,7 +41,7 @@ class CreatePopUpPage extends StatelessWidget with LemonBottomSheet {
             Text(
               t.home.create,
               style: Typo.extraLarge.copyWith(
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
                 fontWeight: FontWeight.w800,
               ),
             ),

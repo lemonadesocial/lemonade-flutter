@@ -9,6 +9,7 @@ import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SelectEventTagsDropdown extends StatefulWidget {
   final List<String> initialSelectedTags;
@@ -38,6 +39,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Query$GetEventTags$Widget(
       builder: (
         result, {
@@ -54,12 +56,12 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
               padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
-                color: LemonColor.chineseBlack,
+                color: appColors.cardBg,
               ),
               child: Row(
                 children: [
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => Assets.icons.icTag.svg(
                       width: Sizing.mSmall,
                       height: Sizing.mSmall,
@@ -94,7 +96,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
                   ),
                   SizedBox(width: Spacing.xSmall),
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) =>
                         Assets.icons.icArrowUpDown.svg(colorFilter: filter),
                   ),
@@ -135,7 +137,7 @@ class _SelectEventTagsDropdownState extends State<SelectEventTagsDropdown> {
               maxHeight: 250.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
-                color: LemonColor.atomicBlack,
+                color: appColors.pageBg,
               ),
               offset: Offset(0, -Spacing.superExtraSmall),
             ),

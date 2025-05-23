@@ -2,6 +2,7 @@ import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post.dart';
+import 'package:app/core/domain/lens/entities/lens_feed.dart';
 import 'package:app/core/domain/lens/entities/lens_switch_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
@@ -10,7 +11,9 @@ import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/auth/query/accounts_available.graphql.dart';
+import 'package:app/graphql/lens/feed/query/lens_get_feed.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_create_post.graphql.dart';
+import 'package:app/graphql/lens/feed/mutation/lens_create_feed.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:dartz/dartz.dart';
 import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.dart';
@@ -294,5 +297,62 @@ class LensRepositoryImpl implements LensRepository {
     }
 
     return Right(result);
+  }
+
+  @override
+  Future<Either<Failure, LensTransactionStatusResult>> createFeed({
+    required Variables$Mutation$LensCreateFeed input,
+  }) async {
+    final response = await _client.mutate$LensCreateFeed(
+      Options$Mutation$LensCreateFeed(
+        variables: input,
+      ),
+    );
+
+    if (response.hasException || response.parsedData?.createFeed == null) {
+      return Left(Failure.withGqlException(response.exception));
+    }
+
+    final result = response.parsedData!.createFeed.maybeWhen(
+      orElse: () => null,
+      createFeedResponse: (data) =>
+          LensTransactionStatusResult.notIndexedYetStatus(
+        reason: data.hash,
+      ),
+      selfFundedTransactionRequest: (data) =>
+          LensTransactionStatusResult.failedTransactionStatus(
+        reason: data.reason,
+        blockTimestamp: DateTime.now(),
+      ),
+      transactionWillFail: (data) =>
+          LensTransactionStatusResult.failedTransactionStatus(
+        reason: data.reason,
+        blockTimestamp: DateTime.now(),
+      ),
+    );
+
+    if (result == null) {
+      return Left(Failure(message: 'Unknown error'));
+    }
+
+    return Right(result);
+  }
+
+  @override
+  Future<Either<Failure, LensFeed>> getFeed({
+    required Variables$Query$LensGetFeed input,
+  }) async {
+    final response = await _client.query$LensGetFeed(
+      Options$Query$LensGetFeed(variables: input),
+    );
+    if (response.hasException || response.parsedData?.feed == null) {
+      return Left(Failure.withGqlException(response.exception));
+    }
+
+    return Right(
+      LensFeed.fromJson(
+        response.parsedData!.feed!.toJson(),
+      ),
+    );
   }
 }

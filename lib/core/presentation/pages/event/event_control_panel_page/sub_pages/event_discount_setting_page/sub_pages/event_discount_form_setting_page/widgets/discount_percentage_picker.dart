@@ -130,7 +130,7 @@ class _Picker extends StatelessWidget {
               displayPercentage,
               style: Typo.extraLarge.copyWith(
                 color: colorScheme.onPrimary,
-                fontFamily: FontFamily.nohemiVariable,
+                fontFamily: FontFamily.clashDisplay,
                 fontWeight: FontWeight.w600,
               ),
             ),

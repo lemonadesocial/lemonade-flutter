@@ -93,7 +93,7 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                           color: colorScheme.onPrimary,
                           fontSize: 26.sp,
                           fontWeight: FontWeight.w800,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                       SizedBox(height: Spacing.superExtraSmall),
@@ -117,7 +117,7 @@ class GuestEventApplicationInfoPage extends StatelessWidget {
                           },
                           label: t.event.requiredFields.completeProfile,
                           textStyle: Typo.medium.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                             fontWeight: FontWeight.w600,
                             color: colorScheme.onPrimary,
                           ),

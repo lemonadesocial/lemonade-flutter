@@ -60,7 +60,7 @@ class AIMetaDataCard extends StatelessWidget {
                             label,
                             style: Typo.medium.copyWith(
                               fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                               color: colorScheme.onPrimary,
                             ),
                           ),
@@ -69,7 +69,7 @@ class AIMetaDataCard extends StatelessWidget {
                             style: Typo.xSmall.copyWith(
                               fontWeight: FontWeight.w400,
                               color: colorScheme.onPrimary.withOpacity(0.54),
-                              fontFamily: FontFamily.switzerVariable,
+                              fontFamily: FontFamily.generalSans,
                             ),
                           ),
                         ],

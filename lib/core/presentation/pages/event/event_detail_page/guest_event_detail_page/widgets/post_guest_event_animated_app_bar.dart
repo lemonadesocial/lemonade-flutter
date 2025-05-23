@@ -16,15 +16,15 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 enum _EventAction {
   share,
@@ -80,7 +80,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
         },
       );
     } else {
-      AutoRouter.of(context).navigate(const LoginRoute());
+      AutoRouter.of(context).navigate(LoginRoute());
     }
   }
 
@@ -91,7 +91,6 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
     bool overlapsContent,
   ) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final primary = Theme.of(context).colorScheme.primary;
     final userId = AuthUtils.getUserId(context);
     final isOwnEventOrCohost = EventUtils.isOwnEvent(
@@ -102,6 +101,9 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
           event: event,
           userId: userId,
         );
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return AppBar(
       backgroundColor: backgroundColor ?? primary,
       automaticallyImplyLeading: hideLeading ?? true,
@@ -109,7 +111,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
           ? null
           : leading ??
               LemonBackButton(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
               ),
       actions: actions ??
           [
@@ -130,7 +132,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
                           value: _EventAction.share,
                           label: t.common.actions.share,
                           leadingIcon: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textSecondary,
                             builder: (colorFilter) => Assets.icons.icShare.svg(
                               colorFilter: colorFilter,
                             ),
@@ -142,7 +144,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
                             label:
                                 StringUtils.capitalize(t.common.actions.edit),
                             leadingIcon: ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textSecondary,
                               builder: (colorFilter) => Assets.icons.icEdit.svg(
                                 width: 18.w,
                                 height: 18.w,
@@ -155,14 +157,16 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
                             value: _EventAction.report,
                             label: t.common.actions.report,
                             leadingIcon: ThemeSvgIcon(
-                              color: LemonColor.coralReef,
+                              color: appColors.textError,
                               builder: (colorFilter) =>
                                   Assets.icons.icReport.svg(
                                 colorFilter: colorFilter,
+                                width: 18.w,
+                                height: 18.w,
                               ),
                             ),
-                            textStyle: Typo.medium.copyWith(
-                              color: LemonColor.coralReef,
+                            textStyle: appText.md.copyWith(
+                              color: appColors.textError,
                             ),
                           ),
                       ],
@@ -181,11 +185,11 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
                         }
                       },
                       child: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icMoreVertical.svg(
                           colorFilter: filter,
-                          width: 25.w,
-                          height: 25.w,
+                          width: Sizing.s5,
+                          height: Sizing.s5,
                         ),
                       ),
                     ),
@@ -197,10 +201,7 @@ class PostGuestEventAnimatedAppBar extends LemonAnimatedAppBar {
           ],
       title: Text(
         event.title ?? '',
-        style: Typo.extraMedium.copyWith(
-          color: colorScheme.onPrimary,
-          fontWeight: FontWeight.w600,
-        ),
+        style: appText.md,
       ),
       centerTitle: true,
       elevation: 0,

@@ -155,7 +155,7 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
                       style: Typo.superLarge.copyWith(
                         color: colorScheme.onPrimary,
                         fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     Text(
@@ -163,7 +163,7 @@ class _GuestEventRewardUsesPageView extends StatelessWidget {
                       style: Typo.medium.copyWith(
                         color: colorScheme.onSecondary,
                         fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                   ],

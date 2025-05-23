@@ -193,7 +193,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
             textStyle: Typo.medium.copyWith(
               fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
-              fontFamily: FontFamily.nohemiVariable,
+              fontFamily: FontFamily.clashDisplay,
             ),
             radius: BorderRadius.circular(LemonRadius.small * 2),
             label: t.common.next,

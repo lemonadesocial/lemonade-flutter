@@ -11,15 +11,14 @@ import 'package:app/graphql/backend/space/space.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailSpaceInfo extends StatefulWidget {
   const GuestEventDetailSpaceInfo({
@@ -67,8 +66,10 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return BlocBuilder<GetSpaceDetailBloc, GetSpaceDetailState>(
       builder: (context, state) {
         final space = state.maybeWhen(
@@ -104,7 +105,9 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                           height: Sizing.regular,
                           borderRadius:
                               BorderRadius.circular(LemonRadius.xSmall),
-                          placeholder: ImagePlaceholder.spaceThumbnail(),
+                          placeholder: ImagePlaceholder.dicebearThumbnail(
+                            seed: space?.id ?? '',
+                          ),
                         ),
                         SizedBox(width: Spacing.small),
                         Column(
@@ -112,8 +115,8 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                           children: [
                             Text(
                               t.event.presentedBy,
-                              style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
+                              style: appText.sm.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             ),
                             Row(
@@ -121,15 +124,13 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                               children: [
                                 Text(
                                   space?.title ?? '',
-                                  style: Typo.extraMedium.copyWith(
-                                    color: colorScheme.onPrimary,
-                                  ),
+                                  style: appText.md,
                                 ),
                                 SizedBox(width: Spacing.superExtraSmall),
                                 Padding(
                                   padding: EdgeInsets.only(top: 4.w),
                                   child: ThemeSvgIcon(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                     builder: (filter) =>
                                         Assets.icons.icArrowRight.svg(
                                       colorFilter: filter,
@@ -163,11 +164,11 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                           : t.common.actions.subscribe,
                       backgroundColor: space?.followed == true
                           ? Colors.transparent
-                          : LemonColor.raisinBlack,
+                          : appColors.buttonTertiaryBg,
                       borderColor:
                           space?.followed == true ? null : Colors.transparent,
-                      textStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                      textStyle: appText.md.copyWith(
+                        color: appColors.buttonTertiary,
                       ),
                     ),
                 ],
@@ -176,8 +177,8 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                 SizedBox(height: Spacing.small),
                 Text(
                   space?.description ?? '',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.md.copyWith(
+                    color: appColors.textSecondary,
                   ),
                 ),
               ],
@@ -223,7 +224,7 @@ class _GuestEventDetailSpaceInfoState extends State<GuestEventDetailSpaceInfo> {
                       child: Padding(
                         padding: EdgeInsets.only(right: Spacing.xSmall),
                         child: ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) => item.$3.svg(
                             colorFilter: filter,
                             width: 20.w,

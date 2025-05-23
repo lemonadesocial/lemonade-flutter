@@ -76,22 +76,17 @@ class _DiscoverPostsState extends State<DiscoverPosts> {
             );
           }
 
-          return SliverPadding(
-            padding: EdgeInsetsDirectional.symmetric(
-              vertical: Spacing.medium,
-            ),
-            sliver: SliverList.separated(
-              itemBuilder: (ctx, index) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
-                child: PostProfileCard(
-                  key: Key(state.posts[index].id),
-                  post: state.posts[index],
-                ),
+          return SliverList.separated(
+            itemBuilder: (ctx, index) => Padding(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
+              child: PostProfileCard(
+                key: Key(state.posts[index].id),
+                post: state.posts[index],
               ),
-              separatorBuilder: (ctx, index) =>
-                  Divider(color: colorScheme.outline),
-              itemCount: state.posts.length,
             ),
+            separatorBuilder: (ctx, index) =>
+                Divider(color: colorScheme.outline),
+            itemCount: state.posts.length,
           );
         },
       ),

@@ -177,7 +177,7 @@ class AIGridItem extends StatelessWidget {
                               label ?? '',
                               style: Typo.medium.copyWith(
                                 fontWeight: FontWeight.w600,
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 color: colorScheme.onPrimary,
                               ),
                             ),

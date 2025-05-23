@@ -3,5 +3,19 @@
     "claimUsernameDescription": "Usernames with 6 or more characters are free to claim.",
     "usernameValidationRules": "Usernames must not be longer than 26 characters and can only contain letters, numbers, _ and -",
     "connectWalletDescription": "It looks like your wallet is not connected. Connect your wallet to activate the feed",
-    "onboardingConnectDescription": "We’ll make sure your on-chain identity comes with you. One name, everywhere you go."
+    "onboardingConnectDescription": "We’ll make sure your on-chain identity comes with you. One name, everywhere you go.",
+    "activateTimeline": "Activate Timeline",
+    "activateTimelineDescription": "Enable the timeline so your community can start posting and engaging here.",
+    "activate": "Activate",
+    "disconnectWallet": "Disconnect Wallet",
+    "setUpYourTimeline": "Set Up Your Timeline",
+    "fillInTheDetailsBelowToCompleteSetup": "Fill in the details below to complete setup.",
+    "nameOfTheFeed": "Name of the Feed",
+    "description": "Description",
+    "admins": "Admins",
+    "activateFeed": "Activate Feed",
+    "defineRulesForYourFeed": "Define rules for your feed.",
+    "walletAddress": "Wallet Address",
+    "noPostsYet": "No Posts",
+    "postsFromThisCommunityWillAppearHere": "When someone shares something, it’ll show up here."
 }

@@ -240,7 +240,7 @@ class _EventItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
-        AutoRouter.of(context).navigate(
+        AutoRouter.of(context).push(
           EventDetailRoute(eventId: event.id ?? ''),
         );
       },

@@ -1,7 +1,7 @@
 name: app
 description: Lemonade Social App
 publish_to: "none"
-version: 2.0.1
+version: 2.2.0
 
 environment:
   flutter: "3.24.1"
@@ -171,6 +171,8 @@ dependencies:
   geolocator_android: 4.6.1
   device_info_plus: 11.3.0
   coinbase_wallet_sdk: 1.0.10
+  provider: ^6.1.5
+  soft_edge_blur: ^0.1.3
 
 dependency_overrides:
   matrix_api_lite:
@@ -230,9 +232,33 @@ flutter:
     - assets/lotties/
     - assets/index.html
     - .env
+    - .env.production
+    - .env.staging
     - shorebird.yaml
 
   fonts:
+    - family: GeneralSans
+      fonts:
+        - asset: assets/fonts/GeneralSans-Regular.otf
+          weight: 400
+        - asset: assets/fonts/GeneralSans-Medium.otf
+          weight: 500
+        - asset: assets/fonts/GeneralSans-Semibold.otf
+          weight: 600
+        - asset: assets/fonts/GeneralSans-Bold.otf
+          weight: 700
+
+    - family: ClashDisplay
+      fonts:
+        - asset: assets/fonts/ClashDisplay-Regular.otf
+          weight: 400
+        - asset: assets/fonts/ClashDisplay-Medium.otf
+          weight: 500
+        - asset: assets/fonts/ClashDisplay-Semibold.otf
+          weight: 600
+        - asset: assets/fonts/ClashDisplay-Bold.otf
+          weight: 700
+
     - family: CircularStd
       fonts:
         - asset: assets/fonts/CircularStd-Black.ttf

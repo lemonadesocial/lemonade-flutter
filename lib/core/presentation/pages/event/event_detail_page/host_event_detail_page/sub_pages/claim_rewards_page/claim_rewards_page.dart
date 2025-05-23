@@ -83,7 +83,7 @@ class _ClaimRewardsPageView extends StatelessWidget {
                         style: Typo.superLarge.copyWith(
                           color: colorScheme.onPrimary,
                           fontWeight: FontWeight.w800,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                     );

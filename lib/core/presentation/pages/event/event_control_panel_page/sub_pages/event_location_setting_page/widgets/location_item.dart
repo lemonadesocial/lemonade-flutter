@@ -92,7 +92,6 @@ class LocationItem extends StatelessWidget {
                           location.title ?? '',
                           style: Typo.small.copyWith(
                             color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
                             fontSize: 13.sp,
                             height: 0,
                           ),

@@ -23,17 +23,14 @@ class OnboardingWrapperPage extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: onBoardingTheme,
-      child: WillPopScope(
-        onWillPop: () async {
-          if (onboardingFlow == false) return true;
-          var currentTopRoute = AutoRouter.of(context).topRoute;
-          bool? isPopBlocked = currentTopRoute.meta.tryGet('popBlocked');
-          return isPopBlocked != null ? !isPopBlocked : true;
-        },
-        child: const AutoRouter(),
-      ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (onboardingFlow == false) return true;
+        var currentTopRoute = AutoRouter.of(context).topRoute;
+        bool? isPopBlocked = currentTopRoute.meta.tryGet('popBlocked');
+        return isPopBlocked != null ? !isPopBlocked : true;
+      },
+      child: const AutoRouter(),
     );
   }
 
@@ -65,7 +62,7 @@ final onBoardingTheme = ThemeData(
       fontSize: 16.sp,
       fontWeight: FontWeight.w400,
       color: LemonColor.white54,
-      fontFamily: FontFamily.switzerVariable,
+      fontFamily: FontFamily.generalSans,
     ),
   ),
   colorScheme: lemonadeDarkThemeColorScheme,

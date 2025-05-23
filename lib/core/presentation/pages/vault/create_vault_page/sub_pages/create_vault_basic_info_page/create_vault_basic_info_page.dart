@@ -38,7 +38,7 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                 Text(
                   '${t.vault.vaultType.individual} ${StringUtils.capitalize(t.vault.vault(n: 1))}',
                   style: Typo.extraLarge.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -107,7 +107,7 @@ class CreateVaultBasicInfoPage extends StatelessWidget {
                             mode: GradientButtonMode.lavenderMode,
                             textStyle: Typo.medium.copyWith(
                               color: colorScheme.onPrimary.withOpacity(0.87),
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

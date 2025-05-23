@@ -35,7 +35,7 @@ class ClaimTokenRewardProcessingView extends StatelessWidget {
                     style: Typo.extraLarge.copyWith(
                       color: colorScheme.onPrimary,
                       fontWeight: FontWeight.bold,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                     ),
                     textAlign: TextAlign.center,
                   ),

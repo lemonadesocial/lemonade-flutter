@@ -377,7 +377,6 @@ class EventDetailNavigationBarItem extends StatelessWidget {
           Text(
             feature.label,
             style: Typo.xSmall.copyWith(
-              fontWeight: FontWeight.w600,
               color: feature.textColor ?? colorScheme.onSecondary,
             ),
           ),

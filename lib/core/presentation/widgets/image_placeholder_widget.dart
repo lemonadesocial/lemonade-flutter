@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
+import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
+import 'package:app/core/utils/dice_bear_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -87,6 +89,43 @@ class ImagePlaceholder {
             colorFilter: filter,
           ),
         ),
+      ),
+    );
+  }
+
+  static Widget dicebearThumbnail({
+    required String seed,
+    double? size,
+    BorderRadius? radius,
+  }) {
+    final avatarSize = size ?? Sizing.s5;
+    return SizedBox(
+      height: avatarSize,
+      width: avatarSize,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: LemonNetworkImage(
+              imageUrl: DiceBearUtils.getSpaceImageUrl(id: seed),
+              width: avatarSize,
+              height: avatarSize,
+              fit: BoxFit.cover,
+              borderRadius: radius,
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Transform.scale(
+              scale: 0.7,
+              child: ThemeSvgIcon(
+                color: Colors.black,
+                builder: (filter) => Assets.icons.icCommunityPlaceholder.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

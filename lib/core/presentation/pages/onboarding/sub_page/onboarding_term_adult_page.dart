@@ -4,13 +4,12 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class OnboardingTermAdultPage extends StatelessWidget {
@@ -19,6 +18,9 @@ class OnboardingTermAdultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final t = Translations.of(context);
     final onboardingBloc = context.watch<OnboardingBloc>();
     return BlocListener<OnboardingBloc, OnboardingState>(
@@ -30,7 +32,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          backgroundColor: colorScheme.background,
+          backgroundColor: appColors.pageBg,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,14 +43,14 @@ class OnboardingTermAdultPage extends StatelessWidget {
                 height: 180.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(180.w),
-                  color: colorScheme.secondaryContainer,
+                  color: appColors.cardBg,
                 ),
                 child: Center(
                   child: Text(
                     '18+',
                     style: TextStyle(
                       fontSize: 48.sp,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       color: colorScheme.onSecondary,
                       fontWeight: FontWeight.w400,
                     ),
@@ -60,20 +62,15 @@ class OnboardingTermAdultPage extends StatelessWidget {
               ),
               Text(
                 t.onboarding.termAdult.title,
-                style: Typo.extraLarge.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontFamily: FontFamily.nohemiVariable,
-                  color: colorScheme.onPrimary,
-                ),
+                style: appText.xl,
               ),
               SizedBox(height: Spacing.superExtraSmall),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
                 child: Text(
                   t.onboarding.termAdult.description,
-                  style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.onSecondary,
-                    fontFamily: FontFamily.switzerVariable,
+                  style: appText.md.copyWith(
+                    color: appColors.textTertiary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -82,7 +79,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
               SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                  child: LinearGradientButton(
+                  child: LinearGradientButton.primaryButton(
                     onTap: () {
                       onboardingBloc.acceptTerm(
                         UpdateUserProfileInput(
@@ -91,14 +88,6 @@ class OnboardingTermAdultPage extends StatelessWidget {
                       );
                     },
                     label: t.onboarding.termAdult.action,
-                    textStyle: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
-                      fontWeight: FontWeight.w600,
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
-                    height: Sizing.large,
-                    radius: BorderRadius.circular(24.r),
-                    mode: GradientButtonMode.lavenderMode,
                     loadingWhen:
                         onboardingBloc.state.status == OnboardingStatus.loading,
                   ),

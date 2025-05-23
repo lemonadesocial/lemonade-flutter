@@ -74,7 +74,7 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                         Text(
                           t.vault.createVault.recoveryPhrase,
                           style: Typo.extraLarge.copyWith(
-                            fontFamily: FontFamily.nohemiVariable,
+                            fontFamily: FontFamily.clashDisplay,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -146,7 +146,7 @@ class ShowRecoveryPhraseBottomSheet extends StatelessWidget {
                               mode: GradientButtonMode.lavenderMode,
                               textStyle: Typo.medium.copyWith(
                                 color: colorScheme.onPrimary.withOpacity(0.87),
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

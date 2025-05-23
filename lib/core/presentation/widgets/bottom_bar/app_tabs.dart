@@ -22,7 +22,7 @@ class TabData {
 final List<TabData> tabs = [
   TabData(
     AppTab.home,
-    '/',
+    '/home',
     ThemeSvgIcon(
       builder: (filter) => Assets.icons.icHouse.svg(
         colorFilter: filter,

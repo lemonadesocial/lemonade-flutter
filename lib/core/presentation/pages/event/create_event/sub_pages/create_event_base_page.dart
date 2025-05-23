@@ -26,7 +26,6 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -39,6 +38,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:formz/formz.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/create_event/sub_pages/widgets/create_event_submitting_to_space_card.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class CreateEventBasePage extends StatelessWidget {
@@ -117,7 +117,6 @@ class CreateEventBasePage extends StatelessWidget {
                 onTap: () =>
                     AutoRouter.of(mContext).pop((EventActionType.viewSubEvent)),
                 mode: GradientButtonMode.light,
-                textColor: Colors.black,
               ),
             ],
           ),
@@ -146,6 +145,8 @@ class CreateEventBasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     return BlocConsumer<CreateEventBloc, CreateEventState>(
       listener: (context, state) async {
@@ -171,7 +172,7 @@ class CreateEventBasePage extends StatelessWidget {
       builder: (context, state) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          backgroundColor: colorScheme.primary,
+          backgroundColor: appColors.pageBg,
           appBar: LemonAppBar(
             leadingWidth: 100.w,
             leading: BlocBuilder<ListSpacesBloc, ListSpacesState>(
@@ -214,7 +215,7 @@ class CreateEventBasePage extends StatelessWidget {
                   child: Icon(
                     Icons.close_rounded,
                     size: Sizing.small,
-                    color: colorScheme.onSurfaceVariant,
+                    color: appColors.textTertiary,
                   ),
                 ),
               ),
@@ -250,13 +251,9 @@ class CreateEventBasePage extends StatelessWidget {
                       errorText: state.title.displayError?.getMessage(
                         t.event.eventCreation.title,
                       ),
-                      style: Typo.mediumPlus.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      placeholderStyle: Typo.mediumPlus.copyWith(
-                        color: LemonColor.white23,
-                        fontWeight: FontWeight.w500,
+                      style: appText.md,
+                      placeholderStyle: appText.md.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ),
@@ -283,7 +280,7 @@ class CreateEventBasePage extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
-                      color: LemonColor.chineseBlack,
+                      color: appColors.cardBg,
                       title: t.event.virtualLinkSetting.virtualLink,
                       subTitle: state.virtualUrl,
                       leading: Icon(
@@ -333,7 +330,7 @@ class CreateEventBasePage extends StatelessWidget {
                   sliver: SliverToBoxAdapter(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: LemonColor.chineseBlack,
+                        color: appColors.cardBg,
                         borderRadius: BorderRadius.circular(LemonRadius.small),
                       ),
                       child: Column(
@@ -371,7 +368,7 @@ class CreateEventBasePage extends StatelessWidget {
                                   showCupertinoModalBottomSheet(
                                     useRootNavigator: true,
                                     context: context,
-                                    backgroundColor: LemonColor.atomicBlack,
+                                    backgroundColor: appColors.cardBg,
                                     topRadius:
                                         Radius.circular(LemonRadius.small),
                                     enableDrag: false,
@@ -452,7 +449,7 @@ class CreateEventBasePage extends StatelessWidget {
                   ),
                   sliver: SliverToBoxAdapter(
                     child: SettingTileWidget(
-                      color: LemonColor.chineseBlack,
+                      color: appColors.cardBg,
                       title: t.event.eventCreation.description,
                       subTitle: StringUtils.stripHtmlTags(
                         state.description ?? '',
@@ -517,7 +514,7 @@ class CreateEventBasePage extends StatelessWidget {
                     child: Container(
                       height: 1.h,
                       decoration: BoxDecoration(
-                        color: colorScheme.outline,
+                        color: appColors.pageDivider,
                       ),
                     ),
                   ),
@@ -543,11 +540,11 @@ class CreateEventBasePage extends StatelessWidget {
 
   _buildSubmitButton(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       builder: (context, state) {
         return Container(
-          color: colorScheme.background,
+          color: appColors.pageBg,
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: Spacing.smMedium,

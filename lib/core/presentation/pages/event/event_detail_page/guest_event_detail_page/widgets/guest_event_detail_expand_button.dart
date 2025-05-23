@@ -2,6 +2,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailExpandButton extends StatelessWidget {
   final VoidCallback? onTap;
@@ -12,7 +13,7 @@ class GuestEventDetailExpandButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return InkWell(
       onTap: onTap,
@@ -22,7 +23,7 @@ class GuestEventDetailExpandButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizing.small),
           border: Border.all(
-            color: colorScheme.outline,
+            color: appColors.pageDivider,
           ),
         ),
         child: Center(

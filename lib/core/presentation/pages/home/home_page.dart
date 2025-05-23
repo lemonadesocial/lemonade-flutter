@@ -1,3 +1,5 @@
+import 'package:app/app_theme/app_theme.dart';
+import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/pages/home/views/home_view.dart';
 import 'package:app/core/presentation/pages/home/widgets/quest_points_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -7,7 +9,6 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -35,12 +36,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isLoggedIn = context.read<AuthBloc>().state.maybeWhen(
+            orElse: () => false,
+            authenticated: (_) => true,
+          );
+      if (!isLoggedIn) {
+        AutoRouter.of(context).navigate(DiscoverRoute());
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     final isLoggedIn = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => false,
           authenticated: (_) => true,
@@ -49,9 +59,17 @@ class _HomePageState extends State<HomePage> {
           orElse: () => false,
           processing: () => true,
         );
+
+    if (!isLoggedIn || isProcessingLogin) {
+      return const LoginPage(
+        isHomeScreen: true,
+      );
+    }
+
     return Scaffold(
       appBar: HomeAppBar(
         title: "",
+        backgroundColor: appColors.pageBg,
         actions: [
           if (isProcessingLogin) ...[
             Loading.defaultLoading(context),
@@ -62,11 +80,11 @@ class _HomePageState extends State<HomePage> {
               width: 85.w,
               child: LemonOutlineButton(
                 onTap: () {
-                  AutoRouter.of(context).navigate(const LoginRoute());
+                  AutoRouter.of(context).navigate(LoginRoute());
                 },
                 label: t.auth.signIn,
-                backgroundColor: colorScheme.secondaryContainer,
-                borderColor: colorScheme.secondaryContainer,
+                backgroundColor: appColors.buttonSecondary,
+                borderColor: appColors.cardBorder,
                 radius: BorderRadius.circular(LemonRadius.button),
               ),
             ),
@@ -82,7 +100,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ],
       ),
-      backgroundColor: LemonColor.black,
+      backgroundColor: appColors.pageBg,
       body: const HomeView(),
     );
   }

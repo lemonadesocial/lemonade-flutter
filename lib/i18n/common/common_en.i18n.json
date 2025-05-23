@@ -98,7 +98,10 @@
         "check": "Check",
         "openSettings": "Open Settings",
         "sign": "Sign",
-        "verifyWallet": "Verify wallet"
+        "verifyWallet": "Verify wallet",
+        "getStarted": "Get Started",
+        "explore": "Explore",
+        "discover": "Discover"
     },
     "followed": "Followed",
     "anonymous": "anonymous",
@@ -285,5 +288,6 @@
             "alertContent": "Photos permission is required to select images. Please enable it in settings."
         }
     },
-    "poweredBy": "powered by"
+    "poweredBy": "powered by",
+    "wallet": "Wallet"
 }

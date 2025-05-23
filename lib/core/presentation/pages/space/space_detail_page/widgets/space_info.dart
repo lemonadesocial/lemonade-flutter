@@ -2,14 +2,11 @@ import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/social_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:app/core/presentation/pages/space/space_detail_page/widgets/space_button_by_role.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SpaceInfo extends StatelessWidget {
   final Space space;
@@ -21,56 +18,48 @@ class SpaceInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final spaceAddressTitle = space.address?.title;
-    return Container(
-      padding: EdgeInsets.all(Spacing.small),
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
+    return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Spacer(),
-              SpaceButtonByRole(space: space),
-            ],
-          ),
-          SizedBox(height: Spacing.small),
+          // SizedBox(height: Spacing.small),
           // Space name
           Text(
             space.title ?? '',
-            style: Typo.extraLarge.copyWith(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onPrimary,
-            ),
+            style: appText.xxl,
           ),
-          if (space.description?.isNotEmpty == true) ...[
-            SizedBox(height: Spacing.superExtraSmall),
-            // Description
-            Text(
-              space.description ?? '',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
-              ),
-            ),
-          ],
           if (spaceAddressTitle != null) ...[
-            SizedBox(height: Spacing.superExtraSmall),
+            SizedBox(height: Spacing.s2),
             Row(
               children: [
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
-                  builder: (filter) => Assets.icons.icLocationPin.svg(
+                  color: appColors.textTertiary,
+                  builder: (filter) => Assets.icons.icLocationPinOutline.svg(
                     colorFilter: filter,
                   ),
                 ),
                 SizedBox(width: Spacing.superExtraSmall),
                 Text(
                   spaceAddressTitle,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                  style: appText.sm.copyWith(
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],
+            ),
+          ],
+          if (space.description?.isNotEmpty == true) ...[
+            SizedBox(height: Spacing.s2),
+            // Description
+            Text(
+              space.description ?? '',
+              style: appText.sm.copyWith(
+                color: appColors.textSecondary,
+              ),
             ),
           ],
           if (space.handleTwitter != null ||
@@ -79,8 +68,9 @@ class SpaceInfo extends StatelessWidget {
               space.handleTiktok != null ||
               space.handleYoutube != null ||
               space.website != null) ...[
-            SizedBox(height: Spacing.small),
+            SizedBox(height: Spacing.s3),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <(String?, String, SvgGenImage)>[
                 (space.handleInstagram, 'instagram', Assets.icons.icInstagram),
                 (space.handleTwitter, 'twitter', Assets.icons.icXLine),
@@ -105,22 +95,14 @@ class SpaceInfo extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    margin: EdgeInsets.only(right: Spacing.superExtraSmall),
-                    decoration: ShapeDecoration(
-                      color: LemonColor.chineseBlack,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(LemonRadius.button),
-                      ),
-                    ),
+                    margin: EdgeInsets.only(right: Spacing.s3),
                     child: Center(
                       child: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => item.$3.svg(
                           colorFilter: filter,
-                          width: 16.w,
-                          height: 16.w,
+                          width: Sizing.s5,
+                          height: Sizing.s5,
                         ),
                       ),
                     ),

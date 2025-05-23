@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
@@ -14,13 +15,14 @@ class LemonBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return GestureDetector(
       onTap: () {
         AutoRouter.of(context).pop();
       },
       child: Center(
         child: ThemeSvgIcon(
-          color: color,
+          color: color ?? appColors.textTertiary,
           builder: (filter) => Assets.icons.icBack.svg(
             colorFilter: filter,
             // fit: BoxFit.scaleDown,

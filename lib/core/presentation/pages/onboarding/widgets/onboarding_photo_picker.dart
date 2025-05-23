@@ -15,6 +15,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class OnboardingPhotoPicker extends StatelessWidget {
   const OnboardingPhotoPicker({
@@ -29,17 +30,18 @@ class OnboardingPhotoPicker extends StatelessWidget {
     final theme = Theme.of(context);
     final t = Translations.of(context);
     final bloc = context.read<OnboardingBloc>();
+    final appColors = context.theme.appColors;
     return Container(
       width: 327.w,
       height: 327.w,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(LemonRadius.small),
+        borderRadius: BorderRadius.circular(LemonRadius.md),
         border: Border.all(
-          color: theme.colorScheme.outline,
+          color: appColors.cardBorder,
           width: 0.5.w,
         ),
-        color: theme.colorScheme.onPrimary.withOpacity(0.06),
+        color: appColors.cardBg,
       ),
       child: imageFile != null
           ? Stack(
@@ -130,11 +132,11 @@ class OnboardingPhotoPicker extends StatelessWidget {
                 if (!hasPermission) {
                   return;
                 }
-                bloc.selectProfileImage;
+                bloc.selectProfileImage();
               },
               child: Center(
                 child: ThemeSvgIcon(
-                  color: theme.colorScheme.onSurfaceVariant,
+                  color: appColors.textTertiary,
                   builder: (colorFilter) => Assets.icons.icSelectImage.svg(
                     colorFilter: colorFilter,
                   ),

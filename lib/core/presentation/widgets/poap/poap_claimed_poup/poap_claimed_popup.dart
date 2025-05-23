@@ -108,7 +108,7 @@ class PoapClaimedPopup extends StatelessWidget {
                           t.nft.collectibleClaimed,
                           style: Typo.extraMedium.copyWith(
                             fontWeight: FontWeight.w600,
-                            fontFamily: FontFamily.switzerVariable,
+                            fontFamily: FontFamily.generalSans,
                           ),
                         ),
                         SizedBox(height: Spacing.xSmall),

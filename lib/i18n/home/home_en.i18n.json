@@ -1,6 +1,6 @@
 {
     "newsfeed": "Newsfeed",
-    "whatOnYourMind": "What's on your mind",
+    "whatOnYourMind": "What's on your mind?",
     "create": "Create",
     "comingSoon": "Coming soon",
     "post": "Post",
@@ -18,11 +18,13 @@
         "moreActions": {
             "myProfile": "My profile",
             "completeProfile": "Complete profile",
+            "connectWallet": "Connect wallet",
             "setting": "Settings",
             "reportIssue": "Report an issue",
             "rateApp": "Rate app",
             "followLemonade": "Follow Lemonade",
-            "signOut": "Sign out"
+            "signOut": "Sign out",
+            "signIn": "Sign in"
         }
     },
     "quickCreate": {

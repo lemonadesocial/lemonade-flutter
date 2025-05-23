@@ -41,7 +41,7 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
                     t.event.eventBuyTickets.selectCategory,
                     style: Typo.extraLarge.copyWith(
                       color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

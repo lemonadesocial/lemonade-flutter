@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_item_by_type/notification_item_base.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notification_thumbnail.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
@@ -8,7 +9,6 @@ import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -25,17 +25,17 @@ class EventTicketAssignedNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final currentUserId = AuthUtils.getUserId(context);
     return NotificationBaseItem(
       notification: notification,
       icon: ThemeSvgIcon(
-        color: LemonColor.paleViolet,
+        color: appColors.textAccent,
         builder: (colorFilter) => Assets.icons.icTicketGradient.svg(
           colorFilter: colorFilter,
-          width: Sizing.small,
-          height: Sizing.small,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
       avatar: notification.refUserExpanded != null
@@ -85,10 +85,9 @@ class EventTicketAssignedNotificationItem extends StatelessWidget {
             ]);
           }
         },
-        backgroundColor: colorScheme.secondaryContainer,
-        radius: BorderRadius.circular(LemonRadius.button),
-        borderColor: Colors.transparent,
+        radius: BorderRadius.circular(LemonRadius.full),
         label: t.common.actions.viewTicket,
+        height: Sizing.s8,
       ),
     );
   }

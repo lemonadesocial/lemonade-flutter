@@ -250,7 +250,7 @@ class _CreateRecurringDatesPageState extends State<CreateRecurringDatesPage> {
                 child: LinearGradientButton.secondaryButton(
                   textStyle: Typo.medium.copyWith(
                     color: Colors.black,
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                   ),
                   mode: GradientButtonMode.light,
                   label: t.event.sessionDuplication.addTimes(n: dates.length),

@@ -123,7 +123,7 @@ class ComingSoonModal extends StatelessWidget {
                         color: colorScheme.onPrimary,
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w800,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     SizedBox(

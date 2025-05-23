@@ -17,14 +17,13 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailHosts extends StatelessWidget {
   const GuestEventDetailHosts({
@@ -38,7 +37,8 @@ class GuestEventDetailHosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+
     final t = Translations.of(context);
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => '',
@@ -58,10 +58,7 @@ class GuestEventDetailHosts extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
           child: Text(
             StringUtils.capitalize(t.common.host(n: 2)),
-            style: Typo.extraMedium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onPrimary,
-            ),
+            style: appText.lg,
           ),
         ),
         SizedBox(
@@ -79,7 +76,6 @@ class GuestEventDetailHosts extends StatelessWidget {
             final host = hosts[index];
             return _EventHostItem(
               host: host,
-              colorScheme: colorScheme,
               isAttending: isAttending,
             );
           },
@@ -92,16 +88,17 @@ class GuestEventDetailHosts extends StatelessWidget {
 class _EventHostItem extends StatelessWidget {
   const _EventHostItem({
     required this.host,
-    required this.colorScheme,
     this.isAttending = false,
   });
 
   final User? host;
-  final ColorScheme colorScheme;
   final bool isAttending;
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return BlocProvider(
       create: (context) => UserFollowsBloc(
         getIt<UserRepository>(),
@@ -116,10 +113,10 @@ class _EventHostItem extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
             border: Border.all(
-              color: colorScheme.outlineVariant,
+              color: appColors.cardBorder,
               width: 1.w,
             ),
           ),
@@ -130,7 +127,7 @@ class _EventHostItem extends StatelessWidget {
                 height: Sizing.medium,
                 borderRadius: BorderRadius.circular(Sizing.medium),
                 border: Border.all(
-                  color: colorScheme.outline,
+                  color: appColors.cardBorder,
                   width: 1.w,
                 ),
                 fit: BoxFit.cover,
@@ -149,10 +146,7 @@ class _EventHostItem extends StatelessWidget {
                   children: [
                     Text(
                       host?.displayName ?? host?.name ?? '',
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: appText.md,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -160,8 +154,8 @@ class _EventHostItem extends StatelessWidget {
                     if (host?.username?.isNotEmpty == true)
                       Text(
                         '@${host?.username}',
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -206,18 +200,18 @@ class _EventHostItem extends StatelessWidget {
                           horizontal: Spacing.superExtraSmall,
                         ),
                         decoration: BoxDecoration(
-                          color: LemonColor.chineseBlack,
+                          color: appColors.cardBg,
                           borderRadius: BorderRadius.circular(
                             Sizing.medium,
                           ),
                           border: Border.all(
-                            color: colorScheme.outline,
+                            color: appColors.cardBorder,
                             width: 0.5.w,
                           ),
                         ),
                         child: Center(
                           child: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (filter) => Assets.icons.icChatBubble.svg(
                               colorFilter: filter,
                               width: Sizing.xSmall,
@@ -246,19 +240,21 @@ class _FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
       height: Sizing.medium,
       padding: EdgeInsets.symmetric(
         horizontal: Spacing.xSmall,
       ),
       decoration: BoxDecoration(
-        color: LemonColor.chineseBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(
           LemonRadius.normal,
         ),
         border: Border.all(
-          color: colorScheme.outline,
+          color: appColors.cardBorder,
           width: 0.5.w,
         ),
       ),
@@ -293,9 +289,8 @@ class _FollowButton extends StatelessWidget {
                   ? Loading.defaultLoading(context)
                   : Text(
                       following ? t.common.followed : t.common.actions.follow,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        fontWeight: FontWeight.w600,
+                      style: appText.sm.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
             ),

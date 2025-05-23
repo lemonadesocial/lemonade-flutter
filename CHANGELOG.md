@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.1.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.0.0...v2.1.0) (2025-05-15)
+
+
+### Features
+
+* hide active feed feature & improve some minor feedback ([#943](https://github.com/lemonadesocial/lemonade-flutter/issues/943)) ([dd9ac4a](https://github.com/lemonadesocial/lemonade-flutter/commit/dd9ac4a8a014bd7c7744c86d43a41d77f9951bf9))
+* implement activate feed flow ([#937](https://github.com/lemonadesocial/lemonade-flutter/issues/937)) ([0903ac8](https://github.com/lemonadesocial/lemonade-flutter/commit/0903ac858358ce951879ae8336a62984b23081b7))
+* lens claim username timeline ([#934](https://github.com/lemonadesocial/lemonade-flutter/issues/934)) ([6a36ce9](https://github.com/lemonadesocial/lemonade-flutter/commit/6a36ce929514220c0779f45443f96841ff6c4c47))
+* lens improvement ([#939](https://github.com/lemonadesocial/lemonade-flutter/issues/939)) ([a008803](https://github.com/lemonadesocial/lemonade-flutter/commit/a008803dbef6841674ee7189ffe4b11a98a24d47))
+* lens posts ([#933](https://github.com/lemonadesocial/lemonade-flutter/issues/933)) ([f9390e8](https://github.com/lemonadesocial/lemonade-flutter/commit/f9390e88293273128c57298cab2d8da1e609e689))
+* new UI home and discover screen ([#938](https://github.com/lemonadesocial/lemonade-flutter/issues/938)) ([d05f6ef](https://github.com/lemonadesocial/lemonade-flutter/commit/d05f6ef49acc30a51083378fad09e4857eaf4510))
+
+
+### Bug Fixes
+
+* bugs space event ([#942](https://github.com/lemonadesocial/lemonade-flutter/issues/942)) ([936ed79](https://github.com/lemonadesocial/lemonade-flutter/commit/936ed792bf426b109a80c78ac37ffa995e5acd86))
+* discover ui bug ([#940](https://github.com/lemonadesocial/lemonade-flutter/issues/940)) ([e03fc1e](https://github.com/lemonadesocial/lemonade-flutter/commit/e03fc1e70b0362f5a5ce2e6e7cb1185b5eb0ffd1))
+* home discover UI ([#941](https://github.com/lemonadesocial/lemonade-flutter/issues/941)) ([c0c133b](https://github.com/lemonadesocial/lemonade-flutter/commit/c0c133be8cf52b9adca4f62a62cd9283110d1405))
+
 ## [2.0.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v1.53.1...v2.0.0) (2025-04-24)
 
 

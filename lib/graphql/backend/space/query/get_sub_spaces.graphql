@@ -1,0 +1,12 @@
+query GetSubSpaces($id: MongoID!) {
+  getSubSpaces(_id: $id) {
+    _id
+    title
+    image_avatar_expanded {
+      _id
+      bucket
+      key
+      url
+    }
+  }
+}

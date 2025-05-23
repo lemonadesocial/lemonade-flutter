@@ -1,8 +1,8 @@
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
   const ProfileAnimatedAppBar({
@@ -30,10 +30,12 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return ClipRect(
       child: Container(
-        color: primary,
+        color: appColors.pageBg,
         height: maxExtent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,7 +46,7 @@ class ProfileAnimatedAppBar extends SliverPersistentHeaderDelegate {
               offset: Offset(0, maxExtent - shrinkOffset),
               child: Text(
                 title ?? '',
-                style: Typo.large,
+                style: appText.md,
               ),
             ),
             // Spacer(),

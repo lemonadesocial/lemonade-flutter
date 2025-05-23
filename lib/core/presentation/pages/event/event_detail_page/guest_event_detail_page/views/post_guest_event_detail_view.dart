@@ -34,6 +34,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class PostGuestEventDetailView extends StatelessWidget {
   const PostGuestEventDetailView({super.key});
@@ -42,11 +43,12 @@ class PostGuestEventDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return BlocBuilder<GetEventDetailBloc, GetEventDetailState>(
       builder: (context, state) => state.when(
         failure: () => Scaffold(
-          backgroundColor: colorScheme.primary,
+          backgroundColor: appColors.pageBg,
           body: Center(
             child: EmptyList(
               emptyText: t.common.somethingWrong,
@@ -54,7 +56,7 @@ class PostGuestEventDetailView extends StatelessWidget {
           ),
         ),
         loading: () => Scaffold(
-          backgroundColor: colorScheme.primary,
+          backgroundColor: appColors.pageBg,
           body: Loading.defaultLoading(context),
         ),
         fetched: (event) {

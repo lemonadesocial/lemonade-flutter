@@ -1,10 +1,8 @@
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
-
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GenderChipWidget extends StatelessWidget {
   const GenderChipWidget({
@@ -31,40 +29,43 @@ class GenderChipWidget extends StatelessWidget {
   /// - true/false, meaning one of gender has been selected
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return InkWell(
       onTap: onSelect,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(LemonRadius.button),
+          borderRadius: BorderRadius.circular(LemonRadius.full),
           color: isSelected == null
               ? defaultColor
               : isSelected!
                   ? activeColor
-                  : colorScheme.onPrimary.withOpacity(0.06),
+                  : appColors.buttonTertiaryBg,
         ),
-        padding: EdgeInsets.all(Spacing.xSmall),
+        padding: EdgeInsets.symmetric(
+          horizontal: Spacing.s2,
+          vertical: Spacing.s1,
+        ),
         child: Row(
           children: [
             ThemeSvgIcon(
               color: isSelected == null
                   ? activeColor
                   : isSelected!
-                      ? colorScheme.primary
-                      : colorScheme.onPrimary.withOpacity(0.36),
+                      ? appColors.textPrimary
+                      : appColors.textTertiary,
               builder: (filter) => leading.svg(colorFilter: filter),
             ),
             SizedBox(width: Spacing.superExtraSmall),
             Text(
               label,
-              style: Typo.medium.copyWith(
+              style: appText.md.copyWith(
                 color: isSelected == null
                     ? activeColor
                     : isSelected!
-                        ? colorScheme.primary
-                        : colorScheme.onPrimary.withOpacity(0.36),
-                fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
+                        ? appColors.textPrimary
+                        : appColors.textTertiary,
               ),
             ),
           ],

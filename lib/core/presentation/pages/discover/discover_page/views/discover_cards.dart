@@ -32,7 +32,7 @@ class _DiscoverCardsState extends State<DiscoverCards> {
     if (isLoggedIn) {
       tapFunc();
     } else {
-      AutoRouter.of(context).push(const LoginRoute());
+      AutoRouter.of(context).push(LoginRoute());
     }
   }
 

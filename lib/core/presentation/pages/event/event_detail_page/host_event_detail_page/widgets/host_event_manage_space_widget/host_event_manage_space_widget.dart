@@ -12,14 +12,13 @@ import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HostEventManageSpaceWidget extends StatefulWidget {
   final String eventId;
@@ -90,7 +89,8 @@ class _HostEventManageSpaceWidgetState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return BlocListener<GetEventDetailBloc, GetEventDetailState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -116,10 +116,10 @@ class _HostEventManageSpaceWidgetState
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: LemonColor.atomicBlack,
+                  color: appColors.cardBg,
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
                   border: Border.all(
-                    color: colorScheme.outlineVariant,
+                    color: appColors.pageDivider,
                   ),
                 ),
                 padding: EdgeInsets.all(Spacing.small),
@@ -132,7 +132,9 @@ class _HostEventManageSpaceWidgetState
                       height: Sizing.medium,
                       borderRadius:
                           BorderRadius.circular(LemonRadius.extraSmall),
-                      placeholder: ImagePlaceholder.spaceThumbnail(),
+                      placeholder: ImagePlaceholder.dicebearThumbnail(
+                        seed: space?.id ?? "",
+                      ),
                     ),
                     SizedBox(width: Spacing.small),
                     Column(
@@ -140,14 +142,14 @@ class _HostEventManageSpaceWidgetState
                       children: [
                         Text(
                           t.space.managingCommunity,
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
+                          style: appText.sm.copyWith(
+                            color: appColors.textTertiary,
                           ),
                         ),
                         Text(
                           space?.title ?? "",
-                          style: Typo.mediumPlus.copyWith(
-                            color: colorScheme.onPrimary,
+                          style: appText.md.copyWith(
+                            color: appColors.textPrimary,
                           ),
                         ),
                         SizedBox(height: Spacing.xSmall),
@@ -183,10 +185,10 @@ class _HostEventManageSpaceWidgetState
                                 }
                               },
                               label: t.space.transferEventSpace.transfer,
-                              textColor: colorScheme.onPrimary,
-                              backgroundColor: LemonColor.chineseBlack,
+                              textColor: appColors.textPrimary,
+                              backgroundColor: appColors.pageBg,
                               leading: ThemeSvgIcon(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textSecondary,
                                 builder: (colorFilter) =>
                                     Assets.icons.icTransfer.svg(
                                   colorFilter: colorFilter,
@@ -204,7 +206,7 @@ class _HostEventManageSpaceWidgetState
               Row(
                 children: [
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textSecondary,
                     builder: (colorFilter) => Assets.icons.icInfo.svg(
                       colorFilter: colorFilter,
                       width: 16.w,
@@ -215,8 +217,8 @@ class _HostEventManageSpaceWidgetState
                   Expanded(
                     child: Text(
                       t.space.toBeFeatured,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.sm.copyWith(
+                        color: appColors.textSecondary,
                       ),
                     ),
                   ),
@@ -256,7 +258,8 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final items = [
       DropdownMenuItem<bool>(
         value: false,
@@ -265,7 +268,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (colorFilter) => Assets.icons.icPublic.svg(
                 colorFilter: colorFilter,
                 width: 18.w,
@@ -279,14 +282,14 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
                 children: [
                   Text(
                     t.space.manageSpace.public,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                    style: appText.sm.copyWith(
+                      color: appColors.textPrimary,
                     ),
                   ),
                   Text(
                     t.space.manageSpace.publicDescription,
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                    style: appText.xs.copyWith(
+                      color: appColors.textSecondary,
                     ),
                   ),
                 ],
@@ -294,7 +297,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
             ),
             if (!isPrivate)
               ThemeSvgIcon(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
                 builder: (colorFilter) => Assets.icons.icDone.svg(
                   colorFilter: colorFilter,
                 ),
@@ -313,7 +316,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (colorFilter) => Assets.icons.icPrivate.svg(
                   colorFilter: colorFilter,
                   width: 18.w,
@@ -327,14 +330,14 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
                   children: [
                     Text(
                       t.space.manageSpace.private,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
+                      style: appText.sm.copyWith(
+                        color: appColors.textPrimary,
                       ),
                     ),
                     Text(
                       t.space.manageSpace.privateDescription,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.xs.copyWith(
+                        color: appColors.textSecondary,
                       ),
                     ),
                   ],
@@ -342,7 +345,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
               ),
               if (isPrivate)
                 ThemeSvgIcon(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                   builder: (colorFilter) => Assets.icons.icDone.svg(
                     colorFilter: colorFilter,
                   ),
@@ -361,10 +364,10 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
           label: isPrivate
               ? t.space.manageSpace.private
               : t.space.manageSpace.public,
-          textColor: colorScheme.onPrimary,
-          backgroundColor: LemonColor.chineseBlack,
+          textColor: appColors.textPrimary,
+          backgroundColor: appColors.pageBg,
           leading: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textSecondary,
             builder: (colorFilter) => isPrivate
                 ? Assets.icons.icPrivate.svg(
                     colorFilter: colorFilter,
@@ -378,7 +381,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
                   ),
           ),
           trailing: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textSecondary,
             builder: (colorFilter) => Assets.icons.icDoubleArrowUpDown.svg(
               colorFilter: colorFilter,
               width: 16.w,
@@ -403,7 +406,7 @@ class _ToggleVisibilityButtonState extends State<_ToggleVisibilityButton> {
           offset: const Offset(0, 170),
           width: 320.w,
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.pageOverlayPrimary,
             borderRadius: BorderRadius.circular(LemonRadius.small),
           ),
         ),

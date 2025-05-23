@@ -9,6 +9,7 @@ import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HomeQuickCreateBottomSheet extends StatelessWidget {
   const HomeQuickCreateBottomSheet({super.key});
@@ -96,19 +97,21 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(Spacing.xSmall),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              LemonColor.arsenic.withOpacity(0.55),
-              LemonColor.charlestonGreen.withOpacity(0.6),
-            ],
-          ),
+          color: appColors.cardBg,
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   colors: [
+          //     LemonColor.arsenic.withOpacity(0.55),
+          //     LemonColor.charlestonGreen.withOpacity(0.6),
+          //   ],
+          // ),
           borderRadius: BorderRadius.circular(LemonRadius.medium),
           border: Border.all(
             color: colorScheme.outline.withOpacity(0.01),

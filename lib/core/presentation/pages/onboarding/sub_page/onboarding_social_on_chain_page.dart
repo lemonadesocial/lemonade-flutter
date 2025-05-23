@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
-import 'package:app/core/presentation/pages/farcaster/widgets/connect_farcaster_button/connect_farcaster_button.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -11,19 +10,16 @@ import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:reown_appkit/reown_appkit.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class OnboardingSocialOnChainPage extends StatelessWidget {
@@ -32,8 +28,8 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -50,7 +46,9 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                 onTap: () => context.router.push(const OnboardingAboutRoute()),
                 child: Text(
                   t.onboarding.skip,
-                  style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                  style: appText.md.copyWith(
+                    color: appColors.textTertiary,
+                  ),
                 ),
               ),
               SizedBox(width: Spacing.smMedium),
@@ -58,36 +56,32 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: theme.colorScheme.primary,
+      backgroundColor: appColors.pageBg,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Spacing.medium),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     t.onboarding.getSocialOnChain,
-                    style: TextStyle(
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.w800,
-                      color: LemonColor.onboardingTitle,
-                      fontFamily: FontFamily.nohemiVariable,
-                    ),
+                    style: appText.xl,
                   ),
                   SizedBox(height: Spacing.extraSmall),
                   Text(
                     t.onboarding.getSocialOnChainDescription,
-                    style: theme.textTheme.bodyMedium,
+                    style: appText.md.copyWith(
+                      color: appColors.textTertiary,
+                    ),
                   ),
                   SizedBox(height: Spacing.medium),
-                  const ConnectFarcasterButton(
-                    variant: ConnectFarcasterButtonVariant.home,
-                  ),
-                  SizedBox(height: Spacing.medium),
+                  // const ConnectFarcasterButton(
+                  //   variant: ConnectFarcasterButtonVariant.home,
+                  // ),
+                  // SizedBox(height: Spacing.medium),
                   ConnectWalletButton(
                     builder: (onPressConnect, connectButtonState) {
                       final w3mService =
@@ -97,21 +91,27 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                               ? w3mService?.session?.address
                               : null;
                       return SettingTileWidget(
-                        radius: LemonRadius.medium,
-                        leadingRadius: LemonRadius.xSmall,
+                        color: appColors.cardBg,
+                        radius: LemonRadius.md,
                         title: t.common.actions.connectWallet,
                         subTitle: userWalletAddress != null
                             ? Web3Utils.formatIdentifier(userWalletAddress)
                             : t.common.status.notConnected,
+                        titleStyle: appText.md,
+                        leadingCircle: false,
                         leading: ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) => Assets.icons.icWallet.svg(
                             colorFilter: filter,
                           ),
                         ),
-                        trailing: Assets.icons.icArrowBack.svg(
-                          width: 18.w,
-                          height: 18.w,
+                        trailing: ThemeSvgIcon(
+                          color: appColors.textTertiary,
+                          builder: (filter) => Assets.icons.icArrowBack.svg(
+                            colorFilter: filter,
+                            width: 18.w,
+                            height: 18.w,
+                          ),
                         ),
                         onTap: () {
                           try {
@@ -143,7 +143,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     ),
                     child: Opacity(
                       opacity: isEnabledNextButton == true ? 1 : 0.5,
-                      child: LinearGradientButton(
+                      child: LinearGradientButton.primaryButton(
                         onTap: () async {
                           if (isEnabledNextButton == false) {
                             return;
@@ -151,14 +151,6 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                           context.router.push(const OnboardingAboutRoute());
                         },
                         label: t.onboarding.next,
-                        textStyle: Typo.medium.copyWith(
-                          fontFamily: FontFamily.nohemiVariable,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onPrimary,
-                        ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(LemonRadius.large),
-                        mode: GradientButtonMode.lavenderMode,
                       ),
                     ),
                   ),

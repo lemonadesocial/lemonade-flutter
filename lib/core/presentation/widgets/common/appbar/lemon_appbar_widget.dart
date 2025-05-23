@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/lemon_back_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,9 +38,9 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = Theme.of(context).colorScheme.background;
+    final appColors = context.theme.appColors;
     return AppBar(
-      backgroundColor: backgroundColor ?? background,
+      backgroundColor: backgroundColor ?? appColors.pageBg,
       automaticallyImplyLeading: hideLeading ?? true,
       leadingWidth: leadingWidth,
       leading: hideLeading ?? false
@@ -47,11 +48,11 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
           : leading ??
               LemonBackButton(
                 onPressBack: onPressBack,
-                color: backButtonColor,
+                color: backButtonColor ?? appColors.textTertiary,
               ),
       actions: actions,
       title: title != null
-          ? buildCenteredTitle(title!)
+          ? buildCenteredTitle(context, title!)
           : (titleBuilder != null ? titleBuilder!(context) : null),
       centerTitle: true,
       elevation: 0,
@@ -60,13 +61,11 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget buildCenteredTitle(String title) {
+  Widget buildCenteredTitle(BuildContext context, String title) {
+    final appText = context.theme.appTextTheme;
     return Text(
       title,
-      style: const TextStyle(
-        fontWeight: FontWeight.w600,
-        fontSize: 18,
-      ),
+      style: appText.md,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

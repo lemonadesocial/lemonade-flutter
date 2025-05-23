@@ -53,7 +53,7 @@ class EmptyDottedBorderCardWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Typo.extraMedium.copyWith(
                       color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.nohemiVariable,
+                      fontFamily: FontFamily.clashDisplay,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

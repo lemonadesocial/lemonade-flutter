@@ -55,7 +55,7 @@ class EventGuestDetailActionsBar extends StatelessWidget {
                 textStyle: Typo.medium.copyWith(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
               ),
               SizedBox(height: Spacing.xSmall),
@@ -67,7 +67,7 @@ class EventGuestDetailActionsBar extends StatelessWidget {
                 textStyle: Typo.medium.copyWith(
                   color: LemonColor.coralReef,
                   fontWeight: FontWeight.w600,
-                  fontFamily: FontFamily.nohemiVariable,
+                  fontFamily: FontFamily.clashDisplay,
                 ),
               ),
             ],

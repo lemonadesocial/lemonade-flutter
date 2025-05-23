@@ -71,7 +71,7 @@ class _DeleteEventConfirmationBottomSheetState
                 Text(
                   title,
                   style: Typo.extraLarge.copyWith(
-                    fontFamily: FontFamily.nohemiVariable,
+                    fontFamily: FontFamily.clashDisplay,
                     fontWeight: FontWeight.w900,
                     color: colorScheme.onPrimary,
                   ),

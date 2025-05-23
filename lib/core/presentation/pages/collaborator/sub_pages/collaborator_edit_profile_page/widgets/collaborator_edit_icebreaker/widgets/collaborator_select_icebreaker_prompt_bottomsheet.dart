@@ -45,7 +45,7 @@ class CollaboratorSelectIcebreakerPromptBottomsheet extends StatelessWidget {
                             style: Typo.extraLarge.copyWith(
                               color: colorScheme.onPrimary,
                               fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                             ),
                           ),
                         ),

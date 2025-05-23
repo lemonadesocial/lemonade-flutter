@@ -6,16 +6,15 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class OnboardingConnectWalletPage extends StatelessWidget {
@@ -43,9 +42,10 @@ class OnboardingConnectWalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: appColors.pageBg,
       appBar: LemonAppBar(
         leading: const SizedBox.shrink(),
         actions: [
@@ -57,8 +57,8 @@ class OnboardingConnectWalletPage extends StatelessWidget {
             ),
             child: Text(
               t.onboarding.skip,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.md.copyWith(
+                color: appColors.textTertiary,
               ),
             ),
           ),
@@ -77,17 +77,13 @@ class OnboardingConnectWalletPage extends StatelessWidget {
             const Spacer(),
             Text(
               t.common.actions.connectWallet,
-              style: Typo.extraLarge.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.nohemiVariable,
-              ),
+              style: appText.xl,
             ),
             SizedBox(height: Spacing.superExtraSmall),
             Text(
               t.lens.onboardingConnectDescription,
-              style: Typo.mediumPlus.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.md.copyWith(
+                color: appColors.textTertiary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -108,11 +104,6 @@ class OnboardingConnectWalletPage extends StatelessWidget {
                   return ConnectWalletButton(
                     builder: (onConnectPressed, state) {
                       return LinearGradientButton.primaryButton(
-                        textStyle: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.nohemiVariable,
-                        ),
                         label: StringUtils.capitalize(t.common.actions.connect),
                         onTap: () async {
                           if (isConnected) {

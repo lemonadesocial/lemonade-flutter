@@ -44,7 +44,7 @@ class GuestEventApplicationFormPage extends StatelessWidget {
                         t.event.applicationForm.applicationForm,
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                           fontWeight: FontWeight.w800,
                         ),
                       ),

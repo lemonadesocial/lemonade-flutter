@@ -15,6 +15,7 @@ import 'package:app/theme/color.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:app/app_theme/app_theme.dart';
 
 class AddRecurringDatesListWidget extends StatelessWidget {
   final List<DateTime> dates;
@@ -34,6 +35,7 @@ class AddRecurringDatesListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
     final addIcon = ThemeSvgIcon(
       color: colorScheme.onSecondary,
       builder: (filter) => Assets.icons.icAdd.svg(
@@ -79,7 +81,6 @@ class AddRecurringDatesListWidget extends StatelessWidget {
             LemonOutlineButton(
               label: t.event.sessionDuplication.addTime,
               leading: addIcon,
-              backgroundColor: LemonColor.atomicBlack,
               radius: BorderRadius.circular(LemonRadius.medium),
               onTap: () {
                 DateTime? newDate = dates.lastOrNull;
@@ -101,7 +102,7 @@ class AddRecurringDatesListWidget extends StatelessWidget {
             LemonOutlineButton(
               label: t.event.sessionDuplication.recurrence,
               leading: addIcon,
-              backgroundColor: LemonColor.atomicBlack,
+              backgroundColor: appColors.cardBg,
               radius: BorderRadius.circular(LemonRadius.medium),
               onTap: () async {
                 List<DateTime>? newDates =
@@ -143,6 +144,7 @@ class _RecurringDateItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Row(
       children: [
         Expanded(
@@ -216,7 +218,7 @@ class _RecurringDateItem extends StatelessWidget {
               final timeOfDay = await showCupertinoModalBottomSheet<TimeOfDay?>(
                 context: context,
                 expand: false,
-                backgroundColor: LemonColor.atomicBlack,
+                backgroundColor: appColors.pageBg,
                 barrierColor: Colors.black.withOpacity(0.5),
                 builder: (context) => SelectTimeOfDayBottomSheet(date: date),
               );

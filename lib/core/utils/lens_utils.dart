@@ -66,6 +66,20 @@ class LensUtils {
     };
   }
 
+  static Map<String, dynamic> constructLensFeedMetadata({
+    required String name,
+    required String description,
+  }) {
+    return {
+      "\$schema": "https://json-schemas.lens.dev/feed/1.0.0.json",
+      "lens": {
+        "id": const Uuid().v4(),
+        "name": name,
+        "description": description,
+      },
+    };
+  }
+
   static Future<LensTransactionStatusResult> pollTransactionStatus({
     required String txHash,
   }) async {

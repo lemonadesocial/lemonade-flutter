@@ -1,0 +1,13 @@
+query ListSpacesByGeoRegions {
+  listGeoRegions {
+    _id
+    title
+    cities {
+      name
+      region
+      space
+      iconUrl: icon_url
+      listedEventsCount: listed_events_count
+    }
+  }
+}

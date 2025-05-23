@@ -39,6 +39,9 @@ class Space with _$Space {
     List<User>? admins,
     DbFile? imageAvatar,
     DbFile? imageCover,
+    String? lensFeedId,
+    List<String>? subSpaces,
+    List<Space>? subSpacesExpanded,
   }) = _Space;
 
   bool isCreator({required String userId}) {
@@ -80,7 +83,7 @@ class Space with _$Space {
     if (isPersonal) {
       return creatorExpanded?.imageAvatar ?? '';
     }
-    return imageCover?.url ?? imageAvatar?.url ?? '';
+    return imageAvatar?.url ?? '';
   }
 
   factory Space.fromJson(Map<String, dynamic> json) => _$SpaceFromJson(json);
@@ -120,6 +123,10 @@ class Space with _$Space {
       imageCover: dto.imageCoverExpanded != null
           ? DbFile.fromDto(dto.imageCoverExpanded!)
           : null,
+      lensFeedId: dto.lensFeedId,
+      subSpaces: dto.subSpaces,
+      subSpacesExpanded:
+          (dto.subSpacesExpanded ?? []).map((e) => Space.fromDto(e)).toList(),
     );
   }
 }

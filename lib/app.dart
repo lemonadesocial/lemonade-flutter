@@ -22,6 +22,7 @@ import 'package:app/router/app_router.dart';
 import 'package:app/router/my_router_observer.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/theme.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ import 'package:app/core/data/post/newsfeed_repository_impl.dart';
 import 'package:app/core/service/newsfeed/newsfeed_service.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -232,38 +234,41 @@ class _AppState extends State<_App> {
           fullWidth: false,
           isHideKeyboard: false,
           isIgnoring: true,
-          child: MaterialApp.router(
-            scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
-            locale: _getCurrentLocale(context),
-            // use provider
-            supportedLocales: [
-              ...AppLocaleUtils.supportedLocales,
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            themeMode: ThemeMode.dark,
-            darkTheme: lemonadeAppDarkThemeData,
-            theme: lemonadeAppLightThemeData,
-            routerDelegate: widget.router.delegate(
-              navigatorObservers: () => <NavigatorObserver>[
-                MyRouterObserver(),
-                SentryNavigatorObserver(),
+          child: ChangeNotifierProvider(
+            create: (context) => AppTheme(),
+            builder: (context, _) => MaterialApp.router(
+              scaffoldMessengerKey: SnackBarUtils.rootScaffoldMessengerKey,
+              locale: _getCurrentLocale(context),
+              // use provider
+              supportedLocales: [
+                ...AppLocaleUtils.supportedLocales,
               ],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              themeMode: context.watch<AppTheme>().themeMode,
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              routerDelegate: widget.router.delegate(
+                navigatorObservers: () => <NavigatorObserver>[
+                  MyRouterObserver(),
+                  SentryNavigatorObserver(),
+                ],
+              ),
+              routeInformationParser:
+                  widget.router.defaultRouteParser(includePrefixMatches: true),
+              builder: (context, widget) {
+                Widget error = const CustomError();
+                if (widget is Scaffold || widget is Navigator) {
+                  error = Scaffold(body: Center(child: error));
+                }
+                ErrorWidget.builder = (errorDetails) => error;
+                if (widget != null) return FlutterEasyLoading(child: widget);
+                throw StateError('widget is null');
+              },
             ),
-            routeInformationParser:
-                widget.router.defaultRouteParser(includePrefixMatches: true),
-            builder: (context, widget) {
-              Widget error = const CustomError();
-              if (widget is Scaffold || widget is Navigator) {
-                error = Scaffold(body: Center(child: error));
-              }
-              ErrorWidget.builder = (errorDetails) => error;
-              if (widget != null) return FlutterEasyLoading(child: widget);
-              throw StateError('widget is null');
-            },
           ),
         ),
       ),

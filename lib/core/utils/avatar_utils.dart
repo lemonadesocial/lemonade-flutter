@@ -1,29 +1,11 @@
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/utils/image_utils.dart';
+import 'package:app/core/utils/dice_bear_utils.dart';
 
 class AvatarUtils {
-  static String randomImage(
-    String id,
-    int length,
-    String Function(int) template,
-  ) {
-    int idLength = id.length;
-    int hash = 0;
-    for (int i = 0; i < idLength; i++) {
-      hash += id.codeUnitAt(i);
-    }
-    return template((hash % length) + 1);
-  }
-
   static String randomUserImage(String id) {
-    return randomImage(
-      id,
-      10,
-      (index) =>
-          '${AppConfig.assetPrefix}/assets/images/avatars/lemonade_davatar_$index.png',
-    );
+    return DiceBearUtils.getUserImageUrl(id: id);
   }
 
   static String getAvatarUrl({

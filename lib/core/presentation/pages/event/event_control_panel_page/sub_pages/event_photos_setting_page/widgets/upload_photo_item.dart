@@ -82,7 +82,7 @@ class _UploadPhotoItemState extends State<UploadPhotoItem> {
                   style: Typo.small.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
-                    fontFamily: FontFamily.switzerVariable,
+                    fontFamily: FontFamily.generalSans,
                   ),
                 ),
               ),

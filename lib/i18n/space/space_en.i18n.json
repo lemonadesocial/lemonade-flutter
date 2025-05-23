@@ -23,14 +23,14 @@
     "myCommunities": "My Communities",
     "ambassadorCommunities": "Ambassador Communities",
     "subscribedCommunities": "Subscribed Communities",
-    "noAmbassadorCommunities": "No ambassador communities",
-    "noAmbassadorCommunitiesDescription": "You have not joined any ambassador communities",
-    "noSubscribedCommunities": "No subscriptions",
+    "noAmbassadorCommunities": "No Ambassador community",
+    "noAmbassadorCommunitiesDescription": "You are not an ambassador in any communities.",
+    "noSubscribedCommunities": "No Subscriptions",
     "noSubscribedCommunitiesDescription": "You have not subscribed to any communities",
     "myCommunityHubs": "My Community Hubs",
     "pendingEventsApproval(ordinal)": {
-        "one": "You have $n event pending approval by the community admin",
-        "other": "You have $n events pending approval by the community admin"
+        "one": "You have $n event pending approval",
+        "other": "You have $n events pending approval"
     },
     "eventWillShowAfterApproval": "It will show up on the schedule once approved",
     "managingCommunity": "Managing Community",
@@ -64,6 +64,16 @@
     "declinedBy": "Declined by",
     "submittedBy": "Submitted by",
     "pendingApprovalEvent": "Pending Approval Event",
-    "eventsAreVisibleOnThePageAfterApproval": "Events are visible on the page after approval.",
-    "accessAllCommunityEventListings": "Access all community event listings"
+    "eventsAreVisibleOnThePageAfterApproval": "These events are not yet visible on the page.",
+    "accessAllCommunityEventListings": "Access all community event listings",
+    "lens": {
+        "createNewFeed": "Create New Feed",
+        "name": "Name",
+        "description": "Description",
+        "createFeed": "Create Feed",
+        "admins": "Admins",
+        "adminInputHint": "Lens or Address"
+    },
+    "noUpcomingEventsForSubscriber": "As a subscriber, you will be notified when new events are posted.",
+    "noUpcomingEventsForNonSubscriber": "Subscribe to the calendar to get notified when new events are posted."
 }

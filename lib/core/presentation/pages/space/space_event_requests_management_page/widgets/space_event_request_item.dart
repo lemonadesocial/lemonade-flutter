@@ -1,9 +1,8 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/domain/space/entities/space_event_request.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
-import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -11,12 +10,10 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class SpaceEventRequestItem extends StatelessWidget {
@@ -34,7 +31,9 @@ class SpaceEventRequestItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final event = request.eventExpanded;
     if (event == null) {
       return const SizedBox.shrink();
@@ -60,264 +59,230 @@ class SpaceEventRequestItem extends StatelessWidget {
         );
       },
       child: Container(
+        padding: EdgeInsets.all(Spacing.s3),
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
-          borderRadius: BorderRadius.circular(LemonRadius.medium),
+          color: appColors.cardBg,
+          borderRadius: BorderRadius.circular(LemonRadius.md),
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.cardBorder,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: EdgeInsets.all(Spacing.small),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.title ?? '',
-                              style: Typo.mediumPlus.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title ?? '',
+                        style: appText.md,
+                      ),
+                      SizedBox(height: Spacing.s2),
+                      // Event info
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Date
+                          Row(
+                            children: [
+                              ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (colorFilter) =>
+                                    Assets.icons.icCalendarTodayOutline.svg(
+                                  colorFilter: colorFilter,
+                                  width: Sizing.s5,
+                                  height: Sizing.s5,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            FutureBuilder(
-                              future: request.createdBy?.isNotEmpty == true
-                                  ? getIt<UserRepository>().getUserProfile(
-                                      GetProfileInput(
-                                        id: request.createdBy,
+                              SizedBox(width: Spacing.s2),
+                              Expanded(
+                                child: Text(
+                                  eventDate,
+                                  style: appText.sm.copyWith(
+                                    color: appColors.textSecondary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Spacing.s1),
+                          // Location
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (colorFilter) => isVirtual
+                                    ? Assets.icons.icLive.svg(
+                                        colorFilter: colorFilter,
+                                        width: Sizing.s5,
+                                        height: Sizing.s5,
+                                      )
+                                    : Assets.icons.icLocationPinOutline.svg(
+                                        colorFilter: colorFilter,
+                                        width: Sizing.s5,
+                                        height: Sizing.s5,
                                       ),
-                                    )
-                                  : Future.value(null),
-                              builder: (context, snapshot) {
-                                final user = snapshot.data?.fold(
-                                  (l) => null,
-                                  (user) => user,
-                                );
-                                return Text(
-                                  '${t.space.submittedBy} ${user?.displayName ?? user?.name ?? '--'}',
-                                  style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: Spacing.extraSmall),
-                        // Event info
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Date
-                            Row(
-                              children: [
-                                ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (colorFilter) =>
-                                      Assets.icons.icCalendar.svg(
-                                    colorFilter: colorFilter,
+                              ),
+                              SizedBox(width: Spacing.s2),
+                              Expanded(
+                                child: Text(
+                                  location,
+                                  style: appText.sm.copyWith(
+                                    color: appColors.textSecondary,
                                   ),
                                 ),
-                                SizedBox(width: Spacing.extraSmall),
-                                Expanded(
-                                  child: Text(
-                                    eventDate,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                  ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Spacing.s1),
+                          Row(
+                            children: [
+                              ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (colorFilter) =>
+                                    Assets.icons.icPersonOutline.svg(
+                                  colorFilter: colorFilter,
+                                  width: Sizing.s5,
+                                  height: Sizing.s5,
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: Spacing.superExtraSmall),
-                            // Location
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (colorFilter) => isVirtual
-                                      ? Assets.icons.icLive.svg(
-                                          colorFilter: colorFilter,
-                                          width: 16.w,
-                                          height: 16.w,
-                                        )
-                                      : Assets.icons.icLocationPin.svg(
-                                          colorFilter: colorFilter,
-                                          width: 16.w,
-                                          height: 16.w,
+                              ),
+                              SizedBox(width: Spacing.s2),
+                              FutureBuilder(
+                                future: request.createdBy?.isNotEmpty == true
+                                    ? getIt<UserRepository>().getUserProfile(
+                                        GetProfileInput(
+                                          id: request.createdBy,
                                         ),
-                                ),
-                                SizedBox(width: Spacing.extraSmall),
-                                Expanded(
-                                  child: Text(
-                                    location,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
+                                      )
+                                    : Future.value(null),
+                                builder: (context, snapshot) {
+                                  final user = snapshot.data?.fold(
+                                    (l) => null,
+                                    (user) => user,
+                                  );
+                                  return Text(
+                                    '${t.space.submittedBy} ${user?.displayName ?? user?.name ?? '--'}',
+                                    style: appText.sm.copyWith(
+                                      color: appColors.textSecondary,
                                     ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Spacing.s1),
+                          // Attendees
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ThemeSvgIcon(
+                                color: appColors.textTertiary,
+                                builder: (colorFilter) =>
+                                    Assets.icons.icGroupOutline.svg(
+                                  colorFilter: colorFilter,
+                                  width: Sizing.s5,
+                                  height: Sizing.s5,
+                                ),
+                              ),
+                              SizedBox(width: Spacing.s2),
+                              Expanded(
+                                child: Text(
+                                  attendeeCount,
+                                  style: appText.sm.copyWith(
+                                    color: appColors.textSecondary,
                                   ),
                                 ),
-                              ],
-                            ),
-                            SizedBox(height: Spacing.superExtraSmall),
-                            // Attendees
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ThemeSvgIcon(
-                                  color: colorScheme.onSecondary,
-                                  builder: (colorFilter) =>
-                                      Assets.icons.icGuests.svg(
-                                    colorFilter: colorFilter,
-                                    width: 16.w,
-                                    height: 16.w,
-                                  ),
-                                ),
-                                SizedBox(width: Spacing.extraSmall),
-                                Expanded(
-                                  child: Text(
-                                    attendeeCount,
-                                    style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  SizedBox(width: Spacing.small),
-                  LemonNetworkImage(
-                    width: 90.w,
-                    height: 90.w,
-                    imageUrl: EventUtils.getEventThumbnailUrl(event: event),
-                    fit: BoxFit.cover,
-                    placeholder: ImagePlaceholder.eventCard(),
-                    borderRadius: BorderRadius.circular(LemonRadius.xSmall),
+                ),
+              ],
+            ),
+            SizedBox(height: Spacing.s3),
+            if (request.state == Enum$SpaceEventRequestState.approved ||
+                request.state == Enum$SpaceEventRequestState.declined)
+              Row(
+                children: [
+                  ThemeSvgIcon(
+                    color: appColors.textTertiary,
+                    builder: (colorFilter) =>
+                        request.state == Enum$SpaceEventRequestState.approved
+                            ? Assets.icons.icDone.svg(
+                                width: Sizing.s5,
+                                height: Sizing.s5,
+                                colorFilter: colorFilter,
+                              )
+                            : Assets.icons.icClose.svg(
+                                width: Sizing.s5,
+                                height: Sizing.s5,
+                                colorFilter: colorFilter,
+                              ),
+                  ),
+                  SizedBox(width: Spacing.extraSmall),
+                  FutureBuilder(
+                    future: request.decidedBy?.isNotEmpty == true
+                        ? getIt<UserRepository>().getUserProfile(
+                            GetProfileInput(
+                              id: request.decidedBy,
+                            ),
+                          )
+                        : Future.value(null),
+                    builder: (context, snapshot) {
+                      final user = snapshot.data?.fold(
+                        (l) => null,
+                        (user) => user,
+                      );
+                      final actionText =
+                          request.state == Enum$SpaceEventRequestState.approved
+                              ? t.space.approvedBy
+                              : t.space.declinedBy;
+                      final name = user?.displayName ?? user?.name ?? '--';
+                      return Text(
+                        '$actionText $name',
+                        style: appText.sm.copyWith(
+                          color: appColors.textSecondary,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
-            ),
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: colorScheme.outlineVariant,
-            ),
-            if (request.state == Enum$SpaceEventRequestState.approved ||
-                request.state == Enum$SpaceEventRequestState.declined)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: Spacing.xSmall,
-                  horizontal: Spacing.small,
-                ),
-                child: Row(
-                  children: [
-                    ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
-                      builder: (colorFilter) =>
-                          request.state == Enum$SpaceEventRequestState.approved
-                              ? Assets.icons.icDone.svg(
-                                  width: 16.w,
-                                  height: 16.w,
-                                  colorFilter: colorFilter,
-                                )
-                              : Assets.icons.icClose.svg(
-                                  width: 16.w,
-                                  height: 16.w,
-                                  colorFilter: colorFilter,
-                                ),
-                    ),
-                    SizedBox(width: Spacing.extraSmall),
-                    FutureBuilder(
-                      future: request.decidedBy?.isNotEmpty == true
-                          ? getIt<UserRepository>().getUserProfile(
-                              GetProfileInput(
-                                id: request.decidedBy,
-                              ),
-                            )
-                          : Future.value(null),
-                      builder: (context, snapshot) {
-                        final user = snapshot.data?.fold(
-                          (l) => null,
-                          (user) => user,
-                        );
-                        final actionText = request.state ==
-                                Enum$SpaceEventRequestState.approved
-                            ? t.space.approvedBy
-                            : t.space.declinedBy;
-                        final name = user?.displayName ?? user?.name ?? '--';
-                        return Text(
-                          '$actionText $name',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
             if (request.state == Enum$SpaceEventRequestState.pending)
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: Spacing.xSmall,
-                  horizontal: Spacing.small,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: LemonOutlineButton(
-                        label: t.space.approve,
-                        leading: ThemeSvgIcon(
-                          color: LemonColor.malachiteGreen,
-                          builder: (colorFilter) => Assets.icons.icDone.svg(
-                            colorFilter: colorFilter,
-                          ),
-                        ),
-                        onTap: onApprove != null
-                            ? () => onApprove!(request)
-                            : null,
-                        textStyle: Typo.small.copyWith(
-                          color: LemonColor.malachiteGreen,
-                        ),
-                        backgroundColor:
-                            LemonColor.malachiteGreen.withOpacity(0.18),
+              Row(
+                children: [
+                  Expanded(
+                    child: LemonOutlineButton(
+                      label: t.space.approve,
+                      onTap:
+                          onApprove != null ? () => onApprove!(request) : null,
+                      textStyle: appText.md.copyWith(
+                        color: appColors.textPrimary,
                       ),
+                      backgroundColor: appColors.buttonSuccessBg,
                     ),
-                    SizedBox(width: Spacing.superExtraSmall),
-                    Expanded(
-                      child: LemonOutlineButton(
-                        label: t.space.decline,
-                        leading: ThemeSvgIcon(
-                          color: LemonColor.coralReef,
-                          builder: (colorFilter) => Assets.icons.icClose.svg(
-                            colorFilter: colorFilter,
-                          ),
-                        ),
-                        onTap: onDecline != null
-                            ? () => onDecline!(request)
-                            : null,
-                        textStyle: Typo.small.copyWith(
-                          color: LemonColor.coralReef,
-                        ),
-                        backgroundColor: LemonColor.coralReef.withOpacity(0.18),
+                  ),
+                  SizedBox(width: Spacing.s1_5),
+                  Expanded(
+                    child: LemonOutlineButton(
+                      label: t.space.decline,
+                      onTap:
+                          onDecline != null ? () => onDecline!(request) : null,
+                      textStyle: appText.md.copyWith(
+                        color: appColors.textPrimary,
                       ),
+                      backgroundColor: appColors.buttonErrorBg,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
           ],
         ),

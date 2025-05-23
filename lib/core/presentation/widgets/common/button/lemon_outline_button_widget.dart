@@ -1,7 +1,7 @@
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class LemonOutlineButton extends StatelessWidget {
   final String? label;
@@ -33,23 +33,24 @@ class LemonOutlineButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height ?? Sizing.medium,
+        height: height ?? Sizing.s9,
         padding: padding ??
             EdgeInsets.symmetric(
-              horizontal: Spacing.xSmall,
-              vertical: Spacing.extraSmall,
+              horizontal: Spacing.s2_5,
             ),
         decoration: ShapeDecoration(
-          color: backgroundColor,
+          color: backgroundColor ?? Colors.transparent,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: borderColor ?? colorScheme.outline,
+              color: borderColor ?? appColors.pageDivider,
             ),
-            borderRadius: radius ?? BorderRadius.circular(LemonRadius.xSmall),
+            borderRadius: radius ?? BorderRadius.circular(LemonRadius.sm),
           ),
         ),
         child: Center(
@@ -65,9 +66,8 @@ class LemonOutlineButton extends StatelessWidget {
                 Text(
                   label!,
                   style: textStyle ??
-                      Typo.small.copyWith(
-                        color: textColor ?? colorScheme.onSecondary,
-                        fontWeight: FontWeight.w600,
+                      appText.sm.copyWith(
+                        color: textColor ?? appColors.textSecondary,
                       ),
                 ),
               if (trailing != null) ...[

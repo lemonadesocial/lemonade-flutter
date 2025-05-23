@@ -224,7 +224,7 @@ class _PoapTransferPopupState extends State<_PoapTransferPopupView> {
                                 t.nft.transferCollectibleTo,
                                 style: Typo.extraMedium.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: FontFamily.switzerVariable,
+                                  fontFamily: FontFamily.generalSans,
                                 ),
                               ),
                               SizedBox(height: Spacing.xSmall),

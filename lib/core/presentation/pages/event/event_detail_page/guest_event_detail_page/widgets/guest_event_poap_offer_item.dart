@@ -156,7 +156,7 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                               widget.token?.metadata?.name ?? '',
                               style: Typo.mediumPlus.copyWith(
                                 color: colorScheme.onPrimary,
-                                fontFamily: FontFamily.nohemiVariable,
+                                fontFamily: FontFamily.clashDisplay,
                                 fontWeight: FontWeight.w700,
                               ),
                               maxLines: 1,
@@ -234,7 +234,7 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                                     StringUtils.capitalize(t.nft.claimed),
                                     style: Typo.medium.copyWith(
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: FontFamily.nohemiVariable,
+                                      fontFamily: FontFamily.clashDisplay,
                                       color: colorScheme.onSurfaceVariant,
                                     ),
                                   ),
@@ -270,7 +270,7 @@ class GuestEventPoapOfferItemState extends State<GuestEventPoapOfferItemView>
                                 : StringUtils.capitalize(t.nft.claim),
                             textStyle: Typo.medium.copyWith(
                               fontWeight: FontWeight.w600,
-                              fontFamily: FontFamily.nohemiVariable,
+                              fontFamily: FontFamily.clashDisplay,
                               color: colorScheme.onPrimary.withOpacity(0.87),
                             ),
                           ),

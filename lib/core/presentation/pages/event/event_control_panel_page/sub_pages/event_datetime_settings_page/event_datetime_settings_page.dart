@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventDatetimeSettingsPage extends StatelessWidget {
@@ -115,11 +116,12 @@ class _EventDatetimeSettingsPageState
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: LemonAppBar(
-          backgroundColor: LemonColor.atomicBlack,
+          backgroundColor: appColors.pageBg,
           title: t.event.datetimeSettings.chooseDateAndTime,
           onPressBack: () {
             final start =
@@ -144,7 +146,7 @@ class _EventDatetimeSettingsPageState
             }
           },
         ),
-        backgroundColor: LemonColor.atomicBlack,
+        backgroundColor: appColors.pageBg,
         resizeToAvoidBottomInset: true,
         body:
             BlocConsumer<EventDateTimeSettingsBloc, EventDateTimeSettingsState>(

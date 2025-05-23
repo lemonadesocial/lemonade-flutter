@@ -4,13 +4,12 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/notification/entities/notification.dart'
     as notification_entities;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class DefaultNotificationItem extends StatelessWidget {
   final notification_entities.Notification notification;
@@ -21,25 +20,28 @@ class DefaultNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return NotificationBaseItem(
       avatar: _buildAvatar(),
       icon: Builder(
         builder: (context) {
           if (notification.type == NotificationType.userDiscoveryMatch) {
             return ThemeSvgIcon(
-              color: LemonColor.paleViolet,
+              color: appColors.textAccent,
               builder: (filter) => Assets.icons.icMatches.svg(
                 colorFilter: filter,
-                width: 30.w,
-                height: 30.w,
+                width: Sizing.s6,
+                height: Sizing.s6,
               ),
             );
           }
 
           return ThemeSvgIcon(
-            color: LemonColor.aero,
+            color: appColors.textAlert,
             builder: (colorFilter) => Assets.icons.icInfo.svg(
               colorFilter: colorFilter,
+              width: Sizing.s6,
+              height: Sizing.s6,
             ),
           );
         },

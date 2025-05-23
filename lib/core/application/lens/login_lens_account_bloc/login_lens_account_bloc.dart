@@ -1,4 +1,5 @@
 import 'package:app/core/application/lens/enums.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/failure.dart';
@@ -58,26 +59,38 @@ class LoginLensAccountBloc
       login: (e) async {
         emit(const LoginLensAccountState.loading());
         try {
-          final authChallenge = e.accountStatus == LensAccountStatus.onboarding
-              ? await _lensRepository.challenge(
-                  input: Variables$Mutation$LensAuthenticationChallenge(
-                    request: Input$ChallengeRequest(
-                      onboardingUser: Input$OnboardingUserChallengeRequest(
-                        wallet: e.ownerAddress,
-                      ),
+          final authChallenge = switch (e.accountStatus) {
+            LensAccountStatus.onboarding => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    onboardingUser: Input$OnboardingUserChallengeRequest(
+                      wallet: e.ownerAddress,
+                      app: AppConfig.lensAppId,
                     ),
                   ),
-                )
-              : await _lensRepository.challenge(
-                  input: Variables$Mutation$LensAuthenticationChallenge(
-                    request: Input$ChallengeRequest(
-                      accountOwner: Input$AccountOwnerChallengeRequest(
-                        owner: e.ownerAddress,
-                        account: e.accountAddress,
-                      ),
+                ),
+              ),
+            LensAccountStatus.builder => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    builder: Input$BuilderChallengeRequest(
+                      address: e.ownerAddress,
                     ),
                   ),
-                );
+                ),
+              ),
+            LensAccountStatus.accountOwner => await _lensRepository.challenge(
+                input: Variables$Mutation$LensAuthenticationChallenge(
+                  request: Input$ChallengeRequest(
+                    accountOwner: Input$AccountOwnerChallengeRequest(
+                      owner: e.ownerAddress,
+                      account: e.accountAddress,
+                      app: AppConfig.lensAppId,
+                    ),
+                  ),
+                ),
+              )
+          };
           if (authChallenge.isLeft()) {
             throw Exception("Failed to get auth challenge");
           }

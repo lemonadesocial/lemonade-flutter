@@ -6,8 +6,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/typo.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class ViewMoreEventsCard extends StatelessWidget {
   final int moreEventsCount;
@@ -18,18 +17,19 @@ class ViewMoreEventsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: () {
-        AutoRouter.of(context).push(const MyEventsRoute());
+        AutoRouter.of(context).push(MyEventsRoute());
       },
       child: Container(
-        padding: EdgeInsets.all(14.w),
+        padding: EdgeInsets.all(Spacing.s3),
         decoration: ShapeDecoration(
+          color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             side: BorderSide(
               width: 1.w,
-              color: LemonColor.white12,
+              color: appColors.cardBorder,
             ),
             borderRadius: BorderRadius.circular(LemonRadius.medium),
           ),
@@ -40,19 +40,19 @@ class ViewMoreEventsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ThemeSvgIcon(
-              color: colorScheme.onPrimary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icSubdirectoryArrowRight.svg(
                 width: Sizing.mSmall,
                 height: Sizing.mSmall,
                 colorFilter: filter,
               ),
             ),
-            SizedBox(width: Spacing.xSmall),
+            SizedBox(width: Spacing.s4),
             Expanded(
               child: Text(
                 '$moreEventsCount more',
-                style: Typo.medium.copyWith(
-                  color: LemonColor.white54,
+                style: context.theme.appTextTheme.md.copyWith(
+                  color: appColors.textTertiary,
                 ),
               ),
             ),

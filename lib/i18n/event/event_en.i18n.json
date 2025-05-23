@@ -4,12 +4,18 @@
         "one": "$n upcoming event",
         "other": "$n upcoming events"
     },
+    "eventCount(ordinal)": {
+        "one": "$n Event",
+        "other": "$n Events"
+    },
     "all": "all",
+    "allEvents": "All Events",
     "attending": "attending",
     "attended": "attended",
     "created": "created",
     "hosting": "hosting",
     "upcoming": "upcoming",
+    "pending": "pending",
     "draft": "draft",
     "past": "past",
     "buy": "buy",
@@ -30,7 +36,7 @@
     "eventStartedDaysAgo": "Started ${days}d ago",
     "eventStarted": "Event started",
     "eventEnded": "Event ended",
-    "myEvents": "My events",
+    "myEvents": "My Events",
     "selectEvents": "Select events",
     "hostedBy": "Hosted by",
     "presentedBy": "Presented by",
@@ -849,7 +855,9 @@
     "startingIn": "Starting in",
     "startingInTime": "Starting in $time",
     "noUpcomingEvents": "No Upcoming Events",
-    "noUpcomingEventsDescription": "Events you are attending & hosting will show up here",
+    "noUpcomingEventsDescription": "Events you are attending will show up here",
+    "noHostedEvents": "No Events Hosted",
+    "noHostedEventsDescription": "Events you are hosted will show up here",
     "register": "Register",
     "visibility": "Visibility",
     "requireApproval": "Require approval",
@@ -990,5 +998,14 @@
         "pending": "Pending",
         "declined": "Declined",
         "going": "Going"
-    }
+    },
+    "myEventsPage": {
+        "noUpcomingEvents": "No Upcoming Events",
+        "noUpcomingEventsDescription": "Upcoming events, whether you’re a host or a guest, will appear here.",
+        "noPastEvents": "No Past Events",
+        "noPastEventsDescription": "Events you were part of will show up here after they end."
+    },
+    "homeUpcomingEvents": "Upcoming Events",
+    "pastEvents": "Past Events",
+    "checkBackLaterForNewEvents": "Check back later for new events."
 }

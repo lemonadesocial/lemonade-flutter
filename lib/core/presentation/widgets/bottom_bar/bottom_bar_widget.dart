@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
 import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
@@ -11,8 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
-
 import 'package:app/core/application/newsfeed/newsfeed_listing_bloc/newsfeed_listing_bloc.dart';
+import 'package:collection/collection.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -54,13 +55,13 @@ class BottomBarState extends State<BottomBar>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = Theme.of(context).appColors;
     return InkWell(
       child: BottomAppBar(
         padding: EdgeInsets.zero,
         elevation: 0.0,
         height: BottomBar.bottomBarHeight,
-        color: colorScheme.background,
+        color: appColors.pageBg,
         child: ClipRect(
           child: Container(
             decoration: BoxDecoration(
@@ -136,15 +137,15 @@ class BottomBarState extends State<BottomBar>
 
     /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.chat ||
-        tabData.tab == AppTab.notification ||
-        tabData.tab == AppTab.discover) {
+    if (tabData.tab == AppTab.chat || tabData.tab == AppTab.notification) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
         AutoRouter.of(context)
             .navigateNamed(tabData.route, includePrefixMatches: true);
       } else {
-        context.router.navigate(const LoginRoute());
+        // If other route is not logged in, navigate to Home Screen
+        _triggerAnimation(tabs[0]);
+        context.router.navigate(const HomeRoute());
       }
     } else {
       _triggerAnimation(tabData);
@@ -160,6 +161,22 @@ class BottomBarState extends State<BottomBar>
     });
     _animationController.reset();
     _animationController.forward();
+  }
+
+  void tabNavigated(TabPageRoute tabRoute) {
+    final tabData = tabs.firstWhereOrNull(
+      (tab) => tab.route.contains(tabRoute.path),
+    );
+
+    if (tabData != null) {
+      // Wrap with addPostFrameCallback to avoid setState during build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Check if the state is still mounted before calling setState
+          _triggerAnimation(tabData);
+        }
+      });
+    }
   }
 
   Widget _buildAnimatedContainer(bool isSelected) {

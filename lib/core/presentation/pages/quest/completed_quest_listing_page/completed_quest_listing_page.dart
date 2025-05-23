@@ -92,7 +92,7 @@ class CompletedQuestsListingPage extends StatelessWidget {
                         t.quest.completed,
                         style: Typo.extraLarge.copyWith(
                           color: colorScheme.onPrimary,
-                          fontFamily: FontFamily.nohemiVariable,
+                          fontFamily: FontFamily.clashDisplay,
                         ),
                       ),
                       SizedBox(height: Spacing.superExtraSmall),

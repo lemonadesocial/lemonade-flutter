@@ -56,7 +56,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
                       t.event.ticketTierSetting.categorySetting.newCategory,
                       style: Typo.extraLarge.copyWith(
                         color: colorScheme.onPrimary,
-                        fontFamily: FontFamily.nohemiVariable,
+                        fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
                     SizedBox(height: Spacing.superExtraSmall),
