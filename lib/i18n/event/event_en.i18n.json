@@ -1004,5 +1004,8 @@
         "noUpcomingEventsDescription": "Upcoming events, whether you’re a host or a guest, will appear here.",
         "noPastEvents": "No Past Events",
         "noPastEventsDescription": "Events you were part of will show up here after they end."
-    }
+    },
+    "homeUpcomingEvents": "Upcoming Events",
+    "pastEvents": "Past Events",
+    "checkBackLaterForNewEvents": "Check back later for new events."
 }

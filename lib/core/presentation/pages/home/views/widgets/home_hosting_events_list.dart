@@ -21,9 +21,7 @@ class HomeHostingEventsList extends StatelessWidget {
     return state.maybeWhen(
       fetched: (events) {
         if (events.isEmpty) {
-          return const NoUpcomingEventsCard(
-            type: NoUpcomingEventsCardType.hosting,
-          );
+          return const NoUpcomingEventsCard();
         }
 
         final eventsList = events.take(2).toList();

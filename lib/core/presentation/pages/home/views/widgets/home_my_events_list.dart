@@ -1,58 +1,78 @@
-import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_event_card/home_event_card.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/no_upcoming_events_card.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class HomeMyEventsList extends StatelessWidget {
+  final List<Event> events;
+
   const HomeMyEventsList({
     super.key,
+    required this.events,
   });
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final appText = context.theme.appTextTheme;
-    final state = context.watch<UpcomingAttendingEventsBloc>().state;
+    final appColors = context.theme.appColors;
 
-    return state.maybeWhen(
-      fetched: (events) {
-        if (events.isEmpty) {
-          return const NoUpcomingEventsCard(
-            type: NoUpcomingEventsCardType.attending,
-          );
-        }
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              t.event.myEvents,
-              style: appText.lg,
+    return MultiSliver(
+      children: [
+        SliverToBoxAdapter(
+          child: InkWell(
+            onTap: () {
+              AutoRouter.of(context).push(MyEventsRoute());
+            },
+            child: Row(
+              children: [
+                Text(
+                  t.event.homeUpcomingEvents,
+                  style: appText.lg,
+                ),
+                const Spacer(),
+                ThemeSvgIcon(
+                  color: appColors.textQuaternary,
+                  builder: (filter) => Assets.icons.icArrowForward.svg(
+                    width: Sizing.s6,
+                    height: Sizing.s6,
+                    colorFilter: filter,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: Spacing.s4),
-            ListView.separated(
-              padding: EdgeInsets.zero,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              separatorBuilder: (context, index) => SizedBox(
-                height: Spacing.xSmall,
-              ),
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return HomeEventCard(event: event);
-              },
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: Spacing.s4,
+          ),
+        ),
+        if (events.isEmpty)
+          const SliverToBoxAdapter(
+            child: NoUpcomingEventsCard(),
+          ),
+        if (events.isNotEmpty)
+          SliverList.separated(
+            separatorBuilder: (context, index) => SizedBox(
+              height: Spacing.xSmall,
             ),
-          ],
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      failure: () => const SizedBox.shrink(),
-      orElse: () => const SizedBox.shrink(),
+            itemCount: events.length,
+            itemBuilder: (context, index) {
+              final event = events[index];
+              return HomeEventCard(event: event);
+            },
+          ),
+      ],
     );
   }
 }

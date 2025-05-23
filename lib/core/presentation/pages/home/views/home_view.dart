@@ -1,15 +1,21 @@
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/common/refresh_bloc/refresh_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/base_events_listing_bloc.dart';
+import 'package:app/core/application/event/events_listing_bloc/upcoming_events_listing_bloc.dart';
 import 'package:app/core/application/event/upcoming_attending_events_bloc/upcoming_attending_events_bloc.dart';
 import 'package:app/core/application/event/upcoming_hosting_events_bloc/upcoming_hosting_events_bloc.dart';
 import 'package:app/core/application/space/list_spaces_bloc/list_spaces_bloc.dart';
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/event_enums.dart';
+import 'package:app/core/domain/event/event_repository.dart';
+import 'package:app/core/domain/event/input/get_events_listing_input.dart';
 import 'package:app/core/domain/space/space_repository.dart';
-import 'package:app/core/presentation/pages/home/views/widgets/home_hosting_events_list.dart';
+import 'package:app/core/presentation/pages/home/views/widgets/home_collaborators.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_list_my_spaces.dart';
 import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_list.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/service/event/event_service.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
@@ -54,12 +60,18 @@ class HomeView extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => UpcomingHostingEventsBloc(userId: userId)
-            ..add(UpcomingHostingEventsEvent.fetch()),
-        ),
-        BlocProvider(
-          create: (context) => UpcomingAttendingEventsBloc(userId: userId)
-            ..add(UpcomingAttendingEventsEvent.fetch()),
+          create: (context) => UpcomingEventsListingBloc(
+            EventService(getIt<EventRepository>()),
+            defaultInput: GetUpcomingEventsInput(
+              id: userId,
+              limit: 100,
+              sort: const GetEventSortInput(
+                start: 1,
+              ),
+            ),
+          )..add(
+              BaseEventsListingEvent.fetch(),
+            ),
         ),
         BlocProvider<ListSpacesBloc>.value(value: mySpacesBloc),
         BlocProvider<ListSpacesBloc>.value(value: ambassadorSpacesBloc),
@@ -155,18 +167,11 @@ class _HomeViewState extends State<_HomeView>
       },
       child: Builder(
         builder: (context) {
-          final userId = context.watch<AuthBloc>().state.maybeWhen(
-                authenticated: (authSession) => authSession.userId,
-                orElse: () => '',
-              );
-          final isLoadingUpcomingAttendingEvents = context
-              .watch<UpcomingAttendingEventsBloc>()
-              .state
-              .maybeWhen(loading: () => true, orElse: () => false);
-          final isLoadingUpcomingHostingEvents = context
-              .watch<UpcomingHostingEventsBloc>()
-              .state
-              .maybeWhen(loading: () => true, orElse: () => false);
+          final isLoadingUpcomingEvents =
+              context.watch<UpcomingEventsListingBloc>().state.maybeWhen(
+                    loading: () => true,
+                    orElse: () => false,
+                  );
           return RefreshIndicator(
             color: appColors.buttonTertiary,
             backgroundColor: appColors.buttonTertiaryBg,
@@ -175,32 +180,47 @@ class _HomeViewState extends State<_HomeView>
             },
             child: CustomScrollView(
               slivers: [
-                if (isLoadingUpcomingHostingEvents ||
-                    isLoadingUpcomingAttendingEvents)
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.s4,
+                  ),
+                  sliver: const SliverToBoxAdapter(
+                    child: HomeCollaborators(),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: Spacing.s5,
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Divider(
+                    color: appColors.pageDividerInverse,
+                    thickness: Spacing.s1_5,
+                  ),
+                ),
+                if (isLoadingUpcomingEvents)
                   SliverPadding(
                     padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
                     sliver: SliverToBoxAdapter(
                       child: Loading.defaultLoading(context),
                     ),
-                  ),
-                if (userId.isNotEmpty)
+                  )
+                else
                   SliverPadding(
                     padding: EdgeInsets.only(
                       left: Spacing.small,
                       right: Spacing.small,
                       top: Spacing.medium,
                     ),
-                    sliver: SliverList.separated(
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: Spacing.s5,
-                      ),
-                      itemCount: 2,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return const HomeHostingEventsList();
-                        }
-
-                        return const HomeMyEventsList();
+                    sliver: BlocBuilder<UpcomingEventsListingBloc,
+                        BaseEventsListingState>(
+                      builder: (context, state) {
+                        final events = state.maybeWhen(
+                          orElse: () => <Event>[],
+                          fetched: (events, filteredEvents) => events,
+                        );
+                        return HomeMyEventsList(events: events);
                       },
                     ),
                   ),

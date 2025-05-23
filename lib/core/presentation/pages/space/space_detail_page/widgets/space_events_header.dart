@@ -51,7 +51,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
     final isSpaceAdmin = widget.space.isAdmin(userId: userId ?? '');
     final isSpaceOwner = widget.space.isCreator(userId: userId ?? '');
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -150,6 +150,7 @@ class _SpaceEventsHeaderState extends State<SpaceEventsHeader> {
                         itemCount: tags.length + 1,
                       ),
                     ),
+                  if (tags.isNotEmpty) SizedBox(height: Spacing.s2),
                 ],
               );
             },
