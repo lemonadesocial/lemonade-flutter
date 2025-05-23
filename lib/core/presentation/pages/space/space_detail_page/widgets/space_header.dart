@@ -50,7 +50,7 @@ class SpaceHeader extends StatelessWidget {
                       height: 98.w,
                       imageUrl: space.imageCover?.url?.isNotEmpty == true
                           ? space.imageCover?.url ?? ''
-                          : DiceBearUtils.getImageUrl(id: space.id ?? ''),
+                          : DiceBearUtils.getSpaceImageUrl(id: space.id ?? ''),
                       fit: BoxFit.cover,
                       placeholder: ImagePlaceholder.eventCard(),
                       borderRadius: BorderRadius.circular(LemonRadius.md),

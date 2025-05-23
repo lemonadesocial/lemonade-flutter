@@ -106,7 +106,7 @@ class ImagePlaceholder {
         children: [
           Positioned.fill(
             child: LemonNetworkImage(
-              imageUrl: DiceBearUtils.getImageUrl(id: seed),
+              imageUrl: DiceBearUtils.getSpaceImageUrl(id: seed),
               width: avatarSize,
               height: avatarSize,
               fit: BoxFit.cover,
