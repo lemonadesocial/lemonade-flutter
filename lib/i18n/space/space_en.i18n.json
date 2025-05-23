@@ -73,5 +73,7 @@
         "createFeed": "Create Feed",
         "admins": "Admins",
         "adminInputHint": "Lens or Address"
-    }
+    },
+    "noUpcomingEventsForSubscriber": "As a subscriber, you will be notified when new events are posted.",
+    "noUpcomingEventsForNonSubscriber": "Subscribe to the calendar to get notified when new events are posted."
 }

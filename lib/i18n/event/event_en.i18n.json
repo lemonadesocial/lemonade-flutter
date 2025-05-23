@@ -1005,5 +1005,7 @@
         "noPastEvents": "No Past Events",
         "noPastEventsDescription": "Events you were part of will show up here after they end."
     },
-    "homeUpcomingEvents": "Upcoming Events"
+    "homeUpcomingEvents": "Upcoming Events",
+    "pastEvents": "Past Events",
+    "checkBackLaterForNewEvents": "Check back later for new events."
 }

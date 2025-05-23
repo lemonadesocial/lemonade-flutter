@@ -146,7 +146,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
             return MultiSliver(
               children: [
                 const SliverToBoxAdapter(
-                  child: LensEmptyList(),
+                  child: LensEmptyListWidget(),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(height: Spacing.s18),
@@ -200,7 +200,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                       )
                     else if (posts.isEmpty || result.hasException)
                       const SliverToBoxAdapter(
-                        child: LensEmptyList(),
+                        child: LensEmptyListWidget(),
                       )
                     else
                       BlocListener<ScrollNotificationBloc,
