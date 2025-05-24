@@ -1,19 +1,14 @@
 import 'package:app/core/presentation/pages/onboarding/widgets/onboarding_photo_picker.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class OnboardingProfilePhotoPage extends StatelessWidget {
@@ -22,7 +17,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final theme = Theme.of(context);
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final bloc = context.read<OnboardingBloc>();
     return BlocConsumer<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
@@ -32,6 +29,7 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: appColors.pageBg,
           appBar: LemonAppBar(
             actions: [
               Row(
@@ -41,7 +39,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                         .push(const OnboardingSocialOnChainRoute()),
                     child: Text(
                       t.onboarding.skip,
-                      style: Typo.medium.copyWith(fontWeight: FontWeight.w400),
+                      style: appText.md.copyWith(
+                        color: appColors.textTertiary,
+                      ),
                     ),
                   ),
                   SizedBox(width: Spacing.smMedium),
@@ -49,30 +49,25 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
               ),
             ],
           ),
-          backgroundColor: theme.colorScheme.primary,
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: Spacing.medium),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         t.onboarding.findYourLook,
-                        style: TextStyle(
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.w800,
-                          color: LemonColor.onboardingTitle,
-                          fontFamily: FontFamily.clashDisplay,
-                        ),
+                        style: appText.xl,
                       ),
                       SizedBox(height: Spacing.extraSmall),
                       Text(
                         t.onboarding.findYourLookDesc,
-                        style: theme.textTheme.bodyMedium,
+                        style: appText.md.copyWith(
+                          color: appColors.textTertiary,
+                        ),
                       ),
                       SizedBox(height: Spacing.medium),
                       OnboardingPhotoPicker(
@@ -86,20 +81,10 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       vertical: Spacing.xSmall,
                     ),
-                    child: LinearGradientButton(
+                    child: LinearGradientButton.primaryButton(
                       onTap:
                           state.profilePhoto == null ? null : bloc.uploadImage,
                       label: t.onboarding.next,
-                      textStyle: Typo.medium.copyWith(
-                        fontFamily: FontFamily.clashDisplay,
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                      height: Sizing.large,
-                      radius: BorderRadius.circular(LemonRadius.large),
-                      mode: state.profilePhoto == null
-                          ? GradientButtonMode.defaultMode
-                          : GradientButtonMode.lavenderMode,
                       loadingWhen: state.status == OnboardingStatus.loading,
                     ),
                   ),

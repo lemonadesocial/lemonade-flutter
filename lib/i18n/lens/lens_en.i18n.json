@@ -3,6 +3,7 @@
     "claimUsernameDescription": "Usernames with 6 or more characters are free to claim.",
     "usernameValidationRules": "Usernames must not be longer than 26 characters and can only contain letters, numbers, _ and -",
     "connectWalletDescription": "It looks like your wallet is not connected. Connect your wallet to activate the feed",
+    "onboardingConnectDescription": "We’ll make sure your on-chain identity comes with you. One name, everywhere you go.",
     "activateTimeline": "Activate Timeline",
     "activateTimelineDescription": "Enable the timeline so your community can start posting and engaging here.",
     "activate": "Activate",

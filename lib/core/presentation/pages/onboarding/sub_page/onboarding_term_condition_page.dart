@@ -2,17 +2,13 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class OnboardingTermConditionsPage extends StatefulWidget {
@@ -31,6 +27,8 @@ class _OnboardingTermConditionsPageState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final onboardingBloc = context.watch<OnboardingBloc>();
     final authBloc = context.watch<AuthBloc>();
@@ -43,7 +41,9 @@ class _OnboardingTermConditionsPageState
             orElse: () => null,
           );
           if (username == null || username.isEmpty == true) {
-            AutoRouter.of(context).replace(OnboardingUsernameRoute());
+            AutoRouter.of(context).replace(
+              const OnboardingConnectWalletRoute(),
+            );
           } else {
             authBloc.add(const AuthEvent.authenticated());
             context.router.replaceAll([const RootRoute()]);
@@ -53,7 +53,7 @@ class _OnboardingTermConditionsPageState
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          backgroundColor: colorScheme.background,
+          backgroundColor: appColors.pageBg,
           body: Stack(
             children: [
               NotificationListener<ScrollNotification>(
@@ -80,18 +80,13 @@ class _OnboardingTermConditionsPageState
                             SizedBox(height: Spacing.xLarge * 3),
                             Text(
                               t.onboarding.termConditions.title,
-                              style: Typo.extraLarge.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontWeight: FontWeight.w800,
-                                fontFamily: FontFamily.clashDisplay,
-                              ),
+                              style: appText.xl,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             Text(
                               t.onboarding.termConditions.description,
-                              style: Typo.mediumPlus.copyWith(
-                                color: colorScheme.onSecondary,
-                                fontFamily: FontFamily.generalSans,
+                              style: appText.md.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             ),
                             SizedBox(height: Spacing.smMedium * 2),
@@ -135,7 +130,7 @@ class _OnboardingTermConditionsPageState
                     top: false,
                     child: Opacity(
                       opacity: termConditionsAccepted ? 1 : 0.5,
-                      child: LinearGradientButton(
+                      child: LinearGradientButton.primaryButton(
                         onTap: () {
                           if (termConditionsAccepted) {
                             onboardingBloc.acceptTerm(
@@ -152,14 +147,6 @@ class _OnboardingTermConditionsPageState
                           }
                         },
                         label: t.onboarding.termConditions.action,
-                        textStyle: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary.withOpacity(0.87),
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.clashDisplay,
-                        ),
-                        height: Sizing.large,
-                        radius: BorderRadius.circular(24.r),
-                        mode: GradientButtonMode.lavenderMode,
                         loadingWhen: onboardingBloc.state.status ==
                             OnboardingStatus.loading,
                       ),
@@ -187,29 +174,28 @@ class TermConditionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(Spacing.medium),
+      padding: EdgeInsets.all(Spacing.s3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(LemonRadius.normal),
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
           SizedBox(height: Spacing.superExtraSmall),
           Text(
             description,
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.sm.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
         ],

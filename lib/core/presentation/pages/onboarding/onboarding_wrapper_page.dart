@@ -23,17 +23,14 @@ class OnboardingWrapperPage extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: onBoardingTheme,
-      child: WillPopScope(
-        onWillPop: () async {
-          if (onboardingFlow == false) return true;
-          var currentTopRoute = AutoRouter.of(context).topRoute;
-          bool? isPopBlocked = currentTopRoute.meta.tryGet('popBlocked');
-          return isPopBlocked != null ? !isPopBlocked : true;
-        },
-        child: const AutoRouter(),
-      ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (onboardingFlow == false) return true;
+        var currentTopRoute = AutoRouter.of(context).topRoute;
+        bool? isPopBlocked = currentTopRoute.meta.tryGet('popBlocked');
+        return isPopBlocked != null ? !isPopBlocked : true;
+      },
+      child: const AutoRouter(),
     );
   }
 

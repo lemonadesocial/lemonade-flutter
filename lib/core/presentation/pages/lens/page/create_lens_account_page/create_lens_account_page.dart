@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:reown_appkit/modal/utils/debouncer.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class CreateLensAccountPage extends StatelessWidget {
@@ -111,6 +112,9 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return BlocConsumer<CreateLensAccountBloc, CreateLensAccountState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -153,7 +157,7 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
               onTap: () => FocusScope.of(context).unfocus(),
               child: Scaffold(
                 appBar: const LemonAppBar(),
-                backgroundColor: theme.colorScheme.primary,
+                backgroundColor: appColors.pageBg,
                 body: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.small),
                   child: Column(
@@ -165,15 +169,14 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
                           children: [
                             Text(
                               t.onboarding.pickUsername,
-                              style: Typo.extraLarge.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: theme.colorScheme.onPrimary,
-                              ),
+                              style: appText.xl,
                             ),
                             SizedBox(height: Spacing.extraSmall),
                             Text(
                               t.lens.claimUsernameDescription,
-                              style: theme.textTheme.bodyMedium,
+                              style: appText.md.copyWith(
+                                color: appColors.textTertiary,
+                              ),
                             ),
                             SizedBox(height: Spacing.medium),
                             LemonTextField(
@@ -181,7 +184,7 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
                               controller: _usernameController,
                               hintText: t.onboarding.username,
                               borderColor:
-                                  showError ? LemonColor.errorRedBg : null,
+                                  showError ? appColors.textError : null,
                               statusWidget: touched
                                   ? statusWidget(
                                       context,
