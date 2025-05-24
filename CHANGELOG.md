@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.1.0...v2.2.0) (2025-05-23)
+
+
+### Features
+
+* adapt new theme ([#953](https://github.com/lemonadesocial/lemonade-flutter/issues/953)) ([e3b196b](https://github.com/lemonadesocial/lemonade-flutter/commit/e3b196b652af7fe4a9b833028fd1bad8656a0c32))
+* define app new theme ([#944](https://github.com/lemonadesocial/lemonade-flutter/issues/944)) ([5cca889](https://github.com/lemonadesocial/lemonade-flutter/commit/5cca889db6dd2834f4701d2f3cad347ed9cd522e))
+* improve discover style ([#946](https://github.com/lemonadesocial/lemonade-flutter/issues/946)) ([9309a83](https://github.com/lemonadesocial/lemonade-flutter/commit/9309a83ae43f1df75e83533b2a1ffbe1bff5e181))
+* improve home refresh ([#957](https://github.com/lemonadesocial/lemonade-flutter/issues/957)) ([af0fa14](https://github.com/lemonadesocial/lemonade-flutter/commit/af0fa14225fef04807e70f71731b4372fc52d0f5))
+* new empty states ([#959](https://github.com/lemonadesocial/lemonade-flutter/issues/959)) ([81823a6](https://github.com/lemonadesocial/lemonade-flutter/commit/81823a6327f3c9c63f7634867a9aa64bcf8f623d))
+* randomize Dicebear avatar ([#960](https://github.com/lemonadesocial/lemonade-flutter/issues/960)) ([2b5e808](https://github.com/lemonadesocial/lemonade-flutter/commit/2b5e808e6ef79c316db54344e7f9fff30318a884))
+* space detail new theme UI ([#947](https://github.com/lemonadesocial/lemonade-flutter/issues/947)) ([78a3666](https://github.com/lemonadesocial/lemonade-flutter/commit/78a3666b108238724a22e2921e040c367c9b9189))
+
+
+### Bug Fixes
+
+* adapt new theme for my events page ([#954](https://github.com/lemonadesocial/lemonade-flutter/issues/954)) ([3d27560](https://github.com/lemonadesocial/lemonade-flutter/commit/3d2756005a5d89b281a3619c6198387e826e7320))
+* adapt new theme for space pending request widgets and page ([#956](https://github.com/lemonadesocial/lemonade-flutter/issues/956)) ([0dbf82f](https://github.com/lemonadesocial/lemonade-flutter/commit/0dbf82f35d34d73befe0d36f655051e4dc9fe0b0))
+* remove unsuned bloc ([#961](https://github.com/lemonadesocial/lemonade-flutter/issues/961)) ([2d833ce](https://github.com/lemonadesocial/lemonade-flutter/commit/2d833ce650adaa2cb1f386db2b9903bb08ebc97e))
+* replace lemoncolor ([#958](https://github.com/lemonadesocial/lemonade-flutter/issues/958)) ([e17d53d](https://github.com/lemonadesocial/lemonade-flutter/commit/e17d53df5ba4290876ad0f462d2d2af9b928c5d0))
+* ui bug in new space detai, dicebear avatar for space  ([#949](https://github.com/lemonadesocial/lemonade-flutter/issues/949)) ([3a843cf](https://github.com/lemonadesocial/lemonade-flutter/commit/3a843cfce38b6b3577b3320934038f4cad7a7835))
+* update logic fetch events in my events page ([#955](https://github.com/lemonadesocial/lemonade-flutter/issues/955)) ([3b0de46](https://github.com/lemonadesocial/lemonade-flutter/commit/3b0de4608b0650b0994db30122f46d3e820c800a))
+* update versioning ([#951](https://github.com/lemonadesocial/lemonade-flutter/issues/951)) ([8ce00ad](https://github.com/lemonadesocial/lemonade-flutter/commit/8ce00ad5f6bd8d48533509d5133bd43129461f29))
+
 ## [2.1.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.0.0...v2.1.0) (2025-05-15)
 
 
