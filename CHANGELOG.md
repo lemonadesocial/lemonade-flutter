@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.2.0...v2.3.0) (2025-05-26)
+
+
+### Features
+
+* create lens account on onboarding flow ([#963](https://github.com/lemonadesocial/lemonade-flutter/issues/963)) ([35b65a3](https://github.com/lemonadesocial/lemonade-flutter/commit/35b65a301cd8a020dda07ec8167de1d55b53829d))
+
+
+### Bug Fixes
+
+* onboarding flow - set default dob ([#965](https://github.com/lemonadesocial/lemonade-flutter/issues/965)) ([7d5a98c](https://github.com/lemonadesocial/lemonade-flutter/commit/7d5a98ce2a980787b5d825f89d1f9e76826730e0))
+
 ## [2.2.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.1.0...v2.2.0) (2025-05-23)
 
 
