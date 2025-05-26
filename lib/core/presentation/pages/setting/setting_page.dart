@@ -1,26 +1,28 @@
+import 'dart:io';
+
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/delete_user_bloc/delete_user_bloc.dart';
-import 'package:app/core/presentation/pages/setting/widgets/setting_delete_account_dialog.dart';
+import 'package:app/core/config.dart';
 import 'package:app/core/presentation/pages/setting/widgets/setting_profile_tile.dart';
-import 'package:app/core/presentation/pages/setting/widgets/setting_tile_widget.dart';
-import 'package:app/core/presentation/widgets/back_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:app/app_theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class SettingPage extends StatelessWidget {
@@ -47,6 +49,18 @@ class SettingPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
+    final backIcon = ThemeSvgIcon(
+      color: appColors.textTertiary,
+      builder: (filter) => Assets.icons.icArrowRight.svg(
+        colorFilter: filter,
+        width: Sizing.s5,
+        height: Sizing.s5,
+      ),
+    );
+
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthBloc, AuthState>(
@@ -79,7 +93,6 @@ class SettingPageView extends StatelessWidget {
         backgroundColor: colorScheme.primary,
         appBar: LemonAppBar(
           title: t.setting.setting,
-          leading: const LemonBackButton(),
         ),
         body: SingleChildScrollView(
           child: SafeArea(
@@ -94,147 +107,308 @@ class SettingPageView extends StatelessWidget {
                 authenticated: (_) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: Spacing.superExtraSmall),
                     const SettingProfileTile(),
-                    SizedBox(height: 24.h),
-                    SettingTileWidget(
-                      title: t.common.vaults,
-                      subTitle: t.setting.vaultDesc,
-                      leading: ThemeSvgIcon(
-                        color: colorScheme.onPrimary.withOpacity(0.54),
-                        builder: (filter) {
-                          return Assets.icons.icBank.svg(colorFilter: filter);
-                        },
-                      ),
-                      featureAvailable: true,
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        AutoRouter.of(context).push(const VaultRootRoute());
-                      },
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    SettingTileWidget(
-                      title: t.setting.notification,
-                      subTitle: t.setting.notificationDesc,
-                      leading: Assets.icons.icNotification.svg(),
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        context.router.push(const NotificationSettingRoute());
-                      },
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    SettingTileWidget(
-                      title: t.setting.blockAccount,
-                      subTitle: t.setting.blockAccountDesc,
-                      leading: Assets.icons.icBlock.svg(),
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        context.router.push(const SettingBlockRoute());
-                      },
-                    ),
-                    SizedBox(height: 24.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Spacing.xSmall,
-                        horizontal: Spacing.superExtraSmall,
-                      ),
-                      child: Text(
-                        t.setting.about,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: appColors.pageBg,
+                      separatorColor: appColors.pageDivider,
+                      dividerMargin: 0,
+                      additionalDividerMargin: 0,
+                      margin: EdgeInsets.zero,
+                      hasLeading: false,
+                      header: Text(
+                        t.setting.account,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
                       ),
-                    ),
-                    SettingTileWidget(
-                      title: t.setting.policy,
-                      leading: Assets.icons.icPrivacy.svg(),
-                      trailing: Assets.icons.icExpand.svg(
-                        width: 18.w,
-                        height: 18.w,
+                      topMargin: 0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.md),
+                        color: appColors.cardBg,
+                        border: Border.all(color: appColors.cardBorder),
                       ),
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        ChromeSafariBrowser().open(
-                          url: WebUri('https://lemonade.social/privacy'),
-                        );
-                      },
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    SettingTileWidget(
-                      title: t.setting.term,
-                      leading: Assets.icons.icTerm.svg(),
-                      trailing: Assets.icons.icExpand.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        ChromeSafariBrowser().open(
-                          url: WebUri('https://lemonade.social/terms'),
-                        );
-                      },
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    SettingTileWidget(
-                      title: t.auth.logout,
-                      subTitle: t.setting.logoutDesc,
-                      leading: ThemeSvgIcon(
-                        builder: (filter) => Assets.icons.icLogout.svg(),
-                      ),
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      onTap: () {
-                        Vibrate.feedback(FeedbackType.light);
-                        context.read<AuthBloc>().add(
-                              const AuthEvent.logout(),
-                            );
-                      },
-                    ),
-                    SizedBox(height: Spacing.xSmall),
-                    SettingTileWidget(
-                      title: t.setting.deleteAccount,
-                      subTitle: t.setting.deleteAccountDesc,
-                      leading: ThemeSvgIcon(
-                        color: LemonColor.deleteAccountRed,
-                        builder: (filter) {
-                          return Assets.icons.icDelete.svg(colorFilter: filter);
-                        },
-                      ),
-                      titleStyle: Typo.medium.copyWith(
-                        color: LemonColor.deleteAccountRed,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      trailing: Assets.icons.icArrowBack.svg(
-                        width: 18.w,
-                        height: 18.w,
-                      ),
-                      onTap: () async {
-                        Vibrate.feedback(FeedbackType.light);
-                        final confirmDeleteAccount = await showDialog<bool>(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return const SettingDeleteAccountDialog();
+                      children: [
+                        CupertinoListTile(
+                          title: Text(
+                            t.setting.accountSettings,
+                            style: appText.md,
+                          ),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) =>
+                                Assets.icons.icPersonOutline.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {},
+                        ),
+                        CupertinoListTile(
+                          title:
+                              Text(t.setting.blockAccount, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icBlock.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            context.router.push(const SettingBlockRoute());
                           },
-                        );
-                        if (confirmDeleteAccount == true) {
-                          context
-                              .read<DeleteUserBloc>()
-                              .add(DeleteUserEvent.delete());
-                        }
-                      },
+                        ),
+                      ],
                     ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: appColors.pageBg,
+                      separatorColor: appColors.pageDivider,
+                      dividerMargin: 0,
+                      additionalDividerMargin: 0,
+                      margin: EdgeInsets.zero,
+                      hasLeading: false,
+                      header: Text(
+                        t.setting.preferences,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
+                        ),
+                      ),
+                      topMargin: 0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.md),
+                        color: appColors.cardBg,
+                        border: Border.all(color: appColors.cardBorder),
+                      ),
+                      children: [
+                        CupertinoListTile(
+                          title:
+                              Text(t.setting.notification, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) =>
+                                Assets.icons.icNotification.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            Vibrate.feedback(FeedbackType.light);
+                            context.router
+                                .push(const NotificationSettingRoute());
+                          },
+                        ),
+                        CupertinoListTile(
+                          title: Text(t.setting.appearance, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icPallete.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            SnackBarUtils.showComingSoon();
+                            // if (context.read<AppTheme>().themeMode == ThemeMode.light) {
+                            //   context.read<AppTheme>().themeMode = ThemeMode.dark;
+                            // } else {
+                            //   context.read<AppTheme>().themeMode = ThemeMode.light;
+                            // }
+                          },
+                        ),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: appColors.pageBg,
+                      separatorColor: appColors.pageDivider,
+                      dividerMargin: 0,
+                      additionalDividerMargin: 0,
+                      margin: EdgeInsets.zero,
+                      hasLeading: false,
+                      header: Text(
+                        t.setting.resources,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
+                        ),
+                      ),
+                      topMargin: 0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.md),
+                        color: appColors.cardBg,
+                        border: Border.all(color: appColors.cardBorder),
+                      ),
+                      children: [
+                        CupertinoListTile(
+                          title: Text(t.setting.policy, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) =>
+                                Assets.icons.icShieldLockOutline.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            ChromeSafariBrowser().open(
+                              url: WebUri('https://lemonade.social/privacy'),
+                            );
+                          },
+                        ),
+                        CupertinoListTile(
+                          title: Text(t.setting.term, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) =>
+                                Assets.icons.icContractOutline.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            ChromeSafariBrowser().open(
+                              url: WebUri('https://lemonade.social/terms'),
+                            );
+                          },
+                        ),
+                        CupertinoListTile(
+                          title: Text(t.setting.contactUs, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icMailOutline.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () async {
+                            await launchUrl(
+                              Uri.parse('mailto:suppor@lemonade.social'),
+                            );
+                          },
+                        ),
+                        CupertinoListTile(
+                          title: Text(
+                            Platform.isAndroid
+                                ? t.setting.rateInPlayStore
+                                : t.setting.rateInAppStore,
+                            style: appText.md,
+                          ),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icStar.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            launchUrl(
+                              Uri.parse(
+                                Platform.isIOS
+                                    ? AppConfig.lemonadeIosDownloadUrl
+                                    : AppConfig.lemonadeAndroidDownloadUrl,
+                              ),
+                            );
+                          },
+                        ),
+                        CupertinoListTile(
+                          title:
+                              Text(t.setting.followLemonade, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icXLine.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            launchUrl(
+                              Uri.parse(AppConfig.lemonadeTwitterUrl),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Spacing.s5),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: appColors.pageBg,
+                      separatorColor: appColors.pageDivider,
+                      dividerMargin: 0,
+                      additionalDividerMargin: 0,
+                      margin: EdgeInsets.zero,
+                      hasLeading: false,
+                      topMargin: 0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.md),
+                        color: appColors.cardBg,
+                        border: Border.all(color: appColors.cardBorder),
+                      ),
+                      children: [
+                        CupertinoListTile(
+                          title: Text(t.setting.signOut, style: appText.md),
+                          leading: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icLogout.svg(
+                              colorFilter: filter,
+                              width: Sizing.s5,
+                              height: Sizing.s5,
+                            ),
+                          ),
+                          trailing: backIcon,
+                          onTap: () {
+                            context.read<AuthBloc>().add(
+                                  const AuthEvent.logout(),
+                                );
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Spacing.s10),
+                    // SettingTileWidget(
+                    //   title: t.setting.deleteAccount,
+                    //   subTitle: t.setting.deleteAccountDesc,
+                    //   leading: ThemeSvgIcon(
+                    //     color: LemonColor.deleteAccountRed,
+                    //     builder: (filter) {
+                    //       return Assets.icons.icDelete.svg(colorFilter: filter);
+                    //     },
+                    //   ),
+                    //   titleStyle: Typo.medium.copyWith(
+                    //     color: LemonColor.deleteAccountRed,
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    //   trailing: Assets.icons.icArrowBack.svg(
+                    //     width: 18.w,
+                    //     height: 18.w,
+                    //   ),
+                    //   onTap: () async {
+                    //     Vibrate.feedback(FeedbackType.light);
+                    //     final confirmDeleteAccount = await showDialog<bool>(
+                    //       context: context,
+                    //       barrierDismissible: true,
+                    //       builder: (BuildContext context) {
+                    //         return const SettingDeleteAccountDialog();
+                    //       },
+                    //     );
+                    //     if (confirmDeleteAccount == true) {
+                    //       context.read<DeleteUserBloc>().add(DeleteUserEvent.delete());
+                    //     }
+                    //   },
+                    // ),
                     // Display version information
                     FutureBuilder<String>(
                       future: getVersion(),
@@ -243,20 +417,13 @@ class SettingPageView extends StatelessWidget {
                         AsyncSnapshot<String> snapshot,
                       ) {
                         if (snapshot.hasData) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              top: Spacing.large,
-                              bottom: Spacing.xLarge,
-                            ),
-                            child: Center(
-                              child: Text(
-                                t.common.appVersion(
-                                  appVersion: snapshot.data as String,
-                                ),
-                                style: Typo.medium.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                          return Center(
+                            child: Text(
+                              t.common.appVersion(
+                                appVersion: snapshot.data as String,
+                              ),
+                              style: appText.xs.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             ),
                           );
