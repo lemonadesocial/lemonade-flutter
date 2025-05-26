@@ -84,6 +84,7 @@ class OnboardingTermAdultPage extends StatelessWidget {
                       onboardingBloc.acceptTerm(
                         UpdateUserProfileInput(
                           termsAcceptedAdult: true,
+                          dob: DateTime(2000, 1, 1).toUtc(),
                         ),
                       );
                     },
