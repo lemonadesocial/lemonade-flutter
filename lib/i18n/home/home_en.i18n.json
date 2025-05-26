@@ -39,5 +39,21 @@
         "cohostRequest": "Co-host request",
         "eventInvite": "Event invite",
         "friendRequest": "Friend request"
+    },
+    "drawer": {
+        "completeProfile": "Complete profile",
+        "stepRemaining(ordinal)": {
+            "one": "1 step remaining",
+            "other": "$n steps remaining"
+        },
+        "earnPoint": "Earn points",
+        "earnPointDesc": "by completing simple tasks!",
+        "communities": "Communities",
+        "communitiesDesc": "Hubs you lead or follow",
+        "events": "Events",
+        "eventsDesc": "All your events in one place",
+        "tickets": "Tickets",
+        "ticketsDesc": "Access your tickets & receipts",
+        "claimUsername": "Claim Username"
     }
 }

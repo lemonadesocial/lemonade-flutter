@@ -176,7 +176,7 @@ class _View extends StatelessWidget {
                         children: [
                           LemonAppBar(
                             title: t.common.actions.verifyWallet,
-                            backgroundColor: LemonColor.atomicBlack,
+                            backgroundColor: Colors.transparent,
                           ),
                           SizedBox(height: Spacing.small),
                           if (lensAuthState.isFetching) ...[

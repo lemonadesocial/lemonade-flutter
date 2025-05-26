@@ -35,11 +35,14 @@ class ImagePlaceholder {
     );
   }
 
-  static Widget avatarPlaceholder({BorderRadius? radius}) {
-    final randomId = Random().nextInt(100);
+  static Widget avatarPlaceholder({
+    String? userId,
+    BorderRadius? radius,
+  }) {
+    final randomId = userId ?? Random().nextInt(100).toString();
     return LemonCircleAvatar(
       size: Sizing.medium,
-      url: AvatarUtils.randomUserImage(randomId.toString()),
+      url: AvatarUtils.randomUserImage(randomId),
     );
   }
 

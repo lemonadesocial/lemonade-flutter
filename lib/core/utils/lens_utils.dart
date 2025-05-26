@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -128,5 +129,14 @@ class LensUtils {
         timeout,
       );
     }
+  }
+
+  static String getLensUsername({
+    LensAccount? lensAccount,
+  }) {
+    if (lensAccount?.username?.localName?.isNotEmpty == true) {
+      return lensAccount!.username!.localName!;
+    }
+    return '';
   }
 }
