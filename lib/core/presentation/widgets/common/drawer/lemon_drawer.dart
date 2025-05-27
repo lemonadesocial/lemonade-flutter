@@ -1,6 +1,9 @@
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_profile_info.dart';
 import 'package:app/core/presentation/widgets/common/drawer/widgets/lemon_drawer_tile_widget.dart';
+import 'package:app/core/presentation/widgets/home_appbar/widgets/complete_profile_bottomsheet.dart';
+import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -14,6 +17,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class LemonDrawer extends StatelessWidget {
   const LemonDrawer({super.key});
@@ -21,7 +25,6 @@ class LemonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appColors = context.theme.appColors;
-
     final backIcon = ThemeSvgIcon(
       color: appColors.textTertiary,
       builder: (filter) => Assets.icons.icArrowBack.svg(
@@ -29,6 +32,17 @@ class LemonDrawer extends StatelessWidget {
         width: Sizing.s5,
         height: Sizing.s5,
       ),
+    );
+
+    final user = context.watch<AuthBloc>().state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
+    final walletState = context.watch<WalletBloc>().state;
+
+    final stepsRemaining = OnboardingUtils.getStepsRemainingToCompleteProfile(
+      user: user,
+      walletState: walletState,
     );
 
     final listTitleWidgets = [
@@ -225,36 +239,46 @@ class LemonDrawer extends StatelessWidget {
                     color: appColors.pageDividerInverse,
                   ),
                 ),
-                // SliverPadding(
-                //   padding: EdgeInsets.symmetric(
-                //     horizontal: Spacing.s4,
-                //   ),
-                //   sliver: SliverToBoxAdapter(
-                //     child: LemonDrawerTileWidget(
-                //       title: t.home.drawer.completeProfile,
-                //       subtitle: t.home.drawer.stepRemaining(n: 2),
-                //       onTap: () {
-                //         context.router.push(const EditProfileRoute());
-                //       },
-                //       radius: BorderRadius.circular(LemonRadius.md),
-                //       leading: Transform.scale(
-                //         scale: 1.5,
-                //         child: Assets.icons.icLoaderFinite.svg(
-                //           width: Sizing.s6,
-                //           height: Sizing.s6,
-                //         ),
-                //       ),
-                //       leadingBackgroundColor: Colors.transparent,
-                //       trailing: backIcon,
-                //       border: Border.all(
-                //         color: appColors.cardBorder,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // SliverToBoxAdapter(
-                //   child: SizedBox(height: Spacing.s4),
-                // ),
+                if (stepsRemaining > 0) ...[
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Spacing.s4,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: LemonDrawerTileWidget(
+                        title: t.home.drawer.completeProfile,
+                        subtitle:
+                            t.home.drawer.stepRemaining(n: stepsRemaining),
+                        onTap: () {
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            useRootNavigator: true,
+                            backgroundColor: appColors.pageBg,
+                            barrierColor: Colors.black.withOpacity(0.5),
+                            builder: (mContext) =>
+                                const CompleteProfileBottomSheet(),
+                          );
+                        },
+                        radius: BorderRadius.circular(LemonRadius.md),
+                        leading: Transform.scale(
+                          scale: 1.5,
+                          child: Assets.icons.icLoaderFinite.svg(
+                            width: Sizing.s6,
+                            height: Sizing.s6,
+                          ),
+                        ),
+                        leadingBackgroundColor: Colors.transparent,
+                        trailing: backIcon,
+                        border: Border.all(
+                          color: appColors.cardBorder,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: Spacing.s4),
+                  ),
+                ],
                 SliverPadding(
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.s4,

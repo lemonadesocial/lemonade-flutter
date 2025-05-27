@@ -46,4 +46,21 @@ class OnboardingUtils {
     }
     return true;
   }
+
+  static int getStepsRemainingToCompleteProfile({
+    required User? user,
+    required WalletState walletState,
+  }) {
+    int stepsRemaining = 0;
+    final filledUsername = (user?.username ?? '').isNotEmpty;
+    final filledAvatar = (user?.imageAvatar ?? '').isNotEmpty;
+    final connectedFarcaster =
+        user?.farcasterUserInfo?.accountKeyRequest?.accepted == true;
+    final connectedWallet = walletState.activeSession != null;
+    if (!filledUsername) stepsRemaining++;
+    if (!filledAvatar) stepsRemaining++;
+    if (!connectedWallet) stepsRemaining++;
+    if (!connectedFarcaster) stepsRemaining++;
+    return stepsRemaining;
+  }
 }
