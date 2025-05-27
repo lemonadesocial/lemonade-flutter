@@ -1,7 +1,6 @@
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
@@ -24,11 +23,9 @@ import 'package:app/app_theme/app_theme.dart';
 
 class LensPostItemActionsWidget extends StatefulWidget {
   final LensPost post;
-  final Space space;
   const LensPostItemActionsWidget({
     super.key,
     required this.post,
-    required this.space,
   });
 
   @override
@@ -47,13 +44,72 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
     checkHasRecasted();
   }
 
+  @override
+  void didUpdateWidget(covariant LensPostItemActionsWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    checkHasLiked();
+    checkHasRecasted();
+  }
+
   void checkHasLiked() {
     setState(() {
       localLiked = widget.post.operations?.hasReacted ?? false;
     });
   }
 
+  Future<void> reactToPost() async {
+    // TODO: Lens - handle add reaction
+    if (localLiked) {
+      setState(() {
+        localLiked = false;
+      });
+      await getIt<LensGQL>().client.mutate$LensUndoReaction(
+            Options$Mutation$LensUndoReaction(
+              variables: Variables$Mutation$LensUndoReaction(
+                request: Input$UndoReactionRequest(
+                  post: widget.post.id ?? '',
+                  reaction: Enum$PostReactionType.UPVOTE,
+                ),
+              ),
+            ),
+          );
+    } else {
+      setState(() {
+        localLiked = true;
+      });
+      await getIt<LensGQL>().client.mutate$LensAddReaction(
+            Options$Mutation$LensAddReaction(
+              variables: Variables$Mutation$LensAddReaction(
+                request: Input$AddReactionRequest(
+                  post: widget.post.id ?? '',
+                  reaction: Enum$PostReactionType.UPVOTE,
+                ),
+              ),
+            ),
+          );
+    }
+  }
+
   void checkHasRecasted() {}
+
+  void checkAuthorized(BuildContext context, Function callback) async {
+    final lensAuthState = context.read<LensAuthBloc>().state;
+    if (!lensAuthState.loggedIn ||
+        !lensAuthState.connected ||
+        lensAuthState.accountStatus != LensAccountStatus.accountOwner) {
+      final isAuthorized = await showCupertinoModalBottomSheet(
+        backgroundColor: LemonColor.atomicBlack,
+        context: context,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        builder: (newContext) {
+          return const LensOnboardingBottomSheet();
+        },
+      );
+      if (!isAuthorized) return;
+    }
+    callback();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,36 +127,10 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
           children: [
             InkWell(
               onTap: () async {
-                // TODO: Lens - handle add reaction
-                if (localLiked) {
-                  setState(() {
-                    localLiked = false;
-                  });
-                  getIt<LensGQL>().client.mutate$LensUndoReaction(
-                        Options$Mutation$LensUndoReaction(
-                          variables: Variables$Mutation$LensUndoReaction(
-                            request: Input$UndoReactionRequest(
-                              post: widget.post.id ?? '',
-                              reaction: Enum$PostReactionType.UPVOTE,
-                            ),
-                          ),
-                        ),
-                      );
-                } else {
-                  setState(() {
-                    localLiked = true;
-                  });
-                  getIt<LensGQL>().client.mutate$LensAddReaction(
-                        Options$Mutation$LensAddReaction(
-                          variables: Variables$Mutation$LensAddReaction(
-                            request: Input$AddReactionRequest(
-                              post: widget.post.id ?? '',
-                              reaction: Enum$PostReactionType.UPVOTE,
-                            ),
-                          ),
-                        ),
-                      );
-                }
+                checkAuthorized(
+                  context,
+                  reactToPost,
+                );
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -150,25 +180,15 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
             BlocBuilder<LensAuthBloc, LensAuthState>(
               builder: (context, state) => InkWell(
                 onTap: () async {
-                  if (!state.loggedIn ||
-                      !state.connected ||
-                      state.accountStatus != LensAccountStatus.accountOwner) {
-                    final isAuthorized = await showCupertinoModalBottomSheet(
-                      backgroundColor: LemonColor.atomicBlack,
-                      context: context,
-                      useRootNavigator: true,
-                      barrierColor: Colors.black.withOpacity(0.5),
-                      builder: (newContext) {
-                        return const LensOnboardingBottomSheet();
-                      },
-                    );
-                    if (!isAuthorized) return;
-                  }
-                  AutoRouter.of(context).push(
-                    CreateLensPostReplyRoute(
-                      post: widget.post,
-                      space: widget.space,
-                    ),
+                  checkAuthorized(
+                    context,
+                    () {
+                      AutoRouter.of(context).push(
+                        CreateLensPostReplyRoute(
+                          post: widget.post,
+                        ),
+                      );
+                    },
                   );
                 },
                 child: Row(

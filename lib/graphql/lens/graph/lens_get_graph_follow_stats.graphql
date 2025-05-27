@@ -1,0 +1,18 @@
+query LensGetGraphFollowStats($request: AccountStatsRequest!) {
+  accountStats(request: $request) {
+    graphFollowStats {
+      followers
+      following
+    }
+    feedStats {
+      posts
+      comments
+      reposts
+      quotes
+      reactions
+      reacted
+      collects
+      tips
+    }
+  }
+}

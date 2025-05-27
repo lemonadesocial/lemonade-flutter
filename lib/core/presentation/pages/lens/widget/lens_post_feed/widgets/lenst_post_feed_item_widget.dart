@@ -1,11 +1,12 @@
 import 'package:app/core/domain/lens/entities/lens_post.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_post_item_actions_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,13 +17,11 @@ class LensPostFeedItemWidget extends StatefulWidget {
   final LensPost post;
   final Function()? onTap;
   final bool showActions;
-  final Space space;
   const LensPostFeedItemWidget({
     super.key,
     required this.post,
     required this.showActions,
     this.onTap,
-    required this.space,
   });
 
   @override
@@ -53,7 +52,16 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                if (widget.post.author == null) {
+                  return;
+                }
+                AutoRouter.of(context).push(
+                  LensUserProfileRoute(
+                    lensAccount: widget.post.author!,
+                  ),
+                );
+              },
               child: LemonNetworkImage(
                 width: Sizing.s10,
                 height: Sizing.s10,
@@ -74,7 +82,14 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
                   // ],
                   InkWell(
                     onTap: () {
-                      // TODO: Lens account profile
+                      if (widget.post.author == null) {
+                        return;
+                      }
+                      AutoRouter.of(context).push(
+                        LensUserProfileRoute(
+                          lensAccount: widget.post.author!,
+                        ),
+                      );
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +113,6 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
                     SizedBox(height: Spacing.s2_5),
                     LensPostItemActionsWidget(
                       post: widget.post,
-                      space: widget.space,
                     ),
                   ],
                 ],

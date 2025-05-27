@@ -36,6 +36,7 @@ class DynamicSliverAppBarState extends State<DynamicSliverAppBar> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: Colors.transparent,
       leading: const SizedBox.shrink(),
       floating: widget.floating,
       forceElevated: widget.forceElevated,

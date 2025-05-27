@@ -82,7 +82,7 @@ class CreateLensPostBloc
         contentUri: uploadResult['uri'] ?? '',
         quoteOf: event.quoteOf,
         commentOn: event.commentOn,
-        feed: event.lensFeedId,
+        feed: event.lensFeedId.isEmpty ? null : event.lensFeedId,
       );
 
       final result = await _lensRepository.createPost(

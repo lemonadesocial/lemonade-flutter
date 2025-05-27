@@ -1,7 +1,6 @@
 import 'package:app/core/application/lens/create_lens_post_bloc/create_lens_post_bloc.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_editor.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -23,11 +22,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 @RoutePage()
 class CreateLensPostReplyPage extends StatelessWidget {
   final LensPost post;
-  final Space space;
   const CreateLensPostReplyPage({
     super.key,
     required this.post,
-    required this.space,
   });
 
   @override
@@ -37,7 +34,7 @@ class CreateLensPostReplyPage extends StatelessWidget {
         getIt<LensRepository>(),
         getIt<LensGroveService>(),
       ),
-      child: _View(post: post, space: space),
+      child: _View(post: post),
     );
   }
 }
@@ -45,11 +42,9 @@ class CreateLensPostReplyPage extends StatelessWidget {
 class _View extends StatefulWidget {
   const _View({
     required this.post,
-    required this.space,
   });
 
   final LensPost post;
-  final Space space;
   @override
   State<_View> createState() => _ViewState();
 }
@@ -87,7 +82,7 @@ class _ViewState extends State<_View> {
             commentOn: Input$ReferencingPostInput(
               post: widget.post.id ?? '',
             ),
-            lensFeedId: widget.space.lensFeedId ?? '',
+            lensFeedId: widget.post.feed?.address ?? '',
           ),
         );
   }
@@ -128,7 +123,6 @@ class _ViewState extends State<_View> {
                             child: LensPostFeedItemWidget(
                               post: widget.post,
                               showActions: false,
-                              space: widget.space,
                             ),
                           ),
                           SliverToBoxAdapter(
