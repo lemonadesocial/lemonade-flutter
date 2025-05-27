@@ -22,6 +22,10 @@ class AppConfig {
   static get aiUrl => dotenv.env['AI_URL'];
   static get wssAIUrl => dotenv.env['WSS_AI_URL'];
 
+  static get identityUrl => isProduction
+      ? 'https://identity.lemonade.social'
+      : 'https://identity.staging.lemonade.social';
+
   // Cubejs
   static get cubeJsUrl => dotenv.env['CUBEJS_URL'];
   static get cubeJsRestUrl => dotenv.env['CUBEJS_REST_URL'];

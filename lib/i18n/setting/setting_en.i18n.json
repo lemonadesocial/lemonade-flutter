@@ -6,7 +6,7 @@
   "policy": "Privacy Policy",
   "term": "Terms of Service",
   "logoutDesc": "See you soon!",
-  "deleteAccount": "Delete account",
+  "deleteAccount": "Delete Account",
   "deleteAccountDesc": "We’re sorry to see you go...",
   "about": "About",
   "deleteAccountDialog": "Are you 100% sure?",
@@ -36,5 +36,17 @@
   "appearance": "Appearance",
   "account": "Account",
   "preferences": "Preferences",
-  "resources": "Resources"
+  "resources": "Resources",
+  "accountSetting": "Account Settings",
+  "basicInfo": "Basic info",
+  "cryptoIdentities": "Crypto Identities",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "ethereumAddress": "Ethereum Address",
+  "solanaAddress": "Solana Address",
+  "needToMakeChanges": "Need to make changes?",
+  "editAccountDetails": "Edit Account Details",
+  "securedBy": "Secured by",
+  "openSourceIdentitySolutions": "open source identity solutions"
 }

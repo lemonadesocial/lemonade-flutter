@@ -134,7 +134,9 @@ class SettingPageView extends StatelessWidget {
                       ),
                     ),
                     trailing: backIcon,
-                    onTap: () {},
+                    onTap: () {
+                      context.router.push(const AccountSettingRoute());
+                    },
                   ),
                   CupertinoListTile(
                     title: Text(t.setting.blockAccount, style: appText.md),
