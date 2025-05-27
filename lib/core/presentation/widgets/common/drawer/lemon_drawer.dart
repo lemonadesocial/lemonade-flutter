@@ -124,6 +124,38 @@ class LemonDrawer extends StatelessWidget {
                 ),
               );
         },
+      ),
+      Divider(
+        height: 1.w,
+        thickness: 1.w,
+        color: appColors.pageDivider,
+      ),
+      LemonDrawerTileWidget(
+        title: t.home.drawer.payoutAccounts,
+        subtitle: t.home.drawer.payoutAccountsDesc,
+        leading: ThemeSvgIcon(
+          color: appColors.textTertiary,
+          builder: (filter) {
+            return Assets.icons.icBank.svg(
+              colorFilter: filter,
+              width: Sizing.s6,
+              height: Sizing.s6,
+            );
+          },
+        ),
+        trailing: backIcon,
+        featureAvailable: true,
+        onTap: () {
+          Vibrate.feedback(FeedbackType.light);
+          context.read<AuthBloc>().state.maybeWhen(
+                authenticated: (authSession) => context.router.push(
+                  const VaultRootRoute(),
+                ),
+                orElse: () => context.router.navigate(
+                  LoginRoute(),
+                ),
+              );
+        },
         radius: BorderRadius.only(
           bottomLeft: Radius.circular(LemonRadius.md),
           bottomRight: Radius.circular(LemonRadius.md),
@@ -193,36 +225,36 @@ class LemonDrawer extends StatelessWidget {
                     color: appColors.pageDividerInverse,
                   ),
                 ),
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.s4,
-                  ),
-                  sliver: SliverToBoxAdapter(
-                    child: LemonDrawerTileWidget(
-                      title: t.home.drawer.completeProfile,
-                      subtitle: t.home.drawer.stepRemaining(n: 2),
-                      onTap: () {
-                        context.router.push(const EditProfileRoute());
-                      },
-                      radius: BorderRadius.circular(LemonRadius.md),
-                      leading: Transform.scale(
-                        scale: 1.5,
-                        child: Assets.icons.icLoaderFinite.svg(
-                          width: Sizing.s6,
-                          height: Sizing.s6,
-                        ),
-                      ),
-                      leadingBackgroundColor: Colors.transparent,
-                      trailing: backIcon,
-                      border: Border.all(
-                        color: appColors.cardBorder,
-                      ),
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(height: Spacing.s4),
-                ),
+                // SliverPadding(
+                //   padding: EdgeInsets.symmetric(
+                //     horizontal: Spacing.s4,
+                //   ),
+                //   sliver: SliverToBoxAdapter(
+                //     child: LemonDrawerTileWidget(
+                //       title: t.home.drawer.completeProfile,
+                //       subtitle: t.home.drawer.stepRemaining(n: 2),
+                //       onTap: () {
+                //         context.router.push(const EditProfileRoute());
+                //       },
+                //       radius: BorderRadius.circular(LemonRadius.md),
+                //       leading: Transform.scale(
+                //         scale: 1.5,
+                //         child: Assets.icons.icLoaderFinite.svg(
+                //           width: Sizing.s6,
+                //           height: Sizing.s6,
+                //         ),
+                //       ),
+                //       leadingBackgroundColor: Colors.transparent,
+                //       trailing: backIcon,
+                //       border: Border.all(
+                //         color: appColors.cardBorder,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // SliverToBoxAdapter(
+                //   child: SizedBox(height: Spacing.s4),
+                // ),
                 SliverPadding(
                   padding: EdgeInsets.symmetric(
                     horizontal: Spacing.s4,

@@ -54,6 +54,8 @@
         "eventsDesc": "All your events in one place",
         "tickets": "Tickets",
         "ticketsDesc": "Access your tickets & receipts",
-        "claimUsername": "Claim Username"
+        "claimUsername": "Claim Username",
+        "payoutAccounts": "Payout Accounts",
+        "payoutAccountsDesc": "Where your event earnings go."
     }
 }
