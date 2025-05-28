@@ -37,6 +37,8 @@ class EditProfilePage extends StatelessWidget {
           child: const EditProfileView(),
         ),
       ],
+      // TODO: use new UI here
+      // child: const EditProfileViewV2(),
       child: const EditProfileView(),
     );
   }

@@ -112,7 +112,10 @@ class _RootPageViewState extends State<RootPage> {
                       orElse: EmptyRoute.new,
                     ),
                   ],
-                  drawer: const LemonDrawer(),
+                  drawer: authState.maybeWhen(
+                    authenticated: (session) => const LemonDrawer(),
+                    orElse: () => null,
+                  ),
                   floatingActionButtonLocation:
                       FloatingActionButtonLocation.centerDocked,
                   bottomNavigationBuilder: (_, tabsRouter) {
