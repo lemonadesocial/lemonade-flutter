@@ -64,7 +64,7 @@ class SpaceInfo extends StatelessWidget {
               options: const LinkifyOptions(humanize: true),
               linkStyle: TextStyle(
                 color: appColors.textAccent,
-                decoration: TextDecoration.underline,
+                decoration: TextDecoration.none,
                 decorationColor: appColors.textAccent,
               ),
             ),
