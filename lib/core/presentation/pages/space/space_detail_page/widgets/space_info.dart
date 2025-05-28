@@ -5,6 +5,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app/app_theme/app_theme.dart';
 
@@ -55,10 +56,16 @@ class SpaceInfo extends StatelessWidget {
           if (space.description?.isNotEmpty == true) ...[
             SizedBox(height: Spacing.s2),
             // Description
-            Text(
-              space.description ?? '',
+            Linkify(
+              text: space.description ?? '',
               style: appText.sm.copyWith(
                 color: appColors.textSecondary,
+              ),
+              options: const LinkifyOptions(humanize: true),
+              linkStyle: TextStyle(
+                color: appColors.textAccent,
+                decoration: TextDecoration.none,
+                decorationColor: appColors.textAccent,
               ),
             ),
           ],
