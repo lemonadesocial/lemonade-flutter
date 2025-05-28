@@ -14,4 +14,7 @@ final lensRoutes = [
   AutoRoute(
     page: CreateLensAccountRoute.page,
   ),
+  AutoRoute(
+    page: LensUserProfileRoute.page,
+  ),
 ];

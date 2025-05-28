@@ -1,5 +1,4 @@
 import 'package:app/core/domain/lens/entities/lens_post.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/create_lens_post_result_listener_widget/create_lens_post_result_listener_widget.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lenst_post_feed_item_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -7,6 +6,7 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/lens/post/query/lens_fetch_post_references.graphql.dart';
+import 'package:app/graphql/lens/post/query/lens_fetch_posts.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
@@ -20,11 +20,9 @@ import 'package:app/core/utils/debouncer.dart';
 @RoutePage()
 class LensPostDetailPage extends StatefulWidget {
   final LensPost post;
-  final Space space;
   const LensPostDetailPage({
     super.key,
     required this.post,
-    required this.space,
   });
 
   @override
@@ -143,10 +141,28 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                           horizontal: Spacing.xSmall,
                         ),
                         sliver: SliverToBoxAdapter(
-                          child: LensPostFeedItemWidget(
-                            post: widget.post,
-                            showActions: true,
-                            space: widget.space,
+                          child: Query$LensFetchPosts$Widget(
+                            options: Options$Query$LensFetchPosts(
+                              variables: Variables$Query$LensFetchPosts(
+                                request: Input$PostsRequest(
+                                  cursor: null,
+                                  filter: Input$PostsFilter(
+                                    posts: [widget.post.id ?? ''],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            builder: (result, {refetch, fetchMore}) {
+                              final rawPost =
+                                  result.parsedData?.posts.items.firstOrNull;
+                              final post = rawPost != null
+                                  ? LensPost.fromJson(rawPost.toJson())
+                                  : widget.post;
+                              return LensPostFeedItemWidget(
+                                post: post,
+                                showActions: true,
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -173,7 +189,6 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               key: ValueKey(posts[index].id),
                               post: posts[index],
                               showActions: true,
-                              space: widget.space,
                             ),
                           );
                         },
