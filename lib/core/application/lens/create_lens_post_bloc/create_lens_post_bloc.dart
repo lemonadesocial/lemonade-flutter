@@ -23,6 +23,7 @@ class CreateLensPostEvent with _$CreateLensPostEvent {
     Input$ReferencingPostInput? commentOn,
     required String content,
     required String lensFeedId,
+    LensMediaImageMetadata? image,
   }) = _CreatePost;
 }
 
@@ -54,6 +55,28 @@ class CreateLensPostBloc
     on<_CreatePost>(_onCreatePost);
   }
 
+  // ignore: library_private_types_in_public_api
+  (String, LensCreatePostMetadata) prepareMetadata(_CreatePost event) {
+    String schema = LensConstants
+        .lensJsonSchemaByPostContent[Enum$MainContentFocus.TEXT_ONLY]!;
+    LensCreatePostMetadata metadata = LensCreatePostMetadata.textOnly(
+      id: const Uuid().v4(),
+      content: event.content,
+    );
+
+    if (event.image != null) {
+      schema = LensConstants
+          .lensJsonSchemaByPostContent[Enum$MainContentFocus.IMAGE]!;
+      metadata = LensCreatePostMetadata.image(
+        id: const Uuid().v4(),
+        content: event.content,
+        image: event.image!,
+      );
+    }
+
+    return (schema, metadata);
+  }
+
   Future<void> _onCreatePost(
     _CreatePost event,
     Emitter<CreateLensPostState> emit,
@@ -61,15 +84,14 @@ class CreateLensPostBloc
     try {
       emit(const CreateLensPostState.loading());
 
-      final textOnlyMetadata = LensCreatePostMetadata.textOnly(
-        id: const Uuid().v4(),
-        content: event.content,
-      );
+      final (schema, metadata) = prepareMetadata(event);
+
+      final metadataJson = metadata.toJson();
+      metadataJson.remove('runtimeType');
 
       Map<String, dynamic> uploadMetadata = {
-        "\$schema": LensConstants
-            .lensJsonSchemaByPostContent[Enum$MainContentFocus.TEXT_ONLY],
-        "lens": textOnlyMetadata.toJson(),
+        "\$schema": schema,
+        "lens": metadataJson,
       };
 
       final uploadResult = await _lensGroveService.uploadJson(uploadMetadata);

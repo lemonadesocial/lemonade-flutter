@@ -88,5 +88,9 @@ fragment LensPost on Post {
   }
   operations {
     hasReacted(request: { type: UPVOTE })
+    hasReposted {
+      optimistic
+      onChain
+    }
   }
 }
