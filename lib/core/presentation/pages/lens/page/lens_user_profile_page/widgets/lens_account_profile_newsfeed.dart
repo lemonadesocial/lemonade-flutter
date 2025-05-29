@@ -146,12 +146,16 @@ class _LensAccountProfileNewsfeedState
                             key: ValueKey(posts[index].id),
                             post: posts[index],
                             showActions: true,
-                            onTap: () {
-                              AutoRouter.of(context).push(
+                            onTap: () async {
+                              await AutoRouter.of(context).push(
                                 LensPostDetailRoute(
                                   post: posts[index],
                                 ),
                               );
+                              refetch?.call();
+                            },
+                            onRefresh: () {
+                              refetch?.call();
                             },
                           ),
                         );

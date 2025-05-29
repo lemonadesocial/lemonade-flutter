@@ -161,6 +161,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               return LensPostFeedItemWidget(
                                 post: post,
                                 showActions: true,
+                                backOnDelete: true,
                               );
                             },
                           ),
@@ -189,6 +190,9 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               key: ValueKey(posts[index].id),
                               post: posts[index],
                               showActions: true,
+                              onRefresh: () {
+                                refetch?.call();
+                              },
                             ),
                           );
                         },

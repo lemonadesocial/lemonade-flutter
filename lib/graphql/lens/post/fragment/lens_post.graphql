@@ -92,5 +92,10 @@ fragment LensPost on Post {
       optimistic
       onChain
     }
+    canDelete {
+      ... on PostOperationValidationPassed {
+        passed
+      }
+    }
   }
 }

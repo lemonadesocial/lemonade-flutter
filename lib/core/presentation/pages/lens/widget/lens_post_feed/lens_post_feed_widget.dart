@@ -205,6 +205,8 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                                 return const SizedBox.shrink();
                               }
                               return LensPostFeedItemWidget(
+                                post: posts[index],
+                                showActions: true,
                                 onTap: () async {
                                   await AutoRouter.of(context).push(
                                     LensPostDetailRoute(
@@ -213,8 +215,9 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                                   );
                                   refetch?.call();
                                 },
-                                post: posts[index],
-                                showActions: true,
+                                onRefresh: () {
+                                  refetch?.call();
+                                },
                               );
                             },
                             separatorBuilder: (context, index) {
