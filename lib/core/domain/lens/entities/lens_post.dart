@@ -132,12 +132,26 @@ class LensPostStats with _$LensPostStats {
 }
 
 @freezed
+class LensPostOperationValidationOutcome
+    with _$LensPostOperationValidationOutcome {
+  factory LensPostOperationValidationOutcome({
+    bool? passed,
+  }) = _LensPostOperationValidationOutcome;
+
+  factory LensPostOperationValidationOutcome.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$LensPostOperationValidationOutcomeFromJson(json);
+}
+
+@freezed
 class LensLoggedInPostOperations with _$LensLoggedInPostOperations {
   @JsonSerializable(explicitToJson: true)
   const factory LensLoggedInPostOperations({
     bool? hasReacted,
     bool? hasBookmarked,
     LensBooleanValue? hasReposted,
+    LensPostOperationValidationOutcome? canDelete,
   }) = _LensLoggedInPostOperations;
 
   factory LensLoggedInPostOperations.fromJson(Map<String, dynamic> json) =>

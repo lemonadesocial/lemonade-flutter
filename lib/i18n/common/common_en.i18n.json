@@ -101,7 +101,8 @@
         "verifyWallet": "Verify wallet",
         "getStarted": "Get Started",
         "explore": "Explore",
-        "discover": "Discover"
+        "discover": "Discover",
+        "deletePost": "Delete Post"
     },
     "followed": "Followed",
     "anonymous": "anonymous",

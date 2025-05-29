@@ -1,0 +1,16 @@
+mutation LensDeletePost($request: DeletePostRequest!) {
+  deletePost(request: $request) {
+    ... on DeletePostResponse {
+      hash
+    }
+    ... on SponsoredTransactionRequest {
+      reason
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+    }
+    ... on TransactionWillFail {
+      reason
+    }
+  }
+}

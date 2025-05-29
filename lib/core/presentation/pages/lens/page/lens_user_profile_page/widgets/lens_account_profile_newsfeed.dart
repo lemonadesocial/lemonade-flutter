@@ -60,7 +60,7 @@ class _LensAccountProfileNewsfeedState
         client: ValueNotifier(getIt<LensGQL>().client),
         child: Query$LensFetchPosts$Widget(
           options: Options$Query$LensFetchPosts(
-            fetchPolicy: FetchPolicy.cacheFirst,
+            fetchPolicy: FetchPolicy.networkOnly,
             variables: Variables$Query$LensFetchPosts(
               request: Input$PostsRequest(
                 filter: Input$PostsFilter(
@@ -146,12 +146,16 @@ class _LensAccountProfileNewsfeedState
                             key: ValueKey(posts[index].id),
                             post: posts[index],
                             showActions: true,
-                            onTap: () {
-                              AutoRouter.of(context).push(
+                            onTap: () async {
+                              await AutoRouter.of(context).push(
                                 LensPostDetailRoute(
                                   post: posts[index],
                                 ),
                               );
+                              refetch?.call();
+                            },
+                            onRefresh: () {
+                              refetch?.call();
                             },
                           ),
                         );

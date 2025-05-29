@@ -63,7 +63,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
           client: ValueNotifier(getIt<LensGQL>().client),
           child: Query$LensFetchPostReferences$Widget(
             options: Options$Query$LensFetchPostReferences(
-              fetchPolicy: FetchPolicy.cacheFirst,
+              fetchPolicy: FetchPolicy.networkOnly,
               variables: Variables$Query$LensFetchPostReferences(
                 request: input,
               ),
@@ -161,6 +161,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               return LensPostFeedItemWidget(
                                 post: post,
                                 showActions: true,
+                                backOnDelete: true,
                               );
                             },
                           ),
@@ -189,6 +190,9 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
                               key: ValueKey(posts[index].id),
                               post: posts[index],
                               showActions: true,
+                              onRefresh: () {
+                                refetch?.call();
+                              },
                             ),
                           );
                         },
