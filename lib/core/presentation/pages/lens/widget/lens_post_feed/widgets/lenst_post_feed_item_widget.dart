@@ -40,9 +40,9 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
     final appText = context.theme.appTextTheme;
 
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (widget.onTap != null) {
-          widget.onTap?.call();
+          await widget.onTap?.call();
           return;
         }
       },

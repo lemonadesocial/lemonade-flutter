@@ -1,4 +1,5 @@
 import 'package:app/core/domain/lens/entities/lens_account.dart';
+import 'package:app/core/domain/lens/entities/lens_boolean_value.dart';
 import 'package:app/core/domain/lens/entities/lens_media.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
@@ -132,8 +133,11 @@ class LensPostStats with _$LensPostStats {
 
 @freezed
 class LensLoggedInPostOperations with _$LensLoggedInPostOperations {
+  @JsonSerializable(explicitToJson: true)
   const factory LensLoggedInPostOperations({
     bool? hasReacted,
+    bool? hasBookmarked,
+    LensBooleanValue? hasReposted,
   }) = _LensLoggedInPostOperations;
 
   factory LensLoggedInPostOperations.fromJson(Map<String, dynamic> json) =>

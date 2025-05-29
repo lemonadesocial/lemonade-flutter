@@ -1,0 +1,26 @@
+mutation LensRepost($request: CreateRepostRequest!) {
+  repost(request: $request) {
+    ... on PostResponse {
+      hash
+    }
+    ... on PostOperationValidationFailed {
+      reason
+      unsatisfiedRules {
+        required {
+          reason
+          message
+          rule
+        }
+      }
+    }
+    ... on SponsoredTransactionRequest {
+      reason
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+    }
+    ... on TransactionWillFail {
+      reason
+    }
+  }
+}

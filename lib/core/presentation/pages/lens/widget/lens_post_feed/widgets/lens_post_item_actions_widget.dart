@@ -2,6 +2,7 @@ import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/domain/lens/entities/lens_post.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
+import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
@@ -20,6 +21,7 @@ import 'package:app/graphql/lens/post/mutation/lens_add_reaction.graphql.dart';
 import 'package:app/graphql/lens/post/mutation/lens_undo_reaction.graphql.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/graphql/lens/post/mutation/lens_repost.graphql.dart';
 
 class LensPostItemActionsWidget extends StatefulWidget {
   final LensPost post;
@@ -35,20 +37,21 @@ class LensPostItemActionsWidget extends StatefulWidget {
 
 class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
   bool localLiked = false;
-  bool localRecasted = false;
+  bool localReposted = false;
+  bool reposting = false;
 
   @override
   void initState() {
     super.initState();
     checkHasLiked();
-    checkHasRecasted();
+    checkHasReposted();
   }
 
   @override
   void didUpdateWidget(covariant LensPostItemActionsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     checkHasLiked();
-    checkHasRecasted();
+    checkHasReposted();
   }
 
   void checkHasLiked() {
@@ -90,7 +93,39 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
     }
   }
 
-  void checkHasRecasted() {}
+  void checkHasReposted() {
+    setState(() {
+      localReposted = widget.post.operations?.hasReposted?.onChain ?? false;
+    });
+  }
+
+  Future<void> repostPost() async {
+    if (!localReposted) {
+      setState(() {
+        reposting = true;
+      });
+      final result = await getIt<LensGQL>().client.mutate$LensRepost(
+            Options$Mutation$LensRepost(
+              variables: Variables$Mutation$LensRepost(
+                request: Input$CreateRepostRequest(
+                  post: widget.post.id ?? '',
+                ),
+              ),
+            ),
+          );
+      setState(() {
+        reposting = false;
+      });
+      result.parsedData?.repost.maybeWhen(
+        orElse: () => null,
+        postResponse: (postResponse) {
+          setState(() {
+            localReposted = true;
+          });
+        },
+      );
+    }
+  }
 
   void checkAuthorized(BuildContext context, Function callback) async {
     final lensAuthState = context.read<LensAuthBloc>().state;
@@ -229,19 +264,26 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
               ),
             ),
             SizedBox(width: Spacing.s4),
-            InkWell(
-              onTap: () async {},
-              child: ThemeSvgIcon(
-                color: localRecasted
-                    ? appColors.textSuccess
-                    : appColors.textTertiary,
-                builder: (filter) => Assets.icons.icRepost.svg(
-                  colorFilter: filter,
-                  width: Sizing.s6,
-                  height: Sizing.s6,
+            if (!reposting)
+              InkWell(
+                onTap: () async {
+                  if (!localReposted) {
+                    await repostPost();
+                  }
+                },
+                child: ThemeSvgIcon(
+                  color: localReposted
+                      ? appColors.textSuccess
+                      : appColors.textTertiary,
+                  builder: (filter) => Assets.icons.icRepost.svg(
+                    colorFilter: filter,
+                    width: Sizing.s6,
+                    height: Sizing.s6,
+                  ),
                 ),
-              ),
-            ),
+              )
+            else
+              Loading.defaultLoading(context),
             const Spacer(),
             InkWell(
               onTap: () {
@@ -259,6 +301,7 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
             SizedBox(width: Spacing.small),
             InkWell(
               onTap: () {
+                SnackBarUtils.showComingSoon();
                 // Share.shareUri(Uri.parse(widget.post.contentUri ?? ''));
               },
               child: ThemeSvgIcon(

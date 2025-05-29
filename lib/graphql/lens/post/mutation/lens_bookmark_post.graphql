@@ -1,0 +1,3 @@
+mutation LensBookmarkPost($request: BookmarkPostRequest!) {
+  bookmarkPost(request: $request)
+}

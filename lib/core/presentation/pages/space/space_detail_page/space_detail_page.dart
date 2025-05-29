@@ -342,7 +342,8 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                   //     );
                   // },
                   // ),
-                  if (_selectedTabIndex == 1) ...[
+                  if (_selectedTabIndex == 1 &&
+                      space.lensFeedId?.isNotEmpty == true) ...[
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: LensAddPostsButton(space: space),

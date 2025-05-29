@@ -1,3 +1,5 @@
+import 'package:app/core/data/common/dtos/common_dtos.dart';
+import 'package:app/core/domain/common/entities/common.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -41,6 +43,34 @@ class FileUploadService {
         // Step 3: Trigger confirmUpload mutation
         await _confirmUpload(firstElement.id ?? '');
         return firstElement.id;
+      }
+    }
+
+    return null;
+  }
+
+  Future<DbFile?> uploadFile(XFile? file, FileDirectory directory) async {
+    if (file == null) {
+      return null;
+    }
+
+    // Step 1: Trigger createFileUpload mutation to get presignedUrl
+    List<Mutation$CreateFileUploads$createFileUploads> listCreateFileUploads =
+        await _getPresignedUrl(file, directory);
+
+    if (listCreateFileUploads.isNotEmpty) {
+      Mutation$CreateFileUploads$createFileUploads firstElement =
+          listCreateFileUploads.first;
+
+      // Step 2: Upload file to S3 using presignedUrl
+      bool s3UploadSuccess = await _uploadToS3(file, firstElement.presignedUrl);
+
+      if (s3UploadSuccess) {
+        // Step 3: Trigger confirmUpload mutation
+        await _confirmUpload(firstElement.id ?? '');
+        final dbFile =
+            DbFile.fromDto(DbFileDto.fromJson(firstElement.toJson()));
+        return dbFile;
       }
     }
 

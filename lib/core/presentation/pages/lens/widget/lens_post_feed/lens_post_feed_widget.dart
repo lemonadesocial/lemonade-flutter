@@ -134,6 +134,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                         item.toJson(),
                       ),
                     )
+                    .where((post) => post.id?.isNotEmpty == true)
                     .toList();
 
                 return MultiSliver(
@@ -204,12 +205,13 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                                 return const SizedBox.shrink();
                               }
                               return LensPostFeedItemWidget(
-                                onTap: () {
-                                  AutoRouter.of(context).push(
+                                onTap: () async {
+                                  await AutoRouter.of(context).push(
                                     LensPostDetailRoute(
                                       post: posts[index],
                                     ),
                                   );
+                                  refetch?.call();
                                 },
                                 post: posts[index],
                                 showActions: true,

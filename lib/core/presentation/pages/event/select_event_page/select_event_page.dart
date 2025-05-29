@@ -11,14 +11,14 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_events.graphql.dart';
 import 'package:app/graphql/backend/event/query/get_hosting_events.graphql.dart';
+import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SelectEventPage extends StatefulWidget {
   final Function(Event event)? onEventSelected;
@@ -76,7 +76,9 @@ class _SelectEventPageState extends State<SelectEventPage>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     final t = Translations.of(context);
     final userId = AuthUtils.getUserId(context);
     final border = OutlineInputBorder(
@@ -84,10 +86,9 @@ class _SelectEventPageState extends State<SelectEventPage>
       borderSide: const BorderSide(color: Colors.transparent),
     );
     return Scaffold(
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageOverlayBg,
       appBar: LemonAppBar(
         title: t.event.selectEvents,
-        backgroundColor: LemonColor.atomicBlack,
       ),
       body: SafeArea(
         child: Column(
@@ -95,8 +96,8 @@ class _SelectEventPageState extends State<SelectEventPage>
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                vertical: Spacing.xSmall,
-                horizontal: Spacing.xSmall,
+                vertical: Spacing.s4,
+                horizontal: Spacing.s4,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -106,11 +107,11 @@ class _SelectEventPageState extends State<SelectEventPage>
                       height: Sizing.medium,
                       child: TextField(
                         controller: _textController,
-                        cursorColor: colorScheme.onSecondary,
+                        cursorColor: appColors.textPrimary,
                         decoration: InputDecoration(
-                          fillColor: LemonColor.chineseBlack,
-                          hintStyle: Typo.medium.copyWith(
-                            color: colorScheme.onSecondary,
+                          fillColor: appColors.buttonTertiaryBg,
+                          hintStyle: appText.md.copyWith(
+                            color: appColors.textTertiary,
                           ),
                           contentPadding: EdgeInsets.zero,
                           hintText: StringUtils.capitalize(t.common.search),
@@ -122,7 +123,7 @@ class _SelectEventPageState extends State<SelectEventPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ThemeSvgIcon(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                                 builder: (filter) => Assets.icons.icSearch.svg(
                                   colorFilter: filter,
                                   width: Sizing.mSmall,
@@ -146,21 +147,17 @@ class _SelectEventPageState extends State<SelectEventPage>
                     children: [
                       TabBar(
                         controller: _tabController,
-                        labelStyle: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        unselectedLabelStyle: Typo.medium.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
+                        labelStyle: appText.md,
+                        unselectedLabelStyle: appText.md.copyWith(
+                          color: appColors.textTertiary,
                         ),
                         tabs: [
                           Tab(text: StringUtils.capitalize(t.event.hosting)),
                           Tab(text: StringUtils.capitalize(t.event.attending)),
                         ],
-                        indicatorColor: LemonColor.paleViolet,
+                        indicatorColor: appColors.textAccent,
                         dividerHeight: 0.5.w,
-                        dividerColor: colorScheme.outline,
+                        dividerColor: appColors.pageDivider,
                       ),
                       Expanded(
                         child: TabBarView(
@@ -235,6 +232,9 @@ class _SelectEventPageState extends State<SelectEventPage>
                                   accepted: userId,
                                   limit: 20,
                                   skip: 0,
+                                  sort: Input$EventSortInput(
+                                    start: Enum$SortOrder.desc,
+                                  ),
                                 ),
                               ),
                               builder: (result, {refetch, fetchMore}) {
@@ -294,9 +294,12 @@ class _SelectEventPageState extends State<SelectEventPage>
                     ],
                   ),
                   if (searchedResultVisible)
-                    _SearchedEventList(
-                      textController: _textController,
-                      onTap: widget.onEventSelected,
+                    Container(
+                      color: appColors.pageBg,
+                      child: _SearchedEventList(
+                        textController: _textController,
+                        onTap: widget.onEventSelected,
+                      ),
                     ),
                 ],
               ),
@@ -371,14 +374,11 @@ class _SearchedEventListState extends State<_SearchedEventList> {
               ),
             )
             .toList();
-        return Container(
-          color: LemonColor.atomicBlack,
-          child: _EventList(
-            events: events,
-            loading: result.isLoading,
-            hasNextPage: false,
-            onTap: widget.onTap,
-          ),
+        return _EventList(
+          events: events,
+          loading: result.isLoading,
+          hasNextPage: false,
+          onTap: widget.onTap,
         );
       },
     );

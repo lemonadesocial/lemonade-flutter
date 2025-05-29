@@ -82,6 +82,7 @@ class _LensAccountProfileNewsfeedState
                     item.toJson(),
                   ),
                 )
+                .where((post) => post.id?.isNotEmpty == true)
                 .toList();
 
             return NotificationListener<ScrollNotification>(
