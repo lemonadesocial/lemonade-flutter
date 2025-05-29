@@ -63,7 +63,7 @@ class _LensPostDetailPageState extends State<LensPostDetailPage> {
           client: ValueNotifier(getIt<LensGQL>().client),
           child: Query$LensFetchPostReferences$Widget(
             options: Options$Query$LensFetchPostReferences(
-              fetchPolicy: FetchPolicy.cacheFirst,
+              fetchPolicy: FetchPolicy.networkOnly,
               variables: Variables$Query$LensFetchPostReferences(
                 request: input,
               ),

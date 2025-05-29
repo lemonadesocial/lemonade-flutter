@@ -60,7 +60,7 @@ class _LensAccountProfileNewsfeedState
         client: ValueNotifier(getIt<LensGQL>().client),
         child: Query$LensFetchPosts$Widget(
           options: Options$Query$LensFetchPosts(
-            fetchPolicy: FetchPolicy.cacheFirst,
+            fetchPolicy: FetchPolicy.networkOnly,
             variables: Variables$Query$LensFetchPosts(
               request: Input$PostsRequest(
                 filter: Input$PostsFilter(

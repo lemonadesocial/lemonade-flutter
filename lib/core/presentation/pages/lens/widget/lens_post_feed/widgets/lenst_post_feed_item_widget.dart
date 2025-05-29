@@ -1,4 +1,5 @@
 import 'package:app/core/domain/lens/entities/lens_post.dart';
+import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_post_item_actions_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
@@ -6,6 +7,8 @@ import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
+import 'package:app/core/utils/lens_utils.dart';
+import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/lens/post/mutation/lens_delete_post.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
@@ -65,11 +68,23 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
     );
     response.result?.parsedData?.deletePost.maybeWhen(
       orElse: () => null,
-      deletePostResponse: (postResponse) {
-        if (widget.backOnDelete) {
-          AutoRouter.of(context).pop();
+      deletePostResponse: (postResponse) async {
+        final result = await LensUtils.pollTransactionStatus(
+          txHash: postResponse.hash,
+        );
+        if (result is FinishedTransactionStatus) {
+          if (widget.backOnDelete) {
+            AutoRouter.of(context).pop();
+          }
+          widget.onRefresh?.call();
+        } else {
+          SnackBarUtils.showError(
+            message: result.maybeWhen(
+              orElse: () => '',
+              failedTransactionStatus: (reason, _) => reason,
+            ),
+          );
         }
-        widget.onRefresh?.call();
       },
     );
   }
