@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.4.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.3.0...v2.4.0) (2025-05-30)
+
+
+### Features
+
+* add lens account profile page ([#967](https://github.com/lemonadesocial/lemonade-flutter/issues/967)) ([2637bba](https://github.com/lemonadesocial/lemonade-flutter/commit/2637bbaa266d1c7055807703162ae78feb431ec0))
+* create lens post with image ([#971](https://github.com/lemonadesocial/lemonade-flutter/issues/971)) ([f1d92cc](https://github.com/lemonadesocial/lemonade-flutter/commit/f1d92cc5e4cba3a9fd17dd7caad43528d7058079))
+* delete lens post ([#972](https://github.com/lemonadesocial/lemonade-flutter/issues/972)) ([6abdf0e](https://github.com/lemonadesocial/lemonade-flutter/commit/6abdf0edf2b252e72894a8170cbd97f6140f8cbc))
+* implement edit profile flow ([#973](https://github.com/lemonadesocial/lemonade-flutter/issues/973)) ([11580de](https://github.com/lemonadesocial/lemonade-flutter/commit/11580de489b975e9606e9c9064db33fbdc3ca20f))
+* new theme UI profile settings ([#966](https://github.com/lemonadesocial/lemonade-flutter/issues/966)) ([ff1158b](https://github.com/lemonadesocial/lemonade-flutter/commit/ff1158b08a21396f5595e9658ce788ed90f15161))
+* update space description to using linkify ([#969](https://github.com/lemonadesocial/lemonade-flutter/issues/969)) ([3a0d4ad](https://github.com/lemonadesocial/lemonade-flutter/commit/3a0d4ad560414fd004ab9583eb61c884c91f4a93))
+
+
+### Bug Fixes
+
+* change release please github action ([#970](https://github.com/lemonadesocial/lemonade-flutter/issues/970)) ([e17cb07](https://github.com/lemonadesocial/lemonade-flutter/commit/e17cb070cdb3a045861f5a0352a246d1617a7d5c))
+
 ## [2.3.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.2.0...v2.3.0) (2025-05-26)
 
 
