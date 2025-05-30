@@ -58,26 +58,29 @@ class EditProfileView extends StatelessWidget {
             appBar: LemonAppBar(
               title: t.profile.editProfile,
               actions: [
-                BlocBuilder<EditProfileBloc, EditProfileState>(
-                  builder: (context, state) {
-                    return TextButton(
-                      onPressed: state.status == EditProfileStatus.editing
-                          ? () {
-                              context.read<EditProfileBloc>().add(
-                                    EditProfileEvent.submitEditProfile(),
-                                  );
-                            }
-                          : null,
-                      child: Text(
-                        t.common.actions.save,
-                        style: appText.md.copyWith(
-                          color: state.status == EditProfileStatus.editing
-                              ? appColors.textPrimary
-                              : appColors.textQuaternary,
+                Padding(
+                  padding: EdgeInsets.only(right: Spacing.s1),
+                  child: BlocBuilder<EditProfileBloc, EditProfileState>(
+                    builder: (context, state) {
+                      return TextButton(
+                        onPressed: state.status == EditProfileStatus.editing
+                            ? () {
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.submitEditProfile(),
+                                    );
+                              }
+                            : null,
+                        child: Text(
+                          t.common.actions.save,
+                          style: appText.md.copyWith(
+                            color: state.status == EditProfileStatus.editing
+                                ? appColors.textPrimary
+                                : appColors.textQuaternary,
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

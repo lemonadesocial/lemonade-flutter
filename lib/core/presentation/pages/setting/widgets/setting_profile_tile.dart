@@ -19,71 +19,80 @@ class SettingProfileTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authSession = context.read<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession,
-          orElse: () => null,
-        );
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
 
-    return InkWell(
-      onTap: () {
-        AutoRouter.of(context).push(const EditProfileRoute());
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: Spacing.s2_5,
-          horizontal: Spacing.s3,
-        ),
-        decoration: BoxDecoration(
-          color: appColors.cardBg,
-          borderRadius: BorderRadius.circular(LemonRadius.md),
-          border: Border.all(color: appColors.cardBorder),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LemonNetworkImage(
-              imageUrl: authSession!.imageAvatar ?? '',
-              width: Sizing.s10,
-              height: Sizing.s10,
-              borderRadius: BorderRadius.circular(LemonRadius.full),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        final authSession = state.maybeWhen(
+          authenticated: (authSession) => authSession,
+          orElse: () => null,
+        );
+
+        if (authSession == null) {
+          return const SizedBox.shrink();
+        }
+
+        return InkWell(
+          onTap: () {
+            AutoRouter.of(context).push(const EditProfileRoute());
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: Spacing.s2_5,
+              horizontal: Spacing.s3,
+            ),
+            decoration: BoxDecoration(
+              color: appColors.cardBg,
+              borderRadius: BorderRadius.circular(LemonRadius.md),
               border: Border.all(color: appColors.cardBorder),
-              placeholder: ImagePlaceholder.avatarPlaceholder(
-                userId: authSession.userId,
-              ),
             ),
-            SizedBox(width: Spacing.small),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    authSession.displayName ?? 'Anonymous',
-                    style: appText.md,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LemonNetworkImage(
+                  imageUrl: authSession.imageAvatar ?? '',
+                  width: Sizing.s10,
+                  height: Sizing.s10,
+                  borderRadius: BorderRadius.circular(LemonRadius.full),
+                  border: Border.all(color: appColors.cardBorder),
+                  placeholder: ImagePlaceholder.avatarPlaceholder(
+                    userId: authSession.userId,
                   ),
-                  Text(
-                    t.common.actions.editProfile,
-                    style: appText.sm.copyWith(
-                      color: appColors.textTertiary,
-                    ),
+                ),
+                SizedBox(width: Spacing.small),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        authSession.displayName ?? 'Anonymous',
+                        style: appText.md,
+                      ),
+                      Text(
+                        t.common.actions.editProfile,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const Spacer(),
+                ThemeSvgIcon(
+                  color: appColors.textTertiary,
+                  builder: (filter) => Assets.icons.icArrowRight.svg(
+                    colorFilter: filter,
+                    width: Sizing.s5,
+                    height: Sizing.s5,
+                  ),
+                ),
+              ],
             ),
-            const Spacer(),
-            ThemeSvgIcon(
-              color: appColors.textTertiary,
-              builder: (filter) => Assets.icons.icArrowRight.svg(
-                colorFilter: filter,
-                width: Sizing.s5,
-                height: Sizing.s5,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
