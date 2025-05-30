@@ -43,7 +43,6 @@ class EditProfileView extends StatelessWidget {
           orElse: () => null,
           authenticated: (user) => user,
         );
-
         return BlocListener<EditProfileBloc, EditProfileState>(
           listener: (context, state) {
             if (state.status == EditProfileStatus.success) {
