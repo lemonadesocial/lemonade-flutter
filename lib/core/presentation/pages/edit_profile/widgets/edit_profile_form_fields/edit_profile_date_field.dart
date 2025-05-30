@@ -83,8 +83,10 @@ class _EditProfileDateFieldState extends State<EditProfileDateField> {
                 label: t.common.actions.ok,
                 onTap: () {
                   if (_tempValue != null) {
-                    _controller.text = DateFormatUtils.custom(_tempValue,
-                        pattern: datePattern);
+                    _controller.text = DateFormatUtils.custom(
+                      _tempValue,
+                      pattern: datePattern,
+                    );
                     widget.onChange(_tempValue);
                   }
                   Navigator.of(context).pop();

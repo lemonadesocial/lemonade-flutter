@@ -198,8 +198,10 @@ class _EditProfileViewV2State extends State<EditProfileViewV2> {
                         children: [
                           EditProfileTextField(
                             label: t.profile.displayName,
-                            initialValue: getValue(editState.displayName,
-                                userProfile?.displayName),
+                            initialValue: getValue(
+                              editState.displayName,
+                              userProfile?.displayName,
+                            ),
                             onChange: (input) =>
                                 context.read<EditProfileBloc>().add(
                                       EditProfileEvent.displayNameChange(
