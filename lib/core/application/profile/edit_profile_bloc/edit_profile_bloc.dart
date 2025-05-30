@@ -365,6 +365,14 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         );
       }
     });
+
+    final formattedDate = state.dob != null
+        ? DateTime.utc(
+            state.dob!.year,
+            state.dob!.month,
+            state.dob!.day,
+          )
+        : null;
     final response = await userRepository.updateUser(
       input: Input$UserInput(
         username: state.username,
@@ -381,7 +389,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         new_photos: mImageId != null ? [mImageId!, ..._profilePhotos] : null,
         // notification_filters:
         //     notificationFilterInput.isEmpty ? null : notificationFilterInput,
-        date_of_birth: state.dob,
+        date_of_birth: formattedDate,
         handle_twitter: state.handleTwitter,
         handle_instagram: state.handleInstagram,
         handle_farcaster: state.handleFarcaster,

@@ -15,6 +15,7 @@
     "dob": "Date of birth",
     "email": "Email",
     "name": "Name",
+    "education" : "Education",
     "educationQualification" : "Educational qualifications",
     "gender": "Gender",
     "ethnicity": "Ethnicity",
@@ -51,7 +52,10 @@
         "github": "Github",
         "instagram": "Instagram",
         "twitter": "Twitter",
-        "farcaster": "Farcaster"
+        "farcaster": "Farcaster",
+        "warpcast": "Warpcast",
+        "lens": "Lens",
+        "mirror": "Mirror"
     },
     "completeProfile": {
         "label": "Complete profile",
@@ -64,5 +68,10 @@
         "connectYourWalletDesc": "Where you receive crypto payments",
         "connectFarcaster": "Connect Farcaster",
         "connectFarcasterDesc": "Showcase Farcaster timeline & create casts"
-    }
+    },
+    "displayName": "Display name",
+    "basicInfo": "Basic info",
+    "bio": "Bio",
+    "bioHint": "Share a little about your background and interests.",
+    "socialHandles": "Social handles"
 }

@@ -73,9 +73,7 @@ class _EditProfileDateFieldState extends State<EditProfileDateField> {
                 ),
                 dayTextStyle: appText.sm,
               ),
-              value: [
-                widget.initialValue,
-              ],
+              value: [widget.initialValue],
               onValueChanged: (value) {
                 _tempValue = value.firstOrNull;
               },
@@ -84,8 +82,13 @@ class _EditProfileDateFieldState extends State<EditProfileDateField> {
               child: LinearGradientButton.primaryButton(
                 label: t.common.actions.ok,
                 onTap: () {
-                  _controller.text =
-                      DateFormatUtils.custom(_tempValue, pattern: datePattern);
+                  if (_tempValue != null) {
+                    _controller.text = DateFormatUtils.custom(
+                      _tempValue,
+                      pattern: datePattern,
+                    );
+                    widget.onChange(_tempValue);
+                  }
                   Navigator.of(context).pop();
                 },
               ),
