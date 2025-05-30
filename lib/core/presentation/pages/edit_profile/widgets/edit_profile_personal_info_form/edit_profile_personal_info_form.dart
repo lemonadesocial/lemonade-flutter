@@ -91,9 +91,13 @@ class EditProfilePersonalInfoForm extends StatelessWidget {
         EditProfileDateField(
           label: t.profile.dob,
           initialValue: userProfile?.dateOfBirth,
-          onChange: (input) => context.read<EditProfileBloc>().add(
-                EditProfileEvent.birthdayChange(input: input ?? DateTime.now()),
-              ),
+          onChange: (input) {
+            if (input != null) {
+              context.read<EditProfileBloc>().add(
+                    EditProfileEvent.birthdayChange(input: input),
+                  );
+            }
+          },
           placeholder: t.profile.hint.dob,
         ),
         EditProfilePickerField(

@@ -50,7 +50,8 @@ class EditProfileSocialForm extends StatelessWidget {
         EditProfileTextField(
           icon: Assets.icons.icXLine,
           label: "X(Twitter)",
-          initialValue: getValue(editState.handleTwitter, userProfile?.handleTwitter),
+          initialValue:
+              getValue(editState.handleTwitter, userProfile?.handleTwitter),
           onChange: (input) => context.read<EditProfileBloc>().add(
                 EditProfileEvent.twitterChange(input: input),
               ),
@@ -60,7 +61,8 @@ class EditProfileSocialForm extends StatelessWidget {
         EditProfileTextField(
           icon: Assets.icons.icLinkedin,
           label: "LinkedIn",
-          initialValue: getValue(editState.handleLinkedin, userProfile?.handleLinkedin),
+          initialValue:
+              getValue(editState.handleLinkedin, userProfile?.handleLinkedin),
           onChange: (input) => context.read<EditProfileBloc>().add(
                 EditProfileEvent.linkedinChange(input: input),
               ),
@@ -70,7 +72,8 @@ class EditProfileSocialForm extends StatelessWidget {
         EditProfileTextField(
           icon: Assets.icons.icInstagram,
           label: "Instagram",
-          initialValue: getValue(editState.handleInstagram, userProfile?.handleInstagram),
+          initialValue:
+              getValue(editState.handleInstagram, userProfile?.handleInstagram),
           onChange: (input) => context.read<EditProfileBloc>().add(
                 EditProfileEvent.instagramChange(input: input),
               ),
@@ -80,7 +83,8 @@ class EditProfileSocialForm extends StatelessWidget {
         EditProfileTextField(
           icon: Assets.icons.icGithubFilled,
           label: "Github",
-          initialValue: getValue(editState.handleGithub, userProfile?.handleGithub),
+          initialValue:
+              getValue(editState.handleGithub, userProfile?.handleGithub),
           onChange: (input) => context.read<EditProfileBloc>().add(
                 EditProfileEvent.githubChange(input: input),
               ),
@@ -100,7 +104,8 @@ class EditProfileSocialForm extends StatelessWidget {
         EditProfileTextField(
           icon: Assets.icons.icMirror,
           label: "Mirror",
-          initialValue: getValue(editState.handleMirror, userProfile?.handleMirror),
+          initialValue:
+              getValue(editState.handleMirror, userProfile?.handleMirror),
           onChange: (input) => context.read<EditProfileBloc>().add(
                 EditProfileEvent.mirrorChange(input: input),
               ),

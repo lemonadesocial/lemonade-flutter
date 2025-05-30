@@ -78,7 +78,8 @@ class _EditProfileViewV2State extends State<EditProfileViewV2> {
                       ? stateValue
                       : (profileValue ?? '');
 
-              final bioValue = getValue(editState.shortBio, userProfile?.description);
+              final bioValue =
+                  getValue(editState.shortBio, userProfile?.description);
               if (_bioController.text != bioValue) {
                 _bioController.text = bioValue;
                 _bioController.selection = TextSelection.fromPosition(
@@ -197,8 +198,8 @@ class _EditProfileViewV2State extends State<EditProfileViewV2> {
                         children: [
                           EditProfileTextField(
                             label: t.profile.displayName,
-                            initialValue: getValue(
-                                editState.displayName, userProfile?.displayName),
+                            initialValue: getValue(editState.displayName,
+                                userProfile?.displayName),
                             onChange: (input) =>
                                 context.read<EditProfileBloc>().add(
                                       EditProfileEvent.displayNameChange(
