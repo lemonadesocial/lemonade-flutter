@@ -29,8 +29,27 @@ class EditProfilePageV2 extends StatelessWidget {
   }
 }
 
-class EditProfileViewV2 extends StatelessWidget {
+class EditProfileViewV2 extends StatefulWidget {
   const EditProfileViewV2({super.key});
+
+  @override
+  State<EditProfileViewV2> createState() => _EditProfileViewV2State();
+}
+
+class _EditProfileViewV2State extends State<EditProfileViewV2> {
+  late final TextEditingController _bioController;
+
+  @override
+  void initState() {
+    super.initState();
+    _bioController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _bioController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +77,14 @@ class EditProfileViewV2 extends StatelessWidget {
                   (stateValue != null && stateValue.isNotEmpty)
                       ? stateValue
                       : (profileValue ?? '');
+
+              final bioValue = getValue(editState.shortBio, userProfile?.description);
+              if (_bioController.text != bioValue) {
+                _bioController.text = bioValue;
+                _bioController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _bioController.text.length),
+                );
+              }
 
               return Scaffold(
                 appBar: LemonAppBar(
@@ -202,12 +229,7 @@ class EditProfileViewV2 extends StatelessWidget {
                                 border: Border.all(color: appColors.cardBorder),
                               ),
                               child: TextField(
-                                controller: TextEditingController(
-                                  text: getValue(
-                                    editState.shortBio,
-                                    userProfile?.description,
-                                  ),
-                                ),
+                                controller: _bioController,
                                 onChanged: (value) =>
                                     context.read<EditProfileBloc>().add(
                                           EditProfileEvent.shortBioChange(
@@ -242,7 +264,10 @@ class EditProfileViewV2 extends StatelessWidget {
                         userProfile: userProfile,
                         editState: editState,
                       ),
-                      const EditProfilePersonalInfoForm(),
+                      EditProfilePersonalInfoForm(
+                        userProfile: userProfile,
+                        editState: editState,
+                      ),
                     ],
                   ),
                 ),

@@ -15,6 +15,7 @@
     "dob": "Date of birth",
     "email": "Email",
     "name": "Name",
+    "education" : "Education",
     "educationQualification" : "Educational qualifications",
     "gender": "Gender",
     "ethnicity": "Ethnicity",
