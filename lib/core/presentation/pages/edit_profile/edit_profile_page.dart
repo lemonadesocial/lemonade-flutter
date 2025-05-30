@@ -3,9 +3,11 @@ import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_avatar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -58,29 +60,40 @@ class EditProfileView extends StatelessWidget {
             appBar: LemonAppBar(
               title: t.profile.editProfile,
               actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: Spacing.s1),
-                  child: BlocBuilder<EditProfileBloc, EditProfileState>(
-                    builder: (context, state) {
-                      return TextButton(
-                        onPressed: state.status == EditProfileStatus.editing
-                            ? () {
-                                context.read<EditProfileBloc>().add(
-                                      EditProfileEvent.submitEditProfile(),
-                                    );
-                              }
-                            : null,
-                        child: Text(
-                          t.common.actions.save,
-                          style: appText.md.copyWith(
-                            color: state.status == EditProfileStatus.editing
-                                ? appColors.textPrimary
-                                : appColors.textQuaternary,
+                BlocBuilder<EditProfileBloc, EditProfileState>(
+                  builder: (context, state) {
+                    if (state.status == EditProfileStatus.loading) {
+                      return Padding(
+                        padding: EdgeInsets.only(right: Spacing.s5),
+                        child: SizedBox(
+                          width: Sizing.xSmall,
+                          height: Sizing.xSmall,
+                          child: CircularProgressIndicator(
+                            backgroundColor: LemonColor.black.withOpacity(0.36),
+                            color: LemonColor.white.withOpacity(0.72),
+                            strokeWidth: 2.5,
                           ),
                         ),
                       );
-                    },
-                  ),
+                    }
+                    return TextButton(
+                      onPressed: state.status == EditProfileStatus.editing
+                          ? () {
+                              context.read<EditProfileBloc>().add(
+                                    EditProfileEvent.submitEditProfile(),
+                                  );
+                            }
+                          : null,
+                      child: Text(
+                        t.common.actions.save,
+                        style: appText.md.copyWith(
+                          color: state.status == EditProfileStatus.editing
+                              ? appColors.textAccent
+                              : appColors.textQuaternary,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -107,16 +120,35 @@ class EditProfileView extends StatelessWidget {
                           Positioned(
                             right: 0,
                             bottom: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(Spacing.s2),
-                              decoration: BoxDecoration(
-                                color: appColors.pageOverlaySecondary,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Assets.icons.icShare.svg(
-                                width: Sizing.s5,
-                                height: Sizing.s5,
-                                color: appColors.textSecondary,
+                            child: InkWell(
+                              onTap: () async {
+                                final profilePhotos =
+                                    (userProfile?.newPhotosExpanded ?? [])
+                                        .map((item) => item.id)
+                                        .whereType<String>()
+                                        .toList();
+
+                                final hasPermission =
+                                    await PermissionUtils.checkPhotosPermission(
+                                        context);
+                                if (!hasPermission) return;
+                                context.read<EditProfileBloc>().add(
+                                      EditProfileEvent.selectProfileImage(
+                                        profilePhotos: profilePhotos,
+                                      ),
+                                    );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(Spacing.s2),
+                                decoration: BoxDecoration(
+                                  color: appColors.pageOverlaySecondary,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Assets.icons.icShare.svg(
+                                  width: Sizing.s5,
+                                  height: Sizing.s5,
+                                  color: appColors.textSecondary,
+                                ),
                               ),
                             ),
                           ),
