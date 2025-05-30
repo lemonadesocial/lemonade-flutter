@@ -130,7 +130,8 @@ class EditProfileView extends StatelessWidget {
 
                                 final hasPermission =
                                     await PermissionUtils.checkPhotosPermission(
-                                        context);
+                                  context,
+                                );
                                 if (!hasPermission) return;
                                 context.read<EditProfileBloc>().add(
                                       EditProfileEvent.selectProfileImage(
@@ -201,7 +202,8 @@ class EditProfileView extends StatelessWidget {
                     ),
                     child: TextField(
                       controller: TextEditingController(
-                          text: userProfile?.description ?? ''),
+                        text: userProfile?.description ?? '',
+                      ),
                       onChanged: (value) => context.read<EditProfileBloc>().add(
                             EditProfileEvent.shortBioChange(input: value),
                           ),
