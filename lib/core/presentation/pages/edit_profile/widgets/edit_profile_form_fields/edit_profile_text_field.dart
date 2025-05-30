@@ -41,7 +41,9 @@ class _EditProfileTextFieldState extends State<EditProfileTextField> {
       child: CupertinoTextFormFieldRow(
         maxLines: widget.maxLines,
         padding: EdgeInsets.zero,
-        style: appText.sm,
+        style: appText.md.copyWith(
+          color: appColors.textPrimary,
+        ),
         placeholder: widget.placeholder,
         placeholderStyle: appText.md.copyWith(
           color: appColors.textQuaternary,

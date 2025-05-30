@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
+import 'package:app/core/presentation/pages/edit_profile/edit_profile_view_v2.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_avatar.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
@@ -25,7 +26,7 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EditProfileBloc(),
-      child: const EditProfileView(),
+      child: const EditProfileViewV2(),
     );
   }
 }
