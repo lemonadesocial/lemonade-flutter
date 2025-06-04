@@ -1,0 +1,268 @@
+# # Fragment for primitive key-value types that appear in configs or dictionaries
+# fragment PrimitiveKeyValue on PrimitiveData {
+#   ... on BigDecimalKeyValue {
+#     key
+#     bigDecimal
+#   }
+#   ... on StringKeyValue {
+#     key
+#     string
+#   }
+#   ... on IntKeyValue {
+#     key
+#     int
+#   }
+#   ... on IntNullableKeyValue {
+#     key
+#     optionalInt
+#   }
+#   ... on AddressKeyValue {
+#     key
+#     address
+#   }
+#   ... on BooleanKeyValue {
+#     key
+#     boolean
+#   }
+#   ... on RawKeyValue {
+#     rawKey: key
+#     data
+#   }
+# }
+
+# Fragment for the 'config' object within a rule, covering its complex structure
+# fragment RuleConfigData on AnyKeyValue {
+#   ... on BigDecimalKeyValue {
+#     key
+#     bigDecimal
+#   }
+#   ... on StringKeyValue {
+#     key
+#     string
+#   }
+#   ... on IntKeyValue {
+#     key
+#     int
+#   }
+#   ... on IntNullableKeyValue {
+#     key
+#     optionalInt
+#   }
+#   ... on AddressKeyValue {
+#     key
+#     address
+#   }
+#   ... on BooleanKeyValue {
+#     key
+#     boolean
+#   }
+#   ... on RawKeyValue {
+#     rawKey: key
+#     data
+#   }
+#   ... on DictionaryKeyValue {
+#     key
+#     dictionary {
+#       ... on BigDecimalKeyValue {
+#         key
+#         bigDecimal
+#       }
+#       ... on StringKeyValue {
+#         key
+#         string
+#       }
+#       ... on IntKeyValue {
+#         key
+#         int
+#       }
+#       ... on IntNullableKeyValue {
+#         key
+#         optionalInt
+#       }
+#       ... on AddressKeyValue {
+#         key
+#         address
+#       }
+#       ... on BooleanKeyValue {
+#         key
+#         boolean
+#       }
+#       ... on RawKeyValue {
+#         rawKey: key
+#         data
+#       }
+#     }
+#   }
+#   ... on ArrayKeyValue {
+#     key
+#     array {
+#       ... on BigDecimalKeyValue {
+#         key
+#         bigDecimal
+#       }
+#       ... on StringKeyValue {
+#         key
+#         string
+#       }
+#       ... on IntKeyValue {
+#         key
+#         int
+#       }
+#       ... on IntNullableKeyValue {
+#         key
+#         optionalInt
+#       }
+#       ... on AddressKeyValue {
+#         key
+#         address
+#       }
+#       ... on BooleanKeyValue {
+#         key
+#         boolean
+#       }
+#       ... on RawKeyValue {
+#         rawKey: key
+#         data
+#       }
+#       ... on DictionaryKeyValue {
+#         key
+#         dictionary {
+#           ... on BigDecimalKeyValue {
+#             key
+#             bigDecimal
+#           }
+#           ... on StringKeyValue {
+#             key
+#             string
+#           }
+#           ... on IntKeyValue {
+#             key
+#             int
+#           }
+#           ... on IntNullableKeyValue {
+#             key
+#             optionalInt
+#           }
+#           ... on AddressKeyValue {
+#             key
+#             address
+#           }
+#           ... on BooleanKeyValue {
+#             key
+#             boolean
+#           }
+#           ... on RawKeyValue {
+#             rawKey: key
+#             data
+#           }
+#         }
+#       }
+#     }
+#   }
+# }
+
+query Namespace($request: NamespaceRequest!) {
+  namespace(request: $request) {
+    rules {
+      required {
+        id
+        type
+        address
+        executesOn
+        config {
+          ... on BigDecimalKeyValue {
+            key
+            bigDecimal
+          }
+          ... on StringKeyValue {
+            key
+            string
+          }
+          ... on AddressKeyValue {
+            key
+            address
+          }
+          ... on ArrayKeyValue {
+            key
+            array {
+              ... on BigDecimalKeyValue {
+                key
+                bigDecimal
+              }
+              ... on StringKeyValue {
+                key
+                string
+              }
+              ... on AddressKeyValue {
+                key
+                address
+              }
+              ... on DictionaryKeyValue {
+                key
+                dictionary {
+                  ... on IntKeyValue {
+                    key
+                    int
+                  }
+                  ... on BigDecimalKeyValue {
+                    key
+                    bigDecimal
+                  }
+                  ... on StringKeyValue {
+                    key
+                    string
+                  }
+                  ... on AddressKeyValue {
+                    key
+                    address
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      anyOf {
+        id
+        type
+        address
+        executesOn
+      }
+    }
+    stats {
+      totalUsernames
+    }
+    owner
+    collectionMetadata {
+      symbol
+      image
+      name
+    }
+    createdAt
+    namespace
+    address
+    operations {
+      canCreate {
+        ... on NamespaceOperationValidationPassed {
+          passed
+        }
+        ... on NamespaceOperationValidationFailed {
+          unsatisfiedRules {
+            required {
+              rule
+              reason
+            }
+          }
+          reason
+        }
+        ... on NamespaceOperationValidationUnknown {
+          extraChecksRequired {
+            executesOn
+            address
+            type
+          }
+        }
+      }
+    }
+  }
+}

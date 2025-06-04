@@ -1,0 +1,56 @@
+mutation LensCreateUsername($request: CreateUsernameRequest!) {
+  createUsername(request: $request) {
+    ... on CreateUsernameResponse {
+      hash
+    }
+    ... on UsernameTaken {
+      ownedBy
+      reason
+    }
+    ... on NamespaceOperationValidationFailed {
+      unsatisfiedRules {
+        required {
+          reason
+          rule
+          message
+        }
+      }
+      reason
+    }
+    ... on SponsoredTransactionRequest {
+      raw {
+        type
+        to
+        from
+        nonce
+        gasLimit
+        maxPriorityFeePerGas
+        maxFeePerGas
+        data
+        value
+        chainId
+      }
+      reason
+      sponsoredReason
+    }
+    ... on SelfFundedTransactionRequest {
+      reason
+      selfFundedReason
+      raw {
+        type
+        to
+        from
+        nonce
+        gasLimit
+        maxPriorityFeePerGas
+        maxFeePerGas
+        data
+        value
+        chainId
+      }
+    }
+    ... on TransactionWillFail {
+      reason
+    }
+  }
+}
