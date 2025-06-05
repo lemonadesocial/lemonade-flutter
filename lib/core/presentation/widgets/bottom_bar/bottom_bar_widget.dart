@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/app_tabs.dart';
+import 'package:app/core/presentation/widgets/glasskit/glass_container.dart';
 import 'package:app/core/presentation/widgets/home/bottom_bar_create_button.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ import 'package:collection/collection.dart';
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
-  static double get bottomBarHeight => Platform.isIOS ? 60.w : 72.w;
+  static double get bottomBarHeight => Platform.isIOS ? 48.w : 60.w;
 
   @override
   BottomBarState createState() => BottomBarState();
@@ -28,8 +29,8 @@ class BottomBarState extends State<BottomBar>
     with SingleTickerProviderStateMixin {
   AppTab _selectedTab = AppTab.home;
   late AnimationController _animationController;
-  late Animation<double> _animation;
-  bool _isTabChanged = false; // for initial render didn't change any tab yet
+  // late Animation<double> _animation;
+  // bool _isTabChanged = false; // for initial render didn't change any tab yet
   var _isHomeScreenFocused = true;
 
   @override
@@ -39,12 +40,12 @@ class BottomBarState extends State<BottomBar>
       vsync: this,
       duration: const Duration(milliseconds: 450),
     );
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
+    // _animation = Tween<double>(begin: 0, end: 1).animate(
+    //   CurvedAnimation(
+    //     parent: _animationController,
+    //     curve: Curves.easeInOut,
+    //   ),
+    // );
   }
 
   @override
@@ -55,35 +56,44 @@ class BottomBarState extends State<BottomBar>
 
   @override
   Widget build(BuildContext context) {
+    final paddingBottom = MediaQuery.of(context).padding.bottom;
     final appColors = Theme.of(context).appColors;
     return InkWell(
-      child: BottomAppBar(
-        padding: EdgeInsets.zero,
-        elevation: 0.0,
-        height: BottomBar.bottomBarHeight,
-        color: appColors.pageBg,
-        child: ClipRect(
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border(
-                top: BorderSide(color: LemonColor.white09),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: appColors.pageDivider),
+          ),
+        ),
+        child: GlassContainer(
+          width: double.infinity,
+          height: BottomBar.bottomBarHeight + paddingBottom,
+          color: appColors.pageOverlayBg,
+          borderColor: Colors.transparent,
+          padding: EdgeInsets.symmetric(
+            horizontal: Spacing.s4,
+            vertical: Spacing.s3,
+          ),
+          blur: 20,
+          // decoration: BoxDecoration(
+          //   // color: appColors.pageOverlayBg,
+          //   shape: BoxShape.rectangle,
+          //   border: Border(
+          //     top: BorderSide(color: appColors.pageDivider),
+          //   ),
+          // ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildTabItem(context, 0),
+              _buildTabItem(context, 1),
+              const Expanded(
+                child: BottomBarCreateButton(),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildTabItem(context, 0),
-                _buildTabItem(context, 1),
-                const Expanded(
-                  child: Center(
-                    child: BottomBarCreateButton(),
-                  ),
-                ),
-                _buildTabItem(context, 2),
-                _buildTabItem(context, 3),
-              ],
-            ),
+              _buildTabItem(context, 2),
+              _buildTabItem(context, 3),
+            ],
           ),
         ),
       ),
@@ -94,26 +104,12 @@ class BottomBarState extends State<BottomBar>
     final tabData = tabs[index];
     final isSelected = _selectedTab == tabData.tab;
     final icon = _buildIcon(context, tabData, isSelected);
-    final marginLeft = index == 0 ? Spacing.smMedium : 0.0;
-    final marginRight = index == 3 ? Spacing.smMedium : 0.0;
     return Expanded(
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: InkWell(
         onTap: () {
           _handleTabTap(context, tabData);
         },
-        child: Container(
-          height: BottomBar.bottomBarHeight,
-          color: Colors.transparent,
-          margin: EdgeInsets.only(right: marginRight, left: marginLeft),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              _buildAnimatedContainer(isSelected),
-              icon,
-            ],
-          ),
-        ),
+        child: icon,
       ),
     );
   }
@@ -121,7 +117,21 @@ class BottomBarState extends State<BottomBar>
   Widget _buildIcon(BuildContext context, TabData tabData, bool isSelected) {
     final icon = tabData.icon;
     final selectedIcon = tabData.selectedIcon;
-    return isSelected ? selectedIcon : icon;
+    final appColors = context.theme.appColors;
+    return ThemeSvgIcon(
+      color: isSelected ? appColors.textPrimary : appColors.textTertiary,
+      builder: (filter) => isSelected
+          ? selectedIcon.svg(
+              colorFilter: filter,
+              width: 24.w,
+              height: 24.w,
+            )
+          : icon.svg(
+              colorFilter: filter,
+              width: 24.w,
+              height: 24.w,
+            ),
+    );
   }
 
   void _handleTabTap(BuildContext context, TabData tabData) {
@@ -156,7 +166,7 @@ class BottomBarState extends State<BottomBar>
 
   void _triggerAnimation(TabData tabData) {
     setState(() {
-      _isTabChanged = true;
+      // _isTabChanged = true;
       _selectedTab = tabData.tab;
     });
     _animationController.reset();
@@ -179,34 +189,34 @@ class BottomBarState extends State<BottomBar>
     }
   }
 
-  Widget _buildAnimatedContainer(bool isSelected) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        if (_isTabChanged) {
-          return Transform.scale(
-            scale: _animation.value,
-            child: Container(
-              width: 54.6.w,
-              height: 36.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: isSelected ? LemonColor.white09 : Colors.transparent,
-              ),
-            ),
-          );
-        }
-        // This is for initial render, when first time render
-        // It's must render container style around selected tab instead of animation
-        return Container(
-          width: 54.6.w,
-          height: 36.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: isSelected ? LemonColor.white09 : Colors.transparent,
-          ),
-        );
-      },
-    );
-  }
+  // Widget _buildAnimatedContainer(bool isSelected) {
+  //   return AnimatedBuilder(
+  //     animation: _animation,
+  //     builder: (context, child) {
+  //       if (_isTabChanged) {
+  //         return Transform.scale(
+  //           scale: _animation.value,
+  //           child: Container(
+  //             width: 54.6.w,
+  //             height: 36.h,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(18),
+  //               color: isSelected ? LemonColor.white09 : Colors.transparent,
+  //             ),
+  //           ),
+  //         );
+  //       }
+  //       // This is for initial render, when first time render
+  //       // It's must render container style around selected tab instead of animation
+  //       return Container(
+  //         width: 54.6.w,
+  //         height: 36.h,
+  //         decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(18),
+  //           color: isSelected ? LemonColor.white09 : Colors.transparent,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
