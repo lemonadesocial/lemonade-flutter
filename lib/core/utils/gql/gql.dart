@@ -76,6 +76,7 @@ class BaseGQL {
     );
 
     _client = GraphQLClient(
+      queryRequestTimeout: const Duration(seconds: 30),
       defaultPolicies: DefaultPolicies(
         query: Policies(
           fetch: FetchPolicy.cacheAndNetwork,
@@ -201,6 +202,7 @@ class CubeGQL {
     );
 
     _client = GraphQLClient(
+      queryRequestTimeout: const Duration(seconds: 30),
       defaultPolicies: DefaultPolicies(
         query: Policies(
           fetch: FetchPolicy.cacheAndNetwork,
