@@ -25,12 +25,10 @@ class LensPostFeedWidget extends StatefulWidget {
     super.key,
     this.title,
     this.lensFeedId,
-    this.query,
   });
 
   final String? title;
   final String? lensFeedId;
-  final Input$PostsRequest? query;
 
   @override
   State<LensPostFeedWidget> createState() => _LensPostFeedWidgetState();
@@ -38,16 +36,15 @@ class LensPostFeedWidget extends StatefulWidget {
 
 class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
   String? cursor;
-  late Input$PostsRequest? queryInput;
+  late Input$PostsRequest queryInput;
   final debouncer = Debouncer(milliseconds: 300);
 
   @override
   void initState() {
     super.initState();
-    queryInput = widget.query ??
-        LensUtils.getDefaultFeedQueryInput(
-          lensFeedId: widget.lensFeedId,
-        );
+    queryInput = LensUtils.getDefaultFeedQueryInput(
+      lensFeedId: widget.lensFeedId,
+    );
   }
 
   @override
@@ -55,7 +52,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
     final appColors = context.theme.appColors;
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, lensAuthState) {
-        if (widget.lensFeedId == null && queryInput == null) {
+        if (widget.lensFeedId == null) {
           return MultiSliver(
             children: [
               const SliverToBoxAdapter(
@@ -77,7 +74,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                 cursor = result?.posts.pageInfo.next;
               },
               variables: Variables$Query$LensFetchPosts(
-                request: queryInput!,
+                request: queryInput,
               ),
             ),
             builder: (
@@ -147,7 +144,7 @@ class _LensPostFeedWidgetState extends State<LensPostFeedWidget> {
                           final fetchMoreOptions =
                               FetchMoreOptions$Query$LensFetchPosts(
                             variables: Variables$Query$LensFetchPosts(
-                              request: queryInput!.copyWith(
+                              request: queryInput.copyWith(
                                 cursor: cursor,
                               ),
                             ),
