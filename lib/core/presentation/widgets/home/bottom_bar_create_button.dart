@@ -40,7 +40,7 @@ class BottomBarCreateButton extends StatelessWidget {
       },
       child: ThemeSvgIcon(
         color: appColors.textTertiary,
-        builder: (colorFilter) => Assets.icons.icEditSquareOutlineSharp.svg(
+        builder: (colorFilter) => Assets.icons.icBoxOutlineSharp.svg(
           colorFilter: colorFilter,
           width: 24.w,
           height: 24.w,

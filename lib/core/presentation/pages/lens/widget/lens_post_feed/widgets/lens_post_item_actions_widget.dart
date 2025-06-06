@@ -268,7 +268,10 @@ class LensPostItemActionsWidgetState extends State<LensPostItemActionsWidget> {
               InkWell(
                 onTap: () async {
                   if (!localReposted) {
-                    await repostPost();
+                    checkAuthorized(
+                      context,
+                      repostPost,
+                    );
                   }
                 },
                 child: ThemeSvgIcon(

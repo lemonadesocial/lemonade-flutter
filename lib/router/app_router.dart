@@ -31,8 +31,8 @@ class AppRouter extends $AppRouter {
               page: DiscoverRoute.page,
             ),
             AutoRoute(
-              path: 'notification',
-              page: NotificationRoute.page,
+              path: 'home-spaces',
+              page: HomeSpaceListingRoute.page,
             ),
             AutoRoute(
               page: ChatStackRoute.page,
@@ -50,6 +50,10 @@ class AppRouter extends $AppRouter {
               page: EmptyRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/notification',
+          page: NotificationRoute.page,
         ),
         AutoRoute(
           path: '/claim-token-reward',

@@ -1,7 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
 import 'package:app/core/presentation/widgets/glasskit/glass_container.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -17,10 +16,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app/app_theme/app_theme.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class LensAddPostsButton extends StatelessWidget {
-  const LensAddPostsButton({super.key, required this.space});
+class LensAddPostsButton extends StatefulWidget {
+  const LensAddPostsButton({
+    super.key,
+    this.lensFeedId,
+    this.builder,
+  });
 
-  final Space space;
+  final String? lensFeedId;
+  final Widget Function(
+    BuildContext context,
+    LensAuthState state,
+    Function(LensAuthState) onTapCreatePost,
+  )? builder;
+
+  @override
+  State<LensAddPostsButton> createState() => _LensAddPostsButtonState();
+}
+
+class _LensAddPostsButtonState extends State<LensAddPostsButton> {
+  void onTapCreatePost(LensAuthState state) async {
+    if (!state.loggedIn ||
+        !state.connected ||
+        state.accountStatus != LensAccountStatus.accountOwner) {
+      final isAuthorized = await showCupertinoModalBottomSheet(
+        backgroundColor: LemonColor.atomicBlack,
+        context: context,
+        useRootNavigator: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        builder: (newContext) {
+          return const LensOnboardingBottomSheet();
+        },
+      );
+      if (!isAuthorized) return;
+    }
+    AutoRouter.of(context).push(
+      CreateLensPostRoute(lensFeedId: widget.lensFeedId),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +68,9 @@ class LensAddPostsButton extends StatelessWidget {
 
     return BlocBuilder<LensAuthBloc, LensAuthState>(
       builder: (context, state) {
+        if (widget.builder != null) {
+          return widget.builder!(context, state, onTapCreatePost);
+        }
         return GlassContainer(
           width: double.infinity,
           height: Sizing.s12 + paddingBottom * 1.5,
@@ -46,23 +82,7 @@ class LensAddPostsButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
           child: InkWell(
             onTap: () async {
-              if (!state.loggedIn ||
-                  !state.connected ||
-                  state.accountStatus != LensAccountStatus.accountOwner) {
-                final isAuthorized = await showCupertinoModalBottomSheet(
-                  backgroundColor: LemonColor.atomicBlack,
-                  context: context,
-                  useRootNavigator: true,
-                  barrierColor: Colors.black.withOpacity(0.5),
-                  builder: (newContext) {
-                    return const LensOnboardingBottomSheet();
-                  },
-                );
-                if (!isAuthorized) return;
-              }
-              AutoRouter.of(context).push(
-                CreateLensPostRoute(space: space),
-              );
+              onTapCreatePost(state);
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,

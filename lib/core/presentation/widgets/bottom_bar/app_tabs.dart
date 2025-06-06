@@ -2,9 +2,10 @@ import 'package:app/gen/assets.gen.dart';
 
 enum AppTab {
   home,
+  spaces,
   discover,
-  notification,
   chat,
+  // notification,
 }
 
 class TabData {
@@ -23,16 +24,16 @@ final List<TabData> tabs = [
     Assets.icons.icoHouseFilled,
   ),
   TabData(
+    AppTab.spaces,
+    '/home-spaces',
+    Assets.icons.icWorkspacesOutline,
+    Assets.icons.icWorkspacesFilled,
+  ),
+  TabData(
     AppTab.discover,
     '/discover',
     Assets.icons.icDiscover,
     Assets.icons.icDiscoverFilled,
-  ),
-  TabData(
-    AppTab.notification,
-    '/notification',
-    Assets.icons.icNotification,
-    Assets.icons.icNotificationSharpFilled,
   ),
   TabData(
     AppTab.chat,
@@ -40,4 +41,10 @@ final List<TabData> tabs = [
     Assets.icons.icChatBubbleOutlineSharp,
     Assets.icons.icChatBubbleOutlineSharpFilled,
   ),
+  // TabData(
+  //   AppTab.notification,
+  //   '/notification',
+  //   Assets.icons.icNotification,
+  //   Assets.icons.icNotificationSharpFilled,
+  // ),
 ];

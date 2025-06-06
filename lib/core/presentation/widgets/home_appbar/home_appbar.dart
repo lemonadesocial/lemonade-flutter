@@ -1,6 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
+import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -41,6 +43,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
       leading: _Leading(title: widget.title),
       actions: widget.actions ??
           [
+            const HomeAppBarNotificationAction(),
+            SizedBox(width: Spacing.s5),
             Padding(
               padding: EdgeInsets.only(right: Spacing.s4),
               child: const HomeAppBarDefaultMoreActionsWidget(),
@@ -89,9 +93,8 @@ class _Leading extends StatelessWidget {
           children: [
             LemonNetworkImage(
               imageUrl: AvatarUtils.getAvatarUrl(user: loggedInUser),
-              placeholder: Assets.icons.icPerson.svg(
-                width: Sizing.s7,
-                height: Sizing.s7,
+              placeholder: ImagePlaceholder.avatarPlaceholder(
+                userId: loggedInUser?.userId,
               ),
               width: Sizing.s7,
               height: Sizing.s7,
@@ -107,6 +110,27 @@ class _Leading extends StatelessWidget {
               style: appText.lg,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeAppBarNotificationAction extends StatelessWidget {
+  const HomeAppBarNotificationAction({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(const NotificationRoute());
+      },
+      child: ThemeSvgIcon(
+        color: context.theme.appColors.textTertiary,
+        builder: (filter) => Assets.icons.icNotification.svg(
+          colorFilter: filter,
+          width: Sizing.s6,
+          height: Sizing.s6,
         ),
       ),
     );
