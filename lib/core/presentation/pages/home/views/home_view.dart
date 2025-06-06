@@ -15,7 +15,6 @@ import 'package:app/core/presentation/pages/home/views/widgets/home_my_events_li
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/lens_post_feed_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
-import 'package:app/core/utils/lens_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/spacing.dart';
@@ -252,9 +251,7 @@ class _HomeViewState extends State<_HomeView>
                   ),
                   LensPostFeedWidget(
                     title: t.home.whatNew,
-                    query: LensUtils.getDefaultFeedQueryInput(
-                      lensFeedId: AppConfig.lemonadeGlobalFeed,
-                    ),
+                    lensFeedId: AppConfig.lemonadeGlobalFeed,
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
