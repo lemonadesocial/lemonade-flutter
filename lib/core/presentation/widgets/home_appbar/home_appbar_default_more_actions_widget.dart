@@ -19,20 +19,22 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
   const HomeAppBarDefaultMoreActionsWidget({super.key});
 
   Widget getThemeIcon(BuildContext context, {required SvgGenImage icon}) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return ThemeSvgIcon(
-      color: colorScheme.onPrimary,
+      color: appColors.textPrimary,
       builder: (filter) => icon.svg(
         colorFilter: filter,
         width: Sizing.mSmall,
@@ -44,7 +46,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -57,20 +59,21 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
     final showRedDot = isLoggedIn;
 
     return FloatingFrostedGlassDropdown(
+      offset: Offset(Spacing.s4, 0),
       items: [
         if (isLoggedIn) ...[
           DropdownItemDpo(
             value: CommonMoreActions.viewProfile,
             label: t.home.appBar.moreActions.myProfile,
             leadingIcon: getThemeIcon(context, icon: Assets.icons.icProfile),
-            customColor: colorScheme.onPrimary,
+            customColor: appColors.textPrimary,
           ),
           DropdownItemDpo(
             value: CommonMoreActions.completeProfile,
             label: t.home.appBar.moreActions.completeProfile,
             leadingIcon:
                 getThemeIcon(context, icon: Assets.icons.icPersonCelebrate),
-            customColor: colorScheme.onPrimary,
+            customColor: appColors.textPrimary,
             showRedDot: OnboardingUtils.showRedDotCompleteProfile(
               user: loggedInUser,
               walletState: walletState,
@@ -80,13 +83,13 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
             value: CommonMoreActions.viewSettings,
             label: t.home.appBar.moreActions.setting,
             leadingIcon: getThemeIcon(context, icon: Assets.icons.icSettings),
-            customColor: colorScheme.onPrimary,
+            customColor: appColors.textPrimary,
           ),
           DropdownItemDpo(
             value: CommonMoreActions.reportIssue,
             label: t.home.appBar.moreActions.reportIssue,
             leadingIcon: getThemeIcon(context, icon: Assets.icons.icReport),
-            customColor: colorScheme.onPrimary,
+            customColor: appColors.textPrimary,
           ),
         ],
         DropdownItemDpo(
@@ -97,19 +100,19 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
                 )
               : t.home.appBar.moreActions.connectWallet,
           leadingIcon: getThemeIcon(context, icon: Assets.icons.icWallet),
-          customColor: colorScheme.onPrimary,
+          customColor: appColors.textPrimary,
         ),
         DropdownItemDpo(
           value: CommonMoreActions.rateApp,
           label: t.home.appBar.moreActions.rateApp,
           leadingIcon: getThemeIcon(context, icon: Assets.icons.icStar),
-          customColor: colorScheme.onPrimary,
+          customColor: appColors.textPrimary,
         ),
         DropdownItemDpo(
           value: CommonMoreActions.followLemonde,
           label: t.home.appBar.moreActions.followLemonade,
           leadingIcon: getThemeIcon(context, icon: Assets.icons.icAddGuest),
-          customColor: colorScheme.onPrimary,
+          customColor: appColors.textPrimary,
         ),
         if (isLoggedIn)
           DropdownItemDpo(
@@ -209,9 +212,9 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
       child: Stack(
         children: [
           Assets.icons.icMoreVertical.svg(
-            width: Sizing.small,
-            height: Sizing.small,
-            color: colorScheme.onSecondary,
+            width: Sizing.s6,
+            height: Sizing.s6,
+            color: appColors.textTertiary,
           ),
           if (showRedDot == true) ...[
             Positioned(

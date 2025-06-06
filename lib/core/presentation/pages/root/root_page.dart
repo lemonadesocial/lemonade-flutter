@@ -102,11 +102,15 @@ class _RootPageViewState extends State<RootPage> {
                   backgroundColor: primaryColor,
                   routes: [
                     const HomeRoute(),
-                    DiscoverRoute(),
                     authState.maybeWhen(
-                      authenticated: (session) => const NotificationRoute(),
+                      authenticated: (session) => const HomeSpaceListingRoute(),
                       orElse: EmptyRoute.new,
                     ),
+                    DiscoverRoute(),
+                    // authState.maybeWhen(
+                    //   authenticated: (session) => const NotificationRoute(),
+                    //   orElse: EmptyRoute.new,
+                    // ),
                     authState.maybeWhen(
                       authenticated: (session) => const ChatStackRoute(),
                       orElse: EmptyRoute.new,

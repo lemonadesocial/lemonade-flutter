@@ -147,7 +147,7 @@ class BottomBarState extends State<BottomBar>
 
     /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.chat || tabData.tab == AppTab.notification) {
+    if (tabData.tab == AppTab.chat || tabData.tab == AppTab.spaces) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
         AutoRouter.of(context)
@@ -177,6 +177,10 @@ class BottomBarState extends State<BottomBar>
     final tabData = tabs.firstWhereOrNull(
       (tab) => tab.route.contains(tabRoute.path),
     );
+
+    if (tabData?.tab == AppTab.home) {
+      _isHomeScreenFocused = true;
+    }
 
     if (tabData != null) {
       // Wrap with addPostFrameCallback to avoid setState during build

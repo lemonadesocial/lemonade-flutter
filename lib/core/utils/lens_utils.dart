@@ -139,4 +139,30 @@ class LensUtils {
     }
     return '';
   }
+
+  static Input$PostsRequest getDefaultFeedQueryInput({
+    String? lensFeedId,
+    String? cursor,
+  }) {
+    return Input$PostsRequest(
+      cursor: cursor,
+      filter: Input$PostsFilter(
+        postTypes: [Enum$PostType.ROOT, Enum$PostType.REPOST],
+        metadata: Input$PostMetadataFilter(
+          mainContentFocus: [
+            Enum$MainContentFocus.TEXT_ONLY,
+            Enum$MainContentFocus.IMAGE,
+            Enum$MainContentFocus.EVENT,
+          ],
+        ),
+        feeds: lensFeedId != null
+            ? [
+                Input$FeedOneOf(
+                  feed: lensFeedId,
+                ),
+              ]
+            : null,
+      ),
+    );
+  }
 }

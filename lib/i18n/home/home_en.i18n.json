@@ -57,5 +57,6 @@
         "claimUsername": "Claim Username",
         "payoutAccounts": "Payout Accounts",
         "payoutAccountsDesc": "Where your event earnings go."
-    }
+    },
+    "whatNew": "What's New"
 }

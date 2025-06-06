@@ -65,7 +65,7 @@ class LemonAppBar extends StatelessWidget implements PreferredSizeWidget {
     final appText = context.theme.appTextTheme;
     return Text(
       title,
-      style: appText.md,
+      style: appText.lg,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

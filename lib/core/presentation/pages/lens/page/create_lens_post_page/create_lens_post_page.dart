@@ -6,7 +6,6 @@ import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post_metadata.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
-import 'package:app/core/domain/space/entities/space.dart';
 import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_bottom_bar.dart';
 import 'package:app/core/presentation/pages/lens/page/create_lens_post_page/widgets/create_lens_post_editor.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
@@ -37,10 +36,10 @@ import 'package:mime/mime.dart';
 class CreateLensPostPage extends StatelessWidget {
   const CreateLensPostPage({
     super.key,
-    required this.space,
+    this.lensFeedId,
   });
 
-  final Space space;
+  final String? lensFeedId;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,7 @@ class CreateLensPostPage extends StatelessWidget {
         getIt<LensRepository>(),
         getIt<LensGroveService>(),
       ),
-      child: CreateLensPostPageView(space: space),
+      child: CreateLensPostPageView(lensFeedId: lensFeedId),
     );
   }
 }
@@ -57,10 +56,10 @@ class CreateLensPostPage extends StatelessWidget {
 class CreateLensPostPageView extends StatefulWidget {
   const CreateLensPostPageView({
     super.key,
-    required this.space,
+    this.lensFeedId,
   });
 
-  final Space space;
+  final String? lensFeedId;
 
   @override
   State<CreateLensPostPageView> createState() => _CreateLensPostPageViewState();
@@ -84,7 +83,7 @@ class _CreateLensPostPageViewState extends State<CreateLensPostPageView> {
     context.read<CreateLensPostBloc>().add(
           CreateLensPostEvent.createPost(
             content: _editorController.text,
-            lensFeedId: widget.space.lensFeedId ?? '',
+            lensFeedId: widget.lensFeedId,
             image: imageUrl != null
                 ? LensMediaImageMetadata(
                     type: mimeType ?? "image/png",

@@ -69,13 +69,13 @@ class _SpaceListItemState extends State<SpaceListItem> {
       child: Container(
         decoration: BoxDecoration(
           color: appColors.cardBg,
-          borderRadius: BorderRadius.circular(LemonRadius.small),
+          borderRadius: BorderRadius.circular(LemonRadius.md),
           border: Border.all(
             color: appColors.cardBorder,
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(14.w),
+          padding: EdgeInsets.all(Spacing.s3),
           child: widget.layout == SpaceListItemLayout.grid
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

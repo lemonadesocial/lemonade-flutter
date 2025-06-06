@@ -14,6 +14,7 @@ class ListSpacesEvent with _$ListSpacesEvent {
     bool? withPublicSpaces,
     List<Enum$SpaceRole>? roles,
   }) = _FetchListSpacesEvent;
+  const factory ListSpacesEvent.refresh() = _RefreshListSpacesEvent;
 }
 
 @freezed
@@ -24,7 +25,7 @@ class ListSpacesState with _$ListSpacesState {
 
   const factory ListSpacesState.success({
     required List<Space> spaces,
-  }) = _RefreshingListSpacesState;
+  }) = _SuccessListSpacesState;
 
   const factory ListSpacesState.failure({
     Failure? failure,
@@ -46,6 +47,7 @@ class ListSpacesBloc extends Bloc<ListSpacesEvent, ListSpacesState> {
   })  : _spaceRepository = spaceRepository,
         super(const ListSpacesState.initial()) {
     on<_FetchListSpacesEvent>(_onFetch);
+    on<_RefreshListSpacesEvent>(_onRefresh);
   }
 
   Future<void> _onFetch(
@@ -61,6 +63,31 @@ class ListSpacesBloc extends Bloc<ListSpacesEvent, ListSpacesState> {
     );
     result.fold(
       (failure) => emit(ListSpacesState.failure(failure: failure)),
+      (spaces) => emit(ListSpacesState.success(spaces: spaces)),
+    );
+  }
+
+  Future<void> _onRefresh(
+    _RefreshListSpacesEvent event,
+    Emitter<ListSpacesState> emit,
+  ) async {
+    if (state is! _SuccessListSpacesState) {
+      emit(const ListSpacesState.loading());
+    }
+
+    final result = await _spaceRepository.listSpaces(
+      withMySpaces: withMySpaces,
+      withPublicSpaces: withPublicSpaces,
+      roles: roles,
+    );
+
+    result.fold(
+      (failure) {
+        if (state is _SuccessListSpacesState) {
+          return;
+        }
+        emit(ListSpacesState.failure(failure: failure));
+      },
       (spaces) => emit(ListSpacesState.success(spaces: spaces)),
     );
   }
