@@ -162,7 +162,7 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
     if (pricePerLengthRule != null) {
       LensPricePerLength? pickedRule;
       for (final rule in pricePerLengthRule!.pricePerLength) {
-        if (username.length >= rule.length) {
+        if (username.length == rule.length) {
           pickedRule = rule;
         }
       }
@@ -287,10 +287,6 @@ class _CreateLensAccountPageViewState extends State<CreateLensAccountPageView> {
                                     : null,
                                 label:
                                     '${t.onboarding.claim} ${selectedPrice != null ? '$selectedPrice ${pricePerLengthRule?.tokenSymbol}' : ''}',
-                                textStyle: Typo.medium.copyWith(
-                                  color: appColors.textPrimary,
-                                  fontWeight: FontWeight.w600,
-                                ),
                               ),
                             ),
                             SizedBox(height: Spacing.xSmall),

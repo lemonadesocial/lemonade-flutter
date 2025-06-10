@@ -92,9 +92,9 @@ class CreateLensAccountBloc
         if (createAccountData is UsernameTaken) {
           message = 'Username taken';
         } else if (createAccountData is NamespaceOperationValidationFailed) {
-          message = 'Namespace operation validation failed';
+          message = createAccountData.reason;
         } else if (createAccountData is TransactionWillFail) {
-          message = 'Transaction will fail';
+          message = 'Transaction will fail\n${createAccountData.reason}';
         } else if (createAccountData is SelfFundedTransactionRequest) {
           message = 'Self funded transaction request';
         } else if (createAccountData is SponsoredTransactionRequest) {

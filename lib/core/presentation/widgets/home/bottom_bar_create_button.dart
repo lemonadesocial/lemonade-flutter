@@ -1,5 +1,6 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/home/home_quick_create_bottom_sheet.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -37,17 +38,13 @@ class BottomBarCreateButton extends StatelessWidget {
           orElse: () => context.router.navigate(LoginRoute()),
         );
       },
-      child: Container(
-        width: 48.h,
-        height: 48.h,
-        padding: EdgeInsets.all(12.w),
-        decoration: ShapeDecoration(
-          color: const Color(0x2DC69DF7),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(27),
-          ),
+      child: ThemeSvgIcon(
+        color: appColors.textTertiary,
+        builder: (colorFilter) => Assets.icons.icBoxOutlineSharp.svg(
+          colorFilter: colorFilter,
+          width: 24.w,
+          height: 24.w,
         ),
-        child: Assets.icons.icCreate.svg(),
       ),
     );
   }

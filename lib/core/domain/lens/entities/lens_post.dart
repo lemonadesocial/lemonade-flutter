@@ -7,7 +7,7 @@ import 'package:app/graphql/lens/schema.graphql.dart';
 part 'lens_post.freezed.dart';
 part 'lens_post.g.dart';
 
-@Freezed(unionKey: '__typename')
+@Freezed(unionKey: '__typename', fallbackUnion: 'unknown')
 sealed class LensPostMetadata with _$LensPostMetadata {
   const LensPostMetadata._();
 

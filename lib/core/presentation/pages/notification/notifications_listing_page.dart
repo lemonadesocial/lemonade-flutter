@@ -1,8 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/notification/notifications_listing_bloc.dart';
 import 'package:app/core/presentation/pages/notification/widgets/notifications_list_view.dart';
+import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
-import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/notification_utils.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -66,7 +66,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
     }
 
     return Scaffold(
-      appBar: HomeAppBar(
+      appBar: LemonAppBar(
         title: t.notification.notifications,
         actions: [
           Padding(
@@ -82,7 +82,7 @@ class _NotificationsListingViewState extends State<_NotificationsListingView>
               },
               child: ThemeSvgIcon(
                 color: appColors.textTertiary,
-                builder: (filter) => Assets.icons.icChatBubble.svg(
+                builder: (filter) => Assets.icons.icChatBubbleOutlineSharp.svg(
                   colorFilter: filter,
                   width: Sizing.s6,
                   height: Sizing.s6,

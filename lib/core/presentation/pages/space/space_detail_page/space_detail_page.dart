@@ -310,7 +310,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                         if (_selectedTabIndex == 0)
                           SpaceEventsList(space: space),
                         if (_selectedTabIndex == 1)
-                          LensPostFeedWidget(space: space),
+                          LensPostFeedWidget(lensFeedId: space.lensFeedId),
                         if (_selectedTabIndex == 2)
                           SubSpacesList(
                             subSpaces: space.subSpacesExpanded ?? [],
@@ -346,7 +346,7 @@ class _ViewState extends State<_View> with TickerProviderStateMixin {
                       space.lensFeedId?.isNotEmpty == true) ...[
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: LensAddPostsButton(space: space),
+                      child: LensAddPostsButton(lensFeedId: space.lensFeedId),
                     ),
                   ],
                 ],

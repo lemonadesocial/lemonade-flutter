@@ -35,62 +35,63 @@ class NewsfeedListingBloc
     bool endReached, {
     GetNewsfeedInput? input,
   }) async {
-    final result = await newsfeedService.getNewsfeed(
-      input: input?.copyWith(offset: offset),
-    );
-    return result.fold(
-      Left.new,
-      (newsfeed) {
-        offsetPaginationService.updateOffset(newsfeed.offset);
-        return Right(newsfeed.posts ?? []);
-      },
-    );
+    return const Right([]);
+    // final result = await newsfeedService.getNewsfeed(
+    //   input: input?.copyWith(offset: offset),
+    // );
+    // return result.fold(
+    //   Left.new,
+    //   (newsfeed) {
+    //     offsetPaginationService.updateOffset(newsfeed.offset);
+    //     return Right(newsfeed.posts ?? []);
+    //   },
+    // );
   }
 
   Future<void> _onFetch(NewsfeedListingEventFetch event, Emitter emit) async {
     // Prevent duplicate load when it's already loading
-    if (state.status != NewsfeedStatus.loading) {
-      emit(state.copyWith(status: NewsfeedStatus.loading));
-      final result = await offsetPaginationService.fetch(defaultInput);
-      result.fold(
-        (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
-        (posts) => emit(
-          state.copyWith(
-            status: NewsfeedStatus.fetched,
-            posts: posts,
-          ),
-        ),
-      );
-    }
+    // if (state.status != NewsfeedStatus.loading) {
+    //   emit(state.copyWith(status: NewsfeedStatus.loading));
+    //   final result = await offsetPaginationService.fetch(defaultInput);
+    //   result.fold(
+    //     (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
+    //     (posts) => emit(
+    //       state.copyWith(
+    //         status: NewsfeedStatus.fetched,
+    //         posts: posts,
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   Future<void> _onRefresh(
     NewsfeedListingEventRefresh event,
     Emitter emit,
   ) async {
-    emit(state.copyWith(status: NewsfeedStatus.loading));
-    final result = await offsetPaginationService.refresh(defaultInput);
-    result.fold(
-      (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
-      (posts) => emit(
-        state.copyWith(
-          status: NewsfeedStatus.fetched,
-          posts: posts,
-        ),
-      ),
-    );
+    // emit(state.copyWith(status: NewsfeedStatus.loading));
+    // final result = await offsetPaginationService.refresh(defaultInput);
+    // result.fold(
+    //   (l) => emit(state.copyWith(status: NewsfeedStatus.failure)),
+    //   (posts) => emit(
+    //     state.copyWith(
+    //       status: NewsfeedStatus.fetched,
+    //       posts: posts,
+    //     ),
+    //   ),
+    // );
   }
 
   void _onNewPostAdded(NewsfeedListingEventNewPost event, Emitter emit) {
-    final newPostList = List.of(state.posts);
-    newPostList.insert(0, event.post);
-    emit(
-      state.copyWith(
-        status: NewsfeedStatus.fetched,
-        posts: newPostList,
-        scrollToTopEvent: true,
-      ),
-    );
+    // final newPostList = List.of(state.posts);
+    // newPostList.insert(0, event.post);
+    // emit(
+    //   state.copyWith(
+    //     status: NewsfeedStatus.fetched,
+    //     posts: newPostList,
+    //     scrollToTopEvent: true,
+    //   ),
+    // );
   }
 
   void _onScroll(NewsfeedListingEventScrollTop event, Emitter emit) {

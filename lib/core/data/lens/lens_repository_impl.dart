@@ -162,13 +162,19 @@ class LensRepositoryImpl implements LensRepository {
         reason: data.reason,
       ),
       namespaceOperationValidationFailed: (data) {
+        String detailReason = data.unsatisfiedRules?.required.map((rule) {
+              return rule.message;
+            }).join('\n') ??
+            '';
+        final reason = [data.reason, detailReason].join('\n');
         return LensCreateAccountWithUsernameResult
-            .namespaceOperationValidationFailed(reason: data.reason);
+            .namespaceOperationValidationFailed(reason: reason);
       },
-      transactionWillFail: (data) =>
-          LensCreateAccountWithUsernameResult.transactionWillFail(
-        reason: data.reason,
-      ),
+      transactionWillFail: (data) {
+        return LensCreateAccountWithUsernameResult.transactionWillFail(
+          reason: data.reason,
+        );
+      },
       selfFundedTransactionRequest: (data) =>
           LensCreateAccountWithUsernameResult.selfFundedTransactionRequest(
         reason: data.reason,
