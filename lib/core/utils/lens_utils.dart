@@ -153,6 +153,7 @@ class LensUtils {
             Enum$MainContentFocus.TEXT_ONLY,
             Enum$MainContentFocus.IMAGE,
             Enum$MainContentFocus.EVENT,
+            Enum$MainContentFocus.LINK,
           ],
         ),
         feeds: lensFeedId != null

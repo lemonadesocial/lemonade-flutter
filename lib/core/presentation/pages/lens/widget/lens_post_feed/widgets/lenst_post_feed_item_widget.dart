@@ -2,6 +2,7 @@ import 'package:app/core/domain/lens/entities/lens_post.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/presentation/pages/farcaster/farcaster_channel_newsfeed_page/widgets/mention_linkifier.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_post_item_actions_widget.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_post_feed/widgets/lens_post_item_carousel_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
@@ -226,10 +227,24 @@ class _PostBody extends StatelessWidget {
             },
           ),
         ],
-        if (post.metadata?.imageUrl?.isNotEmpty == true) ...[
+        if (post.metadata?.attachedImages.isNotEmpty == true) ...[
+          SizedBox(height: Spacing.s2_5),
+          LensPostItemCarouselWidget(
+            images: post.metadata!.attachedImages,
+          ),
+        ] else if (post.metadata?.imageUrl?.isNotEmpty == true) ...[
           SizedBox(height: Spacing.s2_5),
           LemonNetworkImage(
             imageUrl: post.metadata!.imageUrl!,
+            borderRadius: BorderRadius.circular(
+              LemonRadius.sm,
+            ),
+          ),
+        ],
+        if (post.metadata?.lemonadeEventLink?.isNotEmpty == true) ...[
+          SizedBox(height: Spacing.s2_5),
+          LemonNetworkImage(
+            imageUrl: post.metadata!.lemonadeEventLink!,
             borderRadius: BorderRadius.circular(
               LemonRadius.sm,
             ),
