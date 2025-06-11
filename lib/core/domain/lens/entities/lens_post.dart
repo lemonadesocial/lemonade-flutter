@@ -8,13 +8,35 @@ import 'package:app/graphql/lens/schema.graphql.dart';
 part 'lens_post.freezed.dart';
 part 'lens_post.g.dart';
 
-String? _extractLemonadeEventLink(String link) {
+class LensLemonadeEventLink {
+  final String? eventId;
+  final String? shortId;
+  final String imageUrl;
+
+  LensLemonadeEventLink({
+    this.eventId,
+    this.shortId,
+    required this.imageUrl,
+  });
+}
+
+LensLemonadeEventLink? _extractLemonadeEvent(String link) {
   final uri = Uri.parse(link);
-  if (uri.origin.contains(AppConfig.webUrl) &&
-      uri.pathSegments.length > 1 &&
-      uri.pathSegments.first == 'e') {
-    final shortId = uri.pathSegments.last;
-    return '${AppConfig.webUrl}/api/og/event/$shortId';
+  if (uri.origin.contains(AppConfig.webUrl)) {
+    if (uri.pathSegments.length > 1 && uri.pathSegments.first == 'e') {
+      final shortId = uri.pathSegments.last;
+      return LensLemonadeEventLink(
+        shortId: shortId,
+        imageUrl: '${AppConfig.webHubUrl}/api/og/event/$shortId',
+      );
+    }
+    if (uri.pathSegments.length > 1 && uri.pathSegments.first == 'event') {
+      final eventId = uri.pathSegments[1];
+      return LensLemonadeEventLink(
+        eventId: eventId,
+        imageUrl: '${AppConfig.webUrl}/api/og/event?id=$eventId',
+      );
+    }
   }
   return null;
 }
@@ -84,24 +106,23 @@ sealed class LensPostMetadata with _$LensPostMetadata {
     return [];
   }
 
-  String? get lemonadeEventLink {
+  LensLemonadeEventLink? get lemonadeEventLink {
     if (this is LensLinkMetadata) {
       final link = (this as LensLinkMetadata).sharingLink ?? '';
       if (link.isEmpty) {
         return null;
       }
-      return _extractLemonadeEventLink(link);
+      return _extractLemonadeEvent(link);
     }
     if (this is LensEventMetadata) {
       if ((this as LensEventMetadata).links?.isNotEmpty == true) {
-        String? foundedLink;
         for (final link in (this as LensEventMetadata).links!) {
-          foundedLink = _extractLemonadeEventLink(link);
+          final foundedLink = _extractLemonadeEvent(link);
           if (foundedLink != null) {
-            break;
+            return foundedLink;
           }
         }
-        return foundedLink;
+        return null;
       }
     }
     return null;

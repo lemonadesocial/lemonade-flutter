@@ -1,5 +1,6 @@
 query GetEvent($shortid: String, $id: MongoID) {
   getEvent(shortid: $shortid, _id: $id) {
     _id
+    shortid
   }
 }

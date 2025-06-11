@@ -27,6 +27,19 @@ class LensCreatePostMetadata with _$LensCreatePostMetadata {
     required LensMediaImageMetadata image,
   }) = _LensCreatePostMetadataImage;
 
+  @JsonSerializable(explicitToJson: true)
+  const factory LensCreatePostMetadata.event({
+    required String id,
+    required DateTime startsAt,
+    required DateTime endsAt,
+    required String location,
+    List<String>? links,
+    @Default('en') String locale,
+    @Default(Enum$MainContentFocus.EVENT)
+    Enum$MainContentFocus mainContentFocus,
+    String? content,
+  }) = _LensCreatePostMetadataEvent;
+
   factory LensCreatePostMetadata.fromJson(Map<String, dynamic> json) =>
       _$LensCreatePostMetadataFromJson(json);
 }
