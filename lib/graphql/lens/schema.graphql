@@ -3417,13 +3417,13 @@ type MediaAudio {
   recordLabel: String
 
   """The mime type of the audio file."""
-  type: MediaAudioType!
+  type: MediaAudioType
 
   """
   The URI of the audio. You can use the optional `request` argument to choose between
   the original URI or a snapshotted one on CDN. Returns the snapshotted URI by default.
   """
-  item(request: MediaAudioRequest! = {useOriginal: false}): URI!
+  item(request: MediaAudioRequest! = {useOriginal: false}): URI
   cover(request: MediaImageRequest! = {useOriginal: false}): URI
 }
 
@@ -3466,14 +3466,14 @@ type MediaImage {
   license: MetadataLicenseType
 
   """The mime type of the image"""
-  type: MediaImageType!
+  type: MediaImageType
 
   """
   The URI of the image. You can use the optional `request` argument to choose between
   the original, snapshotted on CDN, or transformed to a different resolution. Returns the
   snapshotted URI by default.
   """
-  item(request: MediaImageRequest! = {useOriginal: false}): URI!
+  item(request: MediaImageRequest! = {useOriginal: false}): URI
 
   """The width of the image."""
   width: Int
@@ -3544,8 +3544,8 @@ type MediaVideo {
   license: MetadataLicenseType
 
   """The mime type of the video"""
-  type: MediaVideoType!
-  item(request: MediaVideoRequest! = {useOriginal: false}): URI!
+  type: MediaVideoType
+  item(request: MediaVideoRequest! = {useOriginal: false}): URI
   cover(request: MediaImageRequest! = {useOriginal: false}): URI
 }
 

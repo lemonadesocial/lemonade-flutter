@@ -7,7 +7,9 @@ class AppConfig {
   static get oauth2ClientId => dotenv.env['OAUTH2_CLIENT_ID'];
   static get oauthRedirectScheme => dotenv.env['OAUTH2_REDIRECT_SCHEME'];
   static get webUrl => dotenv.env['WEB_URL'];
-
+  static get webHubUrl => isProduction
+      ? 'https://hub.lemonade.social'
+      : 'https://hub.staging.lemonade.social';
   static get rootBackendUrl => dotenv.env['ROOT_BACKEND_URL'];
   static get backedUrl => dotenv.env['BACKEND_URL'];
   static get wssBackedUrl => dotenv.env['WSS_BACKEND_URL'];

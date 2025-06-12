@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_boolean_value.dart';
 import 'package:app/core/domain/lens/entities/lens_media.dart';
@@ -6,6 +7,39 @@ import 'package:app/graphql/lens/schema.graphql.dart';
 
 part 'lens_post.freezed.dart';
 part 'lens_post.g.dart';
+
+class LensLemonadeEventLink {
+  final String? eventId;
+  final String? shortId;
+  final String imageUrl;
+
+  LensLemonadeEventLink({
+    this.eventId,
+    this.shortId,
+    required this.imageUrl,
+  });
+}
+
+LensLemonadeEventLink? _extractLemonadeEvent(String link) {
+  final uri = Uri.parse(link);
+  if (uri.origin.contains(AppConfig.webUrl)) {
+    if (uri.pathSegments.length > 1 && uri.pathSegments.first == 'e') {
+      final shortId = uri.pathSegments.last;
+      return LensLemonadeEventLink(
+        shortId: shortId,
+        imageUrl: '${AppConfig.webHubUrl}/api/og/event/$shortId',
+      );
+    }
+    if (uri.pathSegments.length > 1 && uri.pathSegments.first == 'event') {
+      final eventId = uri.pathSegments[1];
+      return LensLemonadeEventLink(
+        eventId: eventId,
+        imageUrl: '${AppConfig.webUrl}/api/og/event?id=$eventId',
+      );
+    }
+  }
+  return null;
+}
 
 @Freezed(unionKey: '__typename', fallbackUnion: 'unknown')
 sealed class LensPostMetadata with _$LensPostMetadata {
@@ -21,12 +55,15 @@ sealed class LensPostMetadata with _$LensPostMetadata {
     if (this is LensEventMetadata) {
       return (this as LensEventMetadata).content;
     }
+    if (this is LensLinkMetadata) {
+      return (this as LensLinkMetadata).content;
+    }
     return null;
   }
 
   String? get title {
     if (this is LensTextOnlyMetadata) {
-      return (this as LensTextOnlyMetadata).content;
+      return (this as LensTextOnlyMetadata).title;
     }
     if (this is LensImageMetadata) {
       return (this as LensImageMetadata).title;
@@ -44,12 +81,60 @@ sealed class LensPostMetadata with _$LensPostMetadata {
     return null;
   }
 
+  List<String> get attachedImages {
+    if (this is LensImageMetadata) {
+      return ((this as LensImageMetadata).attachments ?? [])
+          .whereType<LensMediaImage>()
+          .map((e) => e.item)
+          .whereType<String>()
+          .toList();
+    }
+    if (this is LensEventMetadata) {
+      return ((this as LensEventMetadata).attachments ?? [])
+          .whereType<LensMediaImage>()
+          .map((e) => e.item)
+          .whereType<String>()
+          .toList();
+    }
+    if (this is LensLinkMetadata) {
+      return ((this as LensLinkMetadata).attachments ?? [])
+          .whereType<LensMediaImage>()
+          .map((e) => e.item)
+          .whereType<String>()
+          .toList();
+    }
+    return [];
+  }
+
+  LensLemonadeEventLink? get lemonadeEventLink {
+    if (this is LensLinkMetadata) {
+      final link = (this as LensLinkMetadata).sharingLink ?? '';
+      if (link.isEmpty) {
+        return null;
+      }
+      return _extractLemonadeEvent(link);
+    }
+    if (this is LensEventMetadata) {
+      if ((this as LensEventMetadata).links?.isNotEmpty == true) {
+        for (final link in (this as LensEventMetadata).links!) {
+          final foundedLink = _extractLemonadeEvent(link);
+          if (foundedLink != null) {
+            return foundedLink;
+          }
+        }
+        return null;
+      }
+    }
+    return null;
+  }
+
   @FreezedUnionValue('ImageMetadata')
   const factory LensPostMetadata.image({
     String? id,
     String? title,
     String? content,
     LensMediaImage? image,
+    List<LensAnyMedia>? attachments,
     Enum$MainContentFocus? mainContentFocus,
     List<String>? tags,
     String? contentWarning,
@@ -76,7 +161,19 @@ sealed class LensPostMetadata with _$LensPostMetadata {
     List<String>? tags,
     Enum$MainContentFocus? mainContentFocus,
     String? contentWarning,
+    List<LensAnyMedia>? attachments,
   }) = LensEventMetadata;
+
+  @FreezedUnionValue('LinkMetadata')
+  const factory LensPostMetadata.link({
+    String? id,
+    String? content,
+    String? sharingLink,
+    List<String>? tags,
+    Enum$MainContentFocus? mainContentFocus,
+    String? contentWarning,
+    List<LensAnyMedia>? attachments,
+  }) = LensLinkMetadata;
 
   @JsonSerializable(explicitToJson: true)
   const factory LensPostMetadata.unknown({

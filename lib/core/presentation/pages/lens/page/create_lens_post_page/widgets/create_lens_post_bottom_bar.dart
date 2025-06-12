@@ -1,4 +1,5 @@
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/presentation/pages/event/select_event_page/select_event_page.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
@@ -7,9 +8,12 @@ import 'package:app/core/utils/image_utils.dart';
 import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,6 +60,14 @@ class _CreateLensPostBottomBarState extends State<CreateLensPostBottomBar> {
   }
 
   void selectEvent(BuildContext context) async {
+    final isAuthenticated = context.read<AuthBloc>().state.maybeWhen(
+          orElse: () => false,
+          authenticated: (_) => true,
+        );
+    if (!isAuthenticated) {
+      AutoRouter.of(context).push(LoginRoute());
+      return;
+    }
     await showCupertinoModalBottomSheet(
       context: context,
       builder: (context) {

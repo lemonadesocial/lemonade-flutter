@@ -74,11 +74,9 @@ class _CreateLensPostPageViewState extends State<CreateLensPostPageView> {
 
   Future<void> submitCreatePost() async {
     String? imageUrl;
+
     if (selectedImage != null) {
       imageUrl = await uploadImage();
-    } else if (selectedEvent != null) {
-      imageUrl =
-          "${AppConfig.webUrl}/api/og/event?id=${selectedEvent!.id ?? ''}";
     }
     context.read<CreateLensPostBloc>().add(
           CreateLensPostEvent.createPost(
@@ -90,6 +88,7 @@ class _CreateLensPostPageViewState extends State<CreateLensPostPageView> {
                     item: imageUrl,
                   )
                 : null,
+            event: selectedEvent,
           ),
         );
   }
