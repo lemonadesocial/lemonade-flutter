@@ -43,8 +43,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
       leading: _Leading(title: widget.title),
       actions: widget.actions ??
           [
-            const HomeAppBarNotificationAction(),
-            SizedBox(width: Spacing.s5),
+            // const HomeAppBarNotificationAction(),
+            // SizedBox(width: Spacing.s5),
             Padding(
               padding: EdgeInsets.only(right: Spacing.s4),
               child: const HomeAppBarDefaultMoreActionsWidget(),

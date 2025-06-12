@@ -147,7 +147,7 @@ class BottomBarState extends State<BottomBar>
 
     /// Handle navigation
     final authState = BlocProvider.of<AuthBloc>(context).state;
-    if (tabData.tab == AppTab.chat || tabData.tab == AppTab.spaces) {
+    if (tabData.tab == AppTab.notification || tabData.tab == AppTab.spaces) {
       if (authState is AuthStateAuthenticated) {
         _triggerAnimation(tabData);
         AutoRouter.of(context)

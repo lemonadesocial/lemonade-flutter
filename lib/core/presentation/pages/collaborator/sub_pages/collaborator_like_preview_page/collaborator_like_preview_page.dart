@@ -1,22 +1,22 @@
-import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
+// import 'package:app/core/application/collaborator/get_user_discovery_matched_swipes_bloc/get_user_discovery_matched_swipes_bloc.dart';
 import 'package:app/core/application/profile/user_profile_bloc/user_profile_bloc.dart';
 import 'package:app/core/domain/collaborator/collaborator_repository.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+// import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_icon_button_widget.dart';
 import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/service/matrix/matrix_service.dart';
-import 'package:app/core/utils/matrix_utils.dart';
+// import 'package:app/core/service/matrix/matrix_service.dart';
+// import 'package:app/core/utils/matrix_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/graphql/backend/collaborator/mutation/accept_user_discovery.graphql.dart';
+// import 'package:app/graphql/backend/collaborator/mutation/accept_user_discovery.graphql.dart';
 import 'package:app/graphql/backend/collaborator/mutation/decline_user_discovery.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/router/app_router.gr.dart';
+// import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -159,50 +159,51 @@ class _CollaboratorLikePreviewView extends StatelessWidget {
                             icon: Assets.icons.icClose.svg(),
                           ),
                         ),
-                        LinearGradientIconButton(
-                          onTap: () async {
-                            await showFutureLoadingDialog(
-                              context: context,
-                              future: () async {
-                                final result =
-                                    await getIt<CollaboratorRepository>()
-                                        .acceptUserDiscovery(
-                                  input: Variables$Mutation$AcceptUserDiscovery(
-                                    swipee: swipe.other ?? '',
-                                  ),
-                                );
-                                if (result.isLeft()) {
-                                  return;
-                                }
-                                context
-                                    .read<GetUserDiscoveryMatchedSwipesBloc>()
-                                    .add(
-                                      GetUserDiscoveryMatchedSwipesEvent
-                                          .fetch(),
-                                    );
-                                refetch?.call();
-                                final roomId = await getIt<MatrixService>()
-                                    .client
-                                    .startDirectChat(
-                                      LemonadeMatrixUtils.generateMatrixUserId(
-                                        lemonadeMatrixLocalpart:
-                                            userProfile?.matrixLocalpart ?? '',
-                                      ),
-                                    );
-                                AutoRouter.of(context).replace(
-                                  ChatRoute(
-                                    roomId: roomId,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          width: Sizing.xLarge,
-                          height: Sizing.xLarge,
-                          radius: BorderRadius.circular(Sizing.xLarge),
-                          icon: Assets.icons.icChatBubble.svg(),
-                          mode: GradientButtonMode.lavenderMode,
-                        ),
+                        // TODO: hide chat
+                        // LinearGradientIconButton(
+                        //   onTap: () async {
+                        //     await showFutureLoadingDialog(
+                        //       context: context,
+                        //       future: () async {
+                        //         final result =
+                        //             await getIt<CollaboratorRepository>()
+                        //                 .acceptUserDiscovery(
+                        //           input: Variables$Mutation$AcceptUserDiscovery(
+                        //             swipee: swipe.other ?? '',
+                        //           ),
+                        //         );
+                        //         if (result.isLeft()) {
+                        //           return;
+                        //         }
+                        //         context
+                        //             .read<GetUserDiscoveryMatchedSwipesBloc>()
+                        //             .add(
+                        //               GetUserDiscoveryMatchedSwipesEvent
+                        //                   .fetch(),
+                        //             );
+                        //         refetch?.call();
+                        //         final roomId = await getIt<MatrixService>()
+                        //             .client
+                        //             .startDirectChat(
+                        //               LemonadeMatrixUtils.generateMatrixUserId(
+                        //                 lemonadeMatrixLocalpart:
+                        //                     userProfile?.matrixLocalpart ?? '',
+                        //               ),
+                        //             );
+                        //         AutoRouter.of(context).replace(
+                        //           ChatRoute(
+                        //             roomId: roomId,
+                        //           ),
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        //   width: Sizing.xLarge,
+                        //   height: Sizing.xLarge,
+                        //   radius: BorderRadius.circular(Sizing.xLarge),
+                        //   icon: Assets.icons.icChatBubble.svg(),
+                        //   mode: GradientButtonMode.lavenderMode,
+                        // ),
                       ],
                     ),
                   ),
