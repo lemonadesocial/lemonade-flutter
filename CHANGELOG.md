@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.5.0...v2.6.0) (2025-06-12)
+
+
+### Features
+
+* hide chat ([#981](https://github.com/lemonadesocial/lemonade-flutter/issues/981)) ([6b23e01](https://github.com/lemonadesocial/lemonade-flutter/commit/6b23e01106c984ceba0841d57411520999fdebe5))
+
 ## [2.5.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.4.0...v2.5.0) (2025-06-12)
 
 
