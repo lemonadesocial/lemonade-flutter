@@ -7,7 +7,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/typo.dart';
+// import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,13 +27,13 @@ class HostEventDetailConfigGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     Event eventDetail = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => Event(),
           fetched: (eventDetail) => eventDetail,
         );
-    final eventInvitedCount = eventDetail.invitedCount ?? 0;
+    // final eventInvitedCount = eventDetail.invitedCount ?? 0;
     final eventTicketTypesCount = eventDetail.eventTicketTypes?.length ?? 0;
     // final canShowDashboard = FeatureManager(
     //   EventRoleBasedEventFeatureVisibilityStrategy(
@@ -90,53 +90,54 @@ class HostEventDetailConfigGrid extends StatelessWidget {
           );
         },
       ),
-      EventConfigGridViewModel(
-        title: t.event.configuration.invite,
-        subTitle: t.event.invitedCount(count: eventInvitedCount),
-        icon: ThemeSvgIcon(
-          builder: (filter) => Assets.icons.icChatBubbleGradient.svg(
-            width: 24.w,
-            height: 24.w,
-          ),
-        ),
-        onTap: () {
-          Vibrate.feedback(FeedbackType.light);
-          if (event.matrixEventRoomId == null ||
-              event.matrixEventRoomId!.isEmpty) {
-            return showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: colorScheme.secondary,
-                  title: Text(t.common.alert),
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        Text(t.chat.roomNotExistDesc),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text(
-                        t.common.actions.ok,
-                        style: Typo.medium.copyWith(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-          AutoRouter.of(context).navigate(
-            ChatRoute(roomId: event.matrixEventRoomId ?? ''),
-          );
-        },
-      ),
+      // TODO: hide chat
+      // EventConfigGridViewModel(
+      //   title: t.event.configuration.invite,
+      //   subTitle: t.event.invitedCount(count: eventInvitedCount),
+      //   icon: ThemeSvgIcon(
+      //     builder: (filter) => Assets.icons.icChatBubbleGradient.svg(
+      //       width: 24.w,
+      //       height: 24.w,
+      //     ),
+      //   ),
+      //   onTap: () {
+      //     Vibrate.feedback(FeedbackType.light);
+      //     if (event.matrixEventRoomId == null ||
+      //         event.matrixEventRoomId!.isEmpty) {
+      //       return showDialog(
+      //         barrierDismissible: false,
+      //         context: context,
+      //         builder: (BuildContext context) {
+      //           return AlertDialog(
+      //             backgroundColor: colorScheme.secondary,
+      //             title: Text(t.common.alert),
+      //             content: SingleChildScrollView(
+      //               child: ListBody(
+      //                 children: <Widget>[
+      //                   Text(t.chat.roomNotExistDesc),
+      //                 ],
+      //               ),
+      //             ),
+      //             actions: <Widget>[
+      //               TextButton(
+      //                 child: Text(
+      //                   t.common.actions.ok,
+      //                   style: Typo.medium.copyWith(color: Colors.white),
+      //                 ),
+      //                 onPressed: () {
+      //                   Navigator.of(context).pop();
+      //                 },
+      //               ),
+      //             ],
+      //           );
+      //         },
+      //       );
+      //     }
+      //     AutoRouter.of(context).navigate(
+      //       ChatRoute(roomId: event.matrixEventRoomId ?? ''),
+      //     );
+      //   },
+      // ),
       EventConfigGridViewModel(
         title: t.event.configuration.tickets,
         subTitle:
