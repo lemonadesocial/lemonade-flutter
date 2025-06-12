@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.5.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.4.0...v2.5.0) (2025-06-12)
+
+
+### Features
+
+* home refinement - add lemonande feed to home screen ([#978](https://github.com/lemonadesocial/lemonade-flutter/issues/978)) ([167e978](https://github.com/lemonadesocial/lemonade-flutter/commit/167e97814ff75938088371506d87ae16ab192c0c))
+* new bottom bar ([#974](https://github.com/lemonadesocial/lemonade-flutter/issues/974)) ([f3e9bc6](https://github.com/lemonadesocial/lemonade-flutter/commit/f3e9bc65117606a26aa9b8a59ff8d5b7f3a61daf))
+
+
+### Bug Fixes
+
+* display multiple image in lens post, display lemonade event link thumbnail ([#980](https://github.com/lemonadesocial/lemonade-flutter/issues/980)) ([2583cf8](https://github.com/lemonadesocial/lemonade-flutter/commit/2583cf8356b7d5f9f189141f149acb1977909643))
+* extend timeout duration for gql ([#977](https://github.com/lemonadesocial/lemonade-flutter/issues/977)) ([7e0eb2b](https://github.com/lemonadesocial/lemonade-flutter/commit/7e0eb2b82b5a7ebd64fc15d775d47abc6dc98bb3))
+* fix fetch lens feed with feed id ([#979](https://github.com/lemonadesocial/lemonade-flutter/issues/979)) ([92e6084](https://github.com/lemonadesocial/lemonade-flutter/commit/92e60847a0575197d7ae00dbd4f29b2eeaf6f655))
+* update version to 2.5.0 ([#975](https://github.com/lemonadesocial/lemonade-flutter/issues/975)) ([223a1d3](https://github.com/lemonadesocial/lemonade-flutter/commit/223a1d3c93249096eb8c1f833907fb9a86d59b71))
+
 ## [2.4.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.3.0...v2.4.0) (2025-05-30)
 
 
