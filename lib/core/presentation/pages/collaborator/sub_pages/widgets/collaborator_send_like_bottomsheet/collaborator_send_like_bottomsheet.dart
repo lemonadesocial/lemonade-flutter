@@ -6,8 +6,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CollaboratorSendLikeBottomSheet extends StatefulWidget {
@@ -33,10 +33,11 @@ class _CollaboratorSendLikeBottomSheetState
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      color: colorScheme.surface,
+      color: appColors.pageBg,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -62,7 +63,6 @@ class _CollaboratorSendLikeBottomSheetState
                           true) ...[
                     CollaboratorDiscoverExpertiseOfferingCard(
                       user: widget.user,
-                      backgroundColor: LemonColor.charlestonGreen,
                     ),
                     SizedBox(height: Spacing.smMedium),
                   ],

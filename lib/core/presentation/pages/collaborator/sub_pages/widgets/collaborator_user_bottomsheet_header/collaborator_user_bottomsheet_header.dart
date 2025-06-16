@@ -4,12 +4,11 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/image_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class CollaboratorUserBottomsheetHeader extends StatelessWidget {
   final User? user;
@@ -23,11 +22,13 @@ class CollaboratorUserBottomsheetHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final companyName = user?.companyName;
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
+
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(60.r),
       ),
       child: Row(
@@ -51,17 +52,14 @@ class CollaboratorUserBottomsheetHeader extends StatelessWidget {
               children: [
                 Text(
                   user?.name ?? '',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: appText.md,
                 ),
                 SizedBox(height: 2.w),
                 if (user?.jobTitle?.isNotEmpty == true)
                   Row(
                     children: [
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icBriefcase.svg(
                           colorFilter: filter,
                         ),
@@ -70,8 +68,8 @@ class CollaboratorUserBottomsheetHeader extends StatelessWidget {
                       Expanded(
                         child: Text(
                           '${user?.jobTitle} ${companyName?.isNotEmpty == true ? 'at $companyName' : ''}',
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                          style: appText.sm.copyWith(
+                            color: appColors.textTertiary,
                           ),
                           maxLines: 2,
                         ),

@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user_icebreaker.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -8,9 +9,7 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,10 +35,11 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(LemonRadius.small),
-      borderSide: BorderSide(color: colorScheme.outline),
+      borderRadius: BorderRadius.circular(LemonRadius.sm),
+      borderSide: BorderSide(color: appColors.pageDivider),
     );
 
     final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
@@ -56,7 +56,6 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
           const BottomSheetGrabber(),
           LemonAppBar(
             title: t.collaborator.editProfile.addIcebreaker,
-            backgroundColor: LemonColor.atomicBlack,
           ),
           Padding(
             padding: EdgeInsets.all(Spacing.smMedium),
@@ -68,14 +67,12 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
                   width: double.infinity,
                   padding: EdgeInsets.all(Spacing.small),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(LemonRadius.medium),
+                    color: appColors.cardBg,
+                    borderRadius: BorderRadius.circular(LemonRadius.sm),
                   ),
                   child: Text(
                     widget.userIceBreakerQuestion?.title ?? '',
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
+                    style: appText.md,
                   ),
                 ),
                 SizedBox(height: Spacing.xSmall),
@@ -90,7 +87,7 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
                     textAlignVertical: TextAlignVertical.top,
                     expands: true,
                     autofocus: true,
-                    cursorColor: colorScheme.onSecondary,
+                    cursorColor: appColors.textTertiary,
                     decoration: InputDecoration(
                       hintText:
                           t.collaborator.editProfile.addPromptAnswerPlaceholder,
@@ -108,10 +105,10 @@ class CollaboratorAddIcebreakerAnswerBottomsheetState
           Container(
             padding: EdgeInsets.all(Spacing.smMedium),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.pageBg,
               border: Border(
                 top: BorderSide(
-                  color: colorScheme.outline,
+                  color: appColors.pageDivider,
                 ),
               ),
             ),

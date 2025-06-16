@@ -1,12 +1,12 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/widgets/spotlight_event_item.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,8 +21,9 @@ class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final events = user?.eventsExpanded ?? [];
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     if (events.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -32,7 +33,7 @@ class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          color: LemonColor.white06,
+          color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
@@ -64,10 +65,7 @@ class CollaboratorDiscoverSpotlightEventsSection extends StatelessWidget {
                     child: SizedBox(
                       child: Text(
                         t.collaborator.spotlightEvents,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: appText.md,
                       ),
                     ),
                   ),

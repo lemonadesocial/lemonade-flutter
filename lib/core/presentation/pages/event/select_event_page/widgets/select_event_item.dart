@@ -44,28 +44,29 @@ class SelectEventItem extends StatelessWidget {
             placeholder: ImagePlaceholder.eventCard(),
           ),
           SizedBox(width: Spacing.xSmall),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                event.title ?? '',
-                style: appText.md,
-              ),
-              SizedBox(height: 2.w),
-              Text(
-                DateFormatUtils.dateWithTimezone(
-                  dateTime: event.start ?? DateTime.now(),
-                  timezone: event.timezone ?? '',
-                  pattern: DateFormatUtils.fullDateFormat,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  event.title ?? '',
+                  style: appText.md,
                 ),
-                style: appText.sm.copyWith(
-                  color: appColors.textTertiary,
+                SizedBox(height: 2.w),
+                Text(
+                  DateFormatUtils.dateWithTimezone(
+                    dateTime: event.start ?? DateTime.now(),
+                    timezone: event.timezone ?? '',
+                    pattern: DateFormatUtils.fullDateFormat,
+                  ),
+                  style: appText.sm.copyWith(
+                    color: appColors.textTertiary,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const Spacer(),
           InkWell(
             onTap: () {},
             child: ThemeSvgIcon(

@@ -1,7 +1,7 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -17,7 +17,8 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Column(
@@ -29,12 +30,7 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
             children: [
               Text(
                 user?.name ?? '',
-                style: Typo.extraLarge.copyWith(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: colorScheme.onPrimary,
-                  fontFamily: FontFamily.clashDisplay,
-                ),
+                style: appText.xl,
               ),
               SizedBox(width: Spacing.smMedium / 2),
               if (user?.username != null)
@@ -77,7 +73,7 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
                   width: Sizing.medium / 2,
                   height: Sizing.medium / 2,
                   child: ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (colorFilter) => Assets.icons.icBriefcase.svg(
                       colorFilter: colorFilter,
                     ),
@@ -87,8 +83,8 @@ class CollaboratorDiscoverBasicInfoSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '${user?.jobTitle} ${user?.companyName?.isNotEmpty == true ? 'at ${user?.companyName}' : ''}',
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSecondary,
+                    style: appText.md.copyWith(
+                      color: appColors.textTertiary,
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/collaborator/discover_users_bloc/discover_user_bloc.dart';
 import 'package:app/core/data/user/dtos/user_service_offer_dto/user_service_offer_dto.dart';
@@ -17,7 +18,6 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -128,7 +128,8 @@ class _FilterViewState extends State<_FilterView> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final loggedInUser = context.read<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -136,7 +137,7 @@ class _FilterViewState extends State<_FilterView> {
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      color: colorScheme.secondaryContainer,
+      color: appColors.pageBg,
       child: Stack(
         children: [
           Column(
@@ -169,7 +170,7 @@ class _FilterViewState extends State<_FilterView> {
                       child: CollaboratorUserBottomsheetHeader(
                         user: loggedInUser,
                         icon: ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) {
                             return Assets.icons.icEdit.svg(
                               colorFilter: filter,
@@ -183,8 +184,9 @@ class _FilterViewState extends State<_FilterView> {
                     SizedBox(height: Spacing.smMedium),
                     Text(
                       t.collaborator.filter.whatAreYouLookingFor,
-                      style:
-                          Typo.medium.copyWith(color: colorScheme.onSecondary),
+                      style: appText.md.copyWith(
+                        color: appColors.textTertiary,
+                      ),
                     ),
                     SizedBox(height: Spacing.xSmall),
                     LemonTextField(
@@ -215,7 +217,7 @@ class _FilterViewState extends State<_FilterView> {
                             onTap: () => _removeOffering(serviceOfferId),
                             radius: BorderRadius.circular(LemonRadius.normal),
                             borderColor: Colors.transparent,
-                            backgroundColor: colorScheme.surface,
+                            backgroundColor: appColors.buttonTertiaryBg,
                             label: targetItem?.title ?? '',
                             trailing: Assets.icons.icClose.svg(
                               width: 12.w,
@@ -262,10 +264,7 @@ class _FilterViewState extends State<_FilterView> {
                               children: [
                                 Text(
                                   item.title ?? '',
-                                  style: Typo.mediumPlus.copyWith(
-                                    color: colorScheme.onPrimary,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                  style: appText.md,
                                 ),
                                 if (selected)
                                   Assets.icons.icChecked.svg(
@@ -294,10 +293,10 @@ class _FilterViewState extends State<_FilterView> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: colorScheme.outline,
+                    color: appColors.pageDivider,
                   ),
                 ),
-                color: colorScheme.secondaryContainer,
+                color: appColors.pageBg,
               ),
               child: SafeArea(
                 child: LinearGradientButton.primaryButton(
