@@ -1,12 +1,11 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/widgets/collaborator_icebreakers_bottomsheet/collaborator_icebreakers_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -21,6 +20,8 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final icebreakersCount = user?.icebreakers?.length ?? 0;
     final firstIcebreaker = user?.icebreakers?.firstOrNull;
 
@@ -28,7 +29,7 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Spacing.smMedium),
         decoration: ShapeDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
@@ -53,11 +54,7 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                 Expanded(
                   child: Text(
                     t.collaborator.iceBreakers,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                      height: 0,
-                    ),
+                    style: appText.md,
                   ),
                 ),
                 if (icebreakersCount > 1)
@@ -86,9 +83,8 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
                       ),
                       child: Text(
                         t.common.more(count: icebreakersCount - 1),
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
-                          fontWeight: FontWeight.w500,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ),
@@ -98,16 +94,14 @@ class CollaboratorDiscoverIcebreakersSection extends StatelessWidget {
             SizedBox(height: Spacing.smMedium),
             Text(
               firstIcebreaker?.questionExpanded?.title ?? '',
-              style: Typo.medium.copyWith(
-                color: colorScheme.onSecondary,
-                fontWeight: FontWeight.w400,
+              style: appText.md.copyWith(
+                color: appColors.textTertiary,
               ),
             ),
             SizedBox(height: Spacing.smMedium / 2),
             Text(
               firstIcebreaker?.value ?? '',
-              style: Typo.extraMedium.copyWith(
-                color: colorScheme.onPrimary,
+              style: appText.md.copyWith(
                 fontWeight: FontWeight.w600,
                 fontFamily: FontFamily.clashDisplay,
               ),

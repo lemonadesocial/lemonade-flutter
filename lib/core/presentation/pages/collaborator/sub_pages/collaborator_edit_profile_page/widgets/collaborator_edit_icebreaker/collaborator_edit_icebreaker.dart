@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_edit_profile_page/widgets/collaborator_edit_icebreaker/widgets/collaborator_select_icebreaker_prompt_bottomsheet.dart';
@@ -9,9 +10,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +24,8 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
           authenticated: (user) => user,
@@ -36,10 +36,7 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
         SliverToBoxAdapter(
           child: Text(
             t.collaborator.editProfile.icebreakers,
-            style: Typo.mediumPlus.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
         ),
         SliverToBoxAdapter(
@@ -47,7 +44,7 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: DottedBorder(
-            color: colorScheme.outline,
+            color: appColors.pageDivider,
             borderType: BorderType.RRect,
             dashPattern: [6.w, 6.w],
             strokeWidth: 2.w,
@@ -55,13 +52,13 @@ class CollaboratorEditIcebreakers extends StatelessWidget {
             child: LemonOutlineButton(
               onTap: () => showCupertinoModalBottomSheet(
                 context: context,
-                backgroundColor: LemonColor.atomicBlack,
+                backgroundColor: appColors.pageBg,
                 builder: (mContext) =>
                     const CollaboratorSelectIcebreakerPromptBottomsheet(),
               ),
               borderColor: Colors.transparent,
               leading: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icAdd.svg(
                   colorFilter: filter,
                 ),
@@ -130,11 +127,12 @@ class _IcebreakerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
       child: Column(
@@ -151,10 +149,7 @@ class _IcebreakerItem extends StatelessWidget {
                 flex: 5,
                 child: Text(
                   question,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: appText.md,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -168,8 +163,8 @@ class _IcebreakerItem extends StatelessWidget {
           SizedBox(height: Spacing.extraSmall),
           Text(
             answer,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.sm.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
         ],

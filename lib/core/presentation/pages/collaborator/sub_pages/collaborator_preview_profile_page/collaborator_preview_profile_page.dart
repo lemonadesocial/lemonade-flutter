@@ -2,10 +2,9 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/collaborator/collaborator_discover/widgets/collaborator_discover_view.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +16,8 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     return Scaffold(
       appBar: LemonAppBar(
         actions: [
@@ -34,7 +34,7 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     side: BorderSide(
                       width: 1,
-                      color: LemonColor.white09,
+                      color: appColors.pageDivider,
                     ),
                     borderRadius: BorderRadius.circular(LemonRadius.normal),
                   ),
@@ -46,9 +46,8 @@ class CollaboratorPreviewProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       t.collaborator.preview,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        fontWeight: FontWeight.w500,
+                      style: appText.sm.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],

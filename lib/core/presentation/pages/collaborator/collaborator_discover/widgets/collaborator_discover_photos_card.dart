@@ -1,6 +1,6 @@
 import 'package:app/core/presentation/widgets/common/photos_gallery_carousel/photos_gallery_carousel.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,11 @@ class CollaboratorDiscoverPhotosCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        color: LemonColor.white06,
+        color: appColors.cardBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),

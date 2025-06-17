@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -38,15 +39,15 @@ class _RemoveIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         width: Sizing.regular,
         height: Sizing.regular,
         decoration: BoxDecoration(
-          border: Border.all(color: colorScheme.outline),
-          color: colorScheme.surface,
+          border: Border.all(color: appColors.pageDivider),
+          color: appColors.cardBg,
           shape: BoxShape.circle,
         ),
         child: Center(

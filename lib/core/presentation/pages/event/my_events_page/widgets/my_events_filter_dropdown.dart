@@ -59,57 +59,75 @@ class _MyEventsFilterDropdownState extends State<MyEventsFilterDropdown> {
           padding: EdgeInsets.zero,
           child: StatefulBuilder(
             builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _FilterItem(
-                    title: t.event.allEvents,
-                    onTap: () {
-                      widget.onChanged(MyEventsFilter.all);
-                      setState(() {});
-                    },
-                    selected: widget.value == MyEventsFilter.all,
-                  ),
-                  Divider(
-                    height: Spacing.s1_5,
-                    thickness: Spacing.s1_5,
-                    color: appColors.pageDividerInverse.withOpacity(0.5),
-                  ),
-                  _FilterItem(
-                    title: t.event.hosting.capitalize(),
-                    onTap: () {
-                      widget.onChanged(MyEventsFilter.hosting);
-                      setState(() {});
-                    },
-                    selected: widget.value == MyEventsFilter.hosting,
-                  ),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: appColors.pageDivider,
-                  ),
-                  _FilterItem(
-                    title: t.event.attending.capitalize(),
-                    onTap: () {
-                      widget.onChanged(MyEventsFilter.attending);
-                      setState(() {});
-                    },
-                    selected: widget.value == MyEventsFilter.attending,
-                  ),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: appColors.pageDivider,
-                  ),
-                  _FilterItem(
-                    title: t.event.pending.capitalize(),
-                    onTap: () {
-                      widget.onChanged(MyEventsFilter.pending);
-                      setState(() {});
-                    },
-                    selected: widget.value == MyEventsFilter.pending,
-                  ),
-                ],
+              return Container(
+                decoration: BoxDecoration(
+                  color: appColors.pageBg,
+                  borderRadius: BorderRadius.circular(LemonRadius.sm),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(LemonRadius.sm),
+                        topRight: Radius.circular(LemonRadius.sm),
+                      ),
+                      child: _FilterItem(
+                        title: t.event.allEvents,
+                        onTap: () {
+                          widget.onChanged(MyEventsFilter.all);
+                          setState(() {});
+                        },
+                        selected: widget.value == MyEventsFilter.all,
+                      ),
+                    ),
+                    Divider(
+                      height: Spacing.s1_5,
+                      thickness: Spacing.s1_5,
+                      color: appColors.pageDividerInverse.withOpacity(0.5),
+                    ),
+                    _FilterItem(
+                      title: t.event.hosting.capitalize(),
+                      onTap: () {
+                        widget.onChanged(MyEventsFilter.hosting);
+                        setState(() {});
+                      },
+                      selected: widget.value == MyEventsFilter.hosting,
+                    ),
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: appColors.pageDivider,
+                    ),
+                    _FilterItem(
+                      title: t.event.attending.capitalize(),
+                      onTap: () {
+                        widget.onChanged(MyEventsFilter.attending);
+                        setState(() {});
+                      },
+                      selected: widget.value == MyEventsFilter.attending,
+                    ),
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: appColors.pageDivider,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(LemonRadius.sm),
+                        bottomRight: Radius.circular(LemonRadius.sm),
+                      ),
+                      child: _FilterItem(
+                        title: t.event.pending.capitalize(),
+                        onTap: () {
+                          widget.onChanged(MyEventsFilter.pending);
+                          setState(() {});
+                        },
+                        selected: widget.value == MyEventsFilter.pending,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -140,7 +158,7 @@ class _FilterItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: appColors.pageOverlaySecondary,
-          borderRadius: BorderRadius.circular(LemonRadius.sm),
+          // borderRadius: BorderRadius.circular(LemonRadius.sm),
         ),
         padding: EdgeInsets.symmetric(
           horizontal: Spacing.s3,

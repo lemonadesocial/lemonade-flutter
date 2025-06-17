@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/user_repository.dart';
@@ -14,9 +15,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +30,8 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
           orElse: () => null,
@@ -43,10 +43,7 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
         SliverToBoxAdapter(
           child: Text(
             StringUtils.capitalize(t.collaborator.editProfile.spotlightEvents),
-            style: Typo.mediumPlus.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
         ),
         SliverToBoxAdapter(
@@ -68,19 +65,19 @@ class CollaboratorEditSpotlightEvents extends StatelessWidget {
                   onTap: () => showCupertinoModalBottomSheet(
                     context: context,
                     expand: true,
-                    backgroundColor: LemonColor.atomicBlack,
+                    backgroundColor: appColors.pageBg,
                     builder: (mContext) =>
                         const CollaboratorAddSpotlightEventBottomSheet(),
                   ),
                   child: DottedBorder(
-                    color: colorScheme.outline,
+                    color: appColors.pageDivider,
                     borderType: BorderType.RRect,
                     dashPattern: [6.w, 6.w],
                     strokeWidth: 2.w,
                     radius: Radius.circular(LemonRadius.medium),
                     child: Center(
                       child: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icAdd.svg(
                           colorFilter: filter,
                         ),
@@ -126,13 +123,14 @@ class _SpotlightItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Container(
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1,
-            color: LemonColor.white09,
+            color: appColors.pageDivider,
           ),
           borderRadius: BorderRadius.circular(LemonRadius.medium),
         ),
@@ -150,7 +148,7 @@ class _SpotlightItem extends StatelessWidget {
                 file: event?.newNewPhotosExpanded?.firstOrNull,
                 imageConfig: ImageConfig.eventPhoto,
               ),
-              border: Border.all(color: colorScheme.outline),
+              border: Border.all(color: appColors.pageDivider),
               borderRadius: BorderRadius.circular(LemonRadius.medium),
               placeholder: ImagePlaceholder.eventCard(),
               fit: BoxFit.cover,
@@ -167,22 +165,20 @@ class _SpotlightItem extends StatelessWidget {
                   children: [
                     Text(
                       event?.title ?? '',
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                      style: appText.sm.copyWith(
+                        color: appColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2.w),
                     Text(
                       DateFormatUtils.dateWithTimezone(
                         dateTime: event?.start ?? DateTime.now(),
                         timezone: event?.timezone ?? '',
                         pattern: DateFormatUtils.dateOnlyFormat,
                       ),
-                      style: Typo.xSmall.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.xs.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
