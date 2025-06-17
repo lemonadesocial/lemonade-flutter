@@ -1,26 +1,19 @@
 import 'package:app/app_theme/app_theme.dart';
-import 'package:app/core/config.dart';
 import 'package:app/core/presentation/pages/auth/login_page.dart';
 import 'package:app/core/presentation/pages/home/views/home_view.dart';
-import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/lens_add_posts_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
@@ -106,36 +99,32 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: appColors.pageBg,
-      body: Stack(
-        children: [
-          const HomeView(),
-          Positioned(
-            right: Spacing.s4,
-            bottom: BottomBar.bottomBarHeight + Spacing.s14,
-            child: LensAddPostsButton(
-              lensFeedId: AppConfig.lemonadeGlobalFeed,
-              builder: (context, lensAuthState, onTapCreatePost) {
-                return FloatingActionButton(
-                  shape: const CircleBorder(),
-                  backgroundColor: appColors.buttonSecondaryBg,
-                  onPressed: () {
-                    onTapCreatePost(lensAuthState);
-                  },
-                  child: ThemeSvgIcon(
-                    color: appColors.buttonSecondary,
-                    builder: (filter) =>
-                        Assets.icons.icEditSquareOutlineSharp.svg(
-                      colorFilter: filter,
-                      width: Sizing.s6,
-                      height: Sizing.s6,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      body: const HomeView(),
+      // body: Positioned(
+      //   right: Spacing.s4,
+      //   bottom: BottomBar.bottomBarHeight + Spacing.s14,
+      //   child: LensAddPostsButton(
+      //     lensFeedId: AppConfig.lemonadeGlobalFeed,
+      //     builder: (context, lensAuthState, onTapCreatePost) {
+      //       return FloatingActionButton(
+      //         shape: const CircleBorder(),
+      //         backgroundColor: appColors.buttonSecondaryBg,
+      //         onPressed: () {
+      //           onTapCreatePost(lensAuthState);
+      //         },
+      //         child: ThemeSvgIcon(
+      //           color: appColors.buttonSecondary,
+      //           builder: (filter) =>
+      //               Assets.icons.icEditSquareOutlineSharp.svg(
+      //             colorFilter: filter,
+      //             width: Sizing.s6,
+      //             height: Sizing.s6,
+      //           ),
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // ),
     );
   }
 }
