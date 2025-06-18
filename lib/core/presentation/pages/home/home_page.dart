@@ -89,8 +89,8 @@ class _HomePageState extends State<HomePage> {
             SizedBox(width: Spacing.xSmall),
           ],
           if (isLoggedIn) ...[
-            // const HomeAppBarNotificationAction(),
-            // SizedBox(width: Spacing.s5),
+            const HomeAppBarNotificationAction(),
+            SizedBox(width: Spacing.s5),
             Padding(
               padding: EdgeInsets.only(right: Spacing.xSmall),
               child: const HomeAppBarDefaultMoreActionsWidget(),

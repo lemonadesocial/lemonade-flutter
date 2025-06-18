@@ -6,20 +6,20 @@ import 'package:app/core/domain/event/entities/event_story.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/sub_pages/guest_event_stories_page/widgets/event_story_item.dart';
 import 'package:app/core/presentation/pages/event/event_detail_page/guest_event_detail_page/sub_pages/guest_event_stories_page/widgets/guest_event_create_story_bottomsheet.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-// import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
+import 'package:app/core/presentation/widgets/common/dialog/lemon_alert_dialog.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-// import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_stories.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-// import 'package:app/injection/register_module.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-// import 'package:app/theme/typo.dart';
+import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -167,79 +167,78 @@ class _ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final t = Translations.of(context);
-    // final colorScheme = Theme.of(context).colorScheme;
-    // TODO: hide chat
-    // final matrixClient = getIt<MatrixService>().client;
-    // final chatRoom = matrixClient.getRoomById(event?.matrixEventRoomId ?? '');
+    final t = Translations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final matrixClient = getIt<MatrixService>().client;
+    final chatRoom = matrixClient.getRoomById(event?.matrixEventRoomId ?? '');
 
     return SliverToBoxAdapter(
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          // Flexible(
-          //   flex: 1,
-          //   child: InkWell(
-          //     onTap: () {
-          //       if (chatRoom == null) {
-          //         showDialog(
-          //           context: context,
-          //           builder: (context) => LemonAlertDialog(
-          //             child: Text(t.chat.roomNotExistDesc),
-          //           ),
-          //         );
-          //         return;
-          //       }
-          //       AutoRouter.of(context).navigate(
-          //         ChatRoute(roomId: event?.matrixEventRoomId ?? ''),
-          //       );
-          //     },
-          //     child: Container(
-          //       height: Sizing.xLarge,
-          //       decoration: BoxDecoration(
-          //         color: LemonColor.atomicBlack,
-          //         borderRadius: BorderRadius.circular(LemonRadius.small),
-          //       ),
-          //       padding: EdgeInsets.all(Spacing.xSmall),
-          //       child: Row(
-          //         mainAxisSize: MainAxisSize.max,
-          //         children: [
-          //           SizedBox(width: Spacing.extraSmall),
-          //           Assets.icons.icChatBubbleGradient.svg(),
-          //           SizedBox(width: Spacing.xSmall),
-          //           Flexible(
-          //             child: Column(
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               mainAxisSize: MainAxisSize.min,
-          //               children: [
-          //                 Text(
-          //                   t.event.dashboard.liveChat,
-          //                   style: Typo.medium.copyWith(
-          //                     color: colorScheme.onPrimary,
-          //                     fontWeight: FontWeight.w500,
-          //                   ),
-          //                 ),
-          //                 Text(
-          //                   chatRoom?.isUnread == true
-          //                       ? t.event.eventLounge.newMessages
-          //                       : t.event.eventLounge.liveChatDescription,
-          //                   style: Typo.small.copyWith(
-          //                     color: colorScheme.onSecondary,
-          //                     fontWeight: FontWeight.w500,
-          //                   ),
-          //                   maxLines: 1,
-          //                   overflow: TextOverflow.ellipsis,
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Flexible(
+            flex: 1,
+            child: InkWell(
+              onTap: () {
+                if (chatRoom == null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => LemonAlertDialog(
+                      child: Text(t.chat.roomNotExistDesc),
+                    ),
+                  );
+                  return;
+                }
+                AutoRouter.of(context).navigate(
+                  ChatRoute(roomId: event?.matrixEventRoomId ?? ''),
+                );
+              },
+              child: Container(
+                height: Sizing.xLarge,
+                decoration: BoxDecoration(
+                  color: LemonColor.atomicBlack,
+                  borderRadius: BorderRadius.circular(LemonRadius.small),
+                ),
+                padding: EdgeInsets.all(Spacing.xSmall),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SizedBox(width: Spacing.extraSmall),
+                    Assets.icons.icChatBubbleGradient.svg(),
+                    SizedBox(width: Spacing.xSmall),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            t.event.dashboard.liveChat,
+                            style: Typo.medium.copyWith(
+                              color: colorScheme.onPrimary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            chatRoom?.isUnread == true
+                                ? t.event.eventLounge.newMessages
+                                : t.event.eventLounge.liveChatDescription,
+                            style: Typo.small.copyWith(
+                              color: colorScheme.onSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           if (event?.guestDirectoryEnabled == true) ...[
-            // SizedBox(width: Spacing.xSmall),
+            SizedBox(width: Spacing.xSmall),
             InkWell(
               onTap: () {
                 AutoRouter.of(context)

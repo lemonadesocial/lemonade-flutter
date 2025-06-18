@@ -107,14 +107,14 @@ class _RootPageViewState extends State<RootPage> {
                       orElse: EmptyRoute.new,
                     ),
                     DiscoverRoute(),
-                    authState.maybeWhen(
-                      authenticated: (session) => const NotificationRoute(),
-                      orElse: EmptyRoute.new,
-                    ),
                     // authState.maybeWhen(
-                    //   authenticated: (session) => const ChatStackRoute(),
+                    //   authenticated: (session) => const NotificationRoute(),
                     //   orElse: EmptyRoute.new,
                     // ),
+                    authState.maybeWhen(
+                      authenticated: (session) => const ChatStackRoute(),
+                      orElse: EmptyRoute.new,
+                    ),
                   ],
                   drawer: authState.maybeWhen(
                     authenticated: (session) => const LemonDrawer(),

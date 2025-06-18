@@ -3,17 +3,17 @@ import 'package:app/core/application/profile/user_follows_bloc/user_follows_bloc
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
-// import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
+import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-// import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-// import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/core/utils/image_utils.dart';
-// import 'package:app/core/utils/matrix_utils.dart';
+import 'package:app/core/utils/matrix_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
-// import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -169,59 +169,58 @@ class _EventHostItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _FollowButton(host: host),
-                    // TODO: hide chat
-                    // SizedBox(width: Spacing.superExtraSmall),
-                    // InkWell(
-                    //   onTap: () async {
-                    //     final response = await showFutureLoadingDialog(
-                    //       context: context,
-                    //       future: () async {
-                    //         return getIt<MatrixService>()
-                    //             .client
-                    //             .startDirectChat(
-                    //               LemonadeMatrixUtils.generateMatrixUserId(
-                    //                 lemonadeMatrixLocalpart:
-                    //                     host?.matrixLocalpart ?? '',
-                    //               ),
-                    //             );
-                    //       },
-                    //     );
-                    //     if (response.result?.isNotEmpty == true) {
-                    //       AutoRouter.of(context).push(
-                    //         ChatRoute(
-                    //           roomId: response.result!,
-                    //         ),
-                    //       );
-                    //     }
-                    //   },
-                    //   child: Container(
-                    //     width: Sizing.medium,
-                    //     height: Sizing.medium,
-                    //     padding: EdgeInsets.symmetric(
-                    //       horizontal: Spacing.superExtraSmall,
-                    //     ),
-                    //     decoration: BoxDecoration(
-                    //       color: appColors.cardBg,
-                    //       borderRadius: BorderRadius.circular(
-                    //         Sizing.medium,
-                    //       ),
-                    //       border: Border.all(
-                    //         color: appColors.cardBorder,
-                    //         width: 0.5.w,
-                    //       ),
-                    //     ),
-                    //     child: Center(
-                    //       child: ThemeSvgIcon(
-                    //         color: appColors.textTertiary,
-                    //         builder: (filter) => Assets.icons.icChatBubble.svg(
-                    //           colorFilter: filter,
-                    //           width: Sizing.xSmall,
-                    //           height: Sizing.xSmall,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    SizedBox(width: Spacing.superExtraSmall),
+                    InkWell(
+                      onTap: () async {
+                        final response = await showFutureLoadingDialog(
+                          context: context,
+                          future: () async {
+                            return getIt<MatrixService>()
+                                .client
+                                .startDirectChat(
+                                  LemonadeMatrixUtils.generateMatrixUserId(
+                                    lemonadeMatrixLocalpart:
+                                        host?.matrixLocalpart ?? '',
+                                  ),
+                                );
+                          },
+                        );
+                        if (response.result?.isNotEmpty == true) {
+                          AutoRouter.of(context).push(
+                            ChatRoute(
+                              roomId: response.result!,
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: Sizing.medium,
+                        height: Sizing.medium,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Spacing.superExtraSmall,
+                        ),
+                        decoration: BoxDecoration(
+                          color: appColors.cardBg,
+                          borderRadius: BorderRadius.circular(
+                            Sizing.medium,
+                          ),
+                          border: Border.all(
+                            color: appColors.cardBorder,
+                            width: 0.5.w,
+                          ),
+                        ),
+                        child: Center(
+                          child: ThemeSvgIcon(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icChatBubble.svg(
+                              colorFilter: filter,
+                              width: Sizing.xSmall,
+                              height: Sizing.xSmall,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
