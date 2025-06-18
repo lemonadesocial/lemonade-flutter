@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.6.0...v2.6.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* revert hide chat ([#986](https://github.com/lemonadesocial/lemonade-flutter/issues/986)) ([0704778](https://github.com/lemonadesocial/lemonade-flutter/commit/070477837b64210e0ae76640fd4b25df784dcdfe))
+* update create post button ([#985](https://github.com/lemonadesocial/lemonade-flutter/issues/985)) ([dfbea70](https://github.com/lemonadesocial/lemonade-flutter/commit/dfbea707e800fbc05eda1b4cb510d5660f0bfa1c))
+
 ## [2.6.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.5.0...v2.6.0) (2025-06-12)
 
 
