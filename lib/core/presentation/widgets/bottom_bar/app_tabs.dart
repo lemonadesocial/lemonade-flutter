@@ -4,8 +4,8 @@ enum AppTab {
   home,
   spaces,
   discover,
-  notification,
-  // chat,
+  chat,
+  // notification,
 }
 
 class TabData {
@@ -36,15 +36,15 @@ final List<TabData> tabs = [
     Assets.icons.icDiscoverFilled,
   ),
   TabData(
-    AppTab.notification,
-    '/notification',
-    Assets.icons.icNotification,
-    Assets.icons.icNotificationSharpFilled,
+    AppTab.chat,
+    '/chat',
+    Assets.icons.icChatBubbleOutlineSharp,
+    Assets.icons.icChatBubbleOutlineSharpFilled,
   ),
   // TabData(
-  //   AppTab.chat,
-  //   '/chat',
-  //   Assets.icons.icChatBubbleOutlineSharp,
-  //   Assets.icons.icChatBubbleOutlineSharpFilled,
+  //   AppTab.notification,
+  //   '/notification',
+  //   Assets.icons.icNotification,
+  //   Assets.icons.icNotificationSharpFilled,
   // ),
 ];

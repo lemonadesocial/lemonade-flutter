@@ -2,7 +2,7 @@ import 'package:app/app.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
-// import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/service/matrix/matrix_service.dart';
 import 'package:app/setup_sentry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ void main() async {
   if (!kDebugMode) {
     await getIt<FirebaseService>().initialize();
   }
-  // await getIt<MatrixService>().init();
+  await getIt<MatrixService>().init();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   CrashAnalyticsManager().initialize(CrashAnalyticsProvider.sentry);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

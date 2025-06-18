@@ -35,25 +35,25 @@ class AppRouter extends $AppRouter {
               page: HomeSpaceListingRoute.page,
             ),
             AutoRoute(
-              path: 'notification',
-              page: NotificationRoute.page,
+              page: ChatStackRoute.page,
+              path: 'chat',
+              children: [
+                AutoRoute(
+                  initial: true,
+                  path: 'list',
+                  page: ChatListRoute.page,
+                ),
+              ],
             ),
-            // AutoRoute(
-            //   page: ChatStackRoute.page,
-            //   path: 'chat',
-            //   children: [
-            //     AutoRoute(
-            //       initial: true,
-            //       path: 'list',
-            //       page: ChatListRoute.page,
-            //     ),
-            //   ],
-            // ),
             AutoRoute(
               path: '404',
               page: EmptyRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/notification',
+          page: NotificationRoute.page,
         ),
         AutoRoute(
           path: '/claim-token-reward',

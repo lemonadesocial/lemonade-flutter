@@ -11,9 +11,9 @@ import 'package:app/core/presentation/pages/event/widgets/event_time_filter_butt
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_chip_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-// import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/event/event_service.dart';
-// import 'package:app/gen/assets.gen.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -21,7 +21,7 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 
 @RoutePage()
 class EventsListingPage extends StatelessWidget {
@@ -152,24 +152,23 @@ class _EventsListingViewState extends State<_EventsListingView> {
       backgroundColor: colorScheme.primary,
       appBar: LemonAppBar(
         title: t.event.events,
-        // TODO: hide chat
-        // actions: [
-        //   Padding(
-        //     padding: EdgeInsets.only(right: Spacing.xSmall),
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         Vibrate.feedback(FeedbackType.light);
-        //         AutoRouter.of(context).navigateNamed('/chat');
-        //       },
-        //       child: ThemeSvgIcon(
-        //         color: colorScheme.onPrimary,
-        //         builder: (filter) => Assets.icons.icChatBubble.svg(
-        //           colorFilter: filter,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: Spacing.xSmall),
+            child: GestureDetector(
+              onTap: () {
+                Vibrate.feedback(FeedbackType.light);
+                AutoRouter.of(context).navigateNamed('/chat');
+              },
+              child: ThemeSvgIcon(
+                color: colorScheme.onPrimary,
+                builder: (filter) => Assets.icons.icChatBubble.svg(
+                  colorFilter: filter,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.small),

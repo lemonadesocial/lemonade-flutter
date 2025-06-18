@@ -93,21 +93,20 @@ class _CollaboratorDiscoverPageState extends State<CollaboratorDiscoverPage> {
                   ),
                 ),
               ),
-              // TODO: hide chat
-              // Padding(
-              //   padding: EdgeInsets.only(right: Spacing.smMedium),
-              //   child: InkWell(
-              //     onTap: () {
-              //       AutoRouter.of(context).push(const CollaboratorChatRoute());
-              //     },
-              //     child: ThemeSvgIcon(
-              //       color: colorScheme.onPrimary,
-              //       builder: (filter) => Assets.icons.icChatBubble.svg(
-              //         colorFilter: filter,
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: EdgeInsets.only(right: Spacing.smMedium),
+                child: InkWell(
+                  onTap: () {
+                    AutoRouter.of(context).push(const CollaboratorChatRoute());
+                  },
+                  child: ThemeSvgIcon(
+                    color: colorScheme.onPrimary,
+                    builder: (filter) => Assets.icons.icChatBubble.svg(
+                      colorFilter: filter,
+                    ),
+                  ),
+                ),
+              ),
               const _MoreAction(),
             ],
           ),
