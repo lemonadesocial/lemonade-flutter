@@ -5,6 +5,7 @@ import 'package:app/core/domain/lens/entities/lens_namespace_rules.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/graphql/lens/namespace/query/get_lens_namespace.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
@@ -238,6 +239,27 @@ class LensUtils {
               ]
             : null,
       ),
+    );
+  }
+
+  static Chain get lensMainnet {
+    return Chain(
+      chainId: '232',
+      fullChainId: 'eip155:232',
+      explorerUrl: "https://explorer.lens.xyz",
+      name: 'Lens Chain Mainnet',
+      rpcUrl: 'https://rpc.lens.xyz',
+      logoUrl: 'https://lens.xyz/logo.png',
+    );
+  }
+
+  static Chain get lensTestnet {
+    return Chain(
+      chainId: '371111',
+      fullChainId: 'eip155:371111',
+      explorerUrl: "https://explorer.lens.xyz",
+      rpcUrl: 'https://rpc.testnet.lens.xyz',
+      name: 'Lens Chain Testnet',
     );
   }
 }

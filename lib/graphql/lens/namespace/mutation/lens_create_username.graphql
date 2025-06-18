@@ -2,11 +2,15 @@ mutation LensCreateUsername($request: CreateUsernameRequest!) {
   createUsername(request: $request) {
     ... on CreateUsernameResponse {
       hash
+      __typename
     }
+
     ... on UsernameTaken {
       ownedBy
       reason
+      __typename
     }
+
     ... on NamespaceOperationValidationFailed {
       unsatisfiedRules {
         required {
@@ -16,8 +20,12 @@ mutation LensCreateUsername($request: CreateUsernameRequest!) {
         }
       }
       reason
+      __typename
     }
+
     ... on SponsoredTransactionRequest {
+      reason
+      sponsoredReason
       raw {
         type
         to
@@ -29,10 +37,19 @@ mutation LensCreateUsername($request: CreateUsernameRequest!) {
         data
         value
         chainId
+        customData {
+          gasPerPubdata
+          factoryDeps
+          customSignature
+          paymasterParams {
+            paymaster
+            paymasterInput
+          }
+        }
       }
-      reason
-      sponsoredReason
+      __typename
     }
+
     ... on SelfFundedTransactionRequest {
       reason
       selfFundedReason
@@ -48,9 +65,12 @@ mutation LensCreateUsername($request: CreateUsernameRequest!) {
         value
         chainId
       }
+      __typename
     }
+
     ... on TransactionWillFail {
       reason
+      __typename
     }
   }
 }

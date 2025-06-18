@@ -1,4 +1,3 @@
-import 'package:app/core/config.dart';
 import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
@@ -74,7 +73,6 @@ class CreateLensAccountBloc
           request: Input$CreateAccountWithUsernameRequest(
             username: Input$UsernameInput(
               localName: lensUsername,
-              namespace: AppConfig.lensNamespace,
             ),
             metadataUri: uploadResult['uri'] ?? '',
           ),

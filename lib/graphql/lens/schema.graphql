@@ -4560,6 +4560,8 @@ input NamespaceRulesProcessingParams {
 }
 
 type NamespaceUnsatisfiedRule {
+  id: RuleId!
+  type: NamespaceRuleType!
   rule: EvmAddress!
   reason: NamespaceRuleUnsatisfiedReason!
   message: String!

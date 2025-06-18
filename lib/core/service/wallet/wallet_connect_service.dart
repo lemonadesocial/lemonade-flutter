@@ -1,8 +1,10 @@
 // ignore_for_file: unused_element
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
 import 'package:app/core/domain/web3/entities/ethereum_transaction.dart';
 import 'package:app/core/domain/web3/web3_repository.dart';
+import 'package:app/core/utils/lens_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -41,14 +43,17 @@ class WalletConnectService {
     // add our backend supported chains to reown appkit
     ReownAppKitModalNetworks.addSupportedNetworks(
       'eip155',
-      chains
+      [
+        AppConfig.isProduction ? LensUtils.lensMainnet : LensUtils.lensTestnet,
+        ...chains,
+      ]
           .map(
             (chain) => ReownAppKitModalNetworkInfo(
               name: chain.name ?? '',
               chainId: chain.chainId ?? '',
               currency: chain.nativeToken?.symbol ?? '',
               rpcUrl: chain.rpcUrl ?? '',
-              explorerUrl: chain.rpcUrl ?? '',
+              explorerUrl: chain.explorerUrl ?? '',
               isTestNetwork: !AppConfig.isProduction,
             ),
           )
@@ -182,13 +187,20 @@ class WalletConnectService {
     if (_w3mService.session == null) {
       return;
     }
-    final chain = (await getIt<Web3Repository>().getChainByFullChainId(
-      fullChainId: chainId,
-    ))
-        .fold(
-      (failure) => null,
-      (chain) => chain,
-    );
+    Chain? chain;
+    if (chainId == LensUtils.lensMainnet.fullChainId) {
+      chain = LensUtils.lensMainnet;
+    } else if (chainId == LensUtils.lensTestnet.fullChainId) {
+      chain = LensUtils.lensTestnet;
+    } else {
+      chain = (await getIt<Web3Repository>().getChainByFullChainId(
+        fullChainId: chainId,
+      ))
+          .fold(
+        (failure) => null,
+        (chain) => chain,
+      );
+    }
 
     if (chain == null) {
       return;

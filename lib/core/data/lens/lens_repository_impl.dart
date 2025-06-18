@@ -398,7 +398,7 @@ class LensRepositoryImpl implements LensRepository {
           LensCreateUsernameResult.selfFundedTransactionRequest(
         reason: data.reason,
         selfFundedReason: data.selfFundedReason,
-        eip712TransactionRequest: Eip712TransactionRequest.fromJson(
+        raw: Eip712TransactionRequest.fromJson(
           data.raw.toJson(),
         ),
       ),

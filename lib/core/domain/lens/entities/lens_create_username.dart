@@ -25,10 +25,10 @@ sealed class LensCreateUsernameResult with _$LensCreateUsernameResult {
 
   @JsonSerializable(explicitToJson: true)
   const factory LensCreateUsernameResult.selfFundedTransactionRequest({
-    required String reason,
+    String? reason,
     Enum$SelfFundedFallbackReason? selfFundedReason,
-    Eip712TransactionRequest? eip712TransactionRequest,
-  }) = SelfFundedTransactionRequest;
+    Eip712TransactionRequest? raw,
+  }) = LensSelfFundedTransactionRequest;
 
   @JsonSerializable(explicitToJson: true)
   const factory LensCreateUsernameResult.sponsoredTransactionRequest({
