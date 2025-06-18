@@ -1,8 +1,7 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
@@ -23,7 +22,8 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return InkWell(
       onTap: () {
         Vibrate.feedback(FeedbackType.light);
@@ -32,7 +32,7 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         ),
         child: Row(
@@ -44,17 +44,14 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: appText.md,
                   ),
                   SizedBox(height: 2.w),
                   description != ''
                       ? Text(
                           description,
-                          style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                          style: appText.sm.copyWith(
+                            color: appColors.textTertiary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -66,7 +63,7 @@ class CollaboratorProfileFieldCard extends StatelessWidget {
             SizedBox(width: Spacing.xSmall),
             hideArrowButton == false
                 ? ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => Assets.icons.icArrowRight.svg(
                       colorFilter: filter,
                     ),

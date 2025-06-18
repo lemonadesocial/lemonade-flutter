@@ -1,5 +1,6 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -113,11 +114,12 @@ class _Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
-      padding: EdgeInsets.all(Spacing.smMedium),
+      padding: EdgeInsets.all(Spacing.s4),
       clipBehavior: Clip.antiAlias,
       decoration: ShapeDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),

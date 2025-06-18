@@ -1,3 +1,4 @@
+import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post_metadata.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
@@ -24,6 +25,7 @@ class CreateLensPostEvent with _$CreateLensPostEvent {
     required String content,
     String? lensFeedId,
     LensMediaImageMetadata? image,
+    Event? event,
   }) = _CreatePost;
 }
 
@@ -56,21 +58,36 @@ class CreateLensPostBloc
   }
 
   // ignore: library_private_types_in_public_api
-  (String, LensCreatePostMetadata) prepareMetadata(_CreatePost event) {
+  (String, LensCreatePostMetadata) prepareMetadata(_CreatePost blocEvent) {
     String schema = LensConstants
         .lensJsonSchemaByPostContent[Enum$MainContentFocus.TEXT_ONLY]!;
     LensCreatePostMetadata metadata = LensCreatePostMetadata.textOnly(
       id: const Uuid().v4(),
-      content: event.content,
+      content: blocEvent.content,
     );
 
-    if (event.image != null) {
+    if (blocEvent.image != null) {
       schema = LensConstants
           .lensJsonSchemaByPostContent[Enum$MainContentFocus.IMAGE]!;
       metadata = LensCreatePostMetadata.image(
         id: const Uuid().v4(),
-        content: event.content,
-        image: event.image!,
+        content: blocEvent.content,
+        image: blocEvent.image!,
+      );
+    }
+
+    if (blocEvent.event != null) {
+      schema = LensConstants
+          .lensJsonSchemaByPostContent[Enum$MainContentFocus.EVENT]!;
+      metadata = LensCreatePostMetadata.event(
+        id: const Uuid().v4(),
+        startsAt: blocEvent.event!.start?.toUtc() ?? DateTime.now().toUtc(),
+        endsAt: blocEvent.event!.end?.toUtc() ?? DateTime.now().toUtc(),
+        content: blocEvent.content,
+        location: blocEvent.event!.virtualUrl?.isNotEmpty == true
+            ? blocEvent.event!.virtualUrl!
+            : blocEvent.event!.address?.title ?? 'Event address',
+        links: blocEvent.event!.url != null ? [blocEvent.event!.url!] : null,
       );
     }
 

@@ -2,11 +2,10 @@ import 'package:app/core/domain/collaborator/entities/user_expertise/user_expert
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/entities/user_service_offer.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
@@ -21,6 +20,7 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     final sections = [
       if (user?.expertiseExpanded?.isNotEmpty == true)
         _Expertise(
@@ -34,7 +34,7 @@ class CollaboratorDiscoverExpertiseOfferingCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: ShapeDecoration(
-        color: backgroundColor ?? LemonColor.white06,
+        color: backgroundColor ?? appColors.cardBg,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(LemonRadius.normal),
         ),
@@ -71,7 +71,8 @@ class _Offering extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -79,17 +80,13 @@ class _Offering extends StatelessWidget {
       children: [
         Text(
           t.collaborator.offering,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: appText.md,
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
           serviceOffers.map((item) => item.title).join(' , '),
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
-            fontWeight: FontWeight.w400,
+          style: appText.md.copyWith(
+            color: appColors.textTertiary,
           ),
         ),
       ],
@@ -106,7 +103,8 @@ class _Expertise extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,17 +112,13 @@ class _Expertise extends StatelessWidget {
       children: [
         Text(
           t.collaborator.expertise,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: appText.md,
         ),
         SizedBox(height: Spacing.superExtraSmall),
         Text(
           expertises.map((item) => item.title ?? '').join(', '),
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
-            fontWeight: FontWeight.w400,
+          style: appText.md.copyWith(
+            color: appColors.textTertiary,
           ),
         ),
       ],

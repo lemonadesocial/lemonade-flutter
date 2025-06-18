@@ -1,3 +1,4 @@
+import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_grabber.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -10,6 +11,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_add_posts_button/lens_add_posts_button.dart';
 
 class HomeQuickCreateBottomSheet extends StatelessWidget {
   const HomeQuickCreateBottomSheet({super.key});
@@ -45,15 +47,21 @@ class HomeQuickCreateBottomSheet extends StatelessWidget {
                 SizedBox(height: Spacing.medium),
                 Row(
                   children: [
-                    Expanded(
-                      child: _Item(
-                        icon: Assets.icons.icPencil.svg(),
-                        title: t.home.quickCreate.post,
-                        subTitle: t.home.quickCreate.postDesc,
-                        onTap: () {
-                          AutoRouter.of(context).push(const CreatePostRoute());
-                        },
-                      ),
+                    LensAddPostsButton(
+                      lensFeedId: AppConfig.lemonadeGlobalFeed,
+                      builder: (context, lensAuthState, onTapCreatePost) {
+                        return Expanded(
+                          child: _Item(
+                            icon: Assets.icons.icPencil.svg(),
+                            title: t.home.quickCreate.post,
+                            subTitle: t.home.quickCreate.postDesc,
+                            onTap: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              onTapCreatePost(lensAuthState);
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: Spacing.xSmall),
                     Expanded(

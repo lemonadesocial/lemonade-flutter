@@ -1,5 +1,49 @@
 #import "../../account/fragment/lens_account.graphql"
 
+fragment PhysicalAddress on PhysicalAddress {
+  country
+  formatted
+  locality
+  postalCode
+  region
+  streetAddress
+}
+
+fragment MediaAudio on MediaAudio {
+  artist
+  cover
+  credits
+  duration
+  genre
+  item
+  kind
+  license
+  lyrics
+  recordLabel
+  type
+  __typename
+}
+
+fragment MediaVideo on MediaVideo {
+  altTag
+  cover
+  duration
+  item
+  license
+  type
+  __typename
+}
+
+fragment MediaImage on MediaImage {
+  altTag
+  item
+  license
+  type
+  width
+  height
+  __typename
+}
+
 fragment LensPost on Post {
   id
   slug
@@ -60,21 +104,47 @@ fragment LensPost on Post {
       mainContentFocus
       contentWarning
       image {
-        item
-        width
-        height
-        type
-        altTag
+        ...MediaImage
+      }
+      attachments {
+        ... on MediaImage {
+          ...MediaImage
+        }
+        ... on MediaVideo {
+          ...MediaVideo
+        }
+        ... on MediaAudio {
+          ...MediaAudio
+        }
       }
       __typename
     }
     ... on EventMetadata {
-      title
       id
+      title
       content
       links
+      location {
+        virtual
+        physical
+      }
+      address {
+        ...PhysicalAddress
+      }
+      tags
       position
       mainContentFocus
+      attachments {
+        ... on MediaImage {
+          ...MediaImage
+        }
+        ... on MediaVideo {
+          ...MediaVideo
+        }
+        ... on MediaAudio {
+          ...MediaAudio
+        }
+      }
       __typename
     }
     ... on TextOnlyMetadata {
@@ -85,6 +155,26 @@ fragment LensPost on Post {
       contentWarning
       __typename
     }
+    ... on LinkMetadata {
+      id
+      content
+      mainContentFocus
+      sharingLink
+      tags
+      attachments {
+        ... on MediaImage {
+          ...MediaImage
+        }
+        ... on MediaVideo {
+          ...MediaVideo
+        }
+        ... on MediaAudio {
+          ...MediaAudio
+        }
+      }
+      __typename
+    }
+    __typename
   }
   operations {
     hasReacted(request: { type: UPVOTE })

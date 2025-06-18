@@ -1,3 +1,4 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -7,10 +8,8 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +27,7 @@ class CollaboratorEditSocialConnect extends StatelessWidget {
     final isConnectedFarCaster = user?.handleFarcaster?.isNotEmpty == true;
     final isConnectedTwitter = user?.handleTwitter?.isNotEmpty == true;
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return SliverToBoxAdapter(
       child: Column(
         children: [
@@ -36,7 +35,7 @@ class CollaboratorEditSocialConnect extends StatelessWidget {
             socialTitle: t.profile.socials.farcaster,
             socialValue: user?.handleFarcaster ?? '',
             socialIcon: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icFarcaster.svg(
                 colorFilter: filter,
               ),
@@ -51,7 +50,7 @@ class CollaboratorEditSocialConnect extends StatelessWidget {
             socialTitle: t.profile.socials.twitter,
             socialValue: user?.handleTwitter ?? '',
             socialIcon: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icXLine.svg(
                 colorFilter: filter,
               ),
@@ -88,9 +87,10 @@ class _SocialItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     final lineColor =
-        isConnected == true ? LemonColor.snackBarSuccess : LemonColor.coralReef;
+        isConnected == true ? appColors.textSuccess : appColors.textError;
     final connectInfo = isConnected == true
         ? '${t.common.status.connected} : $socialValue'
         : t.common.status.notConnected;
@@ -112,7 +112,7 @@ class _SocialItem extends StatelessWidget {
           bottomLeft: Radius.circular(bottomRadius),
           bottomRight: Radius.circular(bottomRadius),
         ),
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
       ),
       child: Row(
         children: [
@@ -121,7 +121,7 @@ class _SocialItem extends StatelessWidget {
             height: Sizing.medium,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colorScheme.secondaryContainer,
+              color: appColors.cardBg,
             ),
             child: Center(
               child: socialIcon,
@@ -134,11 +134,7 @@ class _SocialItem extends StatelessWidget {
               children: [
                 Text(
                   socialTitle,
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                    height: 0,
-                  ),
+                  style: appText.md,
                 ),
                 SizedBox(height: 2.w),
                 Row(
@@ -156,9 +152,8 @@ class _SocialItem extends StatelessWidget {
                     SizedBox(width: 5.w),
                     Text(
                       connectInfo,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
-                        height: 0,
+                      style: appText.sm.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -170,15 +165,12 @@ class _SocialItem extends StatelessWidget {
               ? LinearGradientButton.secondaryButton(
                   height: Sizing.medium,
                   label: t.common.actions.connect.capitalize(),
-                  textStyle: Typo.small.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
                   onTap: () {
                     if (user == null) {
                       return;
                     }
                     showCupertinoModalBottomSheet(
-                      backgroundColor: LemonColor.atomicBlack,
+                      backgroundColor: appColors.pageBg,
                       context: context,
                       builder: (innerContext) => MultiBlocProvider(
                         providers: [
