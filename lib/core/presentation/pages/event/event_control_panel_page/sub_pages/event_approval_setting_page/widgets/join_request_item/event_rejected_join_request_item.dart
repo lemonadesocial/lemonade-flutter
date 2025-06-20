@@ -1,6 +1,7 @@
 import 'package:app/core/application/event/get_event_detail_bloc/get_event_detail_bloc.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
@@ -19,7 +20,7 @@ class EventRejectedJoinRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final event = context.read<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => null,
           fetched: (event) => event,
@@ -40,7 +41,7 @@ class EventRejectedJoinRequestItem extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Spacing.small),
             decoration: BoxDecoration(
-              color: colorScheme.onPrimary.withOpacity(0.06),
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(
                 LemonRadius.extraSmall,
               ),

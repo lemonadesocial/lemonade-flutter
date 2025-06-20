@@ -9,15 +9,14 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/graphql/backend/applicant/query/get_applicants_info.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventJoinRequestApplicationPage extends StatelessWidget {
   final EventJoinRequest eventJoinRequest;
@@ -58,11 +57,11 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Scaffold(
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       appBar: LemonAppBar(
-        backgroundColor: LemonColor.atomicBlack,
+        backgroundColor: appColors.pageBg,
         title: t.event.eventApproval.application,
       ),
       body: FutureBuilder(
@@ -97,7 +96,6 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
               ),
               if (isPending)
                 _ActionsBar(
-                  colorScheme: colorScheme,
                   onPressDecline: () async {
                     await onPressDecline?.call();
                   },
@@ -115,17 +113,16 @@ class EventJoinRequestApplicationPage extends StatelessWidget {
 
 class _ActionsBar extends StatelessWidget {
   const _ActionsBar({
-    required this.colorScheme,
     required this.onPressDecline,
     required this.onPressApprove,
   });
 
-  final ColorScheme colorScheme;
   final Function()? onPressDecline;
   final Function()? onPressApprove;
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -133,7 +130,7 @@ class _ActionsBar extends StatelessWidget {
           color: LemonColor.atomicBlack,
           border: Border(
             top: BorderSide(
-              color: colorScheme.outline,
+              color: appColors.pageDivider,
             ),
           ),
         ),
@@ -145,18 +142,11 @@ class _ActionsBar extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: LinearGradientButton(
+                child: LinearGradientButton.secondaryButton(
                   onTap: () => onPressDecline?.call(),
-                  radius: BorderRadius.circular(LemonRadius.small * 2),
-                  height: Sizing.large,
                   label: t.common.actions.decline,
-                  textStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.clashDisplay,
-                  ),
                   leading: ThemeSvgIcon(
-                    color: LemonColor.errorRedBg,
+                    color: appColors.textError,
                     builder: (filter) => Assets.icons.icClose.svg(
                       colorFilter: filter,
                       width: Sizing.xSmall,
@@ -167,18 +157,11 @@ class _ActionsBar extends StatelessWidget {
               ),
               SizedBox(width: Spacing.xSmall),
               Expanded(
-                child: LinearGradientButton(
+                child: LinearGradientButton.primaryButton(
                   onTap: () => onPressApprove?.call(),
-                  radius: BorderRadius.circular(LemonRadius.small * 2),
-                  height: Sizing.large,
                   label: t.common.actions.accept,
-                  textStyle: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.clashDisplay,
-                  ),
                   leading: ThemeSvgIcon(
-                    color: LemonColor.paleViolet,
+                    color: appColors.textPrimary,
                     builder: (filter) => Assets.icons.icDone.svg(
                       colorFilter: filter,
                       width: Sizing.xSmall,

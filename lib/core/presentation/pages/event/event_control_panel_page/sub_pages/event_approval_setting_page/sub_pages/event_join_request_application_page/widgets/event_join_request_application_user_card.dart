@@ -14,6 +14,7 @@ import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventJoinRequestApplicationUserCard extends StatelessWidget {
   final EventJoinRequest eventJoinRequest;
@@ -28,53 +29,44 @@ class EventJoinRequestApplicationUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final verifiedEthereumAddresses = userInfo?.walletsNew?['ethereum'];
     final verifiedAddress = verifiedEthereumAddresses?.firstWhereOrNull(
           (element) => element != userInfo?.walletCustodial,
         ) ??
         '';
+    final appColors = context.theme.appColors;
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
-        color: colorScheme.onPrimary.withOpacity(0.03),
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
-      child: Column(
+      child: Stack(
         children: [
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: JoinRequestUserAvatar(
-                    direction: Axis.vertical,
-                    eventJoinRequest: eventJoinRequest,
-                    avatarSize: Sizing.large,
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    _Social(
-                      userInfo: userInfo,
-                    ),
-                  ],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              JoinRequestUserAvatar(
+                direction: Axis.vertical,
+                eventJoinRequest: eventJoinRequest,
+                avatarSize: Sizing.large,
+              ),
+              if (verifiedAddress.isNotEmpty == true) ...[
+                SizedBox(height: Spacing.medium),
+                _VerifiedWallet(
+                  label: t.event.rsvpWeb3Indetity.ethAddress,
+                  address: verifiedAddress,
                 ),
               ],
+            ],
+          ),
+          Positioned(
+            right: 0,
+            child: _Social(
+              userInfo: userInfo,
             ),
           ),
-          if (verifiedAddress.isNotEmpty == true) ...[
-            SizedBox(height: Spacing.medium),
-            _VerifiedWallet(
-              label: t.event.rsvpWeb3Indetity.ethAddress,
-              address: verifiedAddress,
-            ),
-          ],
         ],
       ),
     );
@@ -155,7 +147,7 @@ class _Social extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return SizedBox(
       height: Sizing.medium,
       child: Row(
@@ -182,12 +174,12 @@ class _Social extends StatelessWidget {
               height: Sizing.medium,
               margin: EdgeInsets.only(left: Spacing.xSmall),
               decoration: BoxDecoration(
-                color: LemonColor.darkBackground,
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(Sizing.medium),
               ),
               child: Center(
                 child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => _socialIconsSvg[entry.key].svg(
                     colorFilter: filter,
                     width: Sizing.xSmall,

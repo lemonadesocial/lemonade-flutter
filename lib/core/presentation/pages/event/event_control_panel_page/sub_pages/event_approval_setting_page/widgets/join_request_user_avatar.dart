@@ -120,27 +120,24 @@ class _Name extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: Sizing.xLarge * 3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-            ),
-            overflow: TextOverflow.ellipsis,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: Typo.medium.copyWith(
+            color: colorScheme.onPrimary,
           ),
-          SizedBox(height: 2.w),
-          Text(
-            email,
-            style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
-            ),
+          overflow: TextOverflow.ellipsis,
+        ),
+        SizedBox(height: 2.w),
+        Text(
+          email,
+          style: Typo.small.copyWith(
+            color: colorScheme.onSecondary,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -19,6 +19,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventPendingJoinRequestItem extends StatefulWidget {
   final EventJoinRequest eventJoinRequest;
@@ -77,90 +78,96 @@ class _EventPendingJoinRequestItemState
           orElse: () => null,
           fetched: (event) => event,
         );
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final eventId = event?.id ?? '';
     return InkWell(
       onTap: () {
         goToJoinRequestDetail(context, event);
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.all(Spacing.small),
-            decoration: BoxDecoration(
-              color: colorScheme.onPrimary.withOpacity(0.09),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(LemonRadius.medium),
-                topLeft: Radius.circular(LemonRadius.medium),
+      child: Container(
+        decoration: BoxDecoration(
+          color: appColors.cardBg,
+          borderRadius: BorderRadius.circular(LemonRadius.medium),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.all(Spacing.small),
+              decoration: BoxDecoration(
+                color: appColors.cardBg,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(LemonRadius.medium),
+                  topLeft: Radius.circular(LemonRadius.medium),
+                ),
+              ),
+              child: Row(
+                children: [
+                  JoinRequestUserAvatar(
+                    eventJoinRequest: widget.eventJoinRequest,
+                  ),
+                ],
               ),
             ),
-            child: Row(
-              children: [
-                JoinRequestUserAvatar(
-                  eventJoinRequest: widget.eventJoinRequest,
+            Container(
+              padding: EdgeInsets.all(Spacing.small),
+              decoration: BoxDecoration(
+                // color: appColors.cardBg,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(LemonRadius.medium),
+                  bottomRight: Radius.circular(LemonRadius.medium),
                 ),
-                const Spacer(),
-                InkWell(
-                  onTap: () {
-                    openApplication(context, event);
-                  },
-                  child: Container(
-                    width: Sizing.medium,
-                    height: Sizing.medium,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colorScheme.outline,
+              ),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      openApplication(context, event);
+                    },
+                    child: Container(
+                      width: Sizing.medium,
+                      height: Sizing.medium,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: appColors.pageDivider,
+                        ),
+                        borderRadius: BorderRadius.circular(Sizing.medium),
                       ),
-                      borderRadius: BorderRadius.circular(Sizing.medium),
-                    ),
-                    child: Center(
-                      child: ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
-                        builder: (filter) => Assets.icons.icApplication.svg(
-                          colorFilter: filter,
+                      child: Center(
+                        child: ThemeSvgIcon(
+                          color: appColors.textTertiary,
+                          builder: (filter) => Assets.icons.icApplication.svg(
+                            colorFilter: filter,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(Spacing.small),
-            decoration: BoxDecoration(
-              color: colorScheme.onPrimary.withOpacity(0.06),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(LemonRadius.medium),
-                bottomRight: Radius.circular(LemonRadius.medium),
+                  SizedBox(width: Spacing.s2),
+                  EventJoinRequestActionsBar(
+                    onPressApprove: () async {
+                      await _modifyJoinRequest(
+                        eventId: eventId,
+                        joinRequest: widget.eventJoinRequest,
+                        action: ModifyJoinRequestAction.approve,
+                      );
+                      widget.onRefetch?.call();
+                    },
+                    onPressDecline: () async {
+                      await _modifyJoinRequest(
+                        eventId: eventId,
+                        joinRequest: widget.eventJoinRequest,
+                        action: ModifyJoinRequestAction.decline,
+                      );
+                      widget.onRefetch?.call();
+                    },
+                  ),
+                ],
               ),
             ),
-            child: Row(
-              children: [
-                const Spacer(),
-                EventJoinRequestActionsBar(
-                  onPressApprove: () async {
-                    await _modifyJoinRequest(
-                      eventId: eventId,
-                      joinRequest: widget.eventJoinRequest,
-                      action: ModifyJoinRequestAction.approve,
-                    );
-                    widget.onRefetch?.call();
-                  },
-                  onPressDecline: () async {
-                    await _modifyJoinRequest(
-                      eventId: eventId,
-                      joinRequest: widget.eventJoinRequest,
-                      action: ModifyJoinRequestAction.decline,
-                    );
-                    widget.onRefetch?.call();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

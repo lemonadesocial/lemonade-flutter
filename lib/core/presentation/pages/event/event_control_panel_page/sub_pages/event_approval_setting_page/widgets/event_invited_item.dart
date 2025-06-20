@@ -2,12 +2,12 @@ import 'package:app/core/domain/event/entities/event_guest.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventInvitedItem extends StatelessWidget {
   final EventGuest guest;
@@ -18,13 +18,14 @@ class EventInvitedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(
               LemonRadius.extraSmall,
             ),
@@ -51,11 +52,11 @@ class _Status extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding: EdgeInsets.all(Spacing.xSmall),
       decoration: BoxDecoration(
-        color: LemonColor.darkBackground,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.normal),
       ),
       child: Row(
@@ -65,7 +66,7 @@ class _Status extends StatelessWidget {
                 ? t.event.eventInvited.joined
                 : t.event.eventInvited.notJoined,
             style: Typo.small.copyWith(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
             ),
           ),
         ],
@@ -84,7 +85,7 @@ class _GuestInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -105,7 +106,7 @@ class _GuestInfo extends StatelessWidget {
               Text(
                 guest.userExpanded?.name ?? guest.email ?? t.common.anonymous,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -113,7 +114,7 @@ class _GuestInfo extends StatelessWidget {
               Text(
                 guest.email ?? '',
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
               ),
             ],
