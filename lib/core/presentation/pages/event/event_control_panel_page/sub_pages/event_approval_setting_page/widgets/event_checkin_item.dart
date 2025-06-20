@@ -2,12 +2,12 @@ import 'package:app/core/domain/event/entities/event_checkin.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventCheckInItem extends StatelessWidget {
   final EventCheckin checkIn;
@@ -20,6 +20,7 @@ class EventCheckInItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Column(
@@ -28,7 +29,7 @@ class EventCheckInItem extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(Spacing.small),
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(
                 LemonRadius.extraSmall,
               ),

@@ -5,6 +5,7 @@ import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventJoinRequestActionsBar extends StatelessWidget {
   final Function()? onPressApprove;
@@ -17,7 +18,7 @@ class EventJoinRequestActionsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Row(
       children: [
@@ -26,7 +27,7 @@ class EventJoinRequestActionsBar extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(Spacing.xSmall),
             decoration: ShapeDecoration(
-              color: colorScheme.surface,
+              color: appColors.cardBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
               ),
@@ -49,7 +50,7 @@ class EventJoinRequestActionsBar extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(Spacing.xSmall),
             decoration: ShapeDecoration(
-              color: colorScheme.surface,
+              color: appColors.cardBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(LemonRadius.small),
               ),
@@ -68,7 +69,7 @@ class EventJoinRequestActionsBar extends StatelessWidget {
                 Text(
                   t.common.actions.accept,
                   style: Typo.small.copyWith(
-                    color: colorScheme.onPrimary,
+                    color: appColors.textPrimary,
                   ),
                 ),
               ],

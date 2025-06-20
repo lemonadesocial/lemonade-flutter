@@ -15,6 +15,7 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
@@ -53,7 +54,7 @@ class EventAcceptedExportItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: () {
         AutoRouter.of(context).push(
@@ -68,71 +69,72 @@ class EventAcceptedExportItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
-              borderRadius: BorderRadius.circular(
-                LemonRadius.medium,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(LemonRadius.medium),
+            child: Container(
+              decoration: BoxDecoration(
+                color: appColors.cardBg,
               ),
-            ),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(Spacing.small),
-                  color: LemonColor.white03,
-                  child: Row(
-                    children: [
-                      _GuestInfo(eventAccepted: eventAccepted),
-                      const Spacer(),
-                      eventAccepted.active == true
-                          ? _GuestActions(
-                              event: event,
-                              eventAccepted: eventAccepted,
-                              onTapCancelTicket: onTapCancelTicket,
-                              refetch: refetch,
-                            )
-                          : _InfoTag(
-                              icon: null,
-                              label: t.event.cancelEvent.cancelled,
-                            ),
-                    ],
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(Spacing.small),
+                    color: appColors.cardBg,
+                    child: Row(
+                      children: [
+                        _GuestInfo(eventAccepted: eventAccepted),
+                        const Spacer(),
+                        eventAccepted.active == true
+                            ? _GuestActions(
+                                event: event,
+                                eventAccepted: eventAccepted,
+                                onTapCancelTicket: onTapCancelTicket,
+                                refetch: refetch,
+                              )
+                            : _InfoTag(
+                                icon: null,
+                                label: t.event.cancelEvent.cancelled,
+                              ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(Spacing.small),
-                  child: Row(
-                    children: [
-                      _InfoTag(
-                        icon: ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
-                          builder: (filter) => Assets.icons.icTicket.svg(
-                            width: 15.w,
-                            height: 15.w,
-                            colorFilter: filter,
-                          ),
-                        ),
-                        label: eventAccepted.ticketType ?? '',
-                      ),
-                      if (displayedPaymentAmount != null) ...[
-                        SizedBox(
-                          width: Spacing.extraSmall,
-                        ),
+                  Container(
+                    padding: EdgeInsets.all(Spacing.small),
+                    child: Row(
+                      children: [
                         _InfoTag(
                           icon: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
-                            builder: (filter) => Assets.icons.icCashVariant.svg(
+                            color: appColors.textTertiary,
+                            builder: (filter) => Assets.icons.icTicket.svg(
                               width: 15.w,
                               height: 15.w,
                               colorFilter: filter,
                             ),
                           ),
-                          label: displayedPaymentAmount!,
+                          label: eventAccepted.ticketType ?? '',
                         ),
+                        if (displayedPaymentAmount != null) ...[
+                          SizedBox(
+                            width: Spacing.extraSmall,
+                          ),
+                          _InfoTag(
+                            icon: ThemeSvgIcon(
+                              color: appColors.textTertiary,
+                              builder: (filter) =>
+                                  Assets.icons.icCashVariant.svg(
+                                width: 15.w,
+                                height: 15.w,
+                                colorFilter: filter,
+                              ),
+                            ),
+                            label: displayedPaymentAmount!,
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -151,7 +153,7 @@ class _GuestInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -174,7 +176,7 @@ class _GuestInfo extends StatelessWidget {
                     eventAccepted.buyerEmail ??
                     t.common.anonymous,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -182,7 +184,7 @@ class _GuestInfo extends StatelessWidget {
               Text(
                 eventAccepted.buyerEmail ?? '',
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
               ),
               if (eventAccepted.checkinDate != null) ...[
@@ -202,7 +204,7 @@ class _GuestInfo extends StatelessWidget {
                           eventAccepted.checkinDate!,
                         ),
                         style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ],
