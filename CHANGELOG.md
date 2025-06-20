@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.7.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.6.1...v2.7.0) (2025-06-20)
+
+
+### Features
+
+* claim lens username with custom namespace ([#987](https://github.com/lemonadesocial/lemonade-flutter/issues/987)) ([fbce554](https://github.com/lemonadesocial/lemonade-flutter/commit/fbce554ad6ac6190e77bc12304f800063075ac0b))
+
+
+### Bug Fixes
+
+* fix UI in approval settings page ([#989](https://github.com/lemonadesocial/lemonade-flutter/issues/989)) ([cd1b876](https://github.com/lemonadesocial/lemonade-flutter/commit/cd1b876f511650f2d11ad067162a81c3ad94c34e))
+
 ## [2.6.1](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.6.0...v2.6.1) (2025-06-18)
 
 
