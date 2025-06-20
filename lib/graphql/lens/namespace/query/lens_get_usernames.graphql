@@ -1,0 +1,16 @@
+query LensGetUsernames($request: UsernamesRequest!) {
+  usernames(request: $request) {
+    items {
+      id
+      value
+      namespace
+      localName
+      linkedTo
+      ownedBy
+    }
+    pageInfo {
+      prev
+      next
+    }
+  }
+}

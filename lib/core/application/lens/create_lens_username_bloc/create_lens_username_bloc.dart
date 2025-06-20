@@ -6,12 +6,15 @@ import 'package:app/core/failure.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/lens_utils.dart';
+import 'package:app/core/utils/zksync/eip_712_transaction.dart';
+import 'package:app/core/utils/zksync/supported_zksync_chains.dart';
 import 'package:app/graphql/lens/namespace/mutation/lens_create_username.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:async';
+import 'package:web3dart/web3dart.dart';
 
 part 'create_lens_username_bloc.freezed.dart';
 
@@ -67,7 +70,7 @@ class CreateLensUsernameBloc
         throw Exception(result.exception?.graphqlErrors.first.message);
       }
 
-      result.parsedData?.createUsername.maybeWhen(
+      await result.parsedData?.createUsername.maybeWhen(
         orElse: () {
           throw Exception('Unknown error');
         },
@@ -89,14 +92,61 @@ class CreateLensUsernameBloc
             ),
           );
         },
-        selfFundedTransactionRequest: (response) {},
-        sponsoredTransactionRequest: (response) {
+        selfFundedTransactionRequest: (response) async {
+          final selfFundedTransactionRequest =
+              LensSelfFundedTransactionRequest.fromJson(
+            response.toJson(),
+          );
+          try {
+            final txHash = await _onSelfFundedTransactionRequested(
+              transactionRequest: selfFundedTransactionRequest,
+            );
+
+            final transactionResult =
+                await LensUtils.pollTransactionStatus(txHash: txHash);
+
+            if (transactionResult is FailedTransactionStatus) {
+              throw Exception(
+                'Failed to create username: ${transactionResult.reason}',
+              );
+            }
+          } catch (error) {
+            emit(
+              CreateLensUsernameState.failed(
+                failure: Failure(message: error.toString()),
+              ),
+            );
+          }
+        },
+        sponsoredTransactionRequest: (response) async {
           final sponsoredTransactionRequest =
               LensSponsoredTransactionRequest.fromJson(response.toJson());
-          _onSponsoredTransactionRequested(
-            transactionRequest: sponsoredTransactionRequest,
-            emit: emit,
-          );
+          try {
+            final txHash = await _onSponsoredTransactionRequested(
+              transactionRequest: sponsoredTransactionRequest,
+            );
+
+            final transactionResult =
+                await LensUtils.pollTransactionStatus(txHash: txHash);
+
+            if (transactionResult is FailedTransactionStatus) {
+              throw Exception(
+                'Failed to create username: ${transactionResult.reason}',
+              );
+            }
+
+            emit(
+              CreateLensUsernameState.success(
+                txHash: txHash,
+              ),
+            );
+          } catch (error) {
+            emit(
+              CreateLensUsernameState.failed(
+                failure: Failure(message: error.toString()),
+              ),
+            );
+          }
         },
         transactionWillFail: (response) {
           throw Exception('Transaction failed: ${response.reason}');
@@ -119,41 +169,58 @@ class CreateLensUsernameBloc
     }
   }
 
-  Future<void> _onSponsoredTransactionRequested({
+  Future<String> _onSponsoredTransactionRequested({
     required LensSponsoredTransactionRequest transactionRequest,
-    required Emitter<CreateLensUsernameState> emit,
   }) async {
     final raw = transactionRequest.raw;
 
-    final ethTransaction = EthereumTransaction(
+    final eip712Transaction = ZKSyncEip712Transaction(
       from: raw?.from ?? '',
       to: raw?.to ?? '',
-      value: raw?.value ?? '',
+      value: BigInt.parse(raw?.value ?? '0'),
       data: raw?.data ?? '',
-      nonce: raw?.nonce?.toString() ?? '',
-      gasLimit: raw?.gasLimit?.toString() ?? '',
-      maxFeePerGas: raw?.maxFeePerGas?.toString() ?? '',
-      maxPriorityFeePerGas: raw?.maxPriorityFeePerGas?.toString() ?? '',
+      nonce: BigInt.parse(raw?.nonce?.toString() ?? '0'),
+      gas: BigInt.parse(raw?.gasLimit?.toString() ?? '0'),
+      maxFeePerGas: BigInt.parse(raw?.maxFeePerGas?.toString() ?? '0'),
+      maxPriorityFeePerGas:
+          BigInt.parse(raw?.maxPriorityFeePerGas?.toString() ?? '0'),
+      chainId: BigInt.from(raw?.chainId ?? 0),
+      paymaster: raw?.customData?.paymasterParams?.paymaster,
+      paymasterInput: raw?.customData?.paymasterParams?.paymasterInput,
+      gasPerPubdata:
+          BigInt.parse(raw?.customData?.gasPerPubdata?.toString() ?? '0'),
+      customSignature: raw?.customData?.customSignature,
+      factoryDeps: raw?.customData?.factoryDeps,
+    );
+
+    final lensZkSyncChain =
+        AppConfig.isProduction ? ZKSyncLensMainnet() : ZKSyncLensTestnet();
+
+    final txHash = await lensZkSyncChain.sendTransaction(
+      eip712Transaction,
+      getIt<WalletConnectService>(),
+    );
+
+    return txHash;
+  }
+
+  Future<String> _onSelfFundedTransactionRequested({
+    required LensSelfFundedTransactionRequest transactionRequest,
+  }) async {
+    final raw = transactionRequest.raw;
+
+    final transaction = EthereumTransaction(
+      from: EthereumAddress.fromHex(raw?.from ?? '').toString(),
+      to: EthereumAddress.fromHex(raw?.to ?? '').toString(),
+      value: BigInt.parse(raw?.value ?? '0').toRadixString(16),
+      data: raw?.data ?? '',
     );
 
     final txHash = await getIt<WalletConnectService>().requestTransaction(
       chainId: 'eip155:${raw?.chainId}',
-      transaction: ethTransaction,
+      transaction: transaction,
     );
 
-    final transactionResult =
-        await LensUtils.pollTransactionStatus(txHash: txHash);
-
-    if (transactionResult is FailedTransactionStatus) {
-      throw Exception(
-        'Failed to create username: ${transactionResult.reason}',
-      );
-    }
-
-    emit(
-      CreateLensUsernameState.success(
-        txHash: txHash,
-      ),
-    );
+    return txHash;
   }
 }

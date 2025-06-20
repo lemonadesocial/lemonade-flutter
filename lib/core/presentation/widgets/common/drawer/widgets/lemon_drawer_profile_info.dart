@@ -1,10 +1,9 @@
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
-import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_account_lemonade_username/lens_account_lemaonde_username.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
@@ -12,7 +11,6 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
-import 'package:app/core/utils/lens_utils.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
@@ -24,7 +22,6 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -70,32 +67,7 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                 SizedBox(
                   height: Spacing.s0_5,
                 ),
-                BlocBuilder<LensAuthBloc, LensAuthState>(
-                  builder: (context, state) {
-                    final username = LensUtils.getLensUsername(
-                      lensAccount: state.availableAccounts.firstOrNull,
-                    );
-
-                    if (username.isEmpty) {
-                      return InkWell(
-                        onTap: () => _onPressClaimLensUsername(context),
-                        child: Text(
-                          t.home.drawer.claimUsername,
-                          style: appText.md.copyWith(
-                            color: appColors.textAccent,
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Text(
-                      '@$username',
-                      style: appText.md.copyWith(
-                        color: appColors.textAccent,
-                      ),
-                    );
-                  },
-                ),
+                const LensAccountLemonadeUsername(),
               ],
             ),
           ],
@@ -208,19 +180,6 @@ class LemonDrawerProfileInfo extends StatelessWidget {
   _onPressShare(BuildContext context, User user) {
     final url = '${AppConfig.webUrl}/u/${user.username ?? user.userId}';
     Share.share(url);
-  }
-
-  _onPressClaimLensUsername(BuildContext context) async {
-    final appColors = context.theme.appColors;
-    await showCupertinoModalBottomSheet(
-      backgroundColor: appColors.pageBg,
-      context: context,
-      useRootNavigator: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      builder: (newContext) {
-        return const LensOnboardingBottomSheet();
-      },
-    );
   }
 
   _onPressQRCode(BuildContext context) {

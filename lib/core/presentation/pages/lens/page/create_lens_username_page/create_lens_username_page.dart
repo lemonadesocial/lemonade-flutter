@@ -182,6 +182,7 @@ class _CreateLensUsernamePageViewState
                 username: _usernameController.text,
               ),
             );
+            context.router.pop(true);
           },
           failed: (failure) {
             SnackBarUtils.showError(message: failure.message);

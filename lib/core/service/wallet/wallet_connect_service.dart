@@ -1,4 +1,6 @@
 // ignore_for_file: unused_element
+import 'dart:convert';
+
 import 'package:app/core/config.dart';
 import 'package:app/core/constants/web3/chains.dart';
 import 'package:app/core/domain/web3/entities/chain.dart';
@@ -150,6 +152,28 @@ class WalletConnectService {
     );
     if (data is String) return data;
     throw Exception('Failed to sign message');
+  }
+
+  Future<String?> signTypedDataV4({
+    required Map<String, dynamic> data,
+    required String wallet,
+    String? chainId,
+  }) async {
+    if (chainId == null && _w3mService.selectedChain == null) {
+      throw Exception('No chain selected');
+    }
+    _w3mService.launchConnectedWallet();
+    final result = await _w3mService.request(
+      topic: _w3mService.session?.topic ?? '',
+      chainId:
+          chainId ?? _w3mService.selectedChain?.chainId ?? ETHEREUM.chainId,
+      request: SessionRequestParams(
+        method: 'eth_signTypedData',
+        params: [wallet, jsonEncode(data)],
+      ),
+    );
+    if (result is String) return result;
+    throw Exception('Failed to sign typed data');
   }
 
   Future<String> requestTransaction({

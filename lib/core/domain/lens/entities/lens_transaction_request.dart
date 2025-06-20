@@ -89,6 +89,11 @@ class LensSelfFundedTransactionRequest with _$LensSelfFundedTransactionRequest {
     Enum$SelfFundedFallbackReason? selfFundedReason,
     LensEip1559TransactionRequest? raw,
   }) = _LensSelfFundedTransactionRequest;
+
+  factory LensSelfFundedTransactionRequest.fromJson(
+    Map<String, dynamic> json,
+  ) =>
+      _$LensSelfFundedTransactionRequestFromJson(json);
 }
 
 @freezed
