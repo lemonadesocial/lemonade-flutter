@@ -2,6 +2,7 @@ import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/entities/lens_create_account.dart';
 import 'package:app/core/domain/lens/entities/lens_create_post.dart';
+import 'package:app/core/domain/lens/entities/lens_create_username.dart';
 import 'package:app/core/domain/lens/entities/lens_feed.dart';
 import 'package:app/core/domain/lens/entities/lens_switch_account.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
@@ -20,6 +21,7 @@ import 'package:app/graphql/lens/account/mutation/lens_switch_account.graphql.da
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
 import 'package:app/graphql/lens/account/mutation/lens_create_account.graphql.dart';
 import 'package:app/graphql/lens/account/query/lens_get_account.graphql.dart';
+import 'package:app/graphql/lens/namespace/mutation/lens_create_username.graphql.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 
@@ -159,13 +161,20 @@ class LensRepositoryImpl implements LensRepository {
         ownedBy: data.ownedBy,
         reason: data.reason,
       ),
-      namespaceOperationValidationFailed: (data) =>
-          LensCreateAccountWithUsernameResult
-              .namespaceOperationValidationFailed(reason: data.reason),
-      transactionWillFail: (data) =>
-          LensCreateAccountWithUsernameResult.transactionWillFail(
-        reason: data.reason,
-      ),
+      namespaceOperationValidationFailed: (data) {
+        String detailReason = data.unsatisfiedRules?.required.map((rule) {
+              return rule.message;
+            }).join('\n') ??
+            '';
+        final reason = [data.reason, detailReason].join('\n');
+        return LensCreateAccountWithUsernameResult
+            .namespaceOperationValidationFailed(reason: reason);
+      },
+      transactionWillFail: (data) {
+        return LensCreateAccountWithUsernameResult.transactionWillFail(
+          reason: data.reason,
+        );
+      },
       selfFundedTransactionRequest: (data) =>
           LensCreateAccountWithUsernameResult.selfFundedTransactionRequest(
         reason: data.reason,
@@ -354,5 +363,58 @@ class LensRepositoryImpl implements LensRepository {
         response.parsedData!.feed!.toJson(),
       ),
     );
+  }
+
+  @override
+  Future<Either<Failure, LensCreateUsernameResult>> createUsername({
+    required Variables$Mutation$LensCreateUsername input,
+  }) async {
+    final response = await _client.mutate$LensCreateUsername(
+      Options$Mutation$LensCreateUsername(variables: input),
+    );
+    if (response.hasException || response.parsedData?.createUsername == null) {
+      return Left(Failure.withGqlException(response.exception));
+    }
+    final result = response.parsedData!.createUsername.maybeWhen(
+      orElse: () => null,
+      createUsernameResponse: (data) =>
+          LensCreateUsernameResult.createUsernameResponse(
+        hash: data.hash,
+      ),
+      usernameTaken: (data) => LensCreateUsernameResult.usernameTaken(
+        ownedBy: data.ownedBy,
+        reason: data.reason,
+      ),
+      namespaceOperationValidationFailed: (data) {
+        return LensCreateUsernameResult.namespaceOperationValidationFailed(
+          reason: data.reason,
+        );
+      },
+      transactionWillFail: (data) =>
+          LensCreateUsernameResult.transactionWillFail(
+        reason: data.reason,
+      ),
+      selfFundedTransactionRequest: (data) =>
+          LensCreateUsernameResult.selfFundedTransactionRequest(
+        reason: data.reason,
+        selfFundedReason: data.selfFundedReason,
+        raw: Eip712TransactionRequest.fromJson(
+          data.raw.toJson(),
+        ),
+      ),
+      sponsoredTransactionRequest: (data) =>
+          LensCreateUsernameResult.sponsoredTransactionRequest(
+        reason: data.reason,
+        eip712TransactionRequest: Eip712TransactionRequest.fromJson(
+          data.raw.toJson(),
+        ),
+      ),
+    );
+
+    if (result == null) {
+      return Left(Failure(message: 'Unknown error'));
+    }
+
+    return Right(result);
   }
 }

@@ -189,4 +189,11 @@ class Web3Utils {
   static BigInt percentToPPM(double percentage) {
     return BigInt.from(percentage * 10000);
   }
+
+  static String concatHex(List<String> values) {
+    String concatenatedHex =
+        values.fold('', (acc, x) => acc + x.replaceAll('0x', ''));
+    String hexWithPrefix = '0x$concatenatedHex';
+    return hexWithPrefix;
+  }
 }

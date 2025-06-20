@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:app/core/domain/lens/entities/lens_account.dart';
+import 'package:app/core/domain/lens/entities/lens_namespace_rules.dart';
 import 'package:app/core/domain/lens/entities/lens_transaction.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/web3/entities/chain.dart';
+import 'package:app/graphql/lens/namespace/query/get_lens_namespace.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/graphql/lens/transaction/query/lens_transaction_status.graphql.dart';
 import 'package:app/injection/register_module.dart';
@@ -140,6 +143,78 @@ class LensUtils {
     return '';
   }
 
+  static LensUsernamePricePerLengthRule parsePricePerLengthRule(
+    Query$Namespace$namespace$rules$required rule,
+  ) {
+    String tokenSymbol = '';
+    String tokenAddress = '';
+    List<LensPricePerLength> pricePerLengthList = [];
+
+    for (final configItem in rule.config) {
+      configItem.when(
+        addressKeyValue: (addressKeyValue) {
+          if (addressKeyValue.key == "assetContract") {
+            tokenAddress = addressKeyValue.address;
+          }
+        },
+        stringKeyValue: (stringKeyValue) {
+          if (stringKeyValue.key == "assetSymbol") {
+            tokenSymbol = stringKeyValue.string;
+          }
+        },
+        arrayKeyValue: (arrayKeyValue) {
+          if (arrayKeyValue.key == "overrides") {
+            for (final item in arrayKeyValue.array) {
+              item.maybeWhen(
+                orElse: () {},
+                dictionaryKeyValue: (dictionaryKeyValue) {
+                  int? length;
+                  String? price;
+                  for (final dictEntry in dictionaryKeyValue.dictionary) {
+                    dictEntry.maybeWhen(
+                      orElse: () {},
+                      intKeyValue: (intKeyValue) {
+                        if (intKeyValue.key == "length") {
+                          length = intKeyValue.$int;
+                        }
+                      },
+                      bigDecimalKeyValue: (bigDecimalKeyValue) {
+                        if (bigDecimalKeyValue.key == "amount") {
+                          price = bigDecimalKeyValue.bigDecimal;
+                        }
+                      },
+                    );
+                  }
+                  if (length != null && price != null) {
+                    pricePerLengthList.add(
+                      LensPricePerLength(
+                        length: length!,
+                        price: price!,
+                      ),
+                    );
+                  }
+                },
+              );
+            }
+          }
+        },
+        booleanKeyValue: (_) {},
+        intKeyValue: (_) {},
+        bigDecimalKeyValue: (_) {},
+        dictionaryKeyValue: (_) {},
+        intNullableKeyValue: (_) {},
+        rawKeyValue: (_) {},
+        orElse: () {},
+      );
+    }
+
+    return LensUsernamePricePerLengthRule(
+      tokenSymbol: tokenSymbol,
+      tokenAddress: tokenAddress,
+      pricePerLength: pricePerLengthList,
+    );
+  }
+
   static Input$PostsRequest getDefaultFeedQueryInput({
     String? lensFeedId,
     String? cursor,
@@ -164,6 +239,27 @@ class LensUtils {
               ]
             : null,
       ),
+    );
+  }
+
+  static Chain get lensMainnet {
+    return Chain(
+      chainId: '232',
+      fullChainId: 'eip155:232',
+      explorerUrl: "https://explorer.lens.xyz",
+      name: 'Lens Chain Mainnet',
+      rpcUrl: 'https://rpc.lens.xyz',
+      logoUrl: 'https://lens.xyz/logo.png',
+    );
+  }
+
+  static Chain get lensTestnet {
+    return Chain(
+      chainId: '371111',
+      fullChainId: 'eip155:371111',
+      explorerUrl: "https://explorer.lens.xyz",
+      rpcUrl: 'https://rpc.testnet.lens.xyz',
+      name: 'Lens Chain Testnet',
     );
   }
 }

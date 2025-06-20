@@ -23,6 +23,7 @@ class Chain with _$Chain {
     String? relayPaymentContract,
     String? stakePaymentContract,
     String? rewardRegistryContract,
+    String? explorerUrl,
   }) = _Chain;
 
   int get completedBlockTime =>

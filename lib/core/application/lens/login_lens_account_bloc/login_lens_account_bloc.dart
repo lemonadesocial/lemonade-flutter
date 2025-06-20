@@ -85,7 +85,7 @@ class LoginLensAccountBloc
                     accountOwner: Input$AccountOwnerChallengeRequest(
                       owner: e.ownerAddress,
                       account: e.accountAddress,
-                      app: AppConfig.lensAppId,
+                      // app: AppConfig.lensAppId,
                     ),
                   ),
                 ),

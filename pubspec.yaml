@@ -173,6 +173,7 @@ dependencies:
   coinbase_wallet_sdk: 1.0.10
   provider: ^6.1.5
   soft_edge_blur: ^0.1.3
+  eth_sig_util: ^0.0.9
 
 dependency_overrides:
   matrix_api_lite:

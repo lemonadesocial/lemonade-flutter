@@ -1,0 +1,36 @@
+query CanCreateUsername($request: UsernameInput!) {
+  canCreateUsername(request: $request) {
+    ... on UsernameTaken {
+      ownedBy
+      reason
+    }
+    ... on NamespaceOperationValidationPassed {
+      passed
+    }
+    ... on NamespaceOperationValidationUnknown {
+      extraChecksRequired {
+        id
+        type
+        address
+      }
+    }
+    ... on NamespaceOperationValidationFailed {
+      unsatisfiedRules {
+        required {
+          id
+          type
+          rule
+          reason
+          message
+        }
+        anyOf {
+          id
+          type
+          rule
+          reason
+          message
+        }
+      }
+    }
+  }
+}

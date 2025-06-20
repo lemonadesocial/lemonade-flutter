@@ -121,7 +121,7 @@ class AppConfig {
 
   static get lensNamespace => dotenv.env['LENS_NAMESPACE'];
 
-  static get lensChainId => 232; // Directly use mainnet
+  static get lensChainId => isProduction ? 232 : 371111; // Directly use mainnet
 
   static String get lemonadeGlobalFeed =>
       dotenv.env['LEMONADE_LENS_FEED_ID'] ?? '';
