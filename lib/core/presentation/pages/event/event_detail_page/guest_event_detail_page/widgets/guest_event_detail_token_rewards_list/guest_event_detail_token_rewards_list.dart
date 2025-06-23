@@ -9,13 +9,12 @@ import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class GuestEventDetailTokenRewardsList extends StatefulWidget {
   final List<TokenRewardSetting> rewardSettings;
@@ -59,7 +58,7 @@ class _GuestEventDetailTokenRewardsListState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -93,8 +92,8 @@ class _GuestEventDetailTokenRewardsListState
           effect: ExpandingDotsEffect(
             dotWidth: 12.w,
             dotHeight: 4.w,
-            activeDotColor: colorScheme.onPrimary,
-            dotColor: LemonColor.chineseBlack,
+            activeDotColor: appColors.textPrimary,
+            dotColor: appColors.textTertiary,
             expansionFactor: 1.1,
           ),
         ),
@@ -118,16 +117,17 @@ class _TokenRewardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(Spacing.xSmall),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.pageDivider,
         ),
       ),
       child: Row(
@@ -138,17 +138,17 @@ class _TokenRewardItem extends StatelessWidget {
             height: Sizing.medium,
             placeholder: Container(
               decoration: BoxDecoration(
-                color: LemonColor.chineseBlack,
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
                 border: Border.all(
-                  color: colorScheme.outlineVariant,
+                  color: appColors.pageDivider,
                 ),
               ),
               width: Sizing.medium,
               height: Sizing.medium,
               child: Center(
                 child: ThemeSvgIcon(
-                  color: LemonColor.paleViolet,
+                  color: appColors.textAccent,
                   builder: (filter) => Assets.icons.icGift.svg(
                     colorFilter: filter,
                     width: Sizing.small,
@@ -169,8 +169,7 @@ class _TokenRewardItem extends StatelessWidget {
                     t.event.tokenReward.currencyReward(
                       currency: token?.symbol ?? '',
                     ),
-                    style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                    style: appText.md.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -194,8 +193,8 @@ class _TokenRewardItem extends StatelessWidget {
                 t.event.tokenReward.onClaimingTickets(
                   ticketType: ticketType?.title ?? '',
                 ),
-                style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                style: appText.sm.copyWith(
+                  color: appColors.textTertiary,
                 ),
               ),
             ],

@@ -6,13 +6,12 @@ import 'package:app/core/domain/event/entities/event_application_profile_field.d
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_field_item.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:app/core/utils/date_utils.dart' as date_utils;
+import 'package:app/app_theme/app_theme.dart';
 
 class RSVPProfileFieldsForm extends StatefulWidget {
   const RSVPProfileFieldsForm({
@@ -52,7 +51,8 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
     if (user == null) {
       return const SizedBox();
     }
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return BlocBuilder<EventApplicationFormBloc, EventApplicationFormBlocState>(
       builder: (context, state) {
         if (state.isInitialized == true) {
@@ -75,7 +75,7 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                 if (profileFieldKey == ProfileFieldKey.dateOfBirth)
                   Focus(
                     child: EditProfileFieldItem(
-                      borderColor: colorScheme.outlineVariant,
+                      borderColor: appColors.pageDivider,
                       controller: birthDayCtrl,
                       profileFieldKey: profileFieldKey,
                       onChange: (value) {
@@ -96,10 +96,8 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                       },
                       value: value,
                       showRequired: applicationProfileField.required,
-                      backgroundColor: LemonColor.atomicBlack,
-                      labelStyle: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
+                      backgroundColor: appColors.cardBg,
+                      labelStyle: appText.md,
                     ),
                     onFocusChange: (hasFocus) {
                       if (!hasFocus) {
@@ -124,7 +122,7 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                   )
                 else
                   EditProfileFieldItem(
-                    borderColor: colorScheme.outlineVariant,
+                    borderColor: appColors.pageDivider,
                     profileFieldKey: profileFieldKey,
                     onChange: (value) {
                       context.read<EventApplicationFormBloc>().add(
@@ -137,10 +135,8 @@ class _RSVPProfileFieldsFormState extends State<RSVPProfileFieldsForm> {
                     },
                     value: value,
                     showRequired: applicationProfileField.required,
-                    backgroundColor: LemonColor.atomicBlack,
-                    labelStyle: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                    ),
+                    backgroundColor: appColors.cardBg,
+                    labelStyle: appText.md,
                   ),
                 SizedBox(
                   height: Spacing.smMedium,

@@ -26,12 +26,12 @@ import 'package:app/injection/register_module.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SelectTicketItem extends StatelessWidget {
   const SelectTicketItem({
@@ -75,13 +75,14 @@ class SelectTicketItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     List<EventCurrency> eventCurrencies =
         context.watch<GetEventTicketTypesBloc>().state.maybeWhen(
               orElse: () => [],
               success: (_, currencies) => currencies,
             );
     final selectTicketsBloc = context.watch<SelectEventTicketsBloc>();
-    final colorScheme = Theme.of(context).colorScheme;
     final isLocked =
         ticketType.limited == true && ticketType.whitelisted == false;
     final count = selectTicketsBloc.state.selectedTickets
@@ -149,7 +150,7 @@ class SelectTicketItem extends StatelessWidget {
             ),
             child: Center(
               child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (colorFilter) => Assets.icons.icLock.svg(
                   width: Sizing.xSmall,
                   height: Sizing.xSmall,
@@ -167,10 +168,10 @@ class SelectTicketItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
             border: Border.all(
-              color: colorScheme.outlineVariant,
+              color: appColors.pageDivider,
             ),
           ),
           padding: EdgeInsets.symmetric(vertical: Spacing.smMedium),
@@ -191,9 +192,8 @@ class SelectTicketItem extends StatelessWidget {
                         children: [
                           Text(
                             ticketType.title ?? '',
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
-                            ),
+                            style: appText.md
+                                .copyWith(color: appColors.textSecondary),
                           ),
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.end,
@@ -219,8 +219,8 @@ class SelectTicketItem extends StatelessWidget {
                                   currency: ticketPrice.currency!,
                                   price: ticketPrice,
                                   textColor: entry.key != 0
-                                      ? colorScheme.onSecondary
-                                      : colorScheme.onPrimary,
+                                      ? appColors.textTertiary
+                                      : appColors.textPrimary,
                                 ),
                                 if (!isLast &&
                                     (ticketType.prices?.length ?? 0) > 1)
@@ -230,8 +230,8 @@ class SelectTicketItem extends StatelessWidget {
                                     ),
                                     child: Text(
                                       t.common.or,
-                                      style: Typo.medium.copyWith(
-                                        color: colorScheme.onSecondary,
+                                      style: appText.md.copyWith(
+                                        color: appColors.textTertiary,
                                       ),
                                     ),
                                   ),
@@ -255,8 +255,8 @@ class SelectTicketItem extends StatelessWidget {
                                         label: t.event.eventBuyTickets
                                             .whileListedTicket,
                                         backgroundColor: LemonColor.white18,
-                                        textColor: colorScheme.onPrimary,
-                                        borderColor: colorScheme.outlineVariant,
+                                        textColor: appColors.textPrimary,
+                                        borderColor: appColors.pageDivider,
                                       ),
                                     ),
                                   if (stakingPaymentAccount != null)
@@ -269,8 +269,8 @@ class SelectTicketItem extends StatelessWidget {
                                         label: t.event.eventBuyTickets
                                             .stakingTicket,
                                         backgroundColor: LemonColor.white18,
-                                        textColor: colorScheme.onPrimary,
-                                        borderColor: colorScheme.outlineVariant,
+                                        textColor: appColors.textPrimary,
+                                        borderColor: appColors.pageDivider,
                                       ),
                                     ),
                                 ],
@@ -313,8 +313,8 @@ class SelectTicketItem extends StatelessWidget {
                   ),
                   child: Text(
                     ticketType.description ?? '',
-                    style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                    style: appText.sm.copyWith(
+                      color: appColors.textTertiary,
                     ),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -324,7 +324,7 @@ class SelectTicketItem extends StatelessWidget {
               if (stakingPaymentAccount != null) ...[
                 SizedBox(height: Spacing.xSmall),
                 Divider(
-                  color: colorScheme.outlineVariant,
+                  color: appColors.pageDivider,
                 ),
                 SizedBox(height: Spacing.xSmall),
                 Padding(
@@ -352,7 +352,7 @@ class SelectTicketItem extends StatelessWidget {
                     children: [
                       SizedBox(height: Spacing.xSmall),
                       Divider(
-                        color: colorScheme.outlineVariant,
+                        color: appColors.pageDivider,
                       ),
                       SizedBox(height: Spacing.xSmall),
                       Padding(
@@ -400,8 +400,9 @@ class _PriceItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final isCryptoCurrency = price.isCrypto;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,8 +420,8 @@ class _PriceItem extends StatelessWidget {
                   amount: price.fiatCost ?? 0,
                   currency: currency,
                 ),
-          style: Typo.mediumPlus.copyWith(
-            color: textColor ?? colorScheme.onPrimary,
+          style: appText.md.copyWith(
+            color: textColor ?? appColors.textPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),

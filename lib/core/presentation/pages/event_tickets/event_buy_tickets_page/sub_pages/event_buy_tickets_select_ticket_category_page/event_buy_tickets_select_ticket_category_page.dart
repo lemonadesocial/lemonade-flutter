@@ -6,14 +6,13 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
@@ -24,8 +23,9 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
     final event = context.read<EventProviderBloc>().event;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
 
     return Scaffold(
       appBar: const LemonAppBar(),
@@ -39,11 +39,7 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
                 children: [
                   Text(
                     t.event.eventBuyTickets.selectCategory,
-                    style: Typo.extraLarge.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontFamily: FontFamily.clashDisplay,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: appText.xl,
                   ),
                   Text(
                     "${event.title}  •  ${DateFormatUtils.dateWithTimezone(
@@ -51,9 +47,7 @@ class EventBuyTicketsSelectTicketCategoryPage extends StatelessWidget {
                       timezone: event.timezone ?? '',
                       pattern: DateFormatUtils.dateOnlyFormat,
                     )}",
-                    style: Typo.mediumPlus.copyWith(
-                      color: colorScheme.onSecondary,
-                    ),
+                    style: appText.lg.copyWith(color: appColors.textTertiary),
                   ),
                   SizedBox(height: Spacing.large),
                 ],

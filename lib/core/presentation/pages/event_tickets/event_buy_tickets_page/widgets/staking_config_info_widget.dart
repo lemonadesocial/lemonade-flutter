@@ -4,8 +4,8 @@ import 'package:app/core/service/web3/web3_contract_service.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,7 +55,8 @@ class StakingConfigInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final displayedDate = checkInBefore != null
         ? DateFormatUtils.custom(
@@ -70,13 +71,12 @@ class StakingConfigInfoWidget extends StatelessWidget {
         return Text.rich(
           TextSpan(
             text: t.common.actions.checkIn,
-            style: Typo.small.copyWith(color: colorScheme.onSecondary),
+            style: appText.sm.copyWith(color: appColors.textTertiary),
             children: [
               TextSpan(
                 text:
                     ' ${t.event.eventBuyTickets.beforeTime(time: displayedDate)} ',
-                style: Typo.small.copyWith(
-                  color: colorScheme.onPrimary,
+                style: appText.sm.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),

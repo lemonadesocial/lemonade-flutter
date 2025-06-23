@@ -12,12 +12,11 @@ import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RSVPVerifyWalletForm extends StatelessWidget {
@@ -53,7 +52,8 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     final userProfile = context.watch<AuthBloc>().state.maybeWhen(
           authenticated: (userProfile) => userProfile,
@@ -80,13 +80,13 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: t.event.rsvpWeb3Indetity.yourEthereumAddress,
-                    style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                    style: appText.md,
                   ),
                   if (isRequired)
                     TextSpan(
                       text: " *",
-                      style: Typo.medium.copyWith(
-                        color: LemonColor.coralReef,
+                      style: appText.md.copyWith(
+                        color: appColors.textError,
                       ),
                     ),
                 ],
@@ -96,38 +96,40 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
             if (!isWalletConnected && !isVerified)
               ConnectWalletButton(
                 builder: (onPress, connectButtonState) {
-                  return SizedBox(
-                    width: 150.w,
-                    height: 50.w,
+                  return FittedBox(
                     child: LemonOutlineButton(
+                      height: 50.w,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.s4,
+                      ),
                       leading: ThemeSvgIcon(
                         builder: (filter) => Assets.icons.icCurrencyEth.svg(
                           colorFilter: filter,
                         ),
-                        color: colorScheme.onSecondary,
+                        color: appColors.textPrimary,
                       ),
                       onTap: () => onPress.call(context),
                       label: t.common.actions.connectWallet,
-                      radius: BorderRadius.circular(LemonRadius.medium),
-                      backgroundColor: LemonColor.atomicBlack,
-                      borderColor: colorScheme.outlineVariant,
-                      textStyle: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
+                      radius: BorderRadius.circular(LemonRadius.md),
+                      backgroundColor: appColors.cardBg,
+                      borderColor: appColors.pageDivider,
+                      textColor: appColors.textPrimary,
                     ),
                   );
                 },
               ),
             if (isVerified || (isWalletConnected && !isVerified))
-              SizedBox(
-                width: isVerified ? 200.w : 178.w,
-                height: 50.w,
+              FittedBox(
                 child: LemonOutlineButton(
+                  height: 50.w,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Spacing.s4,
+                  ),
                   leading: ThemeSvgIcon(
                     builder: (filter) => Assets.icons.icCurrencyEth.svg(
                       colorFilter: filter,
                     ),
-                    color: colorScheme.onSecondary,
+                    color: appColors.textPrimary,
                   ),
                   onTap: () {
                     if (isVerified) {
@@ -151,12 +153,10 @@ class EthereumWalletVerificationWidget extends StatelessWidget {
                           ),
                         )
                       : t.event.eventBuyTickets.verifyWithWallet,
-                  radius: BorderRadius.circular(LemonRadius.medium),
-                  backgroundColor: LemonColor.atomicBlack,
-                  borderColor: colorScheme.outlineVariant,
-                  textStyle: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
-                  ),
+                  radius: BorderRadius.circular(LemonRadius.md),
+                  backgroundColor: appColors.cardBg,
+                  borderColor: appColors.pageDivider,
+                  textColor: appColors.textPrimary,
                 ),
               ),
           ],

@@ -2,8 +2,8 @@ import 'package:app/core/domain/reward/entities/token_reward_setting.dart';
 import 'package:app/core/presentation/widgets/token_reward/token_reward_item_widget/token_reward_item_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class TicketTokenRewardsList extends StatelessWidget {
   final List<TokenRewardSetting> tokenRewardSettings;
@@ -26,14 +26,15 @@ class TicketTokenRewardsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           t.event.rewards,
-          style: Typo.medium.copyWith(
-            color: titleColor ?? colorScheme.onSecondary,
+          style: appText.md.copyWith(
+            color: titleColor ?? appColors.textTertiary,
           ),
         ),
         SizedBox(

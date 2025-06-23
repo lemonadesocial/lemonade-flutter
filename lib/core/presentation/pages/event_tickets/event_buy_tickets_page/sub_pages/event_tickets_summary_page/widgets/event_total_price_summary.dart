@@ -7,6 +7,7 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventTotalPriceSummary extends StatelessWidget {
   const EventTotalPriceSummary({
@@ -34,7 +35,8 @@ class EventTotalPriceSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final currencyInfo = PaymentUtils.getCurrencyInfo(
       selectedPaymentAccount,
       currency: selectedCurrency,
@@ -53,7 +55,7 @@ class EventTotalPriceSummary extends StatelessWidget {
               decimals: currencyInfo?.decimals ?? 0,
               decimalDigits: currencyInfo?.decimals ?? 0,
             ),
-            textColor: colorScheme.onSecondary,
+            textColor: appColors.textTertiary,
           ),
           SizedBox(height: Spacing.xSmall),
         ],
@@ -70,9 +72,8 @@ class EventTotalPriceSummary extends StatelessWidget {
                   currency: selectedCurrency,
                   attemptedDecimals: currencyInfo?.decimals ?? 2,
                 ),
-          textStyle: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
+          textStyle: appText.md.copyWith(
+            color: appColors.textPrimary,
           ),
         ),
       ],
