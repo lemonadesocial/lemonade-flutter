@@ -5,11 +5,11 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/date_format_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventInfoSummary extends StatelessWidget {
   final Event event;
@@ -21,12 +21,13 @@ class EventInfoSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.pageDivider,
           width: 1.w,
         ),
         borderRadius: BorderRadius.circular(
@@ -50,17 +51,14 @@ class EventInfoSummary extends StatelessWidget {
                 SizedBox(width: Spacing.xSmall),
                 Text(
                   event.title ?? '',
-                  style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: appText.md,
                 ),
               ],
             ),
           ),
           Divider(
             thickness: 1.w,
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
           ),
           Padding(
             padding: EdgeInsets.all(Spacing.small),
@@ -69,7 +67,7 @@ class EventInfoSummary extends StatelessWidget {
                 Row(
                   children: [
                     ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icCalendar.svg(
                         colorFilter: filter,
                       ),
@@ -77,8 +75,8 @@ class EventInfoSummary extends StatelessWidget {
                     SizedBox(width: Spacing.xSmall),
                     Text(
                       DateFormatUtils.fullDateWithTime(event.start),
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.md.copyWith(
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -88,7 +86,7 @@ class EventInfoSummary extends StatelessWidget {
                   Row(
                     children: [
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icLocationPin.svg(
                           colorFilter: filter,
                         ),
@@ -97,7 +95,7 @@ class EventInfoSummary extends StatelessWidget {
                       Text(
                         event.address?.title ?? '',
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ],

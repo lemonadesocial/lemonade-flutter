@@ -71,127 +71,140 @@ class HostEventDetailView extends StatelessWidget {
               bottom: false,
               child: Stack(
                 children: [
-                  CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: PostGuestEventAnimatedAppBar(
-                          event: event,
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: 6.h),
-                      ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: HostEventBasicInfoCard(
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<GetEventDetailBloc>().add(
+                            GetEventDetailEvent.fetch(
+                              eventId: event.id ?? '',
+                            ),
+                          );
+                    },
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: PostGuestEventAnimatedAppBar(
                             event: event,
-                            // eventUserRole: eventUserRole,
                           ),
                         ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.large),
-                      ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: HostEventDetailConfigGrid(
-                          event: event,
-                          // eventUserRole: eventUserRole,
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: 6.h),
                         ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.large),
-                      ),
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              HostCheckinGuestsAction(
-                                event: event,
-                                // eventUserRole: eventUserRole,
-                              ),
-                              SizedBox(
-                                height: Spacing.extraSmall,
-                              ),
-                              CastOnFarcasterButton(
-                                event: event,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.xLarge),
-                      ),
-                      if (event.subeventEnabled == true) ...[
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
                             horizontal: Spacing.smMedium,
                           ),
                           sliver: SliverToBoxAdapter(
-                            child: CreateSubSideEventButton(
+                            child: HostEventBasicInfoCard(
                               event: event,
+                              // eventUserRole: eventUserRole,
+                            ),
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.large),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: HostEventDetailConfigGrid(
+                            event: event,
+                            // eventUserRole: eventUserRole,
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.large),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Spacing.smMedium,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                HostCheckinGuestsAction(
+                                  event: event,
+                                  // eventUserRole: eventUserRole,
+                                ),
+                                SizedBox(
+                                  height: Spacing.extraSmall,
+                                ),
+                                CastOnFarcasterButton(
+                                  event: event,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                         SliverPadding(
                           padding: EdgeInsets.only(top: Spacing.xLarge),
                         ),
-                      ],
-                      SliverPadding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                        sliver: SliverToBoxAdapter(
-                          child: HostCollectiblesSection(
-                            event: event,
-                            // eventUserRole: eventUserRole,
+                        if (event.subeventEnabled == true) ...[
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: CreateSubSideEventButton(
+                                event: event,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.medium),
-                      ),
-                      if (event.latitude != null &&
-                          event.longitude != null) ...[
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: Spacing.smMedium,
-                            horizontal: Spacing.smMedium,
+                          SliverPadding(
+                            padding: EdgeInsets.only(top: Spacing.xLarge),
                           ),
-                          sliver: SliverToBoxAdapter(
-                            child: HostEventLocation(event: event),
-                          ),
-                        ),
-                      ],
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: Spacing.smMedium),
-                      ),
-                      if (event.space != null)
+                        ],
                         SliverPadding(
                           padding: EdgeInsets.symmetric(
                             horizontal: Spacing.smMedium,
                           ),
                           sliver: SliverToBoxAdapter(
-                            child: HostEventManageSpaceWidget(
-                              eventId: event.id ?? "",
+                            child: HostCollectiblesSection(
+                              event: event,
+                              // eventUserRole: eventUserRole,
                             ),
                           ),
                         ),
-                      const SliverToBoxAdapter(
-                        child: SafeArea(
-                          top: false,
-                          child: SizedBox.shrink(),
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.medium),
                         ),
-                      ),
-                    ],
+                        if (event.latitude != null &&
+                            event.longitude != null) ...[
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: Spacing.smMedium,
+                              horizontal: Spacing.smMedium,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: HostEventLocation(event: event),
+                            ),
+                          ),
+                        ],
+                        SliverPadding(
+                          padding: EdgeInsets.only(top: Spacing.smMedium),
+                        ),
+                        if (event.space != null)
+                          SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Spacing.smMedium,
+                            ),
+                            sliver: SliverToBoxAdapter(
+                              child: HostEventManageSpaceWidget(
+                                eventId: event.id ?? "",
+                              ),
+                            ),
+                          ),
+                        const SliverToBoxAdapter(
+                          child: SafeArea(
+                            top: false,
+                            child: SizedBox.shrink(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

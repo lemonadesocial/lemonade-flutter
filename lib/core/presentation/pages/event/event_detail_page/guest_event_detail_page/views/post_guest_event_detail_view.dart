@@ -328,28 +328,37 @@ class PostGuestEventDetailView extends StatelessWidget {
               bottom: false,
               child: Stack(
                 children: [
-                  CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: PostGuestEventAnimatedAppBar(
-                          event: event,
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<GetEventDetailBloc>().add(
+                            GetEventDetailEvent.fetch(
+                              eventId: event.id ?? '',
+                            ),
+                          );
+                    },
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: PostGuestEventAnimatedAppBar(
+                            event: event,
+                          ),
                         ),
-                      ),
-                      SliverList.separated(
-                        itemCount: widgets.length,
-                        itemBuilder: (context, index) {
-                          return widgets[index];
-                        },
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: Spacing.medium,
+                        SliverList.separated(
+                          itemCount: widgets.length,
+                          itemBuilder: (context, index) {
+                            return widgets[index];
+                          },
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: Spacing.medium,
+                          ),
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: Spacing.xLarge * 3),
-                      ),
-                    ],
+                        SliverToBoxAdapter(
+                          child: SizedBox(height: Spacing.xLarge * 3),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

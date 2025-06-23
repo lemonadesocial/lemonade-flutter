@@ -11,6 +11,7 @@ import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class SelectPaymentAccountsDropdown extends StatelessWidget {
   final List<PaymentAccount> paymentAccounts;
@@ -33,7 +34,9 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
       child: Column(
@@ -42,10 +45,7 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
         children: [
           Text(
             t.event.eventBuyTickets.network,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
           SizedBox(height: Spacing.xSmall),
           DropdownButtonHideUnderline(
@@ -60,9 +60,9 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
               customButton: Container(
                 padding: EdgeInsets.all(Spacing.small),
                 decoration: BoxDecoration(
-                  border: Border.all(color: colorScheme.outlineVariant),
+                  border: Border.all(color: appColors.pageDivider),
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
-                  color: LemonColor.atomicBlack,
+                  color: appColors.cardBg,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,14 +103,14 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
                         children: [
                           Text(
                             t.event.eventBuyTickets.unavailable,
-                            style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
+                            style: appText.md.copyWith(
+                              color: appColors.textTertiary,
                             ),
                           ),
                           Text(
                             t.event.eventBuyTickets.unavailableDescription,
-                            style: Typo.small.copyWith(
-                              color: colorScheme.onSecondary,
+                            style: appText.sm.copyWith(
+                              color: appColors.textTertiary,
                             ),
                           ),
                         ],
@@ -132,8 +132,8 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
               dropdownStyleData: DropdownStyleData(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(LemonRadius.small),
-                  color: LemonColor.atomicBlack,
-                  border: Border.all(color: colorScheme.outlineVariant),
+                  color: appColors.pageBg,
+                  border: Border.all(color: appColors.pageDivider),
                 ),
                 offset: Offset(0, -Spacing.superExtraSmall),
               ),
@@ -150,10 +150,10 @@ class SelectPaymentAccountsDropdown extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: Card(
-                color: colorScheme.background,
+                color: appColors.cardBg,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
-                  side: BorderSide(color: colorScheme.outline),
+                  side: BorderSide(color: appColors.pageDivider),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(Spacing.small),

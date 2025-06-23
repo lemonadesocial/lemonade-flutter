@@ -1,13 +1,12 @@
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class RsvpApplicationMultiOptionsQuestion extends StatefulWidget {
   final EventApplicationQuestion question;
@@ -39,7 +38,8 @@ class RsvpApplicationMultiOptionsQuestionState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,15 +47,13 @@ class RsvpApplicationMultiOptionsQuestionState
           data:
               "${widget.question.question} ${widget.question.isRequired == true ? '**&#42;**' : ''}",
           styleSheet: MarkdownStyleSheet(
-            a: Typo.medium.copyWith(
-              color: LemonColor.paleViolet,
+            a: appText.md.copyWith(
+              color: appColors.textAccent,
               decoration: TextDecoration.none,
             ),
-            p: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-            ),
-            strong: Typo.medium.copyWith(
-              color: LemonColor.coralReef,
+            p: appText.md,
+            strong: appText.md.copyWith(
+              color: appColors.textError,
             ),
           ),
           onTapLink: (text, href, title) async {
@@ -65,10 +63,10 @@ class RsvpApplicationMultiOptionsQuestionState
         SizedBox(height: Spacing.xSmall),
         Container(
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
             border: Border.all(
-              color: colorScheme.outlineVariant,
+              color: appColors.pageDivider,
             ),
           ),
           child: ListView.separated(
@@ -115,9 +113,7 @@ class RsvpApplicationMultiOptionsQuestionState
                       SizedBox(width: Spacing.xSmall),
                       Text(
                         option,
-                        style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                        ),
+                        style: appText.md,
                       ),
                     ],
                   ),
@@ -134,7 +130,7 @@ class RsvpApplicationMultiOptionsQuestionState
                     Expanded(
                       child: Divider(
                         thickness: 1.w,
-                        color: colorScheme.outlineVariant,
+                        color: appColors.pageDivider,
                       ),
                     ),
                   ],

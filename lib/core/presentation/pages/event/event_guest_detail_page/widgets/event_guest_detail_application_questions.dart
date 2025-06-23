@@ -109,7 +109,7 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
                   question: ProfileFieldKey.getFieldLabel(
                     (event?.applicationProfileFields ?? [])[index].field ?? '',
                   ),
-                  answer: finalValue ?? '',
+                  answer: finalValue ?? '--',
                   answers: const [],
                 );
               }),
@@ -118,7 +118,7 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
             ...applications.map(
               (qa) => _QuestionAnswerItem(
                 question: qa.question,
-                answer: qa.answer ?? '',
+                answer: qa.answer ?? '--',
                 answers: qa.answers ?? [],
               ),
             ),

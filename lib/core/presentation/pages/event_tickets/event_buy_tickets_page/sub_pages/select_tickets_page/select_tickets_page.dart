@@ -20,13 +20,12 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/utils/auth_utils.dart';
 import 'package:app/core/utils/event_tickets_utils.dart';
 import 'package:app/core/utils/event_utils.dart';
-import 'package:app/gen/fonts.gen.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -182,7 +181,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
               ? t.event.eventBuyTickets
                   .addictionalTicketsPurchasedSuccess(count: ticketsCount ?? 0)
               : null,
-          buttonBuilder: (newContext) => LinearGradientButton(
+          buttonBuilder: (newContext) => LinearGradientButton.secondaryButton(
             onTap: () => AutoRouter.of(newContext).replace(
               EventUtils.getAssignTicketsRouteForBuyFlow(
                 event: widget.event,
@@ -190,11 +189,6 @@ class _SelectTicketViewState extends State<SelectTicketView> {
               ),
             ),
             height: Sizing.large,
-            textStyle: Typo.medium.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.87),
-              fontFamily: FontFamily.clashDisplay,
-            ),
             radius: BorderRadius.circular(LemonRadius.small * 2),
             label: t.common.next,
           ),
@@ -241,7 +235,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final userId = context.read<AuthBloc>().state.maybeWhen(
           orElse: (() => ''),
@@ -341,7 +335,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: appColors.pageBg,
         appBar: LemonAppBar(
           leading: const LemonBackButton(),
           title: t.event.eventBuyTickets.selectTickets,
@@ -430,7 +424,7 @@ class _SelectTicketViewState extends State<SelectTicketView> {
                     top: Spacing.medium,
                     bottom: Spacing.smMedium,
                   ),
-                  color: colorScheme.background,
+                  color: appColors.pageBg,
                   child: SelectTicketSubmitButton(
                     event: widget.event,
                   ),

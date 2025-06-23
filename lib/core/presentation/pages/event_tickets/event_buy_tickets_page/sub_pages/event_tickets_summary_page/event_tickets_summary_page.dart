@@ -35,15 +35,14 @@ import 'package:app/core/utils/user_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventTicketsSummaryPage extends StatelessWidget {
@@ -181,6 +180,7 @@ class _EventTicketsSummaryPageViewState
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
     final user = context.watch<AuthBloc>().state.maybeWhen(
@@ -384,6 +384,12 @@ class _EventTicketsSummaryPageViewState
                                                         .contains(account),
                                               )
                                               .toList();
+
+                                      if (allPaymentAccountsOfSelectedTickets
+                                          .isEmpty) {
+                                        return const SizedBox.shrink();
+                                      }
+
                                       return Column(
                                         children: [
                                           SelectPaymentAccountsDropdown(
@@ -427,24 +433,22 @@ class _EventTicketsSummaryPageViewState
                                               horizontal: Spacing.small,
                                             ),
                                             child: TicketTokenRewardsList(
-                                              titleColor: colorScheme.onPrimary,
+                                              titleColor: appColors.textPrimary,
                                               containerDecoration:
                                                   BoxDecoration(
-                                                color: LemonColor.atomicBlack,
+                                                color: appColors.cardBg,
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                   LemonRadius.medium,
                                                 ),
                                                 border: Border.all(
-                                                  color: colorScheme
-                                                      .outlineVariant,
+                                                  color: appColors.pageDivider,
                                                   width: 1.w,
                                                 ),
                                               ),
                                               itemSeparator: Divider(
                                                 height: 1.w,
-                                                color:
-                                                    colorScheme.outlineVariant,
+                                                color: appColors.pageDivider,
                                               ),
                                               itemPadding: EdgeInsets.all(
                                                 Spacing.small,
@@ -571,12 +575,12 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final t = Translations.of(context);
     final event = context.read<EventProviderBloc>().event;
     final isPaymentRequired =
         context.read<SelectEventTicketsBloc>().state.isPaymentRequired;
-
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
       child: Column(
@@ -584,17 +588,14 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
         children: [
           Text(
             StringUtils.capitalize(t.event.tickets(n: 2)),
-            style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.md,
           ),
           SizedBox(height: Spacing.xSmall),
           Container(
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               border: Border.all(
-                color: colorScheme.outlineVariant,
+                color: appColors.pageDivider,
                 width: 1.w,
               ),
               borderRadius: BorderRadius.circular(LemonRadius.medium),
@@ -639,7 +640,7 @@ class _TicketsAndTotalPricingSummary extends StatelessWidget {
                 ),
                 Divider(
                   thickness: 1.w,
-                  color: colorScheme.outlineVariant,
+                  color: appColors.pageDivider,
                 ),
                 Padding(
                   padding: EdgeInsets.all(Spacing.small),

@@ -3,9 +3,8 @@ import 'package:app/i18n/i18n.g.dart';
 import 'package:flutter/material.dart';
 import 'package:app/core/domain/event/entities/event_application_question.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class RsvpApplicationTextQuestion extends StatelessWidget {
   final EventApplicationQuestion question;
@@ -21,18 +20,16 @@ class RsvpApplicationTextQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
     return LemonTextField(
       inputHeight: 53.w,
       filled: true,
-      fillColor: LemonColor.atomicBlack,
-      borderColor: colorScheme.outlineVariant,
+      fillColor: appColors.cardBg,
+      borderColor: appColors.pageDivider,
       label: question.question,
-      labelStyle: Typo.medium.copyWith(
-        color: colorScheme.onPrimary,
-        fontWeight: FontWeight.w500,
-      ),
+      labelStyle: appText.md,
       hintText: t.common.hint.enterYourAnswer,
       initialText: answerInput?.answer ?? '',
       onChange: onChange,

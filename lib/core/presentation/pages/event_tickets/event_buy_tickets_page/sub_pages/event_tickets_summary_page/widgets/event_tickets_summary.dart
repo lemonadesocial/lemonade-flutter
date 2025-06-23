@@ -8,13 +8,12 @@ import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/payment_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventTicketsSummary extends StatelessWidget {
   final List<PurchasableTicketType> ticketTypes;
@@ -37,6 +36,7 @@ class EventTicketsSummary extends StatelessWidget {
     return Column(
       children: [
         ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: selectedTickets.length,
           separatorBuilder: (context, index) =>
@@ -80,41 +80,53 @@ class TicketSummaryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final isCrypto = currencyInfo?.contracts?.isNotEmpty == true;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          '$count x ${ticketType.title ?? ''}',
-          style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Text(
+                  '$count x ${ticketType.title ?? ''}',
+                  style: appText.md.copyWith(
+                    color: appColors.textTertiary,
+                  ),
+                  maxLines: 3,
+                ),
+              ),
+              SizedBox(width: Spacing.extraSmall),
+              InkWell(
+                onTap: () => context.router.pop(),
+                child: Container(
+                  width: 21.w,
+                  height: 21.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
+                    color: appColors.cardBg,
+                  ),
+                  child: Center(
+                    child: ThemeSvgIcon(
+                      color: appColors.textTertiary,
+                      builder: (filter) => Assets.icons.icEdit.svg(
+                        colorFilter: filter,
+                        width: Sizing.small / 2,
+                        height: Sizing.small / 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(width: Spacing.extraSmall),
-        InkWell(
-          onTap: () => context.router.pop(),
-          child: Container(
-            width: 21.w,
-            height: 21.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
-              color: colorScheme.outline,
-            ),
-            child: Center(
-              child: ThemeSvgIcon(
-                color: colorScheme.onSurfaceVariant,
-                builder: (filter) => Assets.icons.icEdit.svg(
-                  colorFilter: filter,
-                  width: Sizing.small / 2,
-                  height: Sizing.small / 2,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Spacer(),
         if (!isCrypto)
           Text(
             NumberUtils.formatCurrency(
@@ -126,8 +138,8 @@ class TicketSummaryItem extends StatelessWidget {
                   count,
               currency: currency,
             ),
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
         if (isCrypto)
@@ -142,8 +154,8 @@ class TicketSummaryItem extends StatelessWidget {
               currency: currency,
               decimals: currencyInfo?.decimals ?? 0,
             ),
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
       ],

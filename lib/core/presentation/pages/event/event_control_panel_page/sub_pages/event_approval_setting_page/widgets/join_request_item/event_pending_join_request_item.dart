@@ -2,7 +2,6 @@ import 'package:app/core/application/event/get_event_detail_bloc/get_event_detai
 import 'package:app/core/domain/event/entities/event.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/event_repository.dart';
-import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/sub_pages/event_join_request_application_page/event_join_request_application_page.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/view/event_join_requests_list.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/event_join_request_actions_bar.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_approval_setting_page/widgets/join_request_user_avatar.dart';
@@ -12,13 +11,11 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/app_theme/app_theme.dart';
 
 class EventPendingJoinRequestItem extends StatefulWidget {
@@ -184,33 +181,41 @@ class _EventPendingJoinRequestItemState
   }
 
   Future<dynamic> openApplication(BuildContext context, Event? event) {
-    return showCupertinoModalBottomSheet(
-      expand: true,
-      useRootNavigator: true,
-      backgroundColor: LemonColor.atomicBlack,
-      context: context,
-      builder: (context) => EventJoinRequestApplicationPage(
-        eventJoinRequest: widget.eventJoinRequest,
-        event: event,
-        onPressApprove: () async {
-          await _modifyJoinRequest(
-            eventId: event?.id,
-            joinRequest: widget.eventJoinRequest,
-            action: ModifyJoinRequestAction.approve,
-          );
-          Navigator.of(context, rootNavigator: true).pop();
-          widget.onRefetch?.call();
-        },
-        onPressDecline: () async {
-          await _modifyJoinRequest(
-            eventId: event?.id,
-            joinRequest: widget.eventJoinRequest,
-            action: ModifyJoinRequestAction.decline,
-          );
-          Navigator.of(context, rootNavigator: true).pop();
-          widget.onRefetch?.call();
-        },
+    return AutoRouter.of(context).push(
+      EventGuestDetailRoute(
+        eventId: event?.id ?? '',
+        userId: widget.eventJoinRequest.user ?? '',
+        email: widget.eventJoinRequest.nonLoginUser?.email ?? '',
+        onRequestActionComplete: widget.onRefetch,
       ),
     );
+    // return showCupertinoModalBottomSheet(
+    //   expand: true,
+    //   useRootNavigator: true,
+    //   backgroundColor: LemonColor.atomicBlack,
+    //   context: context,
+    //   builder: (context) => EventJoinRequestApplicationPage(
+    //     eventJoinRequest: widget.eventJoinRequest,
+    //     event: event,
+    //     onPressApprove: () async {
+    //       await _modifyJoinRequest(
+    //         eventId: event?.id,
+    //         joinRequest: widget.eventJoinRequest,
+    //         action: ModifyJoinRequestAction.approve,
+    //       );
+    //       Navigator.of(context, rootNavigator: true).pop();
+    //       widget.onRefetch?.call();
+    //     },
+    //     onPressDecline: () async {
+    //       await _modifyJoinRequest(
+    //         eventId: event?.id,
+    //         joinRequest: widget.eventJoinRequest,
+    //         action: ModifyJoinRequestAction.decline,
+    //       );
+    //       Navigator.of(context, rootNavigator: true).pop();
+    //       widget.onRefetch?.call();
+    //     },
+    //   ),
+    // );
   }
 }
