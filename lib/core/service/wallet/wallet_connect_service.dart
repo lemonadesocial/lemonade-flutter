@@ -168,7 +168,7 @@ class WalletConnectService {
       chainId:
           chainId ?? _w3mService.selectedChain?.chainId ?? ETHEREUM.chainId,
       request: SessionRequestParams(
-        method: 'eth_signTypedData',
+        method: 'eth_signTypedData_v4',
         params: [wallet, jsonEncode(data)],
       ),
     );

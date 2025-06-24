@@ -46,17 +46,14 @@ class _LensAccountLemonadeUsernameState
         if (!state.loggedIn || !hasLensAccount || !isWalletConnected) {
           return InkWell(
             onTap: () async {
-              final isLensAccountConnected =
-                  await _onPressConnectLensAccount(context);
-              if (isLensAccountConnected) {
-                await _onPressClaimLensUsername(context);
-              }
+              await _onPressConnectLensAccount(context);
             },
             child: Text(
-              t.home.drawer.claimUsername,
+              t.home.drawer.connectToClaimUsername,
               style: appText.md.copyWith(
                 color: appColors.textAccent,
               ),
+              textAlign: TextAlign.center,
             ),
           );
         }
