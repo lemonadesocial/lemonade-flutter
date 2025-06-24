@@ -56,7 +56,8 @@
         "ticketsDesc": "Access your tickets & receipts",
         "claimUsername": "Claim Username",
         "payoutAccounts": "Payout Accounts",
-        "payoutAccountsDesc": "Where your event earnings go."
+        "payoutAccountsDesc": "Where your event earnings go.",
+        "connectToClaimUsername": "Connect to claim username"
     },
     "whatNew": "What's New"
 }
