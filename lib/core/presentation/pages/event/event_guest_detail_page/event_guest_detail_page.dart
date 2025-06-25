@@ -184,6 +184,12 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
     List<EventTicketType>? eventTicketTypes,
     Function()? refetch,
   }) {
+    final event = context.read<GetEventDetailBloc>().state.maybeWhen(
+          orElse: () => null,
+          fetched: (data) => data,
+        );
+    final requiredProfileFields = event?.applicationProfileFields ?? [];
+    final eventApplicationQuestions = event?.applicationQuestions ?? [];
     final colorScheme = Theme.of(context).colorScheme;
     final sections = [
       (
@@ -211,12 +217,8 @@ class _EventGuestDetailPageState extends State<EventGuestDetailPage> {
         widget: EventGuestDetailApplicationQuestionsWidget(
           eventGuestDetail: eventGuestDetail,
         ),
-        isVisible: applications?.any(
-              (app) =>
-                  app.answers != null &&
-                  app.answers!.any((answer) => answer.isNotEmpty),
-            ) ??
-            false,
+        isVisible: requiredProfileFields.isNotEmpty ||
+            eventApplicationQuestions.isNotEmpty,
       ),
     ];
 
