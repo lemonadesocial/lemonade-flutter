@@ -38,10 +38,12 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     on<EditProfileEventGithubChange>(onGithubChange);
     on<EditProfileEventLensChange>(onLensChange);
     on<EditProfileEventMirrorChange>(onMirrorChange);
-
+    on<EditProfileEventWebsiteChange>(onWebsiteChange);
+    on<EditProfileEventCalendlyUrlChange>(onCalendlyUrlChange);
     on<EditProfileEventMapNotificationType>(mapNotificationType);
     on<EditProfileEventNotificationCheck>(onNotificationCheck);
     on<EditProfileEventSubmitEditProfile>(submitEditProfile);
+    on<EditProfileEventPronounChange>(onPronounChange);
   }
 
   final userRepository = getIt<UserRepository>();
@@ -282,6 +284,42 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     );
   }
 
+  Future<void> onWebsiteChange(
+    EditProfileEventWebsiteChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        website: event.input,
+      ),
+    );
+  }
+
+  Future<void> onCalendlyUrlChange(
+    EditProfileEventCalendlyUrlChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        calendlyUrl: event.input,
+      ),
+    );
+  }
+
+  Future<void> onPronounChange(
+    EditProfileEventPronounChange event,
+    Emitter<EditProfileState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: EditProfileStatus.editing,
+        pronoun: event.input,
+      ),
+    );
+  }
+
   Future<void> mapNotificationType(
     EditProfileEventMapNotificationType event,
     Emitter<EditProfileState> emit,
@@ -378,6 +416,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         username: state.username,
         pronoun: state.pronoun?.pronoun,
         display_name: state.displayName,
+        name: state.displayName,
         tagline: state.tagline,
         description: state.shortBio,
         job_title: state.jobTitle,

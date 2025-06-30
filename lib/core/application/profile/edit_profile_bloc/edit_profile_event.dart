@@ -43,6 +43,12 @@ class EditProfileEvent with _$EditProfileEvent {
       EditProfileEventLensChange;
   factory EditProfileEvent.mirrorChange({required String input}) =
       EditProfileEventMirrorChange;
+  factory EditProfileEvent.websiteChange({required String input}) =
+      EditProfileEventWebsiteChange;
+  factory EditProfileEvent.calendlyUrlChange({required String input}) =
+      EditProfileEventCalendlyUrlChange;
+  factory EditProfileEvent.pronounChange({required LemonPronoun input}) =
+      EditProfileEventPronounChange;
   factory EditProfileEvent.mapNotificationType({
     required List<String> notificationFilterString,
   }) = EditProfileEventMapNotificationType;

@@ -25,6 +25,8 @@ class EditProfileState with _$EditProfileState {
     String? handleGithub,
     String? handleLens,
     String? handleMirror,
+    String? calendlyUrl,
+    String? website,
     Map<NotificationSettingType, bool>? notificationMap,
   }) = _EditProfileState;
 

@@ -1,6 +1,6 @@
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/profile/edit_profile_bloc/edit_profile_bloc.dart';
-import 'package:app/core/domain/user/entities/user.dart';
+import 'package:app/core/domain/lens/entities/lens_lemonade_profile.dart';
 import 'package:app/core/presentation/pages/edit_profile/widgets/edit_profile_form_fields/edit_profile_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/theme/spacing.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProfileSocialForm extends StatelessWidget {
-  final User? userProfile;
+  final LensLemonadeProfile? userProfile;
   final EditProfileState editState;
 
   const EditProfileSocialForm({
@@ -48,6 +48,16 @@ class EditProfileSocialForm extends StatelessWidget {
       ),
       children: [
         EditProfileTextField(
+          icon: Assets.icons.icGlobe,
+          label: "Website",
+          initialValue: getValue(editState.website, userProfile?.website),
+          onChange: (input) => context.read<EditProfileBloc>().add(
+                EditProfileEvent.websiteChange(input: input),
+              ),
+          maxLines: 1,
+          placeholder: 'Your website',
+        ),
+        EditProfileTextField(
           icon: Assets.icons.icXLine,
           label: "X(Twitter)",
           initialValue:
@@ -68,6 +78,17 @@ class EditProfileSocialForm extends StatelessWidget {
               ),
           maxLines: 1,
           placeholder: '/us/handle',
+        ),
+        EditProfileTextField(
+          icon: Assets.icons.icInstagram,
+          label: "Farcaster",
+          initialValue:
+              getValue(editState.handleFarcaster, userProfile?.handleFarcaster),
+          onChange: (input) => context.read<EditProfileBloc>().add(
+                EditProfileEvent.farcasterChange(input: input),
+              ),
+          maxLines: 1,
+          placeholder: 'username',
         ),
         EditProfileTextField(
           icon: Assets.icons.icInstagram,
@@ -92,26 +113,37 @@ class EditProfileSocialForm extends StatelessWidget {
           placeholder: 'username',
         ),
         EditProfileTextField(
-          icon: Assets.icons.icLensFilled,
-          label: "Lens",
-          initialValue: getValue(editState.handleLens, userProfile?.handleLens),
-          onChange: (input) => context.read<EditProfileBloc>().add(
-                EditProfileEvent.lensChange(input: input),
-              ),
-          maxLines: 1,
-          placeholder: 'username',
-        ),
-        EditProfileTextField(
-          icon: Assets.icons.icMirror,
-          label: "Mirror",
+          icon: Assets.icons.icGithubFilled,
+          label: "Calendly",
           initialValue:
-              getValue(editState.handleMirror, userProfile?.handleMirror),
+              getValue(editState.calendlyUrl, userProfile?.calendlyUrl),
           onChange: (input) => context.read<EditProfileBloc>().add(
-                EditProfileEvent.mirrorChange(input: input),
+                EditProfileEvent.calendlyUrlChange(input: input),
               ),
           maxLines: 1,
           placeholder: 'username',
         ),
+        // EditProfileTextField(
+        //   icon: Assets.icons.icLensFilled,
+        //   label: "Lens",
+        //   initialValue: getValue(editState.handleLens, userProfile?.handleLens),
+        //   onChange: (input) => context.read<EditProfileBloc>().add(
+        //         EditProfileEvent.lensChange(input: input),
+        //       ),
+        //   maxLines: 1,
+        //   placeholder: 'username',
+        // ),
+        // EditProfileTextField(
+        //   icon: Assets.icons.icMirror,
+        //   label: "Mirror",
+        //   initialValue:
+        //       getValue(editState.handleMirror, userProfile?.handleMirror),
+        //   onChange: (input) => context.read<EditProfileBloc>().add(
+        //         EditProfileEvent.mirrorChange(input: input),
+        //       ),
+        //   maxLines: 1,
+        //   placeholder: 'username',
+        // ),
       ],
     );
   }

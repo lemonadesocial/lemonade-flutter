@@ -44,6 +44,7 @@ class UserDto with _$UserDto {
     @JsonKey(name: 'handle_farcaster') String? handleFarcaster,
     @JsonKey(name: 'handle_lens') String? handleLens,
     @JsonKey(name: 'calendly_url') String? calendlyUrl,
+    String? website,
     List<String>? wallets,
     @JsonKey(name: 'wallet_custodial') String? walletCustodial,
     String? name,

@@ -1,0 +1,49 @@
+mutation SetAccountMetadata($request: SetAccountMetadataRequest!) {
+  setAccountMetadata(request: $request) {
+    ... on SetAccountMetadataResponse {
+      hash
+    }
+    ... on SponsoredTransactionRequest {
+      raw {
+        type
+        to
+        from
+        nonce
+        gasLimit
+        maxPriorityFeePerGas
+        maxFeePerGas
+        data
+        value
+        chainId
+        customData {
+          gasPerPubdata
+          factoryDeps
+          customSignature
+          paymasterParams {
+            paymaster
+            paymasterInput
+          }
+        }
+      }
+      reason
+    }
+    ... on SelfFundedTransactionRequest {
+      raw {
+        type
+        to
+        from
+        nonce
+        gasLimit
+        maxPriorityFeePerGas
+        maxFeePerGas
+        data
+        value
+        chainId
+      }
+      reason
+    }
+    ... on TransactionWillFail {
+      reason
+    }
+  }
+}

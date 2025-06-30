@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 enum SortDirection {
   ASC,
   DESC,
@@ -9,6 +11,12 @@ enum LemonPronoun {
   they('They');
 
   final String pronoun;
+
+  static LemonPronoun? fromString(String pronoun) {
+    return LemonPronoun.values.firstWhereOrNull(
+      (e) => e.pronoun == pronoun,
+    );
+  }
 
   const LemonPronoun(this.pronoun);
 }

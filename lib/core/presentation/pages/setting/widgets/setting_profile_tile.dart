@@ -1,5 +1,5 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_lemonade_profile_builder/lens_lemonade_profile_builder.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -51,35 +51,39 @@ class SettingProfileTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                LemonNetworkImage(
-                  imageUrl: authSession.imageAvatar ?? '',
-                  width: Sizing.s10,
-                  height: Sizing.s10,
-                  borderRadius: BorderRadius.circular(LemonRadius.full),
-                  border: Border.all(color: appColors.cardBorder),
-                  placeholder: ImagePlaceholder.avatarPlaceholder(
-                    userId: authSession.userId,
-                  ),
+                LensLemonadeProfileBuilder(
+                  builder: (lensLemonadeProfile) {
+                    return LemonNetworkImage(
+                      imageUrl: lensLemonadeProfile.imageAvatar ?? '',
+                      width: Sizing.s10,
+                      height: Sizing.s10,
+                      borderRadius: BorderRadius.circular(LemonRadius.full),
+                      border: Border.all(color: appColors.cardBorder),
+                    );
+                  },
                 ),
                 SizedBox(width: Spacing.small),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        authSession.displayName ?? 'Anonymous',
-                        style: appText.md,
-                      ),
-                      Text(
-                        t.common.actions.editProfile,
-                        style: appText.sm.copyWith(
-                          color: appColors.textTertiary,
-                        ),
-                      ),
-                    ],
+                  child: LensLemonadeProfileBuilder(
+                    builder: (lensLemonadeProfile) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            lensLemonadeProfile.name ?? 'Anonymous',
+                            style: appText.md,
+                          ),
+                          Text(
+                            t.common.actions.editProfile,
+                            style: appText.sm.copyWith(
+                              color: appColors.textTertiary,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
-                const Spacer(),
                 ThemeSvgIcon(
                   color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icArrowRight.svg(
