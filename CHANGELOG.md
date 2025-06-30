@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.7.0...v2.8.0) (2025-06-30)
+
+
+### Features
+
+* enhance Lens account management and profile synchronization ([#994](https://github.com/lemonadesocial/lemonade-flutter/issues/994)) ([3e0effa](https://github.com/lemonadesocial/lemonade-flutter/commit/3e0effaa602eaa6021335968d5a40cd7d1acfb8a))
+
+
+### Bug Fixes
+
+* updated application not shown in guest detail ([#993](https://github.com/lemonadesocial/lemonade-flutter/issues/993)) ([0ad1621](https://github.com/lemonadesocial/lemonade-flutter/commit/0ad1621b895ae0b2245b6cbd3d57d59a867e58a3))
+* Updated the wallet connect service to use 'eth_signTypedData_v4' method for better compatibility. ([#991](https://github.com/lemonadesocial/lemonade-flutter/issues/991)) ([1e9d883](https://github.com/lemonadesocial/lemonade-flutter/commit/1e9d883a799f1aa9688222a01b2bc340c7d6ad71))
+
 ## [2.7.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.6.1...v2.7.0) (2025-06-23)
 
 
