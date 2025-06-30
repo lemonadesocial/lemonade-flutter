@@ -5,6 +5,7 @@ import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/drawer/lemon_drawer.dart';
+import 'package:app/core/presentation/pages/lens/widget/auto_sync_lens_lemonade_profile_widget/auto_sync_lens_lemonade_profile_widget.dart';
 import 'package:app/core/presentation/widgets/poap/poap_claim_transfer_controller_widget/poap_claim_transfer_controller_widget.dart';
 import 'package:app/core/service/shorebird_codepush_service.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
@@ -90,6 +91,7 @@ class _RootPageViewState extends State<RootPage> {
                 const Align(
                   child: PoapClaimTransferControllerWidget(),
                 ),
+                const AutoSyncLensLemonadeProfileWidget(),
                 AutoTabsScaffold(
                   navigatorObservers: () => [
                     TabRouterObserver(),

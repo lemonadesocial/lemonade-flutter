@@ -78,12 +78,18 @@ class _View extends StatelessWidget {
               BlocListener<LoginLensAccountBloc, LoginLensAccountState>(
                 listener: (context, state) {
                   state.maybeWhen(
-                    success:
-                        (token, refreshToken, idToken, accountStatus) async {
+                    success: (
+                      token,
+                      refreshToken,
+                      account,
+                      idToken,
+                      accountStatus,
+                    ) async {
                       context.read<LensAuthBloc>().add(
                             LensAuthEvent.authorized(
                               token: token,
                               refreshToken: refreshToken,
+                              account: account,
                             ),
                           );
                       if (accountStatus == LensAccountStatus.accountOwner) {

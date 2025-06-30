@@ -4,9 +4,9 @@ import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_account_lemonade_username/lens_account_lemaonde_username.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_lemonade_profile_builder/lens_lemonade_profile_builder.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
@@ -46,23 +46,28 @@ class LemonDrawerProfileInfo extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LemonNetworkImage(
-              imageUrl: authSession!.imageAvatar ?? '',
-              width: Sizing.s20,
-              height: Sizing.s20,
-              borderRadius: BorderRadius.circular(LemonRadius.full),
-              placeholder: ImagePlaceholder.avatarPlaceholder(
-                userId: authSession.userId,
-              ),
+            LensLemonadeProfileBuilder(
+              builder: (lensLemonadeProfile) {
+                return LemonNetworkImage(
+                  imageUrl: lensLemonadeProfile.imageAvatar ?? '',
+                  width: Sizing.s20,
+                  height: Sizing.s20,
+                  borderRadius: BorderRadius.circular(LemonRadius.full),
+                );
+              },
             ),
             SizedBox(height: Spacing.s5),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  authSession.displayName ?? 'Anonymous',
-                  style: appText.lg,
+                LensLemonadeProfileBuilder(
+                  builder: (lensLemonadeProfile) {
+                    return Text(
+                      lensLemonadeProfile.name ?? 'Anonymous',
+                      style: appText.lg,
+                    );
+                  },
                 ),
                 SizedBox(
                   height: Spacing.s0_5,
@@ -151,7 +156,11 @@ class LemonDrawerProfileInfo extends StatelessWidget {
               width: Spacing.s2,
             ),
             InkWell(
-              onTap: () => _onPressShare(context, authSession),
+              onTap: () {
+                if (authSession != null) {
+                  _onPressShare(context, authSession);
+                }
+              },
               child: Container(
                 padding: EdgeInsets.all(Spacing.s2),
                 decoration: ShapeDecoration(

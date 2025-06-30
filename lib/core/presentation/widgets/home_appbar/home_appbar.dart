@@ -1,9 +1,8 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_lemonade_profile_builder/lens_lemonade_profile_builder.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
-import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/core/utils/drawer_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -68,10 +67,6 @@ class _Leading extends StatelessWidget {
   Widget build(BuildContext context) {
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
-    final loggedInUser = context.watch<AuthBloc>().state.maybeWhen(
-          orElse: () => null,
-          authenticated: (authSession) => authSession,
-        );
     return InkWell(
       onTap: () {
         context.read<AuthBloc>().state.maybeWhen(
@@ -91,18 +86,19 @@ class _Leading extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            LemonNetworkImage(
-              imageUrl: AvatarUtils.getAvatarUrl(user: loggedInUser),
-              placeholder: ImagePlaceholder.avatarPlaceholder(
-                userId: loggedInUser?.userId,
-              ),
-              width: Sizing.s7,
-              height: Sizing.s7,
-              borderRadius: BorderRadius.circular(LemonRadius.full),
-              border: Border.all(
-                color: appColors.cardBorder,
-                width: 1.w,
-              ),
+            LensLemonadeProfileBuilder(
+              builder: (lensLemonadeProfile) {
+                return LemonNetworkImage(
+                  imageUrl: lensLemonadeProfile.imageAvatar ?? '',
+                  width: Sizing.s7,
+                  height: Sizing.s7,
+                  borderRadius: BorderRadius.circular(LemonRadius.full),
+                  border: Border.all(
+                    color: appColors.cardBorder,
+                    width: 1.w,
+                  ),
+                );
+              },
             ),
             SizedBox(width: Spacing.s3),
             Text(

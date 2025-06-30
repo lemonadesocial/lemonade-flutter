@@ -1,10 +1,12 @@
 import 'package:app/core/application/lens/enums.dart';
 import 'package:app/core/config.dart';
+import 'package:app/core/domain/lens/entities/lens_account.dart';
 import 'package:app/core/domain/lens/entities/lens_auth.dart';
 import 'package:app/core/domain/lens/lens_repository.dart';
 import 'package:app/core/failure.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/graphql/lens/account/query/lens_get_account.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authenticate.graphql.dart';
 import 'package:app/graphql/lens/auth/mutation/authentication_challenge.graphql.dart';
 import 'package:app/graphql/lens/schema.graphql.dart';
@@ -29,6 +31,7 @@ class LoginLensAccountState with _$LoginLensAccountState {
   const factory LoginLensAccountState.success({
     required String token,
     required String refreshToken,
+    LensAccount? account,
     String? idToken,
     required LensAccountStatus accountStatus,
   }) = _Success;
@@ -122,11 +125,25 @@ class LoginLensAccountBloc
           final authenticationResult = result.fold((l) => null, (r) => r);
 
           if (authenticationResult is LensAuthenticationTokens) {
+            LensAccount? account;
+            if (e.accountStatus == LensAccountStatus.accountOwner &&
+                e.accountAddress.isNotEmpty) {
+              account = (await _lensRepository.getAccount(
+                input: Variables$Query$Account(
+                  request: Input$AccountRequest(
+                    address: e.accountAddress,
+                  ),
+                ),
+              ))
+                  .fold((l) => null, (r) => r);
+            }
+
             emit(
               LoginLensAccountState.success(
                 token: authenticationResult.accessToken ?? '',
                 refreshToken: authenticationResult.refreshToken ?? '',
                 accountStatus: e.accountStatus,
+                account: account,
               ),
             );
           } else if (authenticationResult is LensWrongSignerError) {

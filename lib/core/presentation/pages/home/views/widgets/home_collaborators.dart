@@ -2,8 +2,8 @@ import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/data/collaborator/dtos/user_discovery_swipe_dto/user_discovery_swipe_dto.dart';
 import 'package:app/core/domain/collaborator/entities/user_discovery_swipe/user_discovery_swipe.dart';
 import 'package:app/core/presentation/pages/collaborator/sub_pages/collaborator_chat_page/widgets/horizontal_collaborator_likes_list.dart';
+import 'package:app/core/presentation/pages/lens/widget/lens_lemonade_profile_builder/lens_lemonade_profile_builder.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
-import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/collaborator/query/get_user_discovery_swipes.graphql.dart';
@@ -83,10 +83,6 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
     final t = Translations.of(context);
     final appText = context.theme.appTextTheme;
     final appColors = context.theme.appColors;
-    final user = context.watch<AuthBloc>().state.maybeWhen(
-          authenticated: (authSession) => authSession,
-          orElse: () => null,
-        );
 
     return Container(
       height: 235.w,
@@ -111,14 +107,15 @@ class _EmptyCollaboratorLikes extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                LemonNetworkImage(
-                  borderRadius: BorderRadius.circular(LemonRadius.full),
-                  width: 60.w,
-                  height: 60.w,
-                  imageUrl: user?.imageAvatar ?? '',
-                  placeholder: ImagePlaceholder.avatarPlaceholder(
-                    radius: BorderRadius.circular(LemonRadius.full),
-                  ),
+                LensLemonadeProfileBuilder(
+                  builder: (lensLemonadeProfile) {
+                    return LemonNetworkImage(
+                      borderRadius: BorderRadius.circular(LemonRadius.full),
+                      width: 60.w,
+                      height: 60.w,
+                      imageUrl: lensLemonadeProfile.imageAvatar ?? '',
+                    );
+                  },
                 ),
               ],
             ),

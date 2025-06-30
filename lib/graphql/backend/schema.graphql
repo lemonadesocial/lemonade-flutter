@@ -28,7 +28,7 @@ type Query {
   getHomeEvents(skip: Int! = 0, limit: Int! = 25, search: String, tense: EventTense, longitude: Float, latitude: Float, search_range: Float): [Event!]!
   getEventInvitedStatistics(search: String, _id: MongoID!): GetEventInvitedStatisticsResponse!
   getProfileEvents(skip: Int! = 0, limit: Int! = 25, user: MongoID): [Event!]!
-  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, unpublished: Boolean, space: MongoID, sort: JSON, hosting_only: Boolean): [Event!]!
+  getPastEvents(skip: Int! = 0, limit: Int! = 25, site: MongoID, user: MongoID, unpublished: Boolean, space: MongoID, sort: JSON, hosting_only: Boolean @deprecated(reason: "Use `host` instead."), host: Boolean): [Event!]!
   getUpcomingEvents(
     skip: Int! = 0
     limit: Int! = 25
@@ -173,6 +173,7 @@ type Query {
   getUser(_id: MongoID, username: String, email: String, matrix_localpart: String): User
   getUsers(skip: Int! = 0, limit: Int! = 25, _id: [MongoID!], tag_recommended: Boolean, wallets: [String!], search: String): [User!]!
   getUsersSpotlight: [User!]!
+  getDefaultLensProfile: String
   getUserContacts(skip: Int! = 0, limit: Int! = 25, input: GetUserContactsInput): GetUserContactsResponse!
   getUserDiscovery(longitude: Float!, latitude: Float!, search_range: Float, event: MongoID, offerings: [MongoID!]): UserDiscovery!
   getUserDiscoverySwipes(skip: Int! = 0, limit: Int! = 25, incoming: Boolean, state: UserDiscoverySwipeState, other_wallets: Boolean): [UserDiscoverySwipe!]!
@@ -228,7 +229,7 @@ type Query {
   listSpaceNewsletters(space: MongoID!, scheduled: Boolean, sent: Boolean, draft: Boolean): [EmailSetting!]!
   getSpaceNewsletter(space: MongoID!, _id: MongoID!): EmailSetting
   getSpaceVerificationSubmission(space: MongoID!): SpaceVerificationSubmission
-  getSystemFiles(categories: [FileCategory!]): [SystemFileBase!]!
+  getSystemFiles(categories: [FileCategory!]): [SystemFile!]!
   listSubscriptionItems: [SubscriptionItem!]!
   getCurrentSubscription: SubscriptionResponse
   previewUpdateSubscription(input: UpdateSubscriptionInput!, _id: MongoID!): SubscriptionPricing
@@ -294,6 +295,7 @@ type User {
   events: [MongoID!]
   expertise: [MongoID!]
   frequent_questions: [FrequentQuestion!]
+  website: String
   handle_facebook: String
   handle_farcaster: String
   handle_github: String
@@ -337,6 +339,9 @@ type User {
   farcaster_user_info: FarcasterUserInfo
   lemon_refresh_at: DateTimeISO
   fcm_tokens: [String!]
+  kratos_wallet_address: String
+  lens_profile_id: String
+  lens_profile_synced: Boolean
   matrix_localpart: String
   payment_verification: UserPaymentVerification
   url: String
@@ -550,6 +555,8 @@ type Event {
   start: DateTimeISO!
   end: DateTimeISO!
   host: MongoID!
+  external_url: String
+  external_hostname: String
   cohosts: [MongoID!]
   visible_cohosts: [MongoID!]
   invited: [MongoID!]
@@ -557,6 +564,7 @@ type Event {
   pending: [MongoID!]
   accepted: [MongoID!]
   declined: [MongoID!]
+  unsure: [MongoID!]
   payment_fee: Float!
   donation_enabled: Boolean
   donation_show_history: Boolean
@@ -666,6 +674,9 @@ type Event {
   url: String
   url_go: String
   telegram_channels: [TelegramChannel!]
+  theme_data: JSON
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
   donation_vaults_expanded: [DonationVault!]
   broadcasts: [Broadcast!]
   space_tags: [SpaceTag!]
@@ -691,11 +702,16 @@ type Event {
   speaker_users_expanded(skip: Int! = 0, limit: Int! = 25): [User]
   payment_accounts_expanded(skip: Int! = 0, limit: Int! = 25): [NewPaymentAccount]
   payment_ticket_discounts: [EventPaymentTicketDiscount!]
+  dark_theme_image_expanded: File
+  light_theme_image_expanded: File
   tickets: [TicketBase!]
   application_questions: [EventApplicationQuestion!]
   application_form_submission: DateTimeISO
   calendar_links: EventCalendarLinks
   me_awaiting_approval: Boolean
+  me_going: Boolean
+  me_invited: Boolean
+  me_is_host: Boolean
 }
 
 enum EventState {
@@ -1082,6 +1098,8 @@ type Space {
   address: Address
   image_avatar: MongoID
   image_cover: MongoID
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
 
   """External events are listed on this space"""
   listed_events: [MongoID!]
@@ -1096,6 +1114,8 @@ type Space {
   sub_spaces_expanded(skip: Int, limit: Int): [Space!]
   image_avatar_expanded: File
   image_cover_expanded: File
+  dark_theme_image_expanded: File
+  light_theme_image_expanded: File
 }
 
 enum SpaceState {
@@ -1587,6 +1607,7 @@ type UserWithEmail {
   events: [MongoID!]
   expertise: [MongoID!]
   frequent_questions: [FrequentQuestion!]
+  website: String
   handle_facebook: String
   handle_farcaster: String
   handle_github: String
@@ -1630,6 +1651,9 @@ type UserWithEmail {
   farcaster_user_info: FarcasterUserInfo
   lemon_refresh_at: DateTimeISO
   fcm_tokens: [String!]
+  kratos_wallet_address: String
+  lens_profile_id: String
+  lens_profile_synced: Boolean
   matrix_localpart: String
   payment_verification: UserPaymentVerification
   url: String
@@ -1697,6 +1721,7 @@ type NonloginUser {
   events: [MongoID!]
   expertise: [MongoID!]
   frequent_questions: [FrequentQuestion!]
+  website: String
   handle_facebook: String
   handle_farcaster: String
   handle_github: String
@@ -1740,6 +1765,9 @@ type NonloginUser {
   farcaster_user_info: FarcasterUserInfo
   lemon_refresh_at: DateTimeISO
   fcm_tokens: [String!]
+  kratos_wallet_address: String
+  lens_profile_id: String
+  lens_profile_synced: Boolean
   matrix_localpart: String
   payment_verification: UserPaymentVerification
   url: String
@@ -2181,6 +2209,7 @@ enum InvitationResponse {
   PENDING
   DECLINED
   ACCEPTED
+  UNSURE
   CANCELLED
 }
 
@@ -3384,6 +3413,7 @@ input UserInput {
   events: [MongoID!]
   expertise: [MongoID!]
   frequent_questions: [FrequentQuestionInput!]
+  website: String
   handle_facebook: String
   handle_farcaster: String
   handle_github: String
@@ -3409,6 +3439,7 @@ input UserInput {
   timezone: String
   username: String
   settings: JSON
+  lens_profile_synced: Boolean
   daos: [UserDaoInput!]
   data: JSON
   terms_accepted_adult: Boolean
@@ -4045,6 +4076,8 @@ type SpaceEventInsight {
   start: DateTimeISO!
   end: DateTimeISO!
   host: MongoID!
+  external_url: String
+  external_hostname: String
   cohosts: [MongoID!]
   visible_cohosts: [MongoID!]
   invited: [MongoID!]
@@ -4053,6 +4086,7 @@ type SpaceEventInsight {
   pending: [MongoID!]
   accepted: [MongoID!]
   declined: [MongoID!]
+  unsure: [MongoID!]
   payment_fee: Float!
   donation_enabled: Boolean
   donation_show_history: Boolean
@@ -4176,6 +4210,9 @@ type SpaceEventInsight {
   url: String
   url_go: String
   telegram_channels: [TelegramChannel!]
+  theme_data: JSON
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
   checkins: Float!
   tickets_count: Float!
   reviews: Float
@@ -4285,6 +4322,8 @@ type EventBase {
   start: DateTimeISO!
   end: DateTimeISO!
   host: MongoID!
+  external_url: String
+  external_hostname: String
   cohosts: [MongoID!]
   visible_cohosts: [MongoID!]
   invited: [MongoID!]
@@ -4293,6 +4332,7 @@ type EventBase {
   pending: [MongoID!]
   accepted: [MongoID!]
   declined: [MongoID!]
+  unsure: [MongoID!]
   payment_fee: Float!
   donation_enabled: Boolean
   donation_show_history: Boolean
@@ -4416,6 +4456,9 @@ type EventBase {
   url: String
   url_go: String
   telegram_channels: [TelegramChannel!]
+  theme_data: JSON
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
 }
 
 type SpaceTokenRewardClaim {
@@ -4488,7 +4531,7 @@ enum SpaceVerificationState {
   REJECTED
 }
 
-type SystemFileBase {
+type SystemFile {
   _id: MongoID
   stamp: DateTimeISO!
   name: String!
@@ -4504,6 +4547,8 @@ type SystemFileBase {
 enum FileCategory {
   space_dark_theme
   space_light_theme
+  event_dark_theme
+  event_light_theme
 }
 
 type SubscriptionItem {
@@ -4581,7 +4626,8 @@ type Mutation {
   cancelEvent(_id: MongoID!): Event!
   acceptEventTerms(input: AcceptEventTermsInput!): Boolean!
   inviteEvent(input: InviteEventInput!): Event!
-  responseInvitation(input: ResponseInvitationInput!): Boolean!
+  responseInvitation(input: ResponseInvitationInput!): Boolean! @deprecated(reason: "Use the `respondInvitation` instead. This function will be removed in the next release.")
+  respondInvitation(input: RespondInvitationInput!): Boolean!
   submitEventApplicationQuestions(event: MongoID!, questions: [QuestionInput!]!): [EventApplicationQuestion!]!
   deleteEventApplicationQuestions(questions: [MongoID!]!, event: MongoID!): Boolean!
   submitEventApplicationAnswers(answers: [EventApplicationAnswerInput!]!, event: MongoID!, email: String): Boolean!
@@ -4720,6 +4766,7 @@ type Mutation {
   tgVerify(input: VerifyCodeInput!): Boolean!
   tgUnlinkAccount: Boolean!
   cancelTickets(input: CancelTicketsInput!): Boolean!
+  cancelMyTicket(input: CancelMyTicketInput!): Boolean!
   assignTickets(input: AssignTicketsInput!): Boolean!
   redeemTickets(input: RedeemTicketsInput!): RedeemTicketsResponse!
   createTickets(ticket_type: MongoID!, ticket_assignments: [TicketAssignment!]!): [Ticket!]!
@@ -4731,6 +4778,7 @@ type Mutation {
   removeUserFcmToken(token: String!): Boolean!
   reportUser(input: ReportUserInput!): Boolean!
   toggleBlockUser(input: ToggleBlockUserInput!): Boolean!
+  setDefaultLensProfile(input: SelectDefaultLensProfileInput!): Boolean!
   inviteUserContacts(_id: MongoID): Boolean!
   acceptUserDiscovery(swipee: MongoID!, message: String, event: MongoID): AcceptUserDiscoveryResponse!
   declineUserDiscovery(swipee: MongoID!, message: String, event: MongoID): Boolean!
@@ -4805,6 +4853,8 @@ input EventInput {
   title: String
   start: DateTimeISO
   end: DateTimeISO
+  external_url: String
+  external_hostname: String
   visible_cohosts: [MongoID!]
   donation_enabled: Boolean
   donation_show_history: Boolean
@@ -4885,6 +4935,9 @@ input EventInput {
   subevent_settings: SubeventSettingsInput
   subevent_parent: MongoID
   telegram_channels: [TelegramChannelInput!]
+  theme_data: JSON
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
 }
 
 input ApplicationBlokchainPlatformInput {
@@ -5014,6 +5067,11 @@ input ResponseInvitationInput {
 
 enum InvitationState {
   DECLINED
+}
+
+input RespondInvitationInput {
+  _id: MongoID!
+  response: InvitationResponse!
 }
 
 input QuestionInput {
@@ -5595,6 +5653,8 @@ input SpaceInput {
   address: AddressInput
   image_avatar: MongoID
   image_cover: MongoID
+  dark_theme_image: MongoID
+  light_theme_image: MongoID
   theme_data: JSON
   lens_feed_id: String
 }
@@ -5805,6 +5865,11 @@ input CancelTicketsInput {
   tickets: [MongoID!]!
 }
 
+input CancelMyTicketInput {
+  id: MongoID!
+  event: MongoID!
+}
+
 input AssignTicketsInput {
   event: MongoID!
   assignees: [TicketAssignee!]!
@@ -5892,6 +5957,10 @@ input ReportUserInput {
 input ToggleBlockUserInput {
   user: MongoID!
   block: Boolean!
+}
+
+input SelectDefaultLensProfileInput {
+  lens_profile_id: String!
 }
 
 type AcceptUserDiscoveryResponse {

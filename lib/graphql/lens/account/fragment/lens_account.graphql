@@ -8,6 +8,11 @@ fragment LensAccount on Account {
     bio
     picture
     coverPicture
+    attributes {
+      type
+      key
+      value
+    }
   }
   username {
     id
