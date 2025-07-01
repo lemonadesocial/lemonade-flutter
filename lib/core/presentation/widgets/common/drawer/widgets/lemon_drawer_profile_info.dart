@@ -1,5 +1,6 @@
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/lens/lens_auth_bloc/lens_auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/config.dart';
 import 'package:app/core/domain/user/entities/user.dart';
@@ -11,17 +12,22 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
+import 'package:app/core/utils/gql/gql.dart';
 import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/graphql/lens/account/mutation/lens_account_stats.graphql.dart';
+import 'package:app/graphql/lens/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:reown_appkit/reown_appkit.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -40,6 +46,8 @@ class LemonDrawerProfileInfo extends StatelessWidget {
     final appText = context.theme.appTextTheme;
     final followersCount = authSession?.followers ?? 0;
     final followingCount = authSession?.following ?? 0;
+    final selectedLensAccount =
+        context.watch<LensAuthBloc>().state.selectedAccount;
 
     return Column(
       children: [
@@ -80,46 +88,38 @@ class LemonDrawerProfileInfo extends StatelessWidget {
         SizedBox(
           height: Spacing.s3,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text.rich(
-              TextSpan(
-                text: NumberUtils.formatCompact(amount: followersCount),
-                style: appText.md,
-                children: [
-                  TextSpan(
-                    text:
-                        ' ${StringUtils.capitalize(t.common.follower(n: followersCount))}',
-                    style: appText.md.copyWith(
-                      color: appColors.textSecondary,
-                    ),
+        if (selectedLensAccount != null)
+          GraphQLProvider(
+            client: ValueNotifier(getIt<LensGQL>().client),
+            child: Query$LensAccountStats$Widget(
+              options: Options$Query$LensAccountStats(
+                variables: Variables$Query$LensAccountStats(
+                  request: Input$AccountStatsRequest(
+                    account: selectedLensAccount.address,
                   ),
-                ],
+                ),
               ),
+              builder: (
+                result, {
+                refetch,
+                fetchMore,
+              }) {
+                return _FollowersCount(
+                  followersCount: result.parsedData?.accountStats
+                          .graphFollowStats.followers ??
+                      0,
+                  followingCount: result.parsedData?.accountStats
+                          .graphFollowStats.following ??
+                      0,
+                );
+              },
             ),
-            SizedBox(
-              width: Spacing.s3,
-            ),
-            Text.rich(
-              TextSpan(
-                text: NumberUtils.formatCompact(amount: followingCount),
-                style: appText.md,
-                children: [
-                  TextSpan(
-                    text: ' ${StringUtils.capitalize(t.common.following)}',
-                    style: appText.md.copyWith(
-                      color: appColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-              style: appText.md.copyWith(
-                color: appColors.textPrimary,
-              ),
-            ),
-          ],
-        ),
+          )
+        else
+          _FollowersCount(
+            followersCount: followersCount,
+            followingCount: followingCount,
+          ),
         SizedBox(
           height: Spacing.s5,
         ),
@@ -243,6 +243,61 @@ class _DrawerConnectWalletButton extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _FollowersCount extends StatelessWidget {
+  const _FollowersCount({
+    required this.followersCount,
+    required this.followingCount,
+  });
+  final int followersCount;
+  final int followingCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final appText = context.theme.appTextTheme;
+    final appColors = context.theme.appColors;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text.rich(
+          TextSpan(
+            text: NumberUtils.formatCompact(amount: followersCount),
+            style: appText.md,
+            children: [
+              TextSpan(
+                text:
+                    ' ${StringUtils.capitalize(t.common.follower(n: followersCount))}',
+                style: appText.md.copyWith(
+                  color: appColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: Spacing.s3,
+        ),
+        Text.rich(
+          TextSpan(
+            text: NumberUtils.formatCompact(amount: followingCount),
+            style: appText.md,
+            children: [
+              TextSpan(
+                text: ' ${StringUtils.capitalize(t.common.following)}',
+                style: appText.md.copyWith(
+                  color: appColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          style: appText.md.copyWith(
+            color: appColors.textPrimary,
+          ),
+        ),
+      ],
     );
   }
 }
