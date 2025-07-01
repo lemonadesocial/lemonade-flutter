@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class EventSetupStripePaymentAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return SetupStripePaymentAccountBuilder(
       onPaymentAccountCreated: (paymentAccount) {
         Navigator.of(context).pop(paymentAccount);
@@ -41,13 +41,13 @@ class EventSetupStripePaymentAccountPage extends StatelessWidget {
                       t.event.ticketTierSetting.stripeSetup,
                       style: Typo.extraLarge.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                       ),
                     ),
                     Text(
                       t.event.ticketTierSetting.stripeSetupDesc,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                     SizedBox(height: Spacing.medium),
@@ -55,7 +55,7 @@ class EventSetupStripePaymentAccountPage extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(LemonRadius.small),
                         border: Border.all(
-                          color: colorScheme.outline,
+                          color: appColors.pageDivider,
                         ),
                       ),
                       child: Column(
@@ -71,20 +71,20 @@ class EventSetupStripePaymentAccountPage extends StatelessWidget {
                                   t.event.ticketTierSetting.startSelling,
                                   style: Typo.medium.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    color: colorScheme.onPrimary,
+                                    color: appColors.textPrimary,
                                   ),
                                 ),
                                 Text(
                                   t.event.ticketTierSetting.startSellingDesc,
                                   style: Typo.small.copyWith(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Divider(
-                            color: colorScheme.outline,
+                            color: appColors.pageDivider,
                             height: 1.w,
                           ),
                           InkWell(
@@ -114,12 +114,11 @@ class EventSetupStripePaymentAccountPage extends StatelessWidget {
                                         ? t.event.ticketTierSetting.settingUp
                                         : t.event.ticketTierSetting.getStarted,
                                     style: Typo.medium.copyWith(
-                                      color: LemonColor.paleViolet,
-                                      fontWeight: FontWeight.w600,
+                                      color: appColors.textAccent,
                                     ),
                                   ),
                                   ThemeSvgIcon(
-                                    color: LemonColor.paleViolet,
+                                    color: appColors.textAccent,
                                     builder: (filter) =>
                                         Assets.icons.icExpand.svg(
                                       colorFilter: filter,

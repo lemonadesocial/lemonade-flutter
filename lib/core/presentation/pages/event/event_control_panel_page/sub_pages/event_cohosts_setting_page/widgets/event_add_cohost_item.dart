@@ -3,6 +3,7 @@ import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
 import 'package:app/gen/assets.gen.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -23,7 +24,7 @@ class EventAddCohostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: () async {
         onPressItem();
@@ -51,8 +52,7 @@ class EventAddCohostItem extends StatelessWidget {
                             Text(
                               user?.name ?? '',
                               style: Typo.medium.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary,
+                                color: appColors.textPrimary,
                               ),
                             ),
                             if (user?.email?.isNotEmpty == true) ...[
@@ -62,7 +62,7 @@ class EventAddCohostItem extends StatelessWidget {
                               Text(
                                 user?.email ?? '',
                                 style: Typo.medium.copyWith(
-                                  color: colorScheme.onSecondary,
+                                  color: appColors.textTertiary,
                                 ),
                               ),
                             ],
@@ -77,13 +77,13 @@ class EventAddCohostItem extends StatelessWidget {
                 children: [
                   selected == true
                       ? ThemeSvgIcon(
-                          color: colorScheme.onPrimary,
+                          color: appColors.textPrimary,
                           builder: (colorFilter) => Assets.icons.icChecked.svg(
                             colorFilter: colorFilter,
                           ),
                         )
                       : ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (colorFilter) => Assets.icons.icUncheck.svg(
                             colorFilter: colorFilter,
                           ),

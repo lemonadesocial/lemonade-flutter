@@ -3,6 +3,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
 import 'package:app/theme/spacing.dart';
@@ -16,7 +17,7 @@ class EventDiscountListingSetttingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => null,
@@ -63,9 +64,9 @@ class EventDiscountListingSetttingPage extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(Spacing.smMedium),
               decoration: BoxDecoration(
-                color: colorScheme.background,
+                color: appColors.pageBg,
                 border: Border(
-                  top: BorderSide(color: colorScheme.outline),
+                  top: BorderSide(color: appColors.pageDivider),
                 ),
               ),
               child: SafeArea(

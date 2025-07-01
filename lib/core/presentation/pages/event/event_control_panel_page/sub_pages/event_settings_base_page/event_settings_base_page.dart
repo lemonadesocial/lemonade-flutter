@@ -29,7 +29,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/core/presentation/pages/event/create_event/widgets/select_event_tags_dropdown.dart';
@@ -223,6 +222,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                 showCupertinoModalBottomSheet(
                                   context: context,
                                   useRootNavigator: true,
+                                  barrierColor: Colors.black.withOpacity(0.5),
                                   builder: (mContext) {
                                     return EventVirtualLinkSettingPage(
                                       defaultUrl: event.virtualUrl,
@@ -292,8 +292,7 @@ class EventSettingsBasePage extends StatelessWidget {
                                         onTap: () {
                                           showCupertinoModalBottomSheet(
                                             context: context,
-                                            backgroundColor:
-                                                LemonColor.atomicBlack,
+                                            backgroundColor: appColors.pageBg,
                                             topRadius: Radius.circular(
                                               LemonRadius.small,
                                             ),
@@ -491,7 +490,7 @@ class EventSettingsBasePage extends StatelessWidget {
                             ),
                             sliver: SliverToBoxAdapter(
                               child: SettingTileWidget(
-                                color: LemonColor.chineseBlack,
+                                color: appColors.cardBg,
                                 title:
                                     t.event.sessionDuplication.duplicateSession,
                                 leading: ThemeSvgIcon(
@@ -535,7 +534,7 @@ class EventSettingsBasePage extends StatelessWidget {
                             child: Container(
                               height: 1.h,
                               decoration: BoxDecoration(
-                                color: colorScheme.outline,
+                                color: appColors.pageDivider,
                               ),
                             ),
                           ),
@@ -556,7 +555,7 @@ class EventSettingsBasePage extends StatelessWidget {
                             child: Container(
                               height: 1.h,
                               decoration: BoxDecoration(
-                                color: colorScheme.outline,
+                                color: appColors.pageDivider,
                               ),
                             ),
                           ),
@@ -591,7 +590,7 @@ class EventSettingsBasePage extends StatelessWidget {
           onTap: () {
             showCupertinoModalBottomSheet(
               context: context,
-              barrierColor: Colors.black.withOpacity(0.8),
+              barrierColor: Colors.black.withOpacity(0.5),
               topRadius: Radius.circular(30.r),
               builder: (mContext) {
                 return DeleteEventConfirmationBottomSheet(

@@ -2,7 +2,7 @@ import 'package:app/core/presentation/widgets/bottomsheet_grabber/bottomsheet_gr
 import 'package:app/core/presentation/widgets/common/wheel_time_picker/wheel_time_picker.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -23,8 +23,7 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
+    final appColors = context.theme.appColors;
     final dateFormat = DateFormat('MMM dd, yyyy');
     final timeFormat = DateFormat('hh:mm a');
 
@@ -36,7 +35,7 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
-                color: colorScheme.onPrimary.withOpacity(0.06),
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               child: Row(
@@ -45,11 +44,11 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
                   Text(
                     dateFormat.format(dateTime),
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
                       colorFilter: filter,
                     ),
@@ -66,7 +65,7 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(Spacing.small),
               decoration: BoxDecoration(
-                color: colorScheme.onPrimary.withOpacity(0.06),
+                color: appColors.cardBg,
                 borderRadius: BorderRadius.circular(LemonRadius.medium),
               ),
               child: Row(
@@ -75,11 +74,11 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
                   Text(
                     timeFormat.format(dateTime),
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
                       colorFilter: filter,
                     ),
@@ -94,9 +93,10 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
   }
 
   void _showDatePicker(BuildContext context) {
+    final appColors = context.theme.appColors;
     showCupertinoModalBottomSheet(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) => SizedBox(
         height: 400.w,
@@ -110,16 +110,16 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
                   firstDayOfWeek: 1,
                   calendarType: CalendarDatePicker2Type.single,
                   selectedDayTextStyle: Typo.medium.copyWith(
-                    color: LemonColor.paleViolet,
-                    fontWeight: FontWeight.w700,
+                    color: appColors.textAccent,
                   ),
-                  selectedDayHighlightColor: LemonColor.paleViolet18,
+                  selectedDayHighlightColor:
+                      appColors.textAccent.withOpacity(0.18),
                   customModePickerIcon: const SizedBox(),
                   todayTextStyle: Typo.small.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: appColors.textPrimary,
                   ),
                   dayTextStyle: Typo.small.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: appColors.textPrimary,
                   ),
                 ),
                 value: [dateTime],
@@ -146,9 +146,10 @@ class StakeVaultDateTimeSelectionButtons extends StatelessWidget {
   }
 
   void _showTimePicker(BuildContext context) {
+    final appColors = context.theme.appColors;
     showCupertinoModalBottomSheet(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       builder: (context) => SizedBox(
         height: 300.w,
         child: Column(

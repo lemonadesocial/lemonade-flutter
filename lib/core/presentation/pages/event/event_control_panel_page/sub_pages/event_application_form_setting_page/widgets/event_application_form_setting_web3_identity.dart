@@ -8,8 +8,8 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +104,7 @@ class _EventApplicationFormSettingWeb3IdentityState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => null,
           fetched: (event) => event,
@@ -119,7 +119,7 @@ class _EventApplicationFormSettingWeb3IdentityState
           child: Text(
             t.event.applicationForm.web3Identity.web3IdentityTitle,
             style: Typo.extraMedium.copyWith(
-              color: colorScheme.onPrimary,
+              color: appColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -134,7 +134,7 @@ class _EventApplicationFormSettingWeb3IdentityState
             blockChainPlatform: Enum$BlockchainPlatform.ethereum,
             label: t.event.applicationForm.web3Identity.ethAddress,
             icon: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icCurrencyEth.svg(
                 colorFilter: filter,
               ),
@@ -182,7 +182,7 @@ class _IdentityItemState extends State<_IdentityItem> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return BlocListener<GetEventDetailBloc, GetEventDetailState>(
       listener: (context, state) {
         if (state is GetEventDetailStateFetched) {
@@ -195,9 +195,9 @@ class _IdentityItemState extends State<_IdentityItem> {
         padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.medium),
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
           ),
         ),
         child: Row(
@@ -207,7 +207,7 @@ class _IdentityItemState extends State<_IdentityItem> {
             Text(
               widget.label,
               style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
               ),
             ),
             const Spacer(),
@@ -238,12 +238,12 @@ class _IdentityItemState extends State<_IdentityItem> {
                                 ? t.event.applicationForm.required
                                 : t.event.applicationForm.optional,
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                         ),
                       ),
                       SizedBox(width: Spacing.superExtraSmall),
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) =>
                             Assets.icons.icDoubleArrowUpDown.svg(
                           colorFilter: filter,
@@ -294,7 +294,7 @@ class _IdentityItemState extends State<_IdentityItem> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Divider(
-                                color: colorScheme.outline,
+                                color: appColors.pageDivider,
                                 thickness: 1.w,
                                 height: 1.w,
                               ),
@@ -304,7 +304,7 @@ class _IdentityItemState extends State<_IdentityItem> {
                                 children: [
                                   SizedBox(width: Spacing.small),
                                   ThemeSvgIcon(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                     builder: (filter) =>
                                         Assets.icons.icInfo.svg(
                                       colorFilter: filter,
@@ -318,7 +318,7 @@ class _IdentityItemState extends State<_IdentityItem> {
                                       t.event.applicationForm.web3Identity
                                           .web3IdentityDescription,
                                       style: Typo.small.copyWith(
-                                        color: colorScheme.onSecondary,
+                                        color: appColors.textTertiary,
                                       ),
                                     ),
                                   ),
@@ -332,21 +332,21 @@ class _IdentityItemState extends State<_IdentityItem> {
                   width: 200.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(LemonRadius.small),
-                    color: colorScheme.secondaryContainer,
+                    color: appColors.pageBg,
                   ),
                   offset: Offset(0, -Spacing.superExtraSmall),
                 ),
                 menuItemStyleData: MenuItemStyleData(
                   padding: EdgeInsets.zero,
-                  overlayColor: const MaterialStatePropertyAll(
-                    LemonColor.darkBackground,
+                  overlayColor: MaterialStatePropertyAll(
+                    appColors.pageBg,
                   ),
                   selectedMenuItemBuilder: (context, child) => Row(
                     children: [
                       child,
                       const Spacer(),
                       ThemeSvgIcon(
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                         builder: (filter) => Assets.icons.icDone.svg(
                           colorFilter: filter,
                           width: 16.w,

@@ -3,7 +3,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -18,7 +18,7 @@ class PrivateTicketSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
       builder: (context, state) {
@@ -30,7 +30,7 @@ class PrivateTicketSetting extends StatelessWidget {
         return Container(
           padding: EdgeInsets.all(Spacing.smMedium),
           decoration: BoxDecoration(
-            color: colorScheme.onPrimary.withOpacity(0.06),
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
           child: Row(
@@ -40,7 +40,7 @@ class PrivateTicketSetting extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) {
                       return state.private == true
                           ? Assets.icons.icPrivate.svg(
@@ -55,7 +55,7 @@ class PrivateTicketSetting extends StatelessWidget {
                   Text(
                     t.event.ticketTierSetting.listTicket,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   SizedBox(width: Spacing.superExtraSmall),
@@ -64,17 +64,17 @@ class PrivateTicketSetting extends StatelessWidget {
                         ? t.event.ticketTierSetting.canOnlyAssigned
                         : t.event.ticketTierSetting.visibleToEveryone,
                     style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                     ),
                   ),
                 ],
               ),
               const Spacer(),
               FlutterSwitch(
-                inactiveColor: colorScheme.outline,
-                inactiveToggleColor: colorScheme.onSurfaceVariant,
-                activeColor: LemonColor.paleViolet,
-                activeToggleColor: colorScheme.onPrimary,
+                inactiveColor: appColors.pageDivider,
+                inactiveToggleColor: appColors.textTertiary,
+                activeColor: appColors.textAccent,
+                activeToggleColor: appColors.textPrimary,
                 height: Sizing.small,
                 width: 42.w,
                 value: !(state.private ?? false),

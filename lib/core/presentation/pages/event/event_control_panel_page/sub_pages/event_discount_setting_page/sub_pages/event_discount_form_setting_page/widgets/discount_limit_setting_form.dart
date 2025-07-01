@@ -1,6 +1,6 @@
 import 'package:app/core/application/event/create_event_discount_bloc/create_event_discount_bloc.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -19,7 +19,7 @@ class DiscountLimitSettingForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final createEventDiscountBloc = context.read<CreateEventDiscountBloc>();
 
     return Column(
@@ -29,8 +29,7 @@ class DiscountLimitSettingForm extends StatelessWidget {
         Text(
           t.common.settings,
           style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
+            color: appColors.textPrimary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -96,25 +95,25 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(LemonRadius.small),
-      borderSide: BorderSide(color: colorScheme.outline),
+      borderSide: BorderSide(color: appColors.pageDivider),
     );
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.pageBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
-      padding: EdgeInsets.all(Spacing.small),
+      padding: EdgeInsets.symmetric(
+        horizontal: Spacing.small,
+      ),
       child: SizedBox(
-        height: Sizing.medium,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Flexible(
-              flex: 4,
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,15 +121,13 @@ class _Field extends StatelessWidget {
                   Text(
                     title,
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   Text(
                     description,
                     style: Typo.small.copyWith(
-                      color: colorScheme.onSecondary,
-                      fontWeight: FontWeight.w600,
+                      color: appColors.textTertiary,
                     ),
                   ),
                 ],
@@ -145,9 +142,9 @@ class _Field extends StatelessWidget {
                 textAlign: TextAlign.center,
                 textAlignVertical: TextAlignVertical.center,
                 onChanged: onChange,
-                cursorColor: colorScheme.onPrimary,
+                cursorColor: appColors.textPrimary,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 2.w),

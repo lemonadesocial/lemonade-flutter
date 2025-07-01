@@ -12,6 +12,7 @@ import 'package:app/core/presentation/widgets/future_loading_dialog.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
@@ -93,7 +94,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (event) => event,
@@ -102,7 +103,7 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
     final eventId = event?.id ?? '';
     final eventLevelPaymentAccounts = event?.paymentAccountsExpanded ?? [];
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: appColors.pageBg,
       appBar: LemonAppBar(
         title: initialTicketType != null
             ? t.event.ticketTierSetting.editTicket
@@ -150,10 +151,10 @@ class EventCreateTicketTierPagerView extends StatelessWidget {
                 right: Spacing.smMedium,
               ),
               decoration: BoxDecoration(
-                color: colorScheme.background,
+                color: appColors.pageBg,
                 border: Border(
                   top: BorderSide(
-                    color: colorScheme.outline,
+                    color: appColors.pageDivider,
                   ),
                 ),
               ),

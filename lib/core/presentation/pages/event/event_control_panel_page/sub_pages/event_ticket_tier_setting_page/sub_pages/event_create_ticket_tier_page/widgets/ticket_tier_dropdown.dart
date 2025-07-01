@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +29,14 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(LemonRadius.small),
-          color: colorScheme.onPrimary.withOpacity(0.06),
+          color: appColors.cardBg,
         ),
         height: 56.w,
         child: Row(
@@ -50,7 +50,7 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
                 child: Text(
                   placeholder ?? '',
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onSurfaceVariant,
+                    color: appColors.textTertiary,
                   ),
                 ),
               ),
@@ -59,12 +59,12 @@ class TicketTierFeatureDropdown<T> extends StatelessWidget {
                 child: Text(
                   getDisplayValue?.call(value) ?? '',
                   style: Typo.mediumPlus.copyWith(
-                    color: colorScheme.onPrimary,
+                    color: appColors.textPrimary,
                   ),
                 ),
               ),
             Assets.icons.icDoubleArrowUpDown.svg(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
             ),
           ],
         ),
@@ -132,14 +132,15 @@ class TicketTierFeatureDropdownListState<T, V>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
     return Container(
-      color: LemonColor.atomicBlack,
+      color: appColors.pageBg,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           LemonAppBar(
             title: widget.title ?? '',
-            backgroundColor: LemonColor.atomicBlack,
+            backgroundColor: appColors.pageBg,
           ),
           if (widget.data.isEmpty)
             const Expanded(
@@ -193,7 +194,7 @@ class TicketTierFeatureDropdownListState<T, V>
               ),
             ),
           Container(
-            color: LemonColor.atomicBlack,
+            color: appColors.pageBg,
             padding: EdgeInsets.all(Spacing.smMedium),
             child: SafeArea(
               child: LinearGradientButton.primaryButton(

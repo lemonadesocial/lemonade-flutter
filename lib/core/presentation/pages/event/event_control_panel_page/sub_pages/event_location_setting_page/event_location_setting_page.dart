@@ -12,6 +12,7 @@ import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/service/google/google_place_autocomplete_service.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -95,7 +96,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   }
 
   Widget _buildContent() {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
 
     return BlocListener<EventLocationSettingBloc, EventLocationSettingState>(
@@ -125,7 +126,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                   onChange: _onSearchChanged,
                   hintText: t.event.locationSetting.searchLocation,
                   placeholderStyle: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                   ),
                 ),
                 SizedBox(height: Spacing.smMedium),
@@ -168,7 +169,7 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
                                 child: Text(
                                   t.event.locationSetting.savedLocations,
                                   style: Typo.medium.copyWith(
-                                    color: colorScheme.onPrimary,
+                                    color: appColors.textPrimary,
                                   ),
                                 ),
                               ),
@@ -242,15 +243,15 @@ class _EventLocationSettingPageState extends State<EventLocationSettingPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Scaffold(
-      backgroundColor: colorScheme.secondaryContainer,
+      backgroundColor: appColors.pageBg,
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
           const BottomSheetGrabber(),
           LemonAppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: appColors.pageBg,
             title: t.event.locationSetting.chooseLocation,
           ),
           Expanded(
@@ -334,10 +335,11 @@ void showBottomSheetDetail(
   Function(Address)? onConfirmLocation,
   bool isSubEvent,
 ) {
+  final appColors = context.theme.appColors;
   showCupertinoModalBottomSheet(
     expand: true,
     context: context,
-    backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+    backgroundColor: appColors.pageBg,
     topRadius: Radius.circular(30.r),
     useRootNavigator: true,
     builder: (mContext) {

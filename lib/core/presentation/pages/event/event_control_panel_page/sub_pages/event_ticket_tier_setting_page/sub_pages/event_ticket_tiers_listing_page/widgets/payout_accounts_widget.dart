@@ -15,7 +15,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/payment/mutation/disconnect_stripe_account_mutation.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -35,9 +35,10 @@ class PayoutAccountsWidget extends StatefulWidget {
 class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
     with WidgetsBindingObserver {
   Future<void> _connectStripe() async {
+    final appColors = context.theme.appColors;
     await showCupertinoModalBottomSheet<PaymentAccount>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
       builder: (context) => const EventSetupStripePaymentAccountPage(),
@@ -57,7 +58,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -81,7 +82,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
               icon: hasStripeConnected
                   ? Assets.icons.icStripe.svg()
                   : ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icBank.svg(
                         colorFilter: filter,
                       ),
@@ -111,12 +112,12 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
         ),
         Divider(
           height: 1,
-          color: colorScheme.outline,
+          color: appColors.pageDivider,
         ),
         BlocBuilder<WalletBloc, WalletState>(
           builder: (context, state) {
             final fallbackIcon = ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icWallet.svg(
                 colorFilter: filter,
               ),
@@ -154,7 +155,7 @@ class _PayoutAccountsWidgetState extends State<PayoutAccountsWidget>
                   return InkWell(
                     onTap: () {},
                     child: ThemeSvgIcon(
-                      color: colorScheme.onSurfaceVariant,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icArrowRight.svg(
                         colorFilter: filter,
                       ),
@@ -202,11 +203,11 @@ class PayoutAccountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.only(
           topLeft:
               radiusTop ? Radius.circular(LemonRadius.medium) : Radius.zero,
@@ -229,15 +230,14 @@ class PayoutAccountItem extends StatelessWidget {
                 Text(
                   title,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
+                    color: appColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 2.w),
                 Text(
                   subTitle,
                   style: Typo.small.copyWith(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],

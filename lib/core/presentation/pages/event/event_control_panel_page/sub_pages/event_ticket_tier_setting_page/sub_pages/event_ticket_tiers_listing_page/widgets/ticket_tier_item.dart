@@ -16,7 +16,7 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -73,7 +73,7 @@ class TicketTierItem extends StatelessWidget {
     final isFree =
         eventTicketType.prices?.any((element) => element.fiatCost == 0) ??
             false;
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => '',
@@ -81,7 +81,7 @@ class TicketTierItem extends StatelessWidget {
         );
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.medium),
       ),
       child: Column(
@@ -105,7 +105,7 @@ class TicketTierItem extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorWidget: (_, __, ___) => Center(
                               child: ThemeSvgIcon(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                                 builder: (filter) => Assets.icons.icTicket.svg(
                                   colorFilter: filter,
                                   width: Sizing.xSmall,
@@ -117,7 +117,7 @@ class TicketTierItem extends StatelessWidget {
                         ),
                       )
                     : ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icTicket.svg(
                           colorFilter: filter,
                           width: Sizing.xSmall,
@@ -129,7 +129,7 @@ class TicketTierItem extends StatelessWidget {
                   child: Text(
                     eventTicketType.title ?? '',
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.87),
+                      color: appColors.textPrimary.withOpacity(0.87),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -144,8 +144,8 @@ class TicketTierItem extends StatelessWidget {
                           : t.event.ticketTierSetting.disabled,
                   style: Typo.small.copyWith(
                     color: eventTicketType.active == true
-                        ? colorScheme.onSecondary
-                        : LemonColor.errorRedBg,
+                        ? appColors.textTertiary
+                        : appColors.textError,
                   ),
                 ),
                 SizedBox(width: Spacing.xSmall),
@@ -159,7 +159,7 @@ class TicketTierItem extends StatelessWidget {
           ),
           DottedLine(
             dashLength: 5.w,
-            dashColor: colorScheme.secondary,
+            dashColor: appColors.textTertiary,
             dashRadius: 2.w,
             lineThickness: 2.w,
           ),
@@ -210,8 +210,8 @@ class TicketTierItem extends StatelessWidget {
                                 : '${index == 0 ? '' : ' ${t.common.or}'} $displayedAmount',
                             style: Typo.medium.copyWith(
                               color: index == 0
-                                  ? colorScheme.onPrimary
-                                  : colorScheme.onSecondary,
+                                  ? appColors.textPrimary
+                                  : appColors.textTertiary,
                             ),
                           ),
                         );
@@ -245,7 +245,7 @@ class _TicketTierItemActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final eventId = context.read<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => '',
           fetched: (eventDetail) => eventDetail.id ?? '',
@@ -329,7 +329,7 @@ class _TicketTierItemActionButton extends StatelessWidget {
       },
       child: Center(
         child: ThemeSvgIcon(
-          color: colorScheme.onSecondary,
+          color: appColors.textTertiary,
           builder: (colorFilter) => Assets.icons.icEdit.svg(
             colorFilter: colorFilter,
             width: Sizing.xSmall,

@@ -1,6 +1,6 @@
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,18 +45,18 @@ class SettingTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return InkWell(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: color ?? LemonColor.atomicBlack,
+          color: color ?? appColors.pageBg,
           borderRadius: borderRadius ??
               BorderRadius.circular(radius ?? LemonRadius.small),
           border: isError == true
               ? Border.all(
-                  color: LemonColor.errorRedBg,
+                  color: appColors.textError,
                   width: 1,
                 )
               : null,
@@ -76,7 +76,7 @@ class SettingTileWidget extends StatelessWidget {
                               padding: EdgeInsets.all(Spacing.xSmall),
                               decoration: BoxDecoration(
                                 shape: BoxShape.rectangle,
-                                color: colorScheme.secondaryContainer,
+                                color: appColors.cardBg,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(leadingRadius ?? 42.w),
                                 ),
@@ -98,8 +98,7 @@ class SettingTileWidget extends StatelessWidget {
                           title,
                           style: titleStyle ??
                               Typo.medium.copyWith(
-                                color: titleColor ?? colorScheme.onPrimary,
-                                fontWeight: FontWeight.w600,
+                                color: titleColor ?? appColors.textPrimary,
                               ),
                         ),
                         SizedBox(
@@ -110,8 +109,7 @@ class SettingTileWidget extends StatelessWidget {
                             : Text(
                                 subTitle!,
                                 style: Typo.small.copyWith(
-                                  color: colorScheme.onSecondary,
-                                  fontWeight: FontWeight.w400,
+                                  color: appColors.textTertiary,
                                 ),
                                 maxLines: 2,
                               ),
@@ -123,8 +121,7 @@ class SettingTileWidget extends StatelessWidget {
                                   Text(
                                     description!,
                                     style: Typo.small.copyWith(
-                                      color: colorScheme.onSecondary,
-                                      fontWeight: FontWeight.w400,
+                                      color: appColors.textTertiary,
                                     ),
                                     maxLines: 2,
                                   ),
@@ -155,7 +152,7 @@ class SettingTileWidget extends StatelessWidget {
                     right: 8.w,
                   ),
                   decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    color: appColors.cardBg,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(LemonRadius.xSmall),
                       topRight: Radius.circular(LemonRadius.xSmall),
@@ -164,8 +161,7 @@ class SettingTileWidget extends StatelessWidget {
                   child: Text(
                     t.home.comingSoon,
                     style: Typo.xSmall.copyWith(
-                      color: colorScheme.onPrimary.withOpacity(0.54),
-                      fontWeight: FontWeight.w600,
+                      color: appColors.textTertiary,
                     ),
                   ),
                 ),

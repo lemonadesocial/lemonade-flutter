@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/common/set_limit_bottomsheet/set_l
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -20,13 +20,13 @@ class TicketLimitPerSetting extends StatelessWidget {
     final modifyTicketTypeBloc = context.watch<ModifyTicketTypeBloc>();
     final limitFieldVisible = modifyTicketTypeBloc.state.ticketLimitPer != 1;
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: LemonColor.atomicBlack,
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.normal),
           ),
           child: Column(
@@ -39,7 +39,7 @@ class TicketLimitPerSetting extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) => Assets.icons.icAddGuest.svg(
                             width: 18.w,
                             height: 18.w,
@@ -50,17 +50,17 @@ class TicketLimitPerSetting extends StatelessWidget {
                         Text(
                           t.event.ticketTierSetting.groupRegistration,
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
+                            color: appColors.textPrimary,
                           ),
                         ),
                       ],
                     ),
                     const Spacer(),
                     FlutterSwitch(
-                      inactiveColor: colorScheme.outline,
-                      inactiveToggleColor: colorScheme.onSurfaceVariant,
-                      activeColor: LemonColor.paleViolet,
-                      activeToggleColor: colorScheme.onPrimary,
+                      inactiveColor: appColors.pageDivider,
+                      inactiveToggleColor: appColors.textTertiary,
+                      activeColor: appColors.textAccent,
+                      activeToggleColor: appColors.textPrimary,
                       height: Sizing.small,
                       width: 42.w,
                       value: limitFieldVisible,
@@ -99,10 +99,9 @@ class TicketLimitPerSetting extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(Spacing.small),
                     decoration: BoxDecoration(
-                      color: LemonColor.atomicBlack,
                       border: Border(
                         top: BorderSide(
-                          color: colorScheme.outline,
+                          color: appColors.pageDivider,
                         ),
                       ),
                       borderRadius: BorderRadius.only(
@@ -117,7 +116,7 @@ class TicketLimitPerSetting extends StatelessWidget {
                         Text(
                           t.event.ticketTierSetting.maxTicketsPerGuests,
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
+                            color: appColors.textPrimary,
                           ),
                         ),
                         Row(
@@ -128,12 +127,12 @@ class TicketLimitPerSetting extends StatelessWidget {
                                       .toString() ??
                                   '0',
                               style: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                               ),
                             ),
                             SizedBox(width: Spacing.extraSmall),
                             ThemeSvgIcon(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                               builder: (filter) => Assets.icons.icEdit.svg(
                                 width: 18.w,
                                 height: 18.w,

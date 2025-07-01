@@ -13,7 +13,7 @@ import 'package:app/graphql/backend/event/query/get_event_ticket_categories.grap
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -34,7 +34,7 @@ class TicketCategoryDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
       builder: (context, state) {
@@ -69,7 +69,8 @@ class TicketCategoryDropdown extends StatelessWidget {
                   if (value == 'create') {
                     showCupertinoModalBottomSheet(
                       bounce: true,
-                      backgroundColor: LemonColor.atomicBlack,
+                      backgroundColor: appColors.pageBg,
+                      barrierColor: Colors.black.withOpacity(0.5),
                       context: context,
                       builder: (newContext) {
                         return TicketTierCategoryForm(
@@ -112,14 +113,14 @@ class TicketCategoryDropdown extends StatelessWidget {
                   padding: EdgeInsets.all(Spacing.smMedium),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(LemonRadius.medium),
-                    color: LemonColor.atomicBlack,
+                    color: appColors.cardBg,
                   ),
                   child: _TicketCategoryItem(
                     key: Key(state.category ?? ''),
                     ticketCategory: ticketCategories
                         .firstWhereOrNull((item) => item.id == state.category),
                     trailing: ThemeSvgIcon(
-                      color: colorScheme.onPrimary.withOpacity(0.24),
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icDoubleArrowUpDown.svg(
                         width: Sizing.xSmall,
                         height: Sizing.xSmall,
@@ -145,14 +146,13 @@ class TicketCategoryDropdown extends StatelessWidget {
                 dropdownStyleData: DropdownStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(LemonRadius.small),
-                    color: LemonColor.atomicBlack,
+                    color: appColors.pageBg,
                   ),
                   offset: Offset(0, -Spacing.superExtraSmall),
                   maxHeight: 200.w,
                 ),
-                menuItemStyleData: const MenuItemStyleData(
-                  overlayColor:
-                      MaterialStatePropertyAll(LemonColor.darkBackground),
+                menuItemStyleData: MenuItemStyleData(
+                  overlayColor: MaterialStatePropertyAll(appColors.pageBg),
                 ),
               ),
             );
@@ -169,11 +169,12 @@ class _CreateButtonItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final appColors = context.theme.appColors;
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
         ThemeSvgIcon(
-          color: LemonColor.paleViolet,
+          color: appColors.textAccent,
           builder: (colorFilter) => Assets.icons.icAdd.svg(
             colorFilter: colorFilter,
           ),
@@ -186,7 +187,7 @@ class _CreateButtonItem extends StatelessWidget {
           child: Text(
             t.event.ticketTierSetting.categorySetting.newCategory,
             style: Typo.mediumPlus.copyWith(
-              color: LemonColor.paleViolet,
+              color: appColors.textAccent,
             ),
             overflow: TextOverflow.ellipsis,
           ),
@@ -208,7 +209,7 @@ class _TicketCategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final isPlaceholder = ticketCategory == null;
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -221,8 +222,8 @@ class _TicketCategoryItem extends StatelessWidget {
                 : ticketCategory?.title ?? '',
             style: Typo.medium.copyWith(
               color: isPlaceholder
-                  ? colorScheme.onPrimary.withOpacity(0.24)
-                  : colorScheme.onPrimary,
+                  ? appColors.textTertiary
+                  : appColors.textPrimary,
             ),
             overflow: TextOverflow.ellipsis,
           ),

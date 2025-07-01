@@ -6,7 +6,7 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/chain/chain_query_widget.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -50,13 +50,13 @@ class TicketTierAddPriceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
         ),
         child: Row(
@@ -83,8 +83,7 @@ class TicketTierAddPriceButton extends StatelessWidget {
                     return Text(
                       displayAmount,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        color: appColors.textPrimary,
                       ),
                     );
                   },
@@ -109,7 +108,7 @@ class TicketTierAddPriceButton extends StatelessWidget {
               ),
             SizedBox(width: Spacing.xSmall),
             ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (colorFilter) => ticketPrice != null
                   ? Assets.icons.icEdit.svg(
                       width: Sizing.xSmall,

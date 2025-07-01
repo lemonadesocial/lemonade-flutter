@@ -2,7 +2,7 @@ import 'package:app/core/application/event_tickets/modify_ticket_type_bloc/modif
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -17,12 +17,12 @@ class ActivateTicketSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return Container(
       padding: EdgeInsets.all(Spacing.smMedium),
       decoration: BoxDecoration(
-        color: colorScheme.onPrimary.withOpacity(0.06),
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.normal),
       ),
       child: Row(
@@ -32,7 +32,7 @@ class ActivateTicketSetting extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icOutlineVerified.svg(
                   colorFilter: filter,
                   width: 18.w,
@@ -43,14 +43,14 @@ class ActivateTicketSetting extends StatelessWidget {
               Text(
                 t.event.ticketTierSetting.activateTicket,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
               SizedBox(width: Spacing.superExtraSmall),
               Text(
                 t.event.ticketTierSetting.availableForPurchase,
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
               ),
             ],
@@ -58,10 +58,10 @@ class ActivateTicketSetting extends StatelessWidget {
           const Spacer(),
           BlocBuilder<ModifyTicketTypeBloc, ModifyTicketTypeState>(
             builder: (context, state) => FlutterSwitch(
-              inactiveColor: colorScheme.outline,
-              inactiveToggleColor: colorScheme.onSurfaceVariant,
-              activeColor: LemonColor.paleViolet,
-              activeToggleColor: colorScheme.onPrimary,
+              inactiveColor: appColors.pageDivider,
+              inactiveToggleColor: appColors.textTertiary,
+              activeColor: appColors.textAccent,
+              activeToggleColor: appColors.textPrimary,
               height: Sizing.small,
               width: 42.w,
               value: state.active ?? false,

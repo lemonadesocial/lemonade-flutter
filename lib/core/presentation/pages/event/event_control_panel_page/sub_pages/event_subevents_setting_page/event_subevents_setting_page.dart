@@ -9,8 +9,8 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,15 +51,14 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: LemonAppBar(
-        backgroundColor: LemonColor.atomicBlack,
         title: t.event.subEventSettings.subEventSettings,
       ),
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       body: BlocListener<EditEventDetailBloc, EditEventDetailState>(
         listener: (context, state) {
           if (state.status == EditEventDetailBlocStatus.success) {
@@ -86,16 +85,13 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                           subTitle:
                               t.event.subEventSettings.allowSubEventDescription,
                           onTap: () {},
-                          color: LemonColor.chineseBlack,
+                          color: appColors.cardBg,
                           borderRadius: BorderRadius.all(
                             Radius.circular(LemonRadius.medium),
                           ),
                           trailing: FlutterSwitch(
-                            inactiveColor: Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(0.12),
-                            activeColor: LemonColor.malachiteGreen,
+                            inactiveColor: appColors.pageDivider,
+                            activeColor: appColors.textSuccess,
                             height: 24.w,
                             width: 42.w,
                             onToggle: (value) {
@@ -114,7 +110,7 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                           subTitle: t.event.subEventSettings
                               .requireTicketToCreateDescription,
                           onTap: () {},
-                          color: LemonColor.chineseBlack,
+                          color: appColors.cardBg,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(LemonRadius.medium),
                             topRight: Radius.circular(LemonRadius.medium),
@@ -122,11 +118,8 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                             bottomRight: Radius.zero,
                           ),
                           trailing: FlutterSwitch(
-                            inactiveColor: Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(0.12),
-                            activeColor: LemonColor.malachiteGreen,
+                            inactiveColor: appColors.pageDivider,
+                            activeColor: appColors.textSuccess,
                             height: 24.w,
                             width: 42.w,
                             onToggle: (value) {
@@ -150,7 +143,7 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                           ),
                         ),
                         Divider(
-                          color: colorScheme.outline,
+                          color: appColors.pageDivider,
                           height: 0,
                           thickness: 0.5.w,
                         ),
@@ -164,13 +157,10 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                             topLeft: Radius.zero,
                             topRight: Radius.zero,
                           ),
-                          color: LemonColor.chineseBlack,
+                          color: appColors.cardBg,
                           trailing: FlutterSwitch(
-                            inactiveColor: Theme.of(context)
-                                .colorScheme
-                                .onPrimary
-                                .withOpacity(0.12),
-                            activeColor: LemonColor.malachiteGreen,
+                            inactiveColor: appColors.pageDivider,
+                            activeColor: appColors.textSuccess,
                             height: 24.w,
                             width: 42.w,
                             onToggle: (value) {
@@ -197,9 +187,9 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                         SizedBox(height: Spacing.medium),
                         SettingTileWidget(
                           title: t.event.subEventSettings.viewSubEvents,
-                          color: LemonColor.chineseBlack,
+                          color: appColors.cardBg,
                           trailing: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (filter) => Assets.icons.icArrowRight.svg(
                               colorFilter: filter,
                             ),
@@ -225,17 +215,16 @@ class _EventSubEventsSettingPageState extends State<EventSubEventsSettingPage> {
                             alignment: Alignment.bottomCenter,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: LemonColor.atomicBlack,
+                                color: appColors.pageBg,
                                 border: Border(
                                   top: BorderSide(
-                                    color: colorScheme.outline,
+                                    color: appColors.pageDivider,
                                   ),
                                 ),
                               ),
                               padding: EdgeInsets.all(Spacing.smMedium),
                               child: SafeArea(
                                 child: LinearGradientButton.secondaryButton(
-                                  mode: GradientButtonMode.light,
                                   loadingWhen: state.status ==
                                       EditEventDetailBlocStatus.loading,
                                   onTap: () {

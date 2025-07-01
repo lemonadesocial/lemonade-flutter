@@ -2,7 +2,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return SingleChildScrollView(
       controller: ModalScrollController.of(context),
       padding: EdgeInsets.only(
@@ -36,7 +36,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.pageBg,
         ),
         child: SafeArea(
           child: Column(
@@ -44,7 +44,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               LemonAppBar(
-                backgroundColor: LemonColor.atomicBlack,
+                backgroundColor: appColors.pageBg,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -55,7 +55,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
                     Text(
                       t.event.ticketTierSetting.categorySetting.newCategory,
                       style: Typo.extraLarge.copyWith(
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                         fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
@@ -64,7 +64,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
                       t.event.ticketTierSetting.categorySetting
                           .newCategoryDescription,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                     SizedBox(height: Spacing.medium),
@@ -96,7 +96,7 @@ class _TicketTierCategoryFormState extends State<TicketTierCategoryForm> {
                 decoration: BoxDecoration(
                   border: Border(
                     top: BorderSide(
-                      color: colorScheme.outline,
+                      color: appColors.pageDivider,
                     ),
                   ),
                 ),
@@ -138,10 +138,10 @@ class _TextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(LemonRadius.small),
-      borderSide: BorderSide(color: colorScheme.outline),
+      borderSide: BorderSide(color: appColors.pageDivider),
     );
     return SizedBox(
       height: height,
@@ -149,7 +149,7 @@ class _TextField extends StatelessWidget {
         onChanged: onChanged,
         textAlignVertical: TextAlignVertical.top,
         expands: true,
-        cursorColor: colorScheme.onSecondary,
+        cursorColor: appColors.textTertiary,
         decoration: InputDecoration(
           hintText: hintText,
           filled: true,

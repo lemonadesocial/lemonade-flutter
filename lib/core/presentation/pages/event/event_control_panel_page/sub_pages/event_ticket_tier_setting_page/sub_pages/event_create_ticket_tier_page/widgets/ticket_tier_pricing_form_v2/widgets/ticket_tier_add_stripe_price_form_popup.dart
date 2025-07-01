@@ -9,6 +9,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -107,7 +108,7 @@ class __ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final currencies =
         widget.stripePaymentAccount.accountInfo?.currencies ?? [];
@@ -142,12 +143,12 @@ class __ViewState extends State<_View> {
               children: [
                 Text(
                   t.event.ticketTierSetting.cardStripe,
-                  style: Typo.extraLarge.copyWith(color: colorScheme.onPrimary),
+                  style: Typo.extraLarge.copyWith(color: appColors.textPrimary),
                 ),
                 Text(
                   t.event.ticketTierSetting.cardStripeDesc,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                   ),
                 ),
                 SizedBox(height: Spacing.medium),
@@ -157,9 +158,9 @@ class __ViewState extends State<_View> {
                     vertical: Spacing.small,
                   ),
                   decoration: BoxDecoration(
-                    color: colorScheme.onPrimary.withOpacity(0.06),
+                    color: appColors.cardBg,
                     border: Border.all(
-                      color: colorScheme.outlineVariant,
+                      color: appColors.pageDivider,
                     ),
                     borderRadius: BorderRadius.circular(LemonRadius.small),
                   ),
@@ -173,13 +174,13 @@ class __ViewState extends State<_View> {
                       Text(
                         t.event.ticketTierSetting.stripe,
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
+                          color: appColors.textPrimary,
                         ),
                       ),
                       Text(
                         ' ${widget.stripePaymentAccount.accountInfo?.accountId}',
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ],
@@ -194,9 +195,9 @@ class __ViewState extends State<_View> {
                         builder: (context, state) => LemonTextField(
                           hintText: t.event.ticketTierSetting.enterPrice,
                           filled: true,
-                          fillColor: colorScheme.onPrimary.withOpacity(0.06),
+                          fillColor: appColors.cardBg,
                           controller: amountController,
-                          borderColor: colorScheme.outlineVariant,
+                          borderColor: appColors.pageDivider,
                           onChange: (value) {
                             context.read<ModifyTicketPriceV2Bloc>().add(
                                   ModifyTicketPriceV2Event.onCostChanged(

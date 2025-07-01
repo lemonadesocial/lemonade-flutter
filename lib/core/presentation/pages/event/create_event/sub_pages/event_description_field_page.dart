@@ -1,8 +1,6 @@
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
-import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:app/core/application/event/edit_event_detail_bloc/edit_event_detail_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventDescriptionFieldPage extends StatefulWidget {
@@ -48,8 +47,7 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
+    final appColors = context.theme.appColors;
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
         final bool isLoading =
@@ -61,7 +59,7 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
 
         return Scaffold(
           appBar: LemonAppBar(
-            backgroundColor: LemonColor.atomicBlack,
+            backgroundColor: appColors.pageBg,
             title: t.event.eventCreation.description,
             onPressBack: () async {
               AutoRouter.of(context).pop();
@@ -69,54 +67,33 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
             actions: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
-                child: TextButton(
-                  onPressed: isLoading ? null : _handleSave,
-                  style: TextButton.styleFrom(
-                    backgroundColor:
-                        isButtonSaved ? Colors.transparent : Colors.white,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: Spacing.extraSmall,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                      side: BorderSide(
-                        color: colorScheme.onSecondary,
-                        width: isButtonSaved ? 1 : 0,
-                      ),
-                    ),
+                child: SizedBox(
+                  width: 60.w,
+                  child: LinearGradientButton.secondaryButton(
+                    height: 32.w,
+                    loadingWhen: isLoading,
+                    label:
+                        isButtonSaved ? t.common.saved : t.common.actions.save,
+                    onTap: isLoading ? null : _handleSave,
+                    radius: BorderRadius.circular(LemonRadius.full),
                   ),
-                  child: isLoading
-                      ? SizedBox(
-                          height: Sizing.xSmall,
-                          width: Sizing.xSmall,
-                          child: Loading.defaultLoading(context),
-                        )
-                      : Text(
-                          isButtonSaved ? 'Saved' : 'Save',
-                          style: TextStyle(
-                            color: isButtonSaved ? Colors.white : Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
                 ),
               ),
             ],
           ),
           body: SafeArea(
             child: Container(
-              color: LemonColor.atomicBlack,
+              color: appColors.pageBg,
               child: Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: Spacing.smMedium,
                   vertical: Spacing.smMedium / 2,
                 ),
                 decoration: BoxDecoration(
-                  color: LemonColor.atomicBlack,
+                  color: appColors.pageBg,
                   borderRadius: BorderRadius.circular(LemonRadius.medium),
                   border: Border.all(
-                    color: colorScheme.outline,
+                    color: appColors.pageDivider,
                   ),
                 ),
                 child: HtmlEditor(
@@ -125,14 +102,15 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
                     hint: 'Type something...',
                     shouldEnsureVisible: true,
                     initialText: widget.description,
+                    darkMode: Theme.of(context).brightness == Brightness.dark,
                   ),
                   htmlToolbarOptions: HtmlToolbarOptions(
                     renderBorder: false,
                     renderSeparatorWidget: false,
                     gridViewVerticalSpacing: 0,
                     gridViewHorizontalSpacing: 0,
-                    buttonColor: colorScheme.onSecondary,
-                    buttonSelectedColor: LemonColor.paleViolet,
+                    buttonColor: appColors.textTertiary,
+                    buttonSelectedColor: appColors.textAccent,
                     defaultToolbarButtons: [
                       const StyleButtons(),
                       const FontButtons(

@@ -6,8 +6,8 @@ import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +107,7 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return MultiSliver(
       children: [
@@ -117,7 +117,7 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
               _DefaultProfileFieldItem(
                 label: t.profile.name,
                 icon: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icProfileOutline.svg(
                     colorFilter: filter,
                     width: 16.w,
@@ -130,7 +130,7 @@ class _EventApplicationFormSettingSelectedProfileFieldsListState
               _DefaultProfileFieldItem(
                 label: t.profile.email,
                 icon: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icEmailAt.svg(
                     colorFilter: filter,
                     width: 16.w,
@@ -222,14 +222,14 @@ class _DefaultProfileFieldItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         border: Border.all(
-          color: colorScheme.outlineVariant,
+          color: appColors.pageDivider,
           width: 0.5.w,
         ),
         borderRadius: BorderRadius.vertical(
@@ -244,14 +244,14 @@ class _DefaultProfileFieldItem extends StatelessWidget {
           Text(
             label,
             style: Typo.medium.copyWith(
-              color: colorScheme.onPrimary,
+              color: appColors.textPrimary,
             ),
           ),
           const Spacer(),
           Text(
             t.event.applicationForm.required,
             style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
             ),
           ),
         ],
@@ -284,7 +284,7 @@ class _ProfileFieldItemState extends State<_ProfileFieldItem> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return BlocListener<GetEventDetailBloc, GetEventDetailState>(
       listener: (context, state) {
@@ -297,9 +297,9 @@ class _ProfileFieldItemState extends State<_ProfileFieldItem> {
       child: Container(
         padding: EdgeInsets.all(Spacing.small),
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
             width: 0.5.w,
           ),
           borderRadius: BorderRadius.vertical(
@@ -317,7 +317,7 @@ class _ProfileFieldItemState extends State<_ProfileFieldItem> {
             Text(
               widget.fieldKey.label,
               style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
               ),
             ),
             DropdownButtonHideUnderline(
@@ -338,12 +338,12 @@ class _ProfileFieldItemState extends State<_ProfileFieldItem> {
                             ? t.event.applicationForm.required
                             : t.event.applicationForm.optional,
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                         ),
                       ),
                       SizedBox(width: Spacing.superExtraSmall),
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) =>
                             Assets.icons.icDoubleArrowUpDown.svg(
                           colorFilter: filter,
@@ -378,20 +378,20 @@ class _ProfileFieldItemState extends State<_ProfileFieldItem> {
                   width: 200.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(LemonRadius.small),
-                    color: colorScheme.secondaryContainer,
+                    color: appColors.pageBg,
                   ),
                   offset: Offset(0, -Spacing.superExtraSmall),
                 ),
                 menuItemStyleData: MenuItemStyleData(
-                  overlayColor: const MaterialStatePropertyAll(
-                    LemonColor.darkBackground,
+                  overlayColor: MaterialStatePropertyAll(
+                    appColors.pageBg,
                   ),
                   selectedMenuItemBuilder: (context, child) => Row(
                     children: [
                       child,
                       const Spacer(),
                       ThemeSvgIcon(
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                         builder: (filter) => Assets.icons.icDone.svg(
                           colorFilter: filter,
                           width: 16.w,
