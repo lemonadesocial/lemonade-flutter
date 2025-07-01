@@ -1,6 +1,7 @@
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/presentation/widgets/lemon_circle_avatar_widget.dart';
 import 'package:app/core/utils/avatar_utils.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -21,7 +22,7 @@ class EventCohostSettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onPressItem,
       child: Row(
@@ -45,8 +46,7 @@ class EventCohostSettingItem extends StatelessWidget {
                   Text(
                     user?.name ?? '',
                     style: Typo.medium.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   if (user?.email?.isNotEmpty == true) ...[
@@ -56,7 +56,7 @@ class EventCohostSettingItem extends StatelessWidget {
                     Text(
                       user?.email ?? '',
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],

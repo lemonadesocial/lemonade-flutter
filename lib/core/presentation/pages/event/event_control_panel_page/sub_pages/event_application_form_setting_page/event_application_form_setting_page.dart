@@ -17,6 +17,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
 
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 @RoutePage()
 class EventApplicationFormSettingPage extends StatelessWidget {
@@ -78,7 +79,7 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final eventId = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (event) => event.id ?? '',
           orElse: () => '',
@@ -149,7 +150,7 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
                   ),
                   SliverToBoxAdapter(
                     child: Divider(
-                      color: colorScheme.outline,
+                      color: appColors.pageDivider,
                       height: Spacing.medium * 2,
                     ),
                   ),
@@ -161,7 +162,7 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
                   ),
                   SliverToBoxAdapter(
                     child: Divider(
-                      color: colorScheme.outline,
+                      color: appColors.pageDivider,
                       height: Spacing.medium * 2,
                     ),
                   ),
@@ -182,17 +183,16 @@ class EventApplicationFormSettingPageView extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: colorScheme.background,
+                    color: appColors.pageBg,
                     border: Border(
                       top: BorderSide(
-                        color: colorScheme.outline,
+                        color: appColors.pageDivider,
                       ),
                     ),
                   ),
                   padding: EdgeInsets.all(Spacing.smMedium),
                   child: SafeArea(
                     child: LinearGradientButton.secondaryButton(
-                      mode: GradientButtonMode.light,
                       onTap: () {
                         ChooseQuestionTypeBottomSheet.show(context);
                       },

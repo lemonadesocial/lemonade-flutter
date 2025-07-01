@@ -15,8 +15,8 @@ import 'package:app/graphql/backend/event/mutation/update_event.graphql.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,7 +93,7 @@ class EventManageCohostsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final pendingRequests = eventCohostsRequests
         .where(
@@ -138,7 +138,7 @@ class EventManageCohostsList extends StatelessWidget {
               child: Divider(
                 height: 2 * Spacing.small,
                 thickness: 1.w,
-                color: colorScheme.outlineVariant,
+                color: appColors.pageDivider,
               ),
             ),
           SliverToBoxAdapter(
@@ -147,7 +147,7 @@ class EventManageCohostsList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icInfo.svg(
                     colorFilter: filter,
                   ),
@@ -159,15 +159,14 @@ class EventManageCohostsList extends StatelessWidget {
                     Text(
                       t.event.eventCohost.pendingCohostsTitle,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        color: appColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 2.w),
                     Text(
                       t.event.eventCohost.pendingCohostsDescription,
                       style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -209,8 +208,7 @@ class EventManageCohostsList extends StatelessWidget {
             child: Text(
               t.common.status.declined,
               style: Typo.mediumPlus.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
+                color: appColors.textPrimary,
               ),
             ),
           ),
@@ -264,7 +262,7 @@ class _AcceptedCohostsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final listedAcceptedRequests = event?.visibleCohostsExpanded ?? [];
     final unlistedAcceptedRequests = allHosts
@@ -302,7 +300,7 @@ class _AcceptedCohostsList extends StatelessWidget {
               child: Divider(
                 height: 2 * Spacing.small,
                 thickness: 1.w,
-                color: colorScheme.outlineVariant,
+                color: appColors.pageDivider,
               ),
             ),
           SliverToBoxAdapter(
@@ -311,7 +309,7 @@ class _AcceptedCohostsList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icPrivate.svg(
                     colorFilter: filter,
                   ),
@@ -323,15 +321,14 @@ class _AcceptedCohostsList extends StatelessWidget {
                     Text(
                       t.event.eventCohost.unlistedCohostsTitle,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        color: appColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 2.w),
                     Text(
                       t.event.eventCohost.unlistedCohostsDescription,
                       style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                   ],
@@ -389,7 +386,7 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -400,14 +397,14 @@ class _ActionButton extends StatelessWidget {
               horizontal: Spacing.extraSmall,
             ),
             decoration: BoxDecoration(
-              color: LemonColor.chineseBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
             ),
             child: Center(
               child: Text(
                 t.event.eventCohost.creator,
                 style: Typo.small.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
               ),
             ),
@@ -424,10 +421,10 @@ class _ActionButton extends StatelessWidget {
                 value: EventCohostSettingAction.show,
                 leadingIcon: Icon(
                   Icons.visibility_outlined,
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
                 textStyle: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
             if (visible && canShowHide)
@@ -436,22 +433,22 @@ class _ActionButton extends StatelessWidget {
                 value: EventCohostSettingAction.hide,
                 leadingIcon: Icon(
                   Icons.visibility_off_outlined,
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
                 textStyle: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
             if (!isCreator)
               DropdownItemDpo(
                 label: t.event.eventCohost.removeCohost,
                 value: EventCohostSettingAction.remove,
-                leadingIcon: const Icon(
+                leadingIcon: Icon(
                   Icons.delete_outline,
-                  color: LemonColor.coralReef,
+                  color: appColors.textError,
                 ),
                 textStyle: Typo.medium.copyWith(
-                  color: LemonColor.coralReef,
+                  color: appColors.textError,
                 ),
               ),
           ],
@@ -467,7 +464,7 @@ class _ActionButton extends StatelessWidget {
             }
           },
           child: ThemeSvgIcon(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
             builder: (filter) => Assets.icons.icMoreHoriz.svg(
               colorFilter: filter,
             ),

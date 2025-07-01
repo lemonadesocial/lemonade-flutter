@@ -23,6 +23,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -287,7 +288,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
       },
       builder: (context, state) {
         final t = Translations.of(context);
-        final colorScheme = Theme.of(context).colorScheme;
+        final appColors = context.theme.appColors;
         final userWalletAddress = state.activeSession?.address;
         final event = context.read<GetEventDetailBloc>().state.maybeWhen(
               orElse: () => null,
@@ -345,7 +346,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
                                 Text(
                                   '${t.event.ticketTierSetting.activate} ${widget.chain.name}',
                                   style: Typo.extraLarge.copyWith(
-                                    color: colorScheme.onPrimary,
+                                    color: appColors.textPrimary,
                                   ),
                                 ),
                                 Text(
@@ -354,15 +355,14 @@ class _EventSetupStakeCryptoPaymentAccountPageState
                                     chainName: widget.chain.name ?? '',
                                   ),
                                   style: Typo.medium.copyWith(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                   ),
                                 ),
                                 SizedBox(height: Spacing.medium),
                                 LemonTextField(
                                   controller: walletIdController,
                                   filled: true,
-                                  fillColor:
-                                      colorScheme.onPrimary.withOpacity(0.06),
+                                  fillColor: appColors.cardBg,
                                   borderColor: Colors.transparent,
                                   hintText: t.event.ticketTierSetting.walletId,
                                   autofocus: true,
@@ -371,7 +371,7 @@ class _EventSetupStakeCryptoPaymentAccountPageState
                                 Text(
                                   t.event.ticketTierSetting.checkinBefore,
                                   style: Typo.medium.copyWith(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                   ),
                                 ),
                                 SizedBox(height: Spacing.xSmall),
@@ -389,15 +389,14 @@ class _EventSetupStakeCryptoPaymentAccountPageState
                                 Text(
                                   t.event.ticketTierSetting.refundPercent,
                                   style: Typo.medium.copyWith(
-                                    color: colorScheme.onSecondary,
+                                    color: appColors.textTertiary,
                                   ),
                                 ),
                                 SizedBox(height: Spacing.xSmall),
                                 LemonTextField(
                                   controller: percentageController,
                                   filled: true,
-                                  fillColor:
-                                      colorScheme.onPrimary.withOpacity(0.06),
+                                  fillColor: appColors.cardBg,
                                   borderColor: Colors.transparent,
                                   hintText: '50%',
                                   autofocus: true,

@@ -8,6 +8,7 @@ import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,6 +36,9 @@ class AutoSyncLensLemonadeProfileWidgetView extends StatelessWidget {
     required LensAccount lensAccount,
     required User lemonadeAccount,
   }) async {
+    if (kDebugMode) {
+      return;
+    }
     // handle update lemonade profile
     final lensLemonadeProfile = LensLemonadeProfile.fromLensAndLemonadeAccount(
       lensAccount: lensAccount,

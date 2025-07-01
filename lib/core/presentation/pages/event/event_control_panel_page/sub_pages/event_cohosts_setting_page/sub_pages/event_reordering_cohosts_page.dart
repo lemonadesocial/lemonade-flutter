@@ -5,8 +5,8 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -51,13 +51,13 @@ class _EventReorderingCohostsPageState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Scaffold(
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       appBar: LemonAppBar(
         title: t.event.eventCohost.cohosts,
-        backgroundColor: LemonColor.atomicBlack,
+        backgroundColor: appColors.pageBg,
         actions: [
           Padding(
             padding: EdgeInsets.only(right: Spacing.small),
@@ -69,7 +69,7 @@ class _EventReorderingCohostsPageState
               child: Text(
                 t.common.done,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
             ),
@@ -111,7 +111,7 @@ class _EventReorderingCohostsPageState
                         horizontal: Spacing.extraSmall,
                       ),
                       decoration: BoxDecoration(
-                        color: LemonColor.chineseBlack,
+                        color: appColors.cardBg,
                         borderRadius:
                             BorderRadius.circular(LemonRadius.extraSmall),
                       ),
@@ -119,7 +119,7 @@ class _EventReorderingCohostsPageState
                         child: Text(
                           t.event.eventCohost.creator,
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ),
@@ -129,7 +129,7 @@ class _EventReorderingCohostsPageState
                   ReorderableDragStartListener(
                     index: index,
                     child: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icReorder.svg(
                         colorFilter: filter,
                       ),

@@ -13,7 +13,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:app/theme/sizing.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +30,6 @@ class CreateEventRegistrationSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final appColors = context.theme.appColors;
 
     final isEditMode = initialEvent != null;
@@ -135,8 +133,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
           Text(
             t.event.registration,
             style: Typo.mediumPlus.copyWith(
-              color: colorScheme.onSecondary,
-              fontWeight: FontWeight.w500,
+              color: appColors.textTertiary,
             ),
           ),
           SizedBox(height: Spacing.xSmall),
@@ -172,13 +169,13 @@ class CreateEventRegistrationSection extends StatelessWidget {
                     dropdownStyleData: DropdownStyleData(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(LemonRadius.small),
-                        color: colorScheme.secondaryContainer,
+                        color: appColors.pageBg,
                       ),
                       offset: Offset(0, -Spacing.superExtraSmall),
                     ),
-                    menuItemStyleData: const MenuItemStyleData(
+                    menuItemStyleData: MenuItemStyleData(
                       overlayColor: MaterialStatePropertyAll(
-                        LemonColor.darkBackground,
+                        appColors.pageBg,
                       ),
                     ),
                   ),
@@ -220,7 +217,8 @@ class CreateEventRegistrationSection extends StatelessWidget {
                   onTap: () {
                     showCupertinoModalBottomSheet(
                       bounce: true,
-                      backgroundColor: LemonColor.chineseBlack,
+                      backgroundColor: appColors.pageBg,
+                      barrierColor: Colors.black.withOpacity(0.5),
                       context: context,
                       enableDrag: false,
                       builder: (newContext) {
@@ -262,6 +260,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                     showCupertinoModalBottomSheet(
                       bounce: true,
                       backgroundColor: appColors.pageBg,
+                      barrierColor: Colors.black.withOpacity(0.5),
                       context: context,
                       enableDrag: false,
                       builder: (newContext) {
@@ -426,10 +425,10 @@ class CreateEventRegistrationSection extends StatelessWidget {
                       trailingIcon: Assets.icons.icArrowRight,
                       onTap: () {
                         showCupertinoModalBottomSheet(
-                          barrierColor: LemonColor.black50,
+                          barrierColor: Colors.black.withOpacity(0.5),
                           bounce: true,
                           expand: true,
-                          backgroundColor: LemonColor.atomicBlack,
+                          backgroundColor: appColors.pageBg,
                           context: context,
                           builder: (newContext) {
                             return Container(
@@ -437,7 +436,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                                 borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(18),
                                 ),
-                                color: LemonColor.atomicBlack,
+                                color: appColors.pageBg,
                               ),
                               clipBehavior: Clip.hardEdge,
                               child: FractionallySizedBox(
@@ -479,7 +478,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
     Function()? onTap,
     Function(bool)? onToggleSwitch,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -491,7 +490,7 @@ class CreateEventRegistrationSection extends StatelessWidget {
                 width: Sizing.mSmall,
                 height: Sizing.mSmall,
                 child: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => icon.svg(
                     width: Sizing.mSmall,
                     height: Sizing.mSmall,
@@ -504,15 +503,15 @@ class CreateEventRegistrationSection extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                style: Typo.medium.copyWith(color: appColors.textPrimary),
               ),
             ),
             if (isSwitch)
               FlutterSwitch(
-                inactiveColor: colorScheme.outline,
-                inactiveToggleColor: colorScheme.onSurfaceVariant,
-                activeColor: LemonColor.paleViolet,
-                activeToggleColor: colorScheme.onPrimary,
+                inactiveColor: appColors.pageDivider,
+                inactiveToggleColor: appColors.textTertiary,
+                activeColor: appColors.textAccent,
+                activeToggleColor: appColors.textPrimary,
                 height: 24.h,
                 width: 42.w,
                 value: switchValue ?? false,
@@ -526,11 +525,11 @@ class CreateEventRegistrationSection extends StatelessWidget {
               if (value != null)
                 Text(
                   value,
-                  style: Typo.medium.copyWith(color: colorScheme.onPrimary),
+                  style: Typo.medium.copyWith(color: appColors.textPrimary),
                 ),
               SizedBox(width: Spacing.xSmall),
               ThemeSvgIcon(
-                color: colorScheme.onSurfaceVariant,
+                color: appColors.textTertiary,
                 builder: (filter) => trailingIcon!.svg(
                   width: Sizing.xSmall,
                   height: Sizing.xSmall,

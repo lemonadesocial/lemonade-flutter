@@ -13,7 +13,7 @@ import 'package:app/core/utils/number_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -153,7 +153,7 @@ class _ViewState extends State<_View> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return GetChainsListBuilder(
       builder: (context, allChains) {
         final chains =
@@ -184,13 +184,13 @@ class _ViewState extends State<_View> {
                           Text(
                             t.event.ticketTierSetting.staking,
                             style: Typo.extraLarge.copyWith(
-                              color: colorScheme.onPrimary,
+                              color: appColors.textPrimary,
                             ),
                           ),
                           Text(
                             t.event.ticketTierSetting.cryptoPriceDescription,
                             style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                             ),
                           ),
                           SizedBox(height: Spacing.xSmall),
@@ -202,8 +202,7 @@ class _ViewState extends State<_View> {
                                   builder: (context, state) {
                                     return LemonTextField(
                                       filled: true,
-                                      fillColor: colorScheme.onPrimary
-                                          .withOpacity(0.06),
+                                      fillColor: appColors.cardBg,
                                       borderColor: Colors.transparent,
                                       controller: amountController,
                                       hintText:
@@ -244,7 +243,9 @@ class _ViewState extends State<_View> {
                                           showCupertinoModalBottomSheet(
                                         context: context,
                                         expand: true,
-                                        backgroundColor: LemonColor.atomicBlack,
+                                        backgroundColor: appColors.pageBg,
+                                        barrierColor:
+                                            Colors.black.withOpacity(0.5),
                                         builder: (innerContext) =>
                                             TicketTierFeatureDropdownList<
                                                 String, String>(
@@ -313,7 +314,7 @@ class _ViewState extends State<_View> {
                                           await showCupertinoModalBottomSheet<
                                               PaymentAccount?>(
                                         context: context,
-                                        backgroundColor: LemonColor.atomicBlack,
+                                        backgroundColor: appColors.pageBg,
                                         barrierColor:
                                             Colors.black.withOpacity(0.5),
                                         builder: (context) =>
@@ -411,7 +412,7 @@ class _SupportedChains extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,7 +421,7 @@ class _SupportedChains extends StatelessWidget {
         Text(
           t.event.ticketTierSetting.selectNetworks,
           style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
+            color: appColors.textPrimary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -442,13 +443,11 @@ class _SupportedChains extends StatelessWidget {
                     vertical: Spacing.small,
                   ),
                   decoration: BoxDecoration(
-                    color: selected
-                        ? colorScheme.onPrimary.withOpacity(0.06)
-                        : Colors.transparent,
+                    color: selected ? appColors.cardBg : Colors.transparent,
                     borderRadius: BorderRadius.circular(LemonRadius.small),
                     border: Border.all(
                       color:
-                          selected ? Colors.transparent : colorScheme.outline,
+                          selected ? Colors.transparent : appColors.pageDivider,
                     ),
                   ),
                   child: Row(
@@ -465,8 +464,7 @@ class _SupportedChains extends StatelessWidget {
                         child: Text(
                           chain.name ?? '',
                           style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
+                            color: appColors.textPrimary,
                           ),
                         ),
                       ),
@@ -480,7 +478,7 @@ class _SupportedChains extends StatelessWidget {
                         Text(
                           t.event.ticketTierSetting.activate,
                           style: Typo.medium.copyWith(
-                            color: LemonColor.paleViolet,
+                            color: appColors.textAccent,
                           ),
                         ),
                       ],

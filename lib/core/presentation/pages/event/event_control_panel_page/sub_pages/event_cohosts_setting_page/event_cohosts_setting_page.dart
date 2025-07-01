@@ -17,8 +17,8 @@ import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,7 +78,7 @@ class _EventCohostsSettingPageViewState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     List<EventCohostRequest> eventCohostsRequests =
         context.watch<GetEventCohostRequestsBloc>().state.maybeWhen(
@@ -97,7 +97,7 @@ class _EventCohostsSettingPageViewState
             );
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: LemonColor.atomicBlack,
+        backgroundColor: appColors.pageBg,
         title: t.event.configuration.coHosts,
         actions: [
           Padding(
@@ -109,7 +109,7 @@ class _EventCohostsSettingPageViewState
                 );
               },
               child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icAdd.svg(
                   colorFilter: filter,
                 ),
@@ -131,7 +131,7 @@ class _EventCohostsSettingPageViewState
                 );
               },
               child: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icReorder.svg(
                   colorFilter: filter,
                 ),
@@ -140,7 +140,7 @@ class _EventCohostsSettingPageViewState
           ),
         ],
       ),
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(

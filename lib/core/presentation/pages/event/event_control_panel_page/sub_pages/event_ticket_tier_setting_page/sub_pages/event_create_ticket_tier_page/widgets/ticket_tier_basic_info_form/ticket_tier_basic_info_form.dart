@@ -4,6 +4,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _TicketTierBasicInforFormState extends State<TicketTierBasicInforForm> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final modifyTicketTypeBloc = context.read<ModifyTicketTypeBloc>();
     final event = context
         .read<GetEventDetailBloc>()
@@ -88,7 +89,7 @@ class _TicketTierBasicInforFormState extends State<TicketTierBasicInforForm> {
                 Text(
                   t.event.ticketTierSetting.addTicketDescription,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],
@@ -113,7 +114,7 @@ class _TicketTierBasicInforFormState extends State<TicketTierBasicInforForm> {
                 Text(
                   t.event.ticketTierSetting.addTicketCategory,
                   style: Typo.medium.copyWith(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                   ),
                 ),
               ],

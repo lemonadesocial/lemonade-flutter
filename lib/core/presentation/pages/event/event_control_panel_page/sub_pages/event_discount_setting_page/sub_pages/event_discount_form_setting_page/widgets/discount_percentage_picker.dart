@@ -1,4 +1,5 @@
 import 'package:app/core/application/event/create_event_discount_bloc/create_event_discount_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
@@ -22,7 +23,7 @@ class DiscountPercentagePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -31,8 +32,7 @@ class DiscountPercentagePicker extends StatelessWidget {
         Text(
           t.event.eventPromotions.discountPercent,
           style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
+            color: appColors.textPrimary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
@@ -97,13 +97,13 @@ class _Picker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final displayPercentage = '${(ratio * 100).toInt()}%';
 
     return Container(
       padding: EdgeInsets.all(Spacing.xSmall),
       decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.outline),
+        border: Border.all(color: appColors.pageDivider),
         borderRadius: BorderRadius.circular(LemonRadius.small),
       ),
       child: SizedBox(
@@ -123,15 +123,14 @@ class _Picker extends StatelessWidget {
               },
               icon: Icon(
                 Icons.remove,
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
               ),
             ),
             Text(
               displayPercentage,
               style: Typo.extraLarge.copyWith(
-                color: colorScheme.onPrimary,
+                color: appColors.textPrimary,
                 fontFamily: FontFamily.clashDisplay,
-                fontWeight: FontWeight.w600,
               ),
             ),
             _Button(
@@ -144,7 +143,7 @@ class _Picker extends StatelessWidget {
                 }
               },
               icon: ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (colorFilter) => Assets.icons.icAdd.svg(
                   colorFilter: colorFilter,
                 ),
@@ -167,14 +166,14 @@ class _Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         width: Sizing.large,
         height: Sizing.large,
         decoration: BoxDecoration(
-          color: colorScheme.secondaryContainer,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.xSmall),
         ),
         child: Center(

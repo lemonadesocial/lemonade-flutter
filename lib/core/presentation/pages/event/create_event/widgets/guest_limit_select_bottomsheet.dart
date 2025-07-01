@@ -3,8 +3,8 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,12 +68,11 @@ class GuestLimitSelectBottomSheetState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
+    final appColors = context.theme.appColors;
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      color: LemonColor.atomicBlack,
+      color: appColors.pageBg,
       child: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -90,14 +89,14 @@ class GuestLimitSelectBottomSheetState
                   Text(
                     widget.title ?? '',
                     style: Typo.large.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                     ),
                   ),
                   SizedBox(height: Spacing.superExtraSmall),
                   Text(
                     widget.description ?? '',
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onSurface.withOpacity(0.54),
+                      color: appColors.textTertiary,
                     ),
                   ),
                   SizedBox(height: Spacing.medium),
@@ -105,7 +104,7 @@ class GuestLimitSelectBottomSheetState
                     padding: EdgeInsets.all(Spacing.small),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: colorScheme.onSurface.withOpacity(0.12),
+                        color: appColors.pageDivider,
                       ),
                       borderRadius: BorderRadius.circular(LemonRadius.small),
                     ),
@@ -114,7 +113,7 @@ class GuestLimitSelectBottomSheetState
                         _MinusPlusButton(
                           onTap: _decrement,
                           icon: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (colorFilter) => Assets.icons.icMinus.svg(
                               colorFilter: colorFilter,
                               width: 18.w,
@@ -128,9 +127,9 @@ class GuestLimitSelectBottomSheetState
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
                             style: Typo.large.copyWith(
-                              color: colorScheme.onSurface,
+                              color: appColors.textPrimary,
                             ),
-                            cursorColor: colorScheme.onSurface,
+                            cursorColor: appColors.textPrimary,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               contentPadding:
@@ -163,7 +162,7 @@ class GuestLimitSelectBottomSheetState
                         _MinusPlusButton(
                           onTap: _increment,
                           icon: ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (colorFilter) => Assets.icons.icPlus.svg(
                               colorFilter: colorFilter,
                               width: 18.w,
@@ -184,7 +183,7 @@ class GuestLimitSelectBottomSheetState
                 border: Border(
                   top: BorderSide(
                     width: 1,
-                    color: colorScheme.onSurface.withOpacity(0.06),
+                    color: appColors.pageDivider,
                   ),
                 ),
               ),
@@ -228,7 +227,7 @@ class _MinusPlusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -236,7 +235,7 @@ class _MinusPlusButton extends StatelessWidget {
         height: 36.w,
         padding: EdgeInsets.all(Spacing.extraSmall),
         decoration: ShapeDecoration(
-          color: colorScheme.onSurface.withOpacity(0.12),
+          color: appColors.cardBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.r),
           ),

@@ -1,9 +1,9 @@
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/domain/event/entities/event_payment_ticket_discount.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -22,7 +22,7 @@ class EventDiscountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     final discountPercentage = ((discount.ratio ?? 0) * 100).toInt();
     final highlighted = discountPercentage >= 20;
@@ -44,8 +44,8 @@ class EventDiscountItem extends StatelessWidget {
                     size: Size(ticketLeftSideSize, ticketLeftSideSize),
                     painter: DiscountLeftSidePainterWidget(
                       backgroundColor: highlighted
-                          ? LemonColor.paleViolet18
-                          : colorScheme.secondaryContainer,
+                          ? appColors.textAccent.withOpacity(0.18)
+                          : appColors.cardBg,
                     ),
                   ),
                   Positioned.fill(
@@ -55,8 +55,8 @@ class EventDiscountItem extends StatelessWidget {
                         style: Typo.medium.copyWith(
                           fontWeight: FontWeight.w600,
                           color: highlighted
-                              ? LemonColor.paleViolet
-                              : colorScheme.onSecondary,
+                              ? appColors.textAccent
+                              : appColors.textTertiary,
                         ),
                       ),
                     ),
@@ -68,7 +68,7 @@ class EventDiscountItem extends StatelessWidget {
                   height: 75.w,
                   padding: EdgeInsets.all(Spacing.small),
                   decoration: BoxDecoration(
-                    color: LemonColor.atomicBlack,
+                    color: appColors.cardBg,
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(LemonRadius.medium),
                       bottomRight: Radius.circular(LemonRadius.medium),
@@ -84,9 +84,8 @@ class EventDiscountItem extends StatelessWidget {
                           children: [
                             Text(
                               discount.code ?? '',
-                              style: Typo.medium.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary,
+                              style: Typo.small.copyWith(
+                                color: appColors.textPrimary,
                               ),
                               maxLines: 1,
                             ),
@@ -96,15 +95,15 @@ class EventDiscountItem extends StatelessWidget {
                                 count: discount.useCount?.toInt() ?? 0,
                                 total: discount.ticketLimit?.toInt() ?? 0,
                               ),
-                              style: Typo.medium.copyWith(
-                                color: colorScheme.onSecondary,
+                              style: Typo.small.copyWith(
+                                color: appColors.textTertiary,
                               ),
                             ),
                           ],
                         ),
                       ),
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (colorFilter) => Assets.icons.icArrowRight.svg(
                           colorFilter: colorFilter,
                         ),
@@ -121,7 +120,7 @@ class EventDiscountItem extends StatelessWidget {
             child: CustomPaint(
               size: Size(triangleWidth, 9.w),
               painter: _TrianglePainterWidget(
-                backgroundColor: colorScheme.background,
+                backgroundColor: appColors.pageBg,
               ),
             ),
           ),
@@ -133,7 +132,7 @@ class EventDiscountItem extends StatelessWidget {
               child: CustomPaint(
                 size: Size(triangleWidth, 9.w),
                 painter: _TrianglePainterWidget(
-                  backgroundColor: colorScheme.background,
+                  backgroundColor: appColors.pageBg,
                 ),
               ),
             ),

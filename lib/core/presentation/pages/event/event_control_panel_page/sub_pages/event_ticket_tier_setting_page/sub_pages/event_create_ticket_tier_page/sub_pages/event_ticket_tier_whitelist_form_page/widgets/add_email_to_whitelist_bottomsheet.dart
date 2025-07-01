@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/common/button/linear_gradient_butt
 import 'package:app/core/utils/email_validator.dart';
 import 'package:app/gen/fonts.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _AddEmailToWhiteListBottomSheetState
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return SingleChildScrollView(
       controller: ModalScrollController.of(context),
       padding: EdgeInsets.only(
@@ -47,7 +47,7 @@ class _AddEmailToWhiteListBottomSheetState
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.pageBg,
         ),
         child: SafeArea(
           child: Column(
@@ -55,7 +55,7 @@ class _AddEmailToWhiteListBottomSheetState
             mainAxisSize: MainAxisSize.min,
             children: [
               LemonAppBar(
-                backgroundColor: LemonColor.atomicBlack,
+                backgroundColor: appColors.pageBg,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.xSmall),
@@ -66,7 +66,7 @@ class _AddEmailToWhiteListBottomSheetState
                     Text(
                       t.event.ticketTierSetting.whitelistSetting.addEmail,
                       style: Typo.extraLarge.copyWith(
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                         fontFamily: FontFamily.clashDisplay,
                       ),
                     ),
@@ -75,7 +75,7 @@ class _AddEmailToWhiteListBottomSheetState
                       t.event.ticketTierSetting.whitelistSetting
                           .whiteListAddEmailDescription,
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                       ),
                     ),
                     SizedBox(height: Spacing.medium),
@@ -96,7 +96,7 @@ class _AddEmailToWhiteListBottomSheetState
                 decoration: BoxDecoration(
                   border: Border(
                     top: BorderSide(
-                      color: colorScheme.outline,
+                      color: appColors.pageDivider,
                     ),
                   ),
                 ),
@@ -137,10 +137,10 @@ class EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(LemonRadius.small),
-      borderSide: BorderSide(color: colorScheme.outline),
+      borderSide: BorderSide(color: appColors.pageDivider),
     );
     return SizedBox(
       height: 140.w,
@@ -148,7 +148,7 @@ class EmailInput extends StatelessWidget {
         onChanged: onChanged,
         textAlignVertical: TextAlignVertical.top,
         expands: true,
-        cursorColor: colorScheme.onSecondary,
+        cursorColor: appColors.textTertiary,
         decoration: InputDecoration(
           hintText: t.event.ticketTierSetting.whitelistSetting
               .whitelistInputPlaceholder,

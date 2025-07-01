@@ -7,8 +7,8 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,14 +27,14 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
           fetched: (event) => event,
           orElse: () => null,
         );
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return MultiSliver(
       children: [
         SliverToBoxAdapter(
           child: Text(
             t.event.applicationForm.registrationQuestions,
             style: Typo.extraMedium.copyWith(
-              color: colorScheme.onPrimary,
+              color: appColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -50,16 +50,16 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(Spacing.small),
                   decoration: BoxDecoration(
-                    color: LemonColor.atomicBlack,
+                    color: appColors.cardBg,
                     borderRadius: BorderRadius.circular(LemonRadius.medium),
                     border: Border.all(
-                      color: colorScheme.outlineVariant,
+                      color: appColors.pageDivider,
                     ),
                   ),
                   child: Row(
                     children: [
                       ThemeSvgIcon(
-                        color: colorScheme.onSecondary,
+                        color: appColors.textTertiary,
                         builder: (filter) => Assets.icons.icInfo.svg(
                           colorFilter: filter,
                         ),
@@ -72,13 +72,13 @@ class EventApplicationFormSettingQuestionsList extends StatelessWidget {
                             Text(
                               t.event.applicationForm.noQuestions,
                               style: Typo.medium.copyWith(
-                                color: colorScheme.onPrimary,
+                                color: appColors.textPrimary,
                               ),
                             ),
                             Text(
                               t.event.applicationForm.noQuestionsDescription,
                               style: Typo.small.copyWith(
-                                color: colorScheme.onSecondary,
+                                color: appColors.textTertiary,
                               ),
                             ),
                           ],
@@ -143,22 +143,22 @@ class _QuestionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: LemonColor.atomicBlack,
+          color: appColors.cardBg,
           borderRadius: BorderRadius.circular(LemonRadius.medium),
           border: Border.all(
-            color: colorScheme.outlineVariant,
+            color: appColors.pageDivider,
           ),
         ),
         padding: EdgeInsets.all(Spacing.small),
         child: Row(
           children: [
             ThemeSvgIcon(
-              color: LemonColor.white18,
+              color: appColors.textTertiary,
               builder: (filter) => Assets.icons.icRoundDrag.svg(
                 colorFilter: filter,
               ),
@@ -173,7 +173,7 @@ class _QuestionItem extends StatelessWidget {
                   Text(
                     question.question ?? '',
                     style: Typo.medium.copyWith(
-                      color: colorScheme.onPrimary,
+                      color: appColors.textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -182,7 +182,7 @@ class _QuestionItem extends StatelessWidget {
                     children: [
                       if (question.type == Enum$QuestionType.text) ...[
                         ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) =>
                               Assets.icons.icInsertTextOutline.svg(
                             colorFilter: filter,
@@ -194,14 +194,14 @@ class _QuestionItem extends StatelessWidget {
                         Text(
                           t.event.applicationForm.questionType.text,
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ],
                       if (question.type == Enum$QuestionType.options &&
                           question.select_type == Enum$SelectType.single) ...[
                         ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) => Assets.icons.icSingleSelect.svg(
                             colorFilter: filter,
                             width: 12.w,
@@ -212,14 +212,14 @@ class _QuestionItem extends StatelessWidget {
                         Text(
                           t.event.applicationForm.questionType.singleSelect,
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ],
                       if (question.type == Enum$QuestionType.options &&
                           question.select_type == Enum$SelectType.multi) ...[
                         ThemeSvgIcon(
-                          color: colorScheme.onSecondary,
+                          color: appColors.textTertiary,
                           builder: (filter) => Assets.icons.icMultiSelect.svg(
                             colorFilter: filter,
                             width: 12.w,
@@ -230,7 +230,7 @@ class _QuestionItem extends StatelessWidget {
                         Text(
                           t.event.applicationForm.questionType.multipleSelect,
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ],
@@ -239,7 +239,7 @@ class _QuestionItem extends StatelessWidget {
                         Text(
                           '• ${t.event.applicationForm.required}',
                           style: Typo.small.copyWith(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                           ),
                         ),
                       ],

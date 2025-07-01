@@ -3,7 +3,7 @@ import 'package:app/core/presentation/widgets/common/set_limit_bottomsheet/set_l
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class TicketTotalLimitSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     final modifyTicketTypeBloc = context.watch<ModifyTicketTypeBloc>();
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return InkWell(
       onTap: () async {
         final result = await SetLimitBottomSheet.show(
@@ -39,7 +39,7 @@ class TicketTotalLimitSetting extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: LemonColor.atomicBlack,
+              color: appColors.cardBg,
               borderRadius: BorderRadius.circular(LemonRadius.normal),
             ),
             child: Column(
@@ -52,7 +52,7 @@ class TicketTotalLimitSetting extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (filter) =>
                                 Assets.icons.icArrowUpToLine.svg(
                               width: 18.w,
@@ -64,7 +64,7 @@ class TicketTotalLimitSetting extends StatelessWidget {
                           Text(
                             t.event.ticketTierSetting.totalTickets,
                             style: Typo.medium.copyWith(
-                              color: colorScheme.onPrimary,
+                              color: appColors.textPrimary,
                             ),
                           ),
                         ],
@@ -79,12 +79,12 @@ class TicketTotalLimitSetting extends StatelessWidget {
                                     .toString()
                                 : t.event.ticketTierSetting.unlimited,
                             style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                             ),
                           ),
                           SizedBox(width: Spacing.extraSmall),
                           ThemeSvgIcon(
-                            color: colorScheme.onSecondary,
+                            color: appColors.textTertiary,
                             builder: (filter) => Assets.icons.icEdit.svg(
                               width: 18.w,
                               height: 18.w,

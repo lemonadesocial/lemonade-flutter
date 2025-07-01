@@ -11,6 +11,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/loading_widget.dart';
 import 'package:app/graphql/backend/event/query/list_event_ticket_types.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -30,14 +31,14 @@ class EventTicketTiersListingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           fetched: (event) => event,
           orElse: () => null,
         );
     if (event == null) {
       return Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: appColors.pageBg,
         appBar: const LemonAppBar(),
         body: Center(
           child: Loading.defaultLoading(context),
@@ -46,7 +47,7 @@ class EventTicketTiersListingPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: appColors.pageBg,
       appBar: const LemonAppBar(),
       body: Query$ListEventTicketTypes$Widget(
         options: Options$Query$ListEventTicketTypes(
@@ -88,14 +89,14 @@ class EventTicketTiersListingPage extends StatelessWidget {
                           Text(
                             t.event.ticketTierSetting.ticketTierSettingTitle,
                             style: Typo.extraLarge.copyWith(
-                              color: colorScheme.onPrimary,
+                              color: appColors.textPrimary,
                             ),
                           ),
                           SizedBox(height: 2.w),
                           Text(
                             t.event.ticketTierSetting.ticketTierSettingDesc,
                             style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                             ),
                           ),
                           SizedBox(height: Spacing.smMedium * 2),
@@ -167,10 +168,10 @@ class EventTicketTiersListingPage extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(Spacing.smMedium),
                     decoration: BoxDecoration(
-                      color: colorScheme.background,
+                      color: appColors.pageBg,
                       border: Border(
                         top: BorderSide(
-                          color: colorScheme.outline,
+                          color: appColors.pageDivider,
                         ),
                       ),
                     ),

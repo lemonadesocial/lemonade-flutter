@@ -5,6 +5,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/widgets/private_ticket_setting.dart';
 import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_pages/event_ticket_tier_setting_page/sub_pages/event_create_ticket_tier_page/widgets/ticket_tier_setting_form/widgets/ticket_total_limit_setting.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class TicketTierSettingForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
 
     return Column(
@@ -27,7 +28,7 @@ class TicketTierSettingForm extends StatelessWidget {
         Text(
           t.event.ticketTierSetting.registration,
           style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),

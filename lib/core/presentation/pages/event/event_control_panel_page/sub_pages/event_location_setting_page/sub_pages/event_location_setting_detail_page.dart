@@ -8,6 +8,7 @@ import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
@@ -60,7 +61,7 @@ class _EventLocationSettingDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
 
     return BlocConsumer<EventLocationSettingBloc, EventLocationSettingState>(
@@ -98,7 +99,7 @@ class _EventLocationSettingDetailPageState
               ),
               // Input fields and button
               Container(
-                color: colorScheme.onPrimaryContainer,
+                color: appColors.inputBg,
                 child: SafeArea(
                   top: false,
                   child: Padding(
@@ -116,7 +117,7 @@ class _EventLocationSettingDetailPageState
                           Text(
                             widget.address!.title!,
                             style: Typo.large.copyWith(
-                              color: colorScheme.onPrimary,
+                              color: appColors.textPrimary,
                               height: 0,
                             ),
                           ),
@@ -125,7 +126,7 @@ class _EventLocationSettingDetailPageState
                           Text(
                             widget.address!.street1!,
                             style: Typo.mediumPlus.copyWith(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                               height: 0,
                             ),
                           ),
@@ -156,11 +157,8 @@ class _EventLocationSettingDetailPageState
   _buildConfirmLocationButton() {
     return BlocBuilder<EventLocationSettingBloc, EventLocationSettingState>(
       builder: (context, state) {
-        return LinearGradientButton(
+        return LinearGradientButton.primaryButton(
           label: t.event.locationSetting.confirmLocation,
-          height: 48.h,
-          radius: BorderRadius.circular(24),
-          mode: GradientButtonMode.lavenderMode,
           onTap: () {
             Vibrate.feedback(FeedbackType.light);
             Navigator.of(context).pop();

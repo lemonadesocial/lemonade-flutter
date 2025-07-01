@@ -10,7 +10,7 @@ import 'package:app/core/presentation/pages/event/event_control_panel_page/sub_p
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -44,7 +44,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -53,17 +53,17 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
         Text(
           t.event.ticketTierSetting.pricing,
           style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),
         Container(
           height: Sizing.large,
           decoration: BoxDecoration(
-            color: colorScheme.background,
+            color: appColors.pageBg,
             borderRadius: BorderRadius.circular(LemonRadius.small),
             border: Border.all(
-              color: colorScheme.outline,
+              color: appColors.pageDivider,
             ),
           ),
           child: TabBar(
@@ -81,9 +81,9 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                 LemonRadius.extraSmall,
               ),
               border: Border.all(
-                color: colorScheme.outlineVariant,
+                color: appColors.pageDivider,
               ),
-              color: LemonColor.chineseBlack,
+              color: appColors.cardBg,
             ),
             tabs: [
               Tab(
@@ -94,8 +94,8 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                       t.event.ticketTierSetting.free,
                       style: Typo.medium.copyWith(
                         color: _pricingType == TicketTierPricingFormV2Type.free
-                            ? colorScheme.onPrimary
-                            : colorScheme.onSecondary,
+                            ? appColors.textPrimary
+                            : appColors.textTertiary,
                       ),
                     ),
                   ),
@@ -110,8 +110,8 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                       style: Typo.medium.copyWith(
                         color:
                             _pricingType == TicketTierPricingFormV2Type.direct
-                                ? colorScheme.onPrimary
-                                : colorScheme.onSecondary,
+                                ? appColors.textPrimary
+                                : appColors.textTertiary,
                       ),
                     ),
                   ),
@@ -126,8 +126,8 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                       style: Typo.medium.copyWith(
                         color:
                             _pricingType == TicketTierPricingFormV2Type.staking
-                                ? colorScheme.onPrimary
-                                : colorScheme.onSecondary,
+                                ? appColors.textPrimary
+                                : appColors.textTertiary,
                       ),
                     ),
                   ),
@@ -148,7 +148,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                     label: t.event.ticketTierSetting.addCardPrice,
                     onTap: _onTapStripe,
                     icon: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (colorFilter) => Assets.icons.icCreditCard.svg(
                         width: Sizing.xSmall,
                         height: Sizing.xSmall,
@@ -163,7 +163,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                     label: t.event.ticketTierSetting.addCryptoPrice,
                     onTap: _onTapCryptoRelay,
                     icon: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (colorFilter) => Assets.icons.icWallet.svg(
                         width: Sizing.xSmall,
                         height: Sizing.xSmall,
@@ -187,7 +187,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
                     label: t.event.ticketTierSetting.addStakePrice,
                     onTap: _onTapStaking,
                     icon: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (colorFilter) => Assets.icons.icWallet.svg(
                         width: Sizing.xSmall,
                         height: Sizing.xSmall,
@@ -353,6 +353,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
   }
 
   void _onTapStripe() async {
+    final appColors = context.theme.appColors;
     PaymentAccount? stripePaymentAccount =
         widget.eventLevelPaymentAccounts.firstWhereOrNull(
       (element) => element.provider == PaymentProvider.stripe,
@@ -360,7 +361,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
     stripePaymentAccount ??=
         await showCupertinoModalBottomSheet<PaymentAccount>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
       builder: (context) => const EventSetupStripePaymentAccountPage(),
@@ -370,7 +371,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
     }
     final newPrice = await showCupertinoModalBottomSheet<TicketPriceInput?>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       expand: false,
       builder: (context) => TicketTierAddStripePriceFormPopup(
@@ -395,6 +396,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
   }
 
   void _onTapCryptoRelay() async {
+    final appColors = context.theme.appColors;
     final eventLevelDirectCryptoPaymentAccounts =
         widget.eventLevelPaymentAccounts
             .where(
@@ -403,7 +405,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
             .toList();
     final newPrice = await showCupertinoModalBottomSheet<TicketPriceInput?>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) => TicketTierAddDirectCryptoFormPopup(
         eventLevelDirectCryptoPaymentAccounts:
@@ -428,6 +430,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
   }
 
   void _onTapStaking() async {
+    final appColors = context.theme.appColors;
     final eventLevelStakePaymentAccounts = widget.eventLevelPaymentAccounts
         .where(
           (element) => element.type == PaymentAccountType.ethereumStake,
@@ -435,7 +438,7 @@ class _TicketTierPricingFormV2State extends State<TicketTierPricingFormV2>
         .toList();
     final newPrice = await showCupertinoModalBottomSheet<TicketPriceInput?>(
       context: context,
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (context) => TicketTierAddStakeCryptoPriceFormPopup(
         eventLevelStakePaymentAccounts: eventLevelStakePaymentAccounts,

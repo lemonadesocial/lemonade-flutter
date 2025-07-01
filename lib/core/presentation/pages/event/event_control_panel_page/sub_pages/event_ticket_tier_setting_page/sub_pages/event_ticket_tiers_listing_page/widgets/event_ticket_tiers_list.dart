@@ -10,6 +10,7 @@ import 'package:app/gen/assets.gen.dart';
 import 'package:app/graphql/backend/event/query/get_event_ticket_categories.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -42,7 +43,7 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Query$GetEventTicketCategories$Widget(
       options: Options$Query$GetEventTicketCategories(
         variables: Variables$Query$GetEventTicketCategories(
@@ -73,7 +74,7 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
               child: Text(
                 StringUtils.capitalize(t.event.tickets(n: 2)),
                 style: Typo.mediumPlus.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
               ),
             ),
@@ -112,9 +113,9 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
                                     BorderRadius.circular(LemonRadius.normal),
                                 label: t.common.all,
                                 textColor:
-                                    isActive ? colorScheme.onPrimary : null,
+                                    isActive ? appColors.textPrimary : null,
                                 backgroundColor: isActive
-                                    ? colorScheme.onPrimary.withOpacity(0.09)
+                                    ? appColors.textPrimary.withOpacity(0.09)
                                     : null,
                                 borderColor:
                                     isActive ? Colors.transparent : null,
@@ -145,9 +146,9 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
                               radius: BorderRadius.circular(LemonRadius.normal),
                               label: category.title,
                               textColor:
-                                  isActive ? colorScheme.onPrimary : null,
+                                  isActive ? appColors.textPrimary : null,
                               backgroundColor: isActive
-                                  ? colorScheme.onPrimary.withOpacity(0.09)
+                                  ? appColors.textPrimary.withOpacity(0.09)
                                   : null,
                               borderColor: isActive ? Colors.transparent : null,
                             ),
@@ -179,7 +180,7 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
                     },
                     label: t.event.ticketTierSetting.newTicket,
                     leading: ThemeSvgIcon(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                       builder: (filter) => Assets.icons.icAdd.svg(
                         colorFilter: filter,
                       ),
@@ -187,7 +188,7 @@ class _EventTicketTiersListState extends State<EventTicketTiersList> {
                     height: 50.w,
                     radius: BorderRadius.circular(LemonRadius.medium),
                     textStyle: Typo.medium.copyWith(
-                      color: colorScheme.onSecondary,
+                      color: appColors.textTertiary,
                     ),
                   );
                 }

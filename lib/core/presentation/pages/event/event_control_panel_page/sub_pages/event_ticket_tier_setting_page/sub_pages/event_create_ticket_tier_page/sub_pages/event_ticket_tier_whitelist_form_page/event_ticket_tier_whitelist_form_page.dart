@@ -6,7 +6,7 @@ import 'package:app/core/presentation/widgets/common/list/empty_list_widget.dart
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class EventTicketTierWhitelistFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     return Scaffold(
       appBar: LemonAppBar(
@@ -97,9 +97,9 @@ class EventTicketTierWhitelistFormPage extends StatelessWidget {
                 child: SafeArea(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: colorScheme.background,
+                      color: appColors.pageBg,
                       border: Border(
-                        top: BorderSide(color: colorScheme.outline),
+                        top: BorderSide(color: appColors.pageDivider),
                       ),
                     ),
                     padding: EdgeInsets.all(Spacing.smMedium),
@@ -107,7 +107,8 @@ class EventTicketTierWhitelistFormPage extends StatelessWidget {
                       onTap: () {
                         showCupertinoModalBottomSheet(
                           bounce: true,
-                          backgroundColor: LemonColor.atomicBlack,
+                          backgroundColor: appColors.pageBg,
+                          barrierColor: Colors.black.withOpacity(0.5),
                           context: context,
                           builder: (newContext) {
                             return AddEmailToWhiteListBottomSheet(
@@ -145,11 +146,11 @@ class _EmailItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     return Container(
       padding: EdgeInsets.all(Spacing.small),
       decoration: BoxDecoration(
-        color: LemonColor.atomicBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.small),
       ),
       child: Row(
@@ -163,7 +164,7 @@ class _EmailItem extends StatelessWidget {
               Text(
                 email,
                 style: Typo.medium.copyWith(
-                  color: colorScheme.onPrimary,
+                  color: appColors.textPrimary,
                 ),
               ),
             ],
@@ -173,7 +174,7 @@ class _EmailItem extends StatelessWidget {
               onRemove(email);
             },
             child: ThemeSvgIcon(
-              color: colorScheme.onSecondary,
+              color: appColors.textTertiary,
               builder: (colorFilter) => Assets.icons.icClose.svg(
                 colorFilter: colorFilter,
               ),

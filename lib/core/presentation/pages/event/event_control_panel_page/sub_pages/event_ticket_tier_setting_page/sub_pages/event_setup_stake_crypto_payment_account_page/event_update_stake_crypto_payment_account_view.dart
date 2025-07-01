@@ -11,6 +11,7 @@ import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:app/theme/typo.dart';
@@ -38,7 +39,7 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
 
     final event = context.read<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => null,
@@ -60,7 +61,7 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
         Text(
           t.event.ticketTierSetting.chainActivated(chainName: chain.name ?? ''),
           style: Typo.extraLarge.copyWith(
-            color: colorScheme.onPrimary,
+            color: appColors.textPrimary,
           ),
         ),
         Text(
@@ -68,7 +69,7 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
             chainName: chain.name ?? '',
           ),
           style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
           ),
         ),
         SizedBox(height: Spacing.medium),
@@ -77,13 +78,13 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
-            color: colorScheme.onPrimary.withOpacity(0.06),
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
           ),
           child: Row(
             children: [
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icWallet.svg(
                   colorFilter: filter,
                 ),
@@ -101,7 +102,7 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
                         snapshot.data?.toString() ?? '--',
                       ),
                       style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
+                        color: appColors.textPrimary,
                       ),
                     );
                   },
@@ -115,13 +116,13 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.all(Spacing.small),
           decoration: BoxDecoration(
-            color: colorScheme.onPrimary.withOpacity(0.06),
+            color: appColors.cardBg,
             borderRadius: BorderRadius.circular(LemonRadius.medium),
           ),
           child: Row(
             children: [
               ThemeSvgIcon(
-                color: colorScheme.onSecondary,
+                color: appColors.textTertiary,
                 builder: (filter) => Assets.icons.icRefundDollar.svg(
                   colorFilter: filter,
                 ),
@@ -145,13 +146,12 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
                             text: t.event.ticketTierSetting
                                 .refundPercentDescription,
                             style: Typo.medium.copyWith(
-                              color: colorScheme.onSecondary,
+                              color: appColors.textTertiary,
                             ),
                           ),
                         ],
                         style: Typo.medium.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
+                          color: appColors.textPrimary,
                         ),
                       ),
                     );
@@ -165,7 +165,7 @@ class EventUpdateStakeCryptoPaymentAccountView extends StatelessWidget {
         Text(
           t.event.ticketTierSetting.checkinBefore,
           style: Typo.medium.copyWith(
-            color: colorScheme.onSecondary,
+            color: appColors.textTertiary,
           ),
         ),
         SizedBox(height: Spacing.xSmall),

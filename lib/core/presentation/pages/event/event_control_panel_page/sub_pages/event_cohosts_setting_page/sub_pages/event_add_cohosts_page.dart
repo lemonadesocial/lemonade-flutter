@@ -13,8 +13,8 @@ import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/typo.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -54,14 +54,14 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
   final searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final t = Translations.of(context);
     return Scaffold(
       appBar: LemonAppBar(
-        backgroundColor: LemonColor.atomicBlack,
+        backgroundColor: appColors.pageBg,
         title: t.event.cohosts.addCohosts,
       ),
-      backgroundColor: LemonColor.atomicBlack,
+      backgroundColor: appColors.pageBg,
       resizeToAvoidBottomInset: true,
       body: BlocListener<ManageEventCohostRequestsBloc,
           ManageEventCohostRequestsState>(
@@ -89,7 +89,7 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
               LemonTextField(
                 controller: searchController,
                 leadingIcon: ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icSearch.svg(
                     colorFilter: filter,
                     width: 18.w,
@@ -98,11 +98,11 @@ class _EventAddCohostsViewState extends State<EventAddCohostsView> {
                   ),
                 ),
                 filled: true,
-                fillColor: LemonColor.chineseBlack,
-                borderColor: LemonColor.chineseBlack,
+                fillColor: appColors.inputBg,
+                borderColor: appColors.inputBorder,
                 hintText: t.common.search.capitalize(),
                 placeholderStyle: Typo.medium.copyWith(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                 ),
                 contentPadding: EdgeInsets.all(Spacing.small),
                 onChange: (value) {

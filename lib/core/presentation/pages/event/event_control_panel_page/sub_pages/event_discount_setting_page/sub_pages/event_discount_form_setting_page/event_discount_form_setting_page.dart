@@ -14,6 +14,7 @@ import 'package:app/graphql/backend/event/mutation/create_event_ticket_discount.
 import 'package:app/graphql/backend/schema.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _EventDiscountFormSettingPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
     final readOnly = discount != null;
     final event = context.watch<GetEventDetailBloc>().state.maybeWhen(
           orElse: () => null,
@@ -163,9 +164,9 @@ class _EventDiscountFormSettingPageView extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(Spacing.smMedium),
                   decoration: BoxDecoration(
-                    color: colorScheme.background,
+                    color: appColors.pageBg,
                     border: Border(
-                      top: BorderSide(color: colorScheme.outline),
+                      top: BorderSide(color: appColors.pageDivider),
                     ),
                   ),
                   child: SafeArea(
