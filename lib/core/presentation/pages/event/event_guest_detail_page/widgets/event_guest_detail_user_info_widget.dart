@@ -1,14 +1,18 @@
 import 'package:app/core/domain/event/entities/event_guest_detail/event_guest_detail.dart';
 import 'package:app/core/domain/event/entities/event_join_request.dart';
 import 'package:app/core/domain/event/entities/event_ticket.dart';
+import 'package:app/core/domain/onboarding/onboarding_inputs.dart';
+import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/presentation/widgets/image_placeholder_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_image.dart';
 import 'package:app/core/utils/date_format_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/i18n/i18n.g.dart';
+import 'package:app/injection/register_module.dart';
+import 'package:app/app_theme/app_theme.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 
 class EventGuestDetailUserInfoWidget extends StatelessWidget {
@@ -55,7 +59,8 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Column(
       children: [
         Row(
@@ -76,15 +81,13 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
                   if (_name.isNotEmpty)
                     Text(
                       _name,
-                      style: Typo.medium.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
+                      style: appText.md,
                     ),
                   if (_buyerEmail.isNotEmpty)
                     Text(
                       _buyerEmail,
-                      style: Typo.small.copyWith(
-                        color: colorScheme.onSecondary,
+                      style: appText.sm.copyWith(
+                        color: appColors.textSecondary,
                       ),
                     ),
                 ],
@@ -108,7 +111,7 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
             SizedBox(
               height: Sizing.medium,
               child: VerticalDivider(
-                color: colorScheme.outline,
+                color: appColors.pageDivider,
                 thickness: 1,
                 width: Spacing.large,
               ),
@@ -121,10 +124,29 @@ class EventGuestDetailUserInfoWidget extends StatelessWidget {
             SizedBox(
               height: Sizing.medium,
               child: VerticalDivider(
-                color: colorScheme.outline,
+                color: appColors.pageDivider,
                 thickness: 1,
                 width: Spacing.large,
               ),
+            ),
+            FutureBuilder(
+              future: eventGuestDetail?.user.id != null
+                  ? getIt<UserRepository>().getUserProfile(
+                      GetProfileInput(
+                        id: eventGuestDetail?.user.id,
+                      ),
+                    )
+                  : Future.value(null),
+              builder: (context, snapshot) {
+                final user = snapshot.data?.fold((l) => null, (r) => r);
+                final ethAddress = user?.walletsNew?['ethereum']?.firstOrNull;
+                return _InfoItem(
+                  title: t.event.rsvpWeb3Indetity.ethAddress,
+                  value: ethAddress != null
+                      ? Web3Utils.formatIdentifier(ethAddress)
+                      : '--',
+                );
+              },
             ),
           ],
         ),
@@ -143,7 +165,8 @@ class _InfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -153,8 +176,8 @@ class _InfoItem extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Typo.small.copyWith(
-                color: colorScheme.onSecondary,
+              style: appText.sm.copyWith(
+                color: appColors.textSecondary,
               ),
             ),
           ],
@@ -162,9 +185,7 @@ class _InfoItem extends StatelessWidget {
         SizedBox(height: Spacing.superExtraSmall),
         Text(
           value,
-          style: Typo.medium.copyWith(
-            color: colorScheme.onPrimary,
-          ),
+          style: appText.md,
         ),
       ],
     );
@@ -179,19 +200,20 @@ class _ApprovalStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     Color? color;
     String displayText;
 
     if (joinRequest.isPending) {
       displayText = t.event.eventGuestDetail.pending;
-      color = colorScheme.onSecondary;
+      color = appColors.textSecondary;
     } else if (joinRequest.isDeclined) {
       displayText = t.event.eventGuestDetail.declined;
-      color = LemonColor.coralReef;
+      color = appColors.textError;
     } else {
       displayText = t.event.eventGuestDetail.going;
-      color = LemonColor.malachiteGreen;
+      color = appColors.textSuccess;
     }
 
     return Container(
@@ -202,12 +224,12 @@ class _ApprovalStatus extends StatelessWidget {
         color: LemonColor.chineseBlack,
         borderRadius: BorderRadius.circular(LemonRadius.extraSmall),
         border: Border.all(
-          color: colorScheme.outline,
+          color: appColors.pageDivider,
         ),
       ),
       child: Text(
         displayText,
-        style: Typo.small.copyWith(
+        style: appText.sm.copyWith(
           color: color,
         ),
       ),

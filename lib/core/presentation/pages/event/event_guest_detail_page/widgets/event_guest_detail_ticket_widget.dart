@@ -7,12 +7,11 @@ import 'package:app/core/presentation/widgets/lemon_network_image/lemon_network_
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventGuestDetailTicketWidget extends StatelessWidget {
   final EventGuestDetail? eventGuestDetail;
@@ -28,7 +27,7 @@ class EventGuestDetailTicketWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
 
     final tickets = eventTickets ??
@@ -41,10 +40,7 @@ class EventGuestDetailTicketWidget extends StatelessWidget {
       children: [
         Text(
           t.event.eventGuestDetail.tickets,
-          style: Typo.mediumPlus.copyWith(
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: appText.md,
         ),
         SizedBox(height: Spacing.small),
         ListView.separated(
@@ -94,14 +90,15 @@ class _TicketItemState extends State<_TicketItem> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final ticket = widget.ticket;
     final assignedToInfo = widget.assignedToInfo;
     return Container(
       decoration: BoxDecoration(
-        color: LemonColor.chineseBlack,
+        color: appColors.cardBg,
         borderRadius: BorderRadius.circular(LemonRadius.small),
-        border: Border.all(color: colorScheme.outline),
+        border: Border.all(color: appColors.pageDivider),
       ),
       child: Column(
         children: [
@@ -112,7 +109,7 @@ class _TicketItemState extends State<_TicketItem> {
               child: Row(
                 children: [
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => Assets.icons.icTicket.svg(
                       width: Sizing.mSmall,
                       height: Sizing.mSmall,
@@ -126,16 +123,13 @@ class _TicketItemState extends State<_TicketItem> {
                       children: [
                         Text(
                           widget.ticketType.title ?? '',
-                          style: Typo.medium.copyWith(
-                            color: colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: appText.md,
                         ),
                       ],
                     ),
                   ),
                   ThemeSvgIcon(
-                    color: colorScheme.onSecondary,
+                    color: appColors.textTertiary,
                     builder: (filter) => isExpanded
                         ? Assets.icons.icArrowUp.svg(
                             width: Sizing.mSmall,
@@ -177,7 +171,8 @@ class _ExpandedTicketItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
 
     final String titleText;
@@ -196,7 +191,7 @@ class _ExpandedTicketItem extends StatelessWidget {
 
     return Column(
       children: [
-        Divider(height: 1, color: colorScheme.outline),
+        Divider(height: 1, color: appColors.pageDivider),
         Padding(
           padding: EdgeInsets.all(Spacing.small),
           child: Row(
@@ -212,7 +207,7 @@ class _ExpandedTicketItem extends StatelessWidget {
                 )
               else
                 ThemeSvgIcon(
-                  color: colorScheme.onSecondary,
+                  color: appColors.textTertiary,
                   builder: (filter) => Assets.icons.icTicket.svg(
                     width: Sizing.mSmall,
                     height: Sizing.mSmall,
@@ -227,17 +222,14 @@ class _ExpandedTicketItem extends StatelessWidget {
                     if (titleText.isNotEmpty)
                       Text(
                         titleText,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: appText.sm,
                       ),
                     if (displayText.isNotEmpty) ...[
                       SizedBox(height: Spacing.superExtraSmall / 2),
                       Text(
                         displayText,
-                        style: Typo.small.copyWith(
-                          color: colorScheme.onSecondary,
+                        style: appText.sm.copyWith(
+                          color: appColors.textTertiary,
                         ),
                       ),
                     ],
