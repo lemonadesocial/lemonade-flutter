@@ -48,6 +48,7 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final appColors = context.theme.appColors;
+    final paddingBottom = MediaQuery.of(context).padding.bottom;
     return BlocBuilder<EditEventDetailBloc, EditEventDetailState>(
       builder: (context, state) {
         final bool isLoading =
@@ -96,62 +97,61 @@ class _EventDescriptionFieldPageState extends State<EventDescriptionFieldPage> {
                     color: appColors.pageDivider,
                   ),
                 ),
-                child: HtmlEditor(
-                  controller: controller,
-                  htmlEditorOptions: HtmlEditorOptions(
-                    hint: 'Type something...',
-                    shouldEnsureVisible: true,
-                    initialText: widget.description,
-                    darkMode: Theme.of(context).brightness == Brightness.dark,
-                  ),
-                  htmlToolbarOptions: HtmlToolbarOptions(
-                    renderBorder: false,
-                    renderSeparatorWidget: false,
-                    gridViewVerticalSpacing: 0,
-                    gridViewHorizontalSpacing: 0,
-                    buttonColor: appColors.textTertiary,
-                    buttonSelectedColor: appColors.textAccent,
-                    defaultToolbarButtons: [
-                      const StyleButtons(),
-                      const FontButtons(
-                        clearAll: false,
-                        strikethrough: false,
-                        superscript: false,
-                        subscript: false,
-                      ),
-                      const ListButtons(listStyles: false),
-                      const InsertButtons(
-                        picture: false,
-                        audio: false,
-                        video: false,
-                        otherFile: false,
-                        table: false,
-                        hr: false,
-                      ),
-                    ],
-                    toolbarPosition: ToolbarPosition.aboveEditor,
-                    toolbarType: ToolbarType.nativeScrollable,
-                  ),
-                  otherOptions: OtherOptions(
-                    height: MediaQuery.sizeOf(context).height -
-                        MediaQuery.paddingOf(context).vertical -
-                        AppBar().preferredSize.height -
-                        MediaQuery.viewInsetsOf(context).vertical -
-                        (2 * Spacing.medium), // Account for vertical margins
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(LemonRadius.medium),
-                      border: Border.all(
-                        color: Colors.transparent,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(LemonRadius.medium),
+                  child: HtmlEditor(
+                    controller: controller,
+                    htmlEditorOptions: HtmlEditorOptions(
+                      hint: 'Type something...',
+                      shouldEnsureVisible: true,
+                      initialText: widget.description,
+                      darkMode: Theme.of(context).brightness == Brightness.dark,
+                    ),
+                    htmlToolbarOptions: HtmlToolbarOptions(
+                      renderBorder: false,
+                      renderSeparatorWidget: false,
+                      gridViewVerticalSpacing: 0,
+                      gridViewHorizontalSpacing: 0,
+                      buttonColor: appColors.textTertiary,
+                      buttonSelectedColor: appColors.textAccent,
+                      defaultToolbarButtons: [
+                        const StyleButtons(),
+                        const FontButtons(
+                          clearAll: false,
+                          strikethrough: false,
+                          superscript: false,
+                          subscript: false,
+                        ),
+                        const ListButtons(listStyles: false),
+                        const InsertButtons(
+                          picture: false,
+                          audio: false,
+                          video: false,
+                          otherFile: false,
+                          table: false,
+                          hr: false,
+                        ),
+                      ],
+                      toolbarPosition: ToolbarPosition.aboveEditor,
+                      toolbarType: ToolbarType.nativeScrollable,
+                    ),
+                    otherOptions: OtherOptions(
+                      height: 1.sh - paddingBottom,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(LemonRadius.medium),
+                        border: Border.all(
+                          color: Colors.transparent,
+                        ),
                       ),
                     ),
-                  ),
-                  callbacks: Callbacks(
-                    onBeforeCommand: (String? currentHtml) {
-                      debugPrint('html before change is $currentHtml');
-                    },
-                    onChangeContent: (String? changed) {
-                      debugPrint('content changed to $changed');
-                    },
+                    callbacks: Callbacks(
+                      onBeforeCommand: (String? currentHtml) {
+                        debugPrint('html before change is $currentHtml');
+                      },
+                      onChangeContent: (String? changed) {
+                        debugPrint('content changed to $changed');
+                      },
+                    ),
                   ),
                 ),
               ),
