@@ -8,9 +8,7 @@ import 'package:app/core/utils/string_utils.dart';
 import 'package:app/graphql/backend/applicant/query/get_applicants_info.graphql.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
-import 'package:app/theme/color.dart';
 import 'package:app/theme/spacing.dart';
-import 'package:app/theme/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -18,6 +16,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app/core/utils/date_utils.dart' as date_utils;
 import 'package:app/core/utils/social_utils.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
   final EventGuestDetail eventGuestDetail;
@@ -52,7 +51,7 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appText = context.theme.appTextTheme;
     final applications = eventGuestDetail.application ?? [];
     final t = Translations.of(context);
     final event = context.read<GetEventDetailBloc>().state.maybeWhen(
@@ -74,10 +73,7 @@ class EventGuestDetailApplicationQuestionsWidget extends StatelessWidget {
           children: [
             Text(
               t.event.eventGuestDetail.applicationQuestions,
-              style: Typo.mediumPlus.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: appText.md,
             ),
             // Profile Fields
             if (profileRequiredFields.isNotEmpty && userInfo != null) ...[
@@ -142,7 +138,8 @@ class _QuestionAnswerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appColors = context.theme.appColors;
+    final appText = context.theme.appTextTheme;
     return Padding(
       padding: EdgeInsets.only(top: Spacing.medium),
       child: Column(
@@ -150,19 +147,17 @@ class _QuestionAnswerItem extends StatelessWidget {
         children: [
           Text(
             question,
-            style: Typo.medium.copyWith(
-              color: colorScheme.onSecondary,
+            style: appText.md.copyWith(
+              color: appColors.textTertiary,
             ),
           ),
           SizedBox(height: Spacing.superExtraSmall),
           if (answer.isNotEmpty)
             Linkify(
               text: answer,
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-              linkStyle: Typo.medium.copyWith(
-                color: LemonColor.paleViolet,
+              style: appText.md,
+              linkStyle: appText.md.copyWith(
+                color: appColors.textAccent,
                 decoration: TextDecoration.none,
               ),
               onOpen: (link) async {
@@ -172,11 +167,9 @@ class _QuestionAnswerItem extends StatelessWidget {
           else if (answers.isNotEmpty)
             Linkify(
               text: answers.join(', '),
-              style: Typo.medium.copyWith(
-                color: colorScheme.onPrimary,
-              ),
-              linkStyle: Typo.medium.copyWith(
-                color: LemonColor.paleViolet,
+              style: appText.md,
+              linkStyle: appText.md.copyWith(
+                color: appColors.textAccent,
                 decoration: TextDecoration.none,
               ),
               onOpen: (link) async {
