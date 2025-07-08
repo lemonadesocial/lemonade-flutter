@@ -211,7 +211,7 @@ class _EditProfileViewV2State extends State<EditProfileViewV2> {
                               return EditProfileAvatar(
                                 user: lemonadeAccount,
                                 imageFile: state.profilePhoto,
-                                imageUrl: lemonadeAccount?.imageAvatar,
+                                imageUrl: userProfile.imageAvatar,
                               );
                             },
                           ),
