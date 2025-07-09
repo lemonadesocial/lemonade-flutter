@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.7.0...v2.8.0) (2025-07-09)
+
+
+### Features
+
+* enhance Lens account management and profile synchronization ([#994](https://github.com/lemonadesocial/lemonade-flutter/issues/994)) ([3e0effa](https://github.com/lemonadesocial/lemonade-flutter/commit/3e0effaa602eaa6021335968d5a40cd7d1acfb8a))
+* integrate Lens account statistics into profile info drawer ([#996](https://github.com/lemonadesocial/lemonade-flutter/issues/996)) ([5d4a6f7](https://github.com/lemonadesocial/lemonade-flutter/commit/5d4a6f7c82be54e6d39559ca7ef2306daf977b2f))
+
+
+### Bug Fixes
+
+* pending bugs ([#997](https://github.com/lemonadesocial/lemonade-flutter/issues/997)) ([e69f3a6](https://github.com/lemonadesocial/lemonade-flutter/commit/e69f3a624f82424604f54bf1186c4a98b3a32e60))
+* UI color adjustments ([#995](https://github.com/lemonadesocial/lemonade-flutter/issues/995)) ([d21e74d](https://github.com/lemonadesocial/lemonade-flutter/commit/d21e74daf845970254e1f06f3805f88ce9b2b770))
+* update image URL reference in EditProfileViewV2 ([#998](https://github.com/lemonadesocial/lemonade-flutter/issues/998)) ([f1ed839](https://github.com/lemonadesocial/lemonade-flutter/commit/f1ed8394806372e653dfdf0fb6320c68fba46ae0))
+* update target SDK version in build.gradle ([#999](https://github.com/lemonadesocial/lemonade-flutter/issues/999)) ([bc406b7](https://github.com/lemonadesocial/lemonade-flutter/commit/bc406b763c3603fcd71dac8b4e18a35f345b18a8))
+* updated application not shown in guest detail ([#993](https://github.com/lemonadesocial/lemonade-flutter/issues/993)) ([0ad1621](https://github.com/lemonadesocial/lemonade-flutter/commit/0ad1621b895ae0b2245b6cbd3d57d59a867e58a3))
+* Updated the wallet connect service to use 'eth_signTypedData_v4' method for better compatibility. ([#991](https://github.com/lemonadesocial/lemonade-flutter/issues/991)) ([1e9d883](https://github.com/lemonadesocial/lemonade-flutter/commit/1e9d883a799f1aa9688222a01b2bc340c7d6ad71))
+
 ## [2.7.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.6.1...v2.7.0) (2025-06-23)
 
 
