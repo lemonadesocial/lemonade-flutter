@@ -5,6 +5,7 @@ import 'package:app/core/presentation/widgets/common/button/lemon_outline_button
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
+import 'package:app/core/presentation/widgets/ory_wallet_auth/ory_wallet_auth_button.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -104,6 +105,8 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: Spacing.small),
                   _buildAuthButton(context),
+                  SizedBox(height: Spacing.small),
+                  const OryWalletAuthButton(),
                   SizedBox(height: Spacing.small),
                   LemonOutlineButton(
                     onTap: () {
