@@ -10,5 +10,6 @@
     "signIn": "Sign In",
     "getStarted": "Get Started",
     "signInOrCreateAccount": "Sign In or Create Account",
-    "explore": "Explore"
+    "explore": "Explore",
+    "loginWithWallet": "Login with Wallet"
 }

@@ -3,6 +3,7 @@ import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
 import 'package:app/core/service/matrix/matrix_service.dart';
+import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/setup_sentry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ void main() async {
   registerModule();
 
   await getIt<AppOauth>().init();
+  await getIt<OryAuth>().init();
   if (!kDebugMode) {
     await getIt<FirebaseService>().initialize();
   }

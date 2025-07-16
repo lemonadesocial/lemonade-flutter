@@ -98,6 +98,8 @@ import 'package:app/core/domain/vault/vault_repository.dart' as _i472;
 import 'package:app/core/domain/wallet/wallet_repository.dart' as _i691;
 import 'package:app/core/domain/web3/web3_repository.dart' as _i347;
 import 'package:app/core/oauth/oauth.dart' as _i505;
+import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart'
+    as _i676;
 import 'package:app/core/service/badge/badge_service.dart' as _i459;
 import 'package:app/core/service/firebase/firebase_service.dart' as _i1033;
 import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart'
@@ -105,6 +107,7 @@ import 'package:app/core/service/lens/lens_grove_service/lens_grove_service.dart
 import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart'
     as _i548;
 import 'package:app/core/service/matrix/matrix_service.dart' as _i407;
+import 'package:app/core/service/ory_auth/ory_auth.dart' as _i907;
 import 'package:app/core/service/shorebird_codepush_service.dart' as _i380;
 import 'package:app/core/service/vault/owner_key/database/owner_keys_database.dart'
     as _i951;
@@ -141,6 +144,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i971.EventLocationSettingBloc());
     gh.lazySingleton<_i839.EventSubEventsSettingBloc>(
         () => _i839.EventSubEventsSettingBloc());
+    gh.lazySingleton<_i907.OryAuth>(() => _i907.OryAuth());
     gh.lazySingleton<_i380.ShorebirdCodePushService>(
         () => _i380.ShorebirdCodePushService());
     gh.lazySingleton<_i179.LensGroveService>(() => _i179.LensGroveService());
@@ -152,6 +156,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i407.MatrixService>(() => _i407.MatrixService());
     gh.lazySingleton<_i951.OwnerKeysDatabase>(() => _i951.OwnerKeysDatabase());
     gh.lazySingleton<_i459.BadgeService>(() => _i459.BadgeService());
+    gh.lazySingleton<_i676.AuthMethodTracker>(() => _i676.AuthMethodTracker());
     gh.lazySingleton<_i110.EventRewardRepository>(
         () => _i54.EventRewardRepositoryImpl());
     gh.lazySingleton<_i934.BadgeRepository>(() => _i267.BadgeRepositoryImpl());

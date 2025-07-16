@@ -3,6 +3,7 @@
 import 'package:app/core/config.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
@@ -90,7 +91,8 @@ class CustomErrorHandler {
     // the root cause is query widget still called when loggedout
     final unauthenticatedErrorAfterLogout =
         errorCode == GraphQLErrorCodeStrings.UNAUTHENTICATED &&
-            getIt<AppOauth>().tokenState != OAuthTokenState.valid;
+            (getIt<AppOauth>().tokenState != OAuthTokenState.valid ||
+                getIt<OryAuth>().orySessionState != OrySessionState.valid);
 
     if (!unauthenticatedErrorAfterLogout) {
       showSnackbarError(errorCode, errorMessage);

@@ -5,13 +5,28 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart';
 import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart';
+import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+Future<String> _getBearerToken() async {
+  final authMethod = await getIt<AuthMethodTracker>().getAuthMethod();
+  if (authMethod == AuthMethod.oauth) {
+    final token = await getIt<AppOauth>().getTokenForGql();
+    return token;
+  }
+  if (authMethod == AuthMethod.wallet) {
+    final token = await getIt<OryAuth>().getTokenForGql();
+    return token;
+  }
+  return '';
+}
 
 class GeoLocationLink extends Link {
   GeoLocationLink({
@@ -64,7 +79,7 @@ class BaseGQL {
   }) {
     _authLink = AuthLink(
       getToken: () async {
-        var token = await appOauth.getTokenForGql();
+        var token = await _getBearerToken();
         return 'Bearer $token';
       },
     );
@@ -99,17 +114,27 @@ class BaseGQL {
       ),
     );
 
-    tokenStateSubscription = appOauth.tokenStateStream.listen((tokenState) {
+    tokenStateSubscription =
+        appOauth.tokenStateStream.listen((tokenState) async {
       if (tokenState == OAuthTokenState.invalid) {
+        _webSocketLink.dispose();
+        _client.resetStore();
+      }
+    });
+    orySessionStateSubscription =
+        oryAuth.orySessionStateStream.listen((sessionState) async {
+      if (sessionState == OrySessionState.invalid) {
         _webSocketLink.dispose();
         _client.resetStore();
       }
     });
   }
   final appOauth = getIt<AppOauth>();
+  final oryAuth = getIt<OryAuth>();
   final String httpUrl;
   final String wssUrl;
   late final StreamSubscription<OAuthTokenState> tokenStateSubscription;
+  late final StreamSubscription<OrySessionState> orySessionStateSubscription;
   late final GraphQLClient _client;
   late final AuthLink _authLink;
   late final ErrorLink _errorLink;
@@ -118,7 +143,7 @@ class BaseGQL {
     wssUrl,
     config: SocketClientConfig(
       initialPayload: () async {
-        var token = await appOauth.getTokenForGql();
+        var token = await _getBearerToken();
         return {
           'token': token,
         };

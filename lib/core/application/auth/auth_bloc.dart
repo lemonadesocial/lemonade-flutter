@@ -1,10 +1,11 @@
 import 'dart:async';
-
 import 'package:app/core/domain/user/entities/user.dart';
 import 'package:app/core/domain/user/user_repository.dart';
 import 'package:app/core/managers/crash_analytics_manager.dart';
 import 'package:app/core/oauth/oauth.dart';
+import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart';
 import 'package:app/core/service/firebase/firebase_service.dart';
+import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -20,12 +21,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final firebaseService = getIt<FirebaseService>();
   final userRepository = getIt<UserRepository>();
   final appOauth = getIt<AppOauth>();
+  final oryAuth = getIt<OryAuth>();
+  final authMethodTracker = getIt<AuthMethodTracker>();
   late StreamSubscription? _tokenStateSubscription;
+  late StreamSubscription? _orySessionStateSubscription;
 
   AuthBloc() : super(const AuthState.unknown()) {
     _tokenStateSubscription =
         appOauth.tokenStateStream.listen(_onTokenStateChange);
+    _orySessionStateSubscription =
+        oryAuth.orySessionStateStream.listen(_onOrySessionStateChange);
     on<AuthEventLogin>(_onLogin);
+    on<AuthEventLoginWithWallet>(_onLoginWithWallet);
     on<AuthEventLogout>(_onLogout);
     on<AuthEventForceLogout>(_onForceLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
@@ -36,11 +43,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Future<void> close() async {
     await _tokenStateSubscription?.cancel();
+    await _orySessionStateSubscription?.cancel();
     super.close();
   }
 
-  void _onTokenStateChange(OAuthTokenState tokenState) {
+  void _onTokenStateChange(OAuthTokenState tokenState) async {
+    final authMethod = await authMethodTracker.getAuthMethod();
+    if (authMethod == AuthMethod.wallet || authMethod == null) {
+      return;
+    }
     if (tokenState == OAuthTokenState.valid) {
+      add(const AuthEvent.authenticated());
+    } else {
+      add(const AuthEvent.unauthenticated());
+    }
+  }
+
+  void _onOrySessionStateChange(OrySessionState sessionState) async {
+    final authMethod = await authMethodTracker.getAuthMethod();
+    if (authMethod == AuthMethod.oauth || authMethod == null) {
+      return;
+    }
+    if (sessionState == OrySessionState.valid) {
       add(const AuthEvent.authenticated());
     } else {
       add(const AuthEvent.unauthenticated());
@@ -66,9 +90,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     // This will trigger token state listener to call _onUnAuthenticated
     await appOauth.forceLogout();
+    await oryAuth.forceLogout();
   }
 
-  void _onUnAuthenticated(AuthEventUnAuthenticated event, Emitter emit) {
+  Future<void> _onUnAuthenticated(
+    AuthEventUnAuthenticated event,
+    Emitter emit,
+  ) async {
+    await authMethodTracker.clearAuthMethod();
     emit(const AuthState.unauthenticated(isChecking: false));
   }
 
@@ -84,21 +113,58 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogin(AuthEventLogin event, Emitter emit) async {
+    await authMethodTracker.setAuthMethod(AuthMethod.oauth);
     await appOauth.login();
+  }
+
+  Future<void> _onLoginWithWallet(
+    AuthEventLoginWithWallet event,
+    Emitter emit,
+  ) async {
+    await authMethodTracker.setAuthMethod(AuthMethod.wallet);
+    final result = await oryAuth.loginWithWallet(
+      walletAddress: event.walletAddress,
+      signature: event.signature,
+      token: event.token,
+    );
+    if (!result.$1) {
+      final loginFlow = result.$2.fold(
+        (l) => l,
+        (r) => null,
+      );
+      final accountNotExists =
+          loginFlow?.ui.messages?.any((m) => m.id == 4000006);
+      if (accountNotExists == true) {
+        await oryAuth.signupWithWallet(
+          walletAddress: event.walletAddress,
+          signature: event.signature,
+          token: event.token,
+        );
+        return;
+      }
+    }
   }
 
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
     await firebaseService.removeFcmToken();
-    // This will trigger token state listener to call _onUnAuthenticated
-    final result = await appOauth.logout();
-    result.fold((l) => null, (success) async {
-      if (success) {
-        if (!kDebugMode) {
-          FirebaseAnalytics.instance.setUserId(id: null);
-        }
-        CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
+    final authMethod = await authMethodTracker.getAuthMethod();
+    if (authMethod == AuthMethod.wallet) {
+      await oryAuth.logout();
+      if (!kDebugMode) {
+        FirebaseAnalytics.instance.setUserId(id: null);
       }
-    });
+      CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
+    } else {
+      final result = await appOauth.logout();
+      result.fold((l) => null, (success) async {
+        if (success) {
+          if (!kDebugMode) {
+            FirebaseAnalytics.instance.setUserId(id: null);
+          }
+          CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
+        }
+      });
+    }
   }
 
   Future<void> _onForceLogout(AuthEventForceLogout event, Emitter emit) async {
@@ -108,7 +174,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     CrashAnalyticsManager().crashAnalyticsService?.clearSetUser();
     await firebaseService.removeFcmToken();
+    await authMethodTracker.clearAuthMethod();
     await appOauth.forceLogout();
+    await oryAuth.forceLogout();
   }
 
   Future<User?> _getMe() async {
@@ -120,6 +188,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 @freezed
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login() = AuthEventLogin;
+
+  const factory AuthEvent.loginWithWallet({
+    required String walletAddress,
+    required String signature,
+    required String token,
+  }) = AuthEventLoginWithWallet;
 
   const factory AuthEvent.logout() = AuthEventLogout;
 
