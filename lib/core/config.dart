@@ -125,4 +125,6 @@ class AppConfig {
 
   static String get lemonadeGlobalFeed =>
       dotenv.env['LEMONADE_LENS_FEED_ID'] ?? '';
+
+  static get oryBaseUrl => dotenv.env['ORY_BASE_URL'];
 }

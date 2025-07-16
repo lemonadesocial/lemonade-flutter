@@ -88,8 +88,15 @@ class _RootPageViewState extends State<RootPage> {
             ),
             child: Stack(
               children: [
-                const Align(
-                  child: PoapClaimTransferControllerWidget(),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      authenticated: (session) => const Align(
+                        child: PoapClaimTransferControllerWidget(),
+                      ),
+                      orElse: () => const SizedBox.shrink(),
+                    );
+                  },
                 ),
                 const AutoSyncLensLemonadeProfileWidget(),
                 AutoTabsScaffold(

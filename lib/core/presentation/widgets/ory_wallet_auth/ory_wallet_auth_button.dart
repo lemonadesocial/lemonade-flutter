@@ -1,12 +1,13 @@
+import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/wallet/wallet_repository.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
-import 'package:app/core/service/ory_with_wallet_auth/ory_with_wallet_auth.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
+import 'package:app/i18n/i18n.g.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,26 +20,7 @@ class OryWalletAuthButton extends StatefulWidget {
 }
 
 class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
-  final OryWithWalletAuthService _oryWithWalletAuthService =
-      OryWithWalletAuthService();
-
-  void _signUpWithWallet({
-    required String walletAddress,
-    required String signature,
-    required String token,
-  }) async {
-    try {
-      final result = await _oryWithWalletAuthService.signup(
-        walletAddress: walletAddress,
-        signature: signature,
-        token: token,
-      );
-      result.session?.tokenized;
-      // print(result.sessionToken);
-    } catch (e) {
-      SnackBarUtils.showError(message: e.toString());
-    }
-  }
+  bool _walletButtonTapped = false;
 
   void _loginWithWallet() async {
     try {
@@ -69,34 +51,13 @@ class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
         throw Exception('Failed to sign message');
       }
 
-      final result = await _oryWithWalletAuthService.login(
-        walletAddress: walletAddress,
-        signature: signature,
-        token: userWalletRequest.token,
-      );
-      if (!result.$1) {
-        final loginFlow = result.$2.fold(
-          (l) => l,
-          (r) => null,
-        );
-        final accountNotExists =
-            loginFlow?.ui.messages?.any((m) => m.id == 4000006);
-        if (accountNotExists == true) {
-          // try sign up
-          _signUpWithWallet(
-            walletAddress: walletAddress,
-            signature: signature,
-            token: userWalletRequest.token,
+      context.read<AuthBloc>().add(
+            AuthEvent.loginWithWallet(
+              walletAddress: walletAddress,
+              signature: signature,
+              token: userWalletRequest.token,
+            ),
           );
-          return;
-        }
-      } else {
-        final loginFlow = result.$2.fold((l) => null, (r) => r);
-        if (loginFlow != null) {
-          // print(loginFlow.session.tokenized);
-        }
-      }
-      // login success
     } catch (e) {
       SnackBarUtils.showError(message: e.toString());
     }
@@ -104,19 +65,31 @@ class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (context, state) {
-        if (state.activeSession != null) {
+        if (state.activeSession != null && _walletButtonTapped) {
           _loginWithWallet();
+          _walletButtonTapped = false;
         }
       },
       builder: (context, state) {
         final isConnected = state.activeSession != null;
         if (!isConnected) {
-          return const ConnectWalletButton();
+          return ConnectWalletButton(
+            builder: (onConnectPressed, connectButtonState) {
+              return LinearGradientButton.primaryButton(
+                label: t.auth.loginWithWallet,
+                onTap: () async {
+                  _walletButtonTapped = true;
+                  onConnectPressed(context);
+                },
+              );
+            },
+          );
         }
         return LinearGradientButton.primaryButton(
-          label: "Login with Wallet",
+          label: t.auth.loginWithWallet,
           onTap: () async {
             _loginWithWallet();
           },
