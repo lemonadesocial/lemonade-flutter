@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.8.0...v2.9.0) (2025-07-16)
+
+
+### Features
+
+* login with wallet ([#1000](https://github.com/lemonadesocial/lemonade-flutter/issues/1000)) ([e3c29d1](https://github.com/lemonadesocial/lemonade-flutter/commit/e3c29d13ee6e93a1fb6be4db2a731d5ed3f188c1))
+
 ## [2.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.7.0...v2.8.0) (2025-07-09)
 
 
