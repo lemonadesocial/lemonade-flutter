@@ -46,7 +46,8 @@ class WalletConnectService {
     ReownAppKitModalNetworks.addSupportedNetworks(
       'eip155',
       [
-        AppConfig.isProduction ? LensUtils.lensMainnet : LensUtils.lensTestnet,
+        // currently not require lens when connect to wallet initially
+        // AppConfig.isProduction ? LensUtils.lensMainnet : LensUtils.lensTestnet,
         ...chains,
       ]
           .map(
@@ -111,7 +112,7 @@ class WalletConnectService {
     }
   }
 
-  close() {
+  void close() {
     if (_app == null) return;
     _app!.onSessionEvent.unsubscribeAll();
     _app!.onSessionUpdate.unsubscribeAll();
@@ -159,14 +160,14 @@ class WalletConnectService {
     required String wallet,
     String? chainId,
   }) async {
-    if (chainId == null && _w3mService.selectedChain == null) {
+    if (chainId == null) {
       throw Exception('No chain selected');
     }
+    await switchChain(chainId: chainId);
     _w3mService.launchConnectedWallet();
     final result = await _w3mService.request(
       topic: _w3mService.session?.topic ?? '',
-      chainId:
-          chainId ?? _w3mService.selectedChain?.chainId ?? ETHEREUM.chainId,
+      chainId: chainId,
       request: SessionRequestParams(
         method: 'eth_signTypedData_v4',
         params: [wallet, jsonEncode(data)],
@@ -205,12 +206,10 @@ class WalletConnectService {
     await _w3mService.disconnect(disconnectAllSessions: true);
   }
 
-  Future<void> switchChain({
-    required String chainId,
+  Future<Chain> _getChainFromChainId(
+    String chainId, {
+    bool onlyEip155 = true,
   }) async {
-    if (_w3mService.session == null) {
-      return;
-    }
     Chain? chain;
     if (chainId == LensUtils.lensMainnet.fullChainId) {
       chain = LensUtils.lensMainnet;
@@ -227,13 +226,26 @@ class WalletConnectService {
     }
 
     if (chain == null) {
-      return;
+      throw Exception('Chain $chainId not found');
     }
+
     final namespace =
         NamespaceUtils.getNamespaceFromChain(chain.fullChainId ?? '');
-    if (namespace != NetworkUtils.eip155) {
+
+    if (onlyEip155 && namespace != NetworkUtils.eip155) {
+      throw Exception('Chain $chainId is not supported');
+    }
+    return chain;
+  }
+
+  Future<void> switchChain({
+    required String chainId,
+  }) async {
+    if (_w3mService.session == null) {
       return;
     }
+    final chain = await _getChainFromChainId(chainId);
+
     final targetChain = ReownAppKitModalNetworkInfo(
       name: chain.name ?? '',
       chainId: chain.fullChainId ?? '',
