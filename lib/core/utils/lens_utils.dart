@@ -250,6 +250,11 @@ class LensUtils {
       name: 'Lens Chain Mainnet',
       rpcUrl: 'https://rpc.lens.xyz',
       logoUrl: 'https://lens.xyz/logo.png',
+      nativeToken: ERC20Token(
+        symbol: 'GHO',
+        decimals: 18,
+        contract: "0x000000000000000000000000000000000000800A",
+      ),
     );
   }
 
@@ -260,6 +265,11 @@ class LensUtils {
       explorerUrl: "https://explorer.lens.xyz",
       rpcUrl: 'https://rpc.testnet.lens.xyz',
       name: 'Lens Chain Testnet',
+      nativeToken: ERC20Token(
+        symbol: 'GRASS',
+        contract: "0x000000000000000000000000000000000000800A",
+        decimals: 18,
+      ),
     );
   }
 }
