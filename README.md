@@ -30,11 +30,25 @@ Follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
 Recommend to use fvm [Flutter version management](https://fvm.app/) and use Flutter version 3.16.9 and Dart 3.2.6
 
+**Prebuild**
+
+Generate generated file 
+
+```
+./build_runner.sh
+```
+
+Generate i18n
+
+```
+./gen_i18n.sh
+```
+
 How to install & use
 
 ```
-fvm install 3.16.9
-fvm use 3.16.9
+fvm install 3.24.1
+fvm use 3.24.1
 ```
 
 How to run Staging & Production
