@@ -22,15 +22,15 @@
 - **Event Discovery**: Browse and discover local and virtual events
 
 #### 3. **Communication**
-- **Matrix-based Chat**: Real-time messaging using Matrix protocol
-- **Rooms & Guilds**: Create private/public chat rooms and communities
-- **Community Spaces**: Organized spaces with membership management
-- **Direct Messaging**: One-on-one private conversations
+- **Matrix-based Chat**: Real-time messaging using Matrix protocol (deprecated)
+- **Rooms & Guilds**: Create private/public chat rooms and communities (deprecated)
+- **Community Spaces**: Organized spaces with membership management (deprecated)
+- **Direct Messaging**: One-on-one private conversations (deprecated)
 
 #### 4. **Web3 Integration**
 - **Wallet Connectivity**: Support for multiple crypto wallets via WalletConnect
 - **Lens Protocol**: Integration with Lens social protocol
-- **Farcaster**: Connect and interact with Farcaster network
+- **Farcaster**: Connect and interact with Farcaster network (deprecated)
 - **NFT Support**: Display and manage NFT collections
 - **Token Gating**: Access control based on token ownership
 
@@ -47,8 +47,7 @@
 #### 7. **Payment & Commerce**
 - **Stripe Integration**: Secure payment processing
 - **Crypto Payments**: Support for cryptocurrency transactions
-- **Vault System**: Secure wallet management
-- **Store System**: In-app marketplace functionality
+- **Vault System**: Secure wallet management (deprecated)
 
 ## 📁 Folder Structure
 
