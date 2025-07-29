@@ -16,6 +16,7 @@ class LemonTextField extends StatelessWidget {
     this.minLines = 1,
     this.maxLines,
     this.borderColor,
+    this.focusedBorderColor,
     this.statusWidget,
     this.label,
     this.suffixIcon,
@@ -48,6 +49,7 @@ class LemonTextField extends StatelessWidget {
   final int minLines;
   final int? maxLines;
   final Color? borderColor;
+  final Color? focusedBorderColor;
   final Widget? statusWidget;
   final String? label;
   final Widget? suffixIcon;
@@ -145,7 +147,13 @@ class LemonTextField extends StatelessWidget {
                   ),
               errorText: errorText,
               enabledBorder: border,
-              focusedBorder: border,
+              focusedBorder: border.copyWith(
+                borderSide: BorderSide(
+                  color: focusedBorderColor ??
+                      borderColor ??
+                      theme.colorScheme.outline,
+                ),
+              ),
               errorBorder: errorBorder,
               border: border,
               contentPadding:

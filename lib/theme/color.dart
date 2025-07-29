@@ -77,7 +77,7 @@ class LemonColor {
   static const fabShadow = Color(0x89090909);
 
   // Onboarding gender color
-  static const femaleDefault = Color(0x2DF691B5);
+  static const femaleDefault = Color(0xFFF472b6);
   static const maleDefault = Color(0x1E91C0F6);
   static const ambiguousDefault = Color(0x1EA591F6);
   static const femaleActiveColor = Color(0xFFF691B5);

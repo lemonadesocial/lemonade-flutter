@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/core/application/onboarding/onboarding_bloc/onboarding_bloc.dart';
 import 'package:app/core/presentation/widgets/floating_frosted_glass_dropdown_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/utils/permission_utils.dart';
 import 'package:app/theme/color.dart';
 import 'package:app/theme/sizing.dart';
@@ -14,7 +15,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/core/presentation/dpos/common/dropdown_item_dpo.dart';
-import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/app_theme/app_theme.dart';
 
 class OnboardingPhotoPicker extends StatelessWidget {
@@ -134,13 +134,33 @@ class OnboardingPhotoPicker extends StatelessWidget {
                 }
                 bloc.selectProfileImage();
               },
-              child: Center(
-                child: ThemeSvgIcon(
-                  color: appColors.textTertiary,
-                  builder: (colorFilter) => Assets.icons.icSelectImage.svg(
-                    colorFilter: colorFilter,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Assets.icons.icOnboardingPhotoPlaceholder.svg(),
                   ),
-                ),
+                  Positioned(
+                    right: 16.w,
+                    bottom: 16.w,
+                    child: Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: appColors.buttonSecondaryBg,
+                        borderRadius: BorderRadius.circular(LemonRadius.full),
+                      ),
+                      child: Center(
+                        child: ThemeSvgIcon(
+                          color: appColors.buttonSecondary,
+                          builder: (filter) => Assets.icons.icUpload.svg(
+                            colorFilter: filter,
+                            width: 32,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
     );

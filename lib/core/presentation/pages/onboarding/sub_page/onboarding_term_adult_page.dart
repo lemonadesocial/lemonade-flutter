@@ -17,7 +17,6 @@ class OnboardingTermAdultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
 
@@ -32,54 +31,55 @@ class OnboardingTermAdultPage extends StatelessWidget {
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          backgroundColor: appColors.pageBg,
+          backgroundColor: appColors.pageOverlaySecondary,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(),
               Container(
-                width: 180.w,
-                height: 180.w,
+                width: 230.w,
+                height: 230.w,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(180.w),
-                  color: appColors.cardBg,
+                  borderRadius: BorderRadius.circular(230.w),
+                  color: appColors.buttonTertiaryBg,
                 ),
                 child: Center(
                   child: Text(
                     '18+',
-                    style: TextStyle(
-                      fontSize: 48.sp,
-                      fontFamily: FontFamily.clashDisplay,
-                      color: colorScheme.onSecondary,
-                      fontWeight: FontWeight.w400,
+                    style: appText.xxxl.copyWith(
+                      fontSize: 72.sp,
+                      color: appColors.textTertiary,
+                      fontFamily: FontFamily.generalSans,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: Spacing.xLarge * 1.5,
-              ),
+              const Spacer(),
+              // SizedBox(
+              //   height: Spacing.xLarge * 1.5,
+              // ),
               Text(
                 t.onboarding.termAdult.title,
-                style: appText.xl,
+                style: appText.xxl,
               ),
               SizedBox(height: Spacing.superExtraSmall),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: Spacing.medium),
                 child: Text(
                   t.onboarding.termAdult.description,
-                  style: appText.md.copyWith(
+                  style: appText.sm.copyWith(
                     color: appColors.textTertiary,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Spacer(),
               SafeArea(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
                   child: LinearGradientButton.primaryButton(
+                    radius: BorderRadius.circular(LemonRadius.full),
                     onTap: () {
                       onboardingBloc.acceptTerm(
                         UpdateUserProfileInput(

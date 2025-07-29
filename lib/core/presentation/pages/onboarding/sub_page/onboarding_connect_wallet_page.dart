@@ -1,10 +1,8 @@
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/presentation/pages/lens/widget/lens_onboarding_bottom_sheet.dart';
-import 'package:app/core/presentation/widgets/animation/circular_animation_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
-import 'package:app/core/utils/string_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -15,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:app/app_theme/app_theme.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 
 @RoutePage()
 class OnboardingConnectWalletPage extends StatelessWidget {
@@ -45,8 +44,9 @@ class OnboardingConnectWalletPage extends StatelessWidget {
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     return Scaffold(
-      backgroundColor: appColors.pageBg,
+      backgroundColor: appColors.pageOverlaySecondary,
       appBar: LemonAppBar(
+        backgroundColor: Colors.transparent,
         leading: const SizedBox.shrink(),
         actions: [
           InkWell(
@@ -71,8 +71,24 @@ class OnboardingConnectWalletPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(),
-            CircularAnimationWidget(
-              icon: Assets.icons.icWalletDarkGradient.svg(),
+            Container(
+              width: 231,
+              height: 231,
+              decoration: BoxDecoration(
+                color: appColors.buttonTertiaryBg,
+                borderRadius: BorderRadius.circular(LemonRadius.full),
+              ),
+              child: Center(
+                child: ThemeSvgIcon(
+                  color: appColors.textTertiary,
+                  builder: (filter) =>
+                      Assets.icons.icAccountBalanceWalletOutlineSharp.svg(
+                    colorFilter: filter,
+                    width: 85,
+                    height: 85,
+                  ),
+                ),
+              ),
             ),
             const Spacer(),
             Text(
@@ -104,7 +120,8 @@ class OnboardingConnectWalletPage extends StatelessWidget {
                   return ConnectWalletButton(
                     builder: (onConnectPressed, state) {
                       return LinearGradientButton.primaryButton(
-                        label: StringUtils.capitalize(t.common.actions.connect),
+                        radius: BorderRadius.circular(LemonRadius.full),
+                        label: "Connect Wallet",
                         onTap: () async {
                           if (isConnected) {
                             submit(context);

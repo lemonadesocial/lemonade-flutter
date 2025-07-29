@@ -78,7 +78,10 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
+      appBar: const LemonAppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: appColors.pageOverlaySecondary,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
         child: Column(
@@ -110,6 +113,7 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
                 width: 50.w,
                 height: 52.w,
                 decoration: BoxDecoration(
+                  color: appColors.pageBg,
                   border: Border.all(
                     color: appColors.inputBorder,
                   ),
@@ -120,6 +124,7 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
                 width: 50.w,
                 height: 52.w,
                 decoration: BoxDecoration(
+                  color: appColors.pageBg,
                   border: Border.all(
                     color: appColors.textPrimary,
                   ),
@@ -220,6 +225,8 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
                 ),
               ),
             ),
+            if (MediaQuery.of(context).viewInsets.bottom > 0)
+              SizedBox(height: Spacing.s2),
           ],
         ),
       ),
