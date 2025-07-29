@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:app/core/domain/notification/entities/notification.dart';
 import 'package:app/core/domain/notification/notification_repository.dart';
-import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart';
 import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,32 +21,18 @@ class WatchNotificationsBloc
   }
 
   Future<void> init() async {
-    final authMethod = await getIt<AuthMethodTracker>().getAuthMethod();
-    _authSubscription = authMethod == AuthMethod.oauth
-        ? getIt<AppOauth>().tokenStateStream.listen(
-            (event) async {
-              if (event == OAuthTokenState.invalid) {
-                _notificationSubscription?.cancel();
-                _notificationSubscription = null;
-              }
+    _authSubscription = getIt<OryAuth>().orySessionStateStream.listen(
+      (event) async {
+        if (event == OrySessionState.invalid) {
+          _notificationSubscription?.cancel();
+          _notificationSubscription = null;
+        }
 
-              if (event == OAuthTokenState.valid) {
-                await _startNotificationSubscription();
-              }
-            },
-          )
-        : getIt<OryAuth>().orySessionStateStream.listen(
-            (event) async {
-              if (event == OrySessionState.invalid) {
-                _notificationSubscription?.cancel();
-                _notificationSubscription = null;
-              }
-
-              if (event == OrySessionState.valid) {
-                await _startNotificationSubscription();
-              }
-            },
-          );
+        if (event == OrySessionState.valid) {
+          await _startNotificationSubscription();
+        }
+      },
+    );
   }
 
   @override

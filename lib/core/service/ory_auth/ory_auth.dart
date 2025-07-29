@@ -2,6 +2,7 @@ import 'package:app/core/config.dart';
 import 'package:app/core/service/storage/secure_storage.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:collection/collection.dart';
 import 'package:ory_client/ory_client.dart';
 import 'package:one_of/one_of.dart';
 import 'package:built_value/json_object.dart';
@@ -19,7 +20,7 @@ enum OrySessionState {
 class OryAuth {
   final String baseUrl = AppConfig.oryBaseUrl;
   late final OryClient _oryClient;
-  late final FrontendApi _api;
+  late final FrontendApi api;
   final sessionStorageKey = 'ory_session';
   final BehaviorSubject<OrySessionState> _sessionStateStreamCtrl =
       BehaviorSubject();
@@ -42,7 +43,7 @@ class OryAuth {
     _oryClient = OryClient(
       basePathOverride: baseUrl,
     );
-    _api = _oryClient.getFrontendApi();
+    api = _oryClient.getFrontendApi();
   }
 
   Future<SuccessfulNativeRegistration> signupWithWallet({
@@ -50,7 +51,7 @@ class OryAuth {
     required String signature,
     required String token,
   }) async {
-    final flowData = await _api.createNativeRegistrationFlow();
+    final flowData = await api.createNativeRegistrationFlow();
     if (flowData.data == null) {
       await _reset();
       throw Exception('Failed to create login flow');
@@ -61,12 +62,12 @@ class OryAuth {
       token: token,
       walletAddress: walletAddress,
     );
-    final successNativeRegistration = await _api.updateRegistrationFlow(
+    final successNativeRegistration = await api.updateRegistrationFlow(
       flow: flowData.data!.id,
       updateRegistrationFlowBody: updateSignupBody,
     );
     await _saveSessionToken(successNativeRegistration.data!.sessionToken ?? "");
-    await _processSessionState(_getSession());
+    await _processSessionState(getSession());
     if (successNativeRegistration.data == null) {
       await _reset();
       throw Exception(
@@ -84,7 +85,7 @@ class OryAuth {
     Either<LoginFlow?, SuccessfulNativeLogin?> loginResult;
     bool success = false;
     try {
-      final flowData = await _api.createNativeLoginFlow();
+      final flowData = await api.createNativeLoginFlow();
       if (flowData.data == null) {
         throw Exception('Failed to create login flow');
       }
@@ -95,7 +96,7 @@ class OryAuth {
         walletAddress: walletAddress,
       );
 
-      final successNativeLogin = await _api.updateLoginFlow(
+      final successNativeLogin = await api.updateLoginFlow(
         flow: flowData.data!.id,
         updateLoginFlowBody: updateLoginFlowBody,
       );
@@ -107,7 +108,7 @@ class OryAuth {
       loginResult = Right(successNativeLogin.data!);
       success = true;
       await _saveSessionToken(successNativeLogin.data!.sessionToken ?? "");
-      await _processSessionState(_getSession());
+      await _processSessionState(getSession());
     } catch (e) {
       if (e is DioException && e.response?.data != null) {
         final loginFlow = standardSerializers.deserialize(
@@ -124,9 +125,295 @@ class OryAuth {
     return (success, loginResult);
   }
 
+  Future<void> tryLoginWithCode({
+    required String email,
+    required Function(SuccessfulNativeLogin) onSuccess,
+    required Function() onAccountNotExists,
+    required Function(LoginFlow) onCodeSent,
+  }) async {
+    try {
+      final flowData = (await api.createNativeLoginFlow()).data;
+      if (flowData == null) {
+        throw Exception('Failed to create login flow');
+      }
+      final loginFlowBody = UpdateLoginFlowWithCodeMethod(
+        (b) => b
+          ..method = 'code'
+          ..csrfToken = ''
+          ..identifier = email,
+      );
+      final successNativeLogin = await api.updateLoginFlow(
+        flow: flowData.id,
+        updateLoginFlowBody: UpdateLoginFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateLoginFlowWithCodeMethod],
+              value: loginFlowBody,
+            ),
+        ),
+      );
+      if (successNativeLogin.data == null) {
+        throw Exception(
+          'Failed to update login flow ${successNativeLogin.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeLogin.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      onSuccess(successNativeLogin.data!);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        final loginFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(LoginFlow),
+        ) as LoginFlow?;
+        final accountNotExists = loginFlow?.ui.messages?.firstWhereOrNull(
+              (message) => message.id == 4000035,
+            ) !=
+            null;
+        if (accountNotExists) {
+          await onAccountNotExists();
+          return;
+        }
+
+        final codeSent = loginFlow?.state?.asString == 'sent_email';
+        if (codeSent) {
+          await onCodeSent(loginFlow!);
+        }
+      }
+    }
+  }
+
+  Future<(SuccessfulNativeLogin?, String?)> loginWithCode({
+    required String email,
+    required String code,
+    required String flowId,
+  }) async {
+    SuccessfulNativeLogin? loginResult;
+    String? errorMessage;
+    try {
+      final loginFlowBody = UpdateLoginFlowWithCodeMethod(
+        (b) => b
+          ..method = 'code'
+          ..code = code
+          ..csrfToken = ''
+          ..identifier = email,
+      );
+      final successNativeLogin = await api.updateLoginFlow(
+        flow: flowId,
+        updateLoginFlowBody: UpdateLoginFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateLoginFlowWithCodeMethod],
+              value: loginFlowBody,
+            ),
+        ),
+      );
+      if (successNativeLogin.data == null) {
+        throw Exception(
+          'Failed to update login flow ${successNativeLogin.statusMessage}',
+        );
+      }
+      loginResult = successNativeLogin.data!;
+      await _saveSessionToken(successNativeLogin.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        final loginFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(LoginFlow),
+        ) as LoginFlow?;
+        errorMessage = loginFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+      }
+      await _reset();
+    }
+    return (loginResult, errorMessage);
+  }
+
+  Future<void> trySignupWithCode({
+    required String email,
+    required Function(SuccessfulNativeRegistration) onSuccess,
+    required Function(RegistrationFlow) onCodeSent,
+  }) async {
+    try {
+      final flowData = (await api.createNativeRegistrationFlow()).data;
+      if (flowData == null) {
+        throw Exception('Failed to create registration flow');
+      }
+      final signupFlowBody = UpdateRegistrationFlowWithCodeMethod(
+        (b) => b
+          ..method = 'code'
+          ..csrfToken = ''
+          ..traits = MapJsonObject({
+            'email': email,
+          }),
+      );
+      final successNativeSignup = await api.updateRegistrationFlow(
+        flow: flowData.id,
+        updateRegistrationFlowBody: UpdateRegistrationFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateRegistrationFlowWithCodeMethod],
+              value: signupFlowBody,
+            ),
+        ),
+      );
+      if (successNativeSignup.data == null) {
+        throw Exception(
+          'Failed to update registration flow ${successNativeSignup.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeSignup.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      onSuccess(successNativeSignup.data!);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        final registrationFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(RegistrationFlow),
+        ) as RegistrationFlow?;
+        final codeSent = registrationFlow?.state?.asString == 'sent_email';
+        if (codeSent) {
+          await onCodeSent(registrationFlow!);
+        }
+      }
+    }
+  }
+
+  Future<(SuccessfulNativeRegistration?, String?)> signupWithCode({
+    required String email,
+    required String code,
+    required String flowId,
+  }) async {
+    SuccessfulNativeRegistration? signupResult;
+    String? errorMessage;
+    try {
+      final signupFlowBody = UpdateRegistrationFlowWithCodeMethod(
+        (b) => b
+          ..method = 'code'
+          ..code = code
+          ..csrfToken = ''
+          ..traits = MapJsonObject(
+            {
+              'email': email,
+            },
+          ),
+      );
+
+      final successNativeSignup = await api.updateRegistrationFlow(
+        flow: flowId,
+        updateRegistrationFlowBody: UpdateRegistrationFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateRegistrationFlowWithCodeMethod],
+              value: signupFlowBody,
+            ),
+        ),
+      );
+      if (successNativeSignup.data == null) {
+        throw Exception(
+          'Failed to update registration flow ${successNativeSignup.statusMessage}',
+        );
+      }
+      signupResult = successNativeSignup.data!;
+      await _saveSessionToken(successNativeSignup.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        final registrationFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(RegistrationFlow),
+        ) as RegistrationFlow?;
+        errorMessage = registrationFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+      }
+      signupResult = null;
+      await _reset();
+    }
+    return (signupResult, errorMessage);
+  }
+
+  Future<void> resendCode({
+    required String email,
+    required String flowId,
+    bool isSignup = false,
+    required Function() onCodeSentSuccess,
+  }) async {
+    try {
+      //-- this should always throw an error
+      isSignup
+          ? await api.updateRegistrationFlow(
+              flow: flowId,
+              updateRegistrationFlowBody: UpdateRegistrationFlowBody(
+                (b) => b
+                  ..oneOf = OneOfDynamic(
+                    typeIndex: 0,
+                    types: [UpdateRegistrationFlowWithCodeMethod],
+                    value: UpdateRegistrationFlowWithCodeMethod(
+                      (b) => b
+                        ..method = 'code'
+                        ..resend = 'code'
+                        ..csrfToken = ''
+                        ..traits = MapJsonObject({
+                          'email': email,
+                        }),
+                    ),
+                  ),
+              ),
+            )
+          : await api.updateLoginFlow(
+              flow: flowId,
+              updateLoginFlowBody: UpdateLoginFlowBody(
+                (b) => b
+                  ..oneOf = OneOfDynamic(
+                    typeIndex: 0,
+                    types: [UpdateLoginFlowWithCodeMethod],
+                    value: UpdateLoginFlowWithCodeMethod(
+                      (b) => b
+                        ..resend = 'code'
+                        ..method = 'code'
+                        ..csrfToken = ''
+                        ..identifier = email,
+                    ),
+                  ),
+              ),
+            );
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        bool codeSent = false;
+        if (isSignup) {
+          final registrationFlow = standardSerializers.deserialize(
+            e.response!.data,
+            specifiedType: const FullType(RegistrationFlow),
+          ) as RegistrationFlow?;
+          codeSent = registrationFlow?.state?.asString == 'sent_email';
+        } else {
+          final loginFlow = standardSerializers.deserialize(
+            e.response!.data,
+            specifiedType: const FullType(LoginFlow),
+          ) as LoginFlow?;
+          codeSent = loginFlow?.state?.asString == 'sent_email';
+        }
+        if (codeSent) {
+          await onCodeSentSuccess();
+        }
+      }
+    }
+  }
+
   Future<void> logout() async {
-    final sessionToken = await _getSessionToken();
-    final response = await _api.performNativeLogout(
+    final sessionToken = await getSessionToken();
+    final response = await api.performNativeLogout(
       performNativeLogoutBody: PerformNativeLogoutBody(
         (b) => b..sessionToken = sessionToken ?? "",
       ),
@@ -156,13 +443,13 @@ class OryAuth {
 
   Future<String> _getTokenAndProcess() async {
     try {
-      final session = await _getSession();
+      final session = await getSession();
       if (session == null || !session.isValid) {
         await _processSessionState(Future.value(null));
         return '';
       } else {
         await _processSessionState(Future.value(session));
-        return await _getSessionToken() ?? "";
+        return await getSessionToken() ?? "";
       }
     } catch (e) {
       await _processSessionState(Future.value(null));
@@ -171,12 +458,12 @@ class OryAuth {
   }
 
   Future<void> _checkSessionState() async {
-    await _processSessionState(_getSession());
+    await _processSessionState(getSession());
   }
 
-  Future<Session?> _getSession() async {
-    final res = await _api.toSession(
-      xSessionToken: await _getSessionToken() ?? "",
+  Future<Session?> getSession() async {
+    final res = await api.toSession(
+      xSessionToken: await getSessionToken() ?? "",
     );
     if (res.data == null) {
       return null;
@@ -211,7 +498,7 @@ class OryAuth {
     }
   }
 
-  Future<String?> _getSessionToken() async {
+  Future<String?> getSessionToken() async {
     return await secureStorage.read(key: sessionStorageKey);
   }
 

@@ -69,78 +69,99 @@ class _RootPageViewState extends State<RootPage> {
     final primaryColor = Theme.of(context).colorScheme.primary;
     final authState = BlocProvider.of<AuthBloc>(context).state;
     final isAuthenticated = authState is AuthStateAuthenticated;
-    return PaymentListener(
-      child: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            onBoardingRequired: (user) {
-              OnboardingUtils.startOnboarding(context, user: user);
-            },
-            orElse: () {},
+    return FutureBuilder(
+      future: () async {
+        if (isAuthenticated) {
+          final authSession = authState.maybeWhen(
+            authenticated: (authSession) => authSession,
+            orElse: () => null,
           );
-        },
-        builder: (context, authState) {
-          return UpgradeAlert(
-            upgrader: Upgrader(
-              durationUntilAlertAgain: const Duration(seconds: 30),
-              storeController: storeController,
-              debugLogging: kDebugMode,
-            ),
-            child: Stack(
-              children: [
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      authenticated: (session) => const Align(
-                        child: PoapClaimTransferControllerWidget(),
-                      ),
-                      orElse: () => const SizedBox.shrink(),
-                    );
-                  },
-                ),
-                const AutoSyncLensLemonadeProfileWidget(),
-                AutoTabsScaffold(
-                  navigatorObservers: () => [
-                    TabRouterObserver(),
-                  ],
-                  extendBody: true,
-                  extendBodyBehindAppBar: true,
-                  scaffoldKey: DrawerUtils.drawerGlobalKey,
-                  drawerEnableOpenDragGesture:
-                      isAuthenticated == true ? true : false,
-                  backgroundColor: primaryColor,
-                  routes: [
-                    const HomeRoute(),
-                    authState.maybeWhen(
-                      authenticated: (session) => const HomeSpaceListingRoute(),
-                      orElse: EmptyRoute.new,
-                    ),
-                    DiscoverRoute(),
-                    // authState.maybeWhen(
-                    //   authenticated: (session) => const NotificationRoute(),
-                    //   orElse: EmptyRoute.new,
-                    // ),
-                    authState.maybeWhen(
-                      authenticated: (session) => const ChatStackRoute(),
-                      orElse: EmptyRoute.new,
-                    ),
-                  ],
-                  drawer: authState.maybeWhen(
-                    authenticated: (session) => const LemonDrawer(),
-                    orElse: () => null,
+          if (authSession?.email?.isNotEmpty != true) {
+            await Future.delayed(const Duration(seconds: 2));
+            AutoRouter.of(context).push(const VerifyEmailRoute());
+          }
+        }
+      }(),
+      builder: (context, snapshot) => PaymentListener(
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              onBoardingRequired: (user) {
+                OnboardingUtils.startOnboarding(context, user: user);
+              },
+              authenticated: (user) async {
+                if (user.email?.isNotEmpty != true) {
+                  await Future.delayed(const Duration(seconds: 2));
+                  AutoRouter.of(context).push(const VerifyEmailRoute());
+                }
+              },
+              orElse: () {},
+            );
+          },
+          builder: (context, authState) {
+            return UpgradeAlert(
+              upgrader: Upgrader(
+                durationUntilAlertAgain: const Duration(seconds: 30),
+                storeController: storeController,
+                debugLogging: kDebugMode,
+              ),
+              child: Stack(
+                children: [
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        authenticated: (session) => const Align(
+                          child: PoapClaimTransferControllerWidget(),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      );
+                    },
                   ),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.centerDocked,
-                  bottomNavigationBuilder: (_, tabsRouter) {
-                    return BottomBar(
-                      key: bottomBarGlobalKey,
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+                  const AutoSyncLensLemonadeProfileWidget(),
+                  AutoTabsScaffold(
+                    navigatorObservers: () => [
+                      TabRouterObserver(),
+                    ],
+                    extendBody: true,
+                    extendBodyBehindAppBar: true,
+                    scaffoldKey: DrawerUtils.drawerGlobalKey,
+                    drawerEnableOpenDragGesture:
+                        isAuthenticated == true ? true : false,
+                    backgroundColor: primaryColor,
+                    routes: [
+                      const HomeRoute(),
+                      authState.maybeWhen(
+                        authenticated: (session) =>
+                            const HomeSpaceListingRoute(),
+                        orElse: EmptyRoute.new,
+                      ),
+                      DiscoverRoute(),
+                      // authState.maybeWhen(
+                      //   authenticated: (session) => const NotificationRoute(),
+                      //   orElse: EmptyRoute.new,
+                      // ),
+                      authState.maybeWhen(
+                        authenticated: (session) => const ChatStackRoute(),
+                        orElse: EmptyRoute.new,
+                      ),
+                    ],
+                    drawer: authState.maybeWhen(
+                      authenticated: (session) => const LemonDrawer(),
+                      orElse: () => null,
+                    ),
+                    floatingActionButtonLocation:
+                        FloatingActionButtonLocation.centerDocked,
+                    bottomNavigationBuilder: (_, tabsRouter) {
+                      return BottomBar(
+                        key: bottomBarGlobalKey,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

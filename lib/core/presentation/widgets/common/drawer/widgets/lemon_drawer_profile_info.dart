@@ -81,6 +81,20 @@ class LemonDrawerProfileInfo extends StatelessWidget {
                   height: Spacing.s0_5,
                 ),
                 const LensAccountLemonadeUsername(),
+                if (authSession?.email?.isNotEmpty != true) ...[
+                  SizedBox(height: Spacing.s2),
+                  InkWell(
+                    onTap: () {
+                      context.router.push(const VerifyEmailRoute());
+                    },
+                    child: Text(
+                      'Verify Email',
+                      style: appText.md.copyWith(
+                        color: appColors.textAccent,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ],

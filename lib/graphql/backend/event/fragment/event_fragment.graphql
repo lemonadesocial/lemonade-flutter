@@ -16,6 +16,21 @@ fragment EventHostExpandedFragment on User {
   __typename
 }
 
+fragment EventVisibleCohostsExpandedFragment on UserWithEmail {
+  _id
+  name
+  display_name
+  username
+  new_photos_expanded(limit: 1) {
+    _id
+    key
+    bucket
+  }
+  job_title
+  image_avatar
+  __typename
+}
+
 fragment EventPeopleFragment on Event {
   cohosts
   visible_cohosts
@@ -91,8 +106,8 @@ fragment EventFields on Event {
   host
   approval_required
   hide_cohosts
-  visible_cohosts_expanded(limit: 25) {
-    ...EventHostExpandedFragment
+  visible_cohosts_expanded {
+    ...EventVisibleCohostsExpandedFragment
   }
   host_expanded {
     ...EventHostExpandedFragment

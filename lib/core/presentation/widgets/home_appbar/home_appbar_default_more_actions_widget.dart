@@ -146,9 +146,7 @@ class HomeAppBarDefaultMoreActionsWidget extends StatelessWidget {
         }
 
         if (item?.value == CommonMoreActions.signIn) {
-          context.read<AuthBloc>().add(
-                const AuthEvent.login(),
-              );
+          AutoRouter.of(context).push(const LoginEmailRoute());
           return;
         }
 

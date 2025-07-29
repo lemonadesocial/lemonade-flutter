@@ -1,19 +1,23 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
 import 'package:app/core/domain/wallet/wallet_repository.dart';
-import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
+import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/presentation/widgets/web3/connect_wallet_button.dart';
 import 'package:app/core/service/wallet/wallet_connect_service.dart';
 import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
 import 'package:app/core/utils/web3_utils.dart';
-import 'package:app/i18n/i18n.g.dart';
+import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
+import 'package:app/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:app/app_theme/app_theme.dart';
 
 class OryWalletAuthButton extends StatefulWidget {
-  const OryWalletAuthButton({super.key});
+  const OryWalletAuthButton({
+    super.key,
+  });
 
   @override
   State<OryWalletAuthButton> createState() => _OryWalletAuthButtonState();
@@ -65,7 +69,6 @@ class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (context, state) {
         if (state.activeSession != null && _walletButtonTapped) {
@@ -78,8 +81,7 @@ class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
         if (!isConnected) {
           return ConnectWalletButton(
             builder: (onConnectPressed, connectButtonState) {
-              return LinearGradientButton.primaryButton(
-                label: t.auth.loginWithWallet,
+              return _Button(
                 onTap: () async {
                   _walletButtonTapped = true;
                   onConnectPressed(context);
@@ -88,13 +90,49 @@ class _OryWalletAuthButtonState extends State<OryWalletAuthButton> {
             },
           );
         }
-        return LinearGradientButton.primaryButton(
-          label: t.auth.loginWithWallet,
+        return _Button(
           onTap: () async {
             _loginWithWallet();
           },
         );
       },
+    );
+  }
+}
+
+class _Button extends StatelessWidget {
+  const _Button({
+    required this.onTap,
+  });
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = context.theme.appColors;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: Spacing.s3),
+        decoration: BoxDecoration(
+          color: appColors.buttonTertiaryBg,
+          borderRadius: BorderRadius.circular(LemonRadius.full),
+        ),
+        child: Center(
+          child: Builder(
+            builder: (context) {
+              return ThemeSvgIcon(
+                color: appColors.buttonTertiary,
+                builder: (filter) =>
+                    Assets.icons.icAccountBalanceWalletOutlineSharp.svg(
+                  width: 24,
+                  height: 24,
+                  colorFilter: filter,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
