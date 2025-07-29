@@ -13,6 +13,18 @@ class AppRouter extends $AppRouter {
           fullscreenDialog: true,
         ),
         AutoRoute(
+          page: LoginEmailRoute.page,
+        ),
+        AutoRoute(
+          page: LoginOtpRoute.page,
+        ),
+        AutoRoute(
+          page: VerifyEmailRoute.page,
+        ),
+        AutoRoute(
+          page: VerifyEmailOtpRoute.page,
+        ),
+        AutoRoute(
           path: '/shorebird-update',
           page: ShorebirdUpdateRoute.page,
           fullscreenDialog: true,

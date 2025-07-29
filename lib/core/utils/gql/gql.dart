@@ -5,7 +5,6 @@ import 'package:app/core/config.dart';
 import 'package:app/core/domain/common/entities/common.dart';
 import 'package:app/core/domain/cubejs/cubejs_repository.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart';
 import 'package:app/core/service/lens/lens_storage_service/lens_storage_service.dart';
 import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/core/utils/gql/custom_error_handler.dart';
@@ -16,16 +15,8 @@ import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 Future<String> _getBearerToken() async {
-  final authMethod = await getIt<AuthMethodTracker>().getAuthMethod();
-  if (authMethod == AuthMethod.oauth) {
-    final token = await getIt<AppOauth>().getTokenForGql();
-    return token;
-  }
-  if (authMethod == AuthMethod.wallet) {
-    final token = await getIt<OryAuth>().getTokenForGql();
-    return token;
-  }
-  return '';
+  final token = await getIt<OryAuth>().getTokenForGql();
+  return token;
 }
 
 class GeoLocationLink extends Link {

@@ -38,6 +38,24 @@ const eventHostExpandedFragment = '''
   }
 ''';
 
+const eventVisibleCohostsExpandedFragment = '''
+  fragment eventVisibleCohostsExpandedFragment on UserWithEmail {
+      _id
+      name
+      display_name
+      username
+      image_avatar
+      new_photos_expanded(limit: 1) {
+        _id
+        key
+        bucket
+      }
+      job_title
+      __typename
+      matrix_localpart
+    }
+''';
+
 const eventPeopleFragment = '''
   fragment eventPeopleFragment on Event {
     cohosts
@@ -157,6 +175,7 @@ const eventPaymentAccountFragment = '''
 
 const eventFragment = '''
   $eventHostExpandedFragment
+  $eventVisibleCohostsExpandedFragment
   $eventAddressFragment
   $eventPeopleFragment
   $eventMatrixFragment
@@ -175,8 +194,8 @@ const eventFragment = '''
     cohosts_expanded(limit: 25) {
       ...eventHostExpandedFragment
     }
-    visible_cohosts_expanded(limit: 25) {
-      ...eventHostExpandedFragment
+    visible_cohosts_expanded {
+      ...eventVisibleCohostsExpandedFragment
     }
     new_new_photos
     new_new_photos_expanded(limit: 25) {

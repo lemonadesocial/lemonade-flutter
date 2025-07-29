@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app/core/config.dart';
 import 'package:app/core/oauth/oauth.dart';
-import 'package:app/core/service/auth_method_tracker/auth_method_tracker.dart';
 import 'package:app/core/service/ory_auth/ory_auth.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +40,7 @@ class EventPassService {
   }
 
   Future<void> generateGooglePassKit({required String ticketId}) async {
-    final authMethod = await getIt<AuthMethodTracker>().getAuthMethod();
-    final token = authMethod == AuthMethod.oauth
-        ? await _appOauth.getTokenForGql()
-        : await _oryAuth.getTokenForGql();
+    final token = await _oryAuth.getTokenForGql();
     try {
       await _browser.openUrlRequest(
         urlRequest: URLRequest(

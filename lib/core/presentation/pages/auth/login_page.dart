@@ -1,11 +1,9 @@
 import 'package:app/core/application/auth/auth_bloc.dart';
 import 'package:app/core/presentation/widgets/bottom_bar/bottom_bar_widget.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
-import 'package:app/core/presentation/widgets/common/button/lemon_outline_button_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/home_appbar/home_appbar_default_more_actions_widget.dart';
 import 'package:app/core/presentation/widgets/loading_widget.dart';
-import 'package:app/core/presentation/widgets/ory_wallet_auth/ory_wallet_auth_button.dart';
 import 'package:app/core/utils/onboarding_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/i18n/i18n.g.dart';
@@ -55,9 +53,7 @@ class LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           state.maybeWhen(
             authenticated: (user) {
-              if (!widget.isHomeScreen) {
-                AutoRouter.of(context).pop();
-              }
+              AutoRouter.of(context).root.popUntilRoot();
             },
             onBoardingRequired: (user) {
               OnboardingUtils.startOnboarding(context, user: user);
@@ -105,20 +101,20 @@ class LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: Spacing.small),
                   _buildAuthButtons(context),
-                  SizedBox(height: Spacing.small),
-                  LemonOutlineButton(
-                    onTap: () {
-                      AutoRouter.of(context).navigate(
-                        DiscoverRoute(),
-                      );
-                    },
-                    borderColor: Colors.transparent,
-                    label: t.auth.explore,
-                    textStyle: appText.md.copyWith(
-                      color: appColors.textAccent,
-                    ),
-                  ),
-                  SizedBox(height: Spacing.small),
+                  SizedBox(height: Spacing.s12),
+                  // LemonOutlineButton(
+                  //   onTap: () {
+                  //     AutoRouter.of(context).navigate(
+                  //       DiscoverRoute(),
+                  //     );
+                  //   },
+                  //   borderColor: Colors.transparent,
+                  //   label: t.auth.explore,
+                  //   textStyle: appText.md.copyWith(
+                  //     color: appColors.textAccent,
+                  //   ),
+                  // ),
+                  // SizedBox(height: Spacing.small),
                 ],
               ),
             ),
@@ -133,8 +129,6 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildAuthButtons(BuildContext context) {
-    final t = Translations.of(context);
-
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final processingWidget = SizedBox(
@@ -144,15 +138,17 @@ class LoginPageState extends State<LoginPage> {
 
         final loginButton = Column(
           children: [
-            LinearGradientButton.secondaryButton(
-              mode: GradientButtonMode.light,
-              label: t.auth.signInOrCreateAccount,
-              onTap: () => context.read<AuthBloc>().add(
-                    const AuthEvent.login(),
-                  ),
+            SizedBox(
+              width: 130.w,
+              child: LinearGradientButton.secondaryButton(
+                radius: BorderRadius.circular(LemonRadius.full),
+                mode: GradientButtonMode.light,
+                label: "Get started",
+                onTap: () {
+                  context.router.push(const LoginEmailRoute());
+                },
+              ),
             ),
-            SizedBox(height: Spacing.small),
-            const OryWalletAuthButton(),
           ],
         );
 
