@@ -23,25 +23,12 @@ class VerifyEmailPage extends StatefulWidget {
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
   final oryAuth = getIt<OryAuth>();
   final emailController = TextEditingController();
-  final focusNode = FocusNode();
 
-  bool hasFocus = false;
   bool isEmailValid = false;
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    focusNode.addListener(() {
-      setState(() {
-        hasFocus = focusNode.hasFocus;
-      });
-    });
-  }
-
-  @override
   void dispose() {
-    focusNode.dispose();
     emailController.dispose();
     super.dispose();
   }
@@ -101,9 +88,9 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             SizedBox(height: Spacing.s5),
             LemonTextField(
               autofocus: true,
-              focusNode: focusNode,
               hintText: 'Email Address',
-              borderColor: hasFocus ? appColors.textPrimary : null,
+              textInputType: TextInputType.emailAddress,
+              focusedBorderColor: appColors.textPrimary,
               controller: emailController,
               onChange: (value) {
                 setState(() {
@@ -127,6 +114,8 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                 ),
               ),
             ),
+            if (MediaQuery.of(context).viewInsets.bottom > 0)
+              SizedBox(height: Spacing.s2),
           ],
         ),
       ),

@@ -39,6 +39,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
 
     return Scaffold(
       appBar: LemonAppBar(
+        backgroundColor: Colors.transparent,
         actions: [
           Row(
             children: [
@@ -56,7 +57,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: appColors.pageBg,
+      backgroundColor: appColors.pageOverlaySecondary,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.smMedium),
         child: Column(
@@ -68,13 +69,13 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                 children: [
                   Text(
                     t.onboarding.getSocialOnChain,
-                    style: appText.xl,
+                    style: appText.xxl,
                   ),
                   SizedBox(height: Spacing.extraSmall),
                   Text(
                     t.onboarding.getSocialOnChainDescription,
-                    style: appText.md.copyWith(
-                      color: appColors.textTertiary,
+                    style: appText.sm.copyWith(
+                      color: appColors.textSecondary,
                     ),
                   ),
                   SizedBox(height: Spacing.medium),
@@ -91,7 +92,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                               ? w3mService?.session?.address
                               : null;
                       return SettingTileWidget(
-                        color: appColors.cardBg,
+                        color: appColors.buttonTertiaryBg,
                         radius: LemonRadius.md,
                         title: t.common.actions.connectWallet,
                         subTitle: userWalletAddress != null
@@ -144,6 +145,7 @@ class OnboardingSocialOnChainPage extends StatelessWidget {
                     child: Opacity(
                       opacity: isEnabledNextButton == true ? 1 : 0.5,
                       child: LinearGradientButton.primaryButton(
+                        radius: BorderRadius.circular(LemonRadius.full),
                         onTap: () async {
                           if (isEnabledNextButton == false) {
                             return;

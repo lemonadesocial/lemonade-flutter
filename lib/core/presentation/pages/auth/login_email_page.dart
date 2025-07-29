@@ -27,25 +27,12 @@ class LoginEmailPage extends StatefulWidget {
 class _LoginEmailPageState extends State<LoginEmailPage> {
   final oryAuth = getIt<OryAuth>();
   final emailController = TextEditingController();
-  final focusNode = FocusNode();
 
-  bool hasFocus = false;
   bool isEmailValid = false;
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-    focusNode.addListener(() {
-      setState(() {
-        hasFocus = focusNode.hasFocus;
-      });
-    });
-  }
-
-  @override
   void dispose() {
-    focusNode.dispose();
     emailController.dispose();
     super.dispose();
   }
@@ -104,7 +91,10 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
+      backgroundColor: appColors.pageOverlaySecondary,
+      appBar: const LemonAppBar(
+        backgroundColor: Colors.transparent,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
         child: Column(
@@ -123,16 +113,19 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
             ),
             SizedBox(height: Spacing.s5),
             LemonTextField(
+              textInputType: TextInputType.emailAddress,
               autofocus: true,
-              focusNode: focusNode,
               hintText: 'Email Address',
-              borderColor: hasFocus ? appColors.textPrimary : null,
+              focusedBorderColor: appColors.textPrimary,
               controller: emailController,
               onChange: (value) {
                 setState(() {
                   isEmailValid = EmailValidator.validate(value);
                 });
               },
+              fillColor: appColors.pageBg,
+              filled: true,
+              borderColor: appColors.inputBorder,
             ),
             const Spacer(),
             SafeArea(
@@ -197,6 +190,8 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       },
                     ),
                   ),
+                  if (MediaQuery.of(context).viewInsets.bottom > 0)
+                    SizedBox(height: Spacing.s2),
                 ],
               ),
             ),

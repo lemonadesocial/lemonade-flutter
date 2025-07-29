@@ -26,7 +26,6 @@ class _OnboardingTermConditionsPageState
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     final t = Translations.of(context);
@@ -53,7 +52,7 @@ class _OnboardingTermConditionsPageState
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          backgroundColor: appColors.pageBg,
+          backgroundColor: appColors.pageOverlaySecondary,
           body: Stack(
             children: [
               NotificationListener<ScrollNotification>(
@@ -80,13 +79,13 @@ class _OnboardingTermConditionsPageState
                             SizedBox(height: Spacing.xLarge * 3),
                             Text(
                               t.onboarding.termConditions.title,
-                              style: appText.xl,
+                              style: appText.xxl,
                             ),
                             SizedBox(height: Spacing.smMedium),
                             Text(
                               t.onboarding.termConditions.description,
                               style: appText.md.copyWith(
-                                color: appColors.textTertiary,
+                                color: appColors.textSecondary,
                               ),
                             ),
                             SizedBox(height: Spacing.smMedium * 2),
@@ -120,7 +119,7 @@ class _OnboardingTermConditionsPageState
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  color: colorScheme.background,
+                  color: appColors.pageOverlaySecondary,
                   padding: EdgeInsets.only(
                     top: Spacing.smMedium,
                     left: Spacing.smMedium,
@@ -131,6 +130,7 @@ class _OnboardingTermConditionsPageState
                     child: Opacity(
                       opacity: termConditionsAccepted ? 1 : 0.5,
                       child: LinearGradientButton.primaryButton(
+                        radius: BorderRadius.circular(LemonRadius.full),
                         onTap: () {
                           if (termConditionsAccepted) {
                             onboardingBloc.acceptTerm(
@@ -182,7 +182,7 @@ class TermConditionItem extends StatelessWidget {
       padding: EdgeInsets.all(Spacing.s3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(LemonRadius.normal),
-        color: appColors.cardBg,
+        color: appColors.buttonTertiaryBg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

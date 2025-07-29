@@ -89,13 +89,13 @@ class LoginPageState extends State<LoginPage> {
                   Text(
                     t.auth.lets_get_you_in,
                     textAlign: TextAlign.center,
-                    style: appText.xl,
+                    style: appText.xxl,
                   ),
                   SizedBox(height: 9.h),
                   Text(
                     t.auth.get_started_description,
                     textAlign: TextAlign.center,
-                    style: appText.md.copyWith(
+                    style: appText.sm.copyWith(
                       color: appColors.textTertiary,
                     ),
                   ),

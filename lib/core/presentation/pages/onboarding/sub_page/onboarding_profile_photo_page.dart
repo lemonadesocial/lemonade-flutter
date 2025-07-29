@@ -29,8 +29,9 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: appColors.pageBg,
+          backgroundColor: appColors.pageOverlaySecondary,
           appBar: LemonAppBar(
+            backgroundColor: Colors.transparent,
             actions: [
               Row(
                 children: [
@@ -60,13 +61,13 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                     children: [
                       Text(
                         t.onboarding.findYourLook,
-                        style: appText.xl,
+                        style: appText.xxl,
                       ),
                       SizedBox(height: Spacing.extraSmall),
                       Text(
                         t.onboarding.findYourLookDesc,
-                        style: appText.md.copyWith(
-                          color: appColors.textTertiary,
+                        style: appText.sm.copyWith(
+                          color: appColors.textSecondary,
                         ),
                       ),
                       SizedBox(height: Spacing.medium),
@@ -82,6 +83,7 @@ class OnboardingProfilePhotoPage extends StatelessWidget {
                       vertical: Spacing.xSmall,
                     ),
                     child: LinearGradientButton.primaryButton(
+                      radius: BorderRadius.circular(LemonRadius.full),
                       onTap:
                           state.profilePhoto == null ? null : bloc.uploadImage,
                       label: t.onboarding.next,
