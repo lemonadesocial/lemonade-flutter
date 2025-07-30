@@ -2,6 +2,7 @@ import 'package:app/router/app_router.gr.dart';
 import 'package:app/router/features/lens/lens_routes.dart';
 import 'package:app/router/features/space/space_routes.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:app/router/transition_builder.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 class AppRouter extends $AppRouter {
@@ -12,19 +13,23 @@ class AppRouter extends $AppRouter {
           page: LoginRoute.page,
           fullscreenDialog: true,
         ),
-        AutoRoute(
+        CustomRoute(
           page: LoginEmailRoute.page,
+          transitionsBuilder: CustomTransitionBuilder.slideLeft,
         ),
-        AutoRoute(
+        CustomRoute(
           page: LoginOtpRoute.page,
+          transitionsBuilder: CustomTransitionBuilder.slideLeft,
         ),
-        AutoRoute(
+        CustomRoute(
           page: VerifyEmailRoute.page,
+          transitionsBuilder: CustomTransitionBuilder.slideLeft,
         ),
-        AutoRoute(
+        CustomRoute(
           page: VerifyEmailOtpRoute.page,
+          transitionsBuilder: CustomTransitionBuilder.slideLeft,
         ),
-        AutoRoute(
+        CustomRoute(
           path: '/shorebird-update',
           page: ShorebirdUpdateRoute.page,
           fullscreenDialog: true,
@@ -83,38 +88,46 @@ class AppRouter extends $AppRouter {
           path: '/poap',
           page: PoapListingRoute.page,
         ),
-        AutoRoute(
+        CustomRoute(
           page: OnboardingWrapperRoute.page,
+          transitionsBuilder: CustomTransitionBuilder.slideLeft,
           children: [
-            AutoRoute(
+            CustomRoute(
               page: OnboardingTermAdultRoute.page,
               meta: const {
                 'popBlocked': true,
               },
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingTermConditionsRoute.page,
               meta: const {
                 'popBlocked': true,
               },
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingUsernameRoute.page,
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingConnectWalletRoute.page,
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
             AutoRoute(
               page: CreateLensAccountRoute.page,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingProfilePhotoRoute.page,
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingSocialOnChainRoute.page,
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
-            AutoRoute(
+            CustomRoute(
               page: OnboardingAboutRoute.page,
+              transitionsBuilder: CustomTransitionBuilder.slideLeft,
             ),
           ],
         ),

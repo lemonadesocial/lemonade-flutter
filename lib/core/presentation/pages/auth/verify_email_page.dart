@@ -68,7 +68,10 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     final appColors = context.theme.appColors;
     final appText = context.theme.appTextTheme;
     return Scaffold(
-      appBar: const LemonAppBar(),
+      backgroundColor: appColors.pageOverlaySecondary,
+      appBar: const LemonAppBar(
+        backgroundColor: Colors.transparent,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.s4),
         child: Column(
