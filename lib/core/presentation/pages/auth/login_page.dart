@@ -102,19 +102,6 @@ class LoginPageState extends State<LoginPage> {
                   SizedBox(height: Spacing.small),
                   _buildAuthButtons(context),
                   SizedBox(height: Spacing.s12),
-                  // LemonOutlineButton(
-                  //   onTap: () {
-                  //     AutoRouter.of(context).navigate(
-                  //       DiscoverRoute(),
-                  //     );
-                  //   },
-                  //   borderColor: Colors.transparent,
-                  //   label: t.auth.explore,
-                  //   textStyle: appText.md.copyWith(
-                  //     color: appColors.textAccent,
-                  //   ),
-                  // ),
-                  // SizedBox(height: Spacing.small),
                 ],
               ),
             ),

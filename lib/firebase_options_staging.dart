@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -54,28 +57,19 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAa6SbBX30d2xsl-opo_jvavt22cj3wN2Y',
+    apiKey: 'AIzaSyCncviFlcqtpmaaIYGlMHrISaZSFUkLTAM',
     appId: '1:610594530625:android:0f12542abff71d4197adc0',
     messagingSenderId: '610594530625',
     projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
+    storageBucket: 'lemonade-staging-88d1c.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBzBUA3AK8aCgfzPYHRlMlbC-2t3ddmO9k',
+    apiKey: 'AIzaSyAlo6Taecj5z2GtyUV6b6nyz216T3IvWj8',
     appId: '1:610594530625:ios:f5524cdc2292c7c497adc0',
     messagingSenderId: '610594530625',
     projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
+    storageBucket: 'lemonade-staging-88d1c.firebasestorage.app',
     iosBundleId: 'social.lemonade.app.staging',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBzBUA3AK8aCgfzPYHRlMlbC-2t3ddmO9k',
-    appId: '1:610594530625:ios:1a6c5dfa33638d0c97adc0',
-    messagingSenderId: '610594530625',
-    projectId: 'lemonade-staging-88d1c',
-    storageBucket: 'lemonade-staging-88d1c.appspot.com',
-    iosBundleId: 'com.lemonadesocial.app.RunnerTests',
   );
 }

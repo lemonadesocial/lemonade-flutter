@@ -91,6 +91,8 @@ dependencies:
   flutter_styled_toast: ^2.2.1
   calendar_view: ^1.2.0
   scrollable_positioned_list: 0.3.8
+  sign_in_with_apple: 7.0.1
+  google_sign_in: 6.2.2
 
   # Webview
   flutter_inappwebview: 6.1.5

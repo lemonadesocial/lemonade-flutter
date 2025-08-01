@@ -15,6 +15,9 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:uuid/uuid.dart';
 
 @RoutePage()
 class LoginEmailPage extends StatefulWidget {
@@ -86,6 +89,122 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
     );
   }
 
+  Future<void> _loginWithGoogle() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final credential = await GoogleSignIn().signIn();
+      if (credential == null) {
+        SnackBarUtils.showError(message: 'Failed to sign in with Google');
+        return;
+      }
+      final idToken = (await credential.authentication).idToken;
+      if (idToken == null) {
+        SnackBarUtils.showError(message: 'Failed to sign in with Google');
+        return;
+      }
+      final (success, errorMessage) = await oryAuth.loginWithOidc(
+        provider: 'google',
+        idToken: idToken,
+        onAccountNotExists: () {
+          _signupWithGoogle(idToken);
+        },
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      await GoogleSignIn().signOut();
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _signupWithGoogle(String idToken) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final (success, errorMessage) = await oryAuth.signupWithOidc(
+        provider: 'google',
+        idToken: idToken,
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _signupWithApple(String idToken) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final (success, errorMessage) = await oryAuth.signupWithOidc(
+        provider: 'apple',
+        idToken: idToken,
+        idTokenNonce: const Uuid().v4(),
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: 'Failed to sign up with Apple');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loginWithApple() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final nonce = const Uuid().v4();
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        SnackBarUtils.showError(message: 'Failed to sign in with Apple');
+        return;
+      }
+      final (success, errorMessage) = await oryAuth.loginWithOidc(
+        provider: 'apple',
+        idToken: idToken,
+        idTokenNonce: nonce,
+        onAccountNotExists: () {
+          _signupWithApple(idToken);
+        },
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: 'Failed to sign in with Apple');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appColors = context.theme.appColors;
@@ -137,7 +256,7 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       Expanded(
                         child: _Button(
                           onTap: () {
-                            SnackBarUtils.showComingSoon();
+                            _loginWithGoogle();
                           },
                           icon: ThemeSvgIcon(
                             color: appColors.buttonTertiary,
@@ -151,7 +270,7 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       Expanded(
                         child: _Button(
                           onTap: () {
-                            SnackBarUtils.showComingSoon();
+                            _loginWithApple();
                           },
                           icon: ThemeSvgIcon(
                             color: appColors.buttonTertiary,

@@ -411,6 +411,126 @@ class OryAuth {
     }
   }
 
+  Future<(bool, String?)> loginWithOidc({
+    required String provider,
+    required String idToken,
+    String? idTokenNonce,
+    required Function() onAccountNotExists,
+  }) async {
+    try {
+      final flow = await api.createNativeLoginFlow();
+      if (flow.data == null) {
+        throw Exception('Failed to create login flow');
+      }
+      final loginFlowBody = UpdateLoginFlowWithOidcMethod(
+        (b) => b
+          ..method = 'oidc'
+          ..provider = provider
+          ..csrfToken = ''
+          ..idToken = idToken
+          ..idTokenNonce = idTokenNonce,
+      );
+      final successNativeLogin = await api.updateLoginFlow(
+        flow: flow.data!.id,
+        updateLoginFlowBody: UpdateLoginFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateLoginFlowWithOidcMethod],
+              value: loginFlowBody,
+            ),
+        ),
+      );
+      if (successNativeLogin.data == null) {
+        throw Exception(
+          'Failed to update login flow ${successNativeLogin.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeLogin.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      return (true, null);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        if (e.response?.statusCode != 400) {
+          return (false, e.response?.statusMessage);
+        }
+        final loginFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(LoginFlow),
+        ) as LoginFlow?;
+        final accountNotExists = loginFlow?.ui.messages?.firstWhereOrNull(
+              (message) => message.id == 4000035,
+            ) !=
+            null;
+        if (accountNotExists) {
+          await onAccountNotExists();
+          return (false, null);
+        }
+        final errorMessage = loginFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+        return (false, errorMessage);
+      }
+      return (false, e.toString());
+    }
+  }
+
+  Future<(bool, String?)> signupWithOidc({
+    required String provider,
+    required String idToken,
+    String? idTokenNonce,
+  }) async {
+    try {
+      final flow = await api.createNativeRegistrationFlow();
+      if (flow.data == null) {
+        throw Exception('Failed to create registration flow');
+      }
+      final signupFlowBody = UpdateRegistrationFlowWithOidcMethod(
+        (b) => b
+          ..method = 'oidc'
+          ..provider = provider
+          ..csrfToken = ''
+          ..idToken = idToken
+          ..idTokenNonce = idTokenNonce,
+      );
+      final successNativeSignup = await api.updateRegistrationFlow(
+        flow: flow.data!.id,
+        updateRegistrationFlowBody: UpdateRegistrationFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateRegistrationFlowWithOidcMethod],
+              value: signupFlowBody,
+            ),
+        ),
+      );
+      if (successNativeSignup.data == null) {
+        throw Exception(
+          'Failed to update registration flow ${successNativeSignup.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeSignup.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      return (true, null);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        final registrationFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(RegistrationFlow),
+        ) as RegistrationFlow?;
+        final errorMessage = registrationFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+        return (false, errorMessage);
+      }
+      return (false, e.toString());
+    }
+  }
+
   Future<void> logout() async {
     final sessionToken = await getSessionToken();
     final response = await api.performNativeLogout(
