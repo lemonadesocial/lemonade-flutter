@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.9.0...v2.10.0) (2025-08-02)
+
+
+### Features
+
+* integrate Google and Apple sign-in functionality ([#1007](https://github.com/lemonadesocial/lemonade-flutter/issues/1007)) ([7f8d6e2](https://github.com/lemonadesocial/lemonade-flutter/commit/7f8d6e2e3bae5976985c23dfdf3625e3dbbf7ea1))
+
 ## [2.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.8.0...v2.9.0) (2025-07-30)
 
 
