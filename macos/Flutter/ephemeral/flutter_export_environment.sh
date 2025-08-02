@@ -1,11 +1,11 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/sieuthai/fvm/versions/3.24.1"
-export "FLUTTER_APPLICATION_PATH=/Users/sieuthai/projects/lemonade/lemonade-flutter"
+export "FLUTTER_ROOT=/Users/mthinh/fvm/versions/3.27.4"
+export "FLUTTER_APPLICATION_PATH=/Users/mthinh/Projects/lemonade/lemonade-flutter-refactor"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.53.2"
-export "FLUTTER_BUILD_NUMBER=1.53.2"
+export "FLUTTER_BUILD_NAME=2.8.0"
+export "FLUTTER_BUILD_NUMBER=2.8.0"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"

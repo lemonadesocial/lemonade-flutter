@@ -37,6 +37,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>$(BUNDLE_URL_SCHEME)</string>
+				<string>$(GOOGLE_SIGN_IN_REVERSED_CLIENT_ID)</string>
 			</array>
 		</dict>
 	</array>
@@ -44,8 +45,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>metamask</string>
@@ -96,5 +95,7 @@
 	<string>Allow access to your contacts to enable adding attendees to calendar</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Allow access to your calendar to enable adding events to calendar</string>
+	<key>GIDClientID</key>
+	<string>$(GOOGLE_SIGN_IN_CLIENT_ID)</string>
 </dict>
 </plist>

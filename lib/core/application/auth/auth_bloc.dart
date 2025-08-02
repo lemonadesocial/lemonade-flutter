@@ -26,8 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(const AuthState.unknown()) {
     _orySessionStateSubscription =
         oryAuth.orySessionStateStream.listen(_onOrySessionStateChange);
-    on<AuthEventLogin>(_onLogin);
-    on<AuthEventLoginWithWallet>(_onLoginWithWallet);
     on<AuthEventLogout>(_onLogout);
     on<AuthEventForceLogout>(_onForceLogout);
     on<AuthEventAuthenticated>(_onAuthenticated);
@@ -87,37 +85,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthState.authenticated(authSession: currentUser!));
   }
 
-  @Deprecated('Deprecated')
-  Future<void> _onLogin(AuthEventLogin event, Emitter emit) async {}
-
-  Future<void> _onLoginWithWallet(
-    AuthEventLoginWithWallet event,
-    Emitter emit,
-  ) async {
-    await authMethodTracker.setAuthMethod(AuthMethod.wallet);
-    final result = await oryAuth.loginWithWallet(
-      walletAddress: event.walletAddress,
-      signature: event.signature,
-      token: event.token,
-    );
-    if (!result.$1) {
-      final loginFlow = result.$2.fold(
-        (l) => l,
-        (r) => null,
-      );
-      final accountNotExists =
-          loginFlow?.ui.messages?.any((m) => m.id == 4000006);
-      if (accountNotExists == true) {
-        await oryAuth.signupWithWallet(
-          walletAddress: event.walletAddress,
-          signature: event.signature,
-          token: event.token,
-        );
-        return;
-      }
-    }
-  }
-
   Future<void> _onLogout(AuthEventLogout event, Emitter emit) async {
     await firebaseService.removeFcmToken();
     await oryAuth.logout();
@@ -145,14 +112,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 @freezed
 class AuthEvent with _$AuthEvent {
-  const factory AuthEvent.login() = AuthEventLogin;
-
-  const factory AuthEvent.loginWithWallet({
-    required String walletAddress,
-    required String signature,
-    required String token,
-  }) = AuthEventLoginWithWallet;
-
   const factory AuthEvent.logout() = AuthEventLogout;
 
   const factory AuthEvent.forceLogout() = AuthEventForceLogout;

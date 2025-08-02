@@ -3,6 +3,7 @@ import 'package:app/core/service/storage/secure_storage.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:collection/collection.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ory_client/ory_client.dart';
 import 'package:one_of/one_of.dart';
 import 'package:built_value/json_object.dart';
@@ -411,6 +412,141 @@ class OryAuth {
     }
   }
 
+  Future<(bool, String?)> loginWithOidc({
+    required String provider,
+    required String idToken,
+    String? idTokenNonce,
+    required Function() onAccountNotExists,
+  }) async {
+    try {
+      final flow = await api.createNativeLoginFlow();
+      if (flow.data == null) {
+        throw Exception('Failed to create login flow');
+      }
+      final loginFlowBody = UpdateLoginFlowWithOidcMethod(
+        (b) => b
+          ..method = 'oidc'
+          ..provider = provider
+          ..idToken = idToken
+          ..idTokenNonce = idTokenNonce,
+      );
+      final successNativeLogin = await api.updateLoginFlow(
+        flow: flow.data!.id,
+        updateLoginFlowBody: UpdateLoginFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateLoginFlowWithOidcMethod],
+              value: loginFlowBody,
+            ),
+        ),
+      );
+      if (successNativeLogin.data == null) {
+        throw Exception(
+          'Failed to update login flow ${successNativeLogin.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeLogin.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      return (true, null);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        if (e.response?.statusCode == 200) {
+          if (e.response?.redirects.isNotEmpty == true) {
+            launchUrl(e.response!.redirects.first.location);
+          }
+          return (false, null);
+        }
+        if (e.response?.statusCode != 400) {
+          return (false, e.response?.statusMessage);
+        }
+        final loginFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(LoginFlow),
+        ) as LoginFlow?;
+        final accountNotExists = loginFlow?.ui.messages?.firstWhereOrNull(
+              (message) => message.id == 4000035,
+            ) !=
+            null;
+        if (accountNotExists) {
+          await onAccountNotExists();
+          return (false, null);
+        }
+        final errorMessage = loginFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+        return (false, errorMessage);
+      }
+      return (false, e.toString());
+    }
+  }
+
+  Future<(bool, String?)> signupWithOidc({
+    required String provider,
+    required String idToken,
+    String? idTokenNonce,
+  }) async {
+    try {
+      final flow = await api.createNativeRegistrationFlow();
+      if (flow.data == null) {
+        throw Exception('Failed to create registration flow');
+      }
+      final signupFlowBody = UpdateRegistrationFlowWithOidcMethod(
+        (b) => b
+          ..method = 'oidc'
+          ..provider = provider
+          ..csrfToken = ''
+          ..idToken = idToken
+          ..idTokenNonce = idTokenNonce,
+      );
+      final successNativeSignup = await api.updateRegistrationFlow(
+        flow: flow.data!.id,
+        updateRegistrationFlowBody: UpdateRegistrationFlowBody(
+          (b) => b
+            ..oneOf = OneOfDynamic(
+              typeIndex: 0,
+              types: [UpdateRegistrationFlowWithOidcMethod],
+              value: signupFlowBody,
+            ),
+        ),
+      );
+      if (successNativeSignup.data == null) {
+        throw Exception(
+          'Failed to update registration flow ${successNativeSignup.statusMessage}',
+        );
+      }
+      await _saveSessionToken(successNativeSignup.data!.sessionToken ?? "");
+      await _processSessionState(getSession());
+      return (true, null);
+    } catch (e) {
+      if (e is DioException && e.response?.data != null) {
+        if (e.response?.statusCode == 200) {
+          if (e.response?.redirects.isNotEmpty == true) {
+            launchUrl(e.response!.redirects.first.location);
+          }
+          return (false, null);
+        }
+        if (e.response?.statusCode != 400) {
+          return (false, e.response?.statusMessage);
+        }
+
+        final registrationFlow = standardSerializers.deserialize(
+          e.response!.data,
+          specifiedType: const FullType(RegistrationFlow),
+        ) as RegistrationFlow?;
+        final errorMessage = registrationFlow?.ui.messages
+            ?.firstWhereOrNull(
+              (message) => message.type == UiTextTypeEnum.error,
+            )
+            ?.text;
+        return (false, errorMessage);
+      }
+      return (false, e.toString());
+    }
+  }
+
   Future<void> logout() async {
     final sessionToken = await getSessionToken();
     final response = await api.performNativeLogout(
@@ -511,18 +647,20 @@ class OryAuth {
   }
 }
 
+const _dummyPassword = '!!dummy-WALLET-password@@';
+
 UpdateRegistrationFlowBody _createWalletSignupBody({
   required String signature,
   required String token,
   required String walletAddress,
 }) {
-  final password = _getPassword(walletAddress);
   final passwordMethod = UpdateRegistrationFlowWithPasswordMethod(
     (b) => b
       ..method = 'password'
-      ..password = password
+      ..password = _dummyPassword
+      ..csrfToken = ''
       ..traits = MapJsonObject({
-        'wallet': walletAddress,
+        'wallet': walletAddress.toLowerCase(),
       })
       ..transientPayload = MapJsonObject({
         'wallet_signature': signature,
@@ -552,8 +690,9 @@ UpdateLoginFlowBody _createWalletLoginBody({
   final passwordMethod = UpdateLoginFlowWithPasswordMethod(
     (b) => b
       ..method = 'password'
-      ..identifier = walletAddress
-      ..password = _getPassword(walletAddress)
+      ..identifier = walletAddress.toLowerCase()
+      ..csrfToken = ''
+      ..password = _dummyPassword
       ..transientPayload = MapJsonObject({
         'wallet_signature': signature,
         'wallet_signature_token': token,
@@ -570,10 +709,6 @@ UpdateLoginFlowBody _createWalletLoginBody({
         value: passwordMethod,
       ),
   );
-}
-
-String _getPassword(String walletAddress) {
-  return walletAddress.split('').reversed.join('');
 }
 
 extension SessionExtension on Session {

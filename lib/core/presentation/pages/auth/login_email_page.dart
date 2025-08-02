@@ -1,13 +1,21 @@
+import 'dart:async';
+
 import 'package:app/app_theme/app_theme.dart';
 import 'package:app/core/application/auth/auth_bloc.dart';
+import 'package:app/core/application/wallet/wallet_bloc/wallet_bloc.dart';
+import 'package:app/core/domain/wallet/wallet_repository.dart';
 import 'package:app/core/presentation/widgets/common/appbar/lemon_appbar_widget.dart';
 import 'package:app/core/presentation/widgets/common/button/linear_gradient_button_widget.dart';
 import 'package:app/core/presentation/widgets/lemon_text_field.dart';
 import 'package:app/core/presentation/widgets/ory_wallet_auth/ory_wallet_auth_button.dart';
 import 'package:app/core/presentation/widgets/theme_svg_icon_widget.dart';
 import 'package:app/core/service/ory_auth/ory_auth.dart';
+import 'package:app/core/service/wallet/wallet_connect_service.dart';
+import 'package:app/core/service/wallet/wallet_session_address_extension.dart';
 import 'package:app/core/utils/email_validator.dart';
+import 'package:app/core/utils/platform_infos.dart';
 import 'package:app/core/utils/snackbar_utils.dart';
+import 'package:app/core/utils/web3_utils.dart';
 import 'package:app/gen/assets.gen.dart';
 import 'package:app/injection/register_module.dart';
 import 'package:app/router/app_router.gr.dart';
@@ -15,6 +23,9 @@ import 'package:app/theme/spacing.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:uuid/uuid.dart';
 
 @RoutePage()
 class LoginEmailPage extends StatefulWidget {
@@ -25,9 +36,9 @@ class LoginEmailPage extends StatefulWidget {
 }
 
 class _LoginEmailPageState extends State<LoginEmailPage> {
+  final GoogleSignIn googleSignIn = GoogleSignIn.instance;
   final oryAuth = getIt<OryAuth>();
   final emailController = TextEditingController();
-
   bool isEmailValid = false;
   bool isLoading = false;
 
@@ -86,6 +97,219 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
     );
   }
 
+  Future<void> _loginWithGoogle() async {
+    try {
+      FocusScope.of(context).unfocus();
+      setState(() {
+        isLoading = true;
+      });
+      final nonce = const Uuid().v4();
+      await googleSignIn.initialize(
+        nonce: nonce,
+      );
+      final credential = await googleSignIn.authenticate();
+      final idToken = credential.authentication.idToken;
+      if (idToken == null) {
+        SnackBarUtils.showError(message: 'Failed to sign in with Google');
+        return;
+      }
+      final (success, errorMessage) = await oryAuth.loginWithOidc(
+        provider: 'google',
+        idToken: idToken,
+        idTokenNonce: nonce,
+        onAccountNotExists: () {
+          _signupWithGoogle(idToken, nonce);
+        },
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      if (e is GoogleSignInException) {
+        SnackBarUtils.showError(message: e.description);
+        return;
+      }
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      await GoogleSignIn.instance.signOut();
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _signupWithGoogle(String idToken, String idTokenNonce) async {
+    try {
+      FocusScope.of(context).unfocus();
+      setState(() {
+        isLoading = true;
+      });
+      final (success, errorMessage) = await oryAuth.signupWithOidc(
+        provider: 'google',
+        idToken: idToken,
+        idTokenNonce: idTokenNonce,
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _signupWithApple(String idToken, String idTokenNonce) async {
+    try {
+      FocusScope.of(context).unfocus();
+      setState(() {
+        isLoading = true;
+      });
+      final (success, errorMessage) = await oryAuth.signupWithOidc(
+        provider: 'apple',
+        idToken: idToken,
+        idTokenNonce: idTokenNonce,
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: 'Failed to sign up with Apple');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loginWithApple() async {
+    try {
+      if (PlatformInfos.isAndroid) {
+        SnackBarUtils.showComingSoon();
+        return;
+      }
+      FocusScope.of(context).unfocus();
+      setState(() {
+        isLoading = true;
+      });
+      final nonce = const Uuid().v4();
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        SnackBarUtils.showError(message: 'Failed to sign in with Apple');
+        return;
+      }
+      final (success, errorMessage) = await oryAuth.loginWithOidc(
+        provider: 'apple',
+        idToken: idToken,
+        idTokenNonce: nonce,
+        onAccountNotExists: () {
+          _signupWithApple(idToken, nonce);
+        },
+      );
+      if (errorMessage != null) {
+        SnackBarUtils.showError(message: errorMessage);
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: 'Failed to sign in with Apple');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loginWithWallet() async {
+    try {
+      FocusScope.of(context).unfocus();
+      setState(() {
+        isLoading = true;
+      });
+      final walletAddress =
+          context.read<WalletBloc>().state.activeSession?.address;
+      if (walletAddress == null) {
+        throw Exception('Wallet address not found');
+      }
+      final walletRequest =
+          await getIt<WalletRepository>().getUserWalletRequest(
+        wallet: walletAddress,
+      );
+      if (walletRequest.isLeft()) {
+        throw Exception('Failed to get wallet request');
+      }
+      final userWalletRequest = walletRequest.getOrElse(() => null);
+      if (userWalletRequest == null) {
+        throw Exception('User wallet request not found');
+      }
+      final signedMessage = Web3Utils.toHex(userWalletRequest.message);
+      final signature = await getIt<WalletConnectService>().personalSign(
+        message: signedMessage,
+        wallet: walletAddress,
+      );
+      if (signature == null ||
+          signature.isEmpty ||
+          !signature.startsWith('0x')) {
+        throw Exception('Failed to sign message');
+      }
+
+      final result = await oryAuth.loginWithWallet(
+        walletAddress: walletAddress,
+        signature: signature,
+        token: userWalletRequest.token,
+      );
+      if (!result.$1) {
+        final loginFlow = result.$2.fold(
+          (l) => l,
+          (r) => null,
+        );
+        final accountNotExists =
+            loginFlow?.ui.messages?.any((m) => m.id == 4000006);
+        if (accountNotExists == true) {
+          _signupWithWallet(walletAddress, signature, userWalletRequest.token);
+          return;
+        }
+      }
+    } catch (e) {
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _signupWithWallet(
+    String walletAddress,
+    String signature,
+    String token,
+  ) async {
+    FocusScope.of(context).unfocus();
+    try {
+      setState(() {
+        isLoading = false;
+      });
+      await oryAuth.signupWithWallet(
+        walletAddress: walletAddress,
+        signature: signature,
+        token: token,
+      );
+    } catch (e) {
+      SnackBarUtils.showError(message: e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appColors = context.theme.appColors;
@@ -137,7 +361,7 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       Expanded(
                         child: _Button(
                           onTap: () {
-                            SnackBarUtils.showComingSoon();
+                            _loginWithGoogle();
                           },
                           icon: ThemeSvgIcon(
                             color: appColors.buttonTertiary,
@@ -151,7 +375,7 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       Expanded(
                         child: _Button(
                           onTap: () {
-                            SnackBarUtils.showComingSoon();
+                            _loginWithApple();
                           },
                           icon: ThemeSvgIcon(
                             color: appColors.buttonTertiary,
@@ -162,8 +386,12 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                         ),
                       ),
                       SizedBox(width: Spacing.s2),
-                      const Expanded(
-                        child: OryWalletAuthButton(),
+                      Expanded(
+                        child: OryWalletAuthButton(
+                          onStartLogin: () {
+                            _loginWithWallet();
+                          },
+                        ),
                       ),
                     ],
                   ),
