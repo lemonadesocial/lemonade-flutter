@@ -3,6 +3,7 @@ import 'package:app/core/service/storage/secure_storage.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:collection/collection.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ory_client/ory_client.dart';
 import 'package:one_of/one_of.dart';
 import 'package:built_value/json_object.dart';
@@ -426,7 +427,6 @@ class OryAuth {
         (b) => b
           ..method = 'oidc'
           ..provider = provider
-          ..csrfToken = ''
           ..idToken = idToken
           ..idTokenNonce = idTokenNonce,
       );
@@ -451,6 +451,12 @@ class OryAuth {
       return (true, null);
     } catch (e) {
       if (e is DioException && e.response?.data != null) {
+        if (e.response?.statusCode == 200) {
+          if (e.response?.redirects.isNotEmpty == true) {
+            launchUrl(e.response!.redirects.first.location);
+          }
+          return (false, null);
+        }
         if (e.response?.statusCode != 400) {
           return (false, e.response?.statusMessage);
         }
@@ -516,6 +522,16 @@ class OryAuth {
       return (true, null);
     } catch (e) {
       if (e is DioException && e.response?.data != null) {
+        if (e.response?.statusCode == 200) {
+          if (e.response?.redirects.isNotEmpty == true) {
+            launchUrl(e.response!.redirects.first.location);
+          }
+          return (false, null);
+        }
+        if (e.response?.statusCode != 400) {
+          return (false, e.response?.statusMessage);
+        }
+
         final registrationFlow = standardSerializers.deserialize(
           e.response!.data,
           specifiedType: const FullType(RegistrationFlow),
@@ -631,18 +647,20 @@ class OryAuth {
   }
 }
 
+const _dummyPassword = '!!dummy-WALLET-password@@';
+
 UpdateRegistrationFlowBody _createWalletSignupBody({
   required String signature,
   required String token,
   required String walletAddress,
 }) {
-  final password = _getPassword(walletAddress);
   final passwordMethod = UpdateRegistrationFlowWithPasswordMethod(
     (b) => b
       ..method = 'password'
-      ..password = password
+      ..password = _dummyPassword
+      ..csrfToken = ''
       ..traits = MapJsonObject({
-        'wallet': walletAddress,
+        'wallet': walletAddress.toLowerCase(),
       })
       ..transientPayload = MapJsonObject({
         'wallet_signature': signature,
@@ -672,8 +690,9 @@ UpdateLoginFlowBody _createWalletLoginBody({
   final passwordMethod = UpdateLoginFlowWithPasswordMethod(
     (b) => b
       ..method = 'password'
-      ..identifier = walletAddress
-      ..password = _getPassword(walletAddress)
+      ..identifier = walletAddress.toLowerCase()
+      ..csrfToken = ''
+      ..password = _dummyPassword
       ..transientPayload = MapJsonObject({
         'wallet_signature': signature,
         'wallet_signature_token': token,
@@ -690,10 +709,6 @@ UpdateLoginFlowBody _createWalletLoginBody({
         value: passwordMethod,
       ),
   );
-}
-
-String _getPassword(String walletAddress) {
-  return walletAddress.split('').reversed.join('');
 }
 
 extension SessionExtension on Session {

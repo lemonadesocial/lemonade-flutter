@@ -17,6 +17,9 @@ analyzer:
     invalid_annotation_target: ignore
     deprecated_member_use_from_same_package: ignore
     deprecated_member_use: ignore
+    unreachable_switch_default: ignore
+    curly_braces_in_flow_control_structures: ignore
+    prefer_interpolation_to_compose_strings: ignore
 
 linter:
   # Use recommended Lint rules
