@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.8.0...v2.9.0) (2025-07-30)
+
+
+### Features
+
+* app structure document in markdown ([#1004](https://github.com/lemonadesocial/lemonade-flutter/issues/1004)) ([920fbb6](https://github.com/lemonadesocial/lemonade-flutter/commit/920fbb679b77eded3d23eadea41d7457712830dc))
+* login with wallet ([#1000](https://github.com/lemonadesocial/lemonade-flutter/issues/1000)) ([e3c29d1](https://github.com/lemonadesocial/lemonade-flutter/commit/e3c29d13ee6e93a1fb6be4db2a731d5ed3f188c1))
+* native login ([#1003](https://github.com/lemonadesocial/lemonade-flutter/issues/1003)) ([5eb29e7](https://github.com/lemonadesocial/lemonade-flutter/commit/5eb29e7fbdf55055bf6ee336e5b9ea2421ee15bc))
+
+
+### Bug Fixes
+
+* improve WalletConnectService and LensUtils ([#1002](https://github.com/lemonadesocial/lemonade-flutter/issues/1002)) ([0b99aac](https://github.com/lemonadesocial/lemonade-flutter/commit/0b99aac761ac0b449cf794fe9d1424b975ab94a6))
+* native login feedback ([#1005](https://github.com/lemonadesocial/lemonade-flutter/issues/1005)) ([688e4e6](https://github.com/lemonadesocial/lemonade-flutter/commit/688e4e6ba370ad82beba6b404ef00a5c905f0fc1))
+* streamline layout and enhance transitions in authentication pages ([#1006](https://github.com/lemonadesocial/lemonade-flutter/issues/1006)) ([a2b409c](https://github.com/lemonadesocial/lemonade-flutter/commit/a2b409c4bd201543090bdc853a89e002921fa803))
+
 ## [2.8.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.7.0...v2.8.0) (2025-07-09)
 
 
