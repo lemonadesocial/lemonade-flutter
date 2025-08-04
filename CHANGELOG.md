@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.10.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.9.0...v2.10.0) (2025-08-04)
+
+
+### Features
+
+* integrate Google and Apple sign-in functionality ([#1007](https://github.com/lemonadesocial/lemonade-flutter/issues/1007)) ([7f8d6e2](https://github.com/lemonadesocial/lemonade-flutter/commit/7f8d6e2e3bae5976985c23dfdf3625e3dbbf7ea1))
+
+
+### Bug Fixes
+
+* update author display logic in LensPostFeedItemWidget ([#1009](https://github.com/lemonadesocial/lemonade-flutter/issues/1009)) ([63b0e3a](https://github.com/lemonadesocial/lemonade-flutter/commit/63b0e3a607493a8b690f1a651072bafb0df23468))
+
 ## [2.9.0](https://github.com/lemonadesocial/lemonade-flutter/compare/v2.8.0...v2.9.0) (2025-07-30)
 
 
