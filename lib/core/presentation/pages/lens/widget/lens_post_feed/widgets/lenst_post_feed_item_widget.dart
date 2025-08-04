@@ -151,7 +151,9 @@ class _LensPostFeedItemWidgetState extends State<LensPostFeedItemWidget>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.post.author?.username?.localName ?? '',
+                              widget.post.author?.metadata?.name ??
+                                  widget.post.author?.username?.localName ??
+                                  '',
                               style: appText.md,
                             ),
                             if (widget.post.timestamp != null)
